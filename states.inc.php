@@ -1,4 +1,5 @@
 <?php
+
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
@@ -49,63 +50,50 @@
 
 //    !! It is not a good idea to modify this file when a game is running !!
 
- 
-$machinestates = array(
+
+
+require_once 'modules/php/constants.inc.php';
+
+
+$machinestates = [
 
     // The initial state. Please do not modify.
-    1 => array(
-        "name" => "gameSetup",
+    ST_GAME_SETUP => [
+        "name" => ST_GAME_SETUP_NAME,
         "description" => "",
         "type" => "manager",
         "action" => "stGameSetup",
-        "transitions" => array( "" => 2 )
-    ),
-    
+        "transitions" => ["" => 2]
+    ],
+
     // Note: ID=2 => your first state
 
     2 => array(
-    		"name" => "playerTurn",
-    		"description" => clienttranslate('${actplayer} must play a card or pass'),
-    		"descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
-    		"type" => "activeplayer",
-    		"possibleactions" => array( "playCard", "pass" ),
-    		"transitions" => array( "playCard" => 2, "pass" => 2 )
-    ),
-    
-/*
-    Examples:
-    
-    2 => array(
-        "name" => "nextPlayer",
-        "description" => '',
-        "type" => "game",
-        "action" => "stNextPlayer",
-        "updateGameProgression" => true,   
-        "transitions" => array( "endGame" => 99, "nextPlayer" => 10 )
-    ),
-    
-    10 => array(
         "name" => "playerTurn",
         "description" => clienttranslate('${actplayer} must play a card or pass'),
         "descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
         "type" => "activeplayer",
-        "possibleactions" => array( "playCard", "pass" ),
-        "transitions" => array( "playCard" => 2, "pass" => 2 )
-    ), 
+        "possibleactions" => array("playCard", "pass"),
+        "transitions" => array("playCard" => 2, "pass" => 2)
+    ),
 
-*/    
-   
+    // Generic state to change player
+    ST_CHANGE_ACTIVE_PLAYER => [
+        'name' => ST_CHANGE_ACTIVE_PLAYER_NAME,
+        'description' => '',
+        'descriptionmyturn' => '',
+        'type' => 'game',
+        'action' => 'stChangeActivePlayer',
+    ],
+
     // Final state.
     // Please do not modify (and do not overload action/args methods).
-    99 => array(
+    ST_END_GAME => [
         "name" => "gameEnd",
         "description" => clienttranslate("End of game"),
         "type" => "manager",
         "action" => "stGameEnd",
         "args" => "argGameEnd"
-    )
+    ]
 
-);
-
-
-
+];

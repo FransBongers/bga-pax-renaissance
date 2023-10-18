@@ -1,0 +1,31 @@
+/**
+ *------
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * PaxRenaissance implementation : © <Your name here> <Your email address here>
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * paxrenaissance.css
+ *
+ * PaxRenaissance stylesheet
+ *
+ */
+
+@use "sass:math";
+@use 'base';
+@use 'game-map/gamemap';
+@use 'tokens';
+
+html {
+  background: url("") rgb(192, 192, 192);
+}
+
+#pr_play_area {  
+  transform-origin: top left;
+  // height: fit-content;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}

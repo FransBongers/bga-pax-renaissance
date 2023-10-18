@@ -1,0 +1,23 @@
+{
+  "name": "paxrenaissance",
+  "version": "1.0.0",
+  "description": "Pax Renaissance for BGA",
+  "main": "paxrenaissance.js",
+  "scripts": {
+    "build:ts": "tsc",
+    "build:scss": "sass --no-source-map src/paxrenaissance.scss paxrenaissance.css",
+    "watch:ts": "tsc --watch",
+    "watch:scss": "sass --watch src/paxrenaissance.scss paxrenaissance.css",
+    "watch": "npm run watch:ts && npm run watch:scss",
+    "build": "npm run build:ts && npm run build:scss"
+  },
+  "author": "Frans Bongers",
+  "license": "MIT",
+  "dependencies": {
+    "bga-animations": "thoun/bga-animations#1.1.0"
+  },
+  "devDependencies": {
+    "sass": "^1.62.1",
+    "typescript": "^5.0.4"
+  }
+}
