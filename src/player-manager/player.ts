@@ -6,7 +6,7 @@
 //  .##........##.......##.....##....##....##.......##....##.
 //  .##........########.##.....##....##....########.##.....##
 
-class BatPlayer {
+class PRPlayer {
   protected game: PaxRenaissanceGame;
   protected playerColor: string;
   private playerHexColor: string;
@@ -49,7 +49,7 @@ class BatPlayer {
   // Setup functions
   setupPlayer({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     const playerGamedatas = gamedatas.players[this.playerId];
-
+    this.setupPlayerTableau({playerGamedatas})
     this.setupPlayerPanel({ playerGamedatas });
 
   }
@@ -57,6 +57,12 @@ class BatPlayer {
   setupPlayerPanel({ playerGamedatas }: { playerGamedatas: BgaPlayer }) {
 
     this.updatePlayerPanel({ playerGamedatas });
+  }
+
+  setupPlayerTableau({ playerGamedatas }: { playerGamedatas: BgaPlayer }) {
+    document
+    .getElementById(`pr_player_tableau_${this.playerId}`)
+    .insertAdjacentHTML("beforeend", tplPlayerTableauContent({playerGamedatas}));
   }
 
   updatePlayerPanel({ playerGamedatas }: { playerGamedatas: BgaPlayer }) {

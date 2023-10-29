@@ -112,7 +112,7 @@ class NotificationManager {
     dojo.forEach(this.subscriptions, dojo.unsubscribe);
   }
 
-  getPlayer({ playerId }: { playerId: number }): BatPlayer {
+  getPlayer({ playerId }: { playerId: number }): PRPlayer {
     return this.game.playerManager.getPlayer({ playerId });
   }
 

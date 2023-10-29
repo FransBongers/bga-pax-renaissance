@@ -37,6 +37,12 @@
   background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 70 70" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"><g><g transform="matrix(1,0,0,1,-7.91703,-76.2244)"><path d="M23.8,102.1L35.7,102.1" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:7px;"/></g><g transform="matrix(1,0,0,1,-7.91703,-76.2244)"><path d="M35.7,102.1L47.5,102.1" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:7px;"/></g><g transform="matrix(1,0,0,1,-7.91703,-76.2244)"><path d="M35.7,102.1L35.7,90.3" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:7px;"/></g><g transform="matrix(1,0,0,1,-7.91703,-76.2244)"><path d="M51,118C55.2,113.8 57.3,108.7 57.3,102.8C57.3,96.8 55.2,91.8 51,87.6C46.8,83.4 41.7,81.3 35.8,81.3C29.9,81.3 24.8,83.4 20.6,87.6C16.4,91.8 14.3,96.8 14.3,102.8C14.3,108.7 16.4,113.8 20.6,118C24.8,122.2 29.9,124.3 35.8,124.3C41.7,124.3 46.8,122.2 51,118" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:7px;"/></g><g transform="matrix(1,0,0,1,-7.91703,-76.2244)"><path d="M35.7,113.9L35.7,102.1" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:7px;"/></g><g transform="matrix(1,0,0,1,-7.91703,-76.2244)"><path d="M65.3,132.3L51,118" style="fill:none;fill-rule:nonzero;stroke:black;stroke-width:7px;"/></g></g></svg>');
 }
 
+#pr_game_map_containter {
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
 #pr_game_map {
   background-image: url("img/board.webp");
   background-size: 1500px 1500px;
@@ -55,6 +61,1776 @@
   height: 56px;
 }
 
+.pr_card {
+  box-sizing: border-box;
+  width: 152px;
+  height: 232px;
+  background-size: 100% 100%;
+  position: absolute;
+  background-repeat: no-repeat;
+  border: 1px black solid;
+  box-shadow: 2px 2px 5px -1px #000;
+  border-radius: 5px;
+}
+
+.pr_square_card {
+  box-sizing: border-box;
+  width: 152px;
+  height: 152px;
+  background-size: 100% 100%;
+  position: absolute;
+  background-repeat: no-repeat;
+  border: 1px black solid;
+  box-shadow: 2px 2px 5px -1px #000;
+  border-radius: 5px;
+}
+
+/* ------- EAST CARDS ------- */
+.pr_card[data-card-id=PREN058] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN059] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN060] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN061] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN062] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN063] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN064] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN065] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN066] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN067] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN068] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN069] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN070] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN071] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN072] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN073] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN074] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN075] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN076] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN077] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN078] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN079] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN080] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN081] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN082] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN083] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN084] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN085] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN086] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN087] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN088] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN089] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN090] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN093X] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN094X] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN095X] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN098X] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN099X] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN100X] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN101X] {
+  background-image: url("img/east_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN102X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN103X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN104X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN105X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN106X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN107X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN108X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN109X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN110X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN111X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN112X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN113X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN114X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN115X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN116X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN117X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN118X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN119X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN120X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN121X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN122X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN123X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN124X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN125X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN126X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN127X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN163X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN164X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN165X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN166X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN167X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN168X] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=EAST_BACK] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=EAST_COMET_1] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=EAST_COMET_2] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 100%;
+}
+
+/* ------- WEST CARDS ------- */
+.pr_card[data-card-id=PREN001] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN002] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN003] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN004] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN005] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN006] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN007] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN008] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN009] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN010] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN011] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN012] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN013] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN014] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN015] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN016] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN017] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN018] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN019] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN020] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_card[data-card-id=PREN021] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN022] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN023] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN024] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN025] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN026] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN027] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN028] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN029] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN030] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_card[data-card-id=PREN031] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN032] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN033] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN034] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN035] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN036] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN037] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN038] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN039] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN040] {
+  background-image: url("img/west_cards1.webp");
+  background-size: 1000% 400%;
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN041] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN042] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN043] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN044] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN045] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN046] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN047] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN048] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN049] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN050] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=PREN051] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 0%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN052] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN053] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN054] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN055] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN096X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN097X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN128X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN129X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN130X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 100%;
+  background-position-y: 20%;
+}
+
+.pr_card[data-card-id=PREN131X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 0%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN132X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN133X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN134X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN135X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN136X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN137X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN138X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN139X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN140X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 100%;
+  background-position-y: 40%;
+}
+
+.pr_card[data-card-id=PREN141X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 0%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN142X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN143X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN144X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN145X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN146X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN147X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN148X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN149X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN150X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 100%;
+  background-position-y: 60%;
+}
+
+.pr_card[data-card-id=PREN151X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 0%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN152X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN153X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN154X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN155X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN156X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN157X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN158X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN159X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN160X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 100%;
+  background-position-y: 80%;
+}
+
+.pr_card[data-card-id=PREN161X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=PREN162X] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=WEST_BACK] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=WEST_COMET_1] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=WEST_COMET_2] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 100%;
+}
+
+/* ------- MAP CARDS ------- */
+.pr_card[data-card-id=catholic_england] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_france] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_holy_roman_empire] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_hungary] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_byzantium] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_portugal] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_aragon] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_papal_states] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_ottoman] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=catholic_mamluk] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_card[data-card-id=islamic_england] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 0%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_france] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_holy_roman_empire] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_hungary] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_byzantium] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_portugal] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_aragon] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_papal_states] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_ottoman] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=islamic_mamluk] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 100%;
+  background-position-y: 50%;
+}
+
+.pr_card[data-card-id=reformist_england] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_france] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_holy_roman_empire] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_hungary] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_byzantium] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_portugal] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_aragon] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_papal_states] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_ottoman] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 100%;
+}
+
+.pr_card[data-card-id=reformist_mamluk] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
+/* ------- SQUARE CARDS ------- */
+.pr_square_card[data-card-id=empire_king_england] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_republic_england] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_king_france] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_republic_france] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_king_aragon] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_republic_aragon] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_king_papal_states] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_republic_papal_states] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_king_portugal] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_republic_portugal] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_square_card[data-card-id=empire_king_holy_roman_empire] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 0%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_republic_holy_roman_empire] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_king_hungary] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_republic_hungary] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_king_ottoman] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_republic_ottoman] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_king_byzantium] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_republic_byzantium] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_king_mamluk] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=empire_republic_mamluk] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 100%;
+  background-position-y: 50%;
+}
+
+.pr_square_card[data-card-id=victory_active_renaissance] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_active_globalization] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_active_holy] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_active_imperial] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_active_age_of_byzantine] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_inactive_renaissance] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_inactive_globalization] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 66.6666666667%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_inactive_holy] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 77.7777777778%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_inactive_imperial] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 88.8888888889%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=victory_inactive_age_of_byzantine] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 300%;
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
+.pr_chess_piece {
+  position: absolute;
+  background-repeat: no-repeat;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* ------- PAWNS ------- */
+.pr_pawn {
+  background-image: url("img/pawns.webp");
+  background-size: 400% 100%;
+  width: 26px;
+  height: 43px;
+}
+
+.pr_pawn[data-color=blue] {
+  background-position-x: 0%;
+}
+
+.pr_pawn[data-color=green] {
+  background-position-x: 33.3333333333%;
+}
+
+.pr_pawn[data-color=purple] {
+  background-position-x: 66.6666666667%;
+}
+
+.pr_pawn[data-color=yellow] {
+  background-position-x: 100%;
+}
+
+/* ------- RELIGION PIECES ------- */
+.pr_chess_piece[data-religion=catholic] {
+  background-position-x: 50%;
+}
+
+.pr_chess_piece[data-religion=islamic] {
+  background-position-x: 0%;
+}
+
+.pr_chess_piece[data-religion=reformist] {
+  background-position-x: 100%;
+}
+
+.pr_bishop {
+  background-image: url("img/bishops.webp");
+  background-size: 300% 100%;
+  width: 30px;
+  height: 59px;
+}
+
+.pr_knight {
+  background-image: url("img/knights.webp");
+  background-size: 300% 100%;
+  width: 36px;
+  height: 46px;
+}
+
+.pr_rook {
+  background-image: url("img/rooks.webp");
+  background-size: 300% 100%;
+  width: 30px;
+  height: 49px;
+}
+
+/* ------- PLAYER BOARD ------- */
+/**
+ *------
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * PaxRenaissance implementation : © <Your name here> <Your email address here>
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * paxrenaissance.css
+ *
+ * PaxRenaissance stylesheet
+ *
+ */
+#pr_player_tableaux {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  min-width: 800px;
+  flex-grow: 1;
+}
+
+.pr_player_tableau {
+  min-height: 200px;
+  background-color: ivory;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+  padding: 8px;
+}
+
+.pr_player_tableau_title {
+  font-weight: bold;
+  font-size: large;
+  word-wrap: break-word;
+  margin: 10px;
+}
+
+.pr_player_board {
+  background-image: url("img/player_boards.webp");
+  background-size: 200% 200%;
+  height: 300px;
+  width: 220px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.pr_player_board[data-color=blue] {
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_player_board[data-color=green] {
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_player_board[data-color=purple] {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_player_board[data-color=yellow] {
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
 html {
   background: url("") rgb(192, 192, 192);
 }
@@ -64,6 +1840,7 @@ html {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 /*# sourceMappingURL=paxrenaissance.css.map */

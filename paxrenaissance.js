@@ -1007,10 +1007,20 @@ var PaxRenaissance = (function () {
     };
     return PaxRenaissance;
 }());
-var MIN_PLAY_AREA_WIDTH = 1500;
-var DISABLED = 'disabled';
-var PR_SELECTABLE = 'pr_selectable';
-var PR_SELECTED = 'pr_selected';
+var MIN_PLAY_AREA_WIDTH = 1516;
+var BLUE = "blue";
+var GREEN = "green";
+var PURPLE = "purple";
+var YELLOW = "yellow";
+var COLOR_MAP = {
+    "1084c7": BLUE,
+    bddcc6: GREEN,
+    "732473": PURPLE,
+    ffce00: YELLOW,
+};
+var DISABLED = "disabled";
+var PR_SELECTABLE = "pr_selectable";
+var PR_SELECTED = "pr_selected";
 define([
     'dojo',
     'dojo/_base/declare',
@@ -1101,7 +1111,7 @@ var GameMap = (function () {
     };
     return GameMap;
 }());
-var tplGameMap = function () { return "\n<div id=\"pr_game_map_containter\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    <div class=\"pr_marker\" data-marker-type=\"victory_point\"></div>\n    <div class=\"pr_token\" data-faction=\"french\" data-unit-type=\"bastion\"></div>\n    <div class=\"pr_token\" data-faction=\"indian\" data-unit-type=\"micmac\"></div>\n  </div>\n</div>"; };
+var tplGameMap = function () { return "\n<div id=\"pr_game_map_containter\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    <div class=\"pr_card\" data-card-id=\"PREN001\" style=\"top: 950px; left: 256px;\"></div>\n    <div class=\"pr_card\" data-card-id=\"PREN058\" style=\"top: 1200px; left: 256px;\"></div>\n    <div class=\"pr_square_card\" data-card-id=\"empire_king_france\" style=\"top: 120px; left: 526px;\"></div>\n    <div class=\"pr_card\" data-card-id=\"reformist_england\" style=\"top: 269.5px; left: 350px;\"></div>\n    <div class=\"pr_square_card\" data-card-id=\"victory_inactive_renaissance\" style=\"top: 121px; left: 136px;\"></div>\n    <div class=\"pr_chess_piece pr_pawn\" data-color=\"purple\" style=\"top: 656px; left: 1028px;\"></div>\n    <div class=\"pr_chess_piece pr_bishop\" data-religion=\"reformist\" style=\"top: 831px; left: 1056px;\"></div>\n    <div class=\"pr_chess_piece pr_knight\" data-religion=\"catholic\" style=\"top: 389px; left: 1056px;\"></div>\n    <div class=\"pr_chess_piece pr_rook\" data-religion=\"islamic\" style=\"top: 533px; left: 890px;\"></div>\n  </div>\n</div>"; };
 var LOG_TOKEN_BOLD_TEXT = 'boldText';
 var LOG_TOKEN_NEW_LINE = 'newLine';
 var LOG_TOKEN_PLAYER_NAME = 'playerName';
@@ -1181,14 +1191,25 @@ var NotificationManager = (function () {
 }());
 var PlayerManager = (function () {
     function PlayerManager(game) {
-        console.log('Constructor PlayerManager');
+        console.log("Constructor PlayerManager");
         this.game = game;
         this.players = {};
+        this.setupPlayerTableaux({
+            playerOrder: game.gamedatas.playerorder.map(function (playerId) {
+                return Number(playerId);
+            }),
+        });
         for (var playerId in game.gamedatas.players) {
             var player = game.gamedatas.players[playerId];
-            this.players[playerId] = new BatPlayer({ player: player, game: this.game });
+            this.players[playerId] = new PRPlayer({ player: player, game: this.game });
         }
     }
+    PlayerManager.prototype.setupPlayerTableaux = function (_a) {
+        var playerOrder = _a.playerOrder;
+        document
+            .getElementById("pr_play_area")
+            .insertAdjacentHTML("beforeend", tplPlayerTableauxContainer({ playerOrder: playerOrder }));
+    };
     PlayerManager.prototype.getPlayer = function (_a) {
         var playerId = _a.playerId;
         return this.players[playerId];
@@ -1213,8 +1234,8 @@ var PlayerManager = (function () {
     };
     return PlayerManager;
 }());
-var BatPlayer = (function () {
-    function BatPlayer(_a) {
+var PRPlayer = (function () {
+    function PRPlayer(_a) {
         var game = _a.game, player = _a.player;
         this.game = game;
         var playerId = player.id;
@@ -1226,41 +1247,62 @@ var BatPlayer = (function () {
         var gamedatas = game.gamedatas;
         this.setupPlayer({ gamedatas: gamedatas });
     }
-    BatPlayer.prototype.updatePlayer = function (_a) {
+    PRPlayer.prototype.updatePlayer = function (_a) {
         var gamedatas = _a.gamedatas;
     };
-    BatPlayer.prototype.setupPlayer = function (_a) {
+    PRPlayer.prototype.setupPlayer = function (_a) {
         var gamedatas = _a.gamedatas;
         var playerGamedatas = gamedatas.players[this.playerId];
+        this.setupPlayerTableau({ playerGamedatas: playerGamedatas });
         this.setupPlayerPanel({ playerGamedatas: playerGamedatas });
     };
-    BatPlayer.prototype.setupPlayerPanel = function (_a) {
+    PRPlayer.prototype.setupPlayerPanel = function (_a) {
         var playerGamedatas = _a.playerGamedatas;
         this.updatePlayerPanel({ playerGamedatas: playerGamedatas });
     };
-    BatPlayer.prototype.updatePlayerPanel = function (_a) {
+    PRPlayer.prototype.setupPlayerTableau = function (_a) {
+        var playerGamedatas = _a.playerGamedatas;
+        document
+            .getElementById("pr_player_tableau_".concat(this.playerId))
+            .insertAdjacentHTML("beforeend", tplPlayerTableauContent({ playerGamedatas: playerGamedatas }));
+    };
+    PRPlayer.prototype.updatePlayerPanel = function (_a) {
         var _b;
         var playerGamedatas = _a.playerGamedatas;
         if ((_b = this.game.framework().scoreCtrl) === null || _b === void 0 ? void 0 : _b[this.playerId]) {
             this.game.framework().scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
         }
     };
-    BatPlayer.prototype.clearInterface = function () {
+    PRPlayer.prototype.clearInterface = function () {
     };
-    BatPlayer.prototype.getColor = function () {
+    PRPlayer.prototype.getColor = function () {
         return this.playerColor;
     };
-    BatPlayer.prototype.getHexColor = function () {
+    PRPlayer.prototype.getHexColor = function () {
         return this.playerHexColor;
     };
-    BatPlayer.prototype.getName = function () {
+    PRPlayer.prototype.getName = function () {
         return this.playerName;
     };
-    BatPlayer.prototype.getPlayerId = function () {
+    PRPlayer.prototype.getPlayerId = function () {
         return this.playerId;
     };
-    return BatPlayer;
+    return PRPlayer;
 }());
+var tplPlayerTableauxContainer = function (_a) {
+    var playerOrder = _a.playerOrder;
+    console.log("playerOrderInTpl", playerOrder);
+    return "\n    <div id=\"pr_player_tableaux\">\n    ".concat(playerOrder
+        .map(function (playerId) {
+        return "<div id=\"pr_player_tableau_".concat(playerId, "\" class=\"pr_player_tableau\"></div>");
+    })
+        .join(""), "\n    </div>\n  ");
+};
+var tplPlayerTableauContent = function (_a) {
+    var playerGamedatas = _a.playerGamedatas;
+    var playerId = playerGamedatas.id;
+    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(_("${playerName}'s tableau").replace("${playerName}", playerGamedatas.name), "</span></div>\n  <div>\n    <div class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[playerGamedatas.color], "\"></div>\n  </div>\n    ");
+};
 var tplCardTooltipContainer = function (_a) {
     var card = _a.card, content = _a.content;
     return "<div class=\"pr_card_tooltip\">\n  <div class=\"pr_card_tooltip_inner_container\">\n    ".concat(content, "\n  </div>\n  ").concat(card, "\n</div>");

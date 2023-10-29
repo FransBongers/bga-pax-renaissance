@@ -16,26 +16,36 @@
 
 class PlayerManager {
   private game: PaxRenaissanceGame;
-  private players: Record<number, BatPlayer>;
+  private players: Record<number, PRPlayer>;
 
   constructor(game: PaxRenaissanceGame) {
-    console.log('Constructor PlayerManager');
+    console.log("Constructor PlayerManager");
     this.game = game;
     this.players = {};
 
+    this.setupPlayerTableaux({
+      playerOrder: game.gamedatas.playerorder.map((playerId: string | number) =>
+        Number(playerId)
+      ),
+    });
+
     for (const playerId in game.gamedatas.players) {
       const player = game.gamedatas.players[playerId];
-        this.players[playerId] = new BatPlayer({ player, game: this.game });
-     
+      this.players[playerId] = new PRPlayer({ player, game: this.game });
     }
-
   }
 
-  getPlayer({ playerId }: { playerId: number }): BatPlayer {
+  setupPlayerTableaux({ playerOrder }: { playerOrder: number[] }) {
+    document
+      .getElementById("pr_play_area")
+      .insertAdjacentHTML("beforeend", tplPlayerTableauxContainer({ playerOrder }));
+  }
+
+  getPlayer({ playerId }: { playerId: number }): PRPlayer {
     return this.players[playerId];
   }
 
-  getPlayers(): BatPlayer[] {
+  getPlayers(): PRPlayer[] {
     return Object.values(this.players);
   }
 

@@ -16,7 +16,10 @@
 @use "sass:math";
 @use 'base';
 @use 'game-map/gamemap';
-@use 'tokens';
+@use 'cards';
+@use 'pieces';
+@use 'player-manager/playerBoards';
+@use 'player-manager/playerTableaux';
 
 html {
   background: url("") rgb(192, 192, 192);
@@ -28,4 +31,5 @@ html {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
 }

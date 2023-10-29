@@ -1,0 +1,336 @@
+@use "sass:math";
+@use "sass:map";
+
+.pr_card {
+  box-sizing: border-box;
+  width: 152px;
+  height: 232px;
+  background-size: 100% 100%;
+  position: absolute;
+  background-repeat: no-repeat;
+  border: 1px black solid;
+  box-shadow: 2px 2px 5px -1px #000;
+  border-radius: 5px;
+}
+
+.pr_square_card {
+  box-sizing: border-box;
+  width: 152px;
+  height: 152px;
+  background-size: 100% 100%;
+  position: absolute;
+  background-repeat: no-repeat;
+  border: 1px black solid;
+  box-shadow: 2px 2px 5px -1px #000;
+  border-radius: 5px;
+}
+
+/* ------- EAST CARDS ------- */
+
+$east-cards1: (
+  1: "PREN058",
+  2: "PREN059",
+  3: "PREN060",
+  4: "PREN061",
+  5: "PREN062",
+  6: "PREN063",
+  7: "PREN064",
+  8: "PREN065",
+  9: "PREN066",
+  10: "PREN067",
+  11: "PREN068",
+  12: "PREN069",
+  13: "PREN070",
+  14: "PREN071",
+  15: "PREN072",
+  16: "PREN073",
+  17: "PREN074",
+  18: "PREN075",
+  19: "PREN076",
+  20: "PREN077",
+  21: "PREN078",
+  22: "PREN079",
+  23: "PREN080",
+  24: "PREN081",
+  25: "PREN082",
+  26: "PREN083",
+  27: "PREN084",
+  28: "PREN085",
+  29: "PREN086",
+  30: "PREN087",
+  31: "PREN088",
+  32: "PREN089",
+  33: "PREN090",
+  34: "PREN093X",
+  35: "PREN094X",
+  36: "PREN095X",
+  37: "PREN098X",
+  38: "PREN099X",
+  39: "PREN100X",
+  40: "PREN101X"
+);
+
+@for $i from 1 through 40 {
+  .pr_card[data-card-id="#{map.get($east-cards1,$i)}"] {
+    background-image: url("img/east_cards1.webp");
+    background-size: 1000% 400%;
+    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
+  }
+}
+
+$east-cards2: (
+  1: "PREN102X",
+  2: "PREN103X",
+  3: "PREN104X",
+  4: "PREN105X",
+  5: "PREN106X",
+  6: "PREN107X",
+  7: "PREN108X",
+  8: "PREN109X",
+  9: "PREN110X",
+  10: "PREN111X",
+  11: "PREN112X",
+  12: "PREN113X",
+  13: "PREN114X",
+  14: "PREN115X",
+  15: "PREN116X",
+  16: "PREN117X",
+  17: "PREN118X",
+  18: "PREN119X",
+  19: "PREN120X",
+  20: "PREN121X",
+  21: "PREN122X",
+  22: "PREN123X",
+  23: "PREN124X",
+  24: "PREN125X",
+  25: "PREN126X",
+  26: "PREN127X",
+  27: "PREN163X",
+  28: "PREN164X",
+  29: "PREN165X",
+  30: "PREN166X",
+  31: "PREN167X",
+  32: "PREN168X",
+  33: "EAST_BACK",
+  34: "EAST_COMET_1",
+  35: "EAST_COMET_2"
+);
+
+@for $i from 1 through 35 {
+  .pr_card[data-card-id="#{map.get($east-cards2,$i)}"] {
+    background-image: url("img/east_cards2.webp");
+    background-size: 1000% 400%;
+    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
+  }
+}
+
+/* ------- WEST CARDS ------- */
+
+$west-cards1: (
+  1: "PREN001",
+  2: "PREN002",
+  3: "PREN003",
+  4: "PREN004",
+  5: "PREN005",
+  6: "PREN006",
+  7: "PREN007",
+  8: "PREN008",
+  9: "PREN009",
+  10: "PREN010",
+  11: "PREN011",
+  12: "PREN012",
+  13: "PREN013",
+  14: "PREN014",
+  15: "PREN015",
+  16: "PREN016",
+  17: "PREN017",
+  18: "PREN018",
+  19: "PREN019",
+  20: "PREN020",
+  21: "PREN021",
+  22: "PREN022",
+  23: "PREN023",
+  24: "PREN024",
+  25: "PREN025",
+  26: "PREN026",
+  27: "PREN027",
+  28: "PREN028",
+  29: "PREN029",
+  30: "PREN030",
+  31: "PREN031",
+  32: "PREN032",
+  33: "PREN033",
+  34: "PREN034",
+  35: "PREN035",
+  36: "PREN036",
+  37: "PREN037",
+  38: "PREN038",
+  39: "PREN039",
+  40: "PREN040",
+);
+
+@for $i from 1 through 40 {
+  .pr_card[data-card-id="#{map.get($west-cards1,$i)}"] {
+    background-image: url("img/west_cards1.webp");
+    background-size: 1000% 400%;
+    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
+  }
+}
+
+$west-cards2: (
+  1: "PREN041",
+  2: "PREN042",
+  3: "PREN043",
+  4: "PREN044",
+  5: "PREN045",
+  6: "PREN046",
+  7: "PREN047",
+  8: "PREN048",
+  9: "PREN049",
+  10: "PREN050",
+  11: "PREN051",
+  12: "PREN052",
+  13: "PREN053",
+  14: "PREN054",
+  15: "PREN055",
+  16: "PREN096X",
+  17: "PREN097X",
+  18: "PREN128X",
+  19: "PREN129X",
+  20: "PREN130X",
+  21: "PREN131X",
+  22: "PREN132X",
+  23: "PREN133X",
+  24: "PREN134X",
+  25: "PREN135X",
+  26: "PREN136X",
+  27: "PREN137X",
+  28: "PREN138X",
+  29: "PREN139X",
+  30: "PREN140X",
+  31: "PREN141X",
+  32: "PREN142X",
+  33: "PREN143X",
+  34: "PREN144X",
+  35: "PREN145X",
+  36: "PREN146X",
+  37: "PREN147X",
+  38: "PREN148X",
+  39: "PREN149X",
+  40: "PREN150X",
+  41: "PREN151X",
+  42: "PREN152X",
+  43: "PREN153X",
+  44: "PREN154X",
+  45: "PREN155X",
+  46: "PREN156X",
+  47: "PREN157X",
+  48: "PREN158X",
+  49: "PREN159X",
+  50: "PREN160X",
+  51: "PREN161X",
+  52: "PREN162X",
+  53: "WEST_BACK",
+  54: "WEST_COMET_1",
+  55: "WEST_COMET_2"
+);
+
+@for $i from 1 through 55 {
+  .pr_card[data-card-id="#{map.get($west-cards2,$i)}"] {
+    background-image: url("img/west_cards2.webp");
+    background-size: 1000% 600%;
+    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 5);
+  }
+}
+
+/* ------- MAP CARDS ------- */
+
+$map-cards: (
+  1: "catholic_england",
+  2: "catholic_france",
+  3: "catholic_holy_roman_empire",
+  4: "catholic_hungary",
+  5: "catholic_byzantium",
+  6: "catholic_portugal",
+  7: "catholic_aragon",
+  8: "catholic_papal_states",
+  9: "catholic_ottoman",
+  10: "catholic_mamluk",
+  11: "islamic_england",
+  12: "islamic_france",
+  13: "islamic_holy_roman_empire",
+  14: "islamic_hungary",
+  15: "islamic_byzantium",
+  16: "islamic_portugal",
+  17: "islamic_aragon",
+  18: "islamic_papal_states",
+  19: "islamic_ottoman",
+  20: "islamic_mamluk",
+  21: "reformist_england",
+  22: "reformist_france",
+  23: "reformist_holy_roman_empire",
+  24: "reformist_hungary",
+  25: "reformist_byzantium",
+  26: "reformist_portugal",
+  27: "reformist_aragon",
+  28: "reformist_papal_states",
+  29: "reformist_ottoman",
+  30: "reformist_mamluk",
+);
+
+@for $i from 1 through 30 {
+  .pr_card[data-card-id="#{map.get($map-cards,$i)}"] {
+    background-image: url("img/map_cards.webp");
+    background-size: 1000% 300%;
+    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 2);
+  }
+}
+
+/* ------- SQUARE CARDS ------- */
+
+$square-cards: (
+  1: "empire_king_england",
+  2: "empire_republic_england",
+  3: "empire_king_france",
+  4: "empire_republic_france",
+  5: "empire_king_aragon",
+  6: "empire_republic_aragon",
+  7: "empire_king_papal_states",
+  8: "empire_republic_papal_states",
+  9: "empire_king_portugal",
+  10: "empire_republic_portugal",
+  11: "empire_king_holy_roman_empire",
+  12: "empire_republic_holy_roman_empire",
+  13: "empire_king_hungary",
+  14: "empire_republic_hungary",
+  15: "empire_king_ottoman",
+  16: "empire_republic_ottoman",
+  17: "empire_king_byzantium",
+  18: "empire_republic_byzantium",
+  19: "empire_king_mamluk",
+  20: "empire_republic_mamluk",
+  21: "victory_active_renaissance",
+  22: "victory_active_globalization",
+  23: "victory_active_holy",
+  24: "victory_active_imperial",
+  25: "victory_active_age_of_byzantine",
+  26: "victory_inactive_renaissance",
+  27: "victory_inactive_globalization",
+  28: "victory_inactive_holy",
+  29: "victory_inactive_imperial",
+  30: "victory_inactive_age_of_byzantine",
+);
+
+@for $i from 1 through 30 {
+  .pr_square_card[data-card-id="#{map.get($square-cards,$i)}"] {
+    background-image: url("img/square_cards.webp");
+    background-size: 1000% 300%;
+    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 2);
+  }
+}

@@ -313,7 +313,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     return Number(this.framework().player_id);
   }
 
-  public getCurrentPlayer(): BatPlayer {
+  public getCurrentPlayer(): PRPlayer {
     return this.playerManager.getPlayer({ playerId: this.getPlayerId() });
   }
 

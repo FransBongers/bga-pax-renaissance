@@ -3,6 +3,7 @@
 namespace PaxRenaissance\Managers;
 
 use PaxRenaissance\Core\Game;
+use PaxRenaissance\Core\Globals;
 
 /*
  * Players manager : allows to easily access players ...
@@ -20,9 +21,11 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
 
   public static function setupNewGame($players, $options)
   {
+    Globals::setPlayers($players);
     // Create players
     $gameInfos = Game::get()->getGameinfos();
     $colors = $gameInfos['player_colors'];
+    shuffle($colors);
     $query = self::DB()->multipleInsert([
       'player_id',
       'player_color',
@@ -41,7 +44,7 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
 
     $query->values($values);
 
-    Game::get()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
+    // Game::get()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
     Game::get()->reloadPlayersBasicInfos();
   }
 

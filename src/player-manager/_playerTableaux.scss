@@ -1,0 +1,59 @@
+@use "sass:math";
+@use "../base";
+
+#pr_player_tableaux {
+  display: flex;
+  flex-direction: column;
+  min-height: 400px;
+  min-width: 800px;
+  // width: 100%;
+  flex-grow: 1;
+}
+
+.pr_player_tableau {
+  min-height: 200px;
+  background-color: ivory;
+  display: flex;
+  // flex-direction: row;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px;
+  padding: 8px;
+}
+
+.pr_player_tableau_title {
+  font-weight: bold;
+  font-size: large;
+  word-wrap: break-word;
+  margin: 10px;
+  // margin-right: 126px;
+  // flex-grow: 1;
+}
+
+.pr_player_board {
+  background-image: url("img/player_boards.webp");
+  background-size: 200% 200%;
+  height: 300px;
+  width: 220px;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.pr_player_board[data-color=blue] {
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_player_board[data-color=green] {
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_player_board[data-color=purple] {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_player_board[data-color=yellow] {
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
