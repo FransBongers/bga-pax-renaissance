@@ -25,3 +25,20 @@ const LOG_TOKEN_PLAYER_NAME = 'playerName';
  */
 
 const DISPATCH_TRANSITION = 'dispatchTransition';
+
+/**
+ * Cards
+ */
+// regions
+const WEST = 'west';
+const EAST = 'east';
+
+// types
+const TABLEAU_CARD = 'tableauCard';
+
+// Card locations
+const DECK_EAST = 'deckEast';
+const DECK_WEST = 'deckWest';
+const DISCARD = 'discard';
+const POOL_EAST = 'pool_'.EAST;
+const POOL_WEST = 'pool_'.WEST;

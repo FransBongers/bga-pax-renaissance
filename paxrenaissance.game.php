@@ -38,6 +38,7 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Preferences;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Log;
+use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 
 class PaxRenaissance extends Table
@@ -109,6 +110,7 @@ class PaxRenaissance extends Table
 
         $data = [
             'canceledNotifIds' => Log::getCanceledNotifIds(),
+            'market' => Market::getUiData(),
             'players' => Players::getUiData($pId),
         ];
 

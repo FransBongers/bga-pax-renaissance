@@ -30,8 +30,6 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     'score' => ['player_score', 'int'],
     'scoreAux' => ['player_score_aux', 'int'],
     'zombie' => 'player_zombie',
-    'loyalty' => 'loyalty',
-    'rupees' => ['rupees', 'int'],
   ];
 
   /*
