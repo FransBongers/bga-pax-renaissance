@@ -9,6 +9,5 @@ class PREN059_Safavids extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN059_Safavids';
     $this->name = clienttranslate('Safavids');
     $this->region = EAST;
-    $this->type = TABLEAU_CARD;
   }
 }

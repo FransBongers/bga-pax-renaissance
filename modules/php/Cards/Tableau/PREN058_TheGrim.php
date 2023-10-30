@@ -9,6 +9,5 @@ class PREN058_TheGrim extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN058_TheGrim';
     $this->name = clienttranslate('The Grim');
     $this->region = EAST;
-    $this->type = TABLEAU_CARD;
   }
 }

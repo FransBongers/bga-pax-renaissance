@@ -9,6 +9,5 @@ class PREN005_ReformedTheology extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN005_ReformedTheology';
     $this->name = clienttranslate('Reformed Theology');
     $this->region = WEST;
-    $this->type = TABLEAU_CARD;
   }
 }

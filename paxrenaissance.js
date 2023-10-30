@@ -801,6 +801,7 @@ var PaxRenaissance = (function () {
         this.gameMap = new GameMap(this);
         this.tooltipManager = new TooltipManager(this);
         this.playerManager = new PlayerManager(this);
+        this.market = new Market(this);
         this.updatePlayAreaSize();
         window.addEventListener("resize", function () {
             _this.updatePlayAreaSize();
@@ -1046,10 +1047,22 @@ var GameMap = (function () {
         this.game = game;
         this.zoomLevel =
             Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1;
-        console.log('localStorage zoomLevel', this.zoomLevel);
+        console.log("localStorage zoomLevel", this.zoomLevel);
         var gamedatas = game.gamedatas;
         this.setupGameMap({ gamedatas: gamedatas });
     }
+    GameMap.prototype.setupEmpireCards = function (_a) {
+        var gamedatas = _a.gamedatas;
+        gamedatas.gameMap.forEach(function (card) {
+            console.log("empireCard", card);
+            var id = card.id, location = card.location;
+            var node = document.getElementById("pr_".concat(location));
+            if (!node) {
+                debug("Unable to get empire card node");
+            }
+            node.setAttribute("data-card-id", "".concat(id, "_king"));
+        });
+    };
     GameMap.prototype.updateGameMap = function (_a) {
         var gamedatas = _a.gamedatas;
     };
@@ -1060,6 +1073,7 @@ var GameMap = (function () {
             .insertAdjacentHTML("afterbegin", tplGameMap());
         this.updateGameMapSize();
         this.setupZoomButtons();
+        this.setupEmpireCards({ gamedatas: gamedatas });
     };
     GameMap.prototype.setupZoomButtons = function () {
         var _this = this;
@@ -1073,7 +1087,7 @@ var GameMap = (function () {
     };
     GameMap.prototype.clearInterface = function () { };
     GameMap.prototype.getCurrentZoomIndex = function () {
-        console.log('zoomLevel', this.zoomLevel);
+        console.log("zoomLevel", this.zoomLevel);
         return ZOOM_LEVELS.indexOf(Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1);
     };
     GameMap.prototype.checkZoomButtonClasses = function () {
@@ -1091,7 +1105,7 @@ var GameMap = (function () {
     GameMap.prototype.updateGameMapSize = function () {
         var map = document.getElementById("pr_game_map");
         map.style.transform = "scale(".concat(this.zoomLevel, ")");
-        var mapContainer = document.getElementById('pr_game_map_containter');
+        var mapContainer = document.getElementById("pr_game_map_containter");
         mapContainer.style.width = "".concat(this.zoomLevel * MAX_MAP_WIDTH, "px");
         mapContainer.style.height = "".concat(this.zoomLevel * MAX_MAP_HEIGHT + 56, "px");
     };
@@ -1111,7 +1125,10 @@ var GameMap = (function () {
     };
     return GameMap;
 }());
-var tplGameMap = function () { return "\n<div id=\"pr_game_map_containter\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    <div class=\"pr_card\" data-card-id=\"PREN001\" style=\"top: 950px; left: 256px;\"></div>\n    <div class=\"pr_card\" data-card-id=\"PREN058\" style=\"top: 1200px; left: 256px;\"></div>\n    <div class=\"pr_square_card\" data-card-id=\"empire_king_france\" style=\"top: 120px; left: 526px;\"></div>\n    <div class=\"pr_card\" data-card-id=\"reformist_england\" style=\"top: 269.5px; left: 350px;\"></div>\n    <div class=\"pr_square_card\" data-card-id=\"victory_inactive_renaissance\" style=\"top: 121px; left: 136px;\"></div>\n    <div class=\"pr_chess_piece pr_pawn\" data-color=\"purple\" style=\"top: 656px; left: 1028px;\"></div>\n    <div class=\"pr_chess_piece pr_bishop\" data-religion=\"reformist\" style=\"top: 831px; left: 1056px;\"></div>\n    <div class=\"pr_chess_piece pr_knight\" data-religion=\"catholic\" style=\"top: 389px; left: 1056px;\"></div>\n    <div class=\"pr_chess_piece pr_rook\" data-religion=\"islamic\" style=\"top: 533px; left: 890px;\"></div>\n  </div>\n</div>"; };
+var tplGameMapMarket = function () { return "\n  <div id=\"pr_market_west_0\" class=\"pr_card\" data-card-id=\"WEST_BACK\" style=\"top: 950px; left: 93px;\"></div>\n  <div id=\"pr_market_west_1\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 256px;\"></div>\n  <div id=\"pr_market_west_2\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 425px;\"></div>\n  <div id=\"pr_market_west_3\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 594px;\"></div>\n  <div id=\"pr_market_west_4\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 762px;\"></div>\n  <div id=\"pr_market_west_5\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 931px;\"></div>\n  <div id=\"pr_market_west_deck\" class=\"pr_card\" data-card-id=\"WEST_BACK\" style=\"top: 950px; left: 1095px;\"></div>\n  <div id=\"pr_market_east_0\" class=\"pr_card\" data-card-id=\"EAST_BACK\" style=\"top: 1200px; left: 93px;\"></div>\n  <div id=\"pr_market_east_1\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 256px;\"></div>\n  <div id=\"pr_market_east_2\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 425px;\"></div>\n  <div id=\"pr_market_east_3\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 594px;\"></div>\n  <div id=\"pr_market_east_4\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 762px;\"></div>\n  <div id=\"pr_market_east_5\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 931px;\"></div>\n  <div id=\"pr_market_east_deck\" class=\"pr_card\" data-card-id=\"EAST_BACK\" style=\"top: 1200px; left: 1095px;\"></div>\n"; };
+var tplGameMapEmpireCards = function () { return "\n<div id=\"pr_empire_england\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 349px;\"></div>\n  <div id=\"pr_empire_france\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 526px;\"></div>\n  <div id=\"pr_empire_holy_roman_empire\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 700px;\"></div>\n  <div id=\"pr_empire_hungary\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 876px;\"></div>\n  <div id=\"pr_empire_byzantium\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 1052px;\"></div>\n  <div id=\"pr_empire_portugal\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 349px;\"></div>\n  <div id=\"pr_empire_aragon\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 526px;\"></div>\n  <div id=\"pr_empire_papal_states\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 700px;\"></div>\n  <div id=\"pr_empire_ottoman\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 876px;\"></div>\n  <div id=\"pr_empire_mamluk\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 1052px;\"></div>\n"; };
+var tplGameMapVictoryCards = function () { return "\n  <div class=\"pr_square_card\" data-card-id=\"victory_renaissance_inactive\" style=\"top: 120.5px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_globalization_inactive\" style=\"top: 296px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_imperial_inactive\" style=\"top: 578px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_holy_inactive\" style=\"top: 753.5px; left: 135.5px;\"></div>\n"; };
+var tplGameMap = function () { return "\n<div id=\"pr_game_map_containter\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    \n    <div class=\"pr_card\" data-card-id=\"reformist_england\" style=\"top: 269.5px; left: 350px;\"></div>\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    <div class=\"pr_chess_piece pr_pawn\" data-color=\"purple\" style=\"top: 656px; left: 1028px;\"></div>\n    <div class=\"pr_chess_piece pr_knight\" data-religion=\"catholic\" style=\"top: 389px; left: 1056px;\"></div>\n    <div class=\"pr_chess_piece pr_rook\" data-religion=\"islamic\" style=\"top: 533px; left: 890px;\"></div>\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
 var LOG_TOKEN_BOLD_TEXT = 'boldText';
 var LOG_TOKEN_NEW_LINE = 'newLine';
 var LOG_TOKEN_PLAYER_NAME = 'playerName';
@@ -1140,6 +1157,28 @@ var tplLogTokenPlayerName = function (_a) {
     var name = _a.name, color = _a.color;
     return "<span class=\"playername\" style=\"color:#".concat(color, ";\">").concat(name, "</span>");
 };
+var Market = (function () {
+    function Market(game) {
+        this.game = game;
+        var gamedatas = game.gamedatas;
+        this.setupMarket({ gamedatas: gamedatas });
+    }
+    Market.prototype.setupMarket = function (_a) {
+        var gamedatas = _a.gamedatas;
+        gamedatas.market.forEach(function (card) {
+            var id = card.id, location = card.location;
+            if (location === 'market_west_0' || location === 'market_east_0') {
+                return;
+            }
+            var node = document.getElementById("pr_".concat(location));
+            if (!node) {
+                debug('Unable to get market node');
+            }
+            node.setAttribute('data-card-id', id.split('_')[0]);
+        });
+    };
+    return Market;
+}());
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {

@@ -9,6 +9,5 @@ class PREN066_BlackArmy extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN066_BlackArmy';
     $this->name = clienttranslate('Black Army');
     $this->region = EAST;
-    $this->type = TABLEAU_CARD;
   }
 }

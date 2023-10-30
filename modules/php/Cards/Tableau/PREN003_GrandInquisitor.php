@@ -9,6 +9,5 @@ class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN003_GrandInquisitor';
     $this->name = clienttranslate('Grand Inquisitor');
     $this->region = WEST;
-    $this->type = TABLEAU_CARD;
   }
 }

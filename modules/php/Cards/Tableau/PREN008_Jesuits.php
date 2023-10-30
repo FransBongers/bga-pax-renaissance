@@ -9,6 +9,5 @@ class PREN008_Jesuits extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN008_Jesuits';
     $this->name = clienttranslate('Jesuits');
     $this->region = WEST;
-    $this->type = TABLEAU_CARD;
   }
 }

@@ -9,6 +9,5 @@ class PREN002_PapalElephant extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN002_PapalElephant';
     $this->name = clienttranslate('Papal Elephant');
     $this->region = WEST;
-    $this->type = TABLEAU_CARD;
   }
 }

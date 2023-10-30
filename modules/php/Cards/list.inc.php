@@ -1,5 +1,21 @@
 <?php
 $cardIds = [
+  // Empire
+  'EmpireAragon',
+  'EmpireByzantium',
+  'EmpireEngland',
+  'EmpireFrance',
+  'EmpireHolyRomanEmpire',
+  'EmpireHungary',
+  'EmpireMamluk',
+  'EmpireOttoman',
+  'EmpirePapalStates',
+  'EmpirePortugal',
+  // Victory
+  'VictoryGlobalization',
+  'VictoryHoly',
+  'VictoryImperial',
+  'VictoryRenaissance',
   // Tableau
   'PREN001_InquistionPope',
   'PREN002_PapalElephant',

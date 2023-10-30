@@ -1,3 +1,40 @@
+const tplGameMapMarket = () => `
+  <div id="pr_market_west_0" class="pr_card" data-card-id="WEST_BACK" style="top: 950px; left: 93px;"></div>
+  <div id="pr_market_west_1" class="pr_card" data-card-id="null" style="top: 950px; left: 256px;"></div>
+  <div id="pr_market_west_2" class="pr_card" data-card-id="null" style="top: 950px; left: 425px;"></div>
+  <div id="pr_market_west_3" class="pr_card" data-card-id="null" style="top: 950px; left: 594px;"></div>
+  <div id="pr_market_west_4" class="pr_card" data-card-id="null" style="top: 950px; left: 762px;"></div>
+  <div id="pr_market_west_5" class="pr_card" data-card-id="null" style="top: 950px; left: 931px;"></div>
+  <div id="pr_market_west_deck" class="pr_card" data-card-id="WEST_BACK" style="top: 950px; left: 1095px;"></div>
+  <div id="pr_market_east_0" class="pr_card" data-card-id="EAST_BACK" style="top: 1200px; left: 93px;"></div>
+  <div id="pr_market_east_1" class="pr_card" data-card-id="null" style="top: 1200px; left: 256px;"></div>
+  <div id="pr_market_east_2" class="pr_card" data-card-id="null" style="top: 1200px; left: 425px;"></div>
+  <div id="pr_market_east_3" class="pr_card" data-card-id="null" style="top: 1200px; left: 594px;"></div>
+  <div id="pr_market_east_4" class="pr_card" data-card-id="null" style="top: 1200px; left: 762px;"></div>
+  <div id="pr_market_east_5" class="pr_card" data-card-id="null" style="top: 1200px; left: 931px;"></div>
+  <div id="pr_market_east_deck" class="pr_card" data-card-id="EAST_BACK" style="top: 1200px; left: 1095px;"></div>
+`;
+
+const tplGameMapEmpireCards = () => `
+<div id="pr_empire_england" class="pr_square_card" data-card-id="null" style="top: 120px; left: 349px;"></div>
+  <div id="pr_empire_france" class="pr_square_card" data-card-id="null" style="top: 120px; left: 526px;"></div>
+  <div id="pr_empire_holy_roman_empire" class="pr_square_card" data-card-id="null" style="top: 120px; left: 700px;"></div>
+  <div id="pr_empire_hungary" class="pr_square_card" data-card-id="null" style="top: 120px; left: 876px;"></div>
+  <div id="pr_empire_byzantium" class="pr_square_card" data-card-id="null" style="top: 120px; left: 1052px;"></div>
+  <div id="pr_empire_portugal" class="pr_square_card" data-card-id="null" style="top: 754px; left: 349px;"></div>
+  <div id="pr_empire_aragon" class="pr_square_card" data-card-id="null" style="top: 754px; left: 526px;"></div>
+  <div id="pr_empire_papal_states" class="pr_square_card" data-card-id="null" style="top: 754px; left: 700px;"></div>
+  <div id="pr_empire_ottoman" class="pr_square_card" data-card-id="null" style="top: 754px; left: 876px;"></div>
+  <div id="pr_empire_mamluk" class="pr_square_card" data-card-id="null" style="top: 754px; left: 1052px;"></div>
+`;
+
+const tplGameMapVictoryCards = () => `
+  <div class="pr_square_card" data-card-id="victory_renaissance_inactive" style="top: 120.5px; left: 135.5px;"></div>
+  <div class="pr_square_card" data-card-id="victory_globalization_inactive" style="top: 296px; left: 135.5px;"></div>
+  <div class="pr_square_card" data-card-id="victory_imperial_inactive" style="top: 578px; left: 135.5px;"></div>
+  <div class="pr_square_card" data-card-id="victory_holy_inactive" style="top: 753.5px; left: 135.5px;"></div>
+`;
+
 const tplGameMap = () => `
 <div id="pr_game_map_containter">
   <div class="pr_game_map_zoom_buttons">
@@ -5,16 +42,16 @@ const tplGameMap = () => `
     <button id="pr_game_map_zoom_in_button" type="button" class="bga-zoom-button bga-zoom-in-icon" style="margin-bottom: -5px;"></button>
   </div>
   <div id="pr_game_map">
-    <div class="pr_card" data-card-id="PREN001" style="top: 950px; left: 256px;"></div>
-    <div class="pr_card" data-card-id="PREN058" style="top: 1200px; left: 256px;"></div>
-    <div class="pr_square_card" data-card-id="empire_king_france" style="top: 120px; left: 526px;"></div>
+    
     <div class="pr_card" data-card-id="reformist_england" style="top: 269.5px; left: 350px;"></div>
-    <div class="pr_square_card" data-card-id="victory_inactive_renaissance" style="top: 121px; left: 136px;"></div>
+    ${tplGameMapVictoryCards()}
+    ${tplGameMapEmpireCards()}
     <div class="pr_chess_piece pr_pawn" data-color="purple" style="top: 656px; left: 1028px;"></div>
-    <div class="pr_chess_piece pr_bishop" data-religion="reformist" style="top: 831px; left: 1056px;"></div>
     <div class="pr_chess_piece pr_knight" data-religion="catholic" style="top: 389px; left: 1056px;"></div>
     <div class="pr_chess_piece pr_rook" data-religion="islamic" style="top: 533px; left: 890px;"></div>
+    ${tplGameMapMarket()}
   </div>
-</div>`
+</div>`;
 
+// <div class="pr_chess_piece pr_bishop" data-religion="reformist" style="top: 831px; left: 1056px;"></div>
 // <i class="fa-regular fa-magnifying-glass-plus"></i>

@@ -13,6 +13,11 @@
   border-radius: 5px;
 }
 
+.pr_card[data-card-id=null] {
+  opacity: 0;
+  // background-color: yellow;
+}
+
 .pr_square_card {
   box-sizing: border-box;
   width: 152px;
@@ -23,6 +28,11 @@
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
+}
+
+.pr_square_card[data-card-id=null] {
+  opacity: 0;
+  // background-color: yellow;
 }
 
 /* ------- EAST CARDS ------- */
@@ -294,36 +304,36 @@ $map-cards: (
 /* ------- SQUARE CARDS ------- */
 
 $square-cards: (
-  1: "empire_king_england",
-  2: "empire_republic_england",
-  3: "empire_king_france",
-  4: "empire_republic_france",
-  5: "empire_king_aragon",
-  6: "empire_republic_aragon",
-  7: "empire_king_papal_states",
-  8: "empire_republic_papal_states",
-  9: "empire_king_portugal",
-  10: "empire_republic_portugal",
-  11: "empire_king_holy_roman_empire",
-  12: "empire_republic_holy_roman_empire",
-  13: "empire_king_hungary",
-  14: "empire_republic_hungary",
-  15: "empire_king_ottoman",
-  16: "empire_republic_ottoman",
-  17: "empire_king_byzantium",
-  18: "empire_republic_byzantium",
-  19: "empire_king_mamluk",
-  20: "empire_republic_mamluk",
-  21: "victory_active_renaissance",
-  22: "victory_active_globalization",
-  23: "victory_active_holy",
-  24: "victory_active_imperial",
-  25: "victory_active_age_of_byzantine",
-  26: "victory_inactive_renaissance",
-  27: "victory_inactive_globalization",
-  28: "victory_inactive_holy",
-  29: "victory_inactive_imperial",
-  30: "victory_inactive_age_of_byzantine",
+  1: "EmpireEngland_king",
+  2: "EmpireEngland_republic",
+  3: "EmpireFrance_king",
+  4: "EmpireFrance_republic",
+  5: "EmpireAragon_king",
+  6: "EmpireAragon_republic",
+  7: "EmpirePapalStates_king",
+  8: "EmpirePapalStates_republic",
+  9: "EmpirePortugal_king",
+  10: "EmpirePortugal_republic",
+  11: "EmpireHolyRomanEmpire_king",
+  12: "EmpireHolyRomanEmpire_republic",
+  13: "EmpireHungary_king",
+  14: "EmpireHungary_republic",
+  15: "EmpireOttoman_king",
+  16: "EmpireOttoman_republic",
+  17: "EmpireByzantium_king",
+  18: "EmpireByzantium_republic",
+  19: "EmpireMamluk_king",
+  20: "EmpireMamluk_republic",
+  21: "victory_renaissance_active",
+  22: "victory_globalization_active",
+  23: "victory_holy_active",
+  24: "victory_imperial_active",
+  25: "victory_age_of_byzantine_active",
+  26: "victory_renaissance_inactive",
+  27: "victory_globalization_inactive",
+  28: "victory_holy_inactive",
+  29: "victory_imperial_inactive",
+  30: "victory_age_of_byzantine_inactive",
 );
 
 @for $i from 1 through 30 {

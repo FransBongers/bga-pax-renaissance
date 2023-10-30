@@ -34,7 +34,9 @@ const WEST = 'west';
 const EAST = 'east';
 
 // types
+const EMPIRE_CARD = 'empireCard';
 const TABLEAU_CARD = 'tableauCard';
+const VICTORY_CARD = 'victoryCard';
 
 // Card locations
 const DECK_EAST = 'deckEast';

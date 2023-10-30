@@ -9,6 +9,5 @@ class PREN062_BarbarossaBrothers extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN062_BarbarossaBrothers';
     $this->name = clienttranslate('Barbarossa Brothers');
     $this->region = EAST;
-    $this->type = TABLEAU_CARD;
   }
 }

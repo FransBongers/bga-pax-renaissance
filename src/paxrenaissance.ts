@@ -28,6 +28,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public animationManager: AnimationManager;
   public gameMap: GameMap;
   // public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
+  public market: Market;
   public notificationManager: NotificationManager;
   public playerManager: PlayerManager;
   public tooltipManager: TooltipManager;
@@ -77,7 +78,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.gameMap = new GameMap(this);
     this.tooltipManager = new TooltipManager(this);
     this.playerManager = new PlayerManager(this);
-
+    this.market = new Market(this);
 
     this.updatePlayAreaSize();
     window.addEventListener("resize", () => {

@@ -9,6 +9,5 @@ class PREN001_InquistionPope extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN001_InquistionPope';
     $this->name = clienttranslate('Inquistion Pope');
     $this->region = WEST;
-    $this->type = TABLEAU_CARD;
   }
 }

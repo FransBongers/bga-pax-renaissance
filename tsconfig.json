@@ -26,6 +26,8 @@
     "src/game-map/templates.ts",
     "src/logs/index.ts",
     "src/logs/templates.ts",
+    "src/market/index.ts",
+    "src/market/types.d.ts",
     "src/notification-manager/types.d.ts",
     "src/notification-manager/index.ts",
     "src/player-manager/index.ts",

@@ -9,6 +9,5 @@ class PREN004_Antipope extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN004_Antipope';
     $this->name = clienttranslate('Antipope');
     $this->region = WEST;
-    $this->type = TABLEAU_CARD;
   }
 }

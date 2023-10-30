@@ -9,6 +9,5 @@ class PREN064_JewishPirates extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN064_JewishPirates';
     $this->name = clienttranslate('Jewish Pirates');
     $this->region = EAST;
-    $this->type = TABLEAU_CARD;
   }
 }

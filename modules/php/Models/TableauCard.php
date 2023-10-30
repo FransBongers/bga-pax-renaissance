@@ -3,12 +3,11 @@ namespace PaxRenaissance\Models;
 
 class TableauCard extends Card
 {
-  // protected $type = \CARD_ANIMAL;
+  protected $type = TABLEAU_CARD;
   protected $id;
   protected $name;
   protected $region;
-  protected $type;
-
+  
   protected $staticAttributes = [
     'name',
     'region',

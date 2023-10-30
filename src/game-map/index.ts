@@ -19,7 +19,7 @@ class GameMap {
     this.game = game;
     this.zoomLevel =
       Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1;
-      console.log('localStorage zoomLevel', this.zoomLevel);
+    console.log("localStorage zoomLevel", this.zoomLevel);
     const gamedatas = game.gamedatas;
 
     this.setupGameMap({ gamedatas });
@@ -33,6 +33,18 @@ class GameMap {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
+  setupEmpireCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    gamedatas.gameMap.forEach((card) => {
+      console.log("empireCard", card);
+      const { id, location } = card;
+      const node = document.getElementById(`pr_${location}`);
+      if (!node) {
+        debug("Unable to get empire card node");
+      }
+      node.setAttribute("data-card-id", `${id}_king`);
+    });
+  }
+
   updateGameMap({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {}
 
   // Setup functions
@@ -42,6 +54,7 @@ class GameMap {
       .insertAdjacentHTML("afterbegin", tplGameMap());
     this.updateGameMapSize();
     this.setupZoomButtons();
+    this.setupEmpireCards({ gamedatas });
   }
 
   setupZoomButtons() {
@@ -73,8 +86,10 @@ class GameMap {
   // ..######..########....##.......##....########.##.....##..######.
 
   private getCurrentZoomIndex(): number {
-    console.log('zoomLevel',this.zoomLevel);
-    return ZOOM_LEVELS.indexOf(Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1);
+    console.log("zoomLevel", this.zoomLevel);
+    return ZOOM_LEVELS.indexOf(
+      Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1
+    );
   }
 
   //  .##.....##.########.####.##.......####.########.##....##
@@ -88,10 +103,10 @@ class GameMap {
   private checkZoomButtonClasses() {
     const zoomInButton: HTMLElement = $("pr_game_map_zoom_in_button");
     const zoomOutButton: HTMLElement = $("pr_game_map_zoom_out_button");
-    
+
     zoomInButton.classList.remove(DISABLED);
     zoomOutButton.classList.remove(DISABLED);
-    
+
     if (this.zoomLevel === ZOOM_LEVELS[0]) {
       zoomOutButton.classList.add(DISABLED);
     } else if (this.zoomLevel === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]) {
@@ -102,12 +117,12 @@ class GameMap {
   public updateGameMapSize() {
     const map = document.getElementById("pr_game_map");
     map.style.transform = `scale(${this.zoomLevel})`;
-    const mapContainer = document.getElementById('pr_game_map_containter');
+    const mapContainer = document.getElementById("pr_game_map_containter");
     mapContainer.style.width = `${this.zoomLevel * MAX_MAP_WIDTH}px`;
     mapContainer.style.height = `${this.zoomLevel * MAX_MAP_HEIGHT + 56}px`;
   }
 
-  private zoom({ type }: { type: "in" | "out"; }) {
+  private zoom({ type }: { type: "in" | "out" }) {
     const currentZoomIndex = this.getCurrentZoomIndex();
     if (type === "in" && currentZoomIndex !== ZOOM_LEVELS.length - 1) {
       this.zoomLevel = ZOOM_LEVELS[currentZoomIndex + 1];

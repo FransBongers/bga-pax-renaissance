@@ -9,6 +9,5 @@ class PREN063_OttomanNavy extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN063_OttomanNavy';
     $this->name = clienttranslate('Ottoman Navy');
     $this->region = EAST;
-    $this->type = TABLEAU_CARD;
   }
 }

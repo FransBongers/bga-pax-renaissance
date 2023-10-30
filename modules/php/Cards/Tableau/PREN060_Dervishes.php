@@ -9,6 +9,5 @@ class PREN060_Dervishes extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN060_Dervishes';
     $this->name = clienttranslate('Dervishes');
     $this->region = EAST;
-    $this->type = TABLEAU_CARD;
   }
 }

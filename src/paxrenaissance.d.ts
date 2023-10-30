@@ -22,8 +22,17 @@ interface PaxRenaissanceGame extends Game {
   tooltipManager: TooltipManager;
 }
 
+interface Card {
+  id: string;
+  location: string;
+  state: number;
+  used: number;
+}
+
 interface PaxRenaissanceGamedatas extends Gamedatas {
   canceledNotifIds: string[];
+  gameMap: Card[];
+  market: Card[];
   players: Record<number, BgaPlayer>;
 }
 

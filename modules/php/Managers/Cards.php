@@ -25,9 +25,21 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
     return self::getCardInstance($card['card_id'], $card);
   }
 
+  private static function getClassPrefix($cardId) {
+    if (Utils::startsWith($cardId,'Victory')) {
+      return 'Victory';
+    } 
+    if (Utils::startsWith($cardId,'Empire')) {
+      return 'Empire';
+    }
+    return 'Tableau';
+  }
+
   public static function getCardInstance($id, $data = null)
   {
-    $className = "\PaxRenaissance\Cards\Tableau\\$id";
+    $prefix = self::getClassPrefix($id);
+
+    $className = "\PaxRenaissance\Cards\\$prefix\\$id";
     return new $className($data);
   }
 
@@ -92,6 +104,8 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
       if ($type === TABLEAU_CARD) {
         $region = $card->getRegion();
         $location = 'pool_' . $region;
+      } else if ($type === VICTORY_CARD || $type === EMPIRE_CARD) {
+        $location = $card->getStartLocation();
       }
 
       $cards[$cId] = [

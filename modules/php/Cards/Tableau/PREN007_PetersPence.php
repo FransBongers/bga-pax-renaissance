@@ -9,6 +9,5 @@ class PREN007_PetersPence extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN007_PetersPence';
     $this->name = clienttranslate("Peter's Pence");
     $this->region = WEST;
-    $this->type = TABLEAU_CARD;
   }
 }
