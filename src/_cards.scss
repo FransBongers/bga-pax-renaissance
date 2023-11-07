@@ -3,8 +3,8 @@
 
 .pr_card {
   box-sizing: border-box;
-  width: 152px;
-  height: 232px;
+  width: 151px;
+  height: 230px;
   background-size: 100% 100%;
   position: absolute;
   background-repeat: no-repeat;
@@ -254,50 +254,6 @@ $west-cards2: (
     background-size: 1000% 600%;
     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
     background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 5);
-  }
-}
-
-/* ------- MAP CARDS ------- */
-
-$map-cards: (
-  1: "catholic_england",
-  2: "catholic_france",
-  3: "catholic_holy_roman_empire",
-  4: "catholic_hungary",
-  5: "catholic_byzantium",
-  6: "catholic_portugal",
-  7: "catholic_aragon",
-  8: "catholic_papal_states",
-  9: "catholic_ottoman",
-  10: "catholic_mamluk",
-  11: "islamic_england",
-  12: "islamic_france",
-  13: "islamic_holy_roman_empire",
-  14: "islamic_hungary",
-  15: "islamic_byzantium",
-  16: "islamic_portugal",
-  17: "islamic_aragon",
-  18: "islamic_papal_states",
-  19: "islamic_ottoman",
-  20: "islamic_mamluk",
-  21: "reformist_england",
-  22: "reformist_france",
-  23: "reformist_holy_roman_empire",
-  24: "reformist_hungary",
-  25: "reformist_byzantium",
-  26: "reformist_portugal",
-  27: "reformist_aragon",
-  28: "reformist_papal_states",
-  29: "reformist_ottoman",
-  30: "reformist_mamluk",
-);
-
-@for $i from 1 through 30 {
-  .pr_card[data-card-id="#{map.get($map-cards,$i)}"] {
-    background-image: url("img/map_cards.webp");
-    background-size: 1000% 300%;
-    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
-    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 2);
   }
 }
 

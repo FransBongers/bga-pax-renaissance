@@ -44,6 +44,13 @@
    **** GENERIC METHODS ****
    *************************/
 
+   public function endGame()
+   {
+    self::setAjaxMode();
+    $result = $this->game->endGame();
+    self::ajaxResponse();
+   }
+
    public function restart()
    {
      self::setAjaxMode();

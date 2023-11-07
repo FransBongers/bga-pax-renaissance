@@ -1,9 +1,10 @@
 @use "sass:math";
 
 .pr_chess_piece {
-  position: absolute;
+  // position: absolute;
   background-repeat: no-repeat;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  // opacity: 1 !important;
 }
 
 /* ------- PAWNS ------- */

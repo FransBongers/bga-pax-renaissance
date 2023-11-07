@@ -35,10 +35,12 @@ spl_autoload_register($swdNamespaceAutoload, true, true);
 require_once(APP_GAMEMODULE_PATH . 'module/table/table.game.php');
 
 use PaxRenaissance\Core\Globals;
+use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Preferences;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Managers\Cards;
+use PaxRenaissance\Managers\ChessPieces;
 use PaxRenaissance\Managers\MapBoard;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
@@ -97,6 +99,7 @@ class PaxRenaissance extends Table
         Stats::checkExistence();
 
         Cards::setupNewGame($players,$options);
+        ChessPieces::setupNewGame($players,$options);
         Market::setupNewGame($players,$options);
 
         $this->setGameStateInitialValue('logging', false);
@@ -118,6 +121,7 @@ class PaxRenaissance extends Table
             'gameMap' => MapBoard::getUiData(), 
             'market' => Market::getUiData(),
             'players' => Players::getUiData($pId),
+            'chessPieces' => ChessPieces::getAll()->toArray(),
         ];
 
         return $data;
@@ -145,6 +149,13 @@ class PaxRenaissance extends Table
         return self::$instance;
     }
 
+    function endGame()
+    {
+        Notifications::message(clienttranslate('${tkn_playerName} end the game'),[
+            'player' => Players::get(),
+        ]);
+        $this->nextState('gameEnd');
+    }
 
         /**
      * Generic state to handle change of active player in the middle of a transition

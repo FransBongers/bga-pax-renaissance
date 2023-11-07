@@ -10,7 +10,7 @@
  * paxrenaissance.js
  *
  * PaxRenaissance user interface script
- * 
+ *
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *
  */
@@ -33,7 +33,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public playerManager: PlayerManager;
   public tooltipManager: TooltipManager;
   public playAreaScale: number;
-  
+
   private _notif_uid_to_log_id = {};
   private _last_notif = null;
   public _connections: unknown[];
@@ -104,15 +104,18 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }
 
   public updatePlayAreaSize() {
-    
     const playAreaContainer = document.getElementById("pr_play_area_container");
-    this.playAreaScale = Math.min(1, playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH);
+    this.playAreaScale = Math.min(
+      1,
+      playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH
+    );
     const playArea = document.getElementById("pr_play_area");
     playArea.style.transform = `scale(${this.playAreaScale})`;
     const playAreaHeight = playArea.offsetHeight;
-    playArea.style.width = (playAreaContainer.offsetWidth / this.playAreaScale) + 'px';
-    console.log('playAreaHeight',playAreaHeight);
-    playAreaContainer.style.height = playAreaHeight * this.playAreaScale + 'px';
+    playArea.style.width =
+      playAreaContainer.offsetWidth / this.playAreaScale + "px";
+    console.log("playAreaHeight", playAreaHeight);
+    playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
   }
 
   //  .####.##....##.########.########.########.....###.....######..########.####..#######..##....##
@@ -151,6 +154,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
   //                        action status bar (ie: the HTML links in the status bar).
   //
   public onUpdateActionButtons(stateName: string, args: any) {
+    if (this.framework().isCurrentPlayerActive()) {
+      this.addPrimaryActionButton({
+        id: "end_game_button",
+        text: _("End game"),
+        callback: () => this.takeAction({ action: 'endGame'}),
+      });
+    }
+
     // console.log('onUpdateActionButtons: ' + stateName);
   }
 

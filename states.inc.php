@@ -70,11 +70,11 @@ $machinestates = [
 
     2 => array(
         "name" => "playerTurn",
-        "description" => clienttranslate('${actplayer} must play a card or pass'),
-        "descriptionmyturn" => clienttranslate('${you} must play a card or pass'),
+        "description" => clienttranslate('${actplayer} may end the game'),
+        "descriptionmyturn" => clienttranslate('${you} may end the game'),
         "type" => "activeplayer",
-        "possibleactions" => array("playCard", "pass"),
-        "transitions" => array("playCard" => 2, "pass" => 2)
+        "possibleactions" => array("playCard", "pass", "endGame"),
+        "transitions" => array("playCard" => 2, "pass" => 2, "gameEnd" => ST_END_GAME )
     ),
 
     // Generic state to change player

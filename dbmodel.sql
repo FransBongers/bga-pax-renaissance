@@ -30,6 +30,13 @@ CREATE TABLE IF NOT EXISTS `cards` (
   PRIMARY KEY (`card_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
+CREATE TABLE IF NOT EXISTS `chess_pieces` (
+  `piece_id` varchar(32) NOT NULL,
+  `piece_location` varchar(32) NOT NULL,
+  `piece_state` int(10) DEFAULT 0,
+  PRIMARY KEY (`piece_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
 CREATE TABLE IF NOT EXISTS `log` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `move_id` int(10) NOT NULL,

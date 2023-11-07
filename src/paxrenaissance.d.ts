@@ -29,11 +29,18 @@ interface Card {
   used: number;
 }
 
+interface ChessPiece {
+  id: string;
+  location: string;
+  state: number;
+}
+
 interface PaxRenaissanceGamedatas extends Gamedatas {
   canceledNotifIds: string[];
   gameMap: Card[];
   market: Card[];
   players: Record<number, BgaPlayer>;
+  chessPieces: ChessPiece[];
 }
 
 interface PaxRenaissancePlayerData extends BgaPlayer {

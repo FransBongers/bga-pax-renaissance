@@ -27,6 +27,34 @@ const LOG_TOKEN_PLAYER_NAME = 'playerName';
 const DISPATCH_TRANSITION = 'dispatchTransition';
 
 /**
+ * Player colors
+ */
+const BLUE = "blue";
+const GREEN = "green";
+const PURPLE = "purple";
+const YELLOW = "yellow";
+
+const PLAYER_COLORS = [
+  BLUE,
+  GREEN,
+  PURPLE,
+  YELLOW,
+];
+
+/**
+ * Religions
+ */
+const CATHOLIC = "catholic";
+const ISLAMIC = "islamic";
+const REFORMIST = "reformist";
+
+const RELIGIONS = [
+  CATHOLIC,
+  ISLAMIC,
+  REFORMIST
+];
+
+/**
  * Cards
  */
 // regions
@@ -44,3 +72,37 @@ const DECK_WEST = 'deckWest';
 const DISCARD = 'discard';
 const POOL_EAST = 'pool_'.EAST;
 const POOL_WEST = 'pool_'.WEST;
+
+/**
+ * cities
+ */
+
+ const LONDON = 'london';
+ const BORDEAUX = 'bordeaux';
+ const BRUGES = 'bruges';
+ const PARIS = 'paris';
+ const LYON = 'lyon';
+ const LUBECK = 'lubeck';
+ const NURNBERG = 'nurnberg';
+ const NOVGOROD = 'novgorod';
+ const VIENNA = 'vienna';
+ const BUDA = 'buda';
+ const VARNA = 'varna';
+ const TANA = 'tana';
+ const CAFFA = 'caffa';
+ const TREBIZOND = 'trebizond';
+ const TOLEDO = 'toledo';
+ const GRANADA = 'granada';
+ const SPICE_ISLANDS = 'spiceIslands';
+ const VALENCIA = 'valencia';
+ const ALGIERS = 'algiers';
+ const TIMBUKTU = 'timbuktu';
+ const VENICE = 'venice';
+ const CONSTANTINOPLE_1 = 'constantinople1';
+ const CONSTANTINOPLE_2 = 'constantinople2';
+ const CONSTANTINOPLE_3 = 'constantinople3';
+ const MODON = 'modon';
+ const RHODES = 'rhodes';
+ const CYPRUS = 'cyprus';
+ const CAIRO = 'cairo';
+ const RED_SEA = 'redSea';

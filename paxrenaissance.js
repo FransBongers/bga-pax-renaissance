@@ -820,9 +820,10 @@ var PaxRenaissance = (function () {
         var playArea = document.getElementById("pr_play_area");
         playArea.style.transform = "scale(".concat(this.playAreaScale, ")");
         var playAreaHeight = playArea.offsetHeight;
-        playArea.style.width = (playAreaContainer.offsetWidth / this.playAreaScale) + 'px';
-        console.log('playAreaHeight', playAreaHeight);
-        playAreaContainer.style.height = playAreaHeight * this.playAreaScale + 'px';
+        playArea.style.width =
+            playAreaContainer.offsetWidth / this.playAreaScale + "px";
+        console.log("playAreaHeight", playAreaHeight);
+        playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
     };
     PaxRenaissance.prototype.onEnteringState = function (stateName, args) {
         console.log("Entering state: " + stateName, args);
@@ -836,6 +837,14 @@ var PaxRenaissance = (function () {
         this.clearPossible();
     };
     PaxRenaissance.prototype.onUpdateActionButtons = function (stateName, args) {
+        var _this = this;
+        if (this.framework().isCurrentPlayerActive()) {
+            this.addPrimaryActionButton({
+                id: "end_game_button",
+                text: _("End game"),
+                callback: function () { return _this.takeAction({ action: 'endGame' }); },
+            });
+        }
     };
     PaxRenaissance.prototype.addActionButtonClient = function (_a) {
         var id = _a.id, text = _a.text, callback = _a.callback, extraClasses = _a.extraClasses, _b = _a.color, color = _b === void 0 ? "none" : _b;
@@ -1022,6 +1031,76 @@ var COLOR_MAP = {
 var DISABLED = "disabled";
 var PR_SELECTABLE = "pr_selectable";
 var PR_SELECTED = "pr_selected";
+var ENGLAND = "england";
+var FRANCE = "france";
+var HOLY_ROMAN_EMIRE = "holy_roman_empire";
+var HUNGARY = "hungary";
+var BYZANTIUM = "byzantium";
+var PORTUGAL = "portugal";
+var ARAGON = "aragon";
+var PAPAL_STATES = "papal_states";
+var OTTOMAN = "ottoman";
+var MAMLUK = "mamluk";
+var LONDON = "london";
+var BORDEAUX = "bordeaux";
+var BRUGES = "bruges";
+var PARIS = "paris";
+var LYON = "lyon";
+var LUBECK = "lubeck";
+var NURNBERG = "nurnberg";
+var NOVGOROD = "novgorod";
+var VIENNA = "vienna";
+var BUDA = "buda";
+var VARNA = "varna";
+var TANA = "tana";
+var CAFFA = "caffa";
+var TREBIZOND = "trebizond";
+var TOLEDO = "toledo";
+var GRANADA = "granada";
+var SPICE_ISLANDS = "spiceIslands";
+var VALENCIA = "valencia";
+var ALGIERS = "algiers";
+var TIMBUKTU = "timbuktu";
+var VENICE = "venice";
+var CONSTANTINOPLE_1 = "constantinople1";
+var CONSTANTINOPLE_2 = "constantinople2";
+var CONSTANTINOPLE_3 = "constantinople3";
+var MODON = "modon";
+var RHODES = "rhodes";
+var CYPRUS = "cyprus";
+var CAIRO = "cairo";
+var RED_SEA = "redSea";
+var CITIES = [
+    LONDON,
+    BORDEAUX,
+    BRUGES,
+    PARIS,
+    LYON,
+    LUBECK,
+    NURNBERG,
+    NOVGOROD,
+    VIENNA,
+    BUDA,
+    VARNA,
+    TANA,
+    CAFFA,
+    TREBIZOND,
+    TOLEDO,
+    GRANADA,
+    SPICE_ISLANDS,
+    VALENCIA,
+    ALGIERS,
+    TIMBUKTU,
+    VENICE,
+    CONSTANTINOPLE_1,
+    CONSTANTINOPLE_2,
+    CONSTANTINOPLE_3,
+    MODON,
+    RHODES,
+    CYPRUS,
+    CAIRO,
+    RED_SEA,
+];
 define([
     'dojo',
     'dojo/_base/declare',
@@ -1038,6 +1117,185 @@ var debug = isDebug ? console.info.bind(window.console) : function () { };
 var capitalizeFirstLetter = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+var MAP_CONFIG = (_a = {},
+    _a[ENGLAND] = {
+        top: 270,
+        left: 350,
+        cities: (_b = {},
+            _b[LONDON] = {
+                top: 76,
+                left: 80,
+            },
+            _b[BORDEAUX] = {
+                top: 185,
+                left: 108,
+            },
+            _b),
+    },
+    _a[FRANCE] = {
+        top: 270,
+        left: 525.5,
+        cities: (_c = {},
+            _c[BRUGES] = {
+                top: 65.5,
+                left: 51.5,
+            },
+            _c[PARIS] = {
+                top: 127,
+                left: 9,
+            },
+            _c[LYON] = {
+                top: 164,
+                left: 91,
+            },
+            _c),
+    },
+    _a[HOLY_ROMAN_EMIRE] = {
+        top: 270,
+        left: 701,
+        cities: (_d = {},
+            _d[LUBECK] = {
+                top: 42,
+                left: 27,
+            },
+            _d[NOVGOROD] = {
+                top: 35,
+                left: 89,
+            },
+            _d[NURNBERG] = {
+                top: 128.5,
+                left: 14,
+            },
+            _d[VIENNA] = {
+                top: 150,
+                left: 88.5,
+            },
+            _d),
+    },
+    _a[HUNGARY] = {
+        top: 270,
+        left: 876,
+        cities: (_e = {},
+            _e[BUDA] = {
+                top: 158,
+                left: 15.5,
+            },
+            _e[VARNA] = {
+                top: 170.5,
+                left: 76,
+            },
+            _e),
+    },
+    _a[BYZANTIUM] = {
+        top: 270,
+        left: 1053,
+        cities: (_f = {},
+            _f[TANA] = {
+                top: 41,
+                left: 40,
+            },
+            _f[CAFFA] = {
+                top: 131,
+                left: 5,
+            },
+            _f[TREBIZOND] = {
+                top: 188,
+                left: 112,
+            },
+            _f),
+    },
+    _a[PORTUGAL] = {
+        top: 525,
+        left: 350,
+        cities: (_g = {},
+            _g[TOLEDO] = {
+                top: 62.5,
+                left: 94,
+            },
+            _g[GRANADA] = {
+                top: 118.5,
+                left: 103,
+            },
+            _g[SPICE_ISLANDS] = {
+                top: 184,
+                left: 37,
+            },
+            _g),
+    },
+    _a[ARAGON] = {
+        top: 525,
+        left: 525.5,
+        cities: (_h = {},
+            _h[VALENCIA] = {
+                top: 55.5,
+                left: 14.5,
+            },
+            _h[ALGIERS] = {
+                top: 143.5,
+                left: 101,
+            },
+            _h[TIMBUKTU] = {
+                top: 165.5,
+                left: 33,
+            },
+            _h),
+    },
+    _a[PAPAL_STATES] = {
+        top: 525,
+        left: 701,
+        cities: (_j = {},
+            _j[VENICE] = {
+                top: 20.5,
+                left: 40,
+            },
+            _j),
+    },
+    _a[OTTOMAN] = {
+        top: 525,
+        left: 876,
+        cities: (_k = {},
+            _k[CONSTANTINOPLE_1] = {
+                top: 24.5,
+                left: 10.5,
+            },
+            _k[CONSTANTINOPLE_2] = {
+                top: 24.5,
+                left: 45,
+            },
+            _k[CONSTANTINOPLE_3] = {
+                top: 24.5,
+                left: 79.5,
+            },
+            _k[MODON] = {
+                top: 96,
+                left: 19.5,
+            },
+            _k[RHODES] = {
+                top: 86.5,
+                left: 108,
+            },
+            _k),
+    },
+    _a[MAMLUK] = {
+        top: 525,
+        left: 1053,
+        cities: (_l = {},
+            _l[CYPRUS] = {
+                top: 76,
+                left: 54.5,
+            },
+            _l[CAIRO] = {
+                top: 162,
+                left: 42,
+            },
+            _l[RED_SEA] = {
+                top: 163.5,
+                left: 106,
+            },
+            _l),
+    },
+    _a);
 var LOCAL_STORAGE_MAP_ZOOM_KEY = "PaxRenaissance-map-zoom";
 var ZOOM_LEVELS = [0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1];
 var MAX_MAP_HEIGHT = 1500;
@@ -1051,10 +1309,23 @@ var GameMap = (function () {
         var gamedatas = game.gamedatas;
         this.setupGameMap({ gamedatas: gamedatas });
     }
+    GameMap.prototype.setupChessPieces = function (_a) {
+        var gamedatas = _a.gamedatas;
+        CITIES.forEach(function (city) {
+            var chessPiece = gamedatas.chessPieces.find(function (piece) { return piece.location === city; });
+            if (!chessPiece) {
+                return;
+            }
+            var node = document.getElementById("pr_city_".concat(city));
+            if (!node) {
+                return;
+            }
+            node.insertAdjacentHTML("beforeend", tplChessPiece({ id: chessPiece.id }));
+        });
+    };
     GameMap.prototype.setupEmpireCards = function (_a) {
         var gamedatas = _a.gamedatas;
         gamedatas.gameMap.forEach(function (card) {
-            console.log("empireCard", card);
             var id = card.id, location = card.location;
             var node = document.getElementById("pr_".concat(location));
             if (!node) {
@@ -1074,6 +1345,7 @@ var GameMap = (function () {
         this.updateGameMapSize();
         this.setupZoomButtons();
         this.setupEmpireCards({ gamedatas: gamedatas });
+        this.setupChessPieces({ gamedatas: gamedatas });
     };
     GameMap.prototype.setupZoomButtons = function () {
         var _this = this;
@@ -1125,10 +1397,28 @@ var GameMap = (function () {
     };
     return GameMap;
 }());
+var tplChessPiece = function (_a) {
+    var id = _a.id;
+    var type = id.split('_')[0];
+    var religion = id.split('_')[1];
+    return "<div id=\"".concat(id, "\" class=\"pr_chess_piece pr_").concat(type, "\" data-religion=\"").concat(religion, "\"></div>");
+};
 var tplGameMapMarket = function () { return "\n  <div id=\"pr_market_west_0\" class=\"pr_card\" data-card-id=\"WEST_BACK\" style=\"top: 950px; left: 93px;\"></div>\n  <div id=\"pr_market_west_1\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 256px;\"></div>\n  <div id=\"pr_market_west_2\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 425px;\"></div>\n  <div id=\"pr_market_west_3\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 594px;\"></div>\n  <div id=\"pr_market_west_4\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 762px;\"></div>\n  <div id=\"pr_market_west_5\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 950px; left: 931px;\"></div>\n  <div id=\"pr_market_west_deck\" class=\"pr_card\" data-card-id=\"WEST_BACK\" style=\"top: 950px; left: 1095px;\"></div>\n  <div id=\"pr_market_east_0\" class=\"pr_card\" data-card-id=\"EAST_BACK\" style=\"top: 1200px; left: 93px;\"></div>\n  <div id=\"pr_market_east_1\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 256px;\"></div>\n  <div id=\"pr_market_east_2\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 425px;\"></div>\n  <div id=\"pr_market_east_3\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 594px;\"></div>\n  <div id=\"pr_market_east_4\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 762px;\"></div>\n  <div id=\"pr_market_east_5\" class=\"pr_card\" data-card-id=\"null\" style=\"top: 1200px; left: 931px;\"></div>\n  <div id=\"pr_market_east_deck\" class=\"pr_card\" data-card-id=\"EAST_BACK\" style=\"top: 1200px; left: 1095px;\"></div>\n"; };
 var tplGameMapEmpireCards = function () { return "\n<div id=\"pr_empire_england\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 349px;\"></div>\n  <div id=\"pr_empire_france\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 526px;\"></div>\n  <div id=\"pr_empire_holy_roman_empire\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 700px;\"></div>\n  <div id=\"pr_empire_hungary\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 876px;\"></div>\n  <div id=\"pr_empire_byzantium\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 1052px;\"></div>\n  <div id=\"pr_empire_portugal\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 349px;\"></div>\n  <div id=\"pr_empire_aragon\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 526px;\"></div>\n  <div id=\"pr_empire_papal_states\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 700px;\"></div>\n  <div id=\"pr_empire_ottoman\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 876px;\"></div>\n  <div id=\"pr_empire_mamluk\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 1052px;\"></div>\n"; };
+var tplGameMapMapCards = function () {
+    var htmlArray = Object.entries(MAP_CONFIG).map(function (_a) {
+        var empire = _a[0], data = _a[1];
+        return "\n  <div id=\"pr_empire_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: ").concat(data.top, "px; left: ").concat(data.left, "px\">\n    ").concat(Object.entries(data.cities)
+            .map(function (_a) {
+            var city = _a[0], coords = _a[1];
+            return "<div id=\"pr_city_".concat(city, "\" class=\"pr_city\" style=\"top: ").concat(coords.top, "px; left: ").concat(coords.left, "px\"></div>");
+        })
+            .join(""), "\n  </div>\n");
+    });
+    return htmlArray.join("");
+};
 var tplGameMapVictoryCards = function () { return "\n  <div class=\"pr_square_card\" data-card-id=\"victory_renaissance_inactive\" style=\"top: 120.5px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_globalization_inactive\" style=\"top: 296px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_imperial_inactive\" style=\"top: 578px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_holy_inactive\" style=\"top: 753.5px; left: 135.5px;\"></div>\n"; };
-var tplGameMap = function () { return "\n<div id=\"pr_game_map_containter\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    \n    <div class=\"pr_card\" data-card-id=\"reformist_england\" style=\"top: 269.5px; left: 350px;\"></div>\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    <div class=\"pr_chess_piece pr_pawn\" data-color=\"purple\" style=\"top: 656px; left: 1028px;\"></div>\n    <div class=\"pr_chess_piece pr_knight\" data-religion=\"catholic\" style=\"top: 389px; left: 1056px;\"></div>\n    <div class=\"pr_chess_piece pr_rook\" data-religion=\"islamic\" style=\"top: 533px; left: 890px;\"></div>\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
+var tplGameMap = function () { return "\n<div id=\"pr_game_map_containter\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
 var LOG_TOKEN_BOLD_TEXT = 'boldText';
 var LOG_TOKEN_NEW_LINE = 'newLine';
 var LOG_TOKEN_PLAYER_NAME = 'playerName';

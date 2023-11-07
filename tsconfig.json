@@ -22,6 +22,7 @@
     "src/framework.d.ts",
     "src/templates.ts",
     "src/utility.ts",
+    "src/game-map/config.ts",
     "src/game-map/index.ts",
     "src/game-map/templates.ts",
     "src/logs/index.ts",

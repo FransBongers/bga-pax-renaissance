@@ -33,9 +33,27 @@ class GameMap {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
+  setupChessPieces({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    CITIES.forEach((city) => {
+      const chessPiece = gamedatas.chessPieces.find(
+        (piece) => piece.location === city
+      );
+      if (!chessPiece) {
+        return;
+      }
+      const node = document.getElementById(`pr_city_${city}`);
+      if (!node) {
+        return;
+      }
+      node.insertAdjacentHTML(
+        "beforeend",
+        tplChessPiece({ id: chessPiece.id })
+      );
+    });
+  }
+
   setupEmpireCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     gamedatas.gameMap.forEach((card) => {
-      console.log("empireCard", card);
       const { id, location } = card;
       const node = document.getElementById(`pr_${location}`);
       if (!node) {
@@ -55,6 +73,7 @@ class GameMap {
     this.updateGameMapSize();
     this.setupZoomButtons();
     this.setupEmpireCards({ gamedatas });
+    this.setupChessPieces({ gamedatas });
   }
 
   setupZoomButtons() {
