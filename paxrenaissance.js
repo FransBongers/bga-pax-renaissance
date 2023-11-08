@@ -802,6 +802,7 @@ var PaxRenaissance = (function () {
         this.tooltipManager = new TooltipManager(this);
         this.playerManager = new PlayerManager(this);
         this.market = new Market(this);
+        this.hand = new Hand(this);
         this.updatePlayAreaSize();
         window.addEventListener("resize", function () {
             _this.updatePlayAreaSize();
@@ -1377,7 +1378,7 @@ var GameMap = (function () {
     GameMap.prototype.updateGameMapSize = function () {
         var map = document.getElementById("pr_game_map");
         map.style.transform = "scale(".concat(this.zoomLevel, ")");
-        var mapContainer = document.getElementById("pr_game_map_containter");
+        var mapContainer = document.getElementById("pr_game_map_container");
         mapContainer.style.width = "".concat(this.zoomLevel * MAX_MAP_WIDTH, "px");
         mapContainer.style.height = "".concat(this.zoomLevel * MAX_MAP_HEIGHT + 56, "px");
     };
@@ -1418,7 +1419,30 @@ var tplGameMapMapCards = function () {
     return htmlArray.join("");
 };
 var tplGameMapVictoryCards = function () { return "\n  <div class=\"pr_square_card\" data-card-id=\"victory_renaissance_inactive\" style=\"top: 120.5px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_globalization_inactive\" style=\"top: 296px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_imperial_inactive\" style=\"top: 578px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_holy_inactive\" style=\"top: 753.5px; left: 135.5px;\"></div>\n"; };
-var tplGameMap = function () { return "\n<div id=\"pr_game_map_containter\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
+var tplGameMap = function () { return "\n<div id=\"pr_game_map_container\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
+var Hand = (function () {
+    function Hand(game) {
+        this.game = game;
+        this.setupHand();
+    }
+    Hand.prototype.setupHand = function () {
+        var node = $('game_play_area');
+        node.insertAdjacentHTML('beforeend', tplHand());
+        var handWrapper = $('pr_floating_hand_wrapper');
+        $('pr_floating_hand_button').addEventListener('click', function () {
+            if (handWrapper.dataset.open && handWrapper.dataset.open == 'hand') {
+                delete handWrapper.dataset.open;
+            }
+            else {
+                handWrapper.dataset.open = 'hand';
+            }
+        });
+    };
+    return Hand;
+}());
+var tplHand = function () {
+    return "<div id=\"pr_floating_hand_wrapper\" class=\"active\">\n            <div id=\"pr_floating_hand_button_container\">\n              <button id=\"pr_floating_hand_button\" type=\"button\" class=\"pr_button\">\n                <div class=\"pr_icon\"></div>\n              </button>  \n            </div>\n            <div id=\"pr_floating_hand\">\n              <div id=\"pr_player_hand\">\n              <div id=\"pr_market_east_3\" class=\"pr_card\" data-card-id=\"PREN078\"></div>\n              <div id=\"pr_market_east_3\" class=\"pr_card\" data-card-id=\"PREN079\"></div>\n              </div>\n            </div>\n          </div\n  ";
+};
 var LOG_TOKEN_BOLD_TEXT = 'boldText';
 var LOG_TOKEN_NEW_LINE = 'newLine';
 var LOG_TOKEN_PLAYER_NAME = 'playerName';

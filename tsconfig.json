@@ -25,6 +25,8 @@
     "src/game-map/config.ts",
     "src/game-map/index.ts",
     "src/game-map/templates.ts",
+    "src/hand/index.ts",
+    "src/hand/templates.ts",
     "src/logs/index.ts",
     "src/logs/templates.ts",
     "src/market/index.ts",

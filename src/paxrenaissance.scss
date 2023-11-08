@@ -16,6 +16,7 @@
 @use "sass:math";
 @use 'base';
 @use 'game-map/gamemap';
+@use 'hand/hand';
 @use 'cards';
 @use 'pieces';
 @use 'player-manager/playerBoards';
@@ -23,6 +24,7 @@
 
 html {
   background: url("") rgb(192, 192, 192);
+  // background-image: url("img/background.webp");
 }
 
 #pr_play_area {  

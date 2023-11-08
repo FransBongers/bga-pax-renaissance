@@ -136,7 +136,7 @@ class GameMap {
   public updateGameMapSize() {
     const map = document.getElementById("pr_game_map");
     map.style.transform = `scale(${this.zoomLevel})`;
-    const mapContainer = document.getElementById("pr_game_map_containter");
+    const mapContainer = document.getElementById("pr_game_map_container");
     mapContainer.style.width = `${this.zoomLevel * MAX_MAP_WIDTH}px`;
     mapContainer.style.height = `${this.zoomLevel * MAX_MAP_HEIGHT + 56}px`;
   }
