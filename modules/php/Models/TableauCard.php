@@ -5,15 +5,28 @@ class TableauCard extends Card
 {
   protected $type = TABLEAU_CARD;
   protected $id;
+  protected $flavorText = [];
   protected $name;
   protected $region;
   
   protected $staticAttributes = [
+    'flavorText',
     'name',
     'region',
     'type',
   ];
 
+  public function jsonSerialize()
+  {
+    $data = parent::jsonSerialize();
+    
+    return array_merge($data,[
+      'flavorText' => $this->flavorText,
+      'name' => $this->name,
+      'region' => $this->region,
+      'type' => $this->type,
+    ]);
+  }
 
   // public function getIcons()
   // {

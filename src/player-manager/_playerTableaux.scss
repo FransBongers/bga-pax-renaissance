@@ -11,14 +11,28 @@
 }
 
 .pr_player_tableau {
+  position: relative;
   min-height: 200px;
-  background-color: ivory;
   display: flex;
   // flex-direction: row;
   flex-direction: column;
   align-items: center;
   margin: 8px;
   padding: 8px;
+}
+
+.pr_player_tableau:before {
+  content: ' ';
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  // background-color: ivory;
+  background-color: #f8f8f8;
+  z-index: -1;
 }
 
 .pr_player_tableau_title {

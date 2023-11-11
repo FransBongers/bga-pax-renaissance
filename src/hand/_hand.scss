@@ -10,7 +10,10 @@
   }
   transform: translateY(calc(100% - 50px));
 
-  box-shadow: 0 0 10px 1px #ff0;
+  // box-shadow: 0 0 10px 1px #ff0;
+  // box-shadow: 0 0 10px 1px ivory;
+  box-shadow: 0 0 10px 1px #f8f8f8; // BGA white
+  
   background-color: rgba(40, 39, 36, 0.78);
   border-top: 1px solid #7c5d45;
   border-right: 1px solid #7c5d45;
@@ -27,10 +30,12 @@
     transition: top 0.8s;
 
     #pr_floating_hand_button {
-      border: 1px solid black;
+      border: 1px solid #777;
       border-radius: 50%;
       box-shadow: 2px 2px 5px black;
-      background-color: gray;
+      // background-color: gray;
+      background-color: #fff;
+      
       margin: 0px 5px;
       margin-top: -38px;
       cursor: pointer;
@@ -86,30 +91,31 @@
   #pr_floating_hand {
     width: 100%;
     height: 100%;
-    padding: 4px;
+    // padding: 4px;
     padding-right: 0px;
     // background-color: blue;
 
     #pr_player_hand {
-      min-width: 151px;
+      min-width: 310px;
       min-height: 230px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
+      padding: 8px;
+      // display: flex;
+      // flex-direction: row;
+      // flex-wrap: wrap;
 
-      .pr_card {
-        position: relative !important;
-        margin-right: 4px;
-        flex-shrink: 0;
+      // .pr_card {
+      //   position: relative !important;
+      //   margin-right: 4px;
+      //   flex-shrink: 0;
 
-        &.selected {
-          margin: 2px;
-        }
+      //   &.selected {
+      //     margin: 2px;
+      //   }
 
-        &:hover {
-          z-index: 4;
-        }
-      }
+      //   &:hover {
+      //     z-index: 4;
+      //   }
+      // }
     }
   }
 }

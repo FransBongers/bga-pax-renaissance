@@ -379,7 +379,7 @@
   transition: transform 0.8s;
   z-index: 1000;
   transform: translateY(calc(100% - 50px));
-  box-shadow: 0 0 10px 1px #ff0;
+  box-shadow: 0 0 10px 1px #f8f8f8;
   background-color: rgba(40, 39, 36, 0.78);
   border-top: 1px solid #7c5d45;
   border-right: 1px solid #7c5d45;
@@ -398,10 +398,10 @@
   transition: top 0.8s;
 }
 #pr_floating_hand_wrapper #pr_floating_hand_button_container #pr_floating_hand_button {
-  border: 1px solid black;
+  border: 1px solid #777;
   border-radius: 50%;
   box-shadow: 2px 2px 5px black;
-  background-color: gray;
+  background-color: #fff;
   margin: 0px 5px;
   margin-top: -38px;
   cursor: pointer;
@@ -443,26 +443,12 @@
 #pr_floating_hand_wrapper #pr_floating_hand {
   width: 100%;
   height: 100%;
-  padding: 4px;
   padding-right: 0px;
 }
 #pr_floating_hand_wrapper #pr_floating_hand #pr_player_hand {
-  min-width: 151px;
+  min-width: 310px;
   min-height: 230px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-}
-#pr_floating_hand_wrapper #pr_floating_hand #pr_player_hand .pr_card {
-  position: relative !important;
-  margin-right: 4px;
-  flex-shrink: 0;
-}
-#pr_floating_hand_wrapper #pr_floating_hand #pr_player_hand .pr_card.selected {
-  margin: 2px;
-}
-#pr_floating_hand_wrapper #pr_floating_hand #pr_player_hand .pr_card:hover {
-  z-index: 4;
+  padding: 8px;
 }
 
 .pr_card {
@@ -470,11 +456,14 @@
   width: 151px;
   height: 230px;
   background-size: 100% 100%;
-  position: absolute;
   background-repeat: no-repeat;
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
+}
+
+.card-sides {
+  position: relative !important;
 }
 
 .pr_card[data-card-id=null] {
@@ -1009,14 +998,14 @@
   background-position-y: 100%;
 }
 
-.pr_card[data-card-id=EAST_COMET_1] {
+.pr_card[data-card-id=COMET1] {
   background-image: url("img/east_cards2.webp");
   background-size: 1000% 400%;
   background-position-x: 33.3333333333%;
   background-position-y: 100%;
 }
 
-.pr_card[data-card-id=EAST_COMET_2] {
+.pr_card[data-card-id=COMET2] {
   background-image: url("img/east_cards2.webp");
   background-size: 1000% 400%;
   background-position-x: 44.4444444444%;
@@ -1675,14 +1664,14 @@
   background-position-y: 100%;
 }
 
-.pr_card[data-card-id=WEST_COMET_1] {
+.pr_card[data-card-id=COMET3] {
   background-image: url("img/west_cards2.webp");
   background-size: 1000% 600%;
   background-position-x: 33.3333333333%;
   background-position-y: 100%;
 }
 
-.pr_card[data-card-id=WEST_COMET_2] {
+.pr_card[data-card-id=COMET4] {
   background-image: url("img/west_cards2.webp");
   background-size: 1000% 600%;
   background-position-x: 44.4444444444%;
@@ -1900,6 +1889,12 @@
   background-position-y: 100%;
 }
 
+.pr_market {
+  width: 151px;
+  height: 230px;
+  position: absolute;
+}
+
 .pr_chess_piece {
   background-repeat: no-repeat;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
@@ -1953,6 +1948,7 @@
   background-image: url("img/knights.webp");
   background-size: 300% 100%;
   width: 36px;
+  min-width: 36px;
   height: 46px;
 }
 
@@ -1987,13 +1983,26 @@
 }
 
 .pr_player_tableau {
+  position: relative;
   min-height: 200px;
-  background-color: ivory;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 8px;
   padding: 8px;
+}
+
+.pr_player_tableau:before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.6;
+  background-color: #f8f8f8;
+  z-index: -1;
 }
 
 .pr_player_tableau_title {
@@ -2031,8 +2040,313 @@
   background-position-y: 100%;
 }
 
+.dijitTooltipContainer {
+  padding: 8px !important;
+}
+
+.pr_card_tooltip {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  width: 440px;
+  min-height: 400px;
+}
+.pr_card_tooltip .pr_card {
+  margin-right: -100px;
+  margin-left: 8px;
+  align-self: center;
+  width: 223px;
+  height: 340px;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container {
+  flex-grow: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 274px;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_title {
+  font-size: large;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 4px;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_section_title {
+  font-size: medium;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 4px;
+  margin-top: 4px;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_section_container {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_section_container .pr_card_tooltip_section_inner_container {
+  min-width: 40px;
+  margin-right: 8px;
+  display: flex;
+  justify-content: center;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_tooltip_text {
+  text-align: left;
+  font-size: small;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_flavor_text {
+  text-align: left;
+  font-size: small;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+body > .card {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+}
+
+.card {
+  flex-shrink: 0;
+}
+
+.card[data-side=back] .card-sides {
+  transform: rotateY(180deg);
+}
+
+.card .card-sides {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card .card-sides .card-side {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+  transform-origin: center center;
+  box-shadow: 1px 1px 2px 1px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.card .card-sides .card-side.front > * {
+  pointer-events: none;
+  user-select: none;
+}
+
+.card .card-sides .card-side.back {
+  transform: rotateY(180deg);
+}
+
+.card .card-sides .card-side.back > * {
+  pointer-events: none;
+  user-select: none;
+}
+
+.card-stock .card.bga-cards_selectable-card:not(.bga-cards_disabled-card) {
+  cursor: pointer;
+}
+
+.card-stock .card.bga-cards_disabled-card {
+  cursor: not-allowed;
+  filter: contrast(0.6);
+}
+
+.card-stock.line-stock {
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: var(--wrap);
+  flex-direction: var(--direction);
+}
+
+.card-stock.line-stock[data-center=true] {
+  justify-content: center;
+}
+
+.card-stock.slot-stock {
+  display: flex;
+  gap: var(--gap);
+  flex-wrap: var(--wrap);
+  flex-direction: var(--direction);
+}
+
+.card-stock.slot-stock[data-center=true] {
+  justify-content: center;
+}
+
+.card-stock.scrollable-stock {
+  display: flex;
+  gap: var(--button-gap);
+}
+
+.card-stock.scrollable-stock[data-scrollbar-visible=false] {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.card-stock.scrollable-stock[data-scrollbar-visible=false]::-webkit-scrollbar {
+  display: none;
+}
+
+.card-stock.scrollable-stock .scrollable-stock-inner {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: var(--gap);
+}
+
+.card-stock.scrollable-stock .scrollable-stock-inner[data-center=true] {
+  justify-content: center;
+}
+
+.card-stock.hand-stock {
+  display: flex;
+  justify-content: center;
+}
+
+.card-stock.hand-stock .card {
+  transform: translateY(calc(var(--card-shift) * var(--hand-stock-middle-index-abs))) rotate(calc(var(--hand-stock-middle-index) * var(--card-inclination)));
+}
+
+.card-stock.hand-stock .card:not(:first-child) {
+  margin-left: calc(-1 * var(--card-overlap));
+}
+
+.card-stock.manual-position-stock {
+  position: relative;
+}
+
+.card-stock.manual-position-stock .card {
+  position: absolute;
+}
+
+.card-stock.void-stock {
+  position: relative;
+}
+
+.card-stock.void-stock .card {
+  position: absolute;
+}
+
+.card-stock.deck {
+  position: relative;
+  width: var(--width);
+  height: var(--height);
+}
+
+.card-stock.deck > .card {
+  position: absolute;
+  top: calc(var(--thickness) * var(--xShadowShift) * -1);
+  left: calc(var(--thickness) * var(--yShadowShift) * -1);
+}
+
+.card-stock.deck > .card:first-child {
+  box-shadow: calc(var(--thickness) * var(--xShadowShift)) calc(var(--thickness) * var(--yShadowShift)) 0px 0px #111, calc(var(--thickness) * var(--xShadowShift)) calc(var(--thickness) * var(--yShadowShift)) 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+.card-stock.deck[data-empty=true] > .card {
+  visibility: hidden;
+}
+
+.card-stock.deck[data-empty=true] .bga-cards_deck-counter.hide-when-empty {
+  display: none;
+}
+
+.bga-cards_deck-counter {
+  --bga-cards-deck-counter-size: 20px;
+  position: absolute;
+  z-index: 2;
+  width: var(--bga-cards-deck-counter-size);
+  height: var(--bga-cards-deck-counter-size);
+  left: calc(var(--bga-cards-deck-left) - var(--bga-cards-deck-counter-size) / 2);
+  top: calc(var(--bga-cards-deck-top) - var(--bga-cards-deck-counter-size) / 2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  pointer-events: none;
+}
+
+.bga-cards_deck-counter.round {
+  color: black;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 2px 1px black;
+  font-size: 14px;
+}
+
+.bga-cards_deck-counter.text-shadow {
+  color: white;
+  text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black, 0 0 4px black;
+  font-size: 20px;
+}
+
+.bga-cards_deck-counter.hidden {
+  display: none;
+}
+
+.card-stock.all-visible-deck {
+  position: absolute;
+  --tile-count: 1;
+  width: calc(var(--width) + (var(--tile-count) - 1) * var(--horizontal-shift));
+  height: calc(var(--height) + (var(--tile-count) - 1) * var(--vertical-shift));
+  transition: width 0.5s ease-in-out, height 0.5s ease-in-out, background-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+  opacity: var(--tile-count);
+}
+
+.card-stock.all-visible-deck > .card {
+  position: absolute;
+  margin: 0;
+  transition: left 0.5s ease-in-out, top 0.5s ease-in-out;
+  top: calc(var(--vertical-shift) * var(--order));
+  left: calc(var(--horizontal-shift) * var(--order));
+}
+
+.card-stock.all-visible-deck.vertical:hover, .card-stock.all-visible-deck.vertical:active, .card-stock.all-visible-deck.vertical.opened {
+  height: calc((var(--height) + var(--vertical-shift)) * var(--tile-count) - var(--vertical-shift));
+  z-index: 1;
+}
+
+.card-stock.all-visible-deck.vertical:hover > .card, .card-stock.all-visible-deck.vertical:active > .card, .card-stock.all-visible-deck.vertical.opened > .card {
+  top: calc((var(--height) + var(--vertical-shift)) * var(--order));
+}
+
+.card-stock.all-visible-deck.horizontal:hover, .card-stock.all-visible-deck.horizontal:active, .card-stock.all-visible-deck.horizontal.opened {
+  width: calc((var(--width) + var(--horizontal-shift)) * var(--tile-count) - var(--horizontal-shift));
+  z-index: 1;
+}
+
+.card-stock.all-visible-deck.horizontal:hover > .card, .card-stock.all-visible-deck.horizontal:active > .card, .card-stock.all-visible-deck.horizontal.opened > .card {
+  left: calc((var(--width) + var(--horizontal-shift)) * var(--order));
+}
+
+.card-stock.all-visible-deck .bga-cards_deck-counter {
+  transition: left 0.5s ease-in-out, top 0.5s ease-in-out;
+}
+
+.card-stock.all-visible-deck[data-empty=true] > .card {
+  visibility: hidden;
+}
+
+.card-stock.all-visible-deck[data-empty=true] .bga-cards_deck-counter.hide-when-empty {
+  display: none;
+}
+
 html {
-  background: url("") rgb(192, 192, 192);
+  background-image: url("img/background_goldsmith.webp");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
 }
 
 #pr_play_area {

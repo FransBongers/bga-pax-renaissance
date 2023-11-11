@@ -34,4 +34,10 @@ class TooltipManager {
   public setupTooltips() {
   }
 
+  public addCardTooltip({ nodeId, card }: { nodeId: string; card: TableauCard }): void {
+    const html = tplTableauCardTooltip({ card });
+    this.game.framework().addTooltipHtml(nodeId, html, 500);
+  }
+
+
 }

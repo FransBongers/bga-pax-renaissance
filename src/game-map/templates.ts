@@ -5,20 +5,24 @@ const tplChessPiece = ({ id }: { id: string }) => {
 };
 
 const tplGameMapMarket = () => `
-  <div id="pr_market_west_0" class="pr_card" data-card-id="WEST_BACK" style="top: 950px; left: 93px;"></div>
-  <div id="pr_market_west_1" class="pr_card" data-card-id="null" style="top: 950px; left: 256px;"></div>
-  <div id="pr_market_west_2" class="pr_card" data-card-id="null" style="top: 950px; left: 425px;"></div>
-  <div id="pr_market_west_3" class="pr_card" data-card-id="null" style="top: 950px; left: 594px;"></div>
-  <div id="pr_market_west_4" class="pr_card" data-card-id="null" style="top: 950px; left: 762px;"></div>
-  <div id="pr_market_west_5" class="pr_card" data-card-id="null" style="top: 950px; left: 931px;"></div>
-  <div id="pr_market_west_deck" class="pr_card" data-card-id="WEST_BACK" style="top: 950px; left: 1095px;"></div>
-  <div id="pr_market_east_0" class="pr_card" data-card-id="EAST_BACK" style="top: 1200px; left: 93px;"></div>
-  <div id="pr_market_east_1" class="pr_card" data-card-id="null" style="top: 1200px; left: 256px;"></div>
-  <div id="pr_market_east_2" class="pr_card" data-card-id="null" style="top: 1200px; left: 425px;"></div>
-  <div id="pr_market_east_3" class="pr_card" data-card-id="null" style="top: 1200px; left: 594px;"></div>
-  <div id="pr_market_east_4" class="pr_card" data-card-id="null" style="top: 1200px; left: 762px;"></div>
-  <div id="pr_market_east_5" class="pr_card" data-card-id="null" style="top: 1200px; left: 931px;"></div>
-  <div id="pr_market_east_deck" class="pr_card" data-card-id="EAST_BACK" style="top: 1200px; left: 1095px;"></div>
+  <div id="pr_market_west_0" class="pr_market" style="top: 950px; left: 93px;"></div>
+  <div id="pr_market_west_1" class="pr_market" style="top: 950px; left: 256px;"></div>
+  <div id="pr_market_west_2" class="pr_market" style="top: 950px; left: 425px;"></div>
+  <div id="pr_market_west_3" class="pr_market" style="top: 950px; left: 594px;"></div>
+  <div id="pr_market_west_4" class="pr_market" style="top: 950px; left: 762px;"></div>
+  <div id="pr_market_west_5" class="pr_market" style="top: 950px; left: 931px;"></div>
+  <div id="pr_market_west_deck_container" class="pr_market" style="top: 950px; left: 1095px;">
+    <div id="pr_market_west_deck"></div>
+  </div>
+  <div id="pr_market_east_0" class="pr_market" style="top: 1200px; left: 93px;"></div>
+  <div id="pr_market_east_1" class="pr_market" style="top: 1200px; left: 256px;"></div>
+  <div id="pr_market_east_2" class="pr_market" style="top: 1200px; left: 425px;"></div>
+  <div id="pr_market_east_3" class="pr_market" style="top: 1200px; left: 594px;"></div>
+  <div id="pr_market_east_4" class="pr_market" style="top: 1200px; left: 762px;"></div>
+  <div id="pr_market_east_5" class="pr_market" style="top: 1200px; left: 931px;"></div>
+  <div id="pr_market_east_deck_container" class="pr_market" style="top: 1200px; left: 1095px;">
+    <div id="pr_market_east_deck"></div>
+  </div>
 `;
 
 const tplGameMapEmpireCards = () => `

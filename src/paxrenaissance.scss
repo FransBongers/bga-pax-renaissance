@@ -18,13 +18,19 @@
 @use 'game-map/gamemap';
 @use 'hand/hand';
 @use 'cards';
+@use 'market/market';
 @use 'pieces';
 @use 'player-manager/playerBoards';
 @use 'player-manager/playerTableaux';
+@use 'tooltip-manager/tooltip';
+@import '../node_modules/bga-cards/bga-cards';
 
 html {
-  background: url("") rgb(192, 192, 192);
-  // background-image: url("img/background.webp");
+  // background: url("") rgb(192, 192, 192);
+  background-image: url("img/background_goldsmith.webp");
+  background-attachment: fixed; // no scroll
+  background-position: center; // where to fix picture from
+  background-size: cover; // will cover screen but parts of image might be outside screen
 }
 
 #pr_play_area {  

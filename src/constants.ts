@@ -20,6 +20,17 @@ const PR_SELECTABLE = "pr_selectable";
 const PR_SELECTED = "pr_selected";
 
 /**
+ * Regions
+ */
+const WEST = "west";
+const EAST = "east";
+
+// Card types
+const EMPIRE_CARD = "empireCard";
+const TABLEAU_CARD = "tableauCard";
+const VICTORY_CARD = "victoryCard";
+
+/**
  * Empires
  */
 const ENGLAND = "england";

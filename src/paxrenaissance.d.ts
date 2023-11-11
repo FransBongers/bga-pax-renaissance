@@ -6,7 +6,7 @@ interface AddButtonProps {
 }
 
 interface AddActionButtonProps extends AddButtonProps {
-  color?: 'blue' | 'gray' | 'red' | 'none';
+  color?: "blue" | "gray" | "red" | "none";
 }
 
 interface PaxRenaissanceGame extends Game {
@@ -16,16 +16,22 @@ interface PaxRenaissanceGame extends Game {
   clearInterface: () => void;
   clearPossible: () => void;
   updatePlayAreaSize: () => void;
+  animationManager: AnimationManager;
+  cardManager: CardManager<TableauCard>;
   notificationManager: NotificationManager;
   playAreaScale: number;
   playerManager: PlayerManager;
   tooltipManager: TooltipManager;
 }
 
-interface Card {
+interface TableauCard {
   id: string;
   location: string;
+  flavorText: string[];
+  name: string;
+  region: "east" | "west";
   state: number;
+  type: "tableauCard";
   used: number;
 }
 
@@ -37,8 +43,20 @@ interface ChessPiece {
 
 interface PaxRenaissanceGamedatas extends Gamedatas {
   canceledNotifIds: string[];
-  gameMap: Card[];
-  market: Card[];
+  gameMap: TableauCard[];
+  market: {
+    cards: TableauCard[];
+    deckCounts: {
+      east: {
+        cardCount: number;
+        cometCount: number;
+      };
+      west: {
+        cardCount: number;
+        cometCount: number;
+      };
+    };
+  };
   players: Record<number, BgaPlayer>;
   chessPieces: ChessPiece[];
 }

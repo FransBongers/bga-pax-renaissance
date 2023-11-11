@@ -7,6 +7,10 @@ class PREN076_SophiaPalaiologina extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN076_SophiaPalaiologina';
+    $this->flavorText = [
+      clienttranslate('This Byzantine princess married Ivan III (the Great) of Russia, and also became the grandmother of Ivan the Terrible, the first Tsar of all the Russias.'),
+      clienttranslate('Sophia favored the vision of Moscow as the "third Rome", the legitimate successor to Constantinople and its Byzantine emperors, with the Moscow Primate as the overall head of the Orthodox religion.')
+    ];
     $this->name = clienttranslate('Sophia Palaiologina');
     $this->region = EAST;
   }

@@ -6,11 +6,15 @@
   width: 151px;
   height: 230px;
   background-size: 100% 100%;
-  position: absolute;
+  // position: absolute;
   background-repeat: no-repeat;
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
+}
+
+.card-sides {
+  position: relative !important;
 }
 
 .pr_card[data-card-id=null] {
@@ -123,8 +127,8 @@ $east-cards2: (
   31: "PREN167X",
   32: "PREN168X",
   33: "EAST_BACK",
-  34: "EAST_COMET_1",
-  35: "EAST_COMET_2"
+  34: "COMET1",
+  35: "COMET2"
 );
 
 @for $i from 1 through 35 {
@@ -244,8 +248,8 @@ $west-cards2: (
   51: "PREN161X",
   52: "PREN162X",
   53: "WEST_BACK",
-  54: "WEST_COMET_1",
-  55: "WEST_COMET_2"
+  54: "COMET3",
+  55: "COMET4"
 );
 
 @for $i from 1 through 55 {

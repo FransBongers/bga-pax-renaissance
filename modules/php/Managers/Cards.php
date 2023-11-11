@@ -83,10 +83,26 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  private static function setupCreateMarketDecks()
+  public static function setupCreateMarketDecks($players = [], $options = null)
   {
-    self::pickForLocation(7, POOL_EAST, DECK_EAST);
-    self::pickForLocation(7, POOL_WEST, DECK_WEST);
+    $numberOfAdditionalCards = count($players) * 4;
+
+    foreach(CARDINAL_DIRECTIONS as $direction) {
+      $pool = 'pool_'.$direction;
+      $deck = 'deck_'.$direction;
+      self::pickForLocation(12, $pool, $deck);
+      self::shuffle($deck);
+      Notifications::log('extra', $numberOfAdditionalCards);
+      self::pickForLocation($numberOfAdditionalCards, $pool, 'pile');
+      self::shuffle('pile');
+      $cardsInPile = self::getInLocation('pile');
+      Notifications::log('cardInPile', $cardsInPile);
+      foreach ($cardsInPile as $cardId => $cardInfo) {
+        // Add 14 because that is the number of cards already in each deck, so all
+        // picked cards will be added on top.
+        self::move($cardId,$deck,$cardInfo->getState() + 14);
+      }
+    }
   }
 
   private static function setupLoadCards()
@@ -101,7 +117,10 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
       $type = $card->getType();
 
       $location = '';
-      if ($type === TABLEAU_CARD) {
+      if ($type === TABLEAU_CARD && Utils::startsWith($card->getId(), 'COMET')) {
+        $region = $card->getRegion();
+        $location = 'deck_' . $region;
+      } else if ($type === TABLEAU_CARD) {
         $region = $card->getRegion();
         $location = 'pool_' . $region;
       } else if ($type === VICTORY_CARD || $type === EMPIRE_CARD) {
@@ -114,27 +133,18 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
         'used' => 0,
       ];
     }
-    Notifications::log('cards', $cards);
-    // // Draw base projects on association board (projects_base_X)
-    // shuffle($baseProjects);
-    // $nbBaseProjects = count($players) == 4 ? 4 : 3;
-
-    // for ($i = 0; $i < $nbBaseProjects; $i++) {
-    //   $value = array_pop($baseProjects);
-    //   $cards[$value]['location'] = 'base_' . $i;
-    // }
 
     // // Create the cards
     self::create($cards, null);
-    self::shuffle('pool_'.EAST);
-    self::shuffle('pool_'.WEST);
+    self::shuffle(POOL_EAST);
+    self::shuffle(POOL_WEST);
   }
 
   /* Creation of the cards */
   public static function setupNewGame($players = null, $options = null)
   {
     self::setupLoadCards();
-    self::setupCreateMarketDecks();
+    self::setupCreateMarketDecks($players, $options);
   }
 
   // /**

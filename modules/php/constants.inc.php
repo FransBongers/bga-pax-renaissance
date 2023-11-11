@@ -57,9 +57,13 @@ const RELIGIONS = [
 /**
  * Cards
  */
-// regions
+// cardinal directions
 const WEST = 'west';
 const EAST = 'east';
+const CARDINAL_DIRECTIONS = [
+  WEST,
+  EAST
+];
 
 // types
 const EMPIRE_CARD = 'empireCard';
@@ -67,42 +71,42 @@ const TABLEAU_CARD = 'tableauCard';
 const VICTORY_CARD = 'victoryCard';
 
 // Card locations
-const DECK_EAST = 'deckEast';
-const DECK_WEST = 'deckWest';
+const DECK_EAST = 'deck_east';
+const DECK_WEST = 'deck_west';
 const DISCARD = 'discard';
-const POOL_EAST = 'pool_'.EAST;
-const POOL_WEST = 'pool_'.WEST;
+const POOL_EAST = 'pool_' . EAST;
+const POOL_WEST = 'pool_' . WEST;
 
 /**
  * cities
  */
 
- const LONDON = 'london';
- const BORDEAUX = 'bordeaux';
- const BRUGES = 'bruges';
- const PARIS = 'paris';
- const LYON = 'lyon';
- const LUBECK = 'lubeck';
- const NURNBERG = 'nurnberg';
- const NOVGOROD = 'novgorod';
- const VIENNA = 'vienna';
- const BUDA = 'buda';
- const VARNA = 'varna';
- const TANA = 'tana';
- const CAFFA = 'caffa';
- const TREBIZOND = 'trebizond';
- const TOLEDO = 'toledo';
- const GRANADA = 'granada';
- const SPICE_ISLANDS = 'spiceIslands';
- const VALENCIA = 'valencia';
- const ALGIERS = 'algiers';
- const TIMBUKTU = 'timbuktu';
- const VENICE = 'venice';
- const CONSTANTINOPLE_1 = 'constantinople1';
- const CONSTANTINOPLE_2 = 'constantinople2';
- const CONSTANTINOPLE_3 = 'constantinople3';
- const MODON = 'modon';
- const RHODES = 'rhodes';
- const CYPRUS = 'cyprus';
- const CAIRO = 'cairo';
- const RED_SEA = 'redSea';
+const LONDON = 'london';
+const BORDEAUX = 'bordeaux';
+const BRUGES = 'bruges';
+const PARIS = 'paris';
+const LYON = 'lyon';
+const LUBECK = 'lubeck';
+const NURNBERG = 'nurnberg';
+const NOVGOROD = 'novgorod';
+const VIENNA = 'vienna';
+const BUDA = 'buda';
+const VARNA = 'varna';
+const TANA = 'tana';
+const CAFFA = 'caffa';
+const TREBIZOND = 'trebizond';
+const TOLEDO = 'toledo';
+const GRANADA = 'granada';
+const SPICE_ISLANDS = 'spiceIslands';
+const VALENCIA = 'valencia';
+const ALGIERS = 'algiers';
+const TIMBUKTU = 'timbuktu';
+const VENICE = 'venice';
+const CONSTANTINOPLE_1 = 'constantinople1';
+const CONSTANTINOPLE_2 = 'constantinople2';
+const CONSTANTINOPLE_3 = 'constantinople3';
+const MODON = 'modon';
+const RHODES = 'rhodes';
+const CYPRUS = 'cyprus';
+const CAIRO = 'cairo';
+const RED_SEA = 'redSea';

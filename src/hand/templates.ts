@@ -6,9 +6,7 @@ const tplHand = () => {
               </button>  
             </div>
             <div id="pr_floating_hand">
-              <div id="pr_player_hand">
-              <div id="pr_market_east_3" class="pr_card" data-card-id="PREN078"></div>
-              <div id="pr_market_east_3" class="pr_card" data-card-id="PREN079"></div>
+              <div id="pr_player_hand" style="justify-content: start;">
               </div>
             </div>
           </div

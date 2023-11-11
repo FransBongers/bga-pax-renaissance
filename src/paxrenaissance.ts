@@ -1,21 +1,4 @@
-/**
- *------
- * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * PaxRenaissance implementation : © <Your name here> <Your email address here>
- *
- * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
- * See http://en.boardgamearena.com/#!doc/Studio for more information.
- * -----
- *
- * paxrenaissance.js
- *
- * PaxRenaissance user interface script
- *
- * In this file, you are describing the logic of your user interface, in Javascript language.
- *
- */
-
-// declare const define; // TODO: check if we comment here or in bga-animations module?
+declare const define;
 declare const ebg;
 declare const $;
 declare const dojo: Dojo;
@@ -26,6 +9,7 @@ declare const playSound;
 class PaxRenaissance implements PaxRenaissanceGame {
   public gamedatas: PaxRenaissanceGamedatas;
   public animationManager: AnimationManager;
+  public cardManager: CardManager<TableauCard>;
   public gameMap: GameMap;
   public hand: Hand;
   // public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
@@ -45,18 +29,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
     console.log("paxrenaissance constructor");
   }
 
-  /*
-    setup:
-    
-    This method must set up the game user interface according to current game situation specified
-    in parameters.
-    
-    The method is called each time the game interface is displayed to a player, ie:
-    _ when the game starts
-    _ when a player refreshes the game page (F5)
-    
-    "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
-  */
+  // ..######..########.########.##.....##.########.
+  // .##....##.##..........##....##.....##.##.....##
+  // .##.......##..........##....##.....##.##.....##
+  // ..######..######......##....##.....##.########.
+  // .......##.##..........##....##.....##.##.......
+  // .##....##.##..........##....##.....##.##.......
+  // ..######..########....##.....#######..##.......
+
   public setup(gamedatas: PaxRenaissanceGamedatas) {
     // Create a new div for buttons to avoid BGA auto clearing it
     dojo.place(
@@ -75,7 +55,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // Will store all data for active player and gets refreshed with entering player actions state
     this.activeStates = {};
 
-    this.animationManager = new AnimationManager(this, { duration: 500 });
+    this.animationManager = new AnimationManager(this, { duration: 1000 });
+    this.setupCardManagers();
+
     this.gameMap = new GameMap(this);
     this.tooltipManager = new TooltipManager(this);
     this.playerManager = new PlayerManager(this);
@@ -119,6 +101,60 @@ class PaxRenaissance implements PaxRenaissanceGame {
     playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
   }
 
+  setupCardManagers() {
+    this.cardManager = new CardManager(this, {
+      animationManager: this.animationManager,
+      getId: (card) => card.id.split("_")[0],
+      setupDiv: (card, div) => {
+        // div.classList.add("pr_card");
+        div.style.width = "151px";
+        div.style.height = "230px";
+        // div.style.position = 'relative';
+      },
+      setupFrontDiv: (card, div) => {
+        console.log("setupFrontDiv", card);
+        div.classList.add("pr_card");
+        div.setAttribute("data-card-id", card.id.split("_")[0]);
+        div.style.width = "151px";
+        div.style.height = "230px";
+        // div.style.background = 'blue';
+        // div.classList.add('mygame-card-front');
+        // div.id = `card-${card.id}-front`;
+        // this.addTooltipHtml(div.id, `tooltip de ${card.type}`);
+        if (!card.id.startsWith("FAKE")) {
+          this.tooltipManager.addCardTooltip({
+            nodeId: card.id.split("_")[0] + "-front",
+            card,
+          });
+        }
+      },
+      setupBackDiv: (card, div) => {
+        div.classList.add("pr_card");
+        div.setAttribute(
+          "data-card-id",
+          card.region === EAST ? "EAST_BACK" : "WEST_BACK"
+        );
+        div.style.width = "151px";
+        div.style.height = "230px";
+      },
+      cardWidth: 151,
+      cardHeight: 230,
+      isCardVisible: ({ location }) => {
+        if (location.startsWith("deck")) {
+          return false;
+        }
+        if (location === "market_west_0" || location === "market_east_0") {
+          return false;
+        }
+        return true;
+      },
+    });
+  }
+
+  setupNotifications() {
+    // Replaced by notification manager
+  }
+
   //  .####.##....##.########.########.########.....###.....######..########.####..#######..##....##
   //  ..##..###...##....##....##.......##.....##...##.##...##....##....##.....##..##.....##.###...##
   //  ..##..####..##....##....##.......##.....##..##...##..##..........##.....##..##.....##.####..##
@@ -159,8 +195,99 @@ class PaxRenaissance implements PaxRenaissanceGame {
       this.addPrimaryActionButton({
         id: "end_game_button",
         text: _("End game"),
-        callback: () => this.takeAction({ action: 'endGame'}),
+        callback: () => this.takeAction({ action: "endGame" }),
       });
+
+      this.addPrimaryActionButton({
+        id: "add_card_button",
+        text: _("Add card to hand"),
+        callback: () => {
+          // add a card
+          let card = this.market
+            .getStock({ region: EAST, column: 1 })
+            .getCards()[0];
+          if (!card) {
+            card = this.market
+              .getStock({ region: EAST, column: 2 })
+              .getCards()[0];
+          }
+          if (!card) {
+            card = this.market
+              .getStock({ region: EAST, column: 3 })
+              .getCards()[0];
+          }
+
+          this.hand.addCard(card);
+        },
+      });
+
+      this.addPrimaryActionButton({
+        id: "deal_card_button",
+        text: _("Deal card"),
+        callback: async () => {
+          // add a card
+          const card: TableauCard = {
+            flavorText: [
+              'When faced with a heretic, the papacy had two solu…rced conversion or "auto-da-fé" (public burning).',
+              "Pope Innocent VIII preferred burning. In 1484 he i…man inquisition against witchcraft and magicians.",
+              "He then confirmed Torquemada as the Grand Inquisit… a crusade against Waldensian heretics in France.",
+            ],
+            id: "PREN001_InquistionPope",
+            location: "market_west_3",
+            name: "Inquistion Pope",
+            region: "west",
+            state: 0,
+            type: "tableauCard",
+            used: 0,
+          };
+          await this.market.getDeck({ region: WEST }).addCard({
+            ...card,
+            location: 'deck',
+          });
+          // this.market.getStock({ column: 6, region: WEST }).flipCard({
+          //   ...card,
+          //   location: 'deck',
+          // });
+          await this.market.getStock({region: WEST, column: 5}).addCard(card, {fromStock: this.market.getDeck({region: WEST})});
+          // console.log("source stock", this.stock.getCards());
+          // await this.stockDest.addCard(card, undefined, { visible: false });
+          // console.log("source stock after", this.stock.getCards());
+        },
+      });
+
+      // this.addPrimaryActionButton({
+      //   id: "move_card_button",
+      //   text: _("Move card"),
+      //   callback: async () => {
+      //     // add a card
+      //     const card = {
+      //       id: "PREN007_PetersPence",
+      //       type: 3,
+      //       type_arg: 2,
+      //       location: "table",
+      //       location_arg: 0,
+      //     };
+      //     console.log('source stock', this.stock.getCards());
+      //     await this.stockDest.addCard(card, undefined, {visible: false});
+      //     console.log('source stock after', this.stock.getCards());
+      //   },
+      // });
+
+      // this.addPrimaryActionButton({
+      //   id: "flip_card_button",
+      //   text: _("Flip card"),
+      //   callback: () => {
+      //     // add a card
+      //     const card = {
+      //       id: "PREN007_PetersPence",
+      //       type: 3,
+      //       type_arg: 2,
+      //       location: "table",
+      //       location_arg: 0,
+      //     };
+      //     this.stock.flipCard(card);
+      //   },
+      // });
     }
 
     // console.log('onUpdateActionButtons: ' + stateName);
@@ -468,14 +595,6 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // debug('Loading complete');
     this.cancelLogs(this.gamedatas.canceledNotifIds);
   }
-
-  // .########..#######......######..##.....##.########..######..##....##
-  // ....##....##.....##....##....##.##.....##.##.......##....##.##...##.
-  // ....##....##.....##....##.......##.....##.##.......##.......##..##..
-  // ....##....##.....##....##.......#########.######...##.......#####...
-  // ....##....##.....##....##.......##.....##.##.......##.......##..##..
-  // ....##....##.....##....##....##.##.....##.##.......##....##.##...##.
-  // ....##.....#######......######..##.....##.########..######..##....##
 
   //....###..........##....###....##.....##
   //...##.##.........##...##.##....##...##.
