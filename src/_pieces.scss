@@ -16,8 +16,8 @@
   // height: 234px;
   // width: 30px;
   // height: 49px;
-  width: 26px;
-  height: 43px;
+  width: calc(var(--paxRenChessPieceScale) * 26px);
+  height: calc(var(--paxRenChessPieceScale) * 43px);
 }
 
 .pr_pawn[data-color=blue] {
@@ -53,21 +53,21 @@
 .pr_bishop {
   background-image: url("img/bishops.webp");
   background-size: 300% 100%;
-  width: 30px;
-  height: 59px;
+  width: calc(var(--paxRenChessPieceScale) * 30px);
+  height: calc(var(--paxRenChessPieceScale) * 59px);
 }
 
 .pr_knight {
   background-image: url("img/knights.webp");
   background-size: 300% 100%;
-  width: 36px;
-  min-width: 36px;
-  height: 46px;
+  max-width: calc(var(--paxRenChessPieceScale) * 36px);
+  min-width: calc(var(--paxRenChessPieceScale) * 36px);
+  height: calc(var(--paxRenChessPieceScale) * 46px);
 }
 
 .pr_rook {
   background-image: url("img/rooks.webp");
   background-size: 300% 100%;
-  width: 30px;
-  height: 49px;
+  width: calc(var(--paxRenChessPieceScale) * 30px);
+  height: calc(var(--paxRenChessPieceScale) * 49px);
 }

@@ -3,8 +3,8 @@
 
 .pr_card {
   box-sizing: border-box;
-  width: 151px;
-  height: 230px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
   background-size: 100% 100%;
   // position: absolute;
   background-repeat: no-repeat;
@@ -24,8 +24,8 @@
 
 .pr_square_card {
   box-sizing: border-box;
-  width: 152px;
-  height: 152px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 151px);
   background-size: 100% 100%;
   position: absolute;
   background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 .pr_market {
-  width: 151px;
-  height: 230px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
 }

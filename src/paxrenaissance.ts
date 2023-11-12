@@ -49,7 +49,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // console.log('playAreaWidth',playAreaWidth);
     this.gamedatas = gamedatas;
     // this.gameOptions = gamedatas.gameOptions;
-    debug("gamedatas", gamedatas);
+    debug("gamedata", gamedatas);
 
     this._connections = [];
     // Will store all data for active player and gets refreshed with entering player actions state
@@ -107,16 +107,16 @@ class PaxRenaissance implements PaxRenaissanceGame {
       getId: (card) => card.id.split("_")[0],
       setupDiv: (card, div) => {
         // div.classList.add("pr_card");
-        div.style.width = "151px";
-        div.style.height = "230px";
+        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
         // div.style.position = 'relative';
       },
       setupFrontDiv: (card, div) => {
-        console.log("setupFrontDiv", card);
+        // console.log("setupFrontDiv", card);
         div.classList.add("pr_card");
         div.setAttribute("data-card-id", card.id.split("_")[0]);
-        div.style.width = "151px";
-        div.style.height = "230px";
+        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
         // div.style.background = 'blue';
         // div.classList.add('mygame-card-front');
         // div.id = `card-${card.id}-front`;
@@ -134,8 +134,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
           "data-card-id",
           card.region === EAST ? "EAST_BACK" : "WEST_BACK"
         );
-        div.style.width = "151px";
-        div.style.height = "230px";
+        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
       },
       cardWidth: 151,
       cardHeight: 230,
@@ -221,39 +221,39 @@ class PaxRenaissance implements PaxRenaissanceGame {
         },
       });
 
-      this.addPrimaryActionButton({
-        id: "deal_card_button",
-        text: _("Deal card"),
-        callback: async () => {
-          // add a card
-          const card: TableauCard = {
-            flavorText: [
-              'When faced with a heretic, the papacy had two solu…rced conversion or "auto-da-fé" (public burning).',
-              "Pope Innocent VIII preferred burning. In 1484 he i…man inquisition against witchcraft and magicians.",
-              "He then confirmed Torquemada as the Grand Inquisit… a crusade against Waldensian heretics in France.",
-            ],
-            id: "PREN001_InquistionPope",
-            location: "market_west_3",
-            name: "Inquistion Pope",
-            region: "west",
-            state: 0,
-            type: "tableauCard",
-            used: 0,
-          };
-          await this.market.getDeck({ region: WEST }).addCard({
-            ...card,
-            location: 'deck',
-          });
-          // this.market.getStock({ column: 6, region: WEST }).flipCard({
-          //   ...card,
-          //   location: 'deck',
-          // });
-          await this.market.getStock({region: WEST, column: 5}).addCard(card, {fromStock: this.market.getDeck({region: WEST})});
-          // console.log("source stock", this.stock.getCards());
-          // await this.stockDest.addCard(card, undefined, { visible: false });
-          // console.log("source stock after", this.stock.getCards());
-        },
-      });
+      // this.addPrimaryActionButton({
+      //   id: "deal_card_button",
+      //   text: _("Deal card"),
+      //   callback: async () => {
+      //     // add a card
+      //     const card: TableauCard = {
+      //       flavorText: [
+      //         'When faced with a heretic, the papacy had two solu…rced conversion or "auto-da-fé" (public burning).',
+      //         "Pope Innocent VIII preferred burning. In 1484 he i…man inquisition against witchcraft and magicians.",
+      //         "He then confirmed Torquemada as the Grand Inquisit… a crusade against Waldensian heretics in France.",
+      //       ],
+      //       id: "PREN001_InquistionPope",
+      //       location: "market_west_3",
+      //       name: "Inquistion Pope",
+      //       region: "west",
+      //       state: 0,
+      //       type: "tableauCard",
+      //       used: 0,
+      //     };
+      //     await this.market.getDeck({ region: WEST }).addCard({
+      //       ...card,
+      //       location: 'deck',
+      //     });
+      //     // this.market.getStock({ column: 6, region: WEST }).flipCard({
+      //     //   ...card,
+      //     //   location: 'deck',
+      //     // });
+      //     await this.market.getStock({region: WEST, column: 5}).addCard(card, {fromStock: this.market.getDeck({region: WEST})});
+      //     // console.log("source stock", this.stock.getCards());
+      //     // await this.stockDest.addCard(card, undefined, { visible: false });
+      //     // console.log("source stock after", this.stock.getCards());
+      //   },
+      // });
 
       // this.addPrimaryActionButton({
       //   id: "move_card_button",

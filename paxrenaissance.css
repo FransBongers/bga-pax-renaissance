@@ -54,11 +54,11 @@
 
 #pr_game_map {
   background-image: url("img/board.webp");
-  background-size: 1500px 1500px;
+  background-size: calc(var(--paxRenMapScale) * 1500px) calc(var(--paxRenMapScale) * 1500px);
   background-repeat: no-repeat;
   position: relative;
-  height: 1500px;
-  width: 1500px;
+  height: calc(var(--paxRenMapScale) * 1500px);
+  width: calc(var(--paxRenMapScale) * 1500px);
   box-shadow: 1px 1px 5px #000;
   transform-origin: top left;
 }
@@ -73,8 +73,8 @@
 /* ------- MAP CARDS ------- */
 .pr_map_card {
   box-sizing: border-box;
-  width: 151px;
-  height: 230px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
   background-size: 1000% 300%;
   background-repeat: no-repeat;
@@ -352,8 +352,8 @@
 
 .pr_city {
   position: absolute;
-  width: 37px;
-  height: 37px;
+  width: calc(var(--paxRenMapScale) * 37px);
+  height: calc(var(--paxRenMapScale) * 37px);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -364,12 +364,17 @@
 }
 
 .pr_city > .pr_rook {
-  margin-bottom: 4px;
+  margin-bottom: calc(var(--paxRenMapScale) * 4px);
 }
 
 .pr_city > .pr_knight {
-  margin-bottom: 4px;
-  margin-right: 4px;
+  margin-bottom: calc(var(--paxRenMapScale) * 4px);
+  margin-right: calc(var(--paxRenMapScale) * 4px);
+}
+
+.pr_card_move {
+  --paxRenCardScale: 2;
+  transition: height 2s, width 2s;
 }
 
 #pr_floating_hand_wrapper {
@@ -453,8 +458,8 @@
 
 .pr_card {
   box-sizing: border-box;
-  width: 151px;
-  height: 230px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   border: 1px black solid;
@@ -472,8 +477,8 @@
 
 .pr_square_card {
   box-sizing: border-box;
-  width: 152px;
-  height: 152px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 151px);
   background-size: 100% 100%;
   position: absolute;
   background-repeat: no-repeat;
@@ -1890,8 +1895,8 @@
 }
 
 .pr_market {
-  width: 151px;
-  height: 230px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
 }
 
@@ -1904,8 +1909,8 @@
 .pr_pawn {
   background-image: url("img/pawns.webp");
   background-size: 400% 100%;
-  width: 26px;
-  height: 43px;
+  width: calc(var(--paxRenChessPieceScale) * 26px);
+  height: calc(var(--paxRenChessPieceScale) * 43px);
 }
 
 .pr_pawn[data-color=blue] {
@@ -1940,23 +1945,23 @@
 .pr_bishop {
   background-image: url("img/bishops.webp");
   background-size: 300% 100%;
-  width: 30px;
-  height: 59px;
+  width: calc(var(--paxRenChessPieceScale) * 30px);
+  height: calc(var(--paxRenChessPieceScale) * 59px);
 }
 
 .pr_knight {
   background-image: url("img/knights.webp");
   background-size: 300% 100%;
-  width: 36px;
-  min-width: 36px;
-  height: 46px;
+  max-width: calc(var(--paxRenChessPieceScale) * 36px);
+  min-width: calc(var(--paxRenChessPieceScale) * 36px);
+  height: calc(var(--paxRenChessPieceScale) * 46px);
 }
 
 .pr_rook {
   background-image: url("img/rooks.webp");
   background-size: 300% 100%;
-  width: 30px;
-  height: 49px;
+  width: calc(var(--paxRenChessPieceScale) * 30px);
+  height: calc(var(--paxRenChessPieceScale) * 49px);
 }
 
 /* ------- PLAYER BOARD ------- */
@@ -2355,6 +2360,12 @@ html {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+:root {
+  --paxRenMapScale: 1;
+  --paxRenCardScale: 1;
+  --paxRenChessPieceScale: 1;
 }
 
 /*# sourceMappingURL=paxrenaissance.css.map */

@@ -41,3 +41,9 @@ html {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+:root {
+  --paxRenMapScale: 1;
+  --paxRenCardScale: 1;
+  --paxRenChessPieceScale: 1;
+}

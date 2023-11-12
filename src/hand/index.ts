@@ -36,55 +36,24 @@ class Hand {
   }
 
   public async addCard(card: TableauCard) {
-    // const cardToAdd = {
-    //   ...card,
-    //   type: true,
-    // };
-    if (this.game.cardManager.animationsActive()) {
-      const cardDiv = this.game.cardManager.getCardElement(card);
-      cardDiv.style.zIndex = "20";
-      await this.game.animationManager.playSequence([
-        new BgaShowScreenCenterAnimation({
-          element: cardDiv,
-          transitionTimingFunction: "ease-in-out",
-        }),
-        new BgaPauseAnimation({}),
-      ]);
-      cardDiv.style.removeProperty("z-index");
-      // opponentHandDiv.dataset.animated = 'false';
-      await this.hand.addCard(card);
-      // return this.addCardsToHand([this.game.getPlayerId() == opponentId ? { id: card.id } as Card : card]);
-    } else {
-      debug("no animations active");
-      this.hand.addCard(card);
-    }
-    // const element = this.game.cardManager.getCardElement(card);
-    // const fromElement: HTMLElement = element.parentElement;
-    // const toElement = document.getElementById("pr_player_hand");
-
-    // await this.hand.addCard(
-    //   cardToAdd,
-    //   {
-    //     fromElement,
-    //     animation: new BgaCumulatedAnimation({
-    //       animations: [
-    //         new BgaShowScreenCenterAnimation({
-    //           element,
-    //           transitionTimingFunction: "ease-in",
-    //         }),
-    //         new BgaPauseAnimation({ element }),
-    //         new BgaAttachWithAnimation({
-    //           animation: new BgaSlideAnimation({
-    //             element,
-    //             transitionTimingFunction: "ease-out",
-    //           }),
-    //           attachElement: toElement,
-    //         }),
-    //       ],
+    this.hand.addCard(card);
+    // // Add card with show in center animation
+    // if (this.game.cardManager.animationsActive()) {
+    //   const cardDiv = this.game.cardManager.getCardElement(card);
+    //   cardDiv.style.zIndex = "20";
+    //   await this.game.animationManager.playSequence([
+    //     new BgaShowScreenCenterAnimation({
+    //       element: cardDiv,
+    //       transitionTimingFunction: "ease-in-out",
     //     }),
-    //   },
-    //   { visible: false }
-    // );
-    // this.hand.setCardVisible(card, true);
+    //     new BgaPauseAnimation({}),
+    //   ]);
+    //   cardDiv.style.removeProperty("z-index");
+    //   // opponentHandDiv.dataset.animated = 'false';
+    //   await this.hand.addCard(card);
+    // } else {
+    //   debug("no animations active");
+    //   this.hand.addCard(card);
+    // }
   }
 }

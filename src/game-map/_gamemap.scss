@@ -23,13 +23,13 @@
 
 #pr_game_map {
   background-image: url("img/board.webp");
-  background-size: 1500px 1500px;
+  background-size: calc(var(--paxRenMapScale) * 1500px) calc(var(--paxRenMapScale) * 1500px);
   background-repeat: no-repeat;
   // grid-column: 1 / span 1;
   // grid-row: span 1;
   position: relative;
-  height: 1500px;
-  width: 1500px;
+  height: calc(var(--paxRenMapScale) * 1500px);
+  width: calc(var(--paxRenMapScale) * 1500px);
   // box-shadow: rgb(0 0 0) 2px 2px 8px;
   box-shadow: 1px 1px 5px #000;
   transform-origin: top left;
@@ -47,8 +47,8 @@
 
 .pr_map_card {
   box-sizing: border-box;
-  width: 151px;
-  height: 230px;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
   background-size: 1000% 300%;
   background-repeat: no-repeat;
@@ -103,8 +103,8 @@ $map-cards: (
 .pr_city {
   position: absolute;
   // background-color: yellow;
-  width: 37px;
-  height: 37px;
+  width: calc(var(--paxRenMapScale) * 37px);
+  height: calc(var(--paxRenMapScale) * 37px);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -117,12 +117,12 @@ $map-cards: (
 }
 
 .pr_city > .pr_rook {
-  margin-bottom: 4px;
+  margin-bottom: calc(var(--paxRenMapScale) * 4px);
 }
 
 .pr_city > .pr_knight {
-  margin-bottom: 4px;
-  margin-right: 4px;
+  margin-bottom: calc(var(--paxRenMapScale) * 4px);
+  margin-right: calc(var(--paxRenMapScale) * 4px);
 }
 
 // @each $name, $glyph in $icons {

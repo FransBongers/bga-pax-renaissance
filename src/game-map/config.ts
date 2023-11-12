@@ -1,3 +1,100 @@
+const EMPIRE_CARD_CONFIG = {
+  [ENGLAND]: {
+    top: 120,
+    left: 349,
+  },
+  [FRANCE]: {
+    top: 120,
+    left: 526,
+  },
+  [HOLY_ROMAN_EMIRE]: {
+    top: 120,
+    left: 700,
+  },
+  [HUNGARY]: {
+    top: 120,
+    left: 876,
+  },
+  [BYZANTIUM]: {
+    top: 120,
+    left: 1052,
+  },
+  [PORTUGAL]: {
+    top: 754,
+    left: 349,
+  },
+  [ARAGON]: {
+    top: 754,
+    left: 526,
+  },
+  [PAPAL_STATES]: {
+    top: 754,
+    left: 700,
+  },
+  [OTTOMAN]: {
+    top: 754,
+    left: 876,
+  },
+  [MAMLUK]: {
+    top: 754,
+    left: 1052,
+  },
+}
+
+const MARKET_EAST_CONFIG = [
+  {
+    top: 1200,
+    left: 93,
+  },
+  {
+    top: 1200,
+    left: 256,
+  },
+  {
+    top: 1200,
+    left: 425,
+  },
+  {
+    top: 1200,
+    left: 594,
+  },
+  {
+    top: 1200,
+    left: 762,
+  },
+  {
+    top: 1200,
+    left: 931,
+  },
+];
+
+const MARKET_WEST_CONFIG = [
+  {
+    top: 950,
+    left: 93,
+  },
+  {
+    top: 950,
+    left: 256,
+  },
+  {
+    top: 950,
+    left: 425,
+  },
+  {
+    top: 950,
+    left: 594,
+  },
+  {
+    top: 950,
+    left: 762,
+  },
+  {
+    top: 950,
+    left: 931,
+  },
+];
+
 const MAP_CONFIG = {
   [ENGLAND]: {
     top: 270,

@@ -71,6 +71,10 @@ class GameMap {
       .getElementById("pr_play_area")
       .insertAdjacentHTML("afterbegin", tplGameMap());
     this.updateGameMapSize();
+    // Add in main file?
+    window.addEventListener("resize", () => {
+      this.updateGameMapSize();
+    });
     this.setupZoomButtons();
     this.setupEmpireCards({ gamedatas });
     this.setupChessPieces({ gamedatas });
@@ -133,8 +137,35 @@ class GameMap {
     }
   }
 
+  // public updatePlayAreaSize() {
+  //   const playAreaContainer = document.getElementById("pr_play_area_container");
+  //   this.playAreaScale = Math.min(
+  //     1,
+  //     playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH
+  //   );
+  //   const playArea = document.getElementById("pr_play_area");
+  //   playArea.style.transform = `scale(${this.playAreaScale})`;
+  //   const playAreaHeight = playArea.offsetHeight;
+  //   playArea.style.width =
+  //     playAreaContainer.offsetWidth / this.playAreaScale + "px";
+  //   console.log("playAreaHeight", playAreaHeight);
+  //   playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
+  // }
+
   public updateGameMapSize() {
     const map = document.getElementById("pr_game_map");
+    // const playAreaContainer = document.getElementById("pr_play_area_container");
+    // const playAreaScale = Math.min(
+    //   1,
+    //   playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH
+    // );
+    // const mapScale = this.zoomLevel * playAreaScale;
+    
+    // map.style.setProperty("--paxRenMapScale", `${mapScale}`);
+    // map.style.setProperty("--paxRenCardScale", `${mapScale}`);
+    // map.style.setProperty("--paxRenChessPieceScale", `${mapScale}`);
+    
+
     map.style.transform = `scale(${this.zoomLevel})`;
     const mapContainer = document.getElementById("pr_game_map_container");
     mapContainer.style.width = `${this.zoomLevel * MAX_MAP_WIDTH}px`;

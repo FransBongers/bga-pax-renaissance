@@ -5,51 +5,28 @@ const tplChessPiece = ({ id }: { id: string }) => {
 };
 
 const tplGameMapMarket = () => `
-  <div id="pr_market_west_0" class="pr_market" style="top: 950px; left: 93px;"></div>
-  <div id="pr_market_west_1" class="pr_market" style="top: 950px; left: 256px;"></div>
-  <div id="pr_market_west_2" class="pr_market" style="top: 950px; left: 425px;"></div>
-  <div id="pr_market_west_3" class="pr_market" style="top: 950px; left: 594px;"></div>
-  <div id="pr_market_west_4" class="pr_market" style="top: 950px; left: 762px;"></div>
-  <div id="pr_market_west_5" class="pr_market" style="top: 950px; left: 931px;"></div>
-  <div id="pr_market_west_deck_container" class="pr_market" style="top: 950px; left: 1095px;">
+  ${MARKET_WEST_CONFIG.map(({top, left}, index) => `<div id="pr_market_west_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);"></div>`).join('') }
+  <div id="pr_market_west_deck_container" class="pr_market" style="top: calc(var(--paxRenCardScale) * 950px); left: calc(var(--paxRenCardScale) * 1095px);">
     <div id="pr_market_west_deck"></div>
   </div>
-  <div id="pr_market_east_0" class="pr_market" style="top: 1200px; left: 93px;"></div>
-  <div id="pr_market_east_1" class="pr_market" style="top: 1200px; left: 256px;"></div>
-  <div id="pr_market_east_2" class="pr_market" style="top: 1200px; left: 425px;"></div>
-  <div id="pr_market_east_3" class="pr_market" style="top: 1200px; left: 594px;"></div>
-  <div id="pr_market_east_4" class="pr_market" style="top: 1200px; left: 762px;"></div>
-  <div id="pr_market_east_5" class="pr_market" style="top: 1200px; left: 931px;"></div>
-  <div id="pr_market_east_deck_container" class="pr_market" style="top: 1200px; left: 1095px;">
+  ${MARKET_EAST_CONFIG.map(({top, left}, index) => `<div id="pr_market_east_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);"></div>`).join('') }
+  <div id="pr_market_east_deck_container" class="pr_market" style="top:  calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);">
     <div id="pr_market_east_deck"></div>
   </div>
 `;
 
 const tplGameMapEmpireCards = () => `
-<div id="pr_empire_england" class="pr_square_card" data-card-id="null" style="top: 120px; left: 349px;"></div>
-  <div id="pr_empire_france" class="pr_square_card" data-card-id="null" style="top: 120px; left: 526px;"></div>
-  <div id="pr_empire_holy_roman_empire" class="pr_square_card" data-card-id="null" style="top: 120px; left: 700px;"></div>
-  <div id="pr_empire_hungary" class="pr_square_card" data-card-id="null" style="top: 120px; left: 876px;"></div>
-  <div id="pr_empire_byzantium" class="pr_square_card" data-card-id="null" style="top: 120px; left: 1052px;"></div>
-  <div id="pr_empire_portugal" class="pr_square_card" data-card-id="null" style="top: 754px; left: 349px;"></div>
-  <div id="pr_empire_aragon" class="pr_square_card" data-card-id="null" style="top: 754px; left: 526px;"></div>
-  <div id="pr_empire_papal_states" class="pr_square_card" data-card-id="null" style="top: 754px; left: 700px;"></div>
-  <div id="pr_empire_ottoman" class="pr_square_card" data-card-id="null" style="top: 754px; left: 876px;"></div>
-  <div id="pr_empire_mamluk" class="pr_square_card" data-card-id="null" style="top: 754px; left: 1052px;"></div>
+  ${Object.entries(EMPIRE_CARD_CONFIG).map(([empire, {top, left}]) => `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`).join('')}
 `;
 
 const tplGameMapMapCards = () => {
-
-
   const htmlArray = Object.entries(MAP_CONFIG).map(
     ([empire, data]) => `
-  <div id="pr_empire_${empire}" class="pr_map_card" data-card-id="medieval_${empire}" style="top: ${
-      data.top
-    }px; left: ${data.left}px">
+  <div id="pr_empire_${empire}" class="pr_map_card" data-card-id="medieval_${empire}" style="top: calc(var(--paxRenMapScale) * ${data.top}px); left: calc(var(--paxRenMapScale) * ${data.left}px);">
     ${Object.entries(data.cities)
       .map(
         ([city, coords]) =>
-          `<div id="pr_city_${city}" class="pr_city" style="top: ${coords.top}px; left: ${coords.left}px"></div>`
+          `<div id="pr_city_${city}" class="pr_city" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`
       )
       .join("")}
   </div>
@@ -60,10 +37,10 @@ const tplGameMapMapCards = () => {
 };
 
 const tplGameMapVictoryCards = () => `
-  <div class="pr_square_card" data-card-id="victory_renaissance_inactive" style="top: 120.5px; left: 135.5px;"></div>
-  <div class="pr_square_card" data-card-id="victory_globalization_inactive" style="top: 296px; left: 135.5px;"></div>
-  <div class="pr_square_card" data-card-id="victory_imperial_inactive" style="top: 578px; left: 135.5px;"></div>
-  <div class="pr_square_card" data-card-id="victory_holy_inactive" style="top: 753.5px; left: 135.5px;"></div>
+  <div class="pr_square_card" data-card-id="victory_renaissance_inactive" style="top: calc(var(--paxRenCardScale) * 120.5px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
+  <div class="pr_square_card" data-card-id="victory_globalization_inactive" style="top: calc(var(--paxRenCardScale) * 296px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
+  <div class="pr_square_card" data-card-id="victory_imperial_inactive" style="top: calc(var(--paxRenCardScale) * 578px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
+  <div class="pr_square_card" data-card-id="victory_holy_inactive" style="top: calc(var(--paxRenCardScale) * 753.5px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
 `;
 
 const tplGameMap = () => `

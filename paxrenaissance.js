@@ -385,7 +385,7 @@ function showScreenCenterAnimation(animationManager, animation) {
         element.addEventListener('transitionend', cleanOnTransitionEnd);
         document.addEventListener('visibilitychange', cleanOnTransitionCancel);
         element.offsetHeight;
-        element.style.transition = "transform ".concat(duration, "ms ").concat(transitionTimingFunction);
+        element.style.transition = "width 1s, height 1s, transform ".concat(duration, "ms ").concat(transitionTimingFunction);
         element.offsetHeight;
         element.style.transform = "translate(".concat(-x, "px, ").concat(-y, "px) rotate(").concat((_d = settings === null || settings === void 0 ? void 0 : settings.rotationDelta) !== null && _d !== void 0 ? _d : 0, "deg)");
         timeoutId = setTimeout(cleanOnTransitionEnd, duration + 100);
@@ -1587,7 +1587,7 @@ var PaxRenaissance = (function () {
         var _this = this;
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
         this.gamedatas = gamedatas;
-        debug("gamedatas", gamedatas);
+        debug("gamedata", gamedatas);
         this._connections = [];
         this.activeStates = {};
         this.animationManager = new AnimationManager(this, { duration: 1000 });
@@ -1626,15 +1626,14 @@ var PaxRenaissance = (function () {
             animationManager: this.animationManager,
             getId: function (card) { return card.id.split("_")[0]; },
             setupDiv: function (card, div) {
-                div.style.width = "151px";
-                div.style.height = "230px";
+                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
             },
             setupFrontDiv: function (card, div) {
-                console.log("setupFrontDiv", card);
                 div.classList.add("pr_card");
                 div.setAttribute("data-card-id", card.id.split("_")[0]);
-                div.style.width = "151px";
-                div.style.height = "230px";
+                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
                 if (!card.id.startsWith("FAKE")) {
                     _this.tooltipManager.addCardTooltip({
                         nodeId: card.id.split("_")[0] + "-front",
@@ -1645,8 +1644,8 @@ var PaxRenaissance = (function () {
             setupBackDiv: function (card, div) {
                 div.classList.add("pr_card");
                 div.setAttribute("data-card-id", card.region === EAST ? "EAST_BACK" : "WEST_BACK");
-                div.style.width = "151px";
-                div.style.height = "230px";
+                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
             },
             cardWidth: 151,
             cardHeight: 230,
@@ -1702,39 +1701,6 @@ var PaxRenaissance = (function () {
                     }
                     _this.hand.addCard(card);
                 },
-            });
-            this.addPrimaryActionButton({
-                id: "deal_card_button",
-                text: _("Deal card"),
-                callback: function () { return __awaiter(_this, void 0, void 0, function () {
-                    var card;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                card = {
-                                    flavorText: [
-                                        'When faced with a heretic, the papacy had two solu…rced conversion or "auto-da-fé" (public burning).',
-                                        "Pope Innocent VIII preferred burning. In 1484 he i…man inquisition against witchcraft and magicians.",
-                                        "He then confirmed Torquemada as the Grand Inquisit… a crusade against Waldensian heretics in France.",
-                                    ],
-                                    id: "PREN001_InquistionPope",
-                                    location: "market_west_3",
-                                    name: "Inquistion Pope",
-                                    region: "west",
-                                    state: 0,
-                                    type: "tableauCard",
-                                    used: 0,
-                                };
-                                return [4, this.market.getDeck({ region: WEST }).addCard(__assign(__assign({}, card), { location: 'deck' }))];
-                            case 1:
-                                _a.sent();
-                                return [4, this.market.getStock({ region: WEST, column: 5 }).addCard(card, { fromStock: this.market.getDeck({ region: WEST }) })];
-                            case 2:
-                                _a.sent();
-                                return [2];
-                        }
-                    });
-                }); },
             });
         }
     };
@@ -2003,185 +1969,279 @@ var debug = isDebug ? console.info.bind(window.console) : function () { };
 var capitalizeFirstLetter = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-var MAP_CONFIG = (_a = {},
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+var EMPIRE_CARD_CONFIG = (_a = {},
     _a[ENGLAND] = {
+        top: 120,
+        left: 349,
+    },
+    _a[FRANCE] = {
+        top: 120,
+        left: 526,
+    },
+    _a[HOLY_ROMAN_EMIRE] = {
+        top: 120,
+        left: 700,
+    },
+    _a[HUNGARY] = {
+        top: 120,
+        left: 876,
+    },
+    _a[BYZANTIUM] = {
+        top: 120,
+        left: 1052,
+    },
+    _a[PORTUGAL] = {
+        top: 754,
+        left: 349,
+    },
+    _a[ARAGON] = {
+        top: 754,
+        left: 526,
+    },
+    _a[PAPAL_STATES] = {
+        top: 754,
+        left: 700,
+    },
+    _a[OTTOMAN] = {
+        top: 754,
+        left: 876,
+    },
+    _a[MAMLUK] = {
+        top: 754,
+        left: 1052,
+    },
+    _a);
+var MARKET_EAST_CONFIG = [
+    {
+        top: 1200,
+        left: 93,
+    },
+    {
+        top: 1200,
+        left: 256,
+    },
+    {
+        top: 1200,
+        left: 425,
+    },
+    {
+        top: 1200,
+        left: 594,
+    },
+    {
+        top: 1200,
+        left: 762,
+    },
+    {
+        top: 1200,
+        left: 931,
+    },
+];
+var MARKET_WEST_CONFIG = [
+    {
+        top: 950,
+        left: 93,
+    },
+    {
+        top: 950,
+        left: 256,
+    },
+    {
+        top: 950,
+        left: 425,
+    },
+    {
+        top: 950,
+        left: 594,
+    },
+    {
+        top: 950,
+        left: 762,
+    },
+    {
+        top: 950,
+        left: 931,
+    },
+];
+var MAP_CONFIG = (_b = {},
+    _b[ENGLAND] = {
         top: 270,
         left: 350,
-        cities: (_b = {},
-            _b[LONDON] = {
+        cities: (_c = {},
+            _c[LONDON] = {
                 top: 76,
                 left: 80,
             },
-            _b[BORDEAUX] = {
+            _c[BORDEAUX] = {
                 top: 185,
                 left: 108,
             },
-            _b),
+            _c),
     },
-    _a[FRANCE] = {
+    _b[FRANCE] = {
         top: 270,
         left: 525.5,
-        cities: (_c = {},
-            _c[BRUGES] = {
+        cities: (_d = {},
+            _d[BRUGES] = {
                 top: 65.5,
                 left: 51.5,
             },
-            _c[PARIS] = {
+            _d[PARIS] = {
                 top: 127,
                 left: 9,
             },
-            _c[LYON] = {
+            _d[LYON] = {
                 top: 164,
                 left: 91,
             },
-            _c),
+            _d),
     },
-    _a[HOLY_ROMAN_EMIRE] = {
+    _b[HOLY_ROMAN_EMIRE] = {
         top: 270,
         left: 701,
-        cities: (_d = {},
-            _d[LUBECK] = {
+        cities: (_e = {},
+            _e[LUBECK] = {
                 top: 42,
                 left: 27,
             },
-            _d[NOVGOROD] = {
+            _e[NOVGOROD] = {
                 top: 35,
                 left: 89,
             },
-            _d[NURNBERG] = {
+            _e[NURNBERG] = {
                 top: 128.5,
                 left: 14,
             },
-            _d[VIENNA] = {
+            _e[VIENNA] = {
                 top: 150,
                 left: 88.5,
             },
-            _d),
+            _e),
     },
-    _a[HUNGARY] = {
+    _b[HUNGARY] = {
         top: 270,
         left: 876,
-        cities: (_e = {},
-            _e[BUDA] = {
+        cities: (_f = {},
+            _f[BUDA] = {
                 top: 158,
                 left: 15.5,
             },
-            _e[VARNA] = {
+            _f[VARNA] = {
                 top: 170.5,
                 left: 76,
             },
-            _e),
+            _f),
     },
-    _a[BYZANTIUM] = {
+    _b[BYZANTIUM] = {
         top: 270,
         left: 1053,
-        cities: (_f = {},
-            _f[TANA] = {
+        cities: (_g = {},
+            _g[TANA] = {
                 top: 41,
                 left: 40,
             },
-            _f[CAFFA] = {
+            _g[CAFFA] = {
                 top: 131,
                 left: 5,
             },
-            _f[TREBIZOND] = {
+            _g[TREBIZOND] = {
                 top: 188,
                 left: 112,
             },
-            _f),
+            _g),
     },
-    _a[PORTUGAL] = {
+    _b[PORTUGAL] = {
         top: 525,
         left: 350,
-        cities: (_g = {},
-            _g[TOLEDO] = {
+        cities: (_h = {},
+            _h[TOLEDO] = {
                 top: 62.5,
                 left: 94,
             },
-            _g[GRANADA] = {
+            _h[GRANADA] = {
                 top: 118.5,
                 left: 103,
             },
-            _g[SPICE_ISLANDS] = {
+            _h[SPICE_ISLANDS] = {
                 top: 184,
                 left: 37,
             },
-            _g),
+            _h),
     },
-    _a[ARAGON] = {
+    _b[ARAGON] = {
         top: 525,
         left: 525.5,
-        cities: (_h = {},
-            _h[VALENCIA] = {
+        cities: (_j = {},
+            _j[VALENCIA] = {
                 top: 55.5,
                 left: 14.5,
             },
-            _h[ALGIERS] = {
+            _j[ALGIERS] = {
                 top: 143.5,
                 left: 101,
             },
-            _h[TIMBUKTU] = {
+            _j[TIMBUKTU] = {
                 top: 165.5,
                 left: 33,
             },
-            _h),
+            _j),
     },
-    _a[PAPAL_STATES] = {
+    _b[PAPAL_STATES] = {
         top: 525,
         left: 701,
-        cities: (_j = {},
-            _j[VENICE] = {
+        cities: (_k = {},
+            _k[VENICE] = {
                 top: 20.5,
                 left: 40,
             },
-            _j),
+            _k),
     },
-    _a[OTTOMAN] = {
+    _b[OTTOMAN] = {
         top: 525,
         left: 876,
-        cities: (_k = {},
-            _k[CONSTANTINOPLE_1] = {
+        cities: (_l = {},
+            _l[CONSTANTINOPLE_1] = {
                 top: 24.5,
                 left: 10.5,
             },
-            _k[CONSTANTINOPLE_2] = {
+            _l[CONSTANTINOPLE_2] = {
                 top: 24.5,
                 left: 45,
             },
-            _k[CONSTANTINOPLE_3] = {
+            _l[CONSTANTINOPLE_3] = {
                 top: 24.5,
                 left: 79.5,
             },
-            _k[MODON] = {
+            _l[MODON] = {
                 top: 96,
                 left: 19.5,
             },
-            _k[RHODES] = {
+            _l[RHODES] = {
                 top: 86.5,
                 left: 108,
             },
-            _k),
+            _l),
     },
-    _a[MAMLUK] = {
+    _b[MAMLUK] = {
         top: 525,
         left: 1053,
-        cities: (_l = {},
-            _l[CYPRUS] = {
+        cities: (_m = {},
+            _m[CYPRUS] = {
                 top: 76,
                 left: 54.5,
             },
-            _l[CAIRO] = {
+            _m[CAIRO] = {
                 top: 162,
                 left: 42,
             },
-            _l[RED_SEA] = {
+            _m[RED_SEA] = {
                 top: 163.5,
                 left: 106,
             },
-            _l),
+            _m),
     },
-    _a);
+    _b);
 var LOCAL_STORAGE_MAP_ZOOM_KEY = "PaxRenaissance-map-zoom";
 var ZOOM_LEVELS = [0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1];
 var MAX_MAP_HEIGHT = 1500;
@@ -2224,11 +2284,15 @@ var GameMap = (function () {
         var gamedatas = _a.gamedatas;
     };
     GameMap.prototype.setupGameMap = function (_a) {
+        var _this = this;
         var gamedatas = _a.gamedatas;
         document
             .getElementById("pr_play_area")
             .insertAdjacentHTML("afterbegin", tplGameMap());
         this.updateGameMapSize();
+        window.addEventListener("resize", function () {
+            _this.updateGameMapSize();
+        });
         this.setupZoomButtons();
         this.setupEmpireCards({ gamedatas: gamedatas });
         this.setupChessPieces({ gamedatas: gamedatas });
@@ -2289,21 +2353,30 @@ var tplChessPiece = function (_a) {
     var religion = id.split('_')[1];
     return "<div id=\"".concat(id, "\" class=\"pr_chess_piece pr_").concat(type, "\" data-religion=\"").concat(religion, "\"></div>");
 };
-var tplGameMapMarket = function () { return "\n  <div id=\"pr_market_west_0\" class=\"pr_market\" style=\"top: 950px; left: 93px;\"></div>\n  <div id=\"pr_market_west_1\" class=\"pr_market\" style=\"top: 950px; left: 256px;\"></div>\n  <div id=\"pr_market_west_2\" class=\"pr_market\" style=\"top: 950px; left: 425px;\"></div>\n  <div id=\"pr_market_west_3\" class=\"pr_market\" style=\"top: 950px; left: 594px;\"></div>\n  <div id=\"pr_market_west_4\" class=\"pr_market\" style=\"top: 950px; left: 762px;\"></div>\n  <div id=\"pr_market_west_5\" class=\"pr_market\" style=\"top: 950px; left: 931px;\"></div>\n  <div id=\"pr_market_west_deck_container\" class=\"pr_market\" style=\"top: 950px; left: 1095px;\">\n    <div id=\"pr_market_west_deck\"></div>\n  </div>\n  <div id=\"pr_market_east_0\" class=\"pr_market\" style=\"top: 1200px; left: 93px;\"></div>\n  <div id=\"pr_market_east_1\" class=\"pr_market\" style=\"top: 1200px; left: 256px;\"></div>\n  <div id=\"pr_market_east_2\" class=\"pr_market\" style=\"top: 1200px; left: 425px;\"></div>\n  <div id=\"pr_market_east_3\" class=\"pr_market\" style=\"top: 1200px; left: 594px;\"></div>\n  <div id=\"pr_market_east_4\" class=\"pr_market\" style=\"top: 1200px; left: 762px;\"></div>\n  <div id=\"pr_market_east_5\" class=\"pr_market\" style=\"top: 1200px; left: 931px;\"></div>\n  <div id=\"pr_market_east_deck_container\" class=\"pr_market\" style=\"top: 1200px; left: 1095px;\">\n    <div id=\"pr_market_east_deck\"></div>\n  </div>\n"; };
-var tplGameMapEmpireCards = function () { return "\n<div id=\"pr_empire_england\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 349px;\"></div>\n  <div id=\"pr_empire_france\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 526px;\"></div>\n  <div id=\"pr_empire_holy_roman_empire\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 700px;\"></div>\n  <div id=\"pr_empire_hungary\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 876px;\"></div>\n  <div id=\"pr_empire_byzantium\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 120px; left: 1052px;\"></div>\n  <div id=\"pr_empire_portugal\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 349px;\"></div>\n  <div id=\"pr_empire_aragon\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 526px;\"></div>\n  <div id=\"pr_empire_papal_states\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 700px;\"></div>\n  <div id=\"pr_empire_ottoman\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 876px;\"></div>\n  <div id=\"pr_empire_mamluk\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: 754px; left: 1052px;\"></div>\n"; };
+var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map(function (_a, index) {
+    var top = _a.top, left = _a.left;
+    return "<div id=\"pr_market_west_".concat(index, "\" class=\"pr_market\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\"></div>");
+}).join(''), "\n  <div id=\"pr_market_west_deck_container\" class=\"pr_market\" style=\"top: calc(var(--paxRenCardScale) * 950px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_west_deck\"></div>\n  </div>\n  ").concat(MARKET_EAST_CONFIG.map(function (_a, index) {
+    var top = _a.top, left = _a.left;
+    return "<div id=\"pr_market_east_".concat(index, "\" class=\"pr_market\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\"></div>");
+}).join(''), "\n  <div id=\"pr_market_east_deck_container\" class=\"pr_market\" style=\"top:  calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_east_deck\"></div>\n  </div>\n"); };
+var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(EMPIRE_CARD_CONFIG).map(function (_a) {
+    var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left;
+    return "<div id=\"pr_empire_".concat(empire, "\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
+}).join(''), "\n"); };
 var tplGameMapMapCards = function () {
     var htmlArray = Object.entries(MAP_CONFIG).map(function (_a) {
         var empire = _a[0], data = _a[1];
-        return "\n  <div id=\"pr_empire_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: ").concat(data.top, "px; left: ").concat(data.left, "px\">\n    ").concat(Object.entries(data.cities)
+        return "\n  <div id=\"pr_empire_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(data.top, "px); left: calc(var(--paxRenMapScale) * ").concat(data.left, "px);\">\n    ").concat(Object.entries(data.cities)
             .map(function (_a) {
             var city = _a[0], coords = _a[1];
-            return "<div id=\"pr_city_".concat(city, "\" class=\"pr_city\" style=\"top: ").concat(coords.top, "px; left: ").concat(coords.left, "px\"></div>");
+            return "<div id=\"pr_city_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
         })
             .join(""), "\n  </div>\n");
     });
     return htmlArray.join("");
 };
-var tplGameMapVictoryCards = function () { return "\n  <div class=\"pr_square_card\" data-card-id=\"victory_renaissance_inactive\" style=\"top: 120.5px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_globalization_inactive\" style=\"top: 296px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_imperial_inactive\" style=\"top: 578px; left: 135.5px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_holy_inactive\" style=\"top: 753.5px; left: 135.5px;\"></div>\n"; };
+var tplGameMapVictoryCards = function () { return "\n  <div class=\"pr_square_card\" data-card-id=\"victory_renaissance_inactive\" style=\"top: calc(var(--paxRenCardScale) * 120.5px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_globalization_inactive\" style=\"top: calc(var(--paxRenCardScale) * 296px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_imperial_inactive\" style=\"top: calc(var(--paxRenCardScale) * 578px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_holy_inactive\" style=\"top: calc(var(--paxRenCardScale) * 753.5px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n"; };
 var tplGameMap = function () { return "\n<div id=\"pr_game_map_container\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
 var Hand = (function () {
     function Hand(game) {
@@ -2326,33 +2399,9 @@ var Hand = (function () {
     };
     Hand.prototype.addCard = function (card) {
         return __awaiter(this, void 0, void 0, function () {
-            var cardDiv;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!this.game.cardManager.animationsActive()) return [3, 3];
-                        cardDiv = this.game.cardManager.getCardElement(card);
-                        cardDiv.style.zIndex = "20";
-                        return [4, this.game.animationManager.playSequence([
-                                new BgaShowScreenCenterAnimation({
-                                    element: cardDiv,
-                                    transitionTimingFunction: "ease-in-out",
-                                }),
-                                new BgaPauseAnimation({}),
-                            ])];
-                    case 1:
-                        _a.sent();
-                        cardDiv.style.removeProperty("z-index");
-                        return [4, this.hand.addCard(card)];
-                    case 2:
-                        _a.sent();
-                        return [3, 4];
-                    case 3:
-                        debug("no animations active");
-                        this.hand.addCard(card);
-                        _a.label = 4;
-                    case 4: return [2];
-                }
+                this.hand.addCard(card);
+                return [2];
             });
         });
     };
