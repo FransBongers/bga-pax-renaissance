@@ -31,15 +31,31 @@ class Notifications
     self::notify($pId, 'message', $txt, $args);
   }
 
-  public static function refreshInterface($data)
+  public static function newUndoableStep($player, $stepId)
   {
-    self::notifyAll('refreshInterface', '', $data);
+    self::notify($player, 'newUndoableStep', clienttranslate('Undo here'), [
+      'stepId' => $stepId,
+      'preserve' => ['stepId'],
+    ]);
   }
 
-  public static function smallRefreshInterface($data)
+  public static function clearTurn($player, $notifIds)
   {
-    self::notifyAll('smallRefreshInterface', '', $data);
+    self::notifyAll('clearTurn', clienttranslate('${tkn_playerName} restarts his turn'), [
+      'player' => $player,
+      'notifIds' => $notifIds,
+    ]);
   }
+
+  // public static function refreshInterface($data)
+  // {
+  //   self::notifyAll('refreshInterface', '', $data);
+  // }
+
+  // public static function smallRefreshInterface($data)
+  // {
+  //   self::notifyAll('smallRefreshInterface', '', $data);
+  // }
 
   // public static function smallRefreshHand($player)
   // {
@@ -56,14 +72,6 @@ class Notifications
   //     ]);
   //   }
   // }
-
-  public static function clearTurn($player, $notifIds)
-  {
-    self::notifyAll('clearTurn', clienttranslate('${tkn_playerName} restarts his turn'), [
-      'player' => $player,
-      'notifIds' => $notifIds,
-    ]);
-  }
 
   public static function refreshUI($datas)
   {

@@ -1,15 +1,74 @@
 <?php
 require_once 'gameoptions.inc.php';
 /**
+ * Setup
+ */
+const FUGGER = 'fugger';
+const MEDICI = 'medici';
+const COEUR = 'coeur';
+const MARCHIONNI = 'marchionni';
+
+const COLOR__BANK_MAP = [
+  "1084c7" => FUGGER,
+  "bddcc6" => MARCHIONNI,
+  "732473" => COEUR,
+  "ffce00" => MEDICI
+];
+
+
+/**
  * State ids / names
  */
 
 const ST_GAME_SETUP = 1;
 const ST_GAME_SETUP_NAME = 'gameSetup';
-const ST_CHANGE_ACTIVE_PLAYER = 95;
-const ST_CHANGE_ACTIVE_PLAYER_NAME = 'changeActivePlayer';
+
+const ST_BEFORE_START_OF_TURN = 6;
+const ST_TURNACTION = 7;
+
+const ST_PLAYER_ACTION = 21;
+const ST_PURCHASE_CARD = 22;
+const ST_PLAY_CARD = 23;
+
+const ST_CLEANUP = 88;
+const ST_RESOLVE_STACK = 90;
+const ST_RESOLVE_CHOICE = 91;
+const ST_IMPOSSIBLE_MANDATORY_ACTION = 92;
+const ST_CONFIRM_TURN = 93;
+const ST_CONFIRM_PARTIAL_TURN = 94;
+
+// const ST_CHANGE_ACTIVE_PLAYER = 95;
+// const ST_CHANGE_ACTIVE_PLAYER_NAME = 'changeActivePlayer';
+const ST_GENERIC_NEXT_PLAYER = 97;
 const ST_END_GAME = 99;
 const ST_END_GAME_NAME = 'gameEnd';
+
+/**
+ * STATS
+ */
+
+const STAT_TURN = 12;
+
+/*
+ * ENGINE
+ */
+const NODE_SEQ = 'seq';
+const NODE_OR = 'or';
+const NODE_XOR = 'xor';
+const NODE_PARALLEL = 'parallel';
+const NODE_LEAF = 'leaf';
+
+const ZOMBIE = 98;
+const PASS = 99;
+
+const AFTER_FINISHING_ACTION = 'afterFinishing';
+
+/**
+ * ATOMIC ACTIONS
+ */
+const PLAYER_ACTION = 'PLAYER_ACTION';
+const PURCHASE_CARD = 'PURCHASE_CARD';
+const PLAY_CARD = 'PLAY_CARD';
 
 
 /**

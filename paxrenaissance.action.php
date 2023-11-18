@@ -20,6 +20,8 @@
  * this.ajaxcall( "/paxrenaissance/paxrenaissance/myAction.html", ...)
  *
  */
+
+ use PaxRenaissance\Helpers\Utils;
   
   
   class action_paxrenaissance extends APP_GameAction
@@ -55,6 +57,16 @@
    {
      self::setAjaxMode();
      $result = $this->game->restart();
+     self::ajaxResponse();
+   }
+
+   public function actPlayerAction()
+   {
+     self::setAjaxMode();
+    //  $action = self::getArg('action', AT_alphanum, true);
+     $args = self::getArg('args', AT_json, true);
+     Utils::validateJSonAlphaNum($args, 'args');
+     $this->game->actTakeAtomicAction('actPlayerAction', $args);
      self::ajaxResponse();
    }
 

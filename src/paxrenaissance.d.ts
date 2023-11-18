@@ -10,14 +10,20 @@ interface AddActionButtonProps extends AddButtonProps {
 }
 
 interface PaxRenaissanceGame extends Game {
+  addCancelButton: () => void;
+  addConfirmButton: (props: { callback: Function | string }) => void;
+  addDangerActionButton: (props: AddButtonProps) => void;
   addPrimaryActionButton: (props: AddButtonProps) => void;
   addSecondaryActionButton: (props: AddButtonProps) => void;
-  addDangerActionButton: (props: AddButtonProps) => void;
   clearInterface: () => void;
   clearPossible: () => void;
+  clientUpdatePageTitle: ({ text, args }: { text: string; args: Record<string, unknown> }) => void;
+  takeAction: (props: { action: string; args?: Record<string, unknown> }) => void;
   updatePlayAreaSize: () => void;
+  _connections: unknown[];
   animationManager: AnimationManager;
   cardManager: CardManager<TableauCard>;
+  market: Market;
   notificationManager: NotificationManager;
   playAreaScale: number;
   playerManager: PlayerManager;
@@ -56,11 +62,17 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
         cometCount: number;
       };
     };
+    florins: {
+      east: number[];
+      west: number[];
+    }
   };
   players: Record<number, BgaPlayer>;
   chessPieces: ChessPiece[];
 }
 
 interface PaxRenaissancePlayerData extends BgaPlayer {
-  hexColor: string;
+  // hexColor: string;
+  florins: number;
+  bank: 'coeur' | 'fugger' | 'marchionni' | 'medici' ;
 }

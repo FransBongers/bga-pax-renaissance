@@ -25,15 +25,16 @@ $swdNamespaceAutoload = function ($class) {
         if (file_exists($file)) {
             require_once $file;
         } else {
-            die('Cannot find file : ' . $file);
+            var_dump('Cannot find file : ' . $file);
         }
     }
 };
 spl_autoload_register($swdNamespaceAutoload, true, true);
 
 
-require_once(APP_GAMEMODULE_PATH . 'module/table/table.game.php');
+require_once APP_GAMEMODULE_PATH . 'module/table/table.game.php';
 
+use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Preferences;
@@ -44,12 +45,15 @@ use PaxRenaissance\Managers\ChessPieces;
 use PaxRenaissance\Managers\MapBoard;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
+use PaxRenaissance\Managers\PlayersExtra;
 
 class PaxRenaissance extends Table
 {
     use PaxRenaissance\DebugTrait;
     use PaxRenaissance\States\DispatchActionTrait;
+    use PaxRenaissance\States\EngineTrait;
     use PaxRenaissance\States\PlayerActionTrait;
+    use PaxRenaissance\States\TurnTrait;
 
     public static $instance = null;
     function __construct()
@@ -65,6 +69,7 @@ class PaxRenaissance extends Table
         self::initGameStateLabels(array(
             'logging' => 10,
         ));
+        Engine::boot();
         Stats::checkExistence();
     }
 
@@ -84,7 +89,7 @@ class PaxRenaissance extends Table
         return is_null($val) ? null : $val['global_value'];
     }
 
- /*
+    /*
         setupNewGame:
         
         This method is called only once, when a new game is launched.
@@ -96,14 +101,14 @@ class PaxRenaissance extends Table
         Globals::setupNewGame($players, $options);
         Preferences::setupNewGame($players, $options);
         Players::setupNewGame($players, $options);
+        // Globals::setFirstPlayer($this->getNextPlayerTable()[0]);
         Stats::checkExistence();
 
-        Cards::setupNewGame($players,$options);
-        ChessPieces::setupNewGame($players,$options);
-        Market::setupNewGame($players,$options);
+        Cards::setupNewGame($players, $options);
+        ChessPieces::setupNewGame($players, $options);
+        Market::setupNewGame($players, $options);
 
         $this->setGameStateInitialValue('logging', false);
-
         $this->activeNextPlayer();
 
         /************ End of the game initialization *****/
@@ -112,13 +117,13 @@ class PaxRenaissance extends Table
     /*
         getAllDatas: 
     */
-    protected function getAllDatas($pId = null)
+    public function getAllDatas($pId = null)
     {
         $pId = $pId ?? Players::getCurrentId();
 
         $data = [
             'canceledNotifIds' => Log::getCanceledNotifIds(),
-            'gameMap' => MapBoard::getUiData(), 
+            'gameMap' => MapBoard::getUiData(),
             'market' => Market::getUiData(),
             'players' => Players::getUiData($pId),
             'chessPieces' => ChessPieces::getAll()->toArray(),
@@ -151,67 +156,94 @@ class PaxRenaissance extends Table
 
     function endGame()
     {
-        Notifications::message(clienttranslate('${tkn_playerName} end the game'),[
+        Notifications::message(clienttranslate('${tkn_playerName} end the game'), [
             'player' => Players::get(),
         ]);
         $this->nextState('gameEnd');
     }
 
-        /**
-     * Generic state to handle change of active player in the middle of a transition
-     */
-    function stChangeActivePlayer()
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    ////////////   Custom Turn Order   ////////////
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+    public function initCustomTurnOrder($key, $order, $callback, $endCallback, $loop = false, $autoNext = true, $args = [])
     {
-        $t = Globals::getChangeActivePlayer();
-        $this->gamestate->changeActivePlayer($t['pId']);
-        $this->gamestate->jumpToState($t['st']);
+        $turnOrders = Globals::getCustomTurnOrders();
+        $turnOrders[$key] = [
+            'order' => $order ?? Players::getTurnOrder(),
+            'index' => -1,
+            'callback' => $callback,
+            'args' => $args, // Useful mostly for auto card listeners
+            'endCallback' => $endCallback,
+            'loop' => $loop,
+        ];
+        Globals::setCustomTurnOrders($turnOrders);
+
+        if ($autoNext) {
+            $this->nextPlayerCustomOrder($key);
+        }
     }
 
-    /**
-     * $pId can be either playerId or player
-     */
-    function changeActivePlayerAndJumpTo($pId, $state)
+    public function initCustomDefaultTurnOrder($key, $callback, $endCallback, $loop = false, $autoNext = true)
     {
-        // Should probably always clear logs here?
-        if (Globals::getLogState() == -1) {
-            Globals::setLogState($state);
-            // Globals::setActionCount(0);
-            Log::clearAll();
-        }
-
-        Globals::setChangeActivePlayer([
-            'pId' => is_int($pId) ? $pId : $pId->getId(),
-            'st' => $state,
-        ]);
-        $this->gamestate->jumpToState(ST_CHANGE_ACTIVE_PLAYER);
+        $this->initCustomTurnOrder($key, null, $callback, $endCallback, $loop, $autoNext);
     }
 
-    /**
-     * $pId can be either playerId or player
-     */
-    function nextState($transition, $pId = null)
+    public function nextPlayerCustomOrder($key)
     {
-        // gets current game state to check if it is game or player gamestate
-        $state = $this->gamestate->state(true, false, true);
-        $st = $state['transitions'][$transition];
-
-        if (Globals::getLogState() == -1) {
-            Globals::setLogState($st);
-            Log::clearAll();
+        $turnOrders = Globals::getCustomTurnOrders();
+        if (!isset($turnOrders[$key])) {
+            throw new BgaVisibleSystemException('Asking for the next player of a custom turn order not initialized : ' . $key);
         }
 
-        $pId = is_null($pId) || is_int($pId) ? $pId : $pId->getId();
-        if (is_null($pId) || $pId == $this->getActivePlayerId()) {
-            $this->gamestate->nextState($transition);
+        // Increase index and save
+        $o = $turnOrders[$key];
+        $i = $o['index'] + 1;
+        if ($i == count($o['order']) && $o['loop']) {
+            $i = 0;
+        }
+        $turnOrders[$key]['index'] = $i;
+        Globals::setCustomTurnOrders($turnOrders);
+
+        if ($i < count($o['order'])) {
+            $this->gamestate->jumpToState(ST_GENERIC_NEXT_PLAYER);
+            $this->gamestate->changeActivePlayer($o['order'][$i]);
+            $this->jumpToOrCall($o['callback'], $o['args']);
         } else {
-            if ($state['type'] == 'game') {
-                $this->gamestate->changeActivePlayer($pId);
-                $this->gamestate->nextState($transition);
-            } else {
-                $this->changeActivePlayerAndJumpTo($pId, $st);
-            }
+            $this->endCustomOrder($key);
         }
     }
+
+    public function endCustomOrder($key)
+    {
+        $turnOrders = Globals::getCustomTurnOrders();
+        if (!isset($turnOrders[$key])) {
+            throw new BgaVisibleSystemException('Asking for ending a custom turn order not initialized : ' . $key);
+        }
+
+        $o = $turnOrders[$key];
+        $turnOrders[$key]['index'] = count($o['order']);
+        Globals::setCustomTurnOrders($turnOrders);
+        $callback = $o['endCallback'];
+        $this->jumpToOrCall($callback);
+    }
+
+    public function jumpToOrCall($mixed, $args = [])
+    {
+        if (is_int($mixed) && array_key_exists($mixed, $this->gamestate->states)) {
+            $this->gamestate->jumpToState($mixed);
+        } elseif (method_exists($this, $mixed)) {
+            $method = $mixed;
+            $this->$method($args);
+        } else {
+            throw new BgaVisibleSystemException('Failing to jumpToOrCall  : ' . $mixed);
+        }
+    }
+
+
+
 
     /////////////////////////////////////////////////////////////
     // Exposing protected methods, please use at your own risk //

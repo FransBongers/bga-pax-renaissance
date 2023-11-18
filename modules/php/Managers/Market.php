@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance\Managers;
 
+use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Cards;
@@ -32,10 +33,32 @@ class Market
     self::drawInitialMarketCards();
   }
 
+  public static function getFlorins() {
+    return [
+      EAST => [
+        0 => 0,
+        1 => 1,
+        2 => 0,
+        3 => 2,
+        4 => 0,
+        5 => 0
+      ],
+      WEST => [
+        0 => 0,
+        1 => 1,
+        2 => 0,
+        3 => 2,
+        4 => 0,
+        5 => 0
+      ],
+    ];
+  }
+
   public static function getUiData()
   {
     $data = [
       'cards' => Cards::getSelectQuery()->where('card_location', 'LIKE', 'market%')->get()->ui(),
+      'florins' => self::getFlorins(),
       'deckCounts' => []
     ];
     foreach (CARDINAL_DIRECTIONS as $direction) {
@@ -50,7 +73,16 @@ class Market
       ];
     }
 
-
     return $data;
+  }
+
+  public static function getCardsPlayerCanPurchase($player) {
+    $florins = $player->getFlorins();
+    $cards = Cards::getSelectQuery()->where('card_location', 'LIKE', 'market%')->get()->toArray();
+
+    return Utils::filter($cards, function ($card) use ($florins) {
+      $column = intval(explode('_',$card->getLocation())[2]);
+      return $column > 0 && $column <= $florins;
+    });
   }
 }

@@ -1,15 +1,17 @@
 /**
  * All base constants to be used in other sass files.
  */
+$selectable-color: yellow;
+$selected-color: blue;
 
-$blue-player-color: rgb(16,132,199); // #1084c7;
-$green-player-color: rgb(189,220,198);// #bddcc6;
-$purple-player-color: rgb(115,36,115); //#732473;
-$yellow-player-color: rgb(225,206,0); // #ffce00;
+$blue-player-color: rgb(16, 132, 199); // #1084c7;
+$green-player-color: rgb(189, 220, 198); // #bddcc6;
+$purple-player-color: rgb(115, 36, 115); //#732473;
+$yellow-player-color: rgb(225, 206, 0); // #ffce00;
 
-$blue-religion-color: rgb(31,103,103); // #1f6767
-$red-religion-color: rgb(119,22,14); // #77170e
-$yellow-religion-color: rgb(131,115,33); // #837321
+$blue-religion-color: rgb(31, 103, 103); // #1f6767
+$red-religion-color: rgb(119, 22, 14); // #77170e
+$yellow-religion-color: rgb(131, 115, 33); // #837321
 
 .bga-zoom-out-icon {
   width: 48px;

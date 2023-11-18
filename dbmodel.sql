@@ -22,6 +22,13 @@ CREATE TABLE IF NOT EXISTS `user_preferences` (
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 
+CREATE TABLE IF NOT EXISTS `player_extra` (
+  `player_id` int(10) unsigned NOT NULL,
+  `florins` int(10) unsigned NOT NULL DEFAULT 0,
+  `bank` varchar(32),
+  PRIMARY KEY (`player_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8;
+
 CREATE TABLE IF NOT EXISTS `cards` (
   `card_id` varchar(100) NOT NULL,
   `card_location` varchar(32) NOT NULL,

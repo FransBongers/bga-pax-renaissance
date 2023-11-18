@@ -4,6 +4,8 @@ namespace PaxRenaissance\Managers;
 
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
+use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Managers\PlayersExtra;
 
 /*
  * Players manager : allows to easily access players ...
@@ -39,13 +41,20 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     $values = [];
     foreach ($players as $pId => $player) {
       $color = array_shift($colors);
-      $values[] = [$pId, $color, $player['player_canal'], $player['player_name'], $player['player_avatar'],0];
+      $values[] = [$pId, $color, $player['player_canal'], $player['player_name'], $player['player_avatar'], 0];
     }
 
     $query->values($values);
 
     // Game::get()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
     Game::get()->reloadPlayersBasicInfos();
+    PlayersExtra::setupNewGame();
+  }
+
+  public static function incFlorins($pId, $increment)
+  {
+    $value = intval(PlayersExtra::get($pId)['florins']) + $increment;
+    return PlayersExtra::DB()->update(['florins' => $value], $pId);
   }
 
   public static function getActiveId()
@@ -158,6 +167,21 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     return self::getAll()->map(function ($player) use ($pId) {
       return $player->jsonSerialize($pId);
     });
+  }
+
+  /*
+   * Get current turn order according to first player variable
+   */
+  public function getTurnOrder($firstPlayer = null)
+  {
+    $firstPlayer = $firstPlayer ?? Globals::getFirstPlayer();
+    $order = [];
+    $p = $firstPlayer;
+    do {
+      $order[] = $p;
+      $p = self::getNextId($p);
+    } while ($p != $firstPlayer);
+    return $order;
   }
 
   /**

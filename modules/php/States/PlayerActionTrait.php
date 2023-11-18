@@ -8,7 +8,7 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Helpers\Log;
-use PaxRenaissance\Managers\ActionStack;
+// use PaxRenaissance\Managers\ActionStack;
 
 
 trait PlayerActionTrait
@@ -72,26 +72,26 @@ trait PlayerActionTrait
    */
   function restart()
   {
-    self::checkAction('restart');
-    if (Log::getAll()->empty()) {
-      throw new \BgaVisibleSystemException('Nothing to undo');
-    }
-    Log::revertAll();
-    // TODO: check what the us of Globals::fetch is => probably fetches all globals from db
-    // after db has been restored so they are cached
-    Globals::fetch();
+    // self::checkAction('restart');
+    // if (Log::getAll()->empty()) {
+    //   throw new \BgaVisibleSystemException('Nothing to undo');
+    // }
+    // Log::revertAll();
+    // // TODO: check what the us of Globals::fetch is => probably fetches all globals from db
+    // // after db has been restored so they are cached
+    // Globals::fetch();
 
-    // Refresh interface
-    $datas = $this->getAllDatas(-1);
-    // Unset all private and static information
-    unset($datas['staticData']);
-    unset($datas['canceledNotifIds']);
+    // // Refresh interface
+    // $datas = $this->getAllDatas(-1);
+    // // Unset all private and static information
+    // unset($datas['staticData']);
+    // unset($datas['canceledNotifIds']);
 
-    Notifications::smallRefreshInterface($datas);
-    // $player = Players::getCurrent();
-    // Notifications::smallRefreshHand($player);
+    // Notifications::smallRefreshInterface($datas);
+    // // $player = Players::getCurrent();
+    // // Notifications::smallRefreshHand($player);
 
-    $this->gamestate->jumpToState(Globals::getLogState());
+    // $this->gamestate->jumpToState(Globals::getLogState());
   }
 
   // .##.....##.########.####.##.......####.########.##....##

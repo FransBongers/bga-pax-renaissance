@@ -7,10 +7,12 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Preferences;
 use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\AtomicActions;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Events;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Managers\Players;
+use PaxRenaissance\Managers\PlayersExtra;
 
 /*
  * Player: all utility functions concerning a player
@@ -43,13 +45,33 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   public function jsonSerialize($currentPlayerId = null)
   {
     $data = parent::jsonSerialize();
-
-    return $data;
+    $extra = PlayersExtra::get($this->getId());
+    // return $data;
+    return array_merge($data, [
+      'bank' => $extra['bank'],
+      'florins' => intval($extra['florins']),
+    ]);
   }
 
   public function getId()
   {
     return (int) parent::getId();
+  }
+
+  public function getBank()
+  {
+    return PlayersExtra::get($this->getId())['bank'];
+  }
+
+
+  public function getFlorins()
+  {
+    return intval(PlayersExtra::get($this->getId())['florins']);
+  }
+
+  public function canTakeAction($action, $ctx)
+  {
+    return AtomicActions::isDoable($action, $ctx, $this);
   }
 
 }

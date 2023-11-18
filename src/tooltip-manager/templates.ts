@@ -9,8 +9,8 @@ const tplCardTooltipContainer = ({ card, content }: { card: string; content: str
 
 
 const tplTableauCardTooltip = ({card}: {card: TableauCard}) => {
-  const dataCardId = card.id.split('_')[0];
-  console.log('dataCardId',dataCardId);
+  // const dataCardId = card.id.split('_')[0];
+  // console.log('dataCardId',dataCardId);
   return tplCardTooltipContainer({
     card: `<div class="pr_card" data-card-id="${card.id.split('_')[0]}"></div>`,
     content: `

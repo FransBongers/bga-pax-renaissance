@@ -13,11 +13,20 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
 {
   protected static $initialized = false;
   protected static $variables = [
-    'changeActivePlayer' => 'obj', // Used for the generic "changeActivePlayer" state
+    'engine' => 'obj', // DO NOT MODIFY, USED IN ENGINE MODULE
+    'engineChoices' => 'int', // DO NOT MODIFY, USED IN ENGINE MODULE => number of choices a player has made?
+    'callbackEngineResolved' => 'obj', // DO NOT MODIFY, USED IN ENGINE MODULE => function called when engine is resolved?
+    'anytimeRecursion' => 'int', // DO NOT MODIFY, USED IN ENGINE MODULE
+    'customTurnOrders' => 'obj', // DO NOT MODIFY, USED FOR CUSTOM TURN ORDER FEATURE
+
+    'firstPlayer' => 'int',
+
+    // 'changeActivePlayer' => 'obj', // Used for the generic "changeActivePlayer" state
     'logState' => 'int', // Used to store state id when enabling the log
     'actionStack' => 'obj',
-    'players' => 'obj'
+    'players' => 'obj',
     // 'activePlayerId' => 'int',
+    'remainingActions' => 'int',
   ];
 
   protected static $table = 'global_variables';
@@ -141,6 +150,6 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
    */
   public static function setupNewGame($players, $options)
   {
-
+    Globals::setRemainingActions(2);
   }
 }

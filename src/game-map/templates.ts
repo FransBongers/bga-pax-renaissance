@@ -4,12 +4,27 @@ const tplChessPiece = ({ id }: { id: string }) => {
   return `<div id="${id}" class="pr_chess_piece pr_${type}" data-religion="${religion}"></div>`;
 };
 
+// <div id="pr_market_west_${index}_florins" class="pr_icon pr_none" data-icon="florin" data-region="west">
+// <span id="pr_market_west_${index}_counter" class="pr_counter">5</span>
+// </div>
+// <div id="pr_market_east_${index}_florins" class="pr_icon pr_none" data-icon="florin" data-region="east">
+// <span id="pr_market_east_${index}_counter" class="pr_counter"></span>
+// </div>
+
 const tplGameMapMarket = () => `
-  ${MARKET_WEST_CONFIG.map(({top, left}, index) => `<div id="pr_market_west_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);"></div>`).join('') }
+  ${MARKET_WEST_CONFIG.map(({top, left}, index) => `
+  <div id="pr_market_west_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);">
+    <div id="pr_market_west_${index}_stock" class="pr_market_stock"></div>
+    ${tplIcon({id: `pr_market_west_${index}_florins`, icon: 'florin', classes: 'pr_none', extra: 'data-region="west"', children: `<span id="pr_market_west_${index}_counter" class="pr_counter"></span>`})}
+  </div>`).join('') }
   <div id="pr_market_west_deck_container" class="pr_market" style="top: calc(var(--paxRenCardScale) * 950px); left: calc(var(--paxRenCardScale) * 1095px);">
     <div id="pr_market_west_deck"></div>
   </div>
-  ${MARKET_EAST_CONFIG.map(({top, left}, index) => `<div id="pr_market_east_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);"></div>`).join('') }
+  ${MARKET_EAST_CONFIG.map(({top, left}, index) => `
+  <div id="pr_market_east_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);">
+    <div id="pr_market_east_${index}_stock" class="pr_market_stock"></div>
+    ${tplIcon({id: `pr_market_east_${index}_florins`, icon: 'florin', classes: 'pr_none', extra: 'data-region="east"', children: `<span id="pr_market_east_${index}_counter" class="pr_counter"></span>`})}
+  </div>`).join('') }
   <div id="pr_market_east_deck_container" class="pr_market" style="top:  calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);">
     <div id="pr_market_east_deck"></div>
   </div>

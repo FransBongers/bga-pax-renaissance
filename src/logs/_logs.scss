@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 /* ------- UNDO TURN ------- */
 
 /* Cancelled notification messages */
@@ -18,3 +18,14 @@
 }
 
 /* ------- LOG TOKENS ------- */
+
+#pagemaintitletext {
+  .pr_icon {
+    display: inline-block;
+  }
+
+  .pr_icon[data-icon="florin"] {
+    --paxRenIconScale: 0.5;
+    margin-bottom: -4px;
+  }
+}

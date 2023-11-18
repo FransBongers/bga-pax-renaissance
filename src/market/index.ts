@@ -8,6 +8,10 @@
 
 class Market {
   private game: PaxRenaissanceGame;
+  private counters: {
+    [EAST]: Counter[];
+    [WEST]: Counter[];
+  };
   private decks: {
     [EAST]: Deck<TableauCard>;
     [WEST]: Deck<TableauCard>;
@@ -32,7 +36,8 @@ class Market {
         document.getElementById("pr_market_east_deck"),
         {
           cardNumber: gamedatas.market.deckCounts[EAST].cardCount,
-          fakeCardGenerator: (deckId: string) => this.getFakeCard({deckId, region: EAST}),
+          fakeCardGenerator: (deckId: string) =>
+            this.getFakeCard({ deckId, region: EAST }),
         }
       ),
       [WEST]: new Deck(
@@ -40,7 +45,8 @@ class Market {
         document.getElementById("pr_market_west_deck"),
         {
           cardNumber: gamedatas.market.deckCounts[WEST].cardCount,
-          fakeCardGenerator: (deckId: string) => this.getFakeCard({deckId, region: WEST}),
+          fakeCardGenerator: (deckId: string) =>
+            this.getFakeCard({ deckId, region: WEST }),
         }
       ),
     };
@@ -49,15 +55,23 @@ class Market {
       [EAST]: [],
       [WEST]: [],
     };
+    this.counters = {
+      [EAST]: [],
+      [WEST]: [],
+    };
     for (let i = 0; i <= 5; i++) {
       this.stocks[EAST][i] = new LineStock<TableauCard>(
         this.game.cardManager,
-        document.getElementById(`pr_market_east_${i}`)
+        document.getElementById(`pr_market_east_${i}_stock`)
       );
+      this.counters[EAST][i] = new ebg.counter();
+      this.counters[EAST][i].create(`pr_market_east_${i}_counter`);
       this.stocks[WEST][i] = new LineStock<TableauCard>(
         this.game.cardManager,
-        document.getElementById(`pr_market_west_${i}`)
+        document.getElementById(`pr_market_west_${i}_stock`)
       );
+      this.counters[WEST][i] = new ebg.counter();
+      this.counters[WEST][i].create(`pr_market_west_${i}_counter`);
     }
   }
 
@@ -68,13 +82,21 @@ class Market {
       const stock = this.getStock({ region, column: Number(column) });
       stock.addCard(card);
     });
+    for (let i = 0; i <= 5; i++) {
+      this.setFlorinValue({
+        column: i,
+        region: EAST,
+        value: gamedatas.market.florins[EAST][i],
+      });
+      this.setFlorinValue({
+        column: i,
+        region: WEST,
+        value: gamedatas.market.florins[WEST][i],
+      });
+    }
   }
 
-  public getDeck({
-    region,
-  }: {
-    region: 'east' | 'west';
-  }): Deck<TableauCard> {
+  public getDeck({ region }: { region: "east" | "west" }): Deck<TableauCard> {
     return this.decks[region];
   }
 
@@ -88,7 +110,13 @@ class Market {
     return this.stocks[region][column];
   }
 
-  private getFakeCard({deckId, region}: {deckId: string; region: 'east' | 'west'}): TableauCard {
+  private getFakeCard({
+    deckId,
+    region,
+  }: {
+    deckId: string;
+    region: "east" | "west";
+  }): TableauCard {
     return {
       id: `FAKE-${region}`,
       type: "tableauCard",
@@ -99,5 +127,50 @@ class Market {
       name: "",
       used: 0,
     };
+  }
+
+  public incFlorinValue({
+    region,
+    column,
+    value,
+  }: {
+    region: "east" | "west";
+    column: number;
+    value: number;
+  }) {
+    const currentValue = this.counters[region][column].getValue();
+    this.counters[region][column].incValue(value);
+    const node = document.getElementById(
+      `pr_market_${region}_${column}_florins`
+    );
+    if (node !== null) {
+      this.checkNone({ node, value: currentValue + value });
+    }
+  }
+
+  private setFlorinValue({
+    region,
+    column,
+    value,
+  }: {
+    region: "east" | "west";
+    column: number;
+    value: number;
+  }) {
+    this.counters[region][column].setValue(value);
+    const node = document.getElementById(
+      `pr_market_${region}_${column}_florins`
+    );
+    if (node !== null) {
+      this.checkNone({ node, value });
+    }
+  }
+
+  private checkNone({ node, value }: { node: HTMLElement; value: number }) {
+    if (value === 0) {
+      node.classList.add(PR_NONE);
+    } else {
+      node.classList.remove(PR_NONE);
+    }
   }
 }

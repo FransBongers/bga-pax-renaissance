@@ -2,4 +2,41 @@
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
+
+  .pr_icon {
+    position: absolute;
+    // width: 50px;
+    // height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .pr_counter {
+      margin-top: 4px;
+      margin-left: -2px;
+      font-weight: bold;
+      font-size: 30px;
+      letter-spacing: -2px;
+      text-shadow: 2px 0 2px #ffffff99, 0 -2px 2px #ffffff99, 0 2px 2px #ffffff99, -2px 0 2px #ffffff99;
+    }
+  }
+
+  .pr_icon[data-region="west"] {
+    left: -9px;
+    top: 94px;
+  }
+
+  .pr_icon[data-region="east"] {
+    right: -9px;
+    top: 94px;
+  }
+
+  .pr_icon.pr_none {
+    opacity: 0;
+  }
+}
+
+.pr_market_stock {
+  width: 100%;
+  height: 100%;
 }

@@ -12,8 +12,12 @@ class PRPlayer {
   private playerHexColor: string;
   protected playerId: number;
   private playerName: string;
-
   private player: PaxRenaissancePlayerData;
+  public counters: {
+    cardsWest?: IconCounter;
+    cardsEast?:IconCounter;
+    florins?: IconCounter;
+  }
 
   constructor({ game, player }: { game: PaxRenaissanceGame; player: PaxRenaissancePlayerData }) {
     // console.log("Player", player);
@@ -23,14 +27,14 @@ class PRPlayer {
     this.player = player;
     this.playerName = player.name;
     this.playerColor = player.color;
-    this.playerHexColor = player.hexColor;
+    // this.playerHexColor = player.hexColor;
     const gamedatas = game.gamedatas;
 
     // if (this.playerId === this.game.getPlayerId()) {
     //   dojo.place(tplPlayerHand({ playerId: this.playerId, playerName: this.playerName }), 'pp_player_tableaus', 1);
     // }
 
-    this.setupPlayer({ gamedatas });
+    this.setupPlayer({ gamedatas, player });
   }
 
   // ..######..########.########.##.....##.########.
@@ -47,14 +51,23 @@ class PRPlayer {
   }
 
   // Setup functions
-  setupPlayer({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+  setupPlayer({ gamedatas, player }: { gamedatas: PaxRenaissanceGamedatas; player: PaxRenaissancePlayerData }) {
     const playerGamedatas = gamedatas.players[this.playerId];
     this.setupPlayerTableau({playerGamedatas})
-    this.setupPlayerPanel({ playerGamedatas });
+    this.setupPlayerPanel({ playerGamedatas, player });
 
   }
 
-  setupPlayerPanel({ playerGamedatas }: { playerGamedatas: BgaPlayer }) {
+  setupPlayerPanel({ playerGamedatas, player }: { playerGamedatas: BgaPlayer; player: PaxRenaissancePlayerData }) {
+    const playerBoardDiv: HTMLElement = $('player_board_' + this.playerId);
+    playerBoardDiv.insertAdjacentHTML('beforeend', tplPlayerPanel({playerId: this.playerId}));
+    const node = document.getElementById(`pr_player_panel_${this.playerId}`);
+
+    this.counters = {
+      cardsWest: new IconCounter({containerId: `pr_player_panel_icons_${this.playerId}`, extraIconClasses: 'pr_card_back_icon', icon: 'west_back', iconCounterId: `pr_cards_west_counter_${this.playerId}`, initialValue: 0}),
+      cardsEast: new IconCounter({containerId: `pr_player_panel_icons_${this.playerId}`, extraIconClasses: 'pr_card_back_icon', icon: 'east_back', iconCounterId: `pr_cards_east_counter_${this.playerId}`, initialValue: 0}),
+      florins: new IconCounter({containerId: `pr_player_panel_icons_${this.playerId}`, icon: 'florin', iconCounterId: `pr_florins_counter_${this.playerId}`, initialValue: player.florins}),
+    };
 
     this.updatePlayerPanel({ playerGamedatas });
   }

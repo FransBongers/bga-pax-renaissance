@@ -1,0 +1,36 @@
+@use "sass:math";
+
+.pr_icon {
+  background-repeat: no-repeat;
+ }
+
+.pr_icon[data-icon=florin] {
+  background-position-x: 20%;
+  width: calc(var(--paxRenIconScale) * 50px);
+  height: calc(var(--paxRenIconScale) * 52px);
+  // background-position-y: 8%;
+  border-radius: 50%;
+  background-image: url("img/tokens.webp");
+  background-size: 600% 116%;
+  filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
+}
+
+.pr_card_back_icon {
+  box-sizing: border-box;
+  border-radius: 1px;
+  border: 1px solid
+}
+
+.pr_icon[data-icon=west_back] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: math.div(((53 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((53 - 1) / 10)) * 100%, 5);
+}
+
+.pr_icon[data-icon=east_back] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: math.div(((33 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((33 - 1) / 10)) * 100%, 3);
+}

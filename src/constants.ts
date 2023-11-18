@@ -16,6 +16,7 @@ const COLOR_MAP = {
  * Class names
  */
 const DISABLED = "disabled";
+const PR_NONE = "pr_none";
 const PR_SELECTABLE = "pr_selectable";
 const PR_SELECTED = "pr_selected";
 

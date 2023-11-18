@@ -456,11 +456,42 @@
   padding: 8px;
 }
 
+/**
+ *------
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * PaxRenaissance implementation : © <Your name here> <Your email address here>
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * paxrenaissance.css
+ *
+ * PaxRenaissance stylesheet
+ *
+ */
+.pr_card.pr_selectable {
+  /* border: 2px blue solid; */
+  cursor: pointer !important;
+  box-shadow: 0px 0px 0px 4px yellow !important;
+}
+
+.pr_card.pr_selectable:hover {
+  /* border: 2px blue solid; */
+  cursor: pointer !important;
+  box-shadow: 0px 0px 0px 4px blue !important;
+}
+
+.pr_card.pr_selected {
+  /* border: 2px blue solid; */
+  cursor: pointer !important;
+  box-shadow: 0px 0px 0px 4px blue !important;
+}
+
 .pr_card {
   box-sizing: border-box;
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
-  background-size: 100% 100%;
   background-repeat: no-repeat;
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
@@ -1894,10 +1925,100 @@
   background-position-y: 100%;
 }
 
+.pr_icon {
+  background-repeat: no-repeat;
+}
+
+.pr_icon[data-icon=florin] {
+  background-position-x: 20%;
+  width: calc(var(--paxRenIconScale) * 50px);
+  height: calc(var(--paxRenIconScale) * 52px);
+  border-radius: 50%;
+  background-image: url("img/tokens.webp");
+  background-size: 600% 116%;
+  filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
+}
+
+.pr_card_back_icon {
+  box-sizing: border-box;
+  border-radius: 1px;
+  border: 1px solid;
+}
+
+.pr_icon[data-icon=west_back] {
+  background-image: url("img/west_cards2.webp");
+  background-size: 1000% 600%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_icon[data-icon=east_back] {
+  background-image: url("img/east_cards2.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+/* ------- UNDO TURN ------- */
+/* Cancelled notification messages */
+.log.cancel {
+  color: #c62828 !important;
+  text-decoration: line-through;
+}
+
+/* Desktop logs */
+.log.cancel .roundedbox {
+  background-color: rgba(240, 186, 117, 0.6) !important;
+}
+
+/* Mobile logs */
+.log.cancel.roundedbox {
+  background-color: #ef9a9a;
+}
+
+/* ------- LOG TOKENS ------- */
+#pagemaintitletext .pr_icon {
+  display: inline-block;
+}
+#pagemaintitletext .pr_icon[data-icon=florin] {
+  --paxRenIconScale: 0.5;
+  margin-bottom: -4px;
+}
+
 .pr_market {
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
+}
+.pr_market .pr_icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pr_market .pr_icon .pr_counter {
+  margin-top: 4px;
+  margin-left: -2px;
+  font-weight: bold;
+  font-size: 30px;
+  letter-spacing: -2px;
+  text-shadow: 2px 0 2px rgba(255, 255, 255, 0.6), 0 -2px 2px rgba(255, 255, 255, 0.6), 0 2px 2px rgba(255, 255, 255, 0.6), -2px 0 2px rgba(255, 255, 255, 0.6);
+}
+.pr_market .pr_icon[data-region=west] {
+  left: -9px;
+  top: 94px;
+}
+.pr_market .pr_icon[data-region=east] {
+  right: -9px;
+  top: 94px;
+}
+.pr_market .pr_icon.pr_none {
+  opacity: 0;
+}
+
+.pr_market_stock {
+  width: 100%;
+  height: 100%;
 }
 
 .pr_chess_piece {
@@ -1965,6 +2086,19 @@
 }
 
 /* ------- PLAYER BOARD ------- */
+.pr_player_panel {
+  padding: 4px;
+}
+
+.pr_player_panel_icons {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
@@ -2104,6 +2238,31 @@
   font-size: small;
   font-style: italic;
   margin-bottom: 4px;
+}
+
+.pr_icon_counter_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 4px;
+}
+.pr_icon_counter_container .pr_icon[data-icon=florin] {
+  width: 25px;
+  height: 25px;
+}
+.pr_icon_counter_container .pr_card_back_icon {
+  width: 22px;
+  height: 33px;
+}
+.pr_icon_counter_container .pr_counter {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.pr_icon_counter_container.pr_none {
+  opacity: 0.3;
 }
 
 body > .card {
@@ -2363,6 +2522,7 @@ html {
 }
 
 :root {
+  --paxRenIconScale: 1;
   --paxRenMapScale: 1;
   --paxRenCardScale: 1;
   --paxRenChessPieceScale: 1;

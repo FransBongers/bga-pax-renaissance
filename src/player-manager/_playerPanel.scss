@@ -1,0 +1,17 @@
+
+@use 'sass:math';
+/* ------- PLAYER BOARD ------- */
+
+.pr_player_panel {
+  padding: 4px;
+}
+
+.pr_player_panel_icons {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+

@@ -23,7 +23,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
   private _last_notif = null;
   public _connections: unknown[];
 
-  public activeStates: {};
+  public activeStates: {
+    playerAction: PlayerActionState;
+  };
 
   constructor() {
     console.log("paxrenaissance constructor");
@@ -53,7 +55,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
     this._connections = [];
     // Will store all data for active player and gets refreshed with entering player actions state
-    this.activeStates = {};
+    this.activeStates = {
+      playerAction: new PlayerActionState(this),
+    };
 
     this.animationManager = new AnimationManager(this, { duration: 1000 });
     this.setupCardManagers();
@@ -109,6 +113,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
         // div.classList.add("pr_card");
         div.style.width = "calc(var(--paxRenCardScale) * 151px)";
         div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+
         // div.style.position = 'relative';
       },
       setupFrontDiv: (card, div) => {
@@ -139,6 +144,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
       },
       cardWidth: 151,
       cardHeight: 230,
+      // selectableCardClass: PR_SELECTABLE,
+      // selectedCardClass: PR_SELECTED,
       isCardVisible: ({ location }) => {
         if (location.startsWith("deck")) {
           return false;
@@ -187,39 +194,120 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.clearPossible();
   }
 
+  public async moveFlorin({ index }: { index: number }) {
+    // const element = dojo.place(
+    //   tplIcon({ id: `temp_florin_${index}`, icon: 'florin', style: 'position: absolute;' }),
+    //   `pr_florins_counter_2371052_icon`
+    // );
+    const node = document.getElementById(`pr_florins_counter_2371052_icon`);
+    node.insertAdjacentHTML(
+      "beforeend",
+      tplIcon({
+        id: `temp_florin_${index}`,
+        icon: "florin",
+        style: "position: absolute;",
+      })
+    );
+    const element = document.getElementById(`temp_florin_${index}`);
+    const fromRect = $(`pr_market_west_3_florins`)?.getBoundingClientRect();
+    this.market.incFlorinValue({ region: WEST, column: 3, value: -1 });
+    // this.incCounter({ counter: 'rupees', value: -rupees });
+    await this.animationManager.play(
+      new BgaSlideAnimation<BgaAnimationWithOriginSettings>({
+        element,
+        transitionTimingFunction: "ease-in-out",
+        fromRect,
+      })
+    );
+    element.remove();
+    this.playerManager
+      .getPlayer({ playerId: 2371052 })
+      .counters.florins.incValue(1);
+    return true;
+  }
+
   // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
   //                        action status bar (ie: the HTML links in the status bar).
   //
   public onUpdateActionButtons(stateName: string, args: any) {
+    return;
     if (this.framework().isCurrentPlayerActive()) {
-      this.addPrimaryActionButton({
-        id: "end_game_button",
-        text: _("End game"),
-        callback: () => this.takeAction({ action: "endGame" }),
-      });
+      // this.addPrimaryActionButton({
+      //   id: "end_game_button",
+      //   text: _("End game"),
+      //   callback: () => this.takeAction({ action: "endGame" }),
+      // });
+
+      // this.addPrimaryActionButton({
+      //   id: "add_card_button",
+      //   text: _("Add card to hand"),
+      //   callback: () => {
+      //     // add a card
+      //     let card = this.market
+      //       .getStock({ region: EAST, column: 1 })
+      //       .getCards()[0];
+      //     if (!card) {
+      //       card = this.market
+      //         .getStock({ region: EAST, column: 2 })
+      //         .getCards()[0];
+      //     }
+      //     if (!card) {
+      //       card = this.market
+      //         .getStock({ region: EAST, column: 3 })
+      //         .getCards()[0];
+      //     }
+
+      //     this.hand.addCard(card);
+      //   },
+      // });
 
       this.addPrimaryActionButton({
-        id: "add_card_button",
-        text: _("Add card to hand"),
-        callback: () => {
-          // add a card
-          let card = this.market
-            .getStock({ region: EAST, column: 1 })
-            .getCards()[0];
-          if (!card) {
-            card = this.market
-              .getStock({ region: EAST, column: 2 })
-              .getCards()[0];
+        id: "florins_button",
+        text: _("Move Florins"),
+        callback: async () => {
+          let promises: Promise<boolean>[] = [];
+          for (let i = 0; i < 2; i++) {
+            setTimeout(
+              () => promises.push(this.moveFlorin({ index: i })),
+              i * 100
+            );
           }
-          if (!card) {
-            card = this.market
-              .getStock({ region: EAST, column: 3 })
-              .getCards()[0];
-          }
-
-          this.hand.addCard(card);
+          const results = await Promise.all(promises);
+          return results.some((result) => result);
+          // this.playerManager.getPlayer({ playerId }).incCounter({ counter: 'rupees', value: rupees });
         },
       });
+      //   /**
+      //    * Add an array of cards to the stock.
+      //    *
+      //    * @param cards the cards to add
+      //    * @param animation a `CardAnimation` object
+      //    * @param settings a `AddCardSettings` object
+      //    * @param shift if number, the number of milliseconds between each card. if true, chain animations
+      //    */
+      //   public async addCards(cards: T[], animation?: CardAnimation<T>, settings?: AddCardSettings, shift: number | boolean = false): Promise<boolean> {
+      //     if (!this.manager.animationsActive()) {
+      //         shift = false;
+      //     }
+      //     let promises: Promise<boolean>[] = [];
+
+      //     if (shift === true) {
+      //         if (cards.length) {
+      //             const result = await this.addCard(cards[0], animation, settings);
+      //             const others = await this.addCards(cards.slice(1), animation, settings, shift);
+      //             return result || others;
+      //         }
+      //     } else if (typeof shift === 'number') {
+      //         for (let i=0; i<cards.length; i++) {
+      //             setTimeout(() => promises.push(this.addCard(cards[i], animation, settings)), i * shift);
+      //         }
+      //     } else {
+      //         promises = cards.map(card => this.addCard(card, animation, settings));
+      //     }
+
+      //     const results = await Promise.all(promises);
+      //     return results.some(result => result);
+      // }
 
       // this.addPrimaryActionButton({
       //   id: "deal_card_button",
@@ -341,6 +429,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
       id: "cancel_btn",
       text: _("Cancel"),
       callback: () => this.onCancel(),
+    });
+  }
+
+  addConfirmButton({ callback }: { callback: Function | string }) {
+    this.addPrimaryActionButton({
+      id: "confirm_btn",
+      text: _("Confirm"),
+      callback,
     });
   }
 
@@ -613,17 +709,21 @@ class PaxRenaissance implements PaxRenaissanceGame {
    */
   takeAction({
     action,
-    data = {},
+    args = {},
   }: {
     action: string;
-    data?: Record<string, unknown>;
+    args?: Record<string, unknown>;
   }) {
-    console.log(`takeAction ${action}`, data);
+    console.log(`takeAction ${action}`, args);
     if (!this.framework().checkAction(action)) {
       this.actionError(action);
       return;
     }
-    data.lock = true;
+    const data = {
+      lock: true,
+      args: JSON.stringify(args),
+    }
+    // data.
     const gameName = this.framework().game_name;
     this.framework().ajaxcall(
       `/${gameName}/${gameName}/${action}.html`,
