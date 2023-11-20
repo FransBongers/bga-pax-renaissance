@@ -1,3 +1,108 @@
+var MIN_PLAY_AREA_WIDTH = 1516;
+var BLUE = "blue";
+var GREEN = "green";
+var PURPLE = "purple";
+var YELLOW = "yellow";
+var COLOR_MAP = {
+    "1084c7": BLUE,
+    bddcc6: GREEN,
+    "732473": PURPLE,
+    ffce00: YELLOW,
+};
+var COLORS_WITH_SHADOW = [GREEN, YELLOW];
+var DISABLED = "disabled";
+var PR_NONE = "pr_none";
+var PR_SELECTABLE = "pr_selectable";
+var PR_SELECTED = "pr_selected";
+var WEST = "west";
+var EAST = "east";
+var CARDINAL_DIRECTIONS = [
+    WEST,
+    EAST,
+];
+var EMPIRE_CARD = "empireCard";
+var TABLEAU_CARD = "tableauCard";
+var VICTORY_CARD = "victoryCard";
+var ENGLAND = "england";
+var FRANCE = "france";
+var HOLY_ROMAN_EMIRE = "holy_roman_empire";
+var HUNGARY = "hungary";
+var BYZANTIUM = "byzantium";
+var PORTUGAL = "portugal";
+var ARAGON = "aragon";
+var PAPAL_STATES = "papal_states";
+var OTTOMAN = "ottoman";
+var MAMLUK = "mamluk";
+var VICTORY_RENAISSANCE = "victory_renaissance";
+var VICTORY_GLOBALIZATION = "victory_globalization";
+var VICTORY_IMPERIAL = "victory_imperial";
+var VICTORY_HOLY = "victory_holy";
+var VICTORY_SQUARES = [
+    VICTORY_RENAISSANCE,
+    VICTORY_GLOBALIZATION,
+    VICTORY_IMPERIAL,
+    VICTORY_HOLY,
+];
+var LONDON = "london";
+var BORDEAUX = "bordeaux";
+var BRUGES = "bruges";
+var PARIS = "paris";
+var LYON = "lyon";
+var LUBECK = "lubeck";
+var NURNBERG = "nurnberg";
+var NOVGOROD = "novgorod";
+var VIENNA = "vienna";
+var BUDA = "buda";
+var VARNA = "varna";
+var TANA = "tana";
+var CAFFA = "caffa";
+var TREBIZOND = "trebizond";
+var TOLEDO = "toledo";
+var GRANADA = "granada";
+var SPICE_ISLANDS = "spiceIslands";
+var VALENCIA = "valencia";
+var ALGIERS = "algiers";
+var TIMBUKTU = "timbuktu";
+var VENICE = "venice";
+var CONSTANTINOPLE_1 = "constantinople1";
+var CONSTANTINOPLE_2 = "constantinople2";
+var CONSTANTINOPLE_3 = "constantinople3";
+var MODON = "modon";
+var RHODES = "rhodes";
+var CYPRUS = "cyprus";
+var CAIRO = "cairo";
+var RED_SEA = "redSea";
+var CITIES = [
+    LONDON,
+    BORDEAUX,
+    BRUGES,
+    PARIS,
+    LYON,
+    LUBECK,
+    NURNBERG,
+    NOVGOROD,
+    VIENNA,
+    BUDA,
+    VARNA,
+    TANA,
+    CAFFA,
+    TREBIZOND,
+    TOLEDO,
+    GRANADA,
+    SPICE_ISLANDS,
+    VALENCIA,
+    ALGIERS,
+    TIMBUKTU,
+    VENICE,
+    CONSTANTINOPLE_1,
+    CONSTANTINOPLE_2,
+    CONSTANTINOPLE_3,
+    MODON,
+    RHODES,
+    CYPRUS,
+    CAIRO,
+    RED_SEA,
+];
 var Modal = (function () {
     function Modal(id, config) {
         var _this = this;
@@ -1589,15 +1694,18 @@ var PaxRenaissance = (function () {
         debug("gamedata", gamedatas);
         this._connections = [];
         this.activeStates = {
+            confirmTurn: new ConfirmTurnState(this),
+            flipVictoryCard: new FlipVictoryCardState(this),
             playerAction: new PlayerActionState(this),
         };
-        this.animationManager = new AnimationManager(this, { duration: 1000 });
+        this.animationManager = new AnimationManager(this, { duration: 500 });
         this.setupCardManagers();
         this.gameMap = new GameMap(this);
         this.tooltipManager = new TooltipManager(this);
+        this.hand = new Hand(this);
         this.playerManager = new PlayerManager(this);
         this.market = new Market(this);
-        this.hand = new Hand(this);
+        this.victoryCardManager = new VictoryCardManager(this);
         this.updatePlayAreaSize();
         window.addEventListener("resize", function () {
             _this.updatePlayAreaSize();
@@ -1648,8 +1756,6 @@ var PaxRenaissance = (function () {
                 div.style.width = "calc(var(--paxRenCardScale) * 151px)";
                 div.style.height = "calc(var(--paxRenCardScale) * 230px)";
             },
-            cardWidth: 151,
-            cardHeight: 230,
             isCardVisible: function (_a) {
                 var location = _a.location;
                 if (location.startsWith("deck")) {
@@ -1669,6 +1775,9 @@ var PaxRenaissance = (function () {
         if (this.framework().isCurrentPlayerActive() &&
             this.activeStates[stateName]) {
             this.activeStates[stateName].onEnteringState(args.args);
+        }
+        else if (this.activeStates[stateName]) {
+            this.activeStates[stateName].setDescription(Number(args.active_player));
         }
     };
     PaxRenaissance.prototype.onLeavingState = function (stateName) {
@@ -1713,25 +1822,19 @@ var PaxRenaissance = (function () {
         return;
         if (this.framework().isCurrentPlayerActive()) {
             this.addPrimaryActionButton({
-                id: "florins_button",
-                text: _("Move Florins"),
+                id: "draw_button",
+                text: _("Draw Card"),
                 callback: function () { return __awaiter(_this, void 0, void 0, function () {
-                    var promises, _loop_3, i, results;
-                    var _this = this;
+                    var card;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
-                                promises = [];
-                                _loop_3 = function (i) {
-                                    setTimeout(function () { return promises.push(_this.moveFlorin({ index: i })); }, i * 100);
-                                };
-                                for (i = 0; i < 2; i++) {
-                                    _loop_3(i);
-                                }
-                                return [4, Promise.all(promises)];
+                                card = this.gamedatas.testCard;
+                                card.location = "market_west_5";
+                                return [4, this.market.drawCard(card)];
                             case 1:
-                                results = _a.sent();
-                                return [2, results.some(function (result) { return result; })];
+                                _a.sent();
+                                return [2];
                         }
                     });
                 }); },
@@ -1828,8 +1931,14 @@ var PaxRenaissance = (function () {
         this.framework().restoreServerGameState();
     };
     PaxRenaissance.prototype.clientUpdatePageTitle = function (_a) {
-        var text = _a.text, args = _a.args;
-        this.gamedatas.gamestate.descriptionmyturn = this.format_string_recursive(_(text), args);
+        var text = _a.text, args = _a.args, _b = _a.nonActivePlayers, nonActivePlayers = _b === void 0 ? false : _b;
+        var title = this.format_string_recursive(_(text), args);
+        if (nonActivePlayers) {
+            this.gamedatas.gamestate.description = title;
+        }
+        else {
+            this.gamedatas.gamestate.descriptionmyturn = title;
+        }
         this.framework().updatePageTitle();
     };
     PaxRenaissance.prototype.format_string_recursive = function (log, args) {
@@ -1920,102 +2029,99 @@ var PaxRenaissance = (function () {
     };
     return PaxRenaissance;
 }());
-var MIN_PLAY_AREA_WIDTH = 1516;
-var BLUE = "blue";
-var GREEN = "green";
-var PURPLE = "purple";
-var YELLOW = "yellow";
-var COLOR_MAP = {
-    "1084c7": BLUE,
-    bddcc6: GREEN,
-    "732473": PURPLE,
-    ffce00: YELLOW,
+var _this = this;
+var moveToAnimation = function (_a) {
+    var game = _a.game, element = _a.element, toId = _a.toId, _b = _a.remove, remove = _b === void 0 ? false : _b;
+    return __awaiter(_this, void 0, void 0, function () {
+        var toElement, fromRect, toRect, top, left, originalPositionStyle;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    toElement = document.getElementById(toId);
+                    fromRect = element.getBoundingClientRect();
+                    toRect = toElement.getBoundingClientRect();
+                    top = toRect.top - fromRect.top;
+                    left = toRect.left - fromRect.left;
+                    originalPositionStyle = element.style.position;
+                    element.style.top = "".concat(pxNumber(element.style.top) + top, "px");
+                    element.style.left = "".concat(pxNumber(element.style.left) + left, "px");
+                    element.style.position = 'absolute';
+                    return [4, game.animationManager.play(new BgaSlideAnimation({
+                            element: element,
+                            transitionTimingFunction: 'ease-in-out',
+                            fromRect: fromRect,
+                        }))];
+                case 1:
+                    _c.sent();
+                    if (remove) {
+                        element.remove();
+                    }
+                    else {
+                        element.style.position = originalPositionStyle;
+                    }
+                    return [2];
+            }
+        });
+    });
 };
-var DISABLED = "disabled";
-var PR_NONE = "pr_none";
-var PR_SELECTABLE = "pr_selectable";
-var PR_SELECTED = "pr_selected";
-var WEST = "west";
-var EAST = "east";
-var EMPIRE_CARD = "empireCard";
-var TABLEAU_CARD = "tableauCard";
-var VICTORY_CARD = "victoryCard";
-var ENGLAND = "england";
-var FRANCE = "france";
-var HOLY_ROMAN_EMIRE = "holy_roman_empire";
-var HUNGARY = "hungary";
-var BYZANTIUM = "byzantium";
-var PORTUGAL = "portugal";
-var ARAGON = "aragon";
-var PAPAL_STATES = "papal_states";
-var OTTOMAN = "ottoman";
-var MAMLUK = "mamluk";
-var LONDON = "london";
-var BORDEAUX = "bordeaux";
-var BRUGES = "bruges";
-var PARIS = "paris";
-var LYON = "lyon";
-var LUBECK = "lubeck";
-var NURNBERG = "nurnberg";
-var NOVGOROD = "novgorod";
-var VIENNA = "vienna";
-var BUDA = "buda";
-var VARNA = "varna";
-var TANA = "tana";
-var CAFFA = "caffa";
-var TREBIZOND = "trebizond";
-var TOLEDO = "toledo";
-var GRANADA = "granada";
-var SPICE_ISLANDS = "spiceIslands";
-var VALENCIA = "valencia";
-var ALGIERS = "algiers";
-var TIMBUKTU = "timbuktu";
-var VENICE = "venice";
-var CONSTANTINOPLE_1 = "constantinople1";
-var CONSTANTINOPLE_2 = "constantinople2";
-var CONSTANTINOPLE_3 = "constantinople3";
-var MODON = "modon";
-var RHODES = "rhodes";
-var CYPRUS = "cyprus";
-var CAIRO = "cairo";
-var RED_SEA = "redSea";
-var CITIES = [
-    LONDON,
-    BORDEAUX,
-    BRUGES,
-    PARIS,
-    LYON,
-    LUBECK,
-    NURNBERG,
-    NOVGOROD,
-    VIENNA,
-    BUDA,
-    VARNA,
-    TANA,
-    CAFFA,
-    TREBIZOND,
-    TOLEDO,
-    GRANADA,
-    SPICE_ISLANDS,
-    VALENCIA,
-    ALGIERS,
-    TIMBUKTU,
-    VENICE,
-    CONSTANTINOPLE_1,
-    CONSTANTINOPLE_2,
-    CONSTANTINOPLE_3,
-    MODON,
-    RHODES,
-    CYPRUS,
-    CAIRO,
-    RED_SEA,
-];
+var VictoryCardManager = (function (_super) {
+    __extends(VictoryCardManager, _super);
+    function VictoryCardManager(game) {
+        var _this = _super.call(this, game, {
+            getId: function (card) { return "".concat(card.id); },
+            setupDiv: function (card, div) {
+                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+                div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+            },
+            setupFrontDiv: function (card, div) { return _this.setupFrontDiv(card, div); },
+            setupBackDiv: function (card, div) { return _this.setupBackDiv(card, div); },
+            isCardVisible: function (card) {
+                return card.state === 1;
+            },
+            animationManager: game.animationManager,
+        }) || this;
+        _this.game = game;
+        _this.setupVictorySquares();
+        return _this;
+    }
+    VictoryCardManager.prototype.setupFrontDiv = function (card, div) {
+        div.setAttribute("data-card-id", "".concat(card.location, "_active"));
+        div.classList.add("pr_square_card");
+    };
+    VictoryCardManager.prototype.setupBackDiv = function (card, div) {
+        div.setAttribute("data-card-id", "".concat(card.location, "_inactive"));
+        div.classList.add("pr_square_card");
+    };
+    VictoryCardManager.prototype.setupVictorySquares = function () {
+        var _a;
+        var _this = this;
+        this.victoryCardStocks = (_a = {},
+            _a[VICTORY_RENAISSANCE] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_RENAISSANCE, "_slot"))),
+            _a[VICTORY_GLOBALIZATION] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_GLOBALIZATION, "_slot"))),
+            _a[VICTORY_IMPERIAL] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_IMPERIAL, "_slot"))),
+            _a[VICTORY_HOLY] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_HOLY, "_slot"))),
+            _a);
+        this.game.gamedatas.victoryCards.forEach(function (card) {
+            console.log("cardications");
+            _this.victoryCardStocks[card.location].addCard(card);
+        });
+    };
+    return VictoryCardManager;
+}(CardManager));
 var isDebug = window.location.host == 'studio.boardgamearena.com' || window.location.hash.indexOf('debug') > -1;
 var debug = isDebug ? console.info.bind(window.console) : function () { };
 var capitalizeFirstLetter = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+var pxNumber = function (px) {
+    if ((px || '').endsWith('px')) {
+        return Number(px.slice(0, -2));
+    }
+    else {
+        return 0;
+    }
+};
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
 var EMPIRE_CARD_CONFIG = (_a = {},
     _a[ENGLAND] = {
         top: 120,
@@ -2110,184 +2216,202 @@ var MARKET_WEST_CONFIG = [
         left: 931,
     },
 ];
-var MAP_CONFIG = (_b = {},
-    _b[ENGLAND] = {
+var VICTORY_CARD_CONFIG = (_b = {},
+    _b[VICTORY_RENAISSANCE] = {
+        top: 120.5,
+        left: 135.5,
+    },
+    _b[VICTORY_GLOBALIZATION] = {
+        top: 296,
+        left: 135.5,
+    },
+    _b[VICTORY_IMPERIAL] = {
+        top: 578,
+        left: 135.5,
+    },
+    _b[VICTORY_HOLY] = {
+        top: 753.5,
+        left: 135.5,
+    },
+    _b);
+var MAP_CONFIG = (_c = {},
+    _c[ENGLAND] = {
         top: 270,
         left: 350,
-        cities: (_c = {},
-            _c[LONDON] = {
+        cities: (_d = {},
+            _d[LONDON] = {
                 top: 76,
                 left: 80,
             },
-            _c[BORDEAUX] = {
+            _d[BORDEAUX] = {
                 top: 185,
                 left: 108,
             },
-            _c),
+            _d),
     },
-    _b[FRANCE] = {
+    _c[FRANCE] = {
         top: 270,
         left: 525.5,
-        cities: (_d = {},
-            _d[BRUGES] = {
+        cities: (_e = {},
+            _e[BRUGES] = {
                 top: 65.5,
                 left: 51.5,
             },
-            _d[PARIS] = {
+            _e[PARIS] = {
                 top: 127,
                 left: 9,
             },
-            _d[LYON] = {
+            _e[LYON] = {
                 top: 164,
                 left: 91,
             },
-            _d),
+            _e),
     },
-    _b[HOLY_ROMAN_EMIRE] = {
+    _c[HOLY_ROMAN_EMIRE] = {
         top: 270,
         left: 701,
-        cities: (_e = {},
-            _e[LUBECK] = {
+        cities: (_f = {},
+            _f[LUBECK] = {
                 top: 42,
                 left: 27,
             },
-            _e[NOVGOROD] = {
+            _f[NOVGOROD] = {
                 top: 35,
                 left: 89,
             },
-            _e[NURNBERG] = {
+            _f[NURNBERG] = {
                 top: 128.5,
                 left: 14,
             },
-            _e[VIENNA] = {
+            _f[VIENNA] = {
                 top: 150,
                 left: 88.5,
             },
-            _e),
+            _f),
     },
-    _b[HUNGARY] = {
+    _c[HUNGARY] = {
         top: 270,
         left: 876,
-        cities: (_f = {},
-            _f[BUDA] = {
+        cities: (_g = {},
+            _g[BUDA] = {
                 top: 158,
                 left: 15.5,
             },
-            _f[VARNA] = {
+            _g[VARNA] = {
                 top: 170.5,
                 left: 76,
             },
-            _f),
+            _g),
     },
-    _b[BYZANTIUM] = {
+    _c[BYZANTIUM] = {
         top: 270,
         left: 1053,
-        cities: (_g = {},
-            _g[TANA] = {
+        cities: (_h = {},
+            _h[TANA] = {
                 top: 41,
                 left: 40,
             },
-            _g[CAFFA] = {
+            _h[CAFFA] = {
                 top: 131,
                 left: 5,
             },
-            _g[TREBIZOND] = {
+            _h[TREBIZOND] = {
                 top: 188,
                 left: 112,
             },
-            _g),
+            _h),
     },
-    _b[PORTUGAL] = {
+    _c[PORTUGAL] = {
         top: 525,
         left: 350,
-        cities: (_h = {},
-            _h[TOLEDO] = {
+        cities: (_j = {},
+            _j[TOLEDO] = {
                 top: 62.5,
                 left: 94,
             },
-            _h[GRANADA] = {
+            _j[GRANADA] = {
                 top: 118.5,
                 left: 103,
             },
-            _h[SPICE_ISLANDS] = {
+            _j[SPICE_ISLANDS] = {
                 top: 184,
                 left: 37,
             },
-            _h),
+            _j),
     },
-    _b[ARAGON] = {
+    _c[ARAGON] = {
         top: 525,
         left: 525.5,
-        cities: (_j = {},
-            _j[VALENCIA] = {
+        cities: (_k = {},
+            _k[VALENCIA] = {
                 top: 55.5,
                 left: 14.5,
             },
-            _j[ALGIERS] = {
+            _k[ALGIERS] = {
                 top: 143.5,
                 left: 101,
             },
-            _j[TIMBUKTU] = {
+            _k[TIMBUKTU] = {
                 top: 165.5,
                 left: 33,
             },
-            _j),
+            _k),
     },
-    _b[PAPAL_STATES] = {
+    _c[PAPAL_STATES] = {
         top: 525,
         left: 701,
-        cities: (_k = {},
-            _k[VENICE] = {
+        cities: (_l = {},
+            _l[VENICE] = {
                 top: 20.5,
                 left: 40,
             },
-            _k),
+            _l),
     },
-    _b[OTTOMAN] = {
+    _c[OTTOMAN] = {
         top: 525,
         left: 876,
-        cities: (_l = {},
-            _l[CONSTANTINOPLE_1] = {
+        cities: (_m = {},
+            _m[CONSTANTINOPLE_1] = {
                 top: 24.5,
                 left: 10.5,
             },
-            _l[CONSTANTINOPLE_2] = {
+            _m[CONSTANTINOPLE_2] = {
                 top: 24.5,
                 left: 45,
             },
-            _l[CONSTANTINOPLE_3] = {
+            _m[CONSTANTINOPLE_3] = {
                 top: 24.5,
                 left: 79.5,
             },
-            _l[MODON] = {
+            _m[MODON] = {
                 top: 96,
                 left: 19.5,
             },
-            _l[RHODES] = {
+            _m[RHODES] = {
                 top: 86.5,
                 left: 108,
             },
-            _l),
+            _m),
     },
-    _b[MAMLUK] = {
+    _c[MAMLUK] = {
         top: 525,
         left: 1053,
-        cities: (_m = {},
-            _m[CYPRUS] = {
+        cities: (_o = {},
+            _o[CYPRUS] = {
                 top: 76,
                 left: 54.5,
             },
-            _m[CAIRO] = {
+            _o[CAIRO] = {
                 top: 162,
                 left: 42,
             },
-            _m[RED_SEA] = {
+            _o[RED_SEA] = {
                 top: 163.5,
                 left: 106,
             },
-            _m),
+            _o),
     },
-    _b);
+    _c);
 var LOCAL_STORAGE_MAP_ZOOM_KEY = "PaxRenaissance-map-zoom";
 var ZOOM_LEVELS = [0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1];
 var MAX_MAP_HEIGHT = 1500;
@@ -2395,21 +2519,35 @@ var GameMap = (function () {
 }());
 var tplChessPiece = function (_a) {
     var id = _a.id;
-    var type = id.split('_')[0];
-    var religion = id.split('_')[1];
+    var type = id.split("_")[0];
+    var religion = id.split("_")[1];
     return "<div id=\"".concat(id, "\" class=\"pr_chess_piece pr_").concat(type, "\" data-religion=\"").concat(religion, "\"></div>");
 };
 var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map(function (_a, index) {
     var top = _a.top, left = _a.left;
-    return "\n  <div id=\"pr_market_west_".concat(index, "\" class=\"pr_market\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n    <div id=\"pr_market_west_").concat(index, "_stock\" class=\"pr_market_stock\"></div>\n    ").concat(tplIcon({ id: "pr_market_west_".concat(index, "_florins"), icon: 'florin', classes: 'pr_none', extra: 'data-region="west"', children: "<span id=\"pr_market_west_".concat(index, "_counter\" class=\"pr_counter\"></span>") }), "\n  </div>");
-}).join(''), "\n  <div id=\"pr_market_west_deck_container\" class=\"pr_market\" style=\"top: calc(var(--paxRenCardScale) * 950px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_west_deck\"></div>\n  </div>\n  ").concat(MARKET_EAST_CONFIG.map(function (_a, index) {
+    return "\n  <div id=\"pr_market_west_".concat(index, "\" class=\"pr_market\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n    <div id=\"pr_market_west_").concat(index, "_stock\" class=\"pr_market_stock\"></div>\n    ").concat(tplIcon({
+        id: "pr_market_west_".concat(index, "_florins"),
+        icon: "florin",
+        classes: "pr_none",
+        extra: 'data-region="west"',
+        children: "<span id=\"pr_market_west_".concat(index, "_counter\" class=\"pr_counter\"></span>"),
+    }), "\n  </div>");
+}).join(""), "\n  <div id=\"pr_market_west_deck_container\" class=\"pr_market pr_card\" data-card-id=\"WEST_BACK\" style=\"top: calc(var(--paxRenCardScale) * 950px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_west_deck\"></div>\n    <div id=\"pr_market_west_deck_counter_container\" class=\"pr_deck_counter\">\n      <span id=\"pr_market_west_deck_counter\" class=\"pr_deck_counter_text\"></span>\n      <span class=\"pr_deck_counter_text\">/</span>\n      <div id=\"pr_deck_counter_comet3\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET3\"></div>\n      <div id=\"pr_deck_counter_comet4\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET4\"></div>\n    </div>\n  </div>\n  ").concat(MARKET_EAST_CONFIG.map(function (_a, index) {
     var top = _a.top, left = _a.left;
-    return "\n  <div id=\"pr_market_east_".concat(index, "\" class=\"pr_market\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n    <div id=\"pr_market_east_").concat(index, "_stock\" class=\"pr_market_stock\"></div>\n    ").concat(tplIcon({ id: "pr_market_east_".concat(index, "_florins"), icon: 'florin', classes: 'pr_none', extra: 'data-region="east"', children: "<span id=\"pr_market_east_".concat(index, "_counter\" class=\"pr_counter\"></span>") }), "\n  </div>");
-}).join(''), "\n  <div id=\"pr_market_east_deck_container\" class=\"pr_market\" style=\"top:  calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_east_deck\"></div>\n  </div>\n"); };
-var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(EMPIRE_CARD_CONFIG).map(function (_a) {
+    return "\n  <div id=\"pr_market_east_".concat(index, "\" class=\"pr_market\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n    <div id=\"pr_market_east_").concat(index, "_stock\" class=\"pr_market_stock\"></div>\n    ").concat(tplIcon({
+        id: "pr_market_east_".concat(index, "_florins"),
+        icon: "florin",
+        classes: "pr_none",
+        extra: 'data-region="east"',
+        children: "<span id=\"pr_market_east_".concat(index, "_counter\" class=\"pr_counter\"></span>"),
+    }), "\n  </div>");
+}).join(""), "\n  <div id=\"pr_market_east_deck_container\" class=\"pr_market pr_card\" data-card-id=\"EAST_BACK\" style=\"top: calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_east_deck\"></div>\n    <div id=\"pr_market_east_deck_counter_container\" class=\"pr_deck_counter\">\n      <span id=\"pr_market_east_deck_counter\" class=\"pr_deck_counter_text\"></span>\n      <span class=\"pr_deck_counter_text\">/</span>\n      <div id=\"pr_deck_counter_comet1\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET1\"></div>\n      <div id=\"pr_deck_counter_comet2\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET2\"></div>\n    </div>\n  </div>\n"); };
+var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(EMPIRE_CARD_CONFIG)
+    .map(function (_a) {
     var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left;
-    return "<div id=\"pr_empire_".concat(empire, "\" class=\"pr_square_card\" data-card-id=\"null\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
-}).join(''), "\n"); };
+    return "<div id=\"pr_empire_".concat(empire, "\" class=\"pr_square_card\" data-card-id=\"null\" style=\"position: absolute; top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
+})
+    .join(""), "\n"); };
 var tplGameMapMapCards = function () {
     var htmlArray = Object.entries(MAP_CONFIG).map(function (_a) {
         var empire = _a[0], data = _a[1];
@@ -2422,7 +2560,12 @@ var tplGameMapMapCards = function () {
     });
     return htmlArray.join("");
 };
-var tplGameMapVictoryCards = function () { return "\n  <div class=\"pr_square_card\" data-card-id=\"victory_renaissance_inactive\" style=\"top: calc(var(--paxRenCardScale) * 120.5px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_globalization_inactive\" style=\"top: calc(var(--paxRenCardScale) * 296px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_imperial_inactive\" style=\"top: calc(var(--paxRenCardScale) * 578px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"victory_holy_inactive\" style=\"top: calc(var(--paxRenCardScale) * 753.5px); left: calc(var(--paxRenCardScale) * 135.5px);\"></div>\n"; };
+var tplGameMapVictoryCards = function () { return "\n  ".concat(Object.entries(VICTORY_CARD_CONFIG)
+    .map(function (_a) {
+    var victory = _a[0], _b = _a[1], top = _b.top, left = _b.left;
+    return "<div id=\"pr_".concat(victory, "_slot\" class=\"pr_victory_slot\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
+})
+    .join(""), "\n  "); };
 var tplGameMap = function () { return "\n<div id=\"pr_game_map_container\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
 var Hand = (function () {
     function Hand(game) {
@@ -2441,20 +2584,42 @@ var Hand = (function () {
                 handWrapper.dataset.open = "hand";
             }
         });
-        this.hand = new LineStock(this.game.cardManager, document.getElementById("pr_player_hand"), { wrap: "wrap" });
+        this.hand = new LineStock(this.game.cardManager, document.getElementById("pr_player_hand"), { wrap: "wrap", gap: '12px', center: false });
     };
     Hand.prototype.addCard = function (card) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                this.hand.addCard(card);
-                return [2];
+                switch (_a.label) {
+                    case 0: return [4, this.hand.addCard(card)];
+                    case 1:
+                        _a.sent();
+                        return [2];
+                }
             });
         });
+    };
+    Hand.prototype.removeCard = function (card) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.hand.removeCard(card)];
+                    case 1:
+                        _a.sent();
+                        return [2];
+                }
+            });
+        });
+    };
+    Hand.prototype.getCards = function () {
+        return this.hand.getCards();
+    };
+    Hand.prototype.getStock = function () {
+        return this.hand;
     };
     return Hand;
 }());
 var tplHand = function () {
-    return "<div id=\"pr_floating_hand_wrapper\" class=\"active\">\n            <div id=\"pr_floating_hand_button_container\">\n              <button id=\"pr_floating_hand_button\" type=\"button\" class=\"pr_button\">\n                <div class=\"pr_icon\"></div>\n              </button>  \n            </div>\n            <div id=\"pr_floating_hand\">\n              <div id=\"pr_player_hand\" style=\"justify-content: start;\">\n              </div>\n            </div>\n          </div\n  ";
+    return "<div id=\"pr_floating_hand_wrapper\" class=\"active\">\n            <div id=\"pr_floating_hand_button_container\">\n              <button id=\"pr_floating_hand_button\" type=\"button\" class=\"pr_button\">\n                <div class=\"pr_icon\"></div>\n              </button>  \n            </div>\n            <div id=\"pr_floating_hand\">\n              <div id=\"pr_player_hand\"\">\n              </div>\n            </div>\n          </div\n  ";
 };
 var IconCounter = (function () {
     function IconCounter(config) {
@@ -2512,25 +2677,36 @@ var tplIcon = function (_a) {
     var id = _a.id, children = _a.children, classes = _a.classes, _b = _a.extra, extra = _b === void 0 ? "" : _b, icon = _a.icon, style = _a.style;
     return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_icon").concat(classes ? " ".concat(classes) : '', "\" data-icon=\"").concat(icon, "\" ").concat(extra, " ").concat(style ? "style=\"".concat(style, "\"") : '', ">\n    ").concat(children || '', "\n  </div>");
 };
-var LOG_TOKEN_BOLD_TEXT = 'boldText';
-var LOG_TOKEN_NEW_LINE = 'newLine';
-var LOG_TOKEN_PLAYER_NAME = 'playerName';
-var LOG_TOKEN_FLORIN = 'florin';
+var LOG_TOKEN_BOLD_TEXT = "boldText";
+var LOG_TOKEN_CARD_NAME = "cardName";
+var LOG_TOKEN_NEW_LINE = "newLine";
+var LOG_TOKEN_PLAYER_NAME = "playerName";
+var LOG_TOKEN_FLORIN = "florin";
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
-    var splitKey = key.split('_');
+    var splitKey = key.split("_");
     var type = splitKey[1];
     switch (type) {
         case LOG_TOKEN_BOLD_TEXT:
+        case LOG_TOKEN_CARD_NAME:
             return tlpLogTokenBoldText({ text: value });
         case LOG_TOKEN_FLORIN:
-            return tplIcon({ icon: 'florin' });
+            return tplIcon({ icon: "florin" });
         case LOG_TOKEN_NEW_LINE:
-            return '<br>';
+            return "<br>";
         case LOG_TOKEN_PLAYER_NAME:
-            var player = game.playerManager.getPlayers().find(function (player) { return player.getName() === value; });
-            return player ? tplLogTokenPlayerName({ name: player.getName(), color: player.getHexColor() }) : value;
+            var player = value === "${you}"
+                ? game.playerManager.getPlayer({ playerId: game.getPlayerId() })
+                : game.playerManager
+                    .getPlayers()
+                    .find(function (player) { return player.getName() === value; });
+            return player
+                ? tplLogTokenPlayerName({
+                    name: value === "${you}" ? _('You') : player.getName(),
+                    color: player.getHexColor(),
+                })
+                : value;
         default:
             return value;
     }
@@ -2541,41 +2717,57 @@ var tlpLogTokenBoldText = function (_a) {
 };
 var tplLogTokenPlayerName = function (_a) {
     var name = _a.name, color = _a.color;
-    return "<span class=\"playername\" style=\"color:#".concat(color, ";\">").concat(name, "</span>");
+    return "<span class=\"playername\" ".concat(COLORS_WITH_SHADOW.includes(COLOR_MAP[color]) ? 'data-shadow="true"' : '', " style=\"color:#").concat(color, ";\">").concat(name, "</span>");
 };
 var Market = (function () {
     function Market(game) {
+        var _a;
+        this.deckCounters = (_a = {},
+            _a[EAST] = new ebg.counter(),
+            _a[WEST] = new ebg.counter(),
+            _a);
         this.game = game;
         var gamedatas = game.gamedatas;
-        this.setupDecksAndStocks({ gamedatas: gamedatas });
+        this.setupDecks({ gamedatas: gamedatas });
+        this.setupStocks({ gamedatas: gamedatas });
         this.setupMarket({ gamedatas: gamedatas });
     }
-    Market.prototype.setupDecksAndStocks = function (_a) {
-        var _b, _c, _d;
+    Market.prototype.setupDecks = function (_a) {
+        var _b;
         var _this = this;
         var gamedatas = _a.gamedatas;
         this.decks = (_b = {},
-            _b[EAST] = new Deck(this.game.cardManager, document.getElementById("pr_market_east_deck"), {
-                cardNumber: gamedatas.market.deckCounts[EAST].cardCount,
-                fakeCardGenerator: function (deckId) {
-                    return _this.getFakeCard({ deckId: deckId, region: EAST });
-                },
-            }),
-            _b[WEST] = new Deck(this.game.cardManager, document.getElementById("pr_market_west_deck"), {
-                cardNumber: gamedatas.market.deckCounts[WEST].cardCount,
-                fakeCardGenerator: function (deckId) {
-                    return _this.getFakeCard({ deckId: deckId, region: WEST });
-                },
-            }),
+            _b[EAST] = new LineStock(this.game.cardManager, document.getElementById("pr_market_east_deck")),
+            _b[WEST] = new LineStock(this.game.cardManager, document.getElementById("pr_market_west_deck")),
             _b);
-        this.stocks = (_c = {},
+        CARDINAL_DIRECTIONS.forEach(function (region) {
+            _this.deckCounters[region].create("pr_market_".concat(region, "_deck_counter"));
+            _this.deckCounters[region].setValue(gamedatas.market.deckCounts[region].cardCount);
+        });
+        var comets = {
+            comet1: EAST,
+            comet2: EAST,
+            comet3: WEST,
+            comet4: WEST,
+        };
+        Object.entries(comets).forEach(function (_a) {
+            var comet = _a[0], region = _a[1];
+            if (!gamedatas.market.deckCounts[region][comet]) {
+                _this.setCometOpacity(comet);
+            }
+        });
+    };
+    Market.prototype.setupStocks = function (_a) {
+        var _b, _c;
+        var gamedatas = _a.gamedatas;
+        this.stocks = (_b = {},
+            _b[EAST] = [],
+            _b[WEST] = [],
+            _b);
+        this.counters = (_c = {},
             _c[EAST] = [],
             _c[WEST] = [],
             _c);
-        this.counters = (_d = {},
-            _d[EAST] = [],
-            _d[WEST] = [],
-            _d);
         for (var i = 0; i <= 5; i++) {
             this.stocks[EAST][i] = new LineStock(this.game.cardManager, document.getElementById("pr_market_east_".concat(i, "_stock")));
             this.counters[EAST][i] = new ebg.counter();
@@ -2601,15 +2793,36 @@ var Market = (function () {
                     this.setFlorinValue({
                         column: i,
                         region: EAST,
-                        value: gamedatas.market.florins[EAST][i],
+                        value: gamedatas.market.florins["market_".concat(EAST, "_").concat(i, "_florins")] || 0,
                     });
                     this.setFlorinValue({
                         column: i,
                         region: WEST,
-                        value: gamedatas.market.florins[WEST][i],
+                        value: gamedatas.market.florins["market_".concat(WEST, "_").concat(i, "_florins")] || 0,
                     });
                 }
                 return [2];
+            });
+        });
+    };
+    Market.prototype.drawCard = function (card) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, _, region, column;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4, this.decks[card.region].addCard(__assign(__assign({}, card), { location: "deck" }))];
+                    case 1:
+                        _b.sent();
+                        this.deckCounters[card.region].incValue(-1);
+                        if (card.id.startsWith('COMET')) {
+                            this.setCometOpacity(card.id.split('_')[0].toLowerCase());
+                        }
+                        _a = card.location.split("_"), _ = _a[0], region = _a[1], column = _a[2];
+                        return [4, this.getStock({ region: region, column: Number(column) }).addCard(card)];
+                    case 2:
+                        _b.sent();
+                        return [2];
+                }
             });
         });
     };
@@ -2620,19 +2833,6 @@ var Market = (function () {
     Market.prototype.getStock = function (_a) {
         var region = _a.region, column = _a.column;
         return this.stocks[region][column];
-    };
-    Market.prototype.getFakeCard = function (_a) {
-        var deckId = _a.deckId, region = _a.region;
-        return {
-            id: "FAKE-".concat(region),
-            type: "tableauCard",
-            region: region,
-            location: "deck_".concat(region),
-            flavorText: [],
-            state: 0,
-            name: "",
-            used: 0,
-        };
     };
     Market.prototype.incFlorinValue = function (_a) {
         var region = _a.region, column = _a.column, value = _a.value;
@@ -2651,6 +2851,10 @@ var Market = (function () {
             this.checkNone({ node: node, value: value });
         }
     };
+    Market.prototype.getFlorins = function (_a) {
+        var region = _a.region, column = _a.column;
+        return this.counters[region][column].getValue();
+    };
     Market.prototype.checkNone = function (_a) {
         var node = _a.node, value = _a.value;
         if (value === 0) {
@@ -2659,6 +2863,162 @@ var Market = (function () {
         else {
             node.classList.remove(PR_NONE);
         }
+    };
+    Market.prototype.setCometOpacity = function (comet) {
+        var node = document.getElementById("pr_deck_counter_".concat(comet));
+        if (node) {
+            node.classList.add(PR_NONE);
+        }
+    };
+    Market.prototype.moveFlorinAnimation = function (_a) {
+        var index = _a.index, fromId = _a.fromId, toId = _a.toId;
+        return __awaiter(this, void 0, void 0, function () {
+            var from, to, node, element, elementRect, fromRect, toRect, top, left;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        from = document.getElementById(fromId);
+                        to = document.getElementById(toId);
+                        node = document.getElementById("pr_game_map");
+                        node.insertAdjacentHTML("beforeend", tplIcon({
+                            id: "temp_florin_".concat(index),
+                            icon: "florin",
+                            style: "position: absolute;",
+                        }));
+                        element = document.getElementById("temp_florin_".concat(index));
+                        elementRect = element.getBoundingClientRect();
+                        fromRect = from.getBoundingClientRect();
+                        toRect = to.getBoundingClientRect();
+                        top = toRect.top - elementRect.top;
+                        left = toRect.left - elementRect.left;
+                        element.style.top = "".concat(pxNumber(element.style.top) + top, "px");
+                        element.style.left = "".concat(pxNumber(element.style.left) + left, "px");
+                        return [4, this.game.animationManager.play(new BgaSlideAnimation({
+                                element: element,
+                                transitionTimingFunction: "ease-in-out",
+                                fromRect: fromRect,
+                            }))];
+                    case 1:
+                        _b.sent();
+                        element.remove();
+                        return [2];
+                }
+            });
+        });
+    };
+    Market.prototype.moveFlorinFromPlayerCounter = function (_a) {
+        var florinLocation = _a.florinLocation, index = _a.index, playerId = _a.playerId;
+        return __awaiter(this, void 0, void 0, function () {
+            var _b, _, region, column;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _b = florinLocation.split("_"), _ = _b[0], region = _b[1], column = _b[2];
+                        this.game.playerManager
+                            .getPlayer({ playerId: playerId })
+                            .counters.florins.incValue(-1);
+                        if (!this.game.animationManager.animationsActive()) return [3, 2];
+                        return [4, this.moveFlorinAnimation({
+                                index: index,
+                                fromId: "pr_florins_counter_".concat(playerId, "_icon"),
+                                toId: "pr_".concat(florinLocation),
+                            })];
+                    case 1:
+                        _c.sent();
+                        _c.label = 2;
+                    case 2:
+                        this.incFlorinValue({
+                            region: region,
+                            column: Number(column),
+                            value: 1,
+                        });
+                        return [2];
+                }
+            });
+        });
+    };
+    Market.prototype.moveFlorinToPlayerCounter = function (_a) {
+        var florinLocation = _a.florinLocation, index = _a.index, playerId = _a.playerId;
+        return __awaiter(this, void 0, void 0, function () {
+            var _b, _, region, column;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0:
+                        _b = florinLocation.split("_"), _ = _b[0], region = _b[1], column = _b[2];
+                        this.incFlorinValue({
+                            region: region,
+                            column: Number(column),
+                            value: -1,
+                        });
+                        if (!this.game.animationManager.animationsActive()) return [3, 2];
+                        return [4, this.moveFlorinAnimation({
+                                index: index,
+                                toId: "pr_florins_counter_".concat(playerId, "_icon"),
+                                fromId: "pr_".concat(florinLocation),
+                            })];
+                    case 1:
+                        _c.sent();
+                        _c.label = 2;
+                    case 2:
+                        this.game.playerManager
+                            .getPlayer({ playerId: playerId })
+                            .counters.florins.incValue(1);
+                        return [2, true];
+                }
+            });
+        });
+    };
+    Market.prototype.payFlorins = function (_a) {
+        var placedFlorins = _a.placedFlorins, playerId = _a.playerId;
+        return __awaiter(this, void 0, void 0, function () {
+            var promises, i;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        promises = [];
+                        for (i = 0; i < placedFlorins.length; i++) {
+                            promises.push(this.moveFlorinFromPlayerCounter({
+                                index: i,
+                                playerId: playerId,
+                                florinLocation: placedFlorins[i],
+                            }));
+                        }
+                        return [4, Promise.all(promises)];
+                    case 1:
+                        _b.sent();
+                        return [2];
+                }
+            });
+        });
+    };
+    Market.prototype.takeFlorins = function (_a) {
+        var playerId = _a.playerId, florins = _a.florins, from = _a.from;
+        return __awaiter(this, void 0, void 0, function () {
+            var promises, _loop_3, i;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        promises = [];
+                        _loop_3 = function (i) {
+                            setTimeout(function () {
+                                return promises.push(_this.moveFlorinToPlayerCounter({
+                                    index: i,
+                                    playerId: playerId,
+                                    florinLocation: from,
+                                }));
+                            }, i * 100);
+                        };
+                        for (i = 0; i < florins; i++) {
+                            _loop_3(i);
+                        }
+                        return [4, Promise.all(promises)];
+                    case 1:
+                        _b.sent();
+                        return [2];
+                }
+            });
+        });
     };
     return Market;
 }());
@@ -2669,21 +3029,155 @@ var NotificationManager = (function () {
     }
     NotificationManager.prototype.setupNotifications = function () {
         var _this = this;
-        console.log('notifications subscriptions setup');
+        console.log("notifications subscriptions setup");
         var notifs = [
-            ['log', 1],
+            ["log", undefined],
+            ["flipVictoryCard", undefined],
+            ["purchaseCard", undefined],
+            ["refreshMarket", undefined],
+            ["sellCard", undefined],
         ];
         notifs.forEach(function (notif) {
             _this.subscriptions.push(dojo.subscribe(notif[0], _this, function (notifDetails) {
                 debug("notif_".concat(notif[0]), notifDetails);
+                var msg = _this.game.format_string_recursive(notifDetails.log, notifDetails.args);
+                if (msg != "") {
+                    $("gameaction_status").innerHTML = msg;
+                    $("pagemaintitletext").innerHTML = msg;
+                }
                 var promise = _this["notif_".concat(notif[0])](notifDetails);
-                promise === null || promise === void 0 ? void 0 : promise.then(function () { return _this.game.framework().notifqueue.onSynchronousNotificationEnd(); });
+                promise === null || promise === void 0 ? void 0 : promise.then(function () {
+                    return _this.game.framework().notifqueue.onSynchronousNotificationEnd();
+                });
             }));
             _this.game.framework().notifqueue.setSynchronous(notif[0], notif[1]);
         });
     };
     NotificationManager.prototype.notif_log = function (notif) {
-        debug('notif_log', notif.args);
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                debug("notif_log", notif.args);
+                return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_flipVictoryCard = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, card = _a.card;
+                this.game.victoryCardManager.flipCard(card);
+                return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_purchaseCard = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card, placedFlorins, takenFlorins, discard, player;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, card = _a.card, placedFlorins = _a.placedFlorins, takenFlorins = _a.takenFlorins, discard = _a.discard;
+                        player = this.getPlayer({ playerId: playerId });
+                        return [4, this.game.market.payFlorins({ placedFlorins: placedFlorins, playerId: playerId })];
+                    case 1:
+                        _b.sent();
+                        return [4, this.game.market.takeFlorins({
+                                playerId: playerId,
+                                florins: takenFlorins,
+                                from: card.location,
+                            })];
+                    case 2:
+                        _b.sent();
+                        if (!!discard) return [3, 4];
+                        return [4, player.addCardToHand({ card: card })];
+                    case 3:
+                        _b.sent();
+                        return [3, 6];
+                    case 4: return [4, this.getStockMarketLocation({ location: card.location }).removeCard(card)];
+                    case 5:
+                        _b.sent();
+                        _b.label = 6;
+                    case 6: return [2];
+                }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_refreshMarket = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, cardMoves, cardDraws, _i, cardMoves_1, move, from, to, card, _b, _1, fromRegion, fromColumn, _c, _2, toRegion, toCol, florinsOnCard, _d, cardDraws_1, card;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
+                    case 0:
+                        _a = notif.args, cardMoves = _a.cardMoves, cardDraws = _a.cardDraws;
+                        _i = 0, cardMoves_1 = cardMoves;
+                        _e.label = 1;
+                    case 1:
+                        if (!(_i < cardMoves_1.length)) return [3, 4];
+                        move = cardMoves_1[_i];
+                        from = move.from, to = move.to, card = move.card;
+                        _b = from.split("_"), _1 = _b[0], fromRegion = _b[1], fromColumn = _b[2];
+                        _c = to.split("_"), _2 = _c[0], toRegion = _c[1], toCol = _c[2];
+                        florinsOnCard = this.game.market.getFlorins({
+                            region: fromRegion,
+                            column: Number(fromColumn),
+                        });
+                        this.game.market.incFlorinValue({
+                            region: fromRegion,
+                            column: Number(fromColumn),
+                            value: -florinsOnCard,
+                        });
+                        return [4, this.game.market
+                                .getStock({
+                                region: toRegion,
+                                column: Number(toCol),
+                            })
+                                .addCard(card)];
+                    case 2:
+                        _e.sent();
+                        this.game.market.incFlorinValue({
+                            region: toRegion,
+                            column: Number(toCol),
+                            value: florinsOnCard,
+                        });
+                        _e.label = 3;
+                    case 3:
+                        _i++;
+                        return [3, 1];
+                    case 4:
+                        _d = 0, cardDraws_1 = cardDraws;
+                        _e.label = 5;
+                    case 5:
+                        if (!(_d < cardDraws_1.length)) return [3, 8];
+                        card = cardDraws_1[_d];
+                        return [4, this.game.market.drawCard(card)];
+                    case 6:
+                        _e.sent();
+                        _e.label = 7;
+                    case 7:
+                        _d++;
+                        return [3, 5];
+                    case 8: return [2];
+                }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_sellCard = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card, value, player;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, card = _a.card, value = _a.value;
+                        player = this.getPlayer({ playerId: playerId });
+                        return [4, player.removeCardFromHand({ card: card })];
+                    case 1:
+                        _b.sent();
+                        player.counters.florins.incValue(value);
+                        return [2];
+                }
+            });
+        });
     };
     NotificationManager.prototype.notif_smallRefreshInterface = function (notif) {
         var updatedGamedatas = __assign(__assign({}, this.game.gamedatas), notif.args);
@@ -2697,6 +3191,21 @@ var NotificationManager = (function () {
     NotificationManager.prototype.getPlayer = function (_a) {
         var playerId = _a.playerId;
         return this.game.playerManager.getPlayer({ playerId: playerId });
+    };
+    NotificationManager.prototype.getRegionAndColumnMarketLocation = function (_a) {
+        var location = _a.location;
+        var _b = location.split("_"), _ = _b[0], region = _b[1], colummn = _b[2];
+        return {
+            region: region,
+            column: Number(colummn),
+        };
+    };
+    NotificationManager.prototype.getStockMarketLocation = function (_a) {
+        var location = _a.location;
+        var _b = this.getRegionAndColumnMarketLocation({
+            location: location,
+        }), region = _b.region, column = _b.column;
+        return this.game.market.getStock({ region: region, column: column });
     };
     return NotificationManager;
 }());
@@ -2753,29 +3262,61 @@ var PRPlayer = (function () {
         this.playerId = Number(playerId);
         this.player = player;
         this.playerName = player.name;
-        this.playerColor = player.color;
+        this.playerColor = COLOR_MAP[player.color];
+        this.playerHexColor = player.color;
         var gamedatas = game.gamedatas;
         this.setupPlayer({ gamedatas: gamedatas, player: player });
     }
     PRPlayer.prototype.updatePlayer = function (_a) {
         var gamedatas = _a.gamedatas;
     };
+    PRPlayer.prototype.setupHand = function (_a) {
+        var gamedatas = _a.gamedatas, player = _a.player;
+        this.counters.cardsEast.setValue(player.hand.counts.east);
+        this.counters.cardsWest.setValue(player.hand.counts.west);
+        if (this.playerId === this.game.getPlayerId()) {
+            this.game.hand.getStock().addCards(player.hand.cards);
+        }
+    };
     PRPlayer.prototype.setupPlayer = function (_a) {
         var gamedatas = _a.gamedatas, player = _a.player;
         var playerGamedatas = gamedatas.players[this.playerId];
         this.setupPlayerTableau({ playerGamedatas: playerGamedatas });
         this.setupPlayerPanel({ playerGamedatas: playerGamedatas, player: player });
+        this.setupHand({ gamedatas: gamedatas, player: player });
     };
     PRPlayer.prototype.setupPlayerPanel = function (_a) {
         var playerGamedatas = _a.playerGamedatas, player = _a.player;
-        var playerBoardDiv = $('player_board_' + this.playerId);
-        playerBoardDiv.insertAdjacentHTML('beforeend', tplPlayerPanel({ playerId: this.playerId }));
-        var node = document.getElementById("pr_player_panel_".concat(this.playerId));
+        var playerBoardDiv = $("player_board_" + this.playerId);
+        playerBoardDiv.insertAdjacentHTML("beforeend", tplPlayerPanel({ playerId: this.playerId }));
         this.counters = {
-            cardsWest: new IconCounter({ containerId: "pr_player_panel_icons_".concat(this.playerId), extraIconClasses: 'pr_card_back_icon', icon: 'west_back', iconCounterId: "pr_cards_west_counter_".concat(this.playerId), initialValue: 0 }),
-            cardsEast: new IconCounter({ containerId: "pr_player_panel_icons_".concat(this.playerId), extraIconClasses: 'pr_card_back_icon', icon: 'east_back', iconCounterId: "pr_cards_east_counter_".concat(this.playerId), initialValue: 0 }),
-            florins: new IconCounter({ containerId: "pr_player_panel_icons_".concat(this.playerId), icon: 'florin', iconCounterId: "pr_florins_counter_".concat(this.playerId), initialValue: player.florins }),
+            cardsWest: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_card_back_icon",
+                icon: "west_back",
+                iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
+            cardsEast: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_card_back_icon",
+                icon: "east_back",
+                iconCounterId: "pr_cards_east_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
+            florins: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                icon: "florin",
+                iconCounterId: "pr_florins_counter_".concat(this.playerId),
+                initialValue: player.florins,
+            }),
         };
+        if (COLORS_WITH_SHADOW.includes(this.getColor())) {
+            var node = document.getElementById("player_name_".concat(this.playerId));
+            if (node) {
+                node.setAttribute("data-shadow", "true");
+            }
+        }
         this.updatePlayerPanel({ playerGamedatas: playerGamedatas });
     };
     PRPlayer.prototype.setupPlayerTableau = function (_a) {
@@ -2788,11 +3329,12 @@ var PRPlayer = (function () {
         var _b;
         var playerGamedatas = _a.playerGamedatas;
         if ((_b = this.game.framework().scoreCtrl) === null || _b === void 0 ? void 0 : _b[this.playerId]) {
-            this.game.framework().scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
+            this.game
+                .framework()
+                .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
         }
     };
-    PRPlayer.prototype.clearInterface = function () {
-    };
+    PRPlayer.prototype.clearInterface = function () { };
     PRPlayer.prototype.getColor = function () {
         return this.playerColor;
     };
@@ -2804,6 +3346,55 @@ var PRPlayer = (function () {
     };
     PRPlayer.prototype.getPlayerId = function () {
         return this.playerId;
+    };
+    PRPlayer.prototype.addCardToHand = function (_a) {
+        var card = _a.card;
+        return __awaiter(this, void 0, void 0, function () {
+            var element;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(this.getPlayerId() === this.game.getPlayerId())) return [3, 2];
+                        return [4, this.game.hand.addCard(card)];
+                    case 1:
+                        _b.sent();
+                        return [3, 4];
+                    case 2:
+                        element = this.game.cardManager.getCardElement(card);
+                        return [4, moveToAnimation({
+                                game: this.game,
+                                element: element,
+                                toId: "overall_player_board_".concat(this.playerId),
+                                remove: true,
+                            })];
+                    case 3:
+                        _b.sent();
+                        this.game.cardManager.removeCard(card);
+                        _b.label = 4;
+                    case 4:
+                        this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(1);
+                        return [2];
+                }
+            });
+        });
+    };
+    PRPlayer.prototype.removeCardFromHand = function (_a) {
+        var card = _a.card;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        if (!(this.getPlayerId() === this.game.getPlayerId())) return [3, 2];
+                        return [4, this.game.hand.removeCard(card)];
+                    case 1:
+                        _b.sent();
+                        _b.label = 2;
+                    case 2:
+                        this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(-1);
+                        return [2];
+                }
+            });
+        });
     };
     return PRPlayer;
 }());
@@ -2825,6 +3416,112 @@ var tplPlayerTableauContent = function (_a) {
     var playerId = playerGamedatas.id;
     return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(_("${playerName}'s tableau").replace("${playerName}", playerGamedatas.name), "</span></div>\n  <div>\n    <div class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[playerGamedatas.color], "\"></div>\n  </div>\n    ");
 };
+var ConfirmTurnState = (function () {
+    function ConfirmTurnState(game) {
+        this.game = game;
+    }
+    ConfirmTurnState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    ConfirmTurnState.prototype.onLeavingState = function () {
+        debug("Leaving ConfirmTurnState");
+    };
+    ConfirmTurnState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must confirm or restart their turn",
+            args: {
+                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+            },
+            nonActivePlayers: true,
+        });
+    };
+    ConfirmTurnState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must confirm or restart your turn",
+            args: {
+                tkn_playerName: '${you}'
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () { return _this.game.takeAction({ action: 'actConfirmTurn' }); }
+        });
+    };
+    return ConfirmTurnState;
+}());
+var FlipVictoryCardState = (function () {
+    function FlipVictoryCardState(game) {
+        this.game = game;
+    }
+    FlipVictoryCardState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    FlipVictoryCardState.prototype.onLeavingState = function () {
+        debug("Leaving ConfirmTurnState");
+    };
+    FlipVictoryCardState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must flip an inactive Victory Card",
+            args: {
+                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+            },
+            nonActivePlayers: true,
+        });
+    };
+    FlipVictoryCardState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must flip an inactive Victory Card",
+            args: {
+                tkn_playerName: '${you}'
+            },
+        });
+        this.setVictoryCardsSelectable();
+    };
+    FlipVictoryCardState.prototype.updateInterfaceConfirmSelectCard = function (_a) {
+        var _this = this;
+        var card = _a.card;
+        var node = document.getElementById("".concat(card.id, "-back"));
+        if (!node) {
+            return;
+        }
+        node.classList.add(PR_SELECTED);
+        this.game.clientUpdatePageTitle({
+            text: "Flip ${titleActive}?",
+            args: {
+                titleActive: _(card.titleActive),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actFlipVictoryCard",
+                    args: {
+                        cardId: card.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    FlipVictoryCardState.prototype.setVictoryCardsSelectable = function () {
+        var _this = this;
+        this.args.victoryCards.forEach(function (card) {
+            var node = document.getElementById("".concat(card.id, "-back"));
+            if (!node) {
+                return;
+            }
+            node.classList.add(PR_SELECTABLE);
+            _this.game._connections.push(dojo.connect(node, "onclick", _this, function () {
+                return _this.updateInterfaceConfirmSelectCard({ card: card });
+            }));
+        });
+    };
+    return FlipVictoryCardState;
+}());
 var PlayerActionState = (function () {
     function PlayerActionState(game) {
         this.game = game;
@@ -2836,38 +3533,83 @@ var PlayerActionState = (function () {
     PlayerActionState.prototype.onLeavingState = function () {
         debug("Leaving PlayerActionsState");
     };
+    PlayerActionState.prototype.setDescription = function (activePlayerId) {
+        console.log('setDescription playerAction', activePlayerId);
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} may perform actions",
+            args: {
+                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+            },
+            nonActivePlayers: true,
+        });
+    };
     PlayerActionState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
         this.updatePageTitle();
         this.setMarketCardsSelectable();
+        this.setHandCardsSelectable();
     };
     PlayerActionState.prototype.updateInterfaceConfirmPurchase = function (_a) {
         var _this = this;
         var card = _a.card, column = _a.column;
         this.game.clearPossible();
-        var node = document.getElementById("".concat(card.id.split('_')[0], "-front"));
+        var node = document.getElementById("".concat(card.id.split("_")[0], "-front"));
         if (node) {
             node.classList.add(PR_SELECTED);
         }
         this.game.clientUpdatePageTitle({
-            text: 'Purchase ${cardName} for ${amount} ${tkn_florin} ?',
+            text: "Purchase ${cardName} for ${amount} ${tkn_florin} ?",
             args: {
                 amount: column,
                 cardName: _(card.name),
-                tkn_florin: _('Florin(s)')
+                tkn_florin: _("Florin(s)"),
             },
         });
         this.game.addConfirmButton({
-            callback: function () { return _this.game.takeAction({ action: 'actPlayerAction', args: {
-                    action: 'purchaseCard',
-                    cardId: card.id,
-                } }); }
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "purchaseCard",
+                        cardId: card.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    PlayerActionState.prototype.updateInterfaceConfirmSellCard = function (_a) {
+        var _this = this;
+        var card = _a.card;
+        this.game.clearPossible();
+        var node = document.getElementById("".concat(card.id.split("_")[0], "-front"));
+        if (node) {
+            node.classList.add(PR_SELECTED);
+        }
+        this.game.clientUpdatePageTitle({
+            text: "Sell ${cardName} for ${amount} ${tkn_florin} ?",
+            args: {
+                amount: 2,
+                cardName: _(card.name),
+                tkn_florin: _("Florin(s)"),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "sellCard",
+                        cardId: card.id,
+                    },
+                });
+            },
         });
         this.game.addCancelButton();
     };
     PlayerActionState.prototype.updatePageTitle = function () {
         var remainingActions = this.args.remainingActions;
-        var titleText = _("${you} may perform an action");
+        var titleText = _("${tkn_playerName} may perform an action");
         if (remainingActions === 1) {
             titleText += _(" (1 remaining)");
         }
@@ -2877,23 +3619,41 @@ var PlayerActionState = (function () {
         this.game.clientUpdatePageTitle({
             text: titleText,
             args: {
-                you: "${you}",
+                tkn_playerName: "${you}",
             },
         });
     };
-    PlayerActionState.prototype.setMarketCardsSelectable = function () {
+    PlayerActionState.prototype.setHandCardsSelectable = function () {
         var _this = this;
-        console.log('setMarketCardsSelectable');
-        this.args.cardsPlayerCanPurchase.forEach(function (card) {
-            var id = card.id, location = card.location;
-            var _a = location.split('_'), market = _a[0], region = _a[1], column = _a[2];
-            var nodeId = "".concat(id.split('_')[0], "-front");
+        var cards = this.game.hand.getCards();
+        cards.forEach(function (card) {
+            var id = card.id;
+            var nodeId = "".concat(id.split("_")[0], "-front");
             var node = $(nodeId);
             if (node === null) {
                 return;
             }
             node.classList.add(PR_SELECTABLE);
-            _this.game._connections.push(dojo.connect(node, 'onclick', _this, function () { return _this.updateInterfaceConfirmPurchase({ card: card, column: Number(column) }); }));
+            _this.game._connections.push(dojo.connect(node, "onclick", _this, function () {
+                return _this.updateInterfaceConfirmSellCard({ card: card });
+            }));
+        });
+    };
+    PlayerActionState.prototype.setMarketCardsSelectable = function () {
+        var _this = this;
+        console.log("setMarketCardsSelectable");
+        this.args.cardsPlayerCanPurchase.forEach(function (card) {
+            var id = card.id, location = card.location;
+            var _a = location.split("_"), market = _a[0], region = _a[1], column = _a[2];
+            var nodeId = "".concat(id.split("_")[0], "-front");
+            var node = $(nodeId);
+            if (node === null) {
+                return;
+            }
+            node.classList.add(PR_SELECTABLE);
+            _this.game._connections.push(dojo.connect(node, "onclick", _this, function () {
+                return _this.updateInterfaceConfirmPurchase({ card: card, column: Number(column) });
+            }));
         });
     };
     return PlayerActionState;

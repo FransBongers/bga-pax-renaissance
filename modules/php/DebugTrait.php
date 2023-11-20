@@ -15,7 +15,7 @@ trait DebugTrait
 {
   function test()
   {
-    Notifications::log('extra', Market::getCardsPlayerCanPurchase(Players::get()));
+    Market::refresh(Players::get());
     // Notifications::log('extra', Players::getUiData(Players::getCurrentId()));
     // Players::getActive()->
     // Notifications::log('args',$this->argsResolveChoice());
@@ -31,4 +31,14 @@ trait DebugTrait
     Notifications::log('engine', Globals::getEngine());
   }
 
+  function debugIncFlorins($amount, $playerId = null) {
+    $playerId = $this->debugGetPlayerId($playerId);
+    
+    Players::incFlorins($playerId, intval($amount));
+  }
+
+
+  function debugGetPlayerId($playerId = null) {
+    return $playerId = $playerId === null ? Players::get()->getId() : intval($playerId);
+  }
 }

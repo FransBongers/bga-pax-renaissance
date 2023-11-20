@@ -12,6 +12,7 @@ class LeafNode extends AbstractNode
 {
   public function __construct($info = [])
   {
+    // Notifications::log('construct leaf', $info);
     parent::__construct($info, []);
     $this->info['type'] = NODE_LEAF;
   }
@@ -22,14 +23,6 @@ class LeafNode extends AbstractNode
   public function isResolved()
   {
     return parent::isResolved() || ($this->getAction() != null && $this->isActionResolved());
-  }
-
-  public function isAutomatic($player = null)
-  {
-    if (!isset($this->info['action'])) {
-      return false;
-    }
-    return AtomicActions::get($this->info['action'], $this)->isAutomatic($player);
   }
 
   public function getArgs()
@@ -46,8 +39,6 @@ class LeafNode extends AbstractNode
    */
   public function isDoable($player)
   {
-    // Notifications::log('leaf is Doable',$player->getId());
-    // return true;
     if (isset($this->info['action'])) {
       return $player->canTakeAction($this->info['action'], $this);
     }
@@ -70,15 +61,4 @@ class LeafNode extends AbstractNode
     var_dump(\PaxRenaissance\Core\Engine::$tree->toArray());
     throw new \BgaVisibleSystemException('Trying to get state on a leaf without state nor action');
   }
-
-  // /**
-  //  * The description is given by the corresponding action
-  //  */
-  // public function getDescription()
-  // {
-  //   if (isset($this->info['action'])) {
-  //     return AtomicActions::get($this->info['action'], $this)->getDescription();
-  //   }
-  //   return parent::getDescription();
-  // }
 }

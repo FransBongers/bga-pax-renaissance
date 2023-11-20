@@ -32,10 +32,14 @@ class NotificationManager {
   // ..######..########....##.....#######..##.......
 
   setupNotifications() {
-    console.log('notifications subscriptions setup');
+    console.log("notifications subscriptions setup");
     const notifs: [id: string, wait: number][] = [
       // checked
-      ['log', 1],
+      ["log", undefined],
+      ["flipVictoryCard", undefined],
+      ["purchaseCard", undefined],
+      ["refreshMarket", undefined],
+      ["sellCard", undefined],
     ];
 
     // example: https://github.com/thoun/knarr/blob/main/src/knarr.ts
@@ -43,11 +47,22 @@ class NotificationManager {
       this.subscriptions.push(
         dojo.subscribe(notif[0], this, (notifDetails: Notif<unknown>) => {
           debug(`notif_${notif[0]}`, notifDetails); // log notif params (with Tisaac log method, so only studio side)
+          // Show log messags in page title
+          let msg = this.game.format_string_recursive(
+            notifDetails.log,
+            notifDetails.args as Record<string, unknown>
+          );
+          if (msg != "") {
+            $("gameaction_status").innerHTML = msg;
+            $("pagemaintitletext").innerHTML = msg;
+          }
 
           const promise = this[`notif_${notif[0]}`](notifDetails);
 
           // tell the UI notification ends
-          promise?.then(() => this.game.framework().notifqueue.onSynchronousNotificationEnd());
+          promise?.then(() =>
+            this.game.framework().notifqueue.onSynchronousNotificationEnd()
+          );
         })
       );
       // make all notif as synchronous
@@ -60,15 +75,6 @@ class NotificationManager {
     // });
   }
 
-  // Example code to show log messags in page title
-  // I wont directly answer your issue, but propose something that will fix it and improve your game
-  // put that inside any notification handler :
-  // let msg = this.format_string_recursive(args.log, args.args);
-  // if (msg != '') {
-  //   $('gameaction_status').innerHTML = msg;
-  //   $('pagemaintitletext').innerHTML = msg;
-  // }
-
   // .##....##..#######..########.####.########..######.
   // .###...##.##.....##....##.....##..##.......##....##
   // .####..##.##.....##....##.....##..##.......##......
@@ -77,11 +83,78 @@ class NotificationManager {
   // .##...###.##.....##....##.....##..##.......##....##
   // .##....##..#######.....##....####.##........######.
 
-  notif_log(notif: Notif<unknown>) {
+  async notif_log(notif: Notif<unknown>) {
     // this is for debugging php side
-    debug('notif_log', notif.args);
+    debug("notif_log", notif.args);
+    return Promise.resolve();
   }
 
+  async notif_flipVictoryCard(notif: Notif<NotifFlipVictoryCardArgs>) {
+    const { playerId, card, } = notif.args;
+    this.game.victoryCardManager.flipCard(card);
+    return Promise.resolve();
+  }
+
+  async notif_purchaseCard(notif: Notif<NotifPurchaseCardArgs>) {
+    const { playerId, card, placedFlorins, takenFlorins, discard } = notif.args;
+    const player = this.getPlayer({ playerId });
+
+    await this.game.market.payFlorins({ placedFlorins, playerId });
+    await this.game.market.takeFlorins({
+      playerId,
+      florins: takenFlorins,
+      from: card.location,
+    });
+
+    if (!discard) {
+      await player.addCardToHand({ card });
+    } else {
+      await this.getStockMarketLocation({ location: card.location }).removeCard(
+        card
+      );
+    }
+  }
+
+  async notif_refreshMarket(notif: Notif<NotifRefreshMarketArgs>) {
+    const { cardMoves, cardDraws } = notif.args;
+
+    for (let move of cardMoves) {
+      const { from, to, card } = move;
+      const [_, fromRegion, fromColumn] = from.split("_");
+      const [_2, toRegion, toCol] = to.split("_");
+      const florinsOnCard = this.game.market.getFlorins({
+        region: fromRegion as "east" | "west",
+        column: Number(fromColumn),
+      });
+      this.game.market.incFlorinValue({
+        region: fromRegion as "east" | "west",
+        column: Number(fromColumn),
+        value: -florinsOnCard,
+      });
+      await this.game.market
+        .getStock({
+          region: toRegion as "east" | "west",
+          column: Number(toCol),
+        })
+        .addCard(card);
+      this.game.market.incFlorinValue({
+        region: toRegion as "east" | "west",
+        column: Number(toCol),
+        value: florinsOnCard,
+      });
+    }
+
+    for (let card of cardDraws) {
+      await this.game.market.drawCard(card);
+    }
+  }
+
+  async notif_sellCard(notif: Notif<NotifSellCardArgs>) {
+    const { playerId, card, value } = notif.args;
+    const player = this.getPlayer({ playerId });
+    await player.removeCardFromHand({ card });
+    player.counters.florins.incValue(value);
+  }
 
   // notif_smallRefreshHand(notif: Notif<NotifSmallRefreshHandArgs>) {
   //   const { hand, playerId } = notif.args;
@@ -116,4 +189,25 @@ class NotificationManager {
     return this.game.playerManager.getPlayer({ playerId });
   }
 
+  getRegionAndColumnMarketLocation({ location }: { location: string }): {
+    region: "east" | "west";
+    column: number;
+  } {
+    const [_, region, colummn] = location.split("_");
+    return {
+      region: region as "east" | "west",
+      column: Number(colummn),
+    };
+  }
+
+  getStockMarketLocation({
+    location,
+  }: {
+    location: string;
+  }): LineStock<TableauCard> {
+    const { region, column } = this.getRegionAndColumnMarketLocation({
+      location,
+    });
+    return this.game.market.getStock({ region, column });
+  }
 }

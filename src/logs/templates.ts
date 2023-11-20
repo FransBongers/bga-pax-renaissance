@@ -9,6 +9,6 @@ const tplLogTokenPlayerName = ({
 }: {
   name: string;
   color: string;
-}) => `<span class="playername" style="color:#${color};">${name}</span>`;
+}) => `<span class="playername" ${COLORS_WITH_SHADOW.includes(COLOR_MAP[color]) ? 'data-shadow="true"' : ''} style="color:#${color};">${name}</span>`;
 
 /* ------- GAME SPECIFIC LOG TOKENS ------- */

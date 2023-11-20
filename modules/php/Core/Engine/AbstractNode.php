@@ -13,6 +13,11 @@ class AbstractNode
   protected $parent = null;
   protected $info = [];
 
+  /**
+   * Info is all data provided when creating the Node. Can consist of:
+   * -
+   * children contains all child nodes.
+   */
   public function __construct($info = [], $children = [])
   {
     $this->info =$info;
@@ -31,13 +36,16 @@ class AbstractNode
     $this->parent = $parent;
   }
 
-  // public function replaceAtPos($node, $index)
-  // {
-  //   $this->childs[$index] = $node;
-  //   $node->attach($this);
-  //   return $node;
-  // }
+  public function replaceAtPos($node, $index)
+  {
+    $this->children[$index] = $node;
+    $node->attach($this);
+    return $node;
+  }
 
+  /**
+   * Returns index of this node in children list of parent
+   */
   public function getIndex()
   {
     if ($this->parent == null) {
@@ -52,6 +60,10 @@ class AbstractNode
     throw new \BgaVisibleSystemException("Can't find index of a child");
   }
 
+  /**
+   * Replace the current node with a different node. For example when changing a 
+   * Leaf node to SEQ node.
+   */
   public function replace($newNode)
   {
     $index = $this->getIndex();
@@ -61,12 +73,16 @@ class AbstractNode
     return $this->parent->replaceAtPos($newNode, $index);
   }
 
+  // Push node to children
   public function pushChild($child)
   {
     array_push($this->children, $child);
     $child->attach($this);
   }
 
+  /**
+   * Insert node right after current node in children list
+   */
   public function insertAsBrother($newNode)
   {
     $index = $this->getIndex();
@@ -90,6 +106,7 @@ class AbstractNode
     return $node;
   }
 
+  // Put child at front of children list
   public function unshiftChild($child)
   {
     array_unshift($this->children, $child);
@@ -120,6 +137,7 @@ class AbstractNode
     ]);
   }
 
+
   protected function childrenReduceAnd($callable)
   {
     return \array_reduce(
@@ -142,51 +160,6 @@ class AbstractNode
     );
   }
 
-  /**
-   * The description of the node is the sequence of description of its children, separated by a separator
-   */
-  public function getDescription()
-  {
-    $i = 0;
-    $desc = [];
-    $args = [];
-
-    if (isset($this->info['customDescription'])) {
-      return $this->info['customDescription'];
-    }
-
-    foreach ($this->children as $child) {
-      $name = 'action' . $i++;
-      $tmp = $child->getDescription();
-      if ($tmp != '') {
-        $args[$name] = $tmp;
-        $args['i18n'][] = $name;
-
-        if ($child->forceConfirmation()) {
-          $tmp = [
-            'log' => clienttranslate('Allow ${player_name} to take a triggered action'),
-            'args' => [
-              'player_name' => Players::get($child->getPId())->getName(),
-            ],
-          ];
-        }
-        $args[$name] = $tmp;
-        $args['i18n'][] = $name;
-        $desc[] = '${' . $name . '}';
-      }
-    }
-
-    return [
-      'log' => \implode($this->getDescriptionSeparator(), $desc),
-      'args' => $args,
-    ];
-  }
-
-  public function getDescriptionSeparator()
-  {
-    return '';
-  }
-
   /***********************
    *** Getters (sugar) ***
    ***********************/
@@ -195,19 +168,14 @@ class AbstractNode
     return $this->info['state'] ?? null;
   }
 
-  public function getPId()
+  public function getPlayerId()
   {
-    return $this->info['pId'] ?? null;
+    return $this->info['playerId'] ?? null;
   }
 
   public function getType()
   {
     return $this->info['type'] ?? NODE_LEAF;
-  }
-
-  public function getFlag()
-  {
-    return $this->info['flag'] ?? null;
   }
 
   public function getArgs()
@@ -220,37 +188,9 @@ class AbstractNode
     return $this->info['cardId'] ?? null;
   }
 
-  public function getSource()
-  {
-    return $this->info['source'] ?? null;
-  }
-
-  public function getSourceId()
-  {
-    return $this->info['sourceId'] ?? null;
-  }
-
   public function isDoable($player)
   {
     return true;
-  }
-
-  // public function getUndoableMandatoryNode($player)
-  // {
-  //   if (!$this->isResolved() && !$this->isDoable($player) && ($this->isMandatory() || !$this->isOptional())) {
-  //     return $this;
-  //   }
-  //   return null;
-  // }
-
-  // public function forceConfirmation()
-  // {
-  //   return $this->info['forceConfirmation'] ?? false;
-  // }
-
-  public function isReUsable()
-  {
-    return $this->info['reusable'] ?? false;
   }
 
   public function isResolvingParent()
@@ -266,6 +206,7 @@ class AbstractNode
     return isset($this->info['resolved']) && $this->info['resolved'];
   }
 
+
   public function getResolutionArgs()
   {
     return $this->info['resolutionArgs'] ?? null;
@@ -276,12 +217,7 @@ class AbstractNode
     if ($this->isResolved()) {
       return null;
     }
-
-    if (!isset($this->info['choice']) || $this->children[$this->info['choice']]->isResolved()) {
-      return $this;
-    } else {
-      return $this->children[$this->info['choice']]->getNextUnresolved();
-    }
+    return $this;
   }
 
   public function resolve($args)
@@ -291,13 +227,13 @@ class AbstractNode
   }
 
   // Useful for zombie players
-  public function clearZombieNodes($pId)
+  public function clearZombieNodes($playerId)
   {
     foreach ($this->children as $child) {
-      $child->clearZombieNodes($pId);
+      $child->clearZombieNodes($playerId);
     }
 
-    if ($this->getPId() == $pId) {
+    if ($this->getPlayerId() == $playerId) {
       $this->resolve(ZOMBIE);
     }
   }
@@ -315,75 +251,6 @@ class AbstractNode
     return $this->info['optional'] ?? $this->parent != null && $this->parent->areChildrenOptional();
   }
 
-  // public function isAutomatic($player = null)
-  // {
-  //   $choices = $this->getChoices($player);
-  //   return count($choices) < 2;
-  // }
-
-  // // Allow for automatic resolution in parallel node
-  // public function isIndependent($player = null)
-  // {
-  //   return $this->isAutomatic($player) &&
-  //     $this->childsReduceAnd(function ($child) use ($player) {
-  //       return $child->isIndependent($player);
-  //     });
-  // }
-
-  public function getChoices($player = null, $displayAllChoices = false)
-  {
-    Notifications::log('getChoices',$player->getId());
-    $choice = null;
-    $choices = [];
-    $children = $this->getType() == NODE_SEQ && !empty($this->children) ? [0 => $this->children[0]] : $this->children;
-    Notifications::log('children', ['children' => $children, 'type' => $this->getType()]);
-
-    foreach ($children as $id => $child) {
-      Notifications::log('child', $id);
-      if (!$child->isResolved() && ($displayAllChoices || $child->isDoable($player))) {
-        $choice = [
-          'id' => $id,
-          'args' => $child->getArgs(),
-        ];
-        $choices[$id] = $choice;
-      }
-    }
-
-    if ($this->isOptional()) {
-      if (count($choices) != 1 || !$choice['optionalAction'] || $choice['automaticAction']) {
-        $choices[PASS] = [
-          'id' => PASS,
-          'description' => clienttranslate('Pass'),
-          'irreversibleAction' => false,
-          'args' => [],
-        ];
-      }
-    }
-
-    return $choices;
-  }
-
-  public function choose($childIndex, $auto = false)
-  {
-    $this->info['choice'] = $childIndex;
-    $child = $this->children[$this->info['choice']];
-    if (!$auto && !($child instanceof \PaxRenaissance\Core\Engine\LeafNode)) {
-      $child->enforceMandatory();
-    }
-  }
-
-  public function unchoose()
-  {
-    unset($this->info['choice']);
-  }
-
-  /************************
-   ***** Reversibility *****
-   ************************/
-  public function isIrreversible($player = null)
-  {
-    return false;
-  }
 
   /************************
    *** Action resolution ***
@@ -411,43 +278,4 @@ class AbstractNode
     $this->info['actionResolutionArgs'] = $args;
     $this->info['optional'] = false;
   }
-
-  // // TODO : remove;
-  // public function unresolveAction()
-  // {
-  //   unset($this->infos['actionResolved']);
-  //   unset($this->infos['actionResolutionArgs']);
-  //   unset($this->infos['optional']);
-  // }
-
-  // // Useful for scholar
-  // public function getResolvedActions($types)
-  // {
-  //   $actions = [];
-  //   if (in_array($this->getAction(), $types) && $this->isActionResolved()) {
-  //     $actions[] = $this;
-  //   }
-  //   foreach ($this->childs as $child) {
-  //     $actions = array_merge($actions, $child->getResolvedActions($types));
-  //   }
-  //   return $actions;
-  // }
-
-  // // Useful for Potter Ceramics
-  // public function getNextSibling()
-  // {
-  //   $id = $this->getIndex();
-  //   $childs = $this->getParent()->getChilds();
-  //   return $childs[$id + 1];
-  // }
-
-  // public function enforceMandatory()
-  // {
-  //   $this->infos['mandatory'] = true;
-  // }
-
-  // public function isMandatory()
-  // {
-  //   return $this->infos['mandatory'] ?? false;
-  // }
 }

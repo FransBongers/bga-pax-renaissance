@@ -6,6 +6,7 @@ use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Preferences;
+use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\AtomicActions;
 use PaxRenaissance\Managers\Cards;
@@ -45,11 +46,24 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   public function jsonSerialize($currentPlayerId = null)
   {
     $data = parent::jsonSerialize();
+    $isCurrentPlayer = intval($currentPlayerId) == $this->getId();
     $extra = PlayersExtra::get($this->getId());
+    $hand = $this->getHand();
     // return $data;
     return array_merge($data, [
       'bank' => $extra['bank'],
       'florins' => intval($extra['florins']),
+      'hand' => [
+        'cards' => $isCurrentPlayer ? $hand : [],
+        'counts' => [
+          EAST => count(Utils::filter($hand, function ($card) {
+            return $card->getRegion() === EAST;
+          })),
+          WEST => count(Utils::filter($hand, function ($card) {
+            return $card->getRegion() === WEST;
+          })),
+        ]
+      ],
     ]);
   }
 
@@ -63,10 +77,21 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     return PlayersExtra::get($this->getId())['bank'];
   }
 
+  public function getCardsPlayerCanSell()
+  {
+    return [
+      'hand' => $this->getHand()
+    ];
+  }
 
   public function getFlorins()
   {
     return intval(PlayersExtra::get($this->getId())['florins']);
+  }
+
+  public function getHand()
+  {
+    return Cards::getInLocation(Locations::hand($this->getId()))->toArray();
   }
 
   public function canTakeAction($action, $ctx)
@@ -74,4 +99,8 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     return AtomicActions::isDoable($action, $ctx, $this);
   }
 
+  public function isAtHandLimit()
+  {
+    return count($this->getHand()) === 2;
+  }
 }

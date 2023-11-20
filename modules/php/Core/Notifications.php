@@ -15,9 +15,9 @@ class Notifications
 
   protected static function notify($player, $name, $msg, $data)
   {
-    $pId = is_int($player) ? $player : $player->getId();
+    $playerId = is_int($player) ? $player : $player->getId();
     self::updateArgs($data);
-    Game::get()->notifyPlayer($pId, $name, $msg, $data);
+    Game::get()->notifyPlayer($playerId, $name, $msg, $data);
   }
 
   public static function message($txt, $args = [])
@@ -27,8 +27,8 @@ class Notifications
 
   public static function messageTo($player, $txt, $args = [])
   {
-    $pId = is_int($player) ? $player : $player->getId();
-    self::notify($pId, 'message', $txt, $args);
+    $playerId = is_int($player) ? $player : $player->getId();
+    self::notify($playerId, 'message', $txt, $args);
   }
 
   public static function newUndoableStep($player, $stepId)
@@ -102,7 +102,46 @@ class Notifications
    **** GAME METHODS ****
    *************************/
 
+  public static function flipVictoryCard($player, $card)
+  {
+    self::notifyAll("flipVictoryCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName}'), array(
+      'player' => $player,
+      'card' => $card,
+      'tkn_cardName' => $card->getTitleActive(),
+    ));
+  }
 
+  public static function purchaseCard($player, $card, $placedFlorins, $takenFlorins, $discard = false)
+  {
+    self::notifyAll("purchaseCard",  clienttranslate('${tkn_playerName} purchases ${tkn_cardName}'), array(
+      'player' => $player,
+      'card' => $card,
+      'tkn_cardName' => $card->getName(),
+      'placedFlorins' => $placedFlorins,
+      'takenFlorins' => $takenFlorins,
+      'discard' => $discard,
+    ));
+  }
+
+  public static function refreshMarket($player, $cardMoves, $cardDraws)
+  {
+    self::notifyAll("refreshMarket",  clienttranslate('${tkn_playerName} refreshes the market'), array(
+      'player' => $player,
+      'cardMoves' => $cardMoves,
+      'cardDraws' => $cardDraws,
+    ));
+  }
+
+  public static function sellCard($player, $card, $value)
+  {
+    self::notifyAll("sellCard",  clienttranslate('${tkn_playerName} sells ${tkn_cardName} for ${value} ${tkn_florin}'), array(
+      'player' => $player,
+      'card' => $card,
+      'value' => $value,
+      'tkn_cardName' => $card->getName(),
+      'tkn_florin' => clienttranslate('Florin(s)'),
+    ));
+  }
 
   /*********************
    **** UPDATE ARGS ****
@@ -118,23 +157,5 @@ class Notifications
       $args['playerId'] = $args['player']->getId();
       unset($args['player']);
     }
-    // if (isset($args['card'])) {
-    //   $c = isset($args['card']) ? $args['card'] : $args['task'];
-    //
-    //   $args['value'] = $c['value'];
-    //   $args['value_symbol'] = $c['value']; // The substitution will be done in JS format_string_recursive function
-    //   $args['color'] = $c['color'];
-    //   $args['color_symbol'] = $c['color']; // The substitution will be done in JS format_string_recursive function
-    // }
-
-    // if (isset($args['task'])) {
-    //   $c = $args['task'];
-    //   $args['task_desc'] = $c->getText();
-    //   $args['i18n'][] = 'task_desc';
-    //
-    //   if (isset($args['player_id'])) {
-    //     $args['task'] = $args['task']->jsonSerialize($args['task']->getPId() == $args['player_id']);
-    //   }
-    // }
   }
 }

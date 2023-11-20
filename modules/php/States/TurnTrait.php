@@ -2,13 +2,16 @@
 
 namespace PaxRenaissance\States;
 
+use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Log;
+use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\ActionCards;
+use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Meeples;
 use PaxRenaissance\Managers\Scores;
 use PaxRenaissance\Managers\AtomicActions;
@@ -16,22 +19,9 @@ use PaxRenaissance\Managers\ZooCards;
 
 trait TurnTrait
 {
-  // function actOrderCards($cardIds)
-  // {
-  //   $player = Players::getCurrent();
-  //   foreach ($cardIds as $i => $cardId) {
-  //     $card = ZooCards::getSingle($cardId);
-  //     if (is_null($card) || $card->isPlayed() || $card->getPId() != $player->getId()) {
-  //       throw new \BgaVisibleSystemException("You can't reorder that card:" . $card->getId());
-  //     }
-
-  //     ZooCards::setState($cardId, $i);
-  //   }
-  // }
-
   /**
-   * State function when starting a turn
-   *  useful to intercept for some cards that happens at that moment
+   * State function when starting a turn useful to intercept
+   * for some cards that happens at that moment
    */
   function stBeforeStartOfTurn()
   {
@@ -46,18 +36,20 @@ trait TurnTrait
   {
     $player = Players::getActive();
     self::giveExtraTime($player->getId());
-
-    // if (Globals::isEndTriggered() && Globals::getEndRemainingPlayers() == []) {
-    //   $this->endOfGameInit();
-    //   return;
-    // }
+    Globals::setRemainingActions(2);
+    Cards::resetUsed();
 
     Stats::incTurns($player);
     $node = [
       'children' => [
         [
           'action' => PLAYER_ACTION,
-          'pId' => $player->getId(),
+          'playerId' => $player->getId(),
+        ],
+        [
+          'action' => PLAYER_ACTION,
+          'optional' => true,
+          'playerId' => $player->getId(),
         ],
       ],
     ];
@@ -78,37 +70,16 @@ trait TurnTrait
    */
   function stEndOfTurn()
   {
-    // Globals::setUsedVenom(false);
-    // Globals::setVenomPaid(false);
-    // Globals::setVenomTriggered(false);
-    // Globals::setEffectMap4(false);
+
     $player = Players::getActive();
 
-    // // Solo mode: move one cube to the right
-    // if (Globals::isSolo()) {
-    //   $this->stEndOfSoloTurn();
-    // }
+    $unableToRefresh = Market::refresh($player);
 
-    // // Replenish pool of cards
-    // ZooCards::fillPool();
-    // Players::checkEndOfGamePlayer($player);
-
-    // if (Globals::isEndTriggered()) {
-    //   $remaining = Globals::getEndRemainingPlayers();
-    //   $remaining = array_diff($remaining, [$player->getId()]);
-    //   Globals::setEndRemainingPlayers($remaining);
-    // }
-
-    // if (Globals::isMustBreak()) {
-    //   Globals::setFirstPlayer(Players::getNextId(Players::getActiveId())); // for next start of order.
-    //   Globals::setBreakPlayer(Players::getActiveId());
-    //   Globals::setMustBreak(false);
-    //   $this->endCustomOrder('labor');
-    // } elseif (Globals::isEndTriggered() && Globals::getEndRemainingPlayers() == []) {
-    //   $this->endOfGameInit();
-    // } else {
+    if ($unableToRefresh) {
+      Game::get()->gamestate->jumpToState(ST_END_GAME);
+    } else {
       $this->nextPlayerCustomOrder('default');
-    // }
+    }
   }
 
   function endOfGameInit()
@@ -118,7 +89,7 @@ trait TurnTrait
     //   Engine::setup(
     //     [
     //       'action' => DISCARD_SCORING,
-    //       'pId' => 'all',
+    //       'playerId' => 'all',
     //       'args' => ['current' => Players::getActive()->getId()],
     //     ],
     //     ''
@@ -139,7 +110,7 @@ trait TurnTrait
     //   $card->preScore();
     // }
 
-    // foreach (Players::getAll() as $pId => $player) {
+    // foreach (Players::getAll() as $playerId => $player) {
     //   foreach ($player->getPlayedCards(CARD_SPONSOR) as $cId => $card) {
     //     $card->score();
     //   }
@@ -155,7 +126,7 @@ trait TurnTrait
     // }
 
     // // Send final notif
-    // foreach (Players::getAll() as $pId => $player) {
+    // foreach (Players::getAll() as $playerId => $player) {
     //   // Make sure to call Players::get() because score was modified but it's cached in $player
     //   $score = $player->updateScore(true);
     // }

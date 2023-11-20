@@ -1,7 +1,7 @@
 <?php
 namespace PaxRenaissance\Cards\Tableau;
 
-class COMET3_Halley extends \PaxRenaissance\Models\TableauCard
+class COMET3_Halley extends \PaxRenaissance\Models\CometCard
 {
   public function __construct($row)
   {

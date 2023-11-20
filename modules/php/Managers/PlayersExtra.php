@@ -54,11 +54,11 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
   /*
    * get : returns the Player object for the given player ID
    */
-  public static function get($pId = null)
+  public static function get($playerId = null)
   {
-    $pId = $pId ?: Players::getActiveId();
+    $playerId = $playerId ?: Players::getActiveId();
     return self::DB()
-      ->where($pId)
+      ->where($playerId)
       ->getSingle();
   }
 }

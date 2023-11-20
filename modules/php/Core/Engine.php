@@ -1,5 +1,7 @@
 <?php
+
 namespace PaxRenaissance\Core;
+
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\AtomicActions;
 // use PaxRenaissance\Managers\Scores;
@@ -11,6 +13,7 @@ use PaxRenaissance\Helpers\UserException;
 /*
  * Engine: a class that allows to handle complex flow
  */
+
 class Engine
 {
   public static $tree = null;
@@ -86,11 +89,13 @@ class Engine
 
   /**
    * Proceed to next unresolved part of tree
+   * // TODO: check $isUndo flag 
    */
   public function proceed($confirmedPartial = false, $isUndo = false)
   {
     $node = self::$tree->getNextUnresolved();
-    // Are we done ?
+    // If there are no nodes to resolve we are done. Either transition to
+    // confirm state of auto confirm if no choices were made by the player
     if ($node == null) {
       if (Globals::getEngineChoices() == 0) {
         self::confirm(); // No choices were made => auto confirm
@@ -101,38 +106,26 @@ class Engine
       return;
     }
 
-    $oldPId = Game::get()->getActivePlayerId();
-    $pId = $node->getPId();
+    $oldPlayerId = Game::get()->getActivePlayerId();
+    $playerId = $node->getPlayerId();
 
-    // // Multi active node
-    // if ($pId == 'all') {
-    //   Game::get()->gamestate->jumpToState(ST_RESOLVE_STACK);
-    //   Game::get()->gamestate->setAllPlayersMultiactive();
-
-    //   // Ensure no undo
-    //   Log::checkpoint();
-    //   Globals::setEngineChoices(0);
-
-    //   // Proceed to do the action
-    //   self::proceedToState($node, $isUndo);
-    //   return;
-    // }
-
+    // Confirm partial turn in case next unresolved node in tree
+    // activates a different player and player has made choices
     if (
-      $pId != null &&
-      $oldPId != $pId &&
-      (!$node->isIndependent(Players::get($pId)) && Globals::getEngineChoices() != 0) &&
+      $playerId != null &&
+      $oldPlayerId != $playerId &&
+      Globals::getEngineChoices() != 0 &&
       !$confirmedPartial
     ) {
       Game::get()->gamestate->jumpToState(ST_CONFIRM_PARTIAL_TURN);
       return;
     }
 
-    $player = Players::get($pId);
-    // Jump to resolveStack state to ensure we can change active pId
-    if ($pId != null && $oldPId != $pId) {
+    $player = Players::get($playerId);
+    // Jump to resolveStack state to ensure we can change active playerId
+    if ($playerId != null && $oldPlayerId != $playerId) {
       Game::get()->gamestate->jumpToState(ST_RESOLVE_STACK);
-      Game::get()->gamestate->changeActivePlayer($pId);
+      Game::get()->gamestate->changeActivePlayer($playerId);
     }
 
     if ($confirmedPartial) {
@@ -141,77 +134,13 @@ class Engine
       Globals::setEngineChoices(0);
     }
 
-    // If node with choice, switch to choice state
-    $choices = $node->getChoices($player);
-    $allChoices = $node->getChoices($player, true);
-    if (!empty($allChoices) && $node->getType() != NODE_LEAF) {
-      // Only one choice : auto choose
-      $id = array_keys($choices)[0] ?? null;
-      if (
-        count($choices) == 1 &&
-        count($allChoices) == 1 &&
-        array_keys($allChoices) == array_keys($choices) &&
-        !$choices[$id]['irreversibleAction']
-      ) {
-        self::chooseNode($player, $id, true);
-      } else {
-        // Otherwise, go in the RESOLVE_CHOICE state
-        Game::get()->gamestate->jumpToState(ST_RESOLVE_CHOICE);
-      }
-    } else {
-      // No choice => proceed to do the action
-      self::proceedToState($node, $isUndo);
-    }
+    self::proceedToState($node);
   }
 
-  public function proceedToState($node, $isUndo = false)
+  public function proceedToState($node)
   {
     $state = $node->getState();
-    $args = $node->getArgs();
-    $actionId = AtomicActions::getActionOfState($state, false);
-    // Do some pre-action code if needed and if we are not undoing to an irreversible node
-    if (!$isUndo || !$node->isIrreversible(Players::get($node->getPId()))) {
-      AtomicActions::stPreAction($actionId, $node);
-    }
     Game::get()->gamestate->jumpToState($state);
-  }
-
-  /**
-   * Get the list of choices of current node
-   */
-  public function getNextChoice($player = null, $displayAllChoices = false)
-  {
-    return self::$tree->getNextUnresolved()->getChoices($player, $displayAllChoices);
-  }
-
-  /**
-   * Choose one option
-   */
-  public function chooseNode($player, $nodeId, $auto = false)
-  {
-    $node = self::$tree->getNextUnresolved();
-    $args = $node->getChoices($player);
-    if (!isset($args[$nodeId])) {
-      throw new \BgaVisibleSystemException('This choice is not possible');
-    }
-
-    if (!$auto) {
-      Globals::incEngineChoices();
-      Log::step();
-    }
-
-    if ($nodeId == PASS) {
-      self::resolve(PASS);
-      self::proceed();
-      return;
-    }
-
-    if ($node->getChilds()[$nodeId]->isResolved()) {
-      throw new \BgaVisibleSystemException('Node is already resolved');
-    }
-    $node->choose($nodeId, $auto);
-    self::save();
-    self::proceed();
   }
 
   /**
@@ -220,7 +149,9 @@ class Engine
    */
   public function resolve($args = [])
   {
+    // Get current node
     $node = self::$tree->getNextUnresolved();
+    // Resolve node
     $node->resolve($args);
     self::save();
   }
@@ -233,12 +164,12 @@ class Engine
     if (is_null($node)) {
       $node = self::$tree->getNextUnresolved();
     }
-    if (!$node->isReUsable()) {
-      $node->resolveAction($args);
-      if ($node->isResolvingParent()) {
-        $node->getParent()->resolve([]);
-      }
+
+    $node->resolveAction($args);
+    if ($node->isResolvingParent()) {
+      $node->getParent()->resolve([]);
     }
+
 
     self::save();
 
@@ -250,6 +181,9 @@ class Engine
     }
   }
 
+  /**
+   * Checkpoint for undo func functionality
+   */
   public function checkpoint()
   {
     Globals::setEngineChoices(0);
@@ -257,7 +191,7 @@ class Engine
   }
 
   /**
-   * Insert a new node at root level at the end of seq node
+   * Insert a new node at root level of the tree at the end of seq node
    */
   public function insertAtRoot($t, $last = true)
   {
@@ -276,7 +210,7 @@ class Engine
   /**
    * insertAsChild: turn the node into a SEQ if needed, then insert the flow tree as a child
    */
-  public function insertAsChild($t, &$node = null)
+  public static function insertAsChild($t, &$node = null)
   {
     if (is_null($t)) {
       return;
@@ -295,58 +229,6 @@ class Engine
     // Push child
     $node->pushChild(self::buildTree($t));
     self::save();
-  }
-
-  /**
-   * insertOrUpdateParallelChilds:
-   *  - if the node is a parallel node => insert all the nodes as childs
-   *  - if one of the child is a parallel node => insert as their childs instead
-   *  - otherwise, make the action a parallel node
-   */
-
-  public function insertOrUpdateParallelChilds($childs, &$node = null)
-  {
-    if (empty($childs)) {
-      return;
-    }
-    if (is_null($node)) {
-      $node = self::$tree->getNextUnresolved();
-    }
-
-    if ($node->getType() == NODE_SEQ) {
-      // search if we have children and if so if we have a parallel node
-      foreach ($node->getChilds() as $child) {
-        if ($child->getType() == NODE_PARALLEL) {
-          foreach ($childs as $newChild) {
-            $child->pushChild(self::buildTree($newChild));
-          }
-          self::save();
-          return;
-        }
-      }
-
-      $node->pushChild(
-        self::buildTree([
-          'type' => \NODE_PARALLEL,
-          'childs' => $childs,
-        ])
-      );
-    }
-    // Otherwise, turn the node into a PARALLEL node if needed, and then insert the childs
-    else {
-      // If the node is an action leaf, turn it into a Parallel node first
-      if ($node->getType() == NODE_LEAF) {
-        $newNode = $node->toArray();
-        $newNode['type'] = NODE_PARALLEL;
-        $node = $node->replace(self::buildTree($newNode));
-      }
-
-      // Push childs
-      foreach ($childs as $newChild) {
-        $node->pushChild(self::buildTree($newChild));
-      }
-      self::save();
-    }
   }
 
   /**
@@ -381,10 +263,10 @@ class Engine
       throw new \feException("You can't partial confirm an ended turn");
     }
 
-    $oldPId = Game::get()->getActivePlayerId();
-    $pId = $node->getPId();
+    $oldPlayerId = Game::get()->getActivePlayerId();
+    $playerId = $node->getPlayerId();
 
-    if ($oldPId == $pId) {
+    if ($oldPlayerId == $playerId) {
       throw new \feException("You can't partial confirm for the same player");
     }
 
@@ -422,9 +304,9 @@ class Engine
   /**
    * Clear all nodes related to the current active zombie player
    */
-  public function clearZombieNodes($pId)
+  public function clearZombieNodes($playerId)
   {
-    self::$tree->clearZombieNodes($pId);
+    self::$tree->clearZombieNodes($playerId);
   }
 
   /**

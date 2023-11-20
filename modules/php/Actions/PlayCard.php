@@ -16,16 +16,6 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
     return ST_PLAY_CARD;
   }
 
-  public function getDescription()
-  {
-    return clienttranslate('Choose an action');
-  }
-
-  public function isOptional()
-  {
-    return true;// $this->isMultiplier();
-  }
-
   public function isDoable($player)
   {
     return true;
@@ -75,16 +65,6 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
       // }),
       // 'xtokens' => $player->countXTokens(),
     ];
-
-    // if (!is_null($forcedCardId)) {
-    //   $card = ActionCards::getSingle($forcedCardId);
-    //   $data['descSuffix'] = 'action';
-    //   $data['type'] = $card->getType();
-    //   $data['i18n'][] = 'type';
-    // } elseif ($isHypnosis) {
-    //   $data['descSuffix'] = 'hypnosis';
-    //   $data['pId'] = $this->getCtxArg('hypnosisPId');
-    // }
 
     // $data['xtoken'] = $player->countXTokens();
     // $data['canGainXToken'] = $canGainXToken;
@@ -159,22 +139,11 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
     //   return;
     // }
 
-    // // DUPLICATE ACTION IF THERE ARE MULTIPLIERS
-    // $multipliers = $card->getMeeplesOnIt(MULTIPLIER, ACTIVE);
-    // if (!$isHypnosis && $multipliers->count() > 0) {
-    //   foreach ($multipliers as $meeple) {
-    //     $this->insertAsChild([
-    //       'action' => CHOOSE_ACTION_CARD,
-    //       'pId' => $player->getId(),
-    //       'args' => ['cardId' => $card->getId(), 'strength' => $strength, 'multiplier' => true, 'meepleId' => $meeple['id']],
-    //     ]);
-    //   }
-    // }
 
     // // Insert cleanup actionName
     // $this->insertAsChild([
     //   'action' => \CLEANUP,
-    //   'pId' => $player->getId(),
+    //   'playerId' => $player->getId(),
     //   'args' => ['card' => $cardId, 'hypnosis' => $isHypnosis],
     // ]);
     $this->resolveAction(['card' => $cardId, 'strength' => $strength]);

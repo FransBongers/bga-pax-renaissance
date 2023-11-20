@@ -11,21 +11,21 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Utils;
 
-class PurchaseCard extends \PaxRenaissance\Models\AtomicAction
+class SellCard extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_PURCHASE_CARD;
+    return ST_SELL_CARD;
   }
 
-  public function stPurchaseCard()
+  public function stSellCard()
   {
-    // Notifications::log('stPurchaseCard', $this->ctx->getCardId());
     $cardId = $this->ctx->getCardId();
     $player = self::getPlayer();
-    $availableCards = Market::getCardsPlayerCanPurchase($player);
+    $cardsPlayerCanSell =  $player->getCardsPlayerCanSell()['hand'];
 
-    $card = Utils::array_find($availableCards, function ($card) use ($cardId) {
+
+    $card = Utils::array_find($cardsPlayerCanSell, function ($card) use ($cardId) {
       return $card->getId() === $cardId;
     });
 
@@ -33,8 +33,7 @@ class PurchaseCard extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("Not allowed to purchase card");
     }
     Globals::incRemainingActions(-1);
-    // Notifications::log('card',$card);
-    $card->purchase($player, $this->ctx);
+    $card->sell($player);
 
     $this->resolveAction(['cardId' => $cardId]);
   }

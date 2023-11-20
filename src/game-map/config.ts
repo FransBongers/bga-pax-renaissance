@@ -95,6 +95,25 @@ const MARKET_WEST_CONFIG = [
   },
 ];
 
+const VICTORY_CARD_CONFIG = {
+  [VICTORY_RENAISSANCE]: {
+    top: 120.5,
+    left: 135.5,
+  },
+  [VICTORY_GLOBALIZATION]: {
+    top: 296,
+    left: 135.5,
+  },
+  [VICTORY_IMPERIAL]: {
+    top: 578,
+    left: 135.5,
+  },
+  [VICTORY_HOLY]: {
+    top: 753.5,
+    left: 135.5,
+  },
+}
+
 const MAP_CONFIG = {
   [ENGLAND]: {
     top: 270,

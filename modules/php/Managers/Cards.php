@@ -49,13 +49,7 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
   //////////////////////////////////
   //////////////////////////////////
 
-  // /**
-  //  * getOfPlayer: return the cards in the hand of given player
-  //  */
-  // public static function getOfPlayer($pId)
-  // {
-  //   return self::getInLocation(['hand', $pId]);
-  // }
+
 
   // public static function getOfTypeInLocation($type, $location)
   // {
@@ -92,11 +86,11 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
       $deck = 'deck_'.$direction;
       self::pickForLocation(12, $pool, $deck);
       self::shuffle($deck);
-      Notifications::log('extra', $numberOfAdditionalCards);
+      // Notifications::log('extra', $numberOfAdditionalCards);
       self::pickForLocation($numberOfAdditionalCards, $pool, 'pile');
       self::shuffle('pile');
       $cardsInPile = self::getInLocation('pile');
-      Notifications::log('cardInPile', $cardsInPile);
+      // Notifications::log('cardInPile', $cardsInPile);
       foreach ($cardsInPile as $cardId => $cardInfo) {
         // Add 14 because that is the number of cards already in each deck, so all
         // picked cards will be added on top.
@@ -147,66 +141,23 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
     self::setupCreateMarketDecks($players, $options);
   }
 
-  // /**
-  //  * setupNewGame: create the deck of cards
-  //  */
-  // public static function setupNewGame($players, $options)
-  // {
-  //   $wakhan = Globals::getWakhanEnabled() ? 1 : 0;
-  //   self::createDeck(count($players) + $wakhan);
-  // }
 
-  // private function createDeck($player_count)
-  // {
-  //   $cards = [];
-  //   array_push($cards, [
-  //     "id" => "card_{INDEX}",
-  //     "nbr" => 100,
-  //     "nbrStart" => 1,
-  //     "location" => COURT_CARD,
-  //     "used" => 0,
-  //   ]);
-  //   array_push($cards, [
-  //     "id" => "card_{INDEX}",
-  //     "nbr" => 4,
-  //     "nbrStart" => 101,
-  //     "location" => 'dominanceCheckCard',
-  //     "used" => 0,
-  //   ]);
-  //   array_push($cards, [
-  //     "id" => "card_{INDEX}",
-  //     "nbr" => 12,
-  //     "nbrStart" => 105,
-  //     "location" => EVENT_CARD,
-  //     "used" => 0,
-  //   ]);
-  //   self::create($cards);
-  //   self::shuffle(COURT_CARD);
-  //   self::shuffle(EVENT_CARD);
+  public static function setUsed($id, $value)
+  {
+    self::DB()->update([
+      'used' => $value,
+    ], $id);
+  }
 
-  //   for ($i = 6; $i >= 1; $i--) {
-  //     self::pickForLocation($player_count + 5, COURT_CARD, 'pile');
-  //     if ($i == 2) {
-  //       self::pickForLocation(2, EVENT_CARD, 'pile');
-  //     } elseif ($i > 2) {
-  //       self::pickForLocation(1, EVENT_CARD, 'pile');
-  //       self::pickForLocation(1, 'dominanceCheckCard', 'pile');
-  //     }
-  //     self::shuffle('pile');
-  //     $pile = self::getInLocation('pile');
-  //     $n_cards = self::countInLocation('deck');
-  //     foreach ($pile as $id => $info) {
-  //       self::move($id, 'deck', $info['state'] + $n_cards);
-  //     }
-  //   }
-  // }
+  public static function resetUsed()
+  {
+    self::DB()->update(['used' => 0])->run();
+  }
 
-  // public static function setUsed($id, $value)
-  // {
-  //   self::DB()->update([
-  //     'used' => $value,
-  //   ], $id);
-  // }
+  public static function getVictoryCards()
+  {
+    return Cards::getSelectQuery()->where('card_location', 'LIKE', 'victory%')->get()->toArray();
+  }
 
   // /**
   //  * Should returns the cards that are not available for sale (because player already put rupee on it)

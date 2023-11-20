@@ -31,30 +31,10 @@ class AtomicAction
     return false;
   }
 
-  public function isIndependent($player = null)
-  {
-    return false;
-  }
-
-  public function isAutomatic($player = null)
-  {
-    return false;
-  }
-
-  public function isIrreversible($player = null)
-  {
-    return false;
-  }
-
-  public function getDescription()
-  {
-    return $this->description;
-  }
-
   public function getPlayer()
   {
-    $pId = $this->ctx->getPId() ?? Players::getActiveId();
-    return Players::get($pId);
+    $playerId = $this->ctx->getPlayerId() ?? Players::getActiveId();
+    return Players::get($playerId);
   }
 
   public function getState()
@@ -64,8 +44,6 @@ class AtomicAction
 
   public function resolveAction($args = [], $checkpoint = false)
   {
-    $player = Players::getActive();
-    $args['automatic'] = $this->isAutomatic($player);
     Engine::resolveAction($args, $checkpoint, $this->ctx);
     Engine::proceed();
   }
@@ -79,26 +57,9 @@ class AtomicAction
   }
 
   /**
-   * Insert childs on the next upcoming afterFinishingAction node
+   * Adds new step to logs, so it can be undone per step
+   * TODO: check byPassActiveCheck
    */
-  // public function pushAfterFinishingChilds($childs)
-  // {
-  //   Engine::pushAfterFinishingChildren($childs);
-  // }
-
-  /**
-   * Insert childs as parallel node childs
-   */
-  public function pushParallelChild($node)
-  {
-    $this->pushParallelChilds([$node]);
-  }
-
-  public function pushParallelChilds($childs)
-  {
-    Engine::insertOrUpdateParallelChilds($childs, $this->ctx);
-  }
-
   public static function checkAction($action, $byPassActiveCheck = false)
   {
     if ($byPassActiveCheck) {

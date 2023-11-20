@@ -148,28 +148,6 @@ $machinestates = [
         'possibleactions' => ['actConfirmPartialTurn', 'actRestart'],
     ],
 
-    ST_RESOLVE_CHOICE => [
-        'name' => 'resolveChoice',
-        'description' => '',
-        'descriptionmyturn' => '',
-        'type' => 'activeplayer',
-        'args' => 'argsResolveChoice',
-        'action' => 'stResolveChoice',
-        'possibleactions' => ['actChooseAction', 'actRestart'],
-        'transitions' => [],
-    ],
-
-    ST_IMPOSSIBLE_MANDATORY_ACTION => [
-        'name' => 'impossibleAction',
-        'description' => clienttranslate('${actplayer} can\'t take the mandatory action and must restart his turn or exchange/cook'),
-        'descriptionmyturn' => clienttranslate(
-            '${you} can\'t take the mandatory action. Restart your turn or exchange/cook to make it possible'
-        ),
-        'type' => 'activeplayer',
-        'args' => 'argsImpossibleAction',
-        'possibleactions' => ['actRestart'],
-    ],
-
     ////////////////////////////////////////////////////////////////////////////
     //     _   _                  _         _        _   _
     //    / \ | |_ ___  _ __ ___ (_) ___   / \   ___| |_(_) ___  _ __  ___
@@ -178,6 +156,17 @@ $machinestates = [
     // /_/   \_\__\___/|_| |_| |_|_|\___/_/   \_\___|\__|_|\___/|_| |_|___/
     //
     ////////////////////////////////////////////////////////////////////////////
+
+    ST_FLIP_VICTORY_CARD => [
+        'name' => 'flipVictoryCard',
+        'description' => clienttranslate('${actplayer} must flip an inactive Victory Card'),
+        'descriptionmyturn' => clienttranslate('${you} must flip an inactive Victory Card'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        // 'transitions' => [],
+        'possibleactions' => ['actFlipVictoryCard', 'actRestart'],
+    ],
 
     ST_PLAYER_ACTION => [
         'name' => 'playerAction',
@@ -200,6 +189,14 @@ $machinestates = [
 
     ST_PLAY_CARD => [
         'name' => 'playCard',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_SELL_CARD => [
+        'name' => 'sellCard',
         'description' => '',
         'type' => 'game',
         'action' => 'stAtomicAction',

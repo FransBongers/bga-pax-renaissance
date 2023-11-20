@@ -17,6 +17,11 @@
   background-color: #ef9a9a;
 }
 
+.playername[data-shadow=true], .player-name[data-shadow=true] > a {
+  // text-shadow: 1px 0 1px rgba(0, 0, 0, 0.6), 0 -1px 1px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(0, 0, 0, 0.6), -1px 0 1px rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 0 1px rgba(0, 0, 0, 1), 0 -1px 1px rgba(0, 0, 0, 1), 0 1px 1px rgba(0, 0, 0, 1), -1px 0 1px rgba(0, 0, 0, 1);
+}
+
 /* ------- LOG TOKENS ------- */
 
 #pagemaintitletext {
@@ -27,5 +32,16 @@
   .pr_icon[data-icon="florin"] {
     --paxRenIconScale: 0.5;
     margin-bottom: -4px;
+  }
+}
+
+.log > .roundedbox {
+  .pr_icon {
+    display: inline-block;
+  }
+
+  .pr_icon[data-icon="florin"] {
+    --paxRenIconScale: 0.5;
+    margin-bottom: -6px;
   }
 }

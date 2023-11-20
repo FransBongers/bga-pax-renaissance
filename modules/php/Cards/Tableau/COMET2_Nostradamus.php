@@ -1,7 +1,7 @@
 <?php
 namespace PaxRenaissance\Cards\Tableau;
 
-class COMET2_Nostradamus extends \PaxRenaissance\Models\TableauCard
+class COMET2_Nostradamus extends \PaxRenaissance\Models\CometCard
 {
   public function __construct($row)
   {

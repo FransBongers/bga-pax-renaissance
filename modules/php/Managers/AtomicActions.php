@@ -8,10 +8,13 @@ use PaxRenaissance\Core\Notifications;
 
 class AtomicActions
 {
+  // Mapping of actionId and corresponding class
   static $classes = [
+    FLIP_VICTORY_CARD => 'FlipVictoryCard',
     PURCHASE_CARD => 'PurchaseCard',
     PLAY_CARD => 'PlayCard',
     PLAYER_ACTION => 'PlayerAction',
+    SELL_CARD => 'SellCard',
   ];
 
   public static function get($actionId, $ctx = null)
@@ -87,24 +90,11 @@ class AtomicActions
     $action->$methodName($args);
   }
 
+  /**
+   * Execute state action
+   */
   public static function stAction($actionId, $ctx)
   {
-    $player = Players::getActive();
-    // if (!self::isDoable($actionId, $ctx, $player)) {
-    //   if (!$ctx->isOptional()) {
-    //     if (self::isDoable($actionId, $ctx, $player, true)) {
-    //       Game::get()->gamestate->jumpToState(ST_IMPOSSIBLE_MANDATORY_ACTION);
-    //       return;
-    //     } else {
-    //       throw new \BgaUserException(self::getErrorMessage($actionId));
-    //     }
-    //   } else {
-    //     // Auto pass if optional and not doable
-    //     Game::get()->actPassOptionalAction(true);
-    //     return;
-    //   }
-    // }
-
     $action = self::get($actionId, $ctx);
     $methodName = 'st' . $action->getClassName();
     if (\method_exists($action, $methodName)) {
@@ -112,18 +102,9 @@ class AtomicActions
     }
   }
 
-  public static function stPreAction($actionId, $ctx)
-  {
-    $action = self::get($actionId, $ctx);
-    $methodName = 'stPre' . $action->getClassName();
-    if (\method_exists($action, $methodName)) {
-      $action->$methodName();
-      if ($ctx->isIrreversible(Players::get($ctx->getPId()))) {
-        Engine::checkpoint();
-      }
-    }
-  }
-
+  /**
+   * Executes pass action as defined in atomic action
+   */
   public static function pass($actionId, $ctx)
   {
     if (!$ctx->isOptional()) {

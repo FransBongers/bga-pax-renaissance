@@ -40,18 +40,7 @@ trait EngineTrait
     $action = $this->getCurrentAtomicAction();
     $node = Engine::getNextUnresolved();
     $args = AtomicActions::getArgs($action, $node);
-    $args['automaticAction'] = AtomicActions::get($action, $node)->isAutomatic($player);
     $this->addCommonArgs($args);
-
-    // $sourceId = $node->getSourceId() ?? null;
-    // if (!isset($args['source']) && !is_null($sourceId)) {
-    //   $args['sourceId'] = $sourceId;
-    //   $args['source'] = ZooCards::get($sourceId)->getName();
-    // }
-    $source = $node->getSource() ?? null;
-    if (!isset($args['source']) && !is_null($source)) {
-      $args['source'] = $source;
-    }
 
     return $args;
   }
@@ -66,23 +55,9 @@ trait EngineTrait
     AtomicActions::takeAction($action, $actionName, $args, Engine::getNextUnresolved());
   }
 
-  /**
-   * To pass if the action is an optional one
-   */
-  function actPassOptionalAction($auto = false)
-  {
-    if ($auto) {
-      $this->gamestate->checkPossibleAction('actPassOptionalAction');
-    } else {
-      self::checkAction('actPassOptionalAction');
-    }
-
-    $action = $this->getCurrentAtomicAction();
-    AtomicActions::pass($action, Engine::getNextUnresolved());
-  }
 
   /**
-   * Pass the argument of the action to the atomic action
+   * Execute the state action of atomic action
    */
   function stAtomicAction()
   {
@@ -90,37 +65,8 @@ trait EngineTrait
     AtomicActions::stAction($action, Engine::getNextUnresolved());
   }
 
-  /********************************
-   ********************************
-   ********** FLOW CHOICE *********
-   ********************************
-   ********************************/
-  function argsResolveChoice()
-  {
-    $player = Players::getActive();
-    $node = Engine::getNextUnresolved();
-
-    $args = array_merge($node->getArgs() ?? [], [
-      'choices' => Engine::getNextChoice($player),
-    ]);
-    if ($node instanceof \PaxRenaissance\Core\Engine\XorNode) {
-      $args['xor'] = true;
-    }
-    $this->addCommonArgs($args, 'resolveChoice');
-    return $args;
-  }
-
-  function actChooseAction($choiceId)
-  {
-    $player = Players::getActive();
-    Engine::chooseNode($player, $choiceId);
-  }
-
+  
   public function stResolveStack()
-  {
-  }
-
-  public function stResolveChoice()
   {
   }
 
@@ -139,6 +85,10 @@ trait EngineTrait
     return $data;
   }
 
+  /**
+   * State function that can be used to auto confirm turn if disabled in the 
+   * settings
+   */
   public function stConfirmTurn()
   {
     // Check user preference to bypass if DISABLED is picked

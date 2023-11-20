@@ -1,3 +1,87 @@
+@use "sass:math";
+
+#pr_market_west_deck,
+#pr_market_east_deck {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#pr_market_east_deck_counter, #pr_market_west_deck_counter {
+  flex-grow: 1;
+  text-align: center;
+}
+
+#pr_market_east_deck_container,
+#pr_market_west_deck_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  .pr_deck_counter {
+    // box-sizing: border-box;
+    height: 33px;
+    padding: 4px;
+    width: 104px;
+    background-color: #f8f8f8;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-bottom: -16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    // justify-content: space-between;
+
+    .pr_deck_counter_comet {
+      box-sizing: border-box;
+      border-radius: 1px;
+      border: 1px solid;
+      width: 22px;
+      height: 33px;
+    }
+
+    .pr_deck_counter_comet.pr_none {
+      opacity: 0.3;
+    }
+
+    .pr_deck_counter_text {
+      font-weight: bold;
+      font-size: 30px;
+      letter-spacing: -1px;
+    }
+
+    .pr_deck_counter_comet[data-card-id=COMET1] {
+      background-image: url("img/east_cards2.webp");
+      background-size: 1000% 401%;
+      background-position-x: math.div(((34 - 1) % 10 * 100%), 9);
+      background-position-y: math.div(math.floor(calc((34 - 1) / 10)) * 100%, 3);
+    }
+
+    .pr_deck_counter_comet[data-card-id=COMET2] {
+      background-image: url("img/east_cards2.webp");
+      background-size: 1000% 401%;
+      background-position-x: math.div(((35 - 1) % 10 * 100%), 9);
+      background-position-y: math.div(math.floor(calc((35 - 1) / 10)) * 100%, 3);
+    }
+
+    .pr_deck_counter_comet[data-card-id=COMET3] {
+      background-image: url("img/west_cards2.webp");
+      background-size: 1000% 601%;
+      background-position-x: math.div(((54 - 1) % 10 * 100%), 9);
+      background-position-y: math.div(math.floor(calc((54 - 1) / 10)) * 100%, 5);
+    }
+
+    .pr_deck_counter_comet[data-card-id=COMET4] {
+      background-image: url("img/west_cards2.webp");
+      background-size: 1000% 601%;
+      background-position-x: math.div(((55 - 1) % 10 * 100%), 9);
+      background-position-y: math.div(math.floor(calc((55 - 1) / 10)) * 100%, 5);
+    }
+  }
+}
+
 .pr_market {
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
@@ -17,7 +101,8 @@
       font-weight: bold;
       font-size: 30px;
       letter-spacing: -2px;
-      text-shadow: 2px 0 2px #ffffff99, 0 -2px 2px #ffffff99, 0 2px 2px #ffffff99, -2px 0 2px #ffffff99;
+      text-shadow: 2px 0 2px #ffffff99, 0 -2px 2px #ffffff99,
+        0 2px 2px #ffffff99, -2px 0 2px #ffffff99;
     }
   }
 

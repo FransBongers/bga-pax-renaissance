@@ -17,28 +17,41 @@ interface PaxRenaissanceGame extends Game {
   addSecondaryActionButton: (props: AddButtonProps) => void;
   clearInterface: () => void;
   clearPossible: () => void;
-  clientUpdatePageTitle: ({ text, args }: { text: string; args: Record<string, unknown> }) => void;
+  clientUpdatePageTitle: (props: { text: string; args: Record<string, unknown>; nonActivePlayers?: boolean }) => void;
+  format_string_recursive: (log: string, args: Record<string, unknown>) => string
+  getPlayerId: () => number;
   takeAction: (props: { action: string; args?: Record<string, unknown> }) => void;
   updatePlayAreaSize: () => void;
   _connections: unknown[];
   animationManager: AnimationManager;
   cardManager: CardManager<TableauCard>;
+  hand: Hand;
   market: Market;
   notificationManager: NotificationManager;
   playAreaScale: number;
   playerManager: PlayerManager;
   tooltipManager: TooltipManager;
+  victoryCardManager: VictoryCardManager;
 }
 
-interface TableauCard {
+interface PaxRenCard {
   id: string;
   location: string;
+  state: number;
+  used: number;
+}
+
+interface TableauCard extends PaxRenCard {
   flavorText: string[];
   name: string;
   region: "east" | "west";
-  state: number;
   type: "tableauCard";
-  used: number;
+}
+
+interface VictoryCard extends PaxRenCard {
+  titleActive: string;
+  titleInactive: string;
+  type: "victoryCard";
 }
 
 interface ChessPiece {
@@ -55,24 +68,35 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
     deckCounts: {
       east: {
         cardCount: number;
-        cometCount: number;
+        comet1: boolean;
+        comet2: boolean;
       };
       west: {
         cardCount: number;
-        cometCount: number;
+        comet3: boolean;
+        comet4: boolean;
       };
     };
     florins: {
-      east: number[];
-      west: number[];
+      [location: string]: number;
     }
   };
   players: Record<number, BgaPlayer>;
   chessPieces: ChessPiece[];
+  victoryCards: VictoryCard[]
+  // REMOVE
+  testCard: TableauCard;
 }
 
 interface PaxRenaissancePlayerData extends BgaPlayer {
   // hexColor: string;
   florins: number;
   bank: 'coeur' | 'fugger' | 'marchionni' | 'medici' ;
+  hand: {
+    cards: TableauCard[];
+    counts: {
+      east: number;
+      west: number;
+    }
+  }
 }

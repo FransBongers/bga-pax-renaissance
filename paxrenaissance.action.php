@@ -60,6 +60,30 @@
      self::ajaxResponse();
    }
 
+   public function actConfirmTurn()
+   {
+     self::setAjaxMode();
+     $this->game->actConfirmTurn();
+     self::ajaxResponse();
+   }
+ 
+   public function actConfirmPartialTurn()
+   {
+     self::setAjaxMode();
+     $this->game->actConfirmPartialTurn();
+     self::ajaxResponse();
+   }
+ 
+   public function actFlipVictoryCard()
+   {
+     self::setAjaxMode();
+    //  $action = self::getArg('action', AT_alphanum, true);
+     $args = self::getArg('args', AT_json, true);
+     Utils::validateJSonAlphaNum($args, 'args');
+     $this->game->actTakeAtomicAction('actFlipVictoryCard', $args);
+     self::ajaxResponse();
+   }
+
    public function actPlayerAction()
    {
      self::setAjaxMode();

@@ -1,6 +1,7 @@
 interface State {
   onEnteringState: (args: any) => void;
   onLeavingState: () => void;
+  setDescription: (activePlayerId: number) => void;
 }
 
 interface CommonArgs {
@@ -19,6 +20,12 @@ interface PlayAction {
 }
 
 type PaxRenAction = PurchaseAction | PlayAction;
+
+interface OnEnteringConfirmTurnArgs extends CommonArgs {}
+
+interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
+  victoryCards: VictoryCard[];
+}
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {
   remainingActions: number;

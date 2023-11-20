@@ -1,6 +1,6 @@
 const tplChessPiece = ({ id }: { id: string }) => {
-  const type = id.split('_')[0];
-  const religion = id.split('_')[1];
+  const type = id.split("_")[0];
+  const religion = id.split("_")[1];
   return `<div id="${id}" class="pr_chess_piece pr_${type}" data-religion="${religion}"></div>`;
 };
 
@@ -12,32 +12,67 @@ const tplChessPiece = ({ id }: { id: string }) => {
 // </div>
 
 const tplGameMapMarket = () => `
-  ${MARKET_WEST_CONFIG.map(({top, left}, index) => `
+  ${MARKET_WEST_CONFIG.map(
+    ({ top, left }, index) => `
   <div id="pr_market_west_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);">
     <div id="pr_market_west_${index}_stock" class="pr_market_stock"></div>
-    ${tplIcon({id: `pr_market_west_${index}_florins`, icon: 'florin', classes: 'pr_none', extra: 'data-region="west"', children: `<span id="pr_market_west_${index}_counter" class="pr_counter"></span>`})}
-  </div>`).join('') }
-  <div id="pr_market_west_deck_container" class="pr_market" style="top: calc(var(--paxRenCardScale) * 950px); left: calc(var(--paxRenCardScale) * 1095px);">
+    ${tplIcon({
+      id: `pr_market_west_${index}_florins`,
+      icon: "florin",
+      classes: "pr_none",
+      extra: 'data-region="west"',
+      children: `<span id="pr_market_west_${index}_counter" class="pr_counter"></span>`,
+    })}
+  </div>`
+  ).join("")}
+  <div id="pr_market_west_deck_container" class="pr_market pr_card" data-card-id="WEST_BACK" style="top: calc(var(--paxRenCardScale) * 950px); left: calc(var(--paxRenCardScale) * 1095px);">
     <div id="pr_market_west_deck"></div>
+    <div id="pr_market_west_deck_counter_container" class="pr_deck_counter">
+      <span id="pr_market_west_deck_counter" class="pr_deck_counter_text"></span>
+      <span class="pr_deck_counter_text">/</span>
+      <div id="pr_deck_counter_comet3" class="pr_deck_counter_comet" data-card-id="COMET3"></div>
+      <div id="pr_deck_counter_comet4" class="pr_deck_counter_comet" data-card-id="COMET4"></div>
+    </div>
   </div>
-  ${MARKET_EAST_CONFIG.map(({top, left}, index) => `
+  ${MARKET_EAST_CONFIG.map(
+    ({ top, left }, index) => `
   <div id="pr_market_east_${index}" class="pr_market" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);">
     <div id="pr_market_east_${index}_stock" class="pr_market_stock"></div>
-    ${tplIcon({id: `pr_market_east_${index}_florins`, icon: 'florin', classes: 'pr_none', extra: 'data-region="east"', children: `<span id="pr_market_east_${index}_counter" class="pr_counter"></span>`})}
-  </div>`).join('') }
-  <div id="pr_market_east_deck_container" class="pr_market" style="top:  calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);">
+    ${tplIcon({
+      id: `pr_market_east_${index}_florins`,
+      icon: "florin",
+      classes: "pr_none",
+      extra: 'data-region="east"',
+      children: `<span id="pr_market_east_${index}_counter" class="pr_counter"></span>`,
+    })}
+  </div>`
+  ).join("")}
+  <div id="pr_market_east_deck_container" class="pr_market pr_card" data-card-id="EAST_BACK" style="top: calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);">
     <div id="pr_market_east_deck"></div>
+    <div id="pr_market_east_deck_counter_container" class="pr_deck_counter">
+      <span id="pr_market_east_deck_counter" class="pr_deck_counter_text"></span>
+      <span class="pr_deck_counter_text">/</span>
+      <div id="pr_deck_counter_comet1" class="pr_deck_counter_comet" data-card-id="COMET1"></div>
+      <div id="pr_deck_counter_comet2" class="pr_deck_counter_comet" data-card-id="COMET2"></div>
+    </div>
   </div>
 `;
 
 const tplGameMapEmpireCards = () => `
-  ${Object.entries(EMPIRE_CARD_CONFIG).map(([empire, {top, left}]) => `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`).join('')}
+  ${Object.entries(EMPIRE_CARD_CONFIG)
+    .map(
+      ([empire, { top, left }]) =>
+        `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="position: absolute; top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
+    )
+    .join("")}
 `;
 
 const tplGameMapMapCards = () => {
   const htmlArray = Object.entries(MAP_CONFIG).map(
     ([empire, data]) => `
-  <div id="pr_empire_${empire}" class="pr_map_card" data-card-id="medieval_${empire}" style="top: calc(var(--paxRenMapScale) * ${data.top}px); left: calc(var(--paxRenMapScale) * ${data.left}px);">
+  <div id="pr_empire_${empire}" class="pr_map_card" data-card-id="medieval_${empire}" style="top: calc(var(--paxRenMapScale) * ${
+      data.top
+    }px); left: calc(var(--paxRenMapScale) * ${data.left}px);">
     ${Object.entries(data.cities)
       .map(
         ([city, coords]) =>
@@ -52,11 +87,13 @@ const tplGameMapMapCards = () => {
 };
 
 const tplGameMapVictoryCards = () => `
-  <div class="pr_square_card" data-card-id="victory_renaissance_inactive" style="top: calc(var(--paxRenCardScale) * 120.5px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
-  <div class="pr_square_card" data-card-id="victory_globalization_inactive" style="top: calc(var(--paxRenCardScale) * 296px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
-  <div class="pr_square_card" data-card-id="victory_imperial_inactive" style="top: calc(var(--paxRenCardScale) * 578px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
-  <div class="pr_square_card" data-card-id="victory_holy_inactive" style="top: calc(var(--paxRenCardScale) * 753.5px); left: calc(var(--paxRenCardScale) * 135.5px);"></div>
-`;
+  ${Object.entries(VICTORY_CARD_CONFIG)
+    .map(
+      ([victory, { top, left }]) =>
+        `<div id="pr_${victory}_slot" class="pr_victory_slot" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
+    )
+    .join("")}
+  `;
 
 const tplGameMap = () => `
 <div id="pr_game_map_container">

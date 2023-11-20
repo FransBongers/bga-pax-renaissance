@@ -43,6 +43,13 @@
   // background-color: yellow;
 }
 
+.pr_victory_slot {
+  position: absolute;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 151px);
+  // background-color: yellow;
+}
+
 /* ------- MAP CARDS ------- */
 
 .pr_map_card {

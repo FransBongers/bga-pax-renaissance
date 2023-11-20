@@ -39,9 +39,9 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     ]);
 
     $values = [];
-    foreach ($players as $pId => $player) {
+    foreach ($players as $playerId => $player) {
       $color = array_shift($colors);
-      $values[] = [$pId, $color, $player['player_canal'], $player['player_name'], $player['player_avatar'], 0];
+      $values[] = [$playerId, $color, $player['player_canal'], $player['player_name'], $player['player_avatar'], 0];
     }
 
     $query->values($values);
@@ -51,10 +51,10 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     PlayersExtra::setupNewGame();
   }
 
-  public static function incFlorins($pId, $increment)
+  public static function incFlorins($playerId, $increment)
   {
-    $value = intval(PlayersExtra::get($pId)['florins']) + $increment;
-    return PlayersExtra::DB()->update(['florins' => $value], $pId);
+    $value = intval(PlayersExtra::get($playerId)['florins']) + $increment;
+    return PlayersExtra::DB()->update(['florins' => $value], $playerId);
   }
 
   public static function getActiveId()
@@ -76,49 +76,35 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
   /*
    * get : returns the Player object for the given player ID
    */
-  public static function get($pId = null)
+  public static function get($playerId = null)
   {
-    $pId = $pId ?: self::getActiveId();
+    $playerId = $playerId ?: self::getActiveId();
     return self::DB()
-      ->where($pId)
+      ->where($playerId)
       ->getSingle();
   }
 
-  /*
-   * Workaroud function since db calls from Player model don't seem to be logged
-   * TODO: check if we can handle it from Player model
-   */
-  // public static function incRupees($pId, $increment)
-  // {
-  //   $value = self::get($pId)->getRupees() + $increment;
-  //   return self::DB()->update(['rupees' => $value], $pId);
-  // }
-
-  public static function incScore($pId, $increment)
+  public static function incScore($playerId, $increment)
   {
-    $value = self::get($pId)->getScore() + $increment;
-    return self::DB()->update(['player_score' => $value], $pId);
+    $value = self::get($playerId)->getScore() + $increment;
+    return self::DB()->update(['player_score' => $value], $playerId);
   }
 
-  public static function setPlayerScoreAux($pId, $value)
+  public static function setPlayerScoreAux($playerId, $value)
   {
-    return self::DB()->update(['player_score_aux' => $value], $pId);
+    return self::DB()->update(['player_score_aux' => $value], $playerId);
   }
 
-  public static function setPlayerScore($pId, $value)
+  public static function setPlayerScore($playerId, $value)
   {
-    return self::DB()->update(['player_score' => $value], $pId);
+    return self::DB()->update(['player_score' => $value], $playerId);
   }
 
-  // public static function setLoyalty($pId, $coalition)
-  // {
-  //   return self::DB()->update(['loyalty' => $coalition], $pId);
-  // }
 
-  public function getMany($pIds)
+  public function getMany($playerIds)
   {
     $players = self::DB()
-      ->whereIn($pIds)
+      ->whereIn($playerIds)
       ->get();
     return $players;
   }
@@ -135,20 +121,20 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
 
   public function getNextId($player)
   {
-    $pId = is_int($player) ? $player : $player->getId();
+    $playerId = is_int($player) ? $player : $player->getId();
 
     $table = Game::get()->getNextPlayerTable();
-    return (int) $table[$pId];
+    return (int) $table[$playerId];
   }
 
   public function getPrevId($player)
   {
-    $pId = is_int($player) ? $player : $player->getId();
+    $playerId = is_int($player) ? $player : $player->getId();
 
     $table = Game::get()->getPrevPlayerTable();
-    $pId = (int) $table[$pId];
+    $playerId = (int) $table[$playerId];
 
-    return $pId;
+    return $playerId;
   }
 
   /*
@@ -162,10 +148,10 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
   /*
    * getUiData : get all ui data of all players
    */
-  public static function getUiData($pId)
+  public static function getUiData($playerId)
   {
-    return self::getAll()->map(function ($player) use ($pId) {
-      return $player->jsonSerialize($pId);
+    return self::getAll()->map(function ($player) use ($playerId) {
+      return $player->jsonSerialize($playerId);
     });
   }
 
@@ -189,8 +175,8 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
    */
   public function activeNext()
   {
-    $pId = self::getActiveId();
-    $nextPlayer = self::getNextId((int) $pId);
+    $playerId = self::getActiveId();
+    $nextPlayer = self::getNextId((int) $playerId);
 
     Game::get()->gamestate->changeActivePlayer($nextPlayer);
     return $nextPlayer;
@@ -199,8 +185,8 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
   /**
    * This allow to change active player
    */
-  public function changeActive($pId)
+  public function changeActive($playerId)
   {
-    Game::get()->gamestate->changeActivePlayer($pId);
+    Game::get()->gamestate->changeActivePlayer($playerId);
   }
 }

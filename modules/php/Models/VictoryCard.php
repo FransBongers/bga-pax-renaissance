@@ -15,4 +15,15 @@ class VictoryCard extends Card
     'titleInactive',
     'type',
   ];
+
+  public function jsonSerialize()
+  {
+    $data = parent::jsonSerialize();
+
+    return array_merge($data, [
+      'titleActive' => $this->titleActive,
+      'titleInactive' => $this->titleInactive,
+      'type' => $this->type,
+    ]);
+  }
 }

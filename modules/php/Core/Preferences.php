@@ -33,11 +33,11 @@ class Preferences extends \PaxRenaissance\Helpers\DB_Manager
     foreach ($preferences as $id => $data) {
       $defaultValue = $data['default'] ?? array_keys($data['values'])[0];
 
-      foreach ($players as $pId => $infos) {
+      foreach ($players as $playerId => $infos) {
         $values[] = [
-          'player_id' => $pId,
+          'player_id' => $playerId,
           'pref_id' => $id,
-          'pref_value' => $prefs[$pId][$id] ?? $defaultValue,
+          'pref_value' => $prefs[$playerId][$id] ?? $defaultValue,
         ];
       }
     }
@@ -63,10 +63,10 @@ class Preferences extends \PaxRenaissance\Helpers\DB_Manager
     foreach ($preferences as $id => $data) {
       $defaultValue = $data['default'] ?? array_keys($data['values'])[0];
 
-      foreach ($playerIds as $pId) {
-        if (self::get($pId, $id) == null) {
+      foreach ($playerIds as $playerId) {
+        if (self::get($playerId, $id) == null) {
           $values[] = [
-            'player_id' => $pId,
+            'player_id' => $playerId,
             'pref_id' => $id,
             'pref_value' => $defaultValue,
           ];
@@ -84,11 +84,11 @@ class Preferences extends \PaxRenaissance\Helpers\DB_Manager
   /**
    * Get UI data (useful to check inconsistency)
    */
-  public static function getUiData($pId)
+  public static function getUiData($playerId)
   {
     self::checkExistence();
     return self::DB()
-      ->where('player_id', $pId)
+      ->where('player_id', $playerId)
       ->get()
       ->toArray();
   }
@@ -96,11 +96,11 @@ class Preferences extends \PaxRenaissance\Helpers\DB_Manager
   /*
    * Get a user preference
    */
-  public static function get($pId, $prefId)
+  public static function get($playerId, $prefId)
   {
     return self::DB()
       ->select(['pref_value'])
-      ->where('player_id', $pId)
+      ->where('player_id', $playerId)
       ->where('pref_id', $prefId)
       ->get(true)['pref_value'] ?? null;
   }
@@ -108,11 +108,11 @@ class Preferences extends \PaxRenaissance\Helpers\DB_Manager
   /*
    * Set a user preference
    */
-  public static function set($pId, $prefId, $value)
+  public static function set($playerId, $prefId, $value)
   {
     return self::DB()
       ->update(['pref_value' => $value])
-      ->where('player_id', $pId)
+      ->where('player_id', $playerId)
       ->where('pref_id', $prefId)
       ->run();
   }

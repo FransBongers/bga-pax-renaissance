@@ -13,42 +13,9 @@ class SeqNode extends AbstractNode
     $this->info['type'] = NODE_SEQ;
   }
 
-  /**
-   * The description of the node is the sequence of description of its children
-   */
-  public function getDescriptionSeparator()
-  {
-    return ', ';
-  }
 
   /**
-   * A SEQ node is doable if all its children are doable (or if the SEQ node itself is optional)
-   * WARNING: this is a very basic check that does not cover the case where the first action might make the second one doable
-   *  -> maybe it would make more sense to only check first action ?
-   */
-  // public function isDoable($player)
-  // {
-  //   return $this->childsReduceAnd(function ($child) use ($player) {
-  //     return $child->isDoable($player) || $child->isOptional();
-  //   });
-  // }
-
-  // public function getUndoableMandatoryNode($player)
-  // {
-  //   if ($this->isOptional()) {
-  //     return null;
-  //   }
-  //   foreach ($this->children as $child) {
-  //     $node = $child->getUndoableMandatoryNode($player);
-  //     if (!is_null($node)) {
-  //       return $node;
-  //     }
-  //   }
-  //   return null;
-  // }
-
-  /**
-   * An SEQ node is resolved either when marked as resolved, either when all children are resolved already
+   * An SEQ node is resolved either when marked as resolved or when all children are resolved already
    *  => if the node was actually an action node and is not resolved fully yet => go back to him
    */
   public function isResolved()
@@ -68,9 +35,9 @@ class SeqNode extends AbstractNode
       return null;
     }
 
-    if ($this->isOptional()) {
-      return $this;
-    }
+    // if ($this->isOptional()) {
+    //   return $this;
+    // }
 
     foreach ($this->children as $child) {
       if (!$child->isResolved()) {
@@ -78,15 +45,4 @@ class SeqNode extends AbstractNode
       }
     }
   }
-
-  // /**
-  //  * We only enter this function if the user decide to enter the SEQ (in the case where the node is optional)
-  //  */
-  // public function choose($childIndex, $auto = false)
-  // {
-  //   if ($childIndex != 0) {
-  //     throw new \BgaVisibleSystemException('SEQ Choice shouldnt happen with $childIndex different from 0');
-  //   }
-  //   $this->infos['optional'] = false; // Mark the node as mandatory
-  // }
 }

@@ -15,19 +15,26 @@ class PRPlayer {
   private player: PaxRenaissancePlayerData;
   public counters: {
     cardsWest?: IconCounter;
-    cardsEast?:IconCounter;
+    cardsEast?: IconCounter;
     florins?: IconCounter;
-  }
+  };
+  private hand: LineStock<TableauCard>;
 
-  constructor({ game, player }: { game: PaxRenaissanceGame; player: PaxRenaissancePlayerData }) {
+  constructor({
+    game,
+    player,
+  }: {
+    game: PaxRenaissanceGame;
+    player: PaxRenaissancePlayerData;
+  }) {
     // console.log("Player", player);
     this.game = game;
     const playerId = player.id;
     this.playerId = Number(playerId);
     this.player = player;
     this.playerName = player.name;
-    this.playerColor = player.color;
-    // this.playerHexColor = player.hexColor;
+    this.playerColor = COLOR_MAP[player.color];
+    this.playerHexColor = player.color;
     const gamedatas = game.gamedatas;
 
     // if (this.playerId === this.game.getPlayerId()) {
@@ -45,50 +52,102 @@ class PRPlayer {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  updatePlayer({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+  updatePlayer({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {}
 
-
+  private setupHand({
+    gamedatas,
+    player,
+  }: {
+    gamedatas: PaxRenaissanceGamedatas;
+    player: PaxRenaissancePlayerData;
+  }) {
+    this.counters.cardsEast.setValue(player.hand.counts.east);
+    this.counters.cardsWest.setValue(player.hand.counts.west);
+    if (this.playerId === this.game.getPlayerId()) {
+      
+      this.game.hand.getStock().addCards(player.hand.cards);
+    }
   }
 
   // Setup functions
-  setupPlayer({ gamedatas, player }: { gamedatas: PaxRenaissanceGamedatas; player: PaxRenaissancePlayerData }) {
+  setupPlayer({
+    gamedatas,
+    player,
+  }: {
+    gamedatas: PaxRenaissanceGamedatas;
+    player: PaxRenaissancePlayerData;
+  }) {
     const playerGamedatas = gamedatas.players[this.playerId];
-    this.setupPlayerTableau({playerGamedatas})
+    this.setupPlayerTableau({ playerGamedatas });
     this.setupPlayerPanel({ playerGamedatas, player });
-
+    this.setupHand({ gamedatas, player });
   }
 
-  setupPlayerPanel({ playerGamedatas, player }: { playerGamedatas: BgaPlayer; player: PaxRenaissancePlayerData }) {
-    const playerBoardDiv: HTMLElement = $('player_board_' + this.playerId);
-    playerBoardDiv.insertAdjacentHTML('beforeend', tplPlayerPanel({playerId: this.playerId}));
-    const node = document.getElementById(`pr_player_panel_${this.playerId}`);
+  setupPlayerPanel({
+    playerGamedatas,
+    player,
+  }: {
+    playerGamedatas: BgaPlayer;
+    player: PaxRenaissancePlayerData;
+  }) {
+    const playerBoardDiv: HTMLElement = $("player_board_" + this.playerId);
+    playerBoardDiv.insertAdjacentHTML(
+      "beforeend",
+      tplPlayerPanel({ playerId: this.playerId })
+    );
+    // const node = document.getElementById(`pr_player_panel_${this.playerId}`);
 
     this.counters = {
-      cardsWest: new IconCounter({containerId: `pr_player_panel_icons_${this.playerId}`, extraIconClasses: 'pr_card_back_icon', icon: 'west_back', iconCounterId: `pr_cards_west_counter_${this.playerId}`, initialValue: 0}),
-      cardsEast: new IconCounter({containerId: `pr_player_panel_icons_${this.playerId}`, extraIconClasses: 'pr_card_back_icon', icon: 'east_back', iconCounterId: `pr_cards_east_counter_${this.playerId}`, initialValue: 0}),
-      florins: new IconCounter({containerId: `pr_player_panel_icons_${this.playerId}`, icon: 'florin', iconCounterId: `pr_florins_counter_${this.playerId}`, initialValue: player.florins}),
+      cardsWest: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_card_back_icon",
+        icon: "west_back",
+        iconCounterId: `pr_cards_west_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
+      cardsEast: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_card_back_icon",
+        icon: "east_back",
+        iconCounterId: `pr_cards_east_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
+      florins: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        icon: "florin",
+        iconCounterId: `pr_florins_counter_${this.playerId}`,
+        initialValue: player.florins,
+      }),
     };
+
+    if (COLORS_WITH_SHADOW.includes(this.getColor())) {
+      const node = document.getElementById(`player_name_${this.playerId}`);
+      if (node) {
+        node.setAttribute("data-shadow", "true");
+      }
+    }
 
     this.updatePlayerPanel({ playerGamedatas });
   }
 
   setupPlayerTableau({ playerGamedatas }: { playerGamedatas: BgaPlayer }) {
     document
-    .getElementById(`pr_player_tableau_${this.playerId}`)
-    .insertAdjacentHTML("beforeend", tplPlayerTableauContent({playerGamedatas}));
+      .getElementById(`pr_player_tableau_${this.playerId}`)
+      .insertAdjacentHTML(
+        "beforeend",
+        tplPlayerTableauContent({ playerGamedatas })
+      );
   }
 
   updatePlayerPanel({ playerGamedatas }: { playerGamedatas: BgaPlayer }) {
-
     if (this.game.framework().scoreCtrl?.[this.playerId]) {
-      this.game.framework().scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
+      this.game
+        .framework()
+        .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
     }
-
   }
 
-  clearInterface() {
-
-  }
+  clearInterface() {}
 
   // ..######...########.########.########.########.########...######.
   // .##....##..##..........##.......##....##.......##.....##.##....##
@@ -138,4 +197,26 @@ class PRPlayer {
   // .##.....##.##....##....##.....##..##.....##.##...###.##....##
   // .##.....##..######.....##....####..#######..##....##..######.
 
+  public async addCardToHand({ card }: { card: TableauCard }): Promise<void> {
+    if (this.getPlayerId() === this.game.getPlayerId()) {
+      await this.game.hand.addCard(card);
+    } else {
+      const element = this.game.cardManager.getCardElement(card);
+      await moveToAnimation({
+        game: this.game,
+        element,
+        toId: `overall_player_board_${this.playerId}`,
+        remove: true,
+      });
+      this.game.cardManager.removeCard(card);
+    }
+    this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(1);
+  }
+
+  public async removeCardFromHand({ card }: { card: TableauCard }): Promise<void> {
+    if (this.getPlayerId() === this.game.getPlayerId()) {
+      await this.game.hand.removeCard(card);
+    }
+    this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(-1);
+  }
 }

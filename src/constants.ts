@@ -12,6 +12,8 @@ const COLOR_MAP = {
   ffce00: YELLOW,
 };
 
+const COLORS_WITH_SHADOW = [GREEN, YELLOW];
+
 /**
  * Class names
  */
@@ -25,6 +27,11 @@ const PR_SELECTED = "pr_selected";
  */
 const WEST = "west";
 const EAST = "east";
+
+const CARDINAL_DIRECTIONS = [
+  WEST,
+  EAST,
+]
 
 // Card types
 const EMPIRE_CARD = "empireCard";
@@ -44,6 +51,21 @@ const ARAGON = "aragon";
 const PAPAL_STATES = "papal_states";
 const OTTOMAN = "ottoman";
 const MAMLUK = "mamluk";
+
+/**
+ * Victory cards
+ */
+const VICTORY_RENAISSANCE = "victory_renaissance";
+const VICTORY_GLOBALIZATION = "victory_globalization";
+const VICTORY_IMPERIAL = "victory_imperial";
+const VICTORY_HOLY = "victory_holy";
+
+const VICTORY_SQUARES = [
+  VICTORY_RENAISSANCE,
+  VICTORY_GLOBALIZATION,
+  VICTORY_IMPERIAL,
+  VICTORY_HOLY,
+];
 
 /**
  * cities

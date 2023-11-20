@@ -11,7 +11,7 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
     return [
       'id' => $row['stats_id'],
       'type' => $row['stats_type'],
-      'pId' => $row['stats_player_id'],
+      'playerId' => $row['stats_player_id'],
       'value' => $row['stats_value'],
     ];
   }
@@ -34,7 +34,7 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
     $existingStats = self::DB()
       ->get()
       ->map(function ($stat) {
-        return $stat['type'] . ',' . ($stat['pId'] == null ? 'table' : 'player');
+        return $stat['type'] . ',' . ($stat['playerId'] == null ? 'table' : 'player');
       })
       ->toArray();
 
@@ -62,11 +62,11 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
       }
 
       if (!in_array($stat['id'] . ',player', $existingStats)) {
-        foreach ($playerIds as $i => $pId) {
+        foreach ($playerIds as $i => $playerId) {
           $value = $default[$stat['type']];
           $values[] = [
             'stats_type' => $stat['id'],
-            'stats_player_id' => $pId,
+            'stats_player_id' => $playerId,
             'stats_value' => $value,
           ];
         }
@@ -88,13 +88,13 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
       ->toArray();
   }
 
-  protected static function getFilteredQuery($id, $pId)
+  protected static function getFilteredQuery($id, $playerId)
   {
     $query = self::DB()->where('stats_type', $id);
-    if (is_null($pId)) {
+    if (is_null($playerId)) {
       $query = $query->whereNull('stats_player_id');
     } else {
-      $query = $query->where('stats_player_id', is_int($pId) ? $pId : $pId->getId());
+      $query = $query->where('stats_player_id', is_int($playerId) ? $playerId : $playerId->getId());
     }
     return $query;
   }
@@ -118,7 +118,7 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
       if ($match[1] == 'get') {
         // Basic getters
         $id = null;
-        $pId = null;
+        $playerId = null;
         if ($isTableStat) {
           $id = $stats['table'][$name]['id'];
         } else {
@@ -126,15 +126,15 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
             throw new \InvalidArgumentException("You need to specify the player for the stat {$name}");
           }
           $id = $stats['player'][$name]['id'];
-          $pId = $args[0];
+          $playerId = $args[0];
         }
 
-        $row = self::getFilteredQuery($id, $pId)->get(true);
+        $row = self::getFilteredQuery($id, $playerId)->get(true);
         return $row['value'];
       } elseif ($match[1] == 'set') {
         // Setters in DB and update cache
         $id = null;
-        $pId = null;
+        $playerId = null;
         $value = null;
 
         if ($isTableStat) {
@@ -145,21 +145,21 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
             throw new \InvalidArgumentException("You need to specify the player for the stat {$name}");
           }
           $id = $stats['player'][$name]['id'];
-          $pId = $args[0];
+          $playerId = $args[0];
           $value = $args[1];
         }
 
-        if (self::getFilteredQuery($id, $pId)->count() == 0) {
-          self::DB()->insert(['stats_type' => $id, 'stats_player_id' => $pId, 'stats_value' => $value]);
+        if (self::getFilteredQuery($id, $playerId)->count() == 0) {
+          self::DB()->insert(['stats_type' => $id, 'stats_player_id' => $playerId, 'stats_value' => $value]);
         } else {
-          self::getFilteredQuery($id, $pId)
+          self::getFilteredQuery($id, $playerId)
             ->update(['stats_value' => $value])
             ->run();
         }
         return $value;
       } elseif ($match[1] == 'inc') {
         $id = null;
-        $pId = null;
+        $playerId = null;
         $value = null;
 
         if ($isTableStat) {
@@ -170,11 +170,11 @@ class Stats extends \PaxRenaissance\Helpers\DB_Manager
             throw new \InvalidArgumentException("You need to specify the player for the stat {$name}");
           }
           $id = $stats['player'][$name]['id'];
-          $pId = $args[0];
+          $playerId = $args[0];
           $value = $args[1] ?? 1;
         }
 
-        self::getFilteredQuery($id, $pId)
+        self::getFilteredQuery($id, $playerId)
           ->inc(['stats_value' => $value])
           ->run();
         return $value;

@@ -1,20 +1,23 @@
 @use "sass:math";
 @use "sass:map";
-@use 'base';
+@use "base";
 
-.pr_card.pr_selectable {
+.pr_card.pr_selectable, .pr_square_card.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px base.$selectable-color !important;
 }
 
-.pr_card.pr_selectable:hover {
-  /* border: 2px blue solid; */
-  cursor: pointer !important;
-  box-shadow: 0px 0px 0px 4px base.$selected-color !important;
-}
+// .pr_card.pr_selectable:hover, .pr_square_card.pr_selectable:hover {
+//   /* border: 2px blue solid; */
+//   cursor: pointer !important;
+//   box-shadow: 0px 0px 0px 4px base.$selected-color !important;
+// }
 
-.pr_card.pr_selected {
+.pr_card.pr_selected,
+.pr_square_card.pr_selected,
+.pr_card.pr_selectable:hover,
+.pr_square_card.pr_selectable:hover {
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px base.$selected-color !important;
@@ -36,7 +39,7 @@
   position: relative !important;
 }
 
-.pr_card[data-card-id=null] {
+.pr_card[data-card-id="null"] {
   opacity: 0;
   // background-color: yellow;
 }
@@ -45,15 +48,15 @@
   box-sizing: border-box;
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 151px);
-  background-size: 100% 100%;
-  position: absolute;
+  // background-size: 100% 100%;
+  // position: absolute;
   background-repeat: no-repeat;
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
 }
 
-.pr_square_card[data-card-id=null] {
+.pr_square_card[data-card-id="null"] {
   opacity: 0;
   // background-color: yellow;
 }
@@ -100,7 +103,7 @@ $east-cards1: (
   37: "PREN098X",
   38: "PREN099X",
   39: "PREN100X",
-  40: "PREN101X"
+  40: "PREN101X",
 );
 
 @for $i from 1 through 40 {
@@ -147,7 +150,7 @@ $east-cards2: (
   32: "PREN168X",
   33: "EAST_BACK",
   34: "COMET1",
-  35: "COMET2"
+  35: "COMET2",
 );
 
 @for $i from 1 through 35 {
@@ -268,7 +271,7 @@ $west-cards2: (
   52: "PREN162X",
   53: "WEST_BACK",
   54: "COMET3",
-  55: "COMET4"
+  55: "COMET4",
 );
 
 @for $i from 1 through 55 {

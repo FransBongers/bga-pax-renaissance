@@ -50,9 +50,7 @@ use PaxRenaissance\Managers\PlayersExtra;
 class PaxRenaissance extends Table
 {
     use PaxRenaissance\DebugTrait;
-    use PaxRenaissance\States\DispatchActionTrait;
     use PaxRenaissance\States\EngineTrait;
-    use PaxRenaissance\States\PlayerActionTrait;
     use PaxRenaissance\States\TurnTrait;
 
     public static $instance = null;
@@ -117,16 +115,17 @@ class PaxRenaissance extends Table
     /*
         getAllDatas: 
     */
-    public function getAllDatas($pId = null)
+    public function getAllDatas($playerId = null)
     {
-        $pId = $pId ?? Players::getCurrentId();
+        $playerId = $playerId ?? Players::getCurrentId();
 
         $data = [
             'canceledNotifIds' => Log::getCanceledNotifIds(),
             'gameMap' => MapBoard::getUiData(),
             'market' => Market::getUiData(),
-            'players' => Players::getUiData($pId),
+            'players' => Players::getUiData($playerId),
             'chessPieces' => ChessPieces::getAll()->toArray(),
+            'victoryCards' => Cards::getVictoryCards(),
         ];
 
         return $data;
@@ -159,7 +158,7 @@ class PaxRenaissance extends Table
         Notifications::message(clienttranslate('${tkn_playerName} end the game'), [
             'player' => Players::get(),
         ]);
-        $this->nextState('gameEnd');
+        $this->gamestate->nextState('gameEnd');
     }
 
 

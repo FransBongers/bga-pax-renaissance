@@ -35,14 +35,6 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
   //////////////////////////////////
   //////////////////////////////////
 
-  /**
-   * getOfPlayer: return the cards in the hand of given player
-   */
-  // public static function getOfPlayer($pId)
-  // {
-  //   return self::getInLocation(['hand', $pId]);
-  // }
-
   public static function getOfType($type)
   {
     return self::getSelectQuery()
@@ -59,15 +51,6 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
       ->get()
       ->toArray();
   }
-
-  // public static function getOfTypeInLocation($type, $location)
-  // {
-  //   return self::getSelectQuery()
-  //     ->where(static::$prefix . 'id', 'LIKE', $type . '%')
-  //     ->where(static::$prefix . 'location', $location)
-  //     ->get()
-  //     ->toArray();
-  // }
 
   // ..######..########.########.##.....##.########.
   // .##....##.##..........##....##.....##.##.....##

@@ -31,29 +31,23 @@ class Hand {
     this.hand = new LineStock<TableauCard>(
       this.game.cardManager,
       document.getElementById("pr_player_hand"),
-      { wrap: "wrap" }
+      { wrap: "wrap", gap: '12px', center: false }
     );
   }
 
-  public async addCard(card: TableauCard) {
-    this.hand.addCard(card);
-    // // Add card with show in center animation
-    // if (this.game.cardManager.animationsActive()) {
-    //   const cardDiv = this.game.cardManager.getCardElement(card);
-    //   cardDiv.style.zIndex = "20";
-    //   await this.game.animationManager.playSequence([
-    //     new BgaShowScreenCenterAnimation({
-    //       element: cardDiv,
-    //       transitionTimingFunction: "ease-in-out",
-    //     }),
-    //     new BgaPauseAnimation({}),
-    //   ]);
-    //   cardDiv.style.removeProperty("z-index");
-    //   // opponentHandDiv.dataset.animated = 'false';
-    //   await this.hand.addCard(card);
-    // } else {
-    //   debug("no animations active");
-    //   this.hand.addCard(card);
-    // }
+  public async addCard(card: TableauCard): Promise<void> {
+    await this.hand.addCard(card);
+  }
+
+  public async removeCard(card: TableauCard): Promise<void> {
+    await this.hand.removeCard(card);
+  }
+
+  public getCards(): TableauCard[] {
+    return this.hand.getCards();
+  }
+
+  public getStock(): LineStock<TableauCard> {
+    return this.hand;
   }
 }

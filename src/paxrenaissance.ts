@@ -18,12 +18,15 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public playerManager: PlayerManager;
   public tooltipManager: TooltipManager;
   public playAreaScale: number;
+  public victoryCardManager: VictoryCardManager;
 
   private _notif_uid_to_log_id = {};
   private _last_notif = null;
   public _connections: unknown[];
 
   public activeStates: {
+    confirmTurn: ConfirmTurnState;
+    flipVictoryCard: FlipVictoryCardState;
     playerAction: PlayerActionState;
   };
 
@@ -56,17 +59,21 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this._connections = [];
     // Will store all data for active player and gets refreshed with entering player actions state
     this.activeStates = {
+      confirmTurn: new ConfirmTurnState(this),
+      flipVictoryCard: new FlipVictoryCardState(this),
       playerAction: new PlayerActionState(this),
     };
 
-    this.animationManager = new AnimationManager(this, { duration: 1000 });
+    this.animationManager = new AnimationManager(this, { duration: 500 });
     this.setupCardManagers();
 
     this.gameMap = new GameMap(this);
     this.tooltipManager = new TooltipManager(this);
+    this.hand = new Hand(this);
     this.playerManager = new PlayerManager(this);
     this.market = new Market(this);
-    this.hand = new Hand(this);
+    this.victoryCardManager = new VictoryCardManager(this);
+
     this.updatePlayAreaSize();
     window.addEventListener("resize", () => {
       this.updatePlayAreaSize();
@@ -142,8 +149,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
         div.style.width = "calc(var(--paxRenCardScale) * 151px)";
         div.style.height = "calc(var(--paxRenCardScale) * 230px)";
       },
-      cardWidth: 151,
-      cardHeight: 230,
+      // cardWidth: 151,
+      // cardHeight: 230,
       // selectableCardClass: PR_SELECTABLE,
       // selectedCardClass: PR_SELECTED,
       isCardVisible: ({ location }) => {
@@ -183,6 +190,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
       this.activeStates[stateName]
     ) {
       this.activeStates[stateName].onEnteringState(args.args);
+    } else if (this.activeStates[stateName]) {
+      this.activeStates[stateName].setDescription(Number(args.active_player));
     }
   }
 
@@ -232,150 +241,27 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public onUpdateActionButtons(stateName: string, args: any) {
     return;
     if (this.framework().isCurrentPlayerActive()) {
-      // this.addPrimaryActionButton({
-      //   id: "end_game_button",
-      //   text: _("End game"),
-      //   callback: () => this.takeAction({ action: "endGame" }),
-      // });
-
-      // this.addPrimaryActionButton({
-      //   id: "add_card_button",
-      //   text: _("Add card to hand"),
-      //   callback: () => {
-      //     // add a card
-      //     let card = this.market
-      //       .getStock({ region: EAST, column: 1 })
-      //       .getCards()[0];
-      //     if (!card) {
-      //       card = this.market
-      //         .getStock({ region: EAST, column: 2 })
-      //         .getCards()[0];
-      //     }
-      //     if (!card) {
-      //       card = this.market
-      //         .getStock({ region: EAST, column: 3 })
-      //         .getCards()[0];
-      //     }
-
-      //     this.hand.addCard(card);
-      //   },
-      // });
-
       this.addPrimaryActionButton({
-        id: "florins_button",
-        text: _("Move Florins"),
+        id: "draw_button",
+        text: _("Draw Card"),
         callback: async () => {
-          let promises: Promise<boolean>[] = [];
-          for (let i = 0; i < 2; i++) {
-            setTimeout(
-              () => promises.push(this.moveFlorin({ index: i })),
-              i * 100
-            );
-          }
-          const results = await Promise.all(promises);
-          return results.some((result) => result);
-          // this.playerManager.getPlayer({ playerId }).incCounter({ counter: 'rupees', value: rupees });
+          // async drawCard(card: TableauCard): Promise<void> {
+          //   await this.decks[card.region].addCard(card);
+          //   // await this.getDeck({region: card.region}).
+          //   const [_, region, column] = card.location.split('_');
+          //   await this.getStock({region, column: Number(column)}).addCard(card);
+          // }
+          const card = this.gamedatas.testCard;
+          card.location = "market_west_5";
+          await this.market.drawCard(card);
+          // const card = this.market.getStock({region: WEST, column: 1}).getCards()[0];
+          // const element = this.market.getStock({region: WEST, column: 1}).getCardElement(card);
+          // await moveToAnimation({game: this, element, toId: 'overall_player_board_2371053', remove: true});
+          // element.remove();
+          // this.cardManager.removeCard(card);
+          // console.log("after move");
         },
       });
-      //   /**
-      //    * Add an array of cards to the stock.
-      //    *
-      //    * @param cards the cards to add
-      //    * @param animation a `CardAnimation` object
-      //    * @param settings a `AddCardSettings` object
-      //    * @param shift if number, the number of milliseconds between each card. if true, chain animations
-      //    */
-      //   public async addCards(cards: T[], animation?: CardAnimation<T>, settings?: AddCardSettings, shift: number | boolean = false): Promise<boolean> {
-      //     if (!this.manager.animationsActive()) {
-      //         shift = false;
-      //     }
-      //     let promises: Promise<boolean>[] = [];
-
-      //     if (shift === true) {
-      //         if (cards.length) {
-      //             const result = await this.addCard(cards[0], animation, settings);
-      //             const others = await this.addCards(cards.slice(1), animation, settings, shift);
-      //             return result || others;
-      //         }
-      //     } else if (typeof shift === 'number') {
-      //         for (let i=0; i<cards.length; i++) {
-      //             setTimeout(() => promises.push(this.addCard(cards[i], animation, settings)), i * shift);
-      //         }
-      //     } else {
-      //         promises = cards.map(card => this.addCard(card, animation, settings));
-      //     }
-
-      //     const results = await Promise.all(promises);
-      //     return results.some(result => result);
-      // }
-
-      // this.addPrimaryActionButton({
-      //   id: "deal_card_button",
-      //   text: _("Deal card"),
-      //   callback: async () => {
-      //     // add a card
-      //     const card: TableauCard = {
-      //       flavorText: [
-      //         'When faced with a heretic, the papacy had two solu…rced conversion or "auto-da-fé" (public burning).',
-      //         "Pope Innocent VIII preferred burning. In 1484 he i…man inquisition against witchcraft and magicians.",
-      //         "He then confirmed Torquemada as the Grand Inquisit… a crusade against Waldensian heretics in France.",
-      //       ],
-      //       id: "PREN001_InquistionPope",
-      //       location: "market_west_3",
-      //       name: "Inquistion Pope",
-      //       region: "west",
-      //       state: 0,
-      //       type: "tableauCard",
-      //       used: 0,
-      //     };
-      //     await this.market.getDeck({ region: WEST }).addCard({
-      //       ...card,
-      //       location: 'deck',
-      //     });
-      //     // this.market.getStock({ column: 6, region: WEST }).flipCard({
-      //     //   ...card,
-      //     //   location: 'deck',
-      //     // });
-      //     await this.market.getStock({region: WEST, column: 5}).addCard(card, {fromStock: this.market.getDeck({region: WEST})});
-      //     // console.log("source stock", this.stock.getCards());
-      //     // await this.stockDest.addCard(card, undefined, { visible: false });
-      //     // console.log("source stock after", this.stock.getCards());
-      //   },
-      // });
-
-      // this.addPrimaryActionButton({
-      //   id: "move_card_button",
-      //   text: _("Move card"),
-      //   callback: async () => {
-      //     // add a card
-      //     const card = {
-      //       id: "PREN007_PetersPence",
-      //       type: 3,
-      //       type_arg: 2,
-      //       location: "table",
-      //       location_arg: 0,
-      //     };
-      //     console.log('source stock', this.stock.getCards());
-      //     await this.stockDest.addCard(card, undefined, {visible: false});
-      //     console.log('source stock after', this.stock.getCards());
-      //   },
-      // });
-
-      // this.addPrimaryActionButton({
-      //   id: "flip_card_button",
-      //   text: _("Flip card"),
-      //   callback: () => {
-      //     // add a card
-      //     const card = {
-      //       id: "PREN007_PetersPence",
-      //       type: 3,
-      //       type_arg: 2,
-      //       location: "table",
-      //       location_arg: 0,
-      //     };
-      //     this.stock.flipCard(card);
-      //   },
-      // });
     }
 
     // console.log('onUpdateActionButtons: ' + stateName);
@@ -568,14 +454,18 @@ class PaxRenaissance implements PaxRenaissanceGame {
   clientUpdatePageTitle({
     text,
     args,
+    nonActivePlayers = false,
   }: {
     text: string;
     args: Record<string, string | number>;
+    nonActivePlayers?: boolean;
   }) {
-    this.gamedatas.gamestate.descriptionmyturn = this.format_string_recursive(
-      _(text),
-      args
-    );
+    const title = this.format_string_recursive(_(text), args);
+    if (nonActivePlayers) {
+      this.gamedatas.gamestate.description = title;
+    } else {
+      this.gamedatas.gamestate.descriptionmyturn = title;
+    }
     this.framework().updatePageTitle();
   }
 
@@ -722,7 +612,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     const data = {
       lock: true,
       args: JSON.stringify(args),
-    }
+    };
     // data.
     const gameName = this.framework().game_name;
     this.framework().ajaxcall(
