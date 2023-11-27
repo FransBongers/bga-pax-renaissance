@@ -35,6 +35,26 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
   //////////////////////////////////
   //////////////////////////////////
 
+  public static function getUiData()
+  {
+    $data = [
+      'inPlay' => ChessPieces::getSelectQuery()->where('piece_location', 'NOT LIKE', 'supply%')->get()->toArray(),
+      'supply' => [
+        CATHOLIC => [],
+        ISLAMIC => [],
+        REFORMIST => [],
+      ],
+    ];
+
+    foreach (RELIGIONS as $religion) {
+      $data['supply'][$religion][BISHOP] = count(ChessPieces::getInLocation(Locations::supply(BISHOP, $religion)));
+      $data['supply'][$religion][KNIGHT] = count(ChessPieces::getInLocation(Locations::supply(KNIGHT, $religion)));
+      $data['supply'][$religion][ROOK] = count(ChessPieces::getInLocation(Locations::supply(ROOK, $religion)));
+    }
+
+    return $data;
+  }
+
   public static function getOfType($type)
   {
     return self::getSelectQuery()
@@ -66,77 +86,101 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
   public static function setupNewGame($players = null, $options = null)
   {
     self::setupCreateTokens();
-    self::setupPlaceChessPieces($players,$options);
+    self::setupPlaceChessPieces($players, $options);
+    self::setupPlaceStartingConcessions($players, $options);
   }
 
   public function setupCreateTokens()
   {
     $chessPieces = [];
-    foreach(RELIGIONS as $religion) {
+    $setup = [
+      [BISHOP, CATHOLIC, 5],
+      [BISHOP, ISLAMIC, 5],
+      [BISHOP, REFORMIST, 5],
+      [KNIGHT, CATHOLIC, 10],
+      [KNIGHT, ISLAMIC, 7],
+      [KNIGHT, REFORMIST, 7],
+      [ROOK, CATHOLIC, 10],
+      [ROOK, ISLAMIC, 7],
+      [ROOK, REFORMIST, 7],
+      [PIRATE, CATHOLIC, 6],
+      [PIRATE, ISLAMIC, 4],
+      [PIRATE, REFORMIST, 3],
+      [PAWN, FUGGER, 10],
+      [PAWN, MEDICI, 10],
+      [PAWN, COEUR, 10],
+      [PAWN, MARCHIONNI, 10],
+      [DISK, BLACK, 2],
+      [DISK, WHITE, 2],
+    ];
+
+    foreach ($setup as $setupRecord) {
       $chessPieces[] = [
-        "id" => "bishop_".$religion."_{INDEX}",
-        "nbr" => 5,
+        "id" => $setupRecord[0] . "_" . $setupRecord[1] . "_{INDEX}",
+        "nbr" => $setupRecord[2],
         "nbrStart" => 1,
-        "location" => Locations::bishopsSupply($religion),
-      ];
-      $chessPieces[] = [
-        "id" => "knight_".$religion."_{INDEX}",
-        "nbr" => 8,
-        "nbrStart" => 1,
-        "location" => Locations::knightsSupply($religion),
-      ];
-      $chessPieces[] = [
-        "id" => "rook_".$religion."_{INDEX}",
-        "nbr" => 8,
-        "nbrStart" => 1,
-        "location" => Locations::rooksSupply($religion),
+        "location" => Locations::supply($setupRecord[0], $setupRecord[1]),
       ];
     };
 
-    foreach(PLAYER_COLORS as $color) {
-      $chessPieces[] = [
-        "id" => "pawn_".$color."_{INDEX}",
-        "nbr" => 10,
-        "nbrStart" => 1,
-        "location" => Locations::pawnsSupply($color),
-      ];
-    }
-
     self::create($chessPieces);
-    foreach(RELIGIONS as $religion) {
-      self::shuffle(Locations::bishopsSupply($religion));
-      self::shuffle(Locations::knightsSupply($religion));
-      self::shuffle(Locations::rooksSupply($religion));
+    foreach ([BISHOP, KNIGHT, PIRATE, ROOK] as $type) {
+      foreach (RELIGIONS as $religion) {
+        self::shuffle(Locations::supply($type, $religion));
+      }
     }
 
-    foreach(PLAYER_COLORS as $color) {
-      self::shuffle(Locations::pawnsSupply($color));
+    foreach (BANKS as $bank) {
+      self::shuffle(Locations::supply(PAWN, $bank));
     }
   }
 
-  private function setupPlaceChessPieces($players,$options) {
+  private function setupPlaceChessPieces($players, $options)
+  {
     $setup = [
-      LONDON => Locations::rooksSupply(CATHOLIC),
-      PARIS => Locations::knightsSupply(CATHOLIC),
-      VIENNA => Locations::rooksSupply(CATHOLIC),
-      BUDA => Locations::knightsSupply(CATHOLIC),
-      TANA => Locations::knightsSupply(ISLAMIC),
-      TOLEDO => Locations::knightsSupply(CATHOLIC),
-      VALENCIA => Locations::knightsSupply(CATHOLIC),
-      VENICE => Locations::knightsSupply(CATHOLIC),
-      CONSTANTINOPLE_1 => Locations::rooksSupply(ISLAMIC),
-      CONSTANTINOPLE_2 => Locations::knightsSupply(ISLAMIC),
-      CONSTANTINOPLE_3 => Locations::knightsSupply(ISLAMIC),
-      CAIRO => Locations::rooksSupply(ISLAMIC),
+      LONDON => Locations::supply(ROOK, CATHOLIC),
+      PARIS => Locations::supply(KNIGHT, CATHOLIC),
+      VIENNA => Locations::supply(ROOK, CATHOLIC),
+      BUDA => Locations::supply(KNIGHT, CATHOLIC),
+      TANA => Locations::supply(KNIGHT, ISLAMIC),
+      TOLEDO => Locations::supply(KNIGHT, CATHOLIC),
+      VALENCIA => Locations::supply(KNIGHT, CATHOLIC),
+      VENICE => Locations::supply(KNIGHT, CATHOLIC),
+      CONSTANTINOPLE_1 => Locations::supply(ROOK, ISLAMIC),
+      CONSTANTINOPLE_2 => Locations::supply(KNIGHT, ISLAMIC),
+      CONSTANTINOPLE_3 => Locations::supply(KNIGHT, ISLAMIC),
+      CAIRO => Locations::supply(ROOK, ISLAMIC),
+      TIMBUKTU => Locations::supply(DISK, BLACK),
+      NOVGOROD => Locations::supply(DISK, BLACK),
+      SPICE_ISLANDS => Locations::supply(DISK, WHITE),
+      RED_SEA => Locations::supply(DISK, WHITE),
+      // TODO: remove
+      BORDER_HUNGARY_OTTOMAN => Locations::supply(PIRATE, ISLAMIC),
+      BORDER_ARAGON_PORTUGAL => Locations::supply(PIRATE, REFORMIST),
+      BORDER_OTTOMAN_PAPAL_STATES => Locations::supply(PIRATE, CATHOLIC),
     ];
 
-    foreach($setup as $city => $pool) {
+    foreach ($setup as $location => $pool) {
       $piece = self::getTopOf($pool);
       if ($piece === null) {
         // Should never happen
         continue;
       };
-      self::move($piece['id'],$city);
+      self::move($piece['id'], $location);
+    }
+  }
+
+  private function setupPlaceStartingConcessions($players, $options)
+  {
+    $players = Players::getAll();
+    foreach ($players as $playerId => $player) {
+      $bank = $player->getBank();
+      $piece = self::getTopOf(Locations::supply(PAWN, $bank));
+      if ($piece === null) {
+        // Should never happen
+        continue;
+      };
+      self::move($piece['id'], BANK_STARTING_CONCESSION_MAP[$bank]);
     }
   }
 

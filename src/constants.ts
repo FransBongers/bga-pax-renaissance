@@ -1,5 +1,14 @@
 const MIN_PLAY_AREA_WIDTH = 1516;
 
+/**
+ * Client states
+ */
+const CLIENT_START_TRADE_FAIR_STATE = 'clientStartTradeFairState';
+
+/**
+ * Player colors
+ */
+
 const BLUE = "blue";
 const GREEN = "green";
 const PURPLE = "purple";
@@ -39,18 +48,75 @@ const TABLEAU_CARD = "tableauCard";
 const VICTORY_CARD = "victoryCard";
 
 /**
+ * Chess pieces 
+ */
+const BISHOP = 'bishop';
+const DISK = 'disk'; // for busted disks
+const KNIGHT = 'knight';
+const PAWN = 'pawn';
+const PIRATE = 'pirate';
+const ROOK = 'rook';
+
+
+/**
+ * Religions
+ */
+const CATHOLIC = "catholic";
+const ISLAMIC = "islamic";
+const REFORMIST = "reformist";
+
+const RELIGIONS = [
+  CATHOLIC,
+  ISLAMIC,
+  REFORMIST
+];
+
+/**
  * Empires
  */
 const ENGLAND = "england";
 const FRANCE = "france";
-const HOLY_ROMAN_EMIRE = "holy_roman_empire";
+const HOLY_ROMAN_EMIRE = "holyRomanEmpire";
 const HUNGARY = "hungary";
 const BYZANTIUM = "byzantium";
 const PORTUGAL = "portugal";
 const ARAGON = "aragon";
-const PAPAL_STATES = "papal_states";
+const PAPAL_STATES = "papalStates";
 const OTTOMAN = "ottoman";
 const MAMLUK = "mamluk";
+
+/**
+ * Borders
+ */
+const BORDER_ARAGON_FRANCE = 'border_aragon_france';
+const BORDER_ARAGON_PAPAL_STATES = 'border_aragon_papalStates';
+const BORDER_ARAGON_PORTUGAL = 'border_aragon_portugal';
+const BORDER_BYZANTIUM_HUNGARY = 'border_byzantium_hungary';
+const BORDER_BYZANTIUM_MAMLUK = 'border_byzantium_mamluk';
+const BORDER_ENGLAND_FRANCE = 'border_england_france';
+const BORDER_ENGLAND_PORTUGAL = 'border_england_portugal';
+const BORDER_FRANCE_HOLY_ROMAN_EMPIRE = 'border_france_holyRomanEmpire';
+const BORDER_HOLY_ROMAN_EMPIRE_HUNGARY = 'border_holyRomanEmpire_hungary';
+const BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES = 'border_holyRomanEmpire_papalStates';
+const BORDER_HUNGARY_OTTOMAN = 'border_hungary_ottoman';
+const BORDER_MAMLUK_OTTOMAN = 'border_mamluk_ottoman';
+const BORDER_OTTOMAN_PAPAL_STATES = 'border_ottoman_papalStates';
+
+const BORDERS = [
+  BORDER_ARAGON_FRANCE,
+  BORDER_ARAGON_PAPAL_STATES,
+  BORDER_ARAGON_PORTUGAL,
+  BORDER_BYZANTIUM_HUNGARY,
+  BORDER_BYZANTIUM_MAMLUK,
+  BORDER_ENGLAND_PORTUGAL,
+  BORDER_ENGLAND_FRANCE,
+  BORDER_FRANCE_HOLY_ROMAN_EMPIRE,
+  BORDER_HOLY_ROMAN_EMPIRE_HUNGARY,
+  BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES,
+  BORDER_HUNGARY_OTTOMAN,
+  BORDER_MAMLUK_OTTOMAN,
+  BORDER_OTTOMAN_PAPAL_STATES,
+];
 
 /**
  * Victory cards

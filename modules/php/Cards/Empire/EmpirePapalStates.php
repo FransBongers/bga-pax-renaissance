@@ -9,6 +9,6 @@ class EmpirePapalStates extends \PaxRenaissance\Models\EmpireCard
     $this->id = 'EmpirePapalStates';
     $this->nameKing = clienttranslate('Pope Julius II');
     $this->nameRepublic = clienttranslate('Florentine Signoria');
-    $this->startLocation = 'empire_papal_states';
+    $this->startLocation = 'empire_papalStates';
   }
 }

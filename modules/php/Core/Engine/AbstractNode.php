@@ -188,6 +188,11 @@ class AbstractNode
     return $this->info['cardId'] ?? null;
   }
 
+  public function getInfo()
+  {
+    return $this->info;
+  }
+
   public function isDoable($player)
   {
     return true;

@@ -23,7 +23,8 @@
 
 #pr_game_map {
   background-image: url("img/board.webp");
-  background-size: calc(var(--paxRenMapScale) * 1500px) calc(var(--paxRenMapScale) * 1500px);
+  background-size: calc(var(--paxRenMapScale) * 1500px)
+    calc(var(--paxRenMapScale) * 1500px);
   background-repeat: no-repeat;
   // grid-column: 1 / span 1;
   // grid-row: span 1;
@@ -61,36 +62,35 @@
   background-repeat: no-repeat;
 }
 
-
 $map-cards: (
   1: "catholic_england",
   2: "catholic_france",
-  3: "catholic_holy_roman_empire",
+  3: "catholic_holyRomanEmpire",
   4: "catholic_hungary",
   5: "catholic_byzantium",
   6: "catholic_portugal",
   7: "catholic_aragon",
-  8: "catholic_papal_states",
+  8: "catholic_papalStates",
   9: "catholic_ottoman",
   10: "catholic_mamluk",
   11: "islamic_england",
   12: "islamic_france",
-  13: "islamic_holy_roman_empire",
+  13: "islamic_holyRomanEmpire",
   14: "islamic_hungary",
   15: "islamic_byzantium",
   16: "islamic_portugal",
   17: "islamic_aragon",
-  18: "islamic_papal_states",
+  18: "islamic_papalStates",
   19: "islamic_ottoman",
   20: "islamic_mamluk",
   21: "reformist_england",
   22: "reformist_france",
-  23: "reformist_holy_roman_empire",
+  23: "reformist_holyRomanEmpire",
   24: "reformist_hungary",
   25: "reformist_byzantium",
   26: "reformist_portugal",
   27: "reformist_aragon",
-  28: "reformist_papal_states",
+  28: "reformist_papalStates",
   29: "reformist_ottoman",
   30: "reformist_mamluk",
 );
@@ -107,6 +107,26 @@ $map-cards: (
   }
 }
 
+.pr_border {
+  position: absolute;
+  // background-color: yellow;
+  width: calc(var(--paxRenMapScale) * 36px);
+  height: calc(var(--paxRenMapScale) * 36px);
+  border-radius: 10%;
+  // opacity: 0.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .pr_pawn {
+    margin-bottom: 11px;
+  }
+
+  .pr_pirate {
+    margin-bottom: 8px;
+    margin-left: 2px;
+  }
+}
 
 .pr_city {
   position: absolute;
@@ -116,36 +136,23 @@ $map-cards: (
   border-radius: 50%;
   display: flex;
   justify-content: center;
+// opacity: 0.5;
+
+  .pr_chess_piece {
+    align-self: flex-end;
+  }
   
-  // opacity: 0.5;
+  .pr_disk {
+    margin-bottom: calc(var(--paxRenMapScale) * 3px);
+  }
+
+  .pr_knight {
+    margin-bottom: calc(var(--paxRenMapScale) * 4px);
+    margin-right: calc(var(--paxRenMapScale) * 4px);
+  }
+
+  .pr_rook {
+    margin-bottom: calc(var(--paxRenMapScale) * 4px);
+  }
+  
 }
-
-.pr_city > .pr_chess_piece {
-  align-self: flex-end;
-}
-
-.pr_city > .pr_rook {
-  margin-bottom: calc(var(--paxRenMapScale) * 4px);
-}
-
-.pr_city > .pr_knight {
-  margin-bottom: calc(var(--paxRenMapScale) * 4px);
-  margin-right: calc(var(--paxRenMapScale) * 4px);
-}
-
-// @each $name, $glyph in $icons {
-//   .icon-#{$name}:before {
-//     display: inline-block;
-//     font-family: "Icon Font";
-//     content: $glyph;
-//   }
-// }
-
-// #pr_location {
-//   position: absolute;
-//   background-color: yellow;
-//   width: 30px;
-//   height: 30px;
-//   top: 124px;
-//   left: 285px;
-// }

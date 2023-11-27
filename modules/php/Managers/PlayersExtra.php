@@ -27,7 +27,7 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
     $players = Players::getAll();
 
     $fuggerPlayer = Utils::array_find($players->toArray(), function ($player) {
-      return COLOR__BANK_MAP[$player->getColor()]=== FUGGER;
+      return COLOR_BANK_MAP[$player->getColor()]=== FUGGER;
     });
 
     $firstPlayer = $fuggerPlayer !== null ? $fuggerPlayer->getId() : Game::get()->getNextPlayerTable()[0];
@@ -41,7 +41,7 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
       self::DB()->insert([
         'player_id' => $playerId,
         'florins' => $florins,
-        'bank' => COLOR__BANK_MAP[$players[$playerId]->getColor()],
+        'bank' => COLOR_BANK_MAP[$players[$playerId]->getColor()],
       ]);
       $florins += 1;
     }

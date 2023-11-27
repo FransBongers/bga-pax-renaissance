@@ -89,6 +89,11 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     return intval(PlayersExtra::get($this->getId())['florins']);
   }
 
+  public function incFlorins($increment)
+  {
+    Players::incFlorins($this->getId(), $increment);
+  }
+
   public function getHand()
   {
     return Cards::getInLocation(Locations::hand($this->getId()))->toArray();

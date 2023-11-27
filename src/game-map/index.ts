@@ -33,9 +33,44 @@ class GameMap {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  setupChessPieces({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+  setupChessPiecesBorders({ gamedatas }) {
+    BORDERS.forEach((border) => {
+      const chessPiece = gamedatas.chessPieces.inPlay.find(
+        (piece) => piece.location === border
+      );
+
+      if (!chessPiece) {
+        return;
+      }
+
+      const node = document.getElementById(`pr_${border}`);
+      if (!node) {
+        return;
+      }
+
+      const type = chessPiece.id.split("_")[0];
+      const bankOrReligion = chessPiece.id.split("_")[1];
+
+      node.insertAdjacentHTML(
+        "beforeend",
+        type === PAWN
+          ? tplPawn({
+              id: chessPiece.id,
+              type,
+              bank: bankOrReligion,
+            })
+          : tplChessPiece({ id: chessPiece.id, type, religion: bankOrReligion })
+      );
+    });
+  }
+
+  setupChessPiecesCities({
+    gamedatas,
+  }: {
+    gamedatas: PaxRenaissanceGamedatas;
+  }) {
     CITIES.forEach((city) => {
-      const chessPiece = gamedatas.chessPieces.find(
+      const chessPiece = gamedatas.chessPieces.inPlay.find(
         (piece) => piece.location === city
       );
       if (!chessPiece) {
@@ -45,9 +80,16 @@ class GameMap {
       if (!node) {
         return;
       }
+      const type = chessPiece.id.split("_")[0];
+      const colorOrReligion = chessPiece.id.split("_")[1];
       node.insertAdjacentHTML(
         "beforeend",
-        tplChessPiece({ id: chessPiece.id })
+        tplChessPiece({
+          id: chessPiece.id,
+          type,
+          color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
+          religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
+        })
       );
     });
   }
@@ -77,7 +119,8 @@ class GameMap {
     });
     this.setupZoomButtons();
     this.setupEmpireCards({ gamedatas });
-    this.setupChessPieces({ gamedatas });
+    this.setupChessPiecesCities({ gamedatas });
+    this.setupChessPiecesBorders({ gamedatas });
   }
 
   setupZoomButtons() {
@@ -160,11 +203,10 @@ class GameMap {
     //   playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH
     // );
     // const mapScale = this.zoomLevel * playAreaScale;
-    
+
     // map.style.setProperty("--paxRenMapScale", `${mapScale}`);
     // map.style.setProperty("--paxRenCardScale", `${mapScale}`);
     // map.style.setProperty("--paxRenChessPieceScale", `${mapScale}`);
-    
 
     map.style.transform = `scale(${this.zoomLevel})`;
     const mapContainer = document.getElementById("pr_game_map_container");

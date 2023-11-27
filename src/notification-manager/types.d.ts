@@ -10,16 +10,17 @@ interface Log {
 
 type NotifSmallRefreshInterfaceArgs = Omit<PaxRenaissanceGamedatas, 'staticData'>;
 
-interface NotifFlipVictoryCardArgs {
+interface NotifWithPlayerArgs {
   playerId: number;
   tkn_playerName: string;
+}
+
+interface NotifFlipVictoryCardArgs extends NotifWithPlayerArgs {
   card: VictoryCard;
   tkn_cardName: string;
 }
 
-interface NotifPurchaseCardArgs {
-  playerId: number;
-  tkn_playerName: string;
+interface NotifPurchaseCardArgs extends NotifWithPlayerArgs {
   card: TableauCard;
   tkn_cardName: string;
   placedFlorins: string[];
@@ -27,8 +28,7 @@ interface NotifPurchaseCardArgs {
   discard: boolean;
 }
 
-interface NotifRefreshMarketArgs {
-  playerId: number;
+interface NotifRefreshMarketArgs extends NotifWithPlayerArgs {
   cardMoves: {
     from: string;
     to: string;
@@ -37,10 +37,32 @@ interface NotifRefreshMarketArgs {
   cardDraws: TableauCard[];
 }
 
-interface NotifSellCardArgs {
-  playerId: number;
-  tkn_playerName: string;
+interface NotifSellCardArgs extends NotifWithPlayerArgs {
   card: TableauCard;
   tkn_cardName: string;
   value: number;
+}
+
+interface NotifTradeFairConveneArgs extends NotifWithPlayerArgs {
+  region: string;
+  florinsFromChina: number;
+}
+
+interface NotifTradeFairEmporiumSubsidyArgs extends NotifWithPlayerArgs {
+  amount: number;
+  region: string;
+}
+
+interface NotifTradeFairPlaceLevyArgs extends NotifWithPlayerArgs {
+  chessPiece: ChessPiece;
+  cityId: string;
+  cityName: string;
+}
+
+interface NotifTradeFairProfitDispersalPiratesArgs {
+  region: string;
+}
+
+interface NotifTradeFairProfitDispersalPlayerArgs extends NotifWithPlayerArgs {
+  region: string;
 }

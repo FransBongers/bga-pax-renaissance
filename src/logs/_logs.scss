@@ -24,6 +24,10 @@
 
 /* ------- LOG TOKENS ------- */
 
+// #pagemaintitletext > .pp_loyalty_icon.pp_afghan {
+//   margin-bottom: -3px;
+// }
+
 #pagemaintitletext {
   .pr_icon {
     display: inline-block;
@@ -32,6 +36,12 @@
   .pr_icon[data-icon="florin"] {
     --paxRenIconScale: 0.5;
     margin-bottom: -4px;
+  }
+
+  .pr_chess_piece {
+    display: inline-block;
+    margin-bottom: -8px;
+    --paxRenChessPieceScale: 0.7;
   }
 }
 

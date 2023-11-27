@@ -10,16 +10,21 @@ interface CommonArgs {
 }
 
 interface PurchaseAction {
-  action: 'PURCHASE_CARD';
+  action: "PURCHASE_CARD";
   cards: TableauCard[];
 }
 
 interface PlayAction {
-  action: 'PLAY_CARD';
+  action: "PLAY_CARD";
   cards: TableauCard[];
 }
 
 type PaxRenAction = PurchaseAction | PlayAction;
+
+interface OnEnteringClientStartTradeFairArgs {
+  card: TableauCard;
+  city: City;
+}
 
 interface OnEnteringConfirmTurnArgs extends CommonArgs {}
 
@@ -30,4 +35,27 @@ interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
 interface OnEnteringPlayerActionArgs extends CommonArgs {
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];
+  tradeFair: {
+    east?: {
+      card: TableauCard;
+      city: City;
+    };
+    west?: {
+      card: TableauCard;
+      city: City;
+    };
+  };
+}
+
+interface OnEnteringTradeFairLevyArgs extends CommonArgs {
+  empire: Empire;
+  possibleLevies: {
+    [cityId: string]: {
+      cityName: string;
+      levy: {
+        levyIcon: string;
+        religion: string;
+      };
+    };
+  };
 }

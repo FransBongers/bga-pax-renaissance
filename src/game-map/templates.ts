@@ -1,8 +1,11 @@
-const tplChessPiece = ({ id }: { id: string }) => {
-  const type = id.split("_")[0];
-  const religion = id.split("_")[1];
-  return `<div id="${id}" class="pr_chess_piece pr_${type}" data-religion="${religion}"></div>`;
+const tplChessPiece = ({ id, type, religion, color }: { id?: string; type: string; religion?: string; color?: string; }) => {
+  return `<div ${id ? `id="${id}"` : ''} class="pr_chess_piece pr_${type}" ${religion ? `data-religion="${religion}"` : ''}${color ? `data-color="${color}"` : ''}></div>`;
 };
+
+const tplPawn = ({ id, type, bank }: { id: string; type: string; bank: string; }) => {
+  return `<div id="${id}" class="pr_chess_piece pr_${type}" data-bank="${bank}"></div>`;
+};
+
 
 // <div id="pr_market_west_${index}_florins" class="pr_icon pr_none" data-icon="florin" data-region="west">
 // <span id="pr_market_west_${index}_counter" class="pr_counter">5</span>
@@ -67,6 +70,10 @@ const tplGameMapEmpireCards = () => `
     .join("")}
 `;
 
+const tplGameMapMapBorders = () => {
+  return Object.entries(BORDER_CONFIG).map(([border, coords]) => `<div id="pr_${border}" class="pr_border" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`).join('');
+}
+
 const tplGameMapMapCards = () => {
   const htmlArray = Object.entries(MAP_CONFIG).map(
     ([empire, data]) => `
@@ -105,6 +112,8 @@ const tplGameMap = () => `
     ${tplGameMapVictoryCards()}
     ${tplGameMapEmpireCards()}
     ${tplGameMapMapCards()}
+    ${tplGameMapMapBorders()}
+    ${tplGameMapSupply()}
     ${tplGameMapMarket()}
   </div>
 </div>`;

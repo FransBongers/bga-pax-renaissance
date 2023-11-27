@@ -42,6 +42,7 @@ use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\ChessPieces;
+use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\MapBoard;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
@@ -105,6 +106,7 @@ class PaxRenaissance extends Table
         Cards::setupNewGame($players, $options);
         ChessPieces::setupNewGame($players, $options);
         Market::setupNewGame($players, $options);
+        Empires::setupNewGame($players, $options);
 
         $this->setGameStateInitialValue('logging', false);
         $this->activeNextPlayer();
@@ -124,7 +126,7 @@ class PaxRenaissance extends Table
             'gameMap' => MapBoard::getUiData(),
             'market' => Market::getUiData(),
             'players' => Players::getUiData($playerId),
-            'chessPieces' => ChessPieces::getAll()->toArray(),
+            'chessPieces' => ChessPieces::getUiData(),            
             'victoryCards' => Cards::getVictoryCards(),
         ];
 

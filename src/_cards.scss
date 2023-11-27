@@ -2,7 +2,9 @@
 @use "sass:map";
 @use "base";
 
-.pr_card.pr_selectable, .pr_square_card.pr_selectable {
+.pr_card.pr_selectable,
+.pr_square_card.pr_selectable,
+.pr_city.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px base.$selectable-color !important;
@@ -17,7 +19,9 @@
 .pr_card.pr_selected,
 .pr_square_card.pr_selected,
 .pr_card.pr_selectable:hover,
-.pr_square_card.pr_selectable:hover {
+.pr_square_card.pr_selectable:hover,
+.pr_city.pr_selected,
+.pr_city.pr_selectable:hover {
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px base.$selected-color !important;

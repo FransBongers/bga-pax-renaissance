@@ -178,7 +178,7 @@ class Market {
     }
   }
 
-  private setFlorinValue({
+  public setFlorinValue({
     region,
     column,
     value,

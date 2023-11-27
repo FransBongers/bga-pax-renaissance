@@ -1,16 +1,18 @@
 <?php
 
 namespace PaxRenaissance\Actions;
-// use PaxRenaissance\Managers\Meeples;
-use PaxRenaissance\Managers\Market;
-use PaxRenaissance\Managers\Players;
+
 use PaxRenaissance\Core\Notifications;
-use PaxRenaissance\Managers\ActionCards;
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
+use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Cards;
+use PaxRenaissance\Managers\Cities;
+use PaxRenaissance\Managers\Market;
+use PaxRenaissance\Managers\Players;
 
 class PlayerAction extends \PaxRenaissance\Models\AtomicAction
 {
@@ -30,6 +32,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
       'remainingActions' => Globals::getRemainingActions(),
       'cardsPlayerCanPurchase' => Market::getCardsPlayerCanPurchase($player),
       'cardsPlayerCanSell' => $cardsPlayerCanSell,
+      'tradeFair' => Market::getTradeFairs(),
     ];
 
     return $data;
@@ -55,7 +58,13 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
           'cardId' => $args['cardId'],
         ]);
         break;
-
+      case 'tradeFair':
+        Engine::insertAsChild([
+          'action' => TRADE_FAIR,
+          'playerId' => $this->ctx->getPlayerId(),
+          'region' => $args['region'],
+        ]);
+        break;
     }
 
 

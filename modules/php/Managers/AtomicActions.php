@@ -15,6 +15,9 @@ class AtomicActions
     PLAY_CARD => 'PlayCard',
     PLAYER_ACTION => 'PlayerAction',
     SELL_CARD => 'SellCard',
+    TRADE_FAIR => 'TradeFair',
+    TRADE_FAIR_PROFIT_DISPERSAL => 'TradeFairProfitDispersal',
+    TRADE_FAIR_LEVY => 'TradeFairLevy',
   ];
 
   public static function get($actionId, $ctx = null)

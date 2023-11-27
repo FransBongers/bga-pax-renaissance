@@ -53,6 +53,7 @@ class FlipVictoryCardState implements State {
   }
 
   private updateInterfaceConfirmSelectCard({card}: {card: VictoryCard}) {
+    this.game.clearPossible();
     const node = document.getElementById(`${card.id}-back`);
     if (!node) {
       return;

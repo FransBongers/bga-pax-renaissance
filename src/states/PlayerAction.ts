@@ -16,11 +16,13 @@ class PlayerActionState implements State {
   }
 
   setDescription(activePlayerId: number) {
-    console.log('setDescription playerAction', activePlayerId);
+    console.log("setDescription playerAction", activePlayerId);
     this.game.clientUpdatePageTitle({
       text: "${tkn_playerName} may perform actions",
       args: {
-        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
+        tkn_playerName: this.game.playerManager
+          .getPlayer({ playerId: activePlayerId })
+          .getName(),
       },
       nonActivePlayers: true,
     });
@@ -47,6 +49,7 @@ class PlayerActionState implements State {
     this.updatePageTitle();
     this.setMarketCardsSelectable();
     this.setHandCardsSelectable();
+    this.setTradeFairSelectable();
   }
 
   private updateInterfaceConfirmPurchase({
@@ -174,6 +177,25 @@ class PlayerActionState implements State {
       //   console.log('click');
       //   this.updateInterfaceConfirmPurchase({card, column: Number(column)});
       // }));
+    });
+  }
+
+  private setTradeFairSelectable() {
+    CARDINAL_DIRECTIONS.forEach((region) => {
+      if (!this.args.tradeFair[region]) {
+        return;
+      }
+      this.game.setCardSelectable({
+        card: this.args.tradeFair[region].card,
+        back: true,
+        callback: () =>
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientStartTradeFairArgs>(
+              CLIENT_START_TRADE_FAIR_STATE,
+              { args: this.args.tradeFair[region] }
+            ),
+      });
     });
   }
 

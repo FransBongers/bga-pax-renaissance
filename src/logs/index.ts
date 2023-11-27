@@ -1,8 +1,11 @@
+// Default
 const LOG_TOKEN_BOLD_TEXT = "boldText";
 const LOG_TOKEN_CARD_NAME = "cardName";
 const LOG_TOKEN_NEW_LINE = "newLine";
 const LOG_TOKEN_PLAYER_NAME = "playerName";
+// Game specific
 const LOG_TOKEN_FLORIN = "florin";
+const LOG_TOKEN_CHESS_PIECE = "chessPiece";
 
 let tooltipIdCounter = 0;
 
@@ -25,6 +28,8 @@ const getTokenDiv = ({
       return tplIcon({ icon: "florin" });
     case LOG_TOKEN_NEW_LINE:
       return "<br>";
+    case LOG_TOKEN_CHESS_PIECE:
+      return tplChessPiece({ type: value.split("_")[1], religion: value.split("_")[0] });
     case LOG_TOKEN_PLAYER_NAME:
       const player =
         value === "${you}"
@@ -34,7 +39,7 @@ const getTokenDiv = ({
               .find((player) => player.getName() === value);
       return player
         ? tplLogTokenPlayerName({
-            name: value === "${you}" ? _('You') : player.getName(),
+            name: value === "${you}" ? _("You") : player.getName(),
             color: player.getHexColor(),
           })
         : value;

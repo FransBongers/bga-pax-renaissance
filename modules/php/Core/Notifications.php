@@ -47,6 +47,7 @@ class Notifications
     ]);
   }
 
+
   // public static function refreshInterface($data)
   // {
   //   self::notifyAll('refreshInterface', '', $data);
@@ -141,6 +142,92 @@ class Notifications
       'tkn_cardName' => $card->getName(),
       'tkn_florin' => clienttranslate('Florin(s)'),
     ));
+  }
+
+  public static function tradeFairConvene($player, $region, $florinsFromChina)
+  {
+    $message = [
+      EAST => clienttranslate('${tkn_playerName} convenes an East trade fair ${florinsFromChinaLog}'),
+      WEST => clienttranslate('${tkn_playerName} convenes a West trade fair ${florinsFromChinaLog}')
+    ];
+
+    self::notifyAll("tradeFairConvene", $message[$region], [
+      'player' => $player,
+      'region' => $region,
+      'florinsFromChina' => $florinsFromChina,
+      'florinsFromChinaLog' => [
+        'log' => clienttranslate('and adds ${amount} ${tkn_florin} from China to the profits'),
+        'args' => [
+          'amount' => $florinsFromChina,
+          'tkn_playerName' => $player->getName(),
+          'tkn_florin' => clienttranslate("Florin(s)"),
+        ]
+      ],
+    ]);
+  }
+
+  public static function tradeFairEmporiumSubsidy($player, $region, $amount)
+  {
+    $message = clienttranslate('Emporium Subsidy: ${tkn_playerName} receives ${amount} ${tkn_florin} out of profits');
+      
+    self::notifyAll("tradeFairEmporiumSubsidy", $message, [
+      'player' => $player,
+      'amount' => $amount,
+      'region' => $region,
+      'tkn_florin' => clienttranslate("Florin(s)"),
+    ]);
+  }
+
+  public static function tradeFairProfits($player, $region)
+  {
+    $message = [
+      EAST => clienttranslate('${tkn_playerName} convenes an East trade fair'),
+      WEST => clienttranslate('${tkn_playerName} convenes a West trade fair')
+    ];
+
+    self::notifyAll("tradeFairStart", $message[$region], [
+      'player' => $player,
+    ]);
+  }
+
+  public static function tradeFairProfitDispersalPirates($region) {
+    $message = clienttranslate('Pirates take 1 ${tkn_florin} out of profits');
+      
+    self::notifyAll("tradeFairProfitDispersalPirates", $message, [
+      'tkn_florin' => clienttranslate("Florin(s)"),
+      'region' => $region,
+    ]);
+  }
+
+  public static function tradeFairProfitDispersalPlayer($player, $region) {
+    $message = clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} out of profits');
+      
+    self::notifyAll("tradeFairProfitDispersalPlayer", $message, [
+      'player' => $player,
+      'tkn_florin' => clienttranslate("Florin(s)"),
+      'region' => $region,
+    ]);
+  }
+  
+
+  public static function tradeFairNoVoyage()
+  {
+    self::message(clienttranslate('No profits left. The voyage does not start'),[]);
+  }
+
+  public static function tradeFairPlaceLevy($player, $city, $chessPiece)
+  {
+    $message = clienttranslate('${tkn_playerName} places ${tkn_chessPiece} on ${cityName}');
+    // $chessPieceExploded = explode('_' );
+    
+    self::notifyAll("tradeFairPlaceLevy", $message, [
+      'player' => $player,
+      'cityId' => $city->getId(),
+      'cityName' => $city->getName(),
+      'chessPiece' => $chessPiece,
+      // 'tkn_chessPiece' => 
+      'i18n' => ['cityName'],
+    ]);
   }
 
   /*********************

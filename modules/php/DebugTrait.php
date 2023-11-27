@@ -6,6 +6,8 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\ChessPieces;
+use PaxRenaissance\Managers\Cities;
+use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\PlayersExtra;
@@ -15,7 +17,10 @@ trait DebugTrait
 {
   function test()
   {
-    Market::refresh(Players::get());
+    Notifications::log('Cities', Empires::get(BYZANTIUM)->getReligion());
+    // Notifications::log('Cities', Cities::get(LONDON));
+    // Notifications::log('Cities', Cities::get(BORDEAUX));
+    // Market::refresh(Players::get());
     // Notifications::log('extra', Players::getUiData(Players::getCurrentId()));
     // Players::getActive()->
     // Notifications::log('args',$this->argsResolveChoice());

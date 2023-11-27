@@ -8,13 +8,19 @@ const MEDICI = 'medici';
 const COEUR = 'coeur';
 const MARCHIONNI = 'marchionni';
 
-const COLOR__BANK_MAP = [
-  "1084c7" => FUGGER,
-  "bddcc6" => MARCHIONNI,
-  "732473" => COEUR,
-  "ffce00" => MEDICI
+const COLOR_BANK_MAP = [
+  "1084c7" => FUGGER, // blue
+  "bddcc6" => MARCHIONNI, // green
+  "732473" => COEUR, // purple
+  "ffce00" => MEDICI // yellow
 ];
 
+const BANKS = [
+  FUGGER,
+  MEDICI,
+  COEUR,
+  MARCHIONNI,
+];
 
 /**
  * State ids / names
@@ -31,6 +37,9 @@ const ST_PURCHASE_CARD = 22;
 const ST_PLAY_CARD = 23;
 const ST_SELL_CARD = 24;
 const ST_FLIP_VICTORY_CARD = 25;
+const ST_TRADE_FAIR = 26;
+const ST_TRADE_FAIR_PROFIT_DISPERSAL = 27;
+const ST_TRADE_FAIR_LEVY = 28;
 
 const ST_CLEANUP = 88;
 const ST_RESOLVE_STACK = 90;
@@ -73,6 +82,9 @@ const PLAYER_ACTION = 'PLAYER_ACTION';
 const PURCHASE_CARD = 'PURCHASE_CARD';
 const PLAY_CARD = 'PLAY_CARD';
 const SELL_CARD = 'SELL_CARD';
+const TRADE_FAIR = 'TRADE_FAIR';
+const TRADE_FAIR_PROFIT_DISPERSAL = 'TRADE_FAIR_PROFIT_DISPERSAL';
+const TRADE_FAIR_LEVY = 'TRADE_FAIR_LEVY';
 
 
 /**
@@ -105,8 +117,26 @@ const PLAYER_COLORS = [
 ];
 
 /**
+ * Busted disk colors
+ */
+const BLACK = 'black';
+const WHITE = 'white';
+
+/**
+ * Chess pieces 
+ */
+const BISHOP = 'bishop';
+const KNIGHT = 'knight';
+const PAWN = 'pawn';
+const PIRATE = 'pirate';
+const ROOK = 'rook';
+const DISK = 'disk';
+
+
+/**
  * Religions
  */
+const MEDIEVAL = 'medieval';
 const CATHOLIC = "catholic";
 const ISLAMIC = "islamic";
 const REFORMIST = "reformist";
@@ -165,6 +195,7 @@ const VALENCIA = 'valencia';
 const ALGIERS = 'algiers';
 const TIMBUKTU = 'timbuktu';
 const VENICE = 'venice';
+// const CONSTANTINOPLE = 'constantinople';
 const CONSTANTINOPLE_1 = 'constantinople1';
 const CONSTANTINOPLE_2 = 'constantinople2';
 const CONSTANTINOPLE_3 = 'constantinople3';
@@ -173,3 +204,61 @@ const RHODES = 'rhodes';
 const CYPRUS = 'cyprus';
 const CAIRO = 'cairo';
 const RED_SEA = 'redSea';
+
+/**
+ * Empires
+ */
+const ENGLAND = "england";
+const FRANCE = "france";
+const HOLY_ROMAN_EMIRE = "holyRomanEmpire";
+const HUNGARY = "hungary";
+const BYZANTIUM = "byzantium";
+const PORTUGAL = "portugal";
+const ARAGON = "aragon";
+const PAPAL_STATES = "papalStates";
+const OTTOMAN = "ottoman";
+const MAMLUK = "mamluk";
+
+/**
+ * Borders
+ */
+const BORDER_ARAGON_FRANCE = 'border_aragon_france';
+const BORDER_ARAGON_PAPAL_STATES = 'border_aragon_papalStates';
+const BORDER_ARAGON_PORTUGAL = 'border_aragon_portugal';
+const BORDER_BYZANTIUM_HUNGARY = 'border_byzantium_hungary';
+const BORDER_BYZANTIUM_MAMLUK = 'border_byzantium_mamluk';
+const BORDER_ENGLAND_PORTUGAL = 'border_england_portugal';
+const BORDER_ENGLAND_FRANCE = 'border_england_france';
+const BORDER_FRANCE_HOLY_ROMAN_EMPIRE = 'border_france_holyRomanEmpire';
+const BORDER_HOLY_ROMAN_EMPIRE_HUNGARY = 'border_holyRomanEmpire_hungary';
+const BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES = 'border_holyRomanEmpire_papalStates';
+const BORDER_HUNGARY_OTTOMAN = 'border_hungary_ottoman';
+const BORDER_MAMLUK_OTTOMAN = 'border_mamluk_ottoman';
+const BORDER_OTTOMAN_PAPAL_STATES = 'border_ottoman_papalStates';
+
+const BORDERS = [
+  BORDER_ARAGON_FRANCE,
+  BORDER_ARAGON_PAPAL_STATES,
+  BORDER_ARAGON_PORTUGAL,
+  BORDER_BYZANTIUM_HUNGARY,
+  BORDER_BYZANTIUM_MAMLUK,
+  BORDER_ENGLAND_PORTUGAL,
+  BORDER_ENGLAND_FRANCE,
+  BORDER_FRANCE_HOLY_ROMAN_EMPIRE,
+  BORDER_HOLY_ROMAN_EMPIRE_HUNGARY,
+  BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES,
+  BORDER_HUNGARY_OTTOMAN,
+  BORDER_MAMLUK_OTTOMAN,
+  BORDER_OTTOMAN_PAPAL_STATES,
+];
+
+const TRADE_ROUTES = [
+  TANA => [],
+];
+
+const BANK_STARTING_CONCESSION_MAP = [
+  COEUR => BORDER_MAMLUK_OTTOMAN,
+  FUGGER => BORDER_FRANCE_HOLY_ROMAN_EMPIRE,
+  MARCHIONNI => BORDER_ENGLAND_PORTUGAL,
+  MEDICI => BORDER_ARAGON_PAPAL_STATES
+];

@@ -9,6 +9,6 @@ class EmpireHolyRomanEmpire extends \PaxRenaissance\Models\EmpireCard
     $this->id = 'EmpireHolyRomanEmpire';
     $this->nameKing = clienttranslate('Frederick III House of Habsburg');
     $this->nameRepublic = clienttranslate('Reichstag Imperial Diet');
-    $this->startLocation = 'empire_holy_roman_empire';
+    $this->startLocation = 'empire_holyRomanEmpire';
   }
 }

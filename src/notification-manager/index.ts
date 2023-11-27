@@ -40,6 +40,11 @@ class NotificationManager {
       ["purchaseCard", undefined],
       ["refreshMarket", undefined],
       ["sellCard", undefined],
+      ["tradeFairConvene", undefined],
+      ["tradeFairEmporiumSubsidy", undefined],
+      ["tradeFairPlaceLevy", undefined],
+      ["tradeFairProfitDispersalPirates", undefined],
+      ["tradeFairProfitDispersalPlayer", undefined],
     ];
 
     // example: https://github.com/thoun/knarr/blob/main/src/knarr.ts
@@ -90,7 +95,7 @@ class NotificationManager {
   }
 
   async notif_flipVictoryCard(notif: Notif<NotifFlipVictoryCardArgs>) {
-    const { playerId, card, } = notif.args;
+    const { playerId, card } = notif.args;
     this.game.victoryCardManager.flipCard(card);
     return Promise.resolve();
   }
@@ -118,18 +123,20 @@ class NotificationManager {
   async notif_refreshMarket(notif: Notif<NotifRefreshMarketArgs>) {
     const { cardMoves, cardDraws } = notif.args;
 
+    // Shift cards
     for (let move of cardMoves) {
       const { from, to, card } = move;
       const [_, fromRegion, fromColumn] = from.split("_");
       const [_2, toRegion, toCol] = to.split("_");
+      card.location = to;
       const florinsOnCard = this.game.market.getFlorins({
         region: fromRegion as "east" | "west",
         column: Number(fromColumn),
       });
-      this.game.market.incFlorinValue({
+      this.game.market.setFlorinValue({
         region: fromRegion as "east" | "west",
         column: Number(fromColumn),
-        value: -florinsOnCard,
+        value: 0,
       });
       await this.game.market
         .getStock({
@@ -137,13 +144,19 @@ class NotificationManager {
           column: Number(toCol),
         })
         .addCard(card);
-      this.game.market.incFlorinValue({
+      this.game.market.setFlorinValue({
         region: toRegion as "east" | "west",
         column: Number(toCol),
-        value: florinsOnCard,
+        value:
+          florinsOnCard +
+          this.game.market.getFlorins({
+            region: toRegion as "east" | "west",
+            column: Number(toCol),
+          }),
       });
     }
 
+    // Draw cards
     for (let card of cardDraws) {
       await this.game.market.drawCard(card);
     }
@@ -154,6 +167,77 @@ class NotificationManager {
     const player = this.getPlayer({ playerId });
     await player.removeCardFromHand({ card });
     player.counters.florins.incValue(value);
+  }
+
+  async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {
+    const { florinsFromChina, region } = notif.args;
+    this.game.market.incFlorinValue({
+      region: region as "east" | "west",
+      column: 0,
+      value: florinsFromChina,
+    });
+    const stock = this.game.market.getStock({ region, column: 0 });
+    const card = stock.getCards()[0];
+    stock.removeCard(card);
+    return Promise.resolve();
+  }
+
+  async notif_tradeFairEmporiumSubsidy(
+    notif: Notif<NotifTradeFairEmporiumSubsidyArgs>
+  ) {
+    const { amount, playerId, region } = notif.args;
+    this.game.market.incFlorinValue({
+      region: region as "east" | "west",
+      column: 0,
+      value: -amount,
+    });
+    this.getPlayer({ playerId }).counters.florins.incValue(amount);
+    return Promise.resolve();
+  }
+
+  async notif_tradeFairPlaceLevy(notif: Notif<NotifTradeFairPlaceLevyArgs>) {
+    const { chessPiece, cityId } = notif.args;
+    const node = document.getElementById(`pr_city_${cityId}`);
+    if (!node) {
+      return;
+    }
+    const type = chessPiece.id.split("_")[0];
+    const colorOrReligion = chessPiece.id.split("_")[1];
+    node.insertAdjacentHTML(
+      "beforeend",
+      tplChessPiece({
+        id: chessPiece.id,
+        type,
+        color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
+        religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
+      })
+    );
+    return Promise.resolve();
+  }
+
+  async notif_tradeFairProfitDispersalPirates(
+    notif: Notif<NotifTradeFairProfitDispersalPiratesArgs>
+  ) {
+    const { region } = notif.args;
+    this.game.market.incFlorinValue({
+      region: region as "east" | "west",
+      column: 0,
+      value: -1,
+    });
+    return Promise.resolve();
+  }
+
+  async notif_tradeFairProfitDispersalPlayer(
+    notif: Notif<NotifTradeFairProfitDispersalPlayerArgs>
+  ) {
+    const { region, playerId } = notif.args;
+    this.game.market.incFlorinValue({
+      region: region as "east" | "west",
+      column: 0,
+      value: -1,
+    });
+    this.getPlayer({ playerId }).counters.florins.incValue(1);
+    return Promise.resolve();
   }
 
   // notif_smallRefreshHand(notif: Notif<NotifSmallRefreshHandArgs>) {

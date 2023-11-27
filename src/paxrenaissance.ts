@@ -18,6 +18,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public playerManager: PlayerManager;
   public tooltipManager: TooltipManager;
   public playAreaScale: number;
+  public supply: Supply;
   public victoryCardManager: VictoryCardManager;
 
   private _notif_uid_to_log_id = {};
@@ -25,9 +26,11 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public _connections: unknown[];
 
   public activeStates: {
+    [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
     confirmTurn: ConfirmTurnState;
     flipVictoryCard: FlipVictoryCardState;
     playerAction: PlayerActionState;
+    tradeFairLevy: TradeFairLevyState
   };
 
   constructor() {
@@ -59,9 +62,11 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this._connections = [];
     // Will store all data for active player and gets refreshed with entering player actions state
     this.activeStates = {
+      [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),
       confirmTurn: new ConfirmTurnState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
       playerAction: new PlayerActionState(this),
+      tradeFairLevy: new TradeFairLevyState(this),
     };
 
     this.animationManager = new AnimationManager(this, { duration: 500 });
@@ -71,6 +76,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.tooltipManager = new TooltipManager(this);
     this.hand = new Hand(this);
     this.playerManager = new PlayerManager(this);
+    this.supply = new Supply(this);
     this.market = new Market(this);
     this.victoryCardManager = new VictoryCardManager(this);
 
@@ -467,6 +473,69 @@ class PaxRenaissance implements PaxRenaissanceGame {
       this.gamedatas.gamestate.descriptionmyturn = title;
     }
     this.framework().updatePageTitle();
+  }
+
+  setCardSelectable({
+    card,
+    callback,
+    back = false,
+  }: {
+    card: TableauCard;
+    callback: (props: { card: TableauCard }) => void;
+    back?: boolean;
+  }) {
+    const nodeId = `${card.id.split("_")[0]}-${back ? "back" : "front"}`;
+    const node = $(nodeId);
+    if (node === null) {
+      return;
+    }
+    node.classList.add(PR_SELECTABLE);
+    this._connections.push(
+      dojo.connect(node, "onclick", this, () => callback({ card }))
+    );
+  }
+
+  setCardSelected({
+    card,
+    back = false,
+  }: {
+    card: TableauCard;
+    back?: boolean;
+  }) {
+    const nodeId = `${card.id.split("_")[0]}-${back ? "back" : "front"}`;
+    const node = $(nodeId);
+    if (node === null) {
+      return;
+    }
+    node.classList.add(PR_SELECTED);
+  }
+
+  setCitySelectable({
+    cityId,
+    callback,
+  }: {
+    cityId: string;
+    callback: (props: { cityId: string }) => void;
+  }) {
+    const nodeId = `pr_city_${cityId}`;
+    const node = $(nodeId);
+
+    if (node === null) {
+      return;
+    }
+    node.classList.add(PR_SELECTABLE);
+    this._connections.push(
+      dojo.connect(node, "onclick", this, () => callback({ cityId }))
+    );
+  }
+
+  setCitySelected({ cityId }: { cityId: string }) {
+    const nodeId = `pr_city_${cityId}`;
+    const node = $(nodeId);
+    if (node === null) {
+      return;
+    }
+    node.classList.add(PR_SELECTED);
   }
 
   // .########.########.....###....##.....##.########.##......##..#######..########..##....##

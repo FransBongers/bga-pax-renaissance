@@ -104,7 +104,7 @@
   background-position-y: 0%;
 }
 
-.pr_map_card[data-card-id=catholic_holy_roman_empire] {
+.pr_map_card[data-card-id=catholic_holyRomanEmpire] {
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
@@ -149,7 +149,7 @@
   background-position-y: 0%;
 }
 
-.pr_map_card[data-card-id=catholic_papal_states] {
+.pr_map_card[data-card-id=catholic_papalStates] {
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
@@ -194,7 +194,7 @@
   background-position-y: 50%;
 }
 
-.pr_map_card[data-card-id=islamic_holy_roman_empire] {
+.pr_map_card[data-card-id=islamic_holyRomanEmpire] {
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
@@ -239,7 +239,7 @@
   background-position-y: 50%;
 }
 
-.pr_map_card[data-card-id=islamic_papal_states] {
+.pr_map_card[data-card-id=islamic_papalStates] {
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
@@ -284,7 +284,7 @@
   background-position-y: 100%;
 }
 
-.pr_map_card[data-card-id=reformist_holy_roman_empire] {
+.pr_map_card[data-card-id=reformist_holyRomanEmpire] {
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
@@ -329,7 +329,7 @@
   background-position-y: 100%;
 }
 
-.pr_map_card[data-card-id=reformist_papal_states] {
+.pr_map_card[data-card-id=reformist_papalStates] {
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
@@ -356,6 +356,23 @@
   background-position-y: 100%;
 }
 
+.pr_border {
+  position: absolute;
+  width: calc(var(--paxRenMapScale) * 36px);
+  height: calc(var(--paxRenMapScale) * 36px);
+  border-radius: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.pr_border .pr_pawn {
+  margin-bottom: 11px;
+}
+.pr_border .pr_pirate {
+  margin-bottom: 8px;
+  margin-left: 2px;
+}
+
 .pr_city {
   position: absolute;
   width: calc(var(--paxRenMapScale) * 37px);
@@ -364,18 +381,18 @@
   display: flex;
   justify-content: center;
 }
-
-.pr_city > .pr_chess_piece {
+.pr_city .pr_chess_piece {
   align-self: flex-end;
 }
-
-.pr_city > .pr_rook {
-  margin-bottom: calc(var(--paxRenMapScale) * 4px);
+.pr_city .pr_disk {
+  margin-bottom: calc(var(--paxRenMapScale) * 3px);
 }
-
-.pr_city > .pr_knight {
+.pr_city .pr_knight {
   margin-bottom: calc(var(--paxRenMapScale) * 4px);
   margin-right: calc(var(--paxRenMapScale) * 4px);
+}
+.pr_city .pr_rook {
+  margin-bottom: calc(var(--paxRenMapScale) * 4px);
 }
 
 .pr_card_move {
@@ -476,7 +493,9 @@
  * PaxRenaissance stylesheet
  *
  */
-.pr_card.pr_selectable, .pr_square_card.pr_selectable {
+.pr_card.pr_selectable,
+.pr_square_card.pr_selectable,
+.pr_city.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px yellow !important;
@@ -485,7 +504,9 @@
 .pr_card.pr_selected,
 .pr_square_card.pr_selected,
 .pr_card.pr_selectable:hover,
-.pr_square_card.pr_selectable:hover {
+.pr_square_card.pr_selectable:hover,
+.pr_city.pr_selected,
+.pr_city.pr_selectable:hover {
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px blue !important;
@@ -1989,6 +2010,11 @@
   --paxRenIconScale: 0.5;
   margin-bottom: -4px;
 }
+#pagemaintitletext .pr_chess_piece {
+  display: inline-block;
+  margin-bottom: -8px;
+  --paxRenChessPieceScale: 0.7;
+}
 
 .log > .roundedbox .pr_icon {
   display: inline-block;
@@ -2120,6 +2146,23 @@
 }
 
 /* ------- PAWNS ------- */
+.pr_disk {
+  box-sizing: border-box;
+  width: calc(var(--paxRenChessPieceScale) * 31px);
+  height: calc(var(--paxRenChessPieceScale) * 31px);
+  border-radius: 50%;
+  border: 1px solid;
+}
+
+.pr_disk[data-color=black] {
+  background-color: black;
+}
+
+.pr_disk[data-color=white] {
+  background-color: white;
+}
+
+/* ------- PAWNS ------- */
 .pr_pawn {
   background-image: url("img/pawns.webp");
   background-size: 400% 100%;
@@ -2127,19 +2170,19 @@
   height: calc(var(--paxRenChessPieceScale) * 43px);
 }
 
-.pr_pawn[data-color=blue] {
+.pr_pawn[data-bank=fugger] {
   background-position-x: 0%;
 }
 
-.pr_pawn[data-color=green] {
+.pr_pawn[data-bank=marchionni] {
   background-position-x: 33.3333333333%;
 }
 
-.pr_pawn[data-color=purple] {
+.pr_pawn[data-bank=coeur] {
   background-position-x: 66.6666666667%;
 }
 
-.pr_pawn[data-color=yellow] {
+.pr_pawn[data-bank=medici] {
   background-position-x: 100%;
 }
 
@@ -2169,6 +2212,13 @@
   max-width: calc(var(--paxRenChessPieceScale) * 36px);
   min-width: calc(var(--paxRenChessPieceScale) * 36px);
   height: calc(var(--paxRenChessPieceScale) * 46px);
+}
+
+.pr_pirate {
+  background-image: url("img/pirates.webp");
+  background-size: 300% 100%;
+  min-width: calc(var(--paxRenChessPieceScale) * 45px);
+  min-height: calc(var(--paxRenChessPieceScale) * 47px);
 }
 
 .pr_rook {
@@ -2270,6 +2320,37 @@
 .pr_player_board[data-color=yellow] {
   background-position-x: 100%;
   background-position-y: 100%;
+}
+
+#pr_supply {
+  position: absolute;
+  width: calc(var(--paxRenMapScale) * 188px);
+  left: calc(var(--paxRenMapScale) * 1250px);
+  top: calc(var(--paxRenMapScale) * 500px);
+  display: grid;
+  grid-template-columns: 60px 60px 60px;
+  column-gap: 4px;
+  row-gap: 8px;
+}
+
+.pr_chess_piece_counter_container {
+  display: flex;
+  flex-direction: row;
+  width: 60px;
+  gap: 4px;
+}
+.pr_chess_piece_counter_container .pr_chess_piece_counter_chess_piece {
+  width: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.pr_chess_piece_counter_container span {
+  align-self: center;
+  font-weight: bold;
+  font-size: 30px;
+  letter-spacing: -2px;
+  text-shadow: 2px 0 2px rgba(255, 255, 255, 0.6), 0 -2px 2px rgba(255, 255, 255, 0.6), 0 2px 2px rgba(255, 255, 255, 0.6), -2px 0 2px rgba(255, 255, 255, 0.6);
 }
 
 .dijitTooltipContainer {

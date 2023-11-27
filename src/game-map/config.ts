@@ -39,7 +39,7 @@ const EMPIRE_CARD_CONFIG = {
     top: 754,
     left: 1052,
   },
-}
+};
 
 const MARKET_EAST_CONFIG = [
   {
@@ -112,7 +112,7 @@ const VICTORY_CARD_CONFIG = {
     top: 753.5,
     left: 135.5,
   },
-}
+};
 
 const MAP_CONFIG = {
   [ENGLAND]: {
@@ -290,5 +290,60 @@ const MAP_CONFIG = {
         left: 106,
       },
     },
+  },
+};
+
+const BORDER_CONFIG = {
+  [BORDER_ARAGON_FRANCE]: {
+    top: 495,
+    left: 586,
+  },
+  [BORDER_ARAGON_PAPAL_STATES]: {
+    top: 601,
+    left: 670,
+  },
+  [BORDER_ARAGON_PORTUGAL]: {
+    top: 676,
+    left: 495,
+  },
+  [BORDER_BYZANTIUM_HUNGARY]: {
+    top: 446,
+    left: 1022,
+  },
+  [BORDER_BYZANTIUM_MAMLUK]: {
+    top: 495,
+    left: 1112,
+  },
+  [BORDER_ENGLAND_PORTUGAL]: {
+    top: 495,
+    left: 390,
+  },
+  [BORDER_ENGLAND_FRANCE]: {
+    top: 348,
+    left: 495,
+  },
+  [BORDER_FRANCE_HOLY_ROMAN_EMPIRE]: {
+    top: 313,
+    left: 670,
+  },
+  [BORDER_HOLY_ROMAN_EMPIRE_HUNGARY]: {
+    top: 368,
+    left: 846,
+  },
+  [BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES]: {
+    top: 495,
+    left: 754,
+  },
+  [BORDER_HUNGARY_OTTOMAN]: {
+    top: 495,
+    left: 976,
+  },
+  [BORDER_MAMLUK_OTTOMAN]: {
+    top: 670,
+    left: 1022,
+  },
+  [BORDER_OTTOMAN_PAPAL_STATES]: {
+    top: 663,
+    left: 846,
   },
 };

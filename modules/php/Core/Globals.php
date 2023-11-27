@@ -27,6 +27,7 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
     // 'activePlayerId' => 'int',
     'remainingActions' => 'int',
     'marketFlorins' => 'obj',
+    'empireReligions' => 'obj' // TODO: check if we need to use table for empires?
   ];
 
   protected static $table = 'global_variables';

@@ -154,16 +154,19 @@ class Market
   public static function refreshShiftCards()
   {
     $marketFlorins = Globals::getMarketFlorins();
-    Notifications::log('marketFlorins', $marketFlorins);
     $emptySpaces = [WEST => [], EAST => []];
 
     $cardMoves = [];
 
+    // Go through market from left to right
     for ($column = 0; $column < 6; $column++) {
       foreach (CARDINAL_DIRECTIONS as $region) {
         $card = Cards::getTopOf(Locations::market($region, $column));
+        // If no card in location mark it as empty
         if ($card === null) {
           $emptySpaces[$region][] = $column;
+          // If there is a card check if there is an empty spot in the row.
+          // If so move the card and any Florins on it
         } else if (count($emptySpaces[$region]) > 0) {
           $toColumn = array_shift($emptySpaces[$region]);
           $florinsFrom = $card->getLocation() . '_florins';
@@ -181,15 +184,13 @@ class Market
           // Move florins
           $amount = $marketFlorins[$florinsFrom];
           $marketFlorins[$florinsFrom] = 0;
-          $marketFlorins[Locations::marketFlorins($region, $toColumn)] = $amount;
+          $marketFlorins[Locations::marketFlorins($region, $toColumn)] = $marketFlorins[Locations::marketFlorins($region, $toColumn)] + $amount;
 
           $emptySpaces[$region][] = $column;
         }
       }
     }
     Globals::setMarketFlorins($marketFlorins);
-    // Notifications::log('emptySpaces',$emptySpaces);
-    // Notifications::log('marketFlorins', $marketFlorins);
 
     return [
       'emptySpaces' => $emptySpaces,
@@ -197,9 +198,13 @@ class Market
     ];
   }
 
+  /**
+   * Draw cards for any empty spaces left in the market.
+   */
   public static function refreshDrawCards($emptySpaces)
   {
     $cardDraws = [];
+    // Need to check if unable to refresh as it will trigger end of the game.
     $unableToRefresh = false;
     for ($column = 0; $column < 6; $column++) {
       foreach (CARDINAL_DIRECTIONS as $region) {
@@ -234,5 +239,36 @@ class Market
     $cardDraws = $drawResult['cardDraws'];
     Notifications::refreshMarket($player, $shiftResult['cardMoves'], $cardDraws);
     return $drawResult['unableToRefresh'];
+  }
+
+  public static function getTradeFairs() {
+    $cities = Cities::getCitiesThatCanStartTradeFair();
+    $data = [];
+    foreach(CARDINAL_DIRECTIONS as $region) {
+      $card = Cards::getTopOf(Locations::Market($region, 0));
+      if ($card === null) {
+        continue;
+      }
+      $data[$region] = [
+        'card' => $card,
+        'city' => Utils::filter($cities, function ($city) use ($region) {
+          return $city->getEmporium() === $region;
+        })[0],
+      ];
+    }
+    return $data;
+  }
+
+  public static function incMarketFlorins(string $region, int $column, int $value) {
+    $marketFlorins = Globals::getMarketFlorins();
+    $location = Locations::marketFlorins($region,$column);
+    $marketFlorins[$location] = $marketFlorins[$location] + $value;
+    Globals::setMarketFlorins($marketFlorins);
+  }
+
+  public static function getMarketFlorins(string $region, int $column) {
+    $marketFlorins = Globals::getMarketFlorins();
+    $location = Locations::marketFlorins($region,$column);
+    return $marketFlorins[$location];
   }
 }

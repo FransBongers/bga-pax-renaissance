@@ -94,6 +94,15 @@
      self::ajaxResponse();
    }
 
+   public function actTradeFairLevy()
+   {
+     self::setAjaxMode();
+    //  $action = self::getArg('action', AT_alphanum, true);
+     $args = self::getArg('args', AT_json, true);
+     Utils::validateJSonAlphaNum($args, 'args');
+     $this->game->actTakeAtomicAction('actTradeFairLevy', $args);
+     self::ajaxResponse();
+   }
   }
   
 

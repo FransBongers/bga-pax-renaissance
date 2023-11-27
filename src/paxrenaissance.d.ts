@@ -17,10 +17,31 @@ interface PaxRenaissanceGame extends Game {
   addSecondaryActionButton: (props: AddButtonProps) => void;
   clearInterface: () => void;
   clearPossible: () => void;
-  clientUpdatePageTitle: (props: { text: string; args: Record<string, unknown>; nonActivePlayers?: boolean }) => void;
-  format_string_recursive: (log: string, args: Record<string, unknown>) => string
+  clientUpdatePageTitle: (props: {
+    text: string;
+    args: Record<string, unknown>;
+    nonActivePlayers?: boolean;
+  }) => void;
+  format_string_recursive: (
+    log: string,
+    args: Record<string, unknown>
+  ) => string;
   getPlayerId: () => number;
-  takeAction: (props: { action: string; args?: Record<string, unknown> }) => void;
+  setCardSelectable: (props: {
+    card: TableauCard;
+    callback: (props: { card: TableauCard }) => void;
+    back?: boolean;
+  }) => void;
+  setCardSelected: (props: { card: TableauCard; back?: boolean }) => void;
+  setCitySelectable: (props: {
+    cityId: string;
+    callback: (props: { cityId: string }) => void;
+  }) => void;
+  setCitySelected: (props: { cityId: string }) => void;
+  takeAction: (props: {
+    action: string;
+    args?: Record<string, unknown>;
+  }) => void;
   updatePlayAreaSize: () => void;
   _connections: unknown[];
   animationManager: AnimationManager;
@@ -30,8 +51,24 @@ interface PaxRenaissanceGame extends Game {
   notificationManager: NotificationManager;
   playAreaScale: number;
   playerManager: PlayerManager;
+  supply: Supply;
   tooltipManager: TooltipManager;
   victoryCardManager: VictoryCardManager;
+}
+
+interface City {
+  capital: boolean;
+  empire: string;
+  emporium: string | null;
+  id: string;
+  name: string;
+}
+
+interface Empire {
+  cities: string[]; // cityIds/ Could also return actual cities
+  id: string;
+  name: string;
+  religion: string;
 }
 
 interface PaxRenCard {
@@ -79,11 +116,30 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
     };
     florins: {
       [location: string]: number;
-    }
+    };
   };
   players: Record<number, BgaPlayer>;
-  chessPieces: ChessPiece[];
-  victoryCards: VictoryCard[]
+  chessPieces: {
+    inPlay: ChessPiece[];
+    supply: {
+      catholic: {
+        bishop: number;
+        knight: number;
+        rook: number;
+      };
+      islamic: {
+        bishop: number;
+        knight: number;
+        rook: number;
+      };
+      refomist: {
+        bishop: number;
+        knight: number;
+        rook: number;
+      };
+    };
+  };
+  victoryCards: VictoryCard[];
   // REMOVE
   testCard: TableauCard;
 }
@@ -91,12 +147,12 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
 interface PaxRenaissancePlayerData extends BgaPlayer {
   // hexColor: string;
   florins: number;
-  bank: 'coeur' | 'fugger' | 'marchionni' | 'medici' ;
+  bank: "coeur" | "fugger" | "marchionni" | "medici";
   hand: {
     cards: TableauCard[];
     counts: {
       east: number;
       west: number;
-    }
-  }
+    };
+  };
 }

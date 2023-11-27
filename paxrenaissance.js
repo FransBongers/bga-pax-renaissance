@@ -1,4 +1,5 @@
 var MIN_PLAY_AREA_WIDTH = 1516;
+var CLIENT_START_TRADE_FAIR_STATE = 'clientStartTradeFairState';
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -23,16 +24,58 @@ var CARDINAL_DIRECTIONS = [
 var EMPIRE_CARD = "empireCard";
 var TABLEAU_CARD = "tableauCard";
 var VICTORY_CARD = "victoryCard";
+var BISHOP = 'bishop';
+var DISK = 'disk';
+var KNIGHT = 'knight';
+var PAWN = 'pawn';
+var PIRATE = 'pirate';
+var ROOK = 'rook';
+var CATHOLIC = "catholic";
+var ISLAMIC = "islamic";
+var REFORMIST = "reformist";
+var RELIGIONS = [
+    CATHOLIC,
+    ISLAMIC,
+    REFORMIST
+];
 var ENGLAND = "england";
 var FRANCE = "france";
-var HOLY_ROMAN_EMIRE = "holy_roman_empire";
+var HOLY_ROMAN_EMIRE = "holyRomanEmpire";
 var HUNGARY = "hungary";
 var BYZANTIUM = "byzantium";
 var PORTUGAL = "portugal";
 var ARAGON = "aragon";
-var PAPAL_STATES = "papal_states";
+var PAPAL_STATES = "papalStates";
 var OTTOMAN = "ottoman";
 var MAMLUK = "mamluk";
+var BORDER_ARAGON_FRANCE = 'border_aragon_france';
+var BORDER_ARAGON_PAPAL_STATES = 'border_aragon_papalStates';
+var BORDER_ARAGON_PORTUGAL = 'border_aragon_portugal';
+var BORDER_BYZANTIUM_HUNGARY = 'border_byzantium_hungary';
+var BORDER_BYZANTIUM_MAMLUK = 'border_byzantium_mamluk';
+var BORDER_ENGLAND_FRANCE = 'border_england_france';
+var BORDER_ENGLAND_PORTUGAL = 'border_england_portugal';
+var BORDER_FRANCE_HOLY_ROMAN_EMPIRE = 'border_france_holyRomanEmpire';
+var BORDER_HOLY_ROMAN_EMPIRE_HUNGARY = 'border_holyRomanEmpire_hungary';
+var BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES = 'border_holyRomanEmpire_papalStates';
+var BORDER_HUNGARY_OTTOMAN = 'border_hungary_ottoman';
+var BORDER_MAMLUK_OTTOMAN = 'border_mamluk_ottoman';
+var BORDER_OTTOMAN_PAPAL_STATES = 'border_ottoman_papalStates';
+var BORDERS = [
+    BORDER_ARAGON_FRANCE,
+    BORDER_ARAGON_PAPAL_STATES,
+    BORDER_ARAGON_PORTUGAL,
+    BORDER_BYZANTIUM_HUNGARY,
+    BORDER_BYZANTIUM_MAMLUK,
+    BORDER_ENGLAND_PORTUGAL,
+    BORDER_ENGLAND_FRANCE,
+    BORDER_FRANCE_HOLY_ROMAN_EMPIRE,
+    BORDER_HOLY_ROMAN_EMPIRE_HUNGARY,
+    BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES,
+    BORDER_HUNGARY_OTTOMAN,
+    BORDER_MAMLUK_OTTOMAN,
+    BORDER_OTTOMAN_PAPAL_STATES,
+];
 var VICTORY_RENAISSANCE = "victory_renaissance";
 var VICTORY_GLOBALIZATION = "victory_globalization";
 var VICTORY_IMPERIAL = "victory_imperial";
@@ -1688,22 +1731,26 @@ var PaxRenaissance = (function () {
         console.log("paxrenaissance constructor");
     }
     PaxRenaissance.prototype.setup = function (gamedatas) {
+        var _a;
         var _this = this;
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
         this.gamedatas = gamedatas;
         debug("gamedata", gamedatas);
         this._connections = [];
-        this.activeStates = {
-            confirmTurn: new ConfirmTurnState(this),
-            flipVictoryCard: new FlipVictoryCardState(this),
-            playerAction: new PlayerActionState(this),
-        };
+        this.activeStates = (_a = {},
+            _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
+            _a.confirmTurn = new ConfirmTurnState(this),
+            _a.flipVictoryCard = new FlipVictoryCardState(this),
+            _a.playerAction = new PlayerActionState(this),
+            _a.tradeFairLevy = new TradeFairLevyState(this),
+            _a);
         this.animationManager = new AnimationManager(this, { duration: 500 });
         this.setupCardManagers();
         this.gameMap = new GameMap(this);
         this.tooltipManager = new TooltipManager(this);
         this.hand = new Hand(this);
         this.playerManager = new PlayerManager(this);
+        this.supply = new Supply(this);
         this.market = new Market(this);
         this.victoryCardManager = new VictoryCardManager(this);
         this.updatePlayAreaSize();
@@ -1941,6 +1988,44 @@ var PaxRenaissance = (function () {
         }
         this.framework().updatePageTitle();
     };
+    PaxRenaissance.prototype.setCardSelectable = function (_a) {
+        var card = _a.card, callback = _a.callback, _b = _a.back, back = _b === void 0 ? false : _b;
+        var nodeId = "".concat(card.id.split("_")[0], "-").concat(back ? "back" : "front");
+        var node = $(nodeId);
+        if (node === null) {
+            return;
+        }
+        node.classList.add(PR_SELECTABLE);
+        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ card: card }); }));
+    };
+    PaxRenaissance.prototype.setCardSelected = function (_a) {
+        var card = _a.card, _b = _a.back, back = _b === void 0 ? false : _b;
+        var nodeId = "".concat(card.id.split("_")[0], "-").concat(back ? "back" : "front");
+        var node = $(nodeId);
+        if (node === null) {
+            return;
+        }
+        node.classList.add(PR_SELECTED);
+    };
+    PaxRenaissance.prototype.setCitySelectable = function (_a) {
+        var cityId = _a.cityId, callback = _a.callback;
+        var nodeId = "pr_city_".concat(cityId);
+        var node = $(nodeId);
+        if (node === null) {
+            return;
+        }
+        node.classList.add(PR_SELECTABLE);
+        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ cityId: cityId }); }));
+    };
+    PaxRenaissance.prototype.setCitySelected = function (_a) {
+        var cityId = _a.cityId;
+        var nodeId = "pr_city_".concat(cityId);
+        var node = $(nodeId);
+        if (node === null) {
+            return;
+        }
+        node.classList.add(PR_SELECTED);
+    };
     PaxRenaissance.prototype.format_string_recursive = function (log, args) {
         var _this = this;
         try {
@@ -2121,7 +2206,7 @@ var pxNumber = function (px) {
         return 0;
     }
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
 var EMPIRE_CARD_CONFIG = (_a = {},
     _a[ENGLAND] = {
         top: 120,
@@ -2412,6 +2497,60 @@ var MAP_CONFIG = (_c = {},
             _o),
     },
     _c);
+var BORDER_CONFIG = (_p = {},
+    _p[BORDER_ARAGON_FRANCE] = {
+        top: 495,
+        left: 586,
+    },
+    _p[BORDER_ARAGON_PAPAL_STATES] = {
+        top: 601,
+        left: 670,
+    },
+    _p[BORDER_ARAGON_PORTUGAL] = {
+        top: 676,
+        left: 495,
+    },
+    _p[BORDER_BYZANTIUM_HUNGARY] = {
+        top: 446,
+        left: 1022,
+    },
+    _p[BORDER_BYZANTIUM_MAMLUK] = {
+        top: 495,
+        left: 1112,
+    },
+    _p[BORDER_ENGLAND_PORTUGAL] = {
+        top: 495,
+        left: 390,
+    },
+    _p[BORDER_ENGLAND_FRANCE] = {
+        top: 348,
+        left: 495,
+    },
+    _p[BORDER_FRANCE_HOLY_ROMAN_EMPIRE] = {
+        top: 313,
+        left: 670,
+    },
+    _p[BORDER_HOLY_ROMAN_EMPIRE_HUNGARY] = {
+        top: 368,
+        left: 846,
+    },
+    _p[BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES] = {
+        top: 495,
+        left: 754,
+    },
+    _p[BORDER_HUNGARY_OTTOMAN] = {
+        top: 495,
+        left: 976,
+    },
+    _p[BORDER_MAMLUK_OTTOMAN] = {
+        top: 670,
+        left: 1022,
+    },
+    _p[BORDER_OTTOMAN_PAPAL_STATES] = {
+        top: 663,
+        left: 846,
+    },
+    _p);
 var LOCAL_STORAGE_MAP_ZOOM_KEY = "PaxRenaissance-map-zoom";
 var ZOOM_LEVELS = [0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1];
 var MAX_MAP_HEIGHT = 1500;
@@ -2425,10 +2564,32 @@ var GameMap = (function () {
         var gamedatas = game.gamedatas;
         this.setupGameMap({ gamedatas: gamedatas });
     }
-    GameMap.prototype.setupChessPieces = function (_a) {
+    GameMap.prototype.setupChessPiecesBorders = function (_a) {
+        var gamedatas = _a.gamedatas;
+        BORDERS.forEach(function (border) {
+            var chessPiece = gamedatas.chessPieces.inPlay.find(function (piece) { return piece.location === border; });
+            if (!chessPiece) {
+                return;
+            }
+            var node = document.getElementById("pr_".concat(border));
+            if (!node) {
+                return;
+            }
+            var type = chessPiece.id.split("_")[0];
+            var bankOrReligion = chessPiece.id.split("_")[1];
+            node.insertAdjacentHTML("beforeend", type === PAWN
+                ? tplPawn({
+                    id: chessPiece.id,
+                    type: type,
+                    bank: bankOrReligion,
+                })
+                : tplChessPiece({ id: chessPiece.id, type: type, religion: bankOrReligion }));
+        });
+    };
+    GameMap.prototype.setupChessPiecesCities = function (_a) {
         var gamedatas = _a.gamedatas;
         CITIES.forEach(function (city) {
-            var chessPiece = gamedatas.chessPieces.find(function (piece) { return piece.location === city; });
+            var chessPiece = gamedatas.chessPieces.inPlay.find(function (piece) { return piece.location === city; });
             if (!chessPiece) {
                 return;
             }
@@ -2436,7 +2597,14 @@ var GameMap = (function () {
             if (!node) {
                 return;
             }
-            node.insertAdjacentHTML("beforeend", tplChessPiece({ id: chessPiece.id }));
+            var type = chessPiece.id.split("_")[0];
+            var colorOrReligion = chessPiece.id.split("_")[1];
+            node.insertAdjacentHTML("beforeend", tplChessPiece({
+                id: chessPiece.id,
+                type: type,
+                color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
+                religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
+            }));
         });
     };
     GameMap.prototype.setupEmpireCards = function (_a) {
@@ -2465,7 +2633,8 @@ var GameMap = (function () {
         });
         this.setupZoomButtons();
         this.setupEmpireCards({ gamedatas: gamedatas });
-        this.setupChessPieces({ gamedatas: gamedatas });
+        this.setupChessPiecesCities({ gamedatas: gamedatas });
+        this.setupChessPiecesBorders({ gamedatas: gamedatas });
     };
     GameMap.prototype.setupZoomButtons = function () {
         var _this = this;
@@ -2518,10 +2687,12 @@ var GameMap = (function () {
     return GameMap;
 }());
 var tplChessPiece = function (_a) {
-    var id = _a.id;
-    var type = id.split("_")[0];
-    var religion = id.split("_")[1];
-    return "<div id=\"".concat(id, "\" class=\"pr_chess_piece pr_").concat(type, "\" data-religion=\"").concat(religion, "\"></div>");
+    var id = _a.id, type = _a.type, religion = _a.religion, color = _a.color;
+    return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_chess_piece pr_").concat(type, "\" ").concat(religion ? "data-religion=\"".concat(religion, "\"") : '').concat(color ? "data-color=\"".concat(color, "\"") : '', "></div>");
+};
+var tplPawn = function (_a) {
+    var id = _a.id, type = _a.type, bank = _a.bank;
+    return "<div id=\"".concat(id, "\" class=\"pr_chess_piece pr_").concat(type, "\" data-bank=\"").concat(bank, "\"></div>");
 };
 var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map(function (_a, index) {
     var top = _a.top, left = _a.left;
@@ -2548,6 +2719,12 @@ var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(EM
     return "<div id=\"pr_empire_".concat(empire, "\" class=\"pr_square_card\" data-card-id=\"null\" style=\"position: absolute; top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
 })
     .join(""), "\n"); };
+var tplGameMapMapBorders = function () {
+    return Object.entries(BORDER_CONFIG).map(function (_a) {
+        var border = _a[0], coords = _a[1];
+        return "<div id=\"pr_".concat(border, "\" class=\"pr_border\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
+    }).join('');
+};
 var tplGameMapMapCards = function () {
     var htmlArray = Object.entries(MAP_CONFIG).map(function (_a) {
         var empire = _a[0], data = _a[1];
@@ -2566,7 +2743,7 @@ var tplGameMapVictoryCards = function () { return "\n  ".concat(Object.entries(V
     return "<div id=\"pr_".concat(victory, "_slot\" class=\"pr_victory_slot\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
 })
     .join(""), "\n  "); };
-var tplGameMap = function () { return "\n<div id=\"pr_game_map_container\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
+var tplGameMap = function () { return "\n<div id=\"pr_game_map_container\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupply(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
 var Hand = (function () {
     function Hand(game) {
         this.game = game;
@@ -2682,6 +2859,7 @@ var LOG_TOKEN_CARD_NAME = "cardName";
 var LOG_TOKEN_NEW_LINE = "newLine";
 var LOG_TOKEN_PLAYER_NAME = "playerName";
 var LOG_TOKEN_FLORIN = "florin";
+var LOG_TOKEN_CHESS_PIECE = "chessPiece";
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
@@ -2695,6 +2873,8 @@ var getTokenDiv = function (_a) {
             return tplIcon({ icon: "florin" });
         case LOG_TOKEN_NEW_LINE:
             return "<br>";
+        case LOG_TOKEN_CHESS_PIECE:
+            return tplChessPiece({ type: value.split("_")[1], religion: value.split("_")[0] });
         case LOG_TOKEN_PLAYER_NAME:
             var player = value === "${you}"
                 ? game.playerManager.getPlayer({ playerId: game.getPlayerId() })
@@ -2703,7 +2883,7 @@ var getTokenDiv = function (_a) {
                     .find(function (player) { return player.getName() === value; });
             return player
                 ? tplLogTokenPlayerName({
-                    name: value === "${you}" ? _('You') : player.getName(),
+                    name: value === "${you}" ? _("You") : player.getName(),
                     color: player.getHexColor(),
                 })
                 : value;
@@ -3036,6 +3216,11 @@ var NotificationManager = (function () {
             ["purchaseCard", undefined],
             ["refreshMarket", undefined],
             ["sellCard", undefined],
+            ["tradeFairConvene", undefined],
+            ["tradeFairEmporiumSubsidy", undefined],
+            ["tradeFairPlaceLevy", undefined],
+            ["tradeFairProfitDispersalPirates", undefined],
+            ["tradeFairProfitDispersalPlayer", undefined],
         ];
         notifs.forEach(function (notif) {
             _this.subscriptions.push(dojo.subscribe(notif[0], _this, function (notifDetails) {
@@ -3118,14 +3303,15 @@ var NotificationManager = (function () {
                         from = move.from, to = move.to, card = move.card;
                         _b = from.split("_"), _1 = _b[0], fromRegion = _b[1], fromColumn = _b[2];
                         _c = to.split("_"), _2 = _c[0], toRegion = _c[1], toCol = _c[2];
+                        card.location = to;
                         florinsOnCard = this.game.market.getFlorins({
                             region: fromRegion,
                             column: Number(fromColumn),
                         });
-                        this.game.market.incFlorinValue({
+                        this.game.market.setFlorinValue({
                             region: fromRegion,
                             column: Number(fromColumn),
-                            value: -florinsOnCard,
+                            value: 0,
                         });
                         return [4, this.game.market
                                 .getStock({
@@ -3135,10 +3321,14 @@ var NotificationManager = (function () {
                                 .addCard(card)];
                     case 2:
                         _e.sent();
-                        this.game.market.incFlorinValue({
+                        this.game.market.setFlorinValue({
                             region: toRegion,
                             column: Number(toCol),
-                            value: florinsOnCard,
+                            value: florinsOnCard +
+                                this.game.market.getFlorins({
+                                    region: toRegion,
+                                    column: Number(toCol),
+                                }),
                         });
                         _e.label = 3;
                     case 3:
@@ -3176,6 +3366,88 @@ var NotificationManager = (function () {
                         player.counters.florins.incValue(value);
                         return [2];
                 }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_tradeFairConvene = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, florinsFromChina, region, stock, card;
+            return __generator(this, function (_b) {
+                _a = notif.args, florinsFromChina = _a.florinsFromChina, region = _a.region;
+                this.game.market.incFlorinValue({
+                    region: region,
+                    column: 0,
+                    value: florinsFromChina,
+                });
+                stock = this.game.market.getStock({ region: region, column: 0 });
+                card = stock.getCards()[0];
+                stock.removeCard(card);
+                return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_tradeFairEmporiumSubsidy = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, amount, playerId, region;
+            return __generator(this, function (_b) {
+                _a = notif.args, amount = _a.amount, playerId = _a.playerId, region = _a.region;
+                this.game.market.incFlorinValue({
+                    region: region,
+                    column: 0,
+                    value: -amount,
+                });
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
+                return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_tradeFairPlaceLevy = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, chessPiece, cityId, node, type, colorOrReligion;
+            return __generator(this, function (_b) {
+                _a = notif.args, chessPiece = _a.chessPiece, cityId = _a.cityId;
+                node = document.getElementById("pr_city_".concat(cityId));
+                if (!node) {
+                    return [2];
+                }
+                type = chessPiece.id.split("_")[0];
+                colorOrReligion = chessPiece.id.split("_")[1];
+                node.insertAdjacentHTML("beforeend", tplChessPiece({
+                    id: chessPiece.id,
+                    type: type,
+                    color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
+                    religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
+                }));
+                return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_tradeFairProfitDispersalPirates = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var region;
+            return __generator(this, function (_a) {
+                region = notif.args.region;
+                this.game.market.incFlorinValue({
+                    region: region,
+                    column: 0,
+                    value: -1,
+                });
+                return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_tradeFairProfitDispersalPlayer = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, region, playerId;
+            return __generator(this, function (_b) {
+                _a = notif.args, region = _a.region, playerId = _a.playerId;
+                this.game.market.incFlorinValue({
+                    region: region,
+                    column: 0,
+                    value: -1,
+                });
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(1);
+                return [2, Promise.resolve()];
             });
         });
     };
@@ -3416,6 +3688,141 @@ var tplPlayerTableauContent = function (_a) {
     var playerId = playerGamedatas.id;
     return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(_("${playerName}'s tableau").replace("${playerName}", playerGamedatas.name), "</span></div>\n  <div>\n    <div class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[playerGamedatas.color], "\"></div>\n  </div>\n    ");
 };
+var ChessPieceCounter = (function () {
+    function ChessPieceCounter() {
+        this.counter = new ebg.counter();
+    }
+    ChessPieceCounter.prototype.setup = function (_a) {
+        var religion = _a.religion, type = _a.type, value = _a.value;
+        var supplyContainer = document.getElementById('pr_supply');
+        if (!supplyContainer) {
+            return;
+        }
+        supplyContainer.insertAdjacentHTML('beforeend', tplChessPieceCounter({ id: "".concat(type, "_").concat(religion, "_supply"), type: type, religion: religion }));
+        this.counter.create("".concat(type, "_").concat(religion, "_supply_counter"));
+        this.counter.setValue(value);
+    };
+    return ChessPieceCounter;
+}());
+var Supply = (function () {
+    function Supply(game) {
+        var _a, _b, _c, _d;
+        this.chessPieceCounters = (_a = {},
+            _a[CATHOLIC] = (_b = {},
+                _b[BISHOP] = new ChessPieceCounter(),
+                _b[KNIGHT] = new ChessPieceCounter(),
+                _b[ROOK] = new ChessPieceCounter(),
+                _b),
+            _a[ISLAMIC] = (_c = {},
+                _c[BISHOP] = new ChessPieceCounter(),
+                _c[KNIGHT] = new ChessPieceCounter(),
+                _c[ROOK] = new ChessPieceCounter(),
+                _c),
+            _a[REFORMIST] = (_d = {},
+                _d[BISHOP] = new ChessPieceCounter(),
+                _d[KNIGHT] = new ChessPieceCounter(),
+                _d[ROOK] = new ChessPieceCounter(),
+                _d),
+            _a);
+        this.game = game;
+        var gamedatas = game.gamedatas;
+        this.setupChessPieceCounters({ gamedatas: gamedatas });
+    }
+    Supply.prototype.setupChessPieceCounters = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        console.log('setupChessPieceCounters');
+        [BISHOP, KNIGHT, ROOK].forEach(function (type) {
+            RELIGIONS.forEach(function (religion) {
+                var counter = _this.chessPieceCounters[religion][type];
+                counter.setup({ religion: religion, type: type, value: gamedatas.chessPieces.supply[religion][type] });
+            });
+        });
+    };
+    return Supply;
+}());
+var SUPPLY_CHESS_PIECES_CONFIG = [
+    {
+        type: BISHOP,
+        religion: CATHOLIC,
+    },
+    {
+        type: BISHOP,
+        religion: ISLAMIC,
+    },
+    {
+        type: BISHOP,
+        religion: REFORMIST,
+    },
+    {
+        type: KNIGHT,
+        religion: CATHOLIC,
+    },
+    {
+        type: KNIGHT,
+        religion: ISLAMIC,
+    },
+    {
+        type: KNIGHT,
+        religion: REFORMIST,
+    },
+    {
+        type: ROOK,
+        religion: CATHOLIC,
+    },
+    {
+        type: ROOK,
+        religion: ISLAMIC,
+    },
+    {
+        type: ROOK,
+        religion: REFORMIST,
+    },
+];
+var tplChessPieceCounter = function (_a) {
+    var id = _a.id, religion = _a.religion, type = _a.type;
+    return "\n    <div class=\"pr_chess_piece_counter_container\">\n      <span id=\"".concat(id, "_counter\" ></span>\n      <div class=\"pr_chess_piece_counter_chess_piece\">\n        ").concat(tplChessPiece({ id: id, type: type, religion: religion }), "\n      </div>\n    </div>");
+};
+var tplGameMapSupply = function () {
+    return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
+};
+var ClientStartTradeFairState = (function () {
+    function ClientStartTradeFairState(game) {
+        this.game = game;
+    }
+    ClientStartTradeFairState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    ClientStartTradeFairState.prototype.onLeavingState = function () {
+        debug("Leaving ClientStartTradeFairState");
+    };
+    ClientStartTradeFairState.prototype.setDescription = function (activePlayerId) { };
+    ClientStartTradeFairState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.setCardSelected({ card: this.args.card, back: true });
+        this.game.setCitySelected({ cityId: this.args.city.id });
+        this.game.clientUpdatePageTitle({
+            text: "Convene ${region} trade fair from ${cityName}?",
+            args: {
+                cityName: _(this.args.city.name),
+                region: this.args.city.emporium === EAST ? _("East") : _("West"),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () { return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "tradeFair",
+                    region: _this.args.city.emporium,
+                },
+            }); },
+        });
+        this.game.addCancelButton();
+    };
+    return ClientStartTradeFairState;
+}());
 var ConfirmTurnState = (function () {
     function ConfirmTurnState(game) {
         this.game = game;
@@ -3484,6 +3891,7 @@ var FlipVictoryCardState = (function () {
     FlipVictoryCardState.prototype.updateInterfaceConfirmSelectCard = function (_a) {
         var _this = this;
         var card = _a.card;
+        this.game.clearPossible();
         var node = document.getElementById("".concat(card.id, "-back"));
         if (!node) {
             return;
@@ -3534,11 +3942,13 @@ var PlayerActionState = (function () {
         debug("Leaving PlayerActionsState");
     };
     PlayerActionState.prototype.setDescription = function (activePlayerId) {
-        console.log('setDescription playerAction', activePlayerId);
+        console.log("setDescription playerAction", activePlayerId);
         this.game.clientUpdatePageTitle({
             text: "${tkn_playerName} may perform actions",
             args: {
-                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
             },
             nonActivePlayers: true,
         });
@@ -3548,6 +3958,7 @@ var PlayerActionState = (function () {
         this.updatePageTitle();
         this.setMarketCardsSelectable();
         this.setHandCardsSelectable();
+        this.setTradeFairSelectable();
     };
     PlayerActionState.prototype.updateInterfaceConfirmPurchase = function (_a) {
         var _this = this;
@@ -3656,7 +4067,90 @@ var PlayerActionState = (function () {
             }));
         });
     };
+    PlayerActionState.prototype.setTradeFairSelectable = function () {
+        var _this = this;
+        CARDINAL_DIRECTIONS.forEach(function (region) {
+            if (!_this.args.tradeFair[region]) {
+                return;
+            }
+            _this.game.setCardSelectable({
+                card: _this.args.tradeFair[region].card,
+                back: true,
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, { args: _this.args.tradeFair[region] });
+                },
+            });
+        });
+    };
     return PlayerActionState;
+}());
+var TradeFairLevyState = (function () {
+    function TradeFairLevyState(game) {
+        this.game = game;
+    }
+    TradeFairLevyState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TradeFairLevyState.prototype.onLeavingState = function () {
+        debug("Leaving ConfirmTurnState");
+    };
+    TradeFairLevyState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must select a City to place a Levy",
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TradeFairLevyState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must select a City in ${empireName} to place a Levy",
+            args: {
+                tkn_playerName: "${you}",
+                empireName: _(this.args.empire.name)
+            },
+        });
+        Object.keys(this.args.possibleLevies).forEach(function (cityId) {
+            _this.game.setCitySelectable({
+                cityId: cityId,
+                callback: function () { return _this.updateInterfaceConfirmPlaceLevy({ cityId: cityId }); },
+            });
+        });
+    };
+    TradeFairLevyState.prototype.updateInterfaceConfirmPlaceLevy = function (_a) {
+        var _this = this;
+        var cityId = _a.cityId;
+        this.game.clearPossible();
+        this.game.setCitySelected({ cityId: cityId });
+        var _b = this.args.possibleLevies[cityId].levy, religion = _b.religion, levyIcon = _b.levyIcon;
+        this.game.clientUpdatePageTitle({
+            text: "Place ${tkn_chessPiece} in ${cityName}?",
+            args: {
+                tkn_chessPiece: [religion, levyIcon].join('_'),
+                cityName: _(this.args.possibleLevies[cityId].cityName)
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTradeFairLevy",
+                    args: {
+                        cityId: cityId,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    return TradeFairLevyState;
 }());
 var tplCardTooltipContainer = function (_a) {
     var card = _a.card, content = _a.content;
