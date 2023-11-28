@@ -33,9 +33,13 @@ class GameMap {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  setupChessPiecesBorders({ gamedatas }) {
+  setupChessPiecesBorders({
+    gamedatas,
+  }: {
+    gamedatas: PaxRenaissanceGamedatas;
+  }) {
     BORDERS.forEach((border) => {
-      const chessPiece = gamedatas.chessPieces.inPlay.find(
+      const chessPiece = gamedatas.tokens.inPlay.find(
         (piece) => piece.location === border
       );
 
@@ -70,7 +74,7 @@ class GameMap {
     gamedatas: PaxRenaissanceGamedatas;
   }) {
     CITIES.forEach((city) => {
-      const chessPiece = gamedatas.chessPieces.inPlay.find(
+      const chessPiece = gamedatas.tokens.inPlay.find(
         (piece) => piece.location === city
       );
       if (!chessPiece) {

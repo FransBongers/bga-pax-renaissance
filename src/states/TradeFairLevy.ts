@@ -65,9 +65,9 @@ class TradeFairLevyState implements State {
     this.game.setCitySelected({cityId});
     const {religion, levyIcon} = this.args.possibleLevies[cityId].levy;
     this.game.clientUpdatePageTitle({
-      text: "Place ${tkn_chessPiece} in ${cityName}?",
+      text: "Place ${tkn_mapToken} in ${cityName}?",
       args: {
-        tkn_chessPiece: [religion, levyIcon].join('_'),
+        tkn_mapToken: [religion, levyIcon].join('_'),
         cityName: _(this.args.possibleLevies[cityId].cityName)
       },
     });

@@ -5,30 +5,25 @@ namespace PaxRenaissance;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Managers\Cards;
-use PaxRenaissance\Managers\ChessPieces;
 use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\PlayersExtra;
-
+use PaxRenaissance\Managers\Tokens;
 
 trait DebugTrait
 {
   function test()
   {
-    Notifications::log('Cities', Empires::get(BYZANTIUM)->getReligion());
-    // Notifications::log('Cities', Cities::get(LONDON));
-    // Notifications::log('Cities', Cities::get(BORDEAUX));
-    // Market::refresh(Players::get());
-    // Notifications::log('extra', Players::getUiData(Players::getCurrentId()));
-    // Players::getActive()->
-    // Notifications::log('args',$this->argsResolveChoice());
-    // Cards::setupCreateMarketDecks(Players::getAll());
-    // ChessPieces::createTokens();
-    // Notifications::log('card', Cards::get('PREN001_InquistionPope')->getType());
-    // Notifications::log('market',Market::getUiData());
-    // Notifications::log('players',Globals::getPlayers());
+    $token = Tokens::getTopOf(TOLEDO);
+
+    $token = $token->move(LYON);
+
+    Notifications::log('Token', $token);
+    Notifications::log('Location', $token->getLocation());
+    // Notifications::log('Religion', $token->getReligion());
+    // Notifications::log('Cities', Empires::get(BYZANTIUM)->getReligion());
   }
 
   function engineDisplay()

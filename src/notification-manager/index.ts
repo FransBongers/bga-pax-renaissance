@@ -196,17 +196,23 @@ class NotificationManager {
   }
 
   async notif_tradeFairPlaceLevy(notif: Notif<NotifTradeFairPlaceLevyArgs>) {
-    const { chessPiece, cityId } = notif.args;
+    const { token, cityId } = notif.args;
     const node = document.getElementById(`pr_city_${cityId}`);
     if (!node) {
       return;
     }
-    const type = chessPiece.id.split("_")[0];
-    const colorOrReligion = chessPiece.id.split("_")[1];
+
+    
+
+    const type = token.id.split("_")[0];
+    const colorOrReligion = token.id.split("_")[1];
+
+    this.game.supply.incValue({type, religion: colorOrReligion, value: -1});
+
     node.insertAdjacentHTML(
       "beforeend",
       tplChessPiece({
-        id: chessPiece.id,
+        id: token.id,
         type,
         color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
         religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,

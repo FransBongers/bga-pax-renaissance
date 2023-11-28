@@ -24,7 +24,6 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
   {
     // Notifications::log('stPurchaseCard', $this->ctx->getCardId());
     $region = $this->ctx->getInfo()['region'];
-    Notifications::log('Trade Fair info', $region);
 
     $tradeFairs = Market::getTradeFairs();
 
@@ -35,7 +34,6 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
     $city = $tradeFairs[$region]['city'];
 
     $tradeRoute = $city->getTradeRoute();
-    Notifications::log('tradeRoute', $tradeRoute);
 
     if ($tradeRoute === null) {
       throw new \feException("Not able to get trade route");

@@ -215,17 +215,17 @@ class Notifications
     self::message(clienttranslate('No profits left. The voyage does not start'),[]);
   }
 
-  public static function tradeFairPlaceLevy($player, $city, $chessPiece)
+  public static function tradeFairPlaceLevy($player, $city, $token)
   {
-    $message = clienttranslate('${tkn_playerName} places ${tkn_chessPiece} on ${cityName}');
+    $message = clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${cityName}');
     // $chessPieceExploded = explode('_' );
     
     self::notifyAll("tradeFairPlaceLevy", $message, [
       'player' => $player,
       'cityId' => $city->getId(),
       'cityName' => $city->getName(),
-      'chessPiece' => $chessPiece,
-      // 'tkn_chessPiece' => 
+      'token' => $token,
+      'tkn_mapToken' => $token->getReligion().'_'.$token->getType(),
       'i18n' => ['cityName'],
     ]);
   }

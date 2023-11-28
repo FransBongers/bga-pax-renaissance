@@ -5,7 +5,7 @@ const LOG_TOKEN_NEW_LINE = "newLine";
 const LOG_TOKEN_PLAYER_NAME = "playerName";
 // Game specific
 const LOG_TOKEN_FLORIN = "florin";
-const LOG_TOKEN_CHESS_PIECE = "chessPiece";
+const LOG_TOKEN_MAP_TOKEN = "mapToken";
 
 let tooltipIdCounter = 0;
 
@@ -28,7 +28,7 @@ const getTokenDiv = ({
       return tplIcon({ icon: "florin" });
     case LOG_TOKEN_NEW_LINE:
       return "<br>";
-    case LOG_TOKEN_CHESS_PIECE:
+    case LOG_TOKEN_MAP_TOKEN:
       return tplChessPiece({ type: value.split("_")[1], religion: value.split("_")[0] });
     case LOG_TOKEN_PLAYER_NAME:
       const player =

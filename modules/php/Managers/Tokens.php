@@ -12,21 +12,50 @@ use PaxRenaissance\Helpers\Utils;
 /**
  * ChessPieces
  */
-class ChessPieces extends \PaxRenaissance\Helpers\Pieces
+class Tokens extends \PaxRenaissance\Helpers\Pieces
 {
-  protected static $table = 'chess_pieces';
-  protected static $prefix = 'piece_';
+  protected static $table = 'tokens';
+  protected static $prefix = 'token_';
   protected static $customFields = [];
   protected static $autoreshuffle = false;
   protected static $autoIncrement = false;
-  protected static function cast($chessPiece)
+  // protected static function cast($token)
+  // {
+  //   Notifications::log('token in cast', $token);
+  //   return [
+  //     'id' => $token['id'],
+  //     'location' => $token['location'],
+  //     'state' => intval($token['state']),
+  //     // 'used' => intval($token['used']),
+  //   ];
+  // }
+  // Mapping of token type and corresponding class
+  static $classes = [
+    BISHOP => 'ChessPiece',
+    DISK => 'Disk',
+    KNIGHT => 'ChessPiece',
+    PAWN => 'Pawn',
+    PIRATE => 'ChessPiece',
+    ROOK => 'ChessPiece',
+  ];
+
+  protected static function cast($token)
   {
-    return [
-      'id' => $chessPiece['id'],
-      'location' => $chessPiece['location'],
-      'state' => intval($chessPiece['state']),
-      // 'used' => intval($token['used']),
-    ];
+    return self::getTokenInstance($token['id'], $token);
+  }
+
+  public static function getTokenInstance($id, $data = null)
+  {
+    $type = explode('_', $id)[0];
+    if (!\array_key_exists($type, self::$classes)) {
+      // throw new \feException(print_r(debug_print_backtrace()));
+      // throw new \feException(print_r(Globals::getEngine()));
+      throw new \BgaVisibleSystemException('Trying to get a token not defined in Tokens.php : ' . $type);
+    }
+
+    $className = "\PaxRenaissance\Tokens\\".self::$classes[$type];
+    // $className = "\PaxRenaissance\Tokens\\ChessPiece";
+    return new $className($data);
   }
 
   //////////////////////////////////
@@ -38,7 +67,7 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
   public static function getUiData()
   {
     $data = [
-      'inPlay' => ChessPieces::getSelectQuery()->where('piece_location', 'NOT LIKE', 'supply%')->get()->toArray(),
+      'inPlay' => self::getSelectQuery()->where('token_location', 'NOT LIKE', 'supply%')->get()->toArray(),
       'supply' => [
         CATHOLIC => [],
         ISLAMIC => [],
@@ -47,9 +76,9 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
     ];
 
     foreach (RELIGIONS as $religion) {
-      $data['supply'][$religion][BISHOP] = count(ChessPieces::getInLocation(Locations::supply(BISHOP, $religion)));
-      $data['supply'][$religion][KNIGHT] = count(ChessPieces::getInLocation(Locations::supply(KNIGHT, $religion)));
-      $data['supply'][$religion][ROOK] = count(ChessPieces::getInLocation(Locations::supply(ROOK, $religion)));
+      $data['supply'][$religion][BISHOP] = count(self::getInLocation(Locations::supply(BISHOP, $religion)));
+      $data['supply'][$religion][KNIGHT] = count(self::getInLocation(Locations::supply(KNIGHT, $religion)));
+      $data['supply'][$religion][ROOK] = count(self::getInLocation(Locations::supply(ROOK, $religion)));
     }
 
     return $data;
@@ -161,12 +190,12 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
     ];
 
     foreach ($setup as $location => $pool) {
-      $piece = self::getTopOf($pool);
-      if ($piece === null) {
+      $token = self::getTopOf($pool);
+      if ($token === null) {
         // Should never happen
         continue;
       };
-      self::move($piece['id'], $location);
+      self::move($token->getId(), $location);
     }
   }
 
@@ -175,12 +204,12 @@ class ChessPieces extends \PaxRenaissance\Helpers\Pieces
     $players = Players::getAll();
     foreach ($players as $playerId => $player) {
       $bank = $player->getBank();
-      $piece = self::getTopOf(Locations::supply(PAWN, $bank));
-      if ($piece === null) {
+      $token = self::getTopOf(Locations::supply(PAWN, $bank));
+      if ($token === null) {
         // Should never happen
         continue;
       };
-      self::move($piece['id'], BANK_STARTING_CONCESSION_MAP[$bank]);
+      self::move($token->getId(), BANK_STARTING_CONCESSION_MAP[$bank]);
     }
   }
 

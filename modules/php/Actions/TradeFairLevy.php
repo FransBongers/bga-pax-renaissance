@@ -10,11 +10,11 @@ use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Cards;
-use PaxRenaissance\Managers\ChessPieces;
 use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
+use PaxRenaissance\Managers\Tokens;
 
 class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
 {
@@ -26,9 +26,12 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
   public function stTradeFairLevy()
   {
     $args = self::getPossibleLevies();
-    Notifications::log('args',$args);
     if (count($args['possibleLevies']) === 0) {
       $this->resolveAction([]);
+    } else if (count($args['possibleLevies']) === 1) {
+      $this->actTradeFairLevy([
+        'cityId' => array_keys($args['possibleLevies'])[0]
+      ]);
     }
   }
 
@@ -73,13 +76,14 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
 
     $location = Locations::supply($levy['levyIcon'], $levy['religion']);
 
-    $piece = ChessPieces::getTopOf($location);
+    $token = Tokens::getTopOf($location);
 
     // TODO: check what to do if supply is empty
-    if ($piece !== null) {
-      ChessPieces::move($piece['id'], $cityId);
-      $piece['location'] = $cityId;
-      Notifications::tradeFairPlaceLevy(self::getPlayer(),Cities::get($cityId),$piece);
+    if ($token !== null) {
+      $token = $token->move($cityId);
+      // Tokens::move($piece['id'], $cityId);
+      // $piece['location'] = $cityId;
+      Notifications::tradeFairPlaceLevy(self::getPlayer(),Cities::get($cityId),$token);
     }
 
     // $this->ctx->insertAsBrother(new LeafNode([

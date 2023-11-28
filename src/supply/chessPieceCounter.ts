@@ -14,4 +14,8 @@ class ChessPieceCounter {
     this.counter.create(`${type}_${religion}_supply_counter`);
     this.counter.setValue(value);
   }
+
+  public incValue(value: number) {
+    this.counter.incValue(value);
+  }
 }

@@ -8,9 +8,9 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Helpers\Utils;
-use PaxRenaissance\Managers\ChessPieces;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Players;
+use PaxRenaissance\Managers\Tokens;
 
 class City implements \JsonSerializable
 {
@@ -38,8 +38,8 @@ class City implements \JsonSerializable
     if ($this->emporium === null) {
       return false;
     }
-    $piece = ChessPieces::getTopOf($this->id);
-    if ($piece !== null && Utils::startsWith($piece['id'], 'disk')) {
+    $token = Tokens::getTopOf($this->id);
+    if ($token !== null && $token->getType() === DISK) {
       return false;
     }
     return true;
@@ -67,8 +67,8 @@ class City implements \JsonSerializable
 
   public function getPossibleLevy()
   {
-    $chessPiece = ChessPieces::getTopOf($this->id);
-    if ($chessPiece !== null) {
+    $token = Tokens::getTopOf($this->id);
+    if ($token !== null) {
       return null;
     }
 

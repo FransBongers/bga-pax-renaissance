@@ -2567,7 +2567,7 @@ var GameMap = (function () {
     GameMap.prototype.setupChessPiecesBorders = function (_a) {
         var gamedatas = _a.gamedatas;
         BORDERS.forEach(function (border) {
-            var chessPiece = gamedatas.chessPieces.inPlay.find(function (piece) { return piece.location === border; });
+            var chessPiece = gamedatas.tokens.inPlay.find(function (piece) { return piece.location === border; });
             if (!chessPiece) {
                 return;
             }
@@ -2589,7 +2589,7 @@ var GameMap = (function () {
     GameMap.prototype.setupChessPiecesCities = function (_a) {
         var gamedatas = _a.gamedatas;
         CITIES.forEach(function (city) {
-            var chessPiece = gamedatas.chessPieces.inPlay.find(function (piece) { return piece.location === city; });
+            var chessPiece = gamedatas.tokens.inPlay.find(function (piece) { return piece.location === city; });
             if (!chessPiece) {
                 return;
             }
@@ -2859,7 +2859,7 @@ var LOG_TOKEN_CARD_NAME = "cardName";
 var LOG_TOKEN_NEW_LINE = "newLine";
 var LOG_TOKEN_PLAYER_NAME = "playerName";
 var LOG_TOKEN_FLORIN = "florin";
-var LOG_TOKEN_CHESS_PIECE = "chessPiece";
+var LOG_TOKEN_MAP_TOKEN = "mapToken";
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
@@ -2873,7 +2873,7 @@ var getTokenDiv = function (_a) {
             return tplIcon({ icon: "florin" });
         case LOG_TOKEN_NEW_LINE:
             return "<br>";
-        case LOG_TOKEN_CHESS_PIECE:
+        case LOG_TOKEN_MAP_TOKEN:
             return tplChessPiece({ type: value.split("_")[1], religion: value.split("_")[0] });
         case LOG_TOKEN_PLAYER_NAME:
             var player = value === "${you}"
@@ -3403,17 +3403,18 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_tradeFairPlaceLevy = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, chessPiece, cityId, node, type, colorOrReligion;
+            var _a, token, cityId, node, type, colorOrReligion;
             return __generator(this, function (_b) {
-                _a = notif.args, chessPiece = _a.chessPiece, cityId = _a.cityId;
+                _a = notif.args, token = _a.token, cityId = _a.cityId;
                 node = document.getElementById("pr_city_".concat(cityId));
                 if (!node) {
                     return [2];
                 }
-                type = chessPiece.id.split("_")[0];
-                colorOrReligion = chessPiece.id.split("_")[1];
+                type = token.id.split("_")[0];
+                colorOrReligion = token.id.split("_")[1];
+                this.game.supply.incValue({ type: type, religion: colorOrReligion, value: -1 });
                 node.insertAdjacentHTML("beforeend", tplChessPiece({
-                    id: chessPiece.id,
+                    id: token.id,
                     type: type,
                     color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
                     religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
@@ -3702,6 +3703,9 @@ var ChessPieceCounter = (function () {
         this.counter.create("".concat(type, "_").concat(religion, "_supply_counter"));
         this.counter.setValue(value);
     };
+    ChessPieceCounter.prototype.incValue = function (value) {
+        this.counter.incValue(value);
+    };
     return ChessPieceCounter;
 }());
 var Supply = (function () {
@@ -3735,9 +3739,18 @@ var Supply = (function () {
         [BISHOP, KNIGHT, ROOK].forEach(function (type) {
             RELIGIONS.forEach(function (religion) {
                 var counter = _this.chessPieceCounters[religion][type];
-                counter.setup({ religion: religion, type: type, value: gamedatas.chessPieces.supply[religion][type] });
+                counter.setup({ religion: religion, type: type, value: gamedatas.tokens.supply[religion][type] });
             });
         });
+    };
+    Supply.prototype.incValue = function (_a) {
+        var _b, _c;
+        var religion = _a.religion, type = _a.type, value = _a.value;
+        var counter = (_c = (_b = this.chessPieceCounters) === null || _b === void 0 ? void 0 : _b[religion]) === null || _c === void 0 ? void 0 : _c[type];
+        if (!counter) {
+            return;
+        }
+        counter.incValue(value);
     };
     return Supply;
 }());
@@ -4132,9 +4145,9 @@ var TradeFairLevyState = (function () {
         this.game.setCitySelected({ cityId: cityId });
         var _b = this.args.possibleLevies[cityId].levy, religion = _b.religion, levyIcon = _b.levyIcon;
         this.game.clientUpdatePageTitle({
-            text: "Place ${tkn_chessPiece} in ${cityName}?",
+            text: "Place ${tkn_mapToken} in ${cityName}?",
             args: {
-                tkn_chessPiece: [religion, levyIcon].join('_'),
+                tkn_mapToken: [religion, levyIcon].join('_'),
                 cityName: _(this.args.possibleLevies[cityId].cityName)
             },
         });

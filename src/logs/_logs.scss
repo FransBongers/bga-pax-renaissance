@@ -54,4 +54,10 @@
     --paxRenIconScale: 0.5;
     margin-bottom: -6px;
   }
+
+  .pr_chess_piece {
+    display: inline-block;
+    --paxRenChessPieceScale: 0.7;
+    margin-bottom: -5px;
+  }
 }

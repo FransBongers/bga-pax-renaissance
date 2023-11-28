@@ -54,7 +54,7 @@ interface NotifTradeFairEmporiumSubsidyArgs extends NotifWithPlayerArgs {
 }
 
 interface NotifTradeFairPlaceLevyArgs extends NotifWithPlayerArgs {
-  chessPiece: ChessPiece;
+  token: Token;
   cityId: string;
   cityName: string;
 }

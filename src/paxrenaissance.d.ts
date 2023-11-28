@@ -91,7 +91,7 @@ interface VictoryCard extends PaxRenCard {
   type: "victoryCard";
 }
 
-interface ChessPiece {
+interface Token {
   id: string;
   location: string;
   state: number;
@@ -119,8 +119,8 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
     };
   };
   players: Record<number, BgaPlayer>;
-  chessPieces: {
-    inPlay: ChessPiece[];
+  tokens: {
+    inPlay: Token[];
     supply: {
       catholic: {
         bishop: number;
