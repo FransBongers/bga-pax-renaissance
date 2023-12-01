@@ -9,7 +9,7 @@ declare const playSound;
 class PaxRenaissance implements PaxRenaissanceGame {
   public gamedatas: PaxRenaissanceGamedatas;
   public animationManager: AnimationManager;
-  public cardManager: CardManager<TableauCard>;
+  // public cardManager: CardManager<TableauCard>;
   public gameMap: GameMap;
   public hand: Hand;
   // public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
@@ -19,6 +19,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public tooltipManager: TooltipManager;
   public playAreaScale: number;
   public supply: Supply;
+  public tableauCardManager: TableauCardManager;
   public victoryCardManager: VictoryCardManager;
 
   private _notif_uid_to_log_id = {};
@@ -70,8 +71,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     };
 
     this.animationManager = new AnimationManager(this, { duration: 500 });
-    this.setupCardManagers();
-
+    this.tableauCardManager = new TableauCardManager(this);
+    
     this.gameMap = new GameMap(this);
     this.tooltipManager = new TooltipManager(this);
     this.hand = new Hand(this);
@@ -118,58 +119,58 @@ class PaxRenaissance implements PaxRenaissanceGame {
     playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
   }
 
-  setupCardManagers() {
-    this.cardManager = new CardManager(this, {
-      animationManager: this.animationManager,
-      getId: (card) => card.id.split("_")[0],
-      setupDiv: (card, div) => {
-        // div.classList.add("pr_card");
-        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+  // setupCardManagers() {
+  //   this.cardManager = new CardManager(this, {
+  //     animationManager: this.animationManager,
+  //     getId: (card) => card.id.split("_")[0],
+  //     setupDiv: (card, div) => {
+  //       // div.classList.add("pr_card");
+  //       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+  //       div.style.height = "calc(var(--paxRenCardScale) * 230px)";
 
-        // div.style.position = 'relative';
-      },
-      setupFrontDiv: (card, div) => {
-        // console.log("setupFrontDiv", card);
-        div.classList.add("pr_card");
-        div.setAttribute("data-card-id", card.id.split("_")[0]);
-        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-        // div.style.background = 'blue';
-        // div.classList.add('mygame-card-front');
-        // div.id = `card-${card.id}-front`;
-        // this.addTooltipHtml(div.id, `tooltip de ${card.type}`);
-        if (!card.id.startsWith("FAKE")) {
-          this.tooltipManager.addCardTooltip({
-            nodeId: card.id.split("_")[0] + "-front",
-            card,
-          });
-        }
-      },
-      setupBackDiv: (card, div) => {
-        div.classList.add("pr_card");
-        div.setAttribute(
-          "data-card-id",
-          card.region === EAST ? "EAST_BACK" : "WEST_BACK"
-        );
-        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-      },
-      // cardWidth: 151,
-      // cardHeight: 230,
-      // selectableCardClass: PR_SELECTABLE,
-      // selectedCardClass: PR_SELECTED,
-      isCardVisible: ({ location }) => {
-        if (location.startsWith("deck")) {
-          return false;
-        }
-        if (location === "market_west_0" || location === "market_east_0") {
-          return false;
-        }
-        return true;
-      },
-    });
-  }
+  //       // div.style.position = 'relative';
+  //     },
+  //     setupFrontDiv: (card, div) => {
+  //       // console.log("setupFrontDiv", card);
+  //       div.classList.add("pr_card");
+  //       div.setAttribute("data-card-id", card.id.split("_")[0]);
+  //       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+  //       div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+  //       // div.style.background = 'blue';
+  //       // div.classList.add('mygame-card-front');
+  //       // div.id = `card-${card.id}-front`;
+  //       // this.addTooltipHtml(div.id, `tooltip de ${card.type}`);
+  //       if (!card.id.startsWith("FAKE")) {
+  //         this.tooltipManager.addCardTooltip({
+  //           nodeId: card.id.split("_")[0] + "-front",
+  //           card,
+  //         });
+  //       }
+  //     },
+  //     setupBackDiv: (card, div) => {
+  //       div.classList.add("pr_card");
+  //       div.setAttribute(
+  //         "data-card-id",
+  //         card.region === EAST ? "EAST_BACK" : "WEST_BACK"
+  //       );
+  //       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+  //       div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+  //     },
+  //     // cardWidth: 151,
+  //     // cardHeight: 230,
+  //     // selectableCardClass: PR_SELECTABLE,
+  //     // selectedCardClass: PR_SELECTED,
+  //     isCardVisible: ({ location }) => {
+  //       if (location.startsWith("deck")) {
+  //         return false;
+  //       }
+  //       if (location === "market_west_0" || location === "market_east_0") {
+  //         return false;
+  //       }
+  //       return true;
+  //     },
+  //   });
+  // }
 
   setupNotifications() {
     // Replaced by notification manager

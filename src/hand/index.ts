@@ -29,7 +29,7 @@ class Hand {
     });
 
     this.hand = new LineStock<TableauCard>(
-      this.game.cardManager,
+      this.game.tableauCardManager,
       document.getElementById("pr_player_hand"),
       { wrap: "wrap", gap: '12px', center: false }
     );

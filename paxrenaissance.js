@@ -1745,7 +1745,7 @@ var PaxRenaissance = (function () {
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
         this.animationManager = new AnimationManager(this, { duration: 500 });
-        this.setupCardManagers();
+        this.tableauCardManager = new TableauCardManager(this);
         this.gameMap = new GameMap(this);
         this.tooltipManager = new TooltipManager(this);
         this.hand = new Hand(this);
@@ -1775,45 +1775,6 @@ var PaxRenaissance = (function () {
             playAreaContainer.offsetWidth / this.playAreaScale + "px";
         console.log("playAreaHeight", playAreaHeight);
         playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
-    };
-    PaxRenaissance.prototype.setupCardManagers = function () {
-        var _this = this;
-        this.cardManager = new CardManager(this, {
-            animationManager: this.animationManager,
-            getId: function (card) { return card.id.split("_")[0]; },
-            setupDiv: function (card, div) {
-                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-            },
-            setupFrontDiv: function (card, div) {
-                div.classList.add("pr_card");
-                div.setAttribute("data-card-id", card.id.split("_")[0]);
-                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-                if (!card.id.startsWith("FAKE")) {
-                    _this.tooltipManager.addCardTooltip({
-                        nodeId: card.id.split("_")[0] + "-front",
-                        card: card,
-                    });
-                }
-            },
-            setupBackDiv: function (card, div) {
-                div.classList.add("pr_card");
-                div.setAttribute("data-card-id", card.region === EAST ? "EAST_BACK" : "WEST_BACK");
-                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-            },
-            isCardVisible: function (_a) {
-                var location = _a.location;
-                if (location.startsWith("deck")) {
-                    return false;
-                }
-                if (location === "market_west_0" || location === "market_east_0") {
-                    return false;
-                }
-                return true;
-            },
-        });
     };
     PaxRenaissance.prototype.setupNotifications = function () {
     };
@@ -2149,6 +2110,53 @@ var moveToAnimation = function (_a) {
         });
     });
 };
+var TableauCardManager = (function (_super) {
+    __extends(TableauCardManager, _super);
+    function TableauCardManager(game) {
+        var _this = _super.call(this, game, {
+            getId: function (card) { return card.id.split("_")[0]; },
+            setupDiv: function (card, div) {
+                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+            },
+            setupFrontDiv: function (card, div) { return _this.setupFrontDiv(card, div); },
+            setupBackDiv: function (card, div) { return _this.setupBackDiv(card, div); },
+            isCardVisible: function (card) { return _this.isCardVisible(card); },
+            animationManager: game.animationManager,
+        }) || this;
+        _this.game = game;
+        return _this;
+    }
+    TableauCardManager.prototype.setupFrontDiv = function (card, div) {
+        div.classList.add("pr_card");
+        div.setAttribute("data-card-id", card.id.split("_")[0]);
+        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+        if (!card.id.startsWith("FAKE")) {
+            this.game.tooltipManager.addCardTooltip({
+                nodeId: card.id.split("_")[0] + "-front",
+                card: card,
+            });
+        }
+    };
+    TableauCardManager.prototype.setupBackDiv = function (card, div) {
+        div.classList.add("pr_card");
+        div.setAttribute("data-card-id", card.region === EAST ? "EAST_BACK" : "WEST_BACK");
+        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+    };
+    TableauCardManager.prototype.isCardVisible = function (_a) {
+        var location = _a.location;
+        if (location.startsWith("deck")) {
+            return false;
+        }
+        if (location === "market_west_0" || location === "market_east_0") {
+            return false;
+        }
+        return true;
+    };
+    return TableauCardManager;
+}(CardManager));
 var VictoryCardManager = (function (_super) {
     __extends(VictoryCardManager, _super);
     function VictoryCardManager(game) {
@@ -2761,7 +2769,7 @@ var Hand = (function () {
                 handWrapper.dataset.open = "hand";
             }
         });
-        this.hand = new LineStock(this.game.cardManager, document.getElementById("pr_player_hand"), { wrap: "wrap", gap: '12px', center: false });
+        this.hand = new LineStock(this.game.tableauCardManager, document.getElementById("pr_player_hand"), { wrap: "wrap", gap: '12px', center: false });
     };
     Hand.prototype.addCard = function (card) {
         return __awaiter(this, void 0, void 0, function () {
@@ -2917,8 +2925,8 @@ var Market = (function () {
         var _this = this;
         var gamedatas = _a.gamedatas;
         this.decks = (_b = {},
-            _b[EAST] = new LineStock(this.game.cardManager, document.getElementById("pr_market_east_deck")),
-            _b[WEST] = new LineStock(this.game.cardManager, document.getElementById("pr_market_west_deck")),
+            _b[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_east_deck")),
+            _b[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_west_deck")),
             _b);
         CARDINAL_DIRECTIONS.forEach(function (region) {
             _this.deckCounters[region].create("pr_market_".concat(region, "_deck_counter"));
@@ -2949,10 +2957,10 @@ var Market = (function () {
             _c[WEST] = [],
             _c);
         for (var i = 0; i <= 5; i++) {
-            this.stocks[EAST][i] = new LineStock(this.game.cardManager, document.getElementById("pr_market_east_".concat(i, "_stock")));
+            this.stocks[EAST][i] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_east_".concat(i, "_stock")));
             this.counters[EAST][i] = new ebg.counter();
             this.counters[EAST][i].create("pr_market_east_".concat(i, "_counter"));
-            this.stocks[WEST][i] = new LineStock(this.game.cardManager, document.getElementById("pr_market_west_".concat(i, "_stock")));
+            this.stocks[WEST][i] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_west_".concat(i, "_stock")));
             this.counters[WEST][i] = new ebg.counter();
             this.counters[WEST][i].create("pr_market_west_".concat(i, "_counter"));
         }
@@ -3563,11 +3571,53 @@ var PRPlayer = (function () {
         var playerBoardDiv = $("player_board_" + this.playerId);
         playerBoardDiv.insertAdjacentHTML("beforeend", tplPlayerPanel({ playerId: this.playerId }));
         this.counters = {
+            prestigeCatholic: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_prestige_icon",
+                icon: "prestige_catholic",
+                iconCounterId: "pr_prestige_catholic_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
+            prestigeIslamic: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_prestige_icon",
+                icon: "prestige_islamic",
+                iconCounterId: "pr_prestige_islamic_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
+            prestigeReformist: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_prestige_icon",
+                icon: "prestige_reformist",
+                iconCounterId: "pr_prestige_reformist_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
             cardsWest: new IconCounter({
                 containerId: "pr_player_panel_icons_".concat(this.playerId),
                 extraIconClasses: "pr_card_back_icon",
                 icon: "west_back",
                 iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
+            prestigeLaw: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_prestige_icon",
+                icon: "prestige_law",
+                iconCounterId: "pr_prestige_law_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
+            prestigeDiscovery: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_prestige_icon",
+                icon: "prestige_discovery",
+                iconCounterId: "pr_prestige_discovery_counter_".concat(this.playerId),
+                initialValue: 0,
+            }),
+            prestigePatron: new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(this.playerId),
+                extraIconClasses: "pr_prestige_icon",
+                icon: "prestige_patron",
+                iconCounterId: "pr_prestige_patron_counter_".concat(this.playerId),
                 initialValue: 0,
             }),
             cardsEast: new IconCounter({
@@ -3633,7 +3683,7 @@ var PRPlayer = (function () {
                         _b.sent();
                         return [3, 4];
                     case 2:
-                        element = this.game.cardManager.getCardElement(card);
+                        element = this.game.tableauCardManager.getCardElement(card);
                         return [4, moveToAnimation({
                                 game: this.game,
                                 element: element,
@@ -3642,7 +3692,7 @@ var PRPlayer = (function () {
                             })];
                     case 3:
                         _b.sent();
-                        this.game.cardManager.removeCard(card);
+                        this.game.tableauCardManager.removeCard(card);
                         _b.label = 4;
                     case 4:
                         this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(1);

@@ -34,6 +34,7 @@
     "node_modules/bga-cards/src/card-manager.ts",
     "src/paxrenaissance.ts",
     "src/animations.ts",
+    "src/card-managers/tableauCards.ts",
     "src/card-managers/victoryCards.ts",
     "src/templates.ts",
     "src/utility.ts",

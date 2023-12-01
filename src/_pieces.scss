@@ -58,11 +58,11 @@
 /* ------- RELIGION PIECES ------- */
 
 .pr_chess_piece[data-religion=catholic] {
-  background-position-x: 50%;
+  background-position-x: 0%;
 }
 
 .pr_chess_piece[data-religion=islamic] {
-  background-position-x: 0%;
+  background-position-x: 50%;
 }
 
 .pr_chess_piece[data-religion=reformist] {

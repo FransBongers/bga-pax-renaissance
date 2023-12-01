@@ -40,11 +40,11 @@ class Market {
   setupDecks({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     this.decks = {
       [EAST]: new LineStock(
-        this.game.cardManager,
+        this.game.tableauCardManager,
         document.getElementById("pr_market_east_deck")
       ),
       [WEST]: new LineStock(
-        this.game.cardManager,
+        this.game.tableauCardManager,
         document.getElementById("pr_market_west_deck")
       ),
     };
@@ -77,13 +77,13 @@ class Market {
     };
     for (let i = 0; i <= 5; i++) {
       this.stocks[EAST][i] = new LineStock<TableauCard>(
-        this.game.cardManager,
+        this.game.tableauCardManager,
         document.getElementById(`pr_market_east_${i}_stock`)
       );
       this.counters[EAST][i] = new ebg.counter();
       this.counters[EAST][i].create(`pr_market_east_${i}_counter`);
       this.stocks[WEST][i] = new LineStock<TableauCard>(
-        this.game.cardManager,
+        this.game.tableauCardManager,
         document.getElementById(`pr_market_west_${i}_stock`)
       );
       this.counters[WEST][i] = new ebg.counter();

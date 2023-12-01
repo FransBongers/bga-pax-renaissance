@@ -34,3 +34,34 @@
   background-position-x: math.div(((33 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((33 - 1) / 10)) * 100%, 3);
 }
+
+.pr_prestige_icon {
+  background-image: url("img/prestige.webp");
+  background-size: 600% 100%;
+  width: calc(var(--paxRenIconScale) * 33px);
+  height: calc(var(--paxRenIconScale) * 33px);
+}
+
+.pr_icon[data-icon=prestige_catholic] {
+  background-position-x: 0%; 
+}
+
+.pr_icon[data-icon=prestige_islamic] {
+  background-position-x: 40%; 
+}
+
+.pr_icon[data-icon=prestige_reformist] {
+  background-position-x: 100%; 
+}
+
+.pr_icon[data-icon=prestige_law] {
+  background-position-x: 60%; 
+}
+
+.pr_icon[data-icon=prestige_discovery] {
+  background-position-x: 20%; 
+}
+
+.pr_icon[data-icon=prestige_patron] {
+  background-position-x: 80%; 
+}

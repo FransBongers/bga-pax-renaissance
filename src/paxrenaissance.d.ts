@@ -45,7 +45,7 @@ interface PaxRenaissanceGame extends Game {
   updatePlayAreaSize: () => void;
   _connections: unknown[];
   animationManager: AnimationManager;
-  cardManager: CardManager<TableauCard>;
+  // cardManager: CardManager<TableauCard>;
   hand: Hand;
   market: Market;
   notificationManager: NotificationManager;
@@ -53,6 +53,7 @@ interface PaxRenaissanceGame extends Game {
   playerManager: PlayerManager;
   supply: Supply;
   tooltipManager: TooltipManager;
+  tableauCardManager: TableauCardManager;
   victoryCardManager: VictoryCardManager;
 }
 

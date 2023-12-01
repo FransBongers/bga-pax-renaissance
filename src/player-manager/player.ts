@@ -14,6 +14,12 @@ class PRPlayer {
   private playerName: string;
   private player: PaxRenaissancePlayerData;
   public counters: {
+    prestigeCatholic: IconCounter;
+    prestigeIslamic: IconCounter;
+    prestigeReformist: IconCounter;
+    prestigeLaw: IconCounter;
+    prestigeDiscovery: IconCounter;
+    prestigePatron: IconCounter;
     cardsWest?: IconCounter;
     cardsEast?: IconCounter;
     florins?: IconCounter;
@@ -98,11 +104,53 @@ class PRPlayer {
     // const node = document.getElementById(`pr_player_panel_${this.playerId}`);
 
     this.counters = {
+      prestigeCatholic: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_prestige_icon",
+        icon: "prestige_catholic",
+        iconCounterId: `pr_prestige_catholic_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
+      prestigeIslamic: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_prestige_icon",
+        icon: "prestige_islamic",
+        iconCounterId: `pr_prestige_islamic_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
+      prestigeReformist: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_prestige_icon",
+        icon: "prestige_reformist",
+        iconCounterId: `pr_prestige_reformist_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
       cardsWest: new IconCounter({
         containerId: `pr_player_panel_icons_${this.playerId}`,
         extraIconClasses: "pr_card_back_icon",
         icon: "west_back",
         iconCounterId: `pr_cards_west_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
+      prestigeLaw: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_prestige_icon",
+        icon: "prestige_law",
+        iconCounterId: `pr_prestige_law_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
+      prestigeDiscovery: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_prestige_icon",
+        icon: "prestige_discovery",
+        iconCounterId: `pr_prestige_discovery_counter_${this.playerId}`,
+        initialValue: 0,
+      }),
+      prestigePatron: new IconCounter({
+        containerId: `pr_player_panel_icons_${this.playerId}`,
+        extraIconClasses: "pr_prestige_icon",
+        icon: "prestige_patron",
+        iconCounterId: `pr_prestige_patron_counter_${this.playerId}`,
         initialValue: 0,
       }),
       cardsEast: new IconCounter({
@@ -201,14 +249,14 @@ class PRPlayer {
     if (this.getPlayerId() === this.game.getPlayerId()) {
       await this.game.hand.addCard(card);
     } else {
-      const element = this.game.cardManager.getCardElement(card);
+      const element = this.game.tableauCardManager.getCardElement(card);
       await moveToAnimation({
         game: this.game,
         element,
         toId: `overall_player_board_${this.playerId}`,
         remove: true,
       });
-      this.game.cardManager.removeCard(card);
+      this.game.tableauCardManager.removeCard(card);
     }
     this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(1);
   }
