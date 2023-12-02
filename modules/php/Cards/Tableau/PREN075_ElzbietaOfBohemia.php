@@ -12,6 +12,7 @@ class PREN075_ElzbietaOfBohemia extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Her 100,000 gold crown dowry was not paid immediately and that gave her a pretext to claim the Hungarian and Bohemian crowns.')
     ];
     $this->name = clienttranslate('Elzbieta of Bohemia');
+    $this->oneShot = CORONATION_ONE_SHOT;
     $this->region = EAST;
   }
 }

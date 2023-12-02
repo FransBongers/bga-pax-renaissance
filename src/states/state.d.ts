@@ -32,6 +32,10 @@ interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
   victoryCards: VictoryCard[];
 }
 
+interface OnEnteringPlaceAgentsArgs extends CommonArgs {
+
+}
+
 interface OnEnteringPlayerActionArgs extends CommonArgs {
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];

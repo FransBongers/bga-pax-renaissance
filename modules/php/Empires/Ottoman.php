@@ -9,6 +9,11 @@ class Ottoman extends \PaxRenaissance\Models\Empire
   {
     $this->id = OTTOMAN;
     $this->name = clienttranslate('Ottoman');
+    $this->borders = [
+      BORDER_HUNGARY_OTTOMAN,
+      BORDER_MAMLUK_OTTOMAN,
+      BORDER_OTTOMAN_PAPAL_STATES,
+    ];
     $this->cities = [CONSTANTINOPLE_1, CONSTANTINOPLE_2, CONSTANTINOPLE_3, MODON, RHODES];
   }
 }

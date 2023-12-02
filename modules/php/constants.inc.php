@@ -40,6 +40,7 @@ const ST_FLIP_VICTORY_CARD = 25;
 const ST_TRADE_FAIR = 26;
 const ST_TRADE_FAIR_PROFIT_DISPERSAL = 27;
 const ST_TRADE_FAIR_LEVY = 28;
+const ST_PLACE_AGENTS = 29;
 
 const ST_CLEANUP = 88;
 const ST_RESOLVE_STACK = 90;
@@ -78,9 +79,10 @@ const AFTER_FINISHING_ACTION = 'afterFinishing';
  * ATOMIC ACTIONS
  */
 const FLIP_VICTORY_CARD = 'FLIP_VICTORY_CARD';
+const PLACE_AGENTS = 'PLACE_AGENTS';
 const PLAYER_ACTION = 'PLAYER_ACTION';
-const PURCHASE_CARD = 'PURCHASE_CARD';
 const PLAY_CARD = 'PLAY_CARD';
+const PURCHASE_CARD = 'PURCHASE_CARD';
 const SELL_CARD = 'SELL_CARD';
 const TRADE_FAIR = 'TRADE_FAIR';
 const TRADE_FAIR_PROFIT_DISPERSAL = 'TRADE_FAIR_PROFIT_DISPERSAL';
@@ -134,6 +136,29 @@ const DISK = 'disk';
 
 
 /**
+ * One-Shots
+ */
+const APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT = 'apostacyIslamicCatholicOneShot';
+const APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT = 'apostacyReformistCatholicOneShot';
+const APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT = 'apostacyReformistIslamicOneShot';
+const CONSPIRACY_ONE_SHOT = 'conspiracyOneShot';
+const CORONATION_ONE_SHOT = 'coronationOneShot';
+const CRUSADE_ONE_SHOT = 'crusadeOneShot';
+const JIHAD_ONE_SHOT = 'jihadOneShot';
+const PEASANT_REVOLT_ONE_SHOT = 'peasantRevoltOneShot';
+const REFORMATION_ONE_SHOT = 'reformationOneShot';
+const TRADE_SHIFT_NOVGOROD_ONE_SHOT = 'tradeShiftNovgorodOneShot';
+const TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT = 'tradeShiftSpiceIslandOneShot';
+const TRADE_SHIFT_TIMBUKTU_ONE_SHOT = 'tradeShiftTimbuktuOneShot';
+
+/**
+ * PRESTIGE
+ */
+const DISCOVERY = 'discovery';
+const LAW = 'law';
+const PATRON = 'patron';
+
+/**
  * Religions
  */
 const MEDIEVAL = 'medieval';
@@ -147,12 +172,7 @@ const RELIGIONS = [
   REFORMIST
 ];
 
-/**
- * PRESTIGE
- */
-const DISCOVERY = 'discovery';
-const LAW = 'law';
-const PATRON = 'patron';
+
 
 
 /**

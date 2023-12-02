@@ -7,11 +7,18 @@ class PREN080_GreekKlephts extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN080_GreekKlephts';
+    $this->agents = [
+      'number' => 1,
+      'religion' => REFORMIST,
+      'type' => ROOK,
+    ];
+    $this->empire = OTTOMAN;
     $this->flavorText = [
       clienttranslate('Brigands of the Ottoman empire, the klephts were man who were fleeing taxes, debts, or reprisals from Ottoman officials.'),
       clienttranslate('Living in the rugged mountains of Greece and Cyprus, they preyed upon travelers and raided Ottoman caravans. Some became Armatoloi (militia), others continued the fight up to the Greek War of Independence (1821).')
     ];
     $this->name = clienttranslate('Greek Klephts');
+    $this->oneShot = CONSPIRACY_ONE_SHOT;
     $this->region = EAST;
   }
 }

@@ -7,10 +7,17 @@ class PREN069_BashiBazouk extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN069_BashiBazouk';
+    $this->agents = [
+      'number' => 1,
+      'religion' => REFORMIST,
+      'type' => KNIGHT,
+    ];
+    $this->empire = EAST;
     $this->flavorText = [
       clienttranslate('The Bashi-bazouk, the irregular and undisciplined foot-soldiers of the Ottoman army, did not receive regular salaries and lived off loot. They were little more then legalized bandits.')
     ];
     $this->name = clienttranslate('Bashi-bazouk');
+    $this->oneShot = REFORMATION_ONE_SHOT;
     $this->region = EAST;
   }
 }

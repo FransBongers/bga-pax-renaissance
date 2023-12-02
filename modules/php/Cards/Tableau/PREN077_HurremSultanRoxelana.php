@@ -12,6 +12,7 @@ class PREN077_HurremSultanRoxelana extends \PaxRenaissance\Models\TableauCard
       clienttranslate("Favoring her own son as the next sultan, she had the the sultan's son, Şehzade Mustafa, strangled.")
     ];
     $this->name = clienttranslate('Hürrem Sultan Roxelana');
+    $this->oneShot = CORONATION_ONE_SHOT;
     $this->region = EAST;
   }
 }

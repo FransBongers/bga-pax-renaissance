@@ -7,6 +7,12 @@ class PREN023_SpanishTercio extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN023_SpanishTercio';
+    $this->agents = [
+      'number' => 1,
+      'religion' => CATHOLIC,
+      'type' => KNIGHT,
+    ];
+    $this->empire = WEST;
     $this->flavorText = [
       clienttranslate('This infantry formation, made up of pikemen, swordsmen and arquebusiers or musketeers in a combined arms formation, were deployed all over Europe under the Habsburg Emperors, who were kings of both Spain and the Holy Roman Empire.'),
       clienttranslate('Composed of highly trained volunteers, they dominated supreme on European battlefields.')

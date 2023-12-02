@@ -1744,6 +1744,7 @@ var PaxRenaissance = (function () {
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
+            _a.placeAgents = new PlaceAgentsState(this),
             _a.playerAction = new PlayerActionState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
@@ -4040,6 +4041,39 @@ var FlipVictoryCardState = (function () {
         });
     };
     return FlipVictoryCardState;
+}());
+var PlaceAgentsState = (function () {
+    function PlaceAgentsState(game) {
+        this.game = game;
+    }
+    PlaceAgentsState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    PlaceAgentsState.prototype.onLeavingState = function () {
+        debug("Leaving ConfirmTurnState");
+    };
+    PlaceAgentsState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} may place Agents",
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    PlaceAgentsState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must place an Agent",
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+    };
+    return PlaceAgentsState;
 }());
 var PlayerActionState = (function () {
     function PlayerActionState(game) {

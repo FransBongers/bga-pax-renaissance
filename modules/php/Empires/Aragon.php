@@ -7,6 +7,11 @@ class Aragon extends \PaxRenaissance\Models\Empire
   {
     $this->id = ARAGON;
     $this->name = clienttranslate('Aragon');
+    $this->borders = [
+      BORDER_ARAGON_FRANCE,
+      BORDER_ARAGON_PORTUGAL,
+      BORDER_ARAGON_PAPAL_STATES,
+    ];
     $this->cities = [ALGIERS, TIMBUKTU, VALENCIA];
   }
 }

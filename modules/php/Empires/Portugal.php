@@ -7,6 +7,10 @@ class Portugal extends \PaxRenaissance\Models\Empire
   {
     $this->id = PORTUGAL;
     $this->name = clienttranslate('Portugal');
+    $this->borders = [
+      BORDER_ARAGON_PORTUGAL,
+      BORDER_ENGLAND_PORTUGAL,
+    ];
     $this->cities = [
       GRANADA,
       TOLEDO,

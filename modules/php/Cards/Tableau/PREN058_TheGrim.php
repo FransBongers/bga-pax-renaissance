@@ -7,11 +7,18 @@ class PREN058_TheGrim extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN058_TheGrim';
+    $this->agents = [
+      'number' => 1,
+      'religion' => ISLAMIC,
+      'type' => BISHOP,
+    ];
+    $this->empire = OTTOMAN;
     $this->flavorText = [
       clienttranslate('Selim I "The Grim", whose reign as Ottoman sultan tripled the size of the empire. His conquest of the Mamluk Sultanate allowed him to seize the title of Caliph of Islam, the religious successor to the Islamic prophet, Muhammad.'),
       clienttranslate('Selim had so many of his viziers executed, that "may you be a vizier of Selim\'s" remains an Ottoman curse.')
     ];
     $this->name = clienttranslate('The Grim');
+    $this->oneShot = JIHAD_ONE_SHOT;
     $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }

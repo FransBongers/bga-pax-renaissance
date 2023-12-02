@@ -7,11 +7,18 @@ class PREN008_Jesuits extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN008_Jesuits';
+    $this->agents = [
+      'number' => 1,
+      'religion' => CATHOLIC,
+      'type' => BISHOP,
+    ];
+    $this->empire = ARAGON;
     $this->flavorText = [
       clienttranslate("Ignatius of Loyola was a Spanish knight who had a spiritual vision after a near death experience in the battlefield. Loyola's devotion to the Catholic Church was characterized by absolute obedience to the Pope."),
       clienttranslate('In 1534 he founded the Society of Jesus (Jesuits) and later became its first Superior General. The Jesuits became a major factor in the Counter-Reformation.')
     ];
     $this->name = clienttranslate('Jesuits');
+    $this->oneShot = CRUSADE_ONE_SHOT;
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }

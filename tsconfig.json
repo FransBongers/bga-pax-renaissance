@@ -65,6 +65,7 @@
     "src/states/ClientStartTradeFair.ts",
     "src/states/ConfirmTurn.ts",
     "src/states/FlipVictoryCard.ts",
+    "src/states/PlaceAgents.ts",
     "src/states/PlayerAction.ts",
     "src/states/state.d.ts",
     "src/states/TradeFairLevy.ts",

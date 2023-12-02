@@ -6,6 +6,7 @@ use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\ChessPieces;
 use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Players;
@@ -17,14 +18,24 @@ class Empire implements \JsonSerializable
 {
   protected $id;
   protected $name;
+  protected $borders;
   protected $cities;
 
 
   protected $attributes = [
     'id' => ['id', 'str'],
     'name' => ['name', 'str'],
+    'borders' => ['borders', 'obj'],
     'cities' => ['cities', 'obj'],
   ];
+
+
+  public function getBorders()
+  {
+    return array_map(function ($borderId) {
+      return Borders::get($borderId);
+    },$this->borders);
+  }
 
   public function getCities()
   {

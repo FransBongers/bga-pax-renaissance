@@ -7,6 +7,10 @@ class Byzantium extends \PaxRenaissance\Models\Empire
   {
     $this->id = BYZANTIUM;
     $this->name = clienttranslate('Byzantium');
+    $this->borders = [
+      BORDER_BYZANTIUM_HUNGARY,
+      BORDER_BYZANTIUM_MAMLUK,
+    ];
     $this->cities = [CAFFA, TANA, TREBIZOND];
   }
 }

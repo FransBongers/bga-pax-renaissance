@@ -12,14 +12,20 @@ class TableauCard extends Card
 {
   protected $type = TABLEAU_CARD;
   protected $id;
+  protected $agents = null;
+  protected $empire;
   protected $flavorText = [];
   protected $name;
+  protected $oneShot = null;
   protected $prestige = [];
   protected $region;
 
   protected $staticAttributes = [
+    'agents',
+    'empire',
     'flavorText',
     'name',
+    'oneShot',
     'prestige',
     'region',
     'type',
@@ -30,8 +36,11 @@ class TableauCard extends Card
     $data = parent::jsonSerialize();
 
     return array_merge($data, [
+      'agents' => $this->agents,
+      'empire' => $this->empire,
       'flavorText' => $this->flavorText,
       'name' => $this->name,
+      'oneShot' => $this->oneShot,
       'prestige' => $this->prestige,
       'region' => $this->region,
       'type' => $this->type,
@@ -98,6 +107,16 @@ class TableauCard extends Card
   public function isCometCard()
   {
     return false;
+  }
+
+  public function getAgents()
+  {
+    return $this->agents;
+  }
+
+  public function getEmpire()
+  {
+    return $this->empire;
   }
 
   public function getPurchaseCost()

@@ -30,6 +30,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
     confirmTurn: ConfirmTurnState;
     flipVictoryCard: FlipVictoryCardState;
+    placeAgents: PlaceAgentsState;
     playerAction: PlayerActionState;
     tradeFairLevy: TradeFairLevyState
   };
@@ -66,6 +67,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),
       confirmTurn: new ConfirmTurnState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
+      placeAgents: new PlaceAgentsState(this),
       playerAction: new PlayerActionState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };

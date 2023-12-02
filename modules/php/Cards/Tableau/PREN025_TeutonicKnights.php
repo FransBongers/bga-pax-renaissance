@@ -7,11 +7,18 @@ class PREN025_TeutonicKnights extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN025_TeutonicKnights';
+    $this->agents = [
+      'number' => 2,
+      'religion' => CATHOLIC,
+      'type' => KNIGHT,
+    ];
+    $this->empire = HOLY_ROMAN_EMIRE;
     $this->flavorText = [
       clienttranslate('The Prussian Confederation, a coalition of Prussian cities and local nobility, sought independence from the oppressive Teutonic Knights.'),
       clienttranslate("They asked the Jagiellon king of Poland to annex Prussia, so they could share the privileges of Poland's golden liberty. They eventually prevailed against the knights and imperial troops under Grand Master Ludwig von Erlichshausen.")
     ];
     $this->name = clienttranslate('Teutonic Knights');
+    $this->oneShot = CONSPIRACY_ONE_SHOT;
     $this->region = WEST;
   }
 }

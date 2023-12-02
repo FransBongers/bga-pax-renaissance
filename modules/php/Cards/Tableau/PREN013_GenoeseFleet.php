@@ -7,6 +7,12 @@ class PREN013_GenoeseFleet extends \PaxRenaissance\Models\TableauCard
   {
     parent::__construct($row);
     $this->id = 'PREN013_GenoeseFleet';
+    $this->agents = [
+      'number' => 1,
+      'religion' => CATHOLIC,
+      'type' => PIRATE,
+    ];
+    $this->empire = ARAGON;
     $this->flavorText = [
       clienttranslate('The condottiero Andrea Doria worked for the pope, various Italian princes, France, and the Emperor.'),
       clienttranslate('In his native Genoa, he expelled the French and reestablished the republic under 28 noble clans.'),

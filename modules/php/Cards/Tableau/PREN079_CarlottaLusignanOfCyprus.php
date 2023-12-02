@@ -12,6 +12,7 @@ class PREN079_CarlottaLusignanOfCyprus extends \PaxRenaissance\Models\TableauCar
       clienttranslate('Despite military support from Rhodes, Pope Pius II, and Savoy, she was unable to regain her kingdom.')
     ];
     $this->name = clienttranslate('Carlotta Lusignan of Cyprus');
+    $this->oneShot = CORONATION_ONE_SHOT;
     $this->region = EAST;
   }
 }

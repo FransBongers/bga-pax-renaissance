@@ -1,9 +1,11 @@
 <?php
+
 namespace PaxRenaissance\Actions;
 
 
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
@@ -35,9 +37,19 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("Not allowed to purchase card");
     }
     Globals::incRemainingActions(-1);
-    
+
     $card->play($player);
-    
+
+    if ($card->getAgents() !== null) {
+      $parent = $this->ctx->getParent();
+      $parent->pushChild(new LeafNode([
+        'action' => PLACE_AGENTS,
+        'playerId' => $this->ctx->getPlayerId(),
+        'agents' => $card->getAgents(),
+        'empire' => $card->getEmpire(),
+      ]));
+    }
+
     $this->resolveAction(['cardId' => $cardId]);
   }
 }

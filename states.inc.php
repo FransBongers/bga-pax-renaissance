@@ -231,6 +231,16 @@ $machinestates = [
         'possibleactions' => ['actTradeFairLevy'],
     ],
 
+    ST_PLACE_AGENTS=> [
+        'name' => 'placeAgents',
+        'description' => clienttranslate('${actplayer} may place agent'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actPlaceAgents', 'pass'],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',
