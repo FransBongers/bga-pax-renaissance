@@ -12,6 +12,7 @@ class PREN018_AlmeidaArmada extends \PaxRenaissance\Models\TableauCard
       clienttranslate('In desperation, the Mamluk Sultan made an alliance with his traditional rivals, the Ottomans.')
     ];
     $this->name = clienttranslate('Almeida Armada');
+    $this->prestige = [DISCOVERY];
     $this->region = WEST;
   }
 }

@@ -12,6 +12,7 @@ class PREN010_BonfireOfTheVanities extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The Borgia pope had him burned as a heretic, but his reformations inspired Luther.')
     ];
     $this->name = clienttranslate('Bonfire of the Vanities');
+    $this->prestige = [LAW];
     $this->region = WEST;
   }
 }

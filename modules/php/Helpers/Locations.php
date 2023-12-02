@@ -28,4 +28,9 @@ abstract class Locations extends \APP_DbObject
   {
     return 'supply_' . $type . '_' . $colorBankReligion;
   }
+
+  public static function tableau($playerId, $region)
+  {
+    return 'tableau_' . $region . '_' . $playerId;
+  }
 }

@@ -42,28 +42,52 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   public function actPlayerAction($args)
   {
     self::checkAction('actPlayerAction');
+    $parent = $this->ctx->getParent();
     // Notifications::log('actPlayerAction', $args);
     switch ($args['action']) {
+      case 'playCard':
+        $this->ctx->insertAsBrother(Engine::buildTree([
+          'children' => [
+            [
+              'action' => PLAY_CARD,
+              'playerId' => $this->ctx->getPlayerId(),
+              'cardId' => $args['cardId'],
+            ]
+          ]
+        ]));
+        break;
       case 'purchaseCard':
-        Engine::insertAsChild([
-          'action' => PURCHASE_CARD,
-          'playerId' => $this->ctx->getPlayerId(),
-          'cardId' => $args['cardId'],
-        ]);
+        $this->ctx->insertAsBrother(Engine::buildTree([
+          'children' => [
+            [
+              'action' => PURCHASE_CARD,
+              'playerId' => $this->ctx->getPlayerId(),
+              'cardId' => $args['cardId'],
+            ]
+          ]
+        ]));
         break;
       case 'sellCard':
-        Engine::insertAsChild([
-          'action' => SELL_CARD,
-          'playerId' => $this->ctx->getPlayerId(),
-          'cardId' => $args['cardId'],
-        ]);
+        $this->ctx->insertAsBrother(Engine::buildTree([
+          'children' => [
+            [
+              'action' => SELL_CARD,
+              'playerId' => $this->ctx->getPlayerId(),
+              'cardId' => $args['cardId'],
+            ]
+          ]
+        ]));
         break;
       case 'tradeFair':
-        Engine::insertAsChild([
-          'action' => TRADE_FAIR,
-          'playerId' => $this->ctx->getPlayerId(),
-          'region' => $args['region'],
-        ]);
+        $this->ctx->insertAsBrother(Engine::buildTree([
+          'children' => [
+            [
+              'action' => TRADE_FAIR,
+              'playerId' => $this->ctx->getPlayerId(),
+              'region' => $args['region'],
+            ]
+          ]
+        ]));
         break;
     }
 

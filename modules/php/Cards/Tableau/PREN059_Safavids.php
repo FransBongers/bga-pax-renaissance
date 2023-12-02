@@ -12,6 +12,7 @@ class PREN059_Safavids extends \PaxRenaissance\Models\TableauCard
       clienttranslate("By 1511 pro-Shi'a uprisings erupted in the neighboring Ottoman Empire, a Sunni dynasty, and the Turkish Sultan responded by conquering Safavid Iran.")
     ];
     $this->name = clienttranslate('Safavids');
+    $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }
 }

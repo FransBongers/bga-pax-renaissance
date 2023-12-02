@@ -12,6 +12,7 @@ class PREN008_Jesuits extends \PaxRenaissance\Models\TableauCard
       clienttranslate('In 1534 he founded the Society of Jesus (Jesuits) and later became its first Superior General. The Jesuits became a major factor in the Counter-Reformation.')
     ];
     $this->name = clienttranslate('Jesuits');
+    $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }
 }

@@ -72,6 +72,13 @@ const RELIGIONS = [
 ];
 
 /**
+ * PRESTIGE
+ */
+const DISCOVERY = 'discovery';
+const LAW = 'law';
+const PATRON = 'patron';
+
+/**
  * Empires
  */
 const ENGLAND = "england";

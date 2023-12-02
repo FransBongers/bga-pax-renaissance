@@ -38,6 +38,9 @@ var RELIGIONS = [
     ISLAMIC,
     REFORMIST
 ];
+var DISCOVERY = 'discovery';
+var LAW = 'law';
+var PATRON = 'patron';
 var ENGLAND = "england";
 var FRANCE = "france";
 var HOLY_ROMAN_EMIRE = "holyRomanEmpire";
@@ -1735,7 +1738,7 @@ var PaxRenaissance = (function () {
         var _this = this;
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
         this.gamedatas = gamedatas;
-        debug("gamedata", gamedatas);
+        debug("gamedatas", gamedatas);
         this._connections = [];
         this.activeStates = (_a = {},
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
@@ -3221,6 +3224,7 @@ var NotificationManager = (function () {
         var notifs = [
             ["log", undefined],
             ["flipVictoryCard", undefined],
+            ["playCard", undefined],
             ["purchaseCard", undefined],
             ["refreshMarket", undefined],
             ["sellCard", undefined],
@@ -3261,6 +3265,24 @@ var NotificationManager = (function () {
                 _a = notif.args, playerId = _a.playerId, card = _a.card;
                 this.game.victoryCardManager.flipCard(card);
                 return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_playCard = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card, player;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, card = _a.card;
+                        player = this.getPlayer({ playerId: playerId });
+                        player.counters.cards[card.region].incValue(-1);
+                        return [4, player.tableau.addCard(card)];
+                    case 1:
+                        _b.sent();
+                        card.prestige.forEach(function (prestige) { return player.counters.prestige[prestige].incValue(1); });
+                        return [2];
+                }
             });
         });
     };
@@ -3538,6 +3560,10 @@ var PlayerManager = (function () {
 var PRPlayer = (function () {
     function PRPlayer(_a) {
         var game = _a.game, player = _a.player;
+        this.counters = {
+            prestige: {},
+            cards: {},
+        };
         this.game = game;
         var playerId = player.id;
         this.playerId = Number(playerId);
@@ -3553,8 +3579,8 @@ var PRPlayer = (function () {
     };
     PRPlayer.prototype.setupHand = function (_a) {
         var gamedatas = _a.gamedatas, player = _a.player;
-        this.counters.cardsEast.setValue(player.hand.counts.east);
-        this.counters.cardsWest.setValue(player.hand.counts.west);
+        this.counters.cards.east.setValue(player.hand.counts.east);
+        this.counters.cards.west.setValue(player.hand.counts.west);
         if (this.playerId === this.game.getPlayerId()) {
             this.game.hand.getStock().addCards(player.hand.cards);
         }
@@ -3562,78 +3588,53 @@ var PRPlayer = (function () {
     PRPlayer.prototype.setupPlayer = function (_a) {
         var gamedatas = _a.gamedatas, player = _a.player;
         var playerGamedatas = gamedatas.players[this.playerId];
-        this.setupPlayerTableau({ playerGamedatas: playerGamedatas });
+        this.tableau = new PlayerTableau({ game: this.game, player: player });
         this.setupPlayerPanel({ playerGamedatas: playerGamedatas, player: player });
         this.setupHand({ gamedatas: gamedatas, player: player });
     };
     PRPlayer.prototype.setupPlayerPanel = function (_a) {
+        var _this = this;
         var playerGamedatas = _a.playerGamedatas, player = _a.player;
         var playerBoardDiv = $("player_board_" + this.playerId);
         playerBoardDiv.insertAdjacentHTML("beforeend", tplPlayerPanel({ playerId: this.playerId }));
-        this.counters = {
-            prestigeCatholic: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
+        [CATHOLIC, ISLAMIC, REFORMIST].forEach(function (prestige) {
+            _this.counters.prestige[prestige] = new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(_this.playerId),
                 extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_catholic",
-                iconCounterId: "pr_prestige_catholic_counter_".concat(this.playerId),
+                icon: "prestige_".concat(prestige),
+                iconCounterId: "pr_prestige_".concat(prestige, "_counter_").concat(_this.playerId),
                 initialValue: 0,
-            }),
-            prestigeIslamic: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
+            });
+        });
+        this.counters.cards.west = new IconCounter({
+            containerId: "pr_player_panel_icons_".concat(this.playerId),
+            extraIconClasses: "pr_card_back_icon",
+            icon: "west_back",
+            iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
+            initialValue: 0,
+        });
+        [LAW, DISCOVERY, PATRON].forEach(function (prestige) {
+            _this.counters.prestige[prestige] = new IconCounter({
+                containerId: "pr_player_panel_icons_".concat(_this.playerId),
                 extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_islamic",
-                iconCounterId: "pr_prestige_islamic_counter_".concat(this.playerId),
+                icon: "prestige_".concat(prestige),
+                iconCounterId: "pr_prestige_".concat(prestige, "_counter_").concat(_this.playerId),
                 initialValue: 0,
-            }),
-            prestigeReformist: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
-                extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_reformist",
-                iconCounterId: "pr_prestige_reformist_counter_".concat(this.playerId),
-                initialValue: 0,
-            }),
-            cardsWest: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
-                extraIconClasses: "pr_card_back_icon",
-                icon: "west_back",
-                iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
-                initialValue: 0,
-            }),
-            prestigeLaw: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
-                extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_law",
-                iconCounterId: "pr_prestige_law_counter_".concat(this.playerId),
-                initialValue: 0,
-            }),
-            prestigeDiscovery: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
-                extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_discovery",
-                iconCounterId: "pr_prestige_discovery_counter_".concat(this.playerId),
-                initialValue: 0,
-            }),
-            prestigePatron: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
-                extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_patron",
-                iconCounterId: "pr_prestige_patron_counter_".concat(this.playerId),
-                initialValue: 0,
-            }),
-            cardsEast: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
-                extraIconClasses: "pr_card_back_icon",
-                icon: "east_back",
-                iconCounterId: "pr_cards_east_counter_".concat(this.playerId),
-                initialValue: 0,
-            }),
-            florins: new IconCounter({
-                containerId: "pr_player_panel_icons_".concat(this.playerId),
-                icon: "florin",
-                iconCounterId: "pr_florins_counter_".concat(this.playerId),
-                initialValue: player.florins,
-            }),
-        };
+            });
+        });
+        this.counters.cards.east = new IconCounter({
+            containerId: "pr_player_panel_icons_".concat(this.playerId),
+            extraIconClasses: "pr_card_back_icon",
+            icon: "east_back",
+            iconCounterId: "pr_cards_east_counter_".concat(this.playerId),
+            initialValue: 0,
+        });
+        this.counters.florins = new IconCounter({
+            containerId: "pr_player_panel_icons_".concat(this.playerId),
+            icon: "florin",
+            iconCounterId: "pr_florins_counter_".concat(this.playerId),
+            initialValue: player.florins,
+        });
         if (COLORS_WITH_SHADOW.includes(this.getColor())) {
             var node = document.getElementById("player_name_".concat(this.playerId));
             if (node) {
@@ -3642,13 +3643,8 @@ var PRPlayer = (function () {
         }
         this.updatePlayerPanel({ playerGamedatas: playerGamedatas });
     };
-    PRPlayer.prototype.setupPlayerTableau = function (_a) {
-        var playerGamedatas = _a.playerGamedatas;
-        document
-            .getElementById("pr_player_tableau_".concat(this.playerId))
-            .insertAdjacentHTML("beforeend", tplPlayerTableauContent({ playerGamedatas: playerGamedatas }));
-    };
     PRPlayer.prototype.updatePlayerPanel = function (_a) {
+        var _this = this;
         var _b;
         var playerGamedatas = _a.playerGamedatas;
         if ((_b = this.game.framework().scoreCtrl) === null || _b === void 0 ? void 0 : _b[this.playerId]) {
@@ -3656,6 +3652,14 @@ var PRPlayer = (function () {
                 .framework()
                 .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
         }
+        ;
+        var allCards = __spreadArray(__spreadArray([], playerGamedatas.tableau.east, true), playerGamedatas.tableau.west, true);
+        allCards.forEach(function (card) {
+            card.prestige.forEach(function (prestige) {
+                console.log('prestigeCounter', prestige, _this.counters.prestige[prestige]);
+                _this.counters.prestige[prestige].incValue(1);
+            });
+        });
     };
     PRPlayer.prototype.clearInterface = function () { };
     PRPlayer.prototype.getColor = function () {
@@ -3695,7 +3699,7 @@ var PRPlayer = (function () {
                         this.game.tableauCardManager.removeCard(card);
                         _b.label = 4;
                     case 4:
-                        this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(1);
+                        this.counters.cards[card.region].incValue(1);
                         return [2];
                 }
             });
@@ -3713,7 +3717,7 @@ var PRPlayer = (function () {
                         _b.sent();
                         _b.label = 2;
                     case 2:
-                        this.counters[card.region === EAST ? "cardsEast" : "cardsWest"].incValue(-1);
+                        this.counters.cards[card.region].incValue(-1);
                         return [2];
                 }
             });
@@ -3721,6 +3725,55 @@ var PRPlayer = (function () {
     };
     return PRPlayer;
 }());
+var PlayerTableau = (function () {
+    function PlayerTableau(_a) {
+        var game = _a.game, player = _a.player;
+        this.game = game;
+        this.setup({ player: player });
+    }
+    PlayerTableau.prototype.setup = function (_a) {
+        var player = _a.player;
+        document
+            .getElementById("pr_player_tableau_".concat(player.id))
+            .insertAdjacentHTML("beforeend", tplPlayerTableauContent({
+            player: player,
+            title: _("${tkn_playerName}'s tableau").replace("${tkn_playerName}", tplLogTokenPlayerName({
+                name: player.name,
+                color: player.color,
+            })),
+        }));
+        this.tableauEast = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction('state') });
+        this.tableauWest = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction('state') });
+        this.tableauEast.addCards(player.tableau[EAST]);
+        this.tableauWest.addCards(player.tableau[WEST]);
+    };
+    PlayerTableau.prototype.addCard = function (card) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log('location', card.location);
+                        if (!(card.location.split('_')[1] === EAST)) return [3, 2];
+                        return [4, this.tableauEast.addCard(card)];
+                    case 1:
+                        _a.sent();
+                        return [3, 4];
+                    case 2: return [4, this.tableauWest.addCard(card)];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2];
+                }
+            });
+        });
+    };
+    return PlayerTableau;
+}());
+var tplPlayerTableauContent = function (_a) {
+    var player = _a.player, title = _a.title;
+    var playerId = player.id;
+    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\"></div>\n    <div class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\"></div>\n  </div>\n    ");
+};
 var tplPlayerPanel = function (_a) {
     var playerId = _a.playerId;
     return "<div id=\"pr_player_panel_".concat(playerId, "\" class=\"pr_player_panel\">\n            <div id=\"pr_player_panel_icons_").concat(playerId, "\" class=\"pr_player_panel_icons\"></div>\n          </div>");
@@ -3733,11 +3786,6 @@ var tplPlayerTableauxContainer = function (_a) {
         return "<div id=\"pr_player_tableau_".concat(playerId, "\" class=\"pr_player_tableau\"></div>");
     })
         .join(""), "\n    </div>\n  ");
-};
-var tplPlayerTableauContent = function (_a) {
-    var playerGamedatas = _a.playerGamedatas;
-    var playerId = playerGamedatas.id;
-    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(_("${playerName}'s tableau").replace("${playerName}", playerGamedatas.name), "</span></div>\n  <div>\n    <div class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[playerGamedatas.color], "\"></div>\n  </div>\n    ");
 };
 var ChessPieceCounter = (function () {
     function ChessPieceCounter() {
@@ -4052,7 +4100,7 @@ var PlayerActionState = (function () {
         });
         this.game.addCancelButton();
     };
-    PlayerActionState.prototype.updateInterfaceConfirmSellCard = function (_a) {
+    PlayerActionState.prototype.updateInterfaceOnClickHandCard = function (_a) {
         var _this = this;
         var card = _a.card;
         this.game.clearPossible();
@@ -4061,14 +4109,27 @@ var PlayerActionState = (function () {
             node.classList.add(PR_SELECTED);
         }
         this.game.clientUpdatePageTitle({
-            text: "Sell ${cardName} for ${amount} ${tkn_florin} ?",
+            text: "Play or sell ${cardName}?",
             args: {
-                amount: 2,
                 cardName: _(card.name),
-                tkn_florin: _("Florin(s)"),
             },
         });
-        this.game.addConfirmButton({
+        this.game.addPrimaryActionButton({
+            id: "play_card_button",
+            text: _("Play"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "playCard",
+                        cardId: card.id,
+                    },
+                });
+            },
+        });
+        this.game.addPrimaryActionButton({
+            id: "sell_card_button",
+            text: _('Sell'),
             callback: function () {
                 return _this.game.takeAction({
                     action: "actPlayerAction",
@@ -4109,7 +4170,7 @@ var PlayerActionState = (function () {
             }
             node.classList.add(PR_SELECTABLE);
             _this.game._connections.push(dojo.connect(node, "onclick", _this, function () {
-                return _this.updateInterfaceConfirmSellCard({ card: card });
+                return _this.updateInterfaceOnClickHandCard({ card: card });
             }));
         });
     };

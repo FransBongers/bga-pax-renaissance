@@ -12,6 +12,7 @@ class PREN078_SittIHatunOfDulkadir extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Her marriage to Mehmed II served as an alliance between the Ottomans and this important buffer state.')
     ];
     $this->name = clienttranslate('Sitt-î Hatun of Dulkadir');
+    $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }
 }

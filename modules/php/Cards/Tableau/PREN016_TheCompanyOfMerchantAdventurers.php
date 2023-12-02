@@ -12,6 +12,7 @@ class PREN016_TheCompanyOfMerchantAdventurers extends \PaxRenaissance\Models\Tab
       clienttranslate('Despite a papal bull barring the expedition, on his second attempt Giovanni Caboto (John Cabot, above) landed in Canada, the first European to do so since the Vikings.')
     ];
     $this->name = clienttranslate('The Company of Merchant Adventurers');
+    $this->prestige = [DISCOVERY];
     $this->region = WEST;
   }
 }

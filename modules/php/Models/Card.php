@@ -11,6 +11,9 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
 {
   protected $table = 'cards';
   protected $primary = 'card_id';
+  protected $location;
+  protected $state;
+
   protected $attributes = [
     'id' => ['card_id', 'int'],
     'location' => 'card_location',

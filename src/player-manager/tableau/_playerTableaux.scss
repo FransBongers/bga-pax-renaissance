@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "../base";
+@use "../../base";
 
 #pr_player_tableaux {
   display: flex;
@@ -44,12 +44,37 @@
   // flex-grow: 1;
 }
 
+.pr_player_tableau_cards_container {
+  // background-color: yellow;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.pr_player_board_tableau_cards {
+  min-height: 229px;
+  // background-color: blue;
+  flex-grow: 1;
+  align-items: center;
+  
+}
+
+.pr_player_board_tableau_cards[data-region=west] {
+  justify-content: flex-end;
+}
+
+/**
+* PLAYER BOARDS
+*/
+
 .pr_player_board {
   background-image: url("img/player_boards.webp");
   background-size: 200% 200%;
   height: 400px;
-  width: 293px;
+  min-width: 293px;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  margin-left: 8px;
+  margin-right: 8px;
 }
 
 .pr_player_board[data-color=blue] {

@@ -12,6 +12,7 @@ class PREN005_ReformedTheology extends \PaxRenaissance\Models\TableauCard
       clienttranslate('His alliance of Reformed Swiss cantons warred with the cantons that remained Catholic, and Zwingli was killed in battle in 1531.')
     ];
     $this->name = clienttranslate('Reformed Theology');
+    $this->prestige = [REFORMIST];
     $this->region = WEST;
   }
 }

@@ -14,11 +14,13 @@ class TableauCard extends Card
   protected $id;
   protected $flavorText = [];
   protected $name;
+  protected $prestige = [];
   protected $region;
 
   protected $staticAttributes = [
     'flavorText',
     'name',
+    'prestige',
     'region',
     'type',
   ];
@@ -30,6 +32,7 @@ class TableauCard extends Card
     return array_merge($data, [
       'flavorText' => $this->flavorText,
       'name' => $this->name,
+      'prestige' => $this->prestige,
       'region' => $this->region,
       'type' => $this->type,
     ]);
@@ -57,6 +60,19 @@ class TableauCard extends Card
     Cards::move($this->getId(), Locations::hand($playerId));
 
     Notifications::purchaseCard($player, $this, $placedFlorins, $floringsOnCard);
+  }
+
+  public function play($player)
+  {
+    if ($this->region === EAST) {
+      $this->location = Locations::tableau($player->getId(), EAST);
+      $this->state = Cards::insertOnTop($this->getId(), $this->location);
+    } else {
+      $this->location = Locations::tableau($player->getId(), WEST);
+      $this->state = Cards::insertAtBottom($this->getId(), $this->location);
+    }
+
+    Notifications::playCard($player, $this);
   }
 
   public function sell($player)

@@ -11,6 +11,7 @@ class PREN083_PospoliteRuszenie extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Pospolite ruszenie units were militia formed from the szlachta (Polish nobility). Operating during the "Golden Liberty", a period when royal powers were kept in check by the Sejm (Parliament), they were eventually outclassed by professional forces.')
     ];
     $this->name = clienttranslate('Pospolite Ruszenie');
+    $this->prestige = [LAW];
     $this->region = EAST;
   }
 }

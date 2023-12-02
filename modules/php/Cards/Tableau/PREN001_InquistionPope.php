@@ -13,6 +13,7 @@ class PREN001_InquistionPope extends \PaxRenaissance\Models\TableauCard
       clienttranslate('He then confirmed Torquemada as the Grand Inquisitor of Spain, and funded a crusade against Waldensian heretics in France.'),
     ];
     $this->name = clienttranslate('Inquistion Pope');
+    $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }
 }

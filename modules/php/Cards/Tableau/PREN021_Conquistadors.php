@@ -12,6 +12,7 @@ class PREN021_Conquistadors extends \PaxRenaissance\Models\TableauCard
       clienttranslate('There, he successfully pitted some native groups against others, using the local interpreter Malinche. In the Aztec capital, he tool its emperor hostage and plundered its gold. The captured city was renamed Mexico City, later sacked during a native revolt.')
     ];
     $this->name = clienttranslate('Conquistadors');
+    $this->prestige = [DISCOVERY];
     $this->region = WEST;
   }
 }

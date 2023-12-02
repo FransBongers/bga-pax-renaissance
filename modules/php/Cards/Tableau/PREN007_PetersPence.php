@@ -13,6 +13,7 @@ class PREN007_PetersPence extends \PaxRenaissance\Models\TableauCard
       clienttranslate('In reformist England, the "pence" was abolished by King Henry VIII in 1534.')
     ];
     $this->name = clienttranslate("Peter's Pence");
+    $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }
 }

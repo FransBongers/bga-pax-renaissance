@@ -12,6 +12,7 @@ class PREN058_TheGrim extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Selim had so many of his viziers executed, that "may you be a vizier of Selim\'s" remains an Ottoman curse.')
     ];
     $this->name = clienttranslate('The Grim');
+    $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }
 }

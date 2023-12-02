@@ -13,6 +13,7 @@ class PREN086_SaintStefanCelMare extends \PaxRenaissance\Models\TableauCard
       clienttranslate('In 1503 he became an Ottoman vassal.')
     ];
     $this->name = clienttranslate('Saint Stefan cel Mare');
+    $this->prestige = [REFORMIST];
     $this->region = EAST;
   }
 }

@@ -12,6 +12,7 @@ class PREN029_HolyLandCrusade extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Only Vlad the Impaler responded favorably, and the crusaders dissipated when the Medici withdrew their promise to provide transport.')
     ];
     $this->name = clienttranslate('Holy Land Crusade');
+    $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }
 }

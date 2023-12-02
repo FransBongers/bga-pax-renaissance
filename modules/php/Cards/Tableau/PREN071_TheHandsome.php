@@ -12,6 +12,7 @@ class PREN071_TheHandsome extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Vlad assumed command of the armies defending Wallachia and Transylvania, opposed by Radu in command of the invading Janissaries. Radu won, becoming pasha of Wallachia.')
     ];
     $this->name = clienttranslate('The Handsome');
+    $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }
 }

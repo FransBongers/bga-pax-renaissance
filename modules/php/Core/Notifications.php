@@ -105,43 +105,52 @@ class Notifications
 
   public static function flipVictoryCard($player, $card)
   {
-    self::notifyAll("flipVictoryCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName}'), array(
+    self::notifyAll("flipVictoryCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName}'), [
       'player' => $player,
       'card' => $card,
       'tkn_cardName' => $card->getTitleActive(),
-    ));
+    ]);
+  }
+
+  public static function playCard($player, $card)
+  {
+    self::notifyAll("playCard",  clienttranslate('${tkn_playerName} plays ${tkn_cardName}'), [
+      'player' => $player,
+      'card' => $card,
+      'tkn_cardName' => $card->getName(),
+    ]);
   }
 
   public static function purchaseCard($player, $card, $placedFlorins, $takenFlorins, $discard = false)
   {
-    self::notifyAll("purchaseCard",  clienttranslate('${tkn_playerName} purchases ${tkn_cardName}'), array(
+    self::notifyAll("purchaseCard",  clienttranslate('${tkn_playerName} purchases ${tkn_cardName}'), [
       'player' => $player,
       'card' => $card,
       'tkn_cardName' => $card->getName(),
       'placedFlorins' => $placedFlorins,
       'takenFlorins' => $takenFlorins,
       'discard' => $discard,
-    ));
+    ]);
   }
 
   public static function refreshMarket($player, $cardMoves, $cardDraws)
   {
-    self::notifyAll("refreshMarket",  clienttranslate('${tkn_playerName} refreshes the market'), array(
+    self::notifyAll("refreshMarket",  clienttranslate('${tkn_playerName} refreshes the market'), [
       'player' => $player,
       'cardMoves' => $cardMoves,
       'cardDraws' => $cardDraws,
-    ));
+    ]);
   }
 
   public static function sellCard($player, $card, $value)
   {
-    self::notifyAll("sellCard",  clienttranslate('${tkn_playerName} sells ${tkn_cardName} for ${value} ${tkn_florin}'), array(
+    self::notifyAll("sellCard",  clienttranslate('${tkn_playerName} sells ${tkn_cardName} for ${value} ${tkn_florin}'), [
       'player' => $player,
       'card' => $card,
       'value' => $value,
       'tkn_cardName' => $card->getName(),
       'tkn_florin' => clienttranslate('Florin(s)'),
-    ));
+    ]);
   }
 
   public static function tradeFairConvene($player, $region, $florinsFromChina)
@@ -169,7 +178,7 @@ class Notifications
   public static function tradeFairEmporiumSubsidy($player, $region, $amount)
   {
     $message = clienttranslate('Emporium Subsidy: ${tkn_playerName} receives ${amount} ${tkn_florin} out of profits');
-      
+
     self::notifyAll("tradeFairEmporiumSubsidy", $message, [
       'player' => $player,
       'amount' => $amount,
@@ -190,42 +199,44 @@ class Notifications
     ]);
   }
 
-  public static function tradeFairProfitDispersalPirates($region) {
+  public static function tradeFairProfitDispersalPirates($region)
+  {
     $message = clienttranslate('Pirates take 1 ${tkn_florin} out of profits');
-      
+
     self::notifyAll("tradeFairProfitDispersalPirates", $message, [
       'tkn_florin' => clienttranslate("Florin(s)"),
       'region' => $region,
     ]);
   }
 
-  public static function tradeFairProfitDispersalPlayer($player, $region) {
+  public static function tradeFairProfitDispersalPlayer($player, $region)
+  {
     $message = clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} out of profits');
-      
+
     self::notifyAll("tradeFairProfitDispersalPlayer", $message, [
       'player' => $player,
       'tkn_florin' => clienttranslate("Florin(s)"),
       'region' => $region,
     ]);
   }
-  
+
 
   public static function tradeFairNoVoyage()
   {
-    self::message(clienttranslate('No profits left. The voyage does not start'),[]);
+    self::message(clienttranslate('No profits left. The voyage does not start'), []);
   }
 
   public static function tradeFairPlaceLevy($player, $city, $token)
   {
     $message = clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${cityName}');
     // $chessPieceExploded = explode('_' );
-    
+
     self::notifyAll("tradeFairPlaceLevy", $message, [
       'player' => $player,
       'cityId' => $city->getId(),
       'cityName' => $city->getName(),
       'token' => $token,
-      'tkn_mapToken' => $token->getReligion().'_'.$token->getType(),
+      'tkn_mapToken' => $token->getReligion() . '_' . $token->getType(),
       'i18n' => ['cityName'],
     ]);
   }

@@ -82,6 +82,7 @@ interface PaxRenCard {
 interface TableauCard extends PaxRenCard {
   flavorText: string[];
   name: string;
+  prestige: string[];
   region: "east" | "west";
   type: "tableauCard";
 }
@@ -119,7 +120,7 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
       [location: string]: number;
     };
   };
-  players: Record<number, BgaPlayer>;
+  players: Record<number, PaxRenaissancePlayerData>;
   tokens: {
     inPlay: Token[];
     supply: {
@@ -156,4 +157,8 @@ interface PaxRenaissancePlayerData extends BgaPlayer {
       west: number;
     };
   };
+  tableau: {
+    east: TableauCard[];
+    west: TableauCard[];
+  }
 }

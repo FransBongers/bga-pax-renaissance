@@ -58,7 +58,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // console.log('playAreaWidth',playAreaWidth);
     this.gamedatas = gamedatas;
     // this.gameOptions = gamedatas.gameOptions;
-    debug("gamedata", gamedatas);
+    debug("gamedatas", gamedatas);
 
     this._connections = [];
     // Will store all data for active player and gets refreshed with entering player actions state

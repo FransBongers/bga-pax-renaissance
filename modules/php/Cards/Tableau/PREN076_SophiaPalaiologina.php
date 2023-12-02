@@ -12,6 +12,7 @@ class PREN076_SophiaPalaiologina extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Sophia favored the vision of Moscow as the "third Rome", the legitimate successor to Constantinople and its Byzantine emperors, with the Moscow Primate as the overall head of the Orthodox religion.')
     ];
     $this->name = clienttranslate('Sophia Palaiologina');
+    $this->prestige = [REFORMIST];
     $this->region = EAST;
   }
 }

@@ -12,6 +12,7 @@ class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The Consejo Real, appointed by Isabella starting in 1480, had full judicial powers over the nobles, keeping them subordinate to the crown.'),
     ];
     $this->name = clienttranslate('Grand Inquisitor');
+    $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }
 }

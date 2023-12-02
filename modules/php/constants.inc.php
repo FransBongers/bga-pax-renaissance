@@ -148,6 +148,14 @@ const RELIGIONS = [
 ];
 
 /**
+ * PRESTIGE
+ */
+const DISCOVERY = 'discovery';
+const LAW = 'law';
+const PATRON = 'patron';
+
+
+/**
  * Cards
  */
 // cardinal directions

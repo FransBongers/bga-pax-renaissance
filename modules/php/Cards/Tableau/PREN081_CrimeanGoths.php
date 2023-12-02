@@ -12,6 +12,7 @@ class PREN081_CrimeanGoths extends \PaxRenaissance\Models\TableauCard
       clienttranslate('To justify his racist ambitions in the Crimea, Adolf Hitler claimed the region was still inhabited by German-speaking Goths, making them native Aryen peoples.')
     ];
     $this->name = clienttranslate('Crimean Goths');
+    $this->prestige = [LAW];
     $this->region = EAST;
   }
 }

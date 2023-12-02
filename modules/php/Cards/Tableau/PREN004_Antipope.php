@@ -12,6 +12,7 @@ class PREN004_Antipope extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The pope responded by forming a union with the Byzantine Orthodox Church, and Felix was forced by France to abdicate in 1449.')
     ];
     $this->name = clienttranslate('Antipope');
+    $this->prestige = [REFORMIST];
     $this->region = WEST;
   }
 }

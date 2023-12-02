@@ -64,7 +64,7 @@ class Engine
    * Convert an array into a tree
    * @param array $t
    */
-  public function buildTree($t)
+  public static function buildTree($t)
   {
     $t['children'] = $t['children'] ?? [];
     $type = $t['type'] ?? (empty($t['children']) ? NODE_LEAF : NODE_SEQ);

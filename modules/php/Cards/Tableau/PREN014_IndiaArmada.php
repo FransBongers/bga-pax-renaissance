@@ -12,6 +12,7 @@ class PREN014_IndiaArmada extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The scale of trade realignment was on a scale that would be unequaled until the invention of the airplane.'),
     ];
     $this->name = clienttranslate('India Armada');
+    $this->prestige = [DISCOVERY];
     $this->region = WEST;
   }
 }

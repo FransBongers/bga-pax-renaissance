@@ -12,6 +12,7 @@ class PREN009_HouseOfBorgia extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The Borgias made enemies of the Medici, the Sforza, Savonarola, and many others. They were also patrons of the arts.')
     ];
     $this->name = clienttranslate("House of Borgia");
+    $this->prestige = [PATRON];
     $this->region = WEST;
   }
 }

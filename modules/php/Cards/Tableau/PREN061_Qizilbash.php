@@ -12,6 +12,7 @@ class PREN061_Qizilbash extends \PaxRenaissance\Models\TableauCard
       clienttranslate("The establishment of the state religion of Shi'ism, opposed to the Sunni Islam of the Ottomans, marked the beginnings of modern Persian history.")
     ];
     $this->name = clienttranslate('Qizilbāsh');
+    $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }
 }

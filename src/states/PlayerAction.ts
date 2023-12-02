@@ -85,21 +85,41 @@ class PlayerActionState implements State {
     this.game.addCancelButton();
   }
 
-  private updateInterfaceConfirmSellCard({ card }: { card: TableauCard }) {
+  private updateInterfaceOnClickHandCard({ card }: { card: TableauCard }) {
     this.game.clearPossible();
     const node = document.getElementById(`${card.id.split("_")[0]}-front`);
     if (node) {
       node.classList.add(PR_SELECTED);
     }
     this.game.clientUpdatePageTitle({
-      text: "Sell ${cardName} for ${amount} ${tkn_florin} ?",
+      text: "Play or sell ${cardName}?",
       args: {
-        amount: 2,
         cardName: _(card.name),
-        tkn_florin: _("Florin(s)"),
       },
     });
-    this.game.addConfirmButton({
+    //
+    this.game.addPrimaryActionButton({
+      id: "play_card_button",
+      text: _("Play"),
+      callback: () =>
+        this.game.takeAction({
+          action: "actPlayerAction",
+          args: {
+            action: "playCard",
+            cardId: card.id,
+          },
+        }),
+    });
+    this.game.addPrimaryActionButton({
+      id: "sell_card_button",
+      text: _('Sell'),
+      // text: this.game.format_string_recursive(
+      //   "Sell for ${amount} ${tkn_florin}",
+      //   {
+      //     amount: 2,
+      //     tkn_florin: _("Florin(s)"),
+      //   }
+      // ),
       callback: () =>
         this.game.takeAction({
           action: "actPlayerAction",
@@ -109,6 +129,16 @@ class PlayerActionState implements State {
           },
         }),
     });
+    // this.game.addConfirmButton({
+    //   callback: () =>
+    //     this.game.takeAction({
+    //       action: "actPlayerAction",
+    //       args: {
+    //         action: "sellCard",
+    //         cardId: card.id,
+    //       },
+    //     }),
+    // });
     this.game.addCancelButton();
   }
 
@@ -151,7 +181,7 @@ class PlayerActionState implements State {
       node.classList.add(PR_SELECTABLE);
       this.game._connections.push(
         dojo.connect(node, "onclick", this, () =>
-          this.updateInterfaceConfirmSellCard({ card })
+          this.updateInterfaceOnClickHandCard({ card })
         )
       );
     });

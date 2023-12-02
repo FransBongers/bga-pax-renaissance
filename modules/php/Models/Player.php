@@ -64,6 +64,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
           })),
         ]
       ],
+      'tableau' => $this->getTableauCards(),
     ]);
   }
 
@@ -97,6 +98,14 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   public function getHand()
   {
     return Cards::getInLocation(Locations::hand($this->getId()))->toArray();
+  }
+
+  public function getTableauCards()
+  {
+    return [
+      EAST => Cards::getInLocation(Locations::tableau($this->getId(), EAST))->toArray(),
+      WEST => Cards::getInLocation(Locations::tableau($this->getId(), WEST))->toArray(),
+    ];
   }
 
   public function canTakeAction($action, $ctx)

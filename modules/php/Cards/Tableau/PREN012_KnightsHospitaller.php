@@ -12,6 +12,7 @@ class PREN012_KnightsHospitaller extends \PaxRenaissance\Models\TableauCard
       clienttranslate("In 1480 his forces barely repulsed a massive siege by Mehmed the Conqueror, during which d'Aubusson was wounded thrice. His reward was a cardinal's hat and papal independence.")
     ];
     $this->name = clienttranslate('Knights Hospitaller');
+    $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }
 }

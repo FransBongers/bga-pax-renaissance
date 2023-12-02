@@ -12,6 +12,7 @@ class PREN006_StarChamber extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Under the leadership of Cardinal Wolsey in the reign of King Henry VIII, the Star Chamber became a political tool, and a symbol of the abuse of royal power.')
     ];
     $this->name = clienttranslate('Star Chamber');
+    $this->prestige = [REFORMIST];
     $this->region = WEST;
   }
 }

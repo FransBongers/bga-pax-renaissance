@@ -37,6 +37,7 @@ class NotificationManager {
       // checked
       ["log", undefined],
       ["flipVictoryCard", undefined],
+      ["playCard", undefined],
       ["purchaseCard", undefined],
       ["refreshMarket", undefined],
       ["sellCard", undefined],
@@ -98,6 +99,16 @@ class NotificationManager {
     const { playerId, card } = notif.args;
     this.game.victoryCardManager.flipCard(card);
     return Promise.resolve();
+  }
+
+  async notif_playCard(notif: Notif<NotifPlayCardArgs>) {
+    const { playerId, card } = notif.args;
+    const player = this.getPlayer({ playerId });
+
+    player.counters.cards[card.region].incValue(-1);
+    await player.tableau.addCard(card);
+    card.prestige.forEach((prestige) => player.counters.prestige[prestige].incValue(1));
+    // return Promise.resolve();
   }
 
   async notif_purchaseCard(notif: Notif<NotifPurchaseCardArgs>) {
@@ -202,12 +213,10 @@ class NotificationManager {
       return;
     }
 
-    
-
     const type = token.id.split("_")[0];
     const colorOrReligion = token.id.split("_")[1];
 
-    this.game.supply.incValue({type, religion: colorOrReligion, value: -1});
+    this.game.supply.incValue({ type, religion: colorOrReligion, value: -1 });
 
     node.insertAdjacentHTML(
       "beforeend",

@@ -30,7 +30,7 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
     });
 
     if ($card === null) {
-      throw new \feException("Not allowed to purchase card");
+      throw new \feException("Not allowed to sell card");
     }
     Globals::incRemainingActions(-1);
     $card->sell($player);

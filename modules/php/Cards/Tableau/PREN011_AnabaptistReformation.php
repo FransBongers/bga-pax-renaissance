@@ -12,6 +12,7 @@ class PREN011_AnabaptistReformation extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The painting commemorates an Anabaptist marty, who while escaping from prison, stopped to save the life of a pursuer, and so was recaptured and burned at the stake.')
     ];
     $this->name = clienttranslate('Anabaptist Reformation');
+    $this->prestige = [REFORMIST];
     $this->region = WEST;
   }
 }

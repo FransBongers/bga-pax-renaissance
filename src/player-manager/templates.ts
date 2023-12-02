@@ -21,19 +21,3 @@ const tplPlayerTableauxContainer = ({
     </div>
   `;
 };
-
-const tplPlayerTableauContent = ({
-  playerGamedatas,
-}: {
-  playerGamedatas: BgaPlayer;
-}) => {
-  const playerId = playerGamedatas.id;
-  return `
-  <div class="pr_player_tableau_title"><span>${(
-    _("${playerName}'s tableau") as string
-  ).replace("${playerName}", playerGamedatas.name)}</span></div>
-  <div>
-    <div class="pr_player_board" data-color="${COLOR_MAP[playerGamedatas.color]}"></div>
-  </div>
-    `;
-};
