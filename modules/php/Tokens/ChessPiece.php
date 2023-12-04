@@ -1,6 +1,8 @@
 <?php
 namespace PaxRenaissance\Tokens;
 
+use PaxRenaissance\Helpers\Locations;
+
 class ChessPiece extends \PaxRenaissance\Models\Token
 {
   protected $religion;
@@ -26,5 +28,10 @@ class ChessPiece extends \PaxRenaissance\Models\Token
   public function getReligion()
   {
     return $this->religion;
+  }
+
+  public function getSupply()
+  {
+    return Locations::supply($this->getType(),$this->getReligion());
   }
 }

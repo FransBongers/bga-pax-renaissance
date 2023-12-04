@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN059_Safavids extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN059_Safavids extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN059_Safavids';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => BISHOP,
+      [
+        'religion' => ISLAMIC,
+        'type' => BISHOP,
+      ]
     ];
     $this->empire = BYZANTIUM;
     $this->flavorText = [

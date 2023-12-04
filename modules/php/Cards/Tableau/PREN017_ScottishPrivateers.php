@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN017_ScottishPrivateers extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN017_ScottishPrivateers extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN017_ScottishPrivateers';
     $this->agents = [
-      'number' => 1,
-      'religion' => REFORMIST,
-      'type' => PIRATE,
+      [
+        'religion' => REFORMIST,
+        'type' => PIRATE,
+      ]
     ];
     $this->empire = ENGLAND;
     $this->flavorText = [

@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN013_GenoeseFleet extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN013_GenoeseFleet extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN013_GenoeseFleet';
     $this->agents = [
-      'number' => 1,
-      'religion' => CATHOLIC,
-      'type' => PIRATE,
+      [
+        'religion' => CATHOLIC,
+        'type' => PIRATE,
+      ]
     ];
     $this->empire = ARAGON;
     $this->flavorText = [

@@ -36,7 +36,7 @@ class ClientStartTradeFairState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.setCardSelected({ card: this.args.card, back: true });
-    this.game.setCitySelected({ cityId: this.args.city.id });
+    this.game.setLocationSelected({ id: this.args.city.id });
 
     this.game.clientUpdatePageTitle({
       text: "Convene ${region} trade fair from ${cityName}?",

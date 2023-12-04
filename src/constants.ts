@@ -32,6 +32,14 @@ const PR_SELECTABLE = "pr_selectable";
 const PR_SELECTED = "pr_selected";
 
 /**
+ * Banks
+ */
+const FUGGER = 'fugger';
+const MEDICI = 'medici';
+const COEUR = 'coeur';
+const MARCHIONNI = 'marchionni';
+
+/**
  * Regions
  */
 const WEST = "west";

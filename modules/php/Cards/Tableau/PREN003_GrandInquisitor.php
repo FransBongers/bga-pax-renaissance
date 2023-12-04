@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN003_GrandInquisitor';
     $this->agents = [
-      'number' => 1,
-      'religion' => CATHOLIC,
-      'type' => BISHOP,
+      [
+        'religion' => CATHOLIC,
+        'type' => BISHOP,
+      ]
     ];
     $this->empire = PORTUGAL;
     $this->flavorText = [

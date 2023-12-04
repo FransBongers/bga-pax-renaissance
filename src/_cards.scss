@@ -4,6 +4,7 @@
 
 .pr_card.pr_selectable,
 .pr_square_card.pr_selectable,
+.pr_border.pr_selectable,
 .pr_city.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
@@ -20,6 +21,8 @@
 .pr_square_card.pr_selected,
 .pr_card.pr_selectable:hover,
 .pr_square_card.pr_selectable:hover,
+.pr_border.pr_selected,
+.pr_border.pr_selectable:hover,
 .pr_city.pr_selected,
 .pr_city.pr_selectable:hover {
   /* border: 2px blue solid; */

@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN065_MamlukSlaveSoldiers extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN065_MamlukSlaveSoldiers extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN065_MamlukSlaveSoldiers';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => KNIGHT,
+      [
+        'religion' => ISLAMIC,
+        'type' => KNIGHT,
+      ]
     ];
     $this->empire = MAMLUK;
     $this->flavorText = [

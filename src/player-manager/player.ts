@@ -194,6 +194,10 @@ class PRPlayer {
   // .##....##.##..........##.......##....##.......##....##..##....##
   // ..######..########....##.......##....########.##.....##..######.
 
+  getBank(): string {
+    return FUGGER;
+  }
+
   getColor(): string {
     return this.playerColor;
   }

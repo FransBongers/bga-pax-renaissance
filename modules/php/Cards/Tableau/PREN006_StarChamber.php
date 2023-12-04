@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN006_StarChamber extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN006_StarChamber extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN006_StarChamber';
     $this->agents = [
-      'number' => 1,
-      'religion' => REFORMIST,
-      'type' => BISHOP,
+      [
+        'religion' => REFORMIST,
+        'type' => BISHOP,
+      ]
     ];
     $this->empire = ENGLAND;
     $this->flavorText = [

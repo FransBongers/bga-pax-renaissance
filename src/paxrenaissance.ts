@@ -30,7 +30,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
     confirmTurn: ConfirmTurnState;
     flipVictoryCard: FlipVictoryCardState;
-    placeAgents: PlaceAgentsState;
+    placeAgent: PlaceAgentState;
     playerAction: PlayerActionState;
     tradeFairLevy: TradeFairLevyState
   };
@@ -67,7 +67,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),
       confirmTurn: new ConfirmTurnState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
-      placeAgents: new PlaceAgentsState(this),
+      placeAgent: new PlaceAgentState(this),
       playerAction: new PlayerActionState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };
@@ -513,14 +513,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
     node.classList.add(PR_SELECTED);
   }
 
-  setCitySelectable({
-    cityId,
+  setLocationSelectable({
+    id,
     callback,
   }: {
-    cityId: string;
-    callback: (props: { cityId: string }) => void;
+    id: string;
+    callback: (props: { id: string }) => void;
   }) {
-    const nodeId = `pr_city_${cityId}`;
+    const nodeId = `pr_${id}`;
     const node = $(nodeId);
 
     if (node === null) {
@@ -528,12 +528,12 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, () => callback({ cityId }))
+      dojo.connect(node, "onclick", this, () => callback({ id }))
     );
   }
 
-  setCitySelected({ cityId }: { cityId: string }) {
-    const nodeId = `pr_city_${cityId}`;
+  setLocationSelected({ id }: { id: string }) {
+    const nodeId = `pr_${id}`;
     const node = $(nodeId);
     if (node === null) {
       return;

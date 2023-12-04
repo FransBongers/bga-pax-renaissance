@@ -53,8 +53,8 @@ class TradeFairLevyState implements State {
       },
     });
     Object.keys(this.args.possibleLevies).forEach((cityId) => {
-      this.game.setCitySelectable({
-        cityId,
+      this.game.setLocationSelectable({
+        id: cityId,
         callback: () => this.updateInterfaceConfirmPlaceLevy({cityId}),
       });
     });
@@ -62,7 +62,7 @@ class TradeFairLevyState implements State {
 
   private updateInterfaceConfirmPlaceLevy({cityId}: {cityId: string;}) {
     this.game.clearPossible();
-    this.game.setCitySelected({cityId});
+    this.game.setLocationSelected({id: cityId});
     const {religion, levyIcon} = this.args.possibleLevies[cityId].levy;
     this.game.clientUpdatePageTitle({
       text: "Place ${tkn_mapToken} in ${cityName}?",

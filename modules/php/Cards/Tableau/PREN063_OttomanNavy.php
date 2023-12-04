@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN063_OttomanNavy extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN063_OttomanNavy extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN063_OttomanNavy';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => PIRATE,
+      [
+        'religion' => ISLAMIC,
+        'type' => PIRATE,
+      ]
     ];
     $this->empire = OTTOMAN;
     $this->flavorText = [

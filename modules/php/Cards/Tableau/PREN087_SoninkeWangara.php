@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN087_SoninkeWangara extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN087_SoninkeWangara extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN087_SoninkeWangara';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => ROOK,
+      [
+        'religion' => ISLAMIC,
+        'type' => ROOK,
+      ]
     ];
     $this->empire = ARAGON;
     $this->flavorText = [

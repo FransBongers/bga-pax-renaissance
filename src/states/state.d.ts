@@ -33,7 +33,17 @@ interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
 }
 
 interface OnEnteringPlaceAgentsArgs extends CommonArgs {
-
+  agents: {
+    type: string;
+    religion: string | null;
+  }[];
+  locations: Record<
+    string,
+    {
+      id: string;
+      name: string;
+    }
+  >;
 }
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {

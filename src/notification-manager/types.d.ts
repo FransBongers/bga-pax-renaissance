@@ -20,6 +20,14 @@ interface NotifFlipVictoryCardArgs extends NotifWithPlayerArgs {
   tkn_cardName: string;
 }
 
+interface NotifKillTokenArgs extends NotifWithPlayerArgs {
+  token: Token;
+}
+
+interface NotifPlaceAgentArgs extends NotifWithPlayerArgs {
+  token: Token;
+}
+
 interface NotifPlayCardArgs extends NotifWithPlayerArgs {
   card: TableauCard;
   tkn_cardName: string;

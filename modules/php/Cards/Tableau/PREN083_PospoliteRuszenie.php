@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN083_PospoliteRuszenie extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN083_PospoliteRuszenie extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN083_PospoliteRuszenie';
     $this->agents = [
-      'number' => 1,
-      'religion' => CATHOLIC,
-      'type' => ROOK,
+      [
+        'religion' => CATHOLIC,
+        'type' => ROOK,
+      ]
     ];
     $this->empire = HUNGARY;
     $this->flavorText = [

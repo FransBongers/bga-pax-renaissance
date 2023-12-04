@@ -60,7 +60,6 @@ class GameMap {
         type === PAWN
           ? tplPawn({
               id: chessPiece.id,
-              type,
               bank: bankOrReligion,
             })
           : tplChessPiece({ id: chessPiece.id, type, religion: bankOrReligion })
@@ -80,7 +79,7 @@ class GameMap {
       if (!chessPiece) {
         return;
       }
-      const node = document.getElementById(`pr_city_${city}`);
+      const node = document.getElementById(`pr_${city}`);
       if (!node) {
         return;
       }

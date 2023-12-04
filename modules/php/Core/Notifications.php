@@ -2,6 +2,10 @@
 
 namespace PaxRenaissance\Core;
 
+use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Borders;
+use PaxRenaissance\Managers\Cities;
+
 class Notifications
 {
   /*************************
@@ -111,6 +115,34 @@ class Notifications
       'tkn_cardName' => $card->getTitleActive(),
     ]);
   }
+
+  public static function killToken($player, $token, $locationId)
+  {
+    $location = Utils::startsWith($locationId,'border') ? Borders::get($locationId) : Cities::get($locationId);
+    
+    $isPawn = $token->getType() === PAWN;
+    self::notifyAll("killToken",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${locationName}'), [
+      'player' => $player,
+      'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
+      'locationName' => $location->getName(),
+      'token' => $token,
+      'i18n' => ['locationName'],
+    ]);
+  }
+
+  public static function placeAgent($player, $token, $location)
+  {
+    $isPawn = $token->getType() === PAWN;
+    
+    self::notifyAll("placeAgent",  clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${locationName}'), [
+      'player' => $player,
+      'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
+      'locationName' => $location->getName(),
+      'token' => $token,
+      'i18n' => ['locationName'],
+    ]);
+  }
+   
 
   public static function playCard($player, $card)
   {

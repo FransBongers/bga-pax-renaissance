@@ -59,4 +59,12 @@ class Empires
       return self::get($empireId);
     }, array_keys(self::$empires));
   }
+
+  public static function getRegion($region)
+  {
+    $empires = $region === EAST ? EAST_EMPIRES : WEST_EMPIRES;
+    return array_map(function ($empireId) {
+      return self::get($empireId);
+    }, $empires);
+  }
 }

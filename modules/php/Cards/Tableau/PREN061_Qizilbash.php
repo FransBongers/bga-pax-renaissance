@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN061_Qizilbash extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN061_Qizilbash extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN061_Qizilbash';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => BISHOP,
+      [
+        'religion' => ISLAMIC,
+        'type' => BISHOP,
+      ]
     ];
     $this->empire = EAST;
     $this->flavorText = [

@@ -1,6 +1,7 @@
 <?php
 namespace PaxRenaissance\Tokens;
 
+use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Players;
 
@@ -36,5 +37,10 @@ class Pawn extends \PaxRenaissance\Models\Token
     return Utils::filter(Players::getAll()->toArray(), function ($plyr) {
       return $plyr->getBank() === $this->bank;
     })[0];
+  }
+
+  public function getSupply()
+  {
+    return Locations::supply($this->getType(),$this->getBank());
   }
 }

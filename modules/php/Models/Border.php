@@ -6,11 +6,12 @@ use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Log;
+use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\ChessPieces;
 use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Players;
-use PaxRenaissance\Helpers\Log;
-use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Tokens;
 
 
 class Border implements \JsonSerializable
@@ -40,8 +41,34 @@ class Border implements \JsonSerializable
     return $data;
   }
 
+  public function placeAgent($token)
+  {
+    $currentToken = $this->getToken();
+    if ($token->getType() === PIRATE && $currentToken !== null) {
+      $currentToken->kill();
+    }
+
+    $token = $token->move($this->getId());
+    Notifications::placeAgent(Players::get(),$token, $this);
+  }
+
   public function isSeaBorder()
   {
     return $this->seaBorder;
+  }
+
+  public function getId()
+  {
+    return $this->id;
+  }
+
+  public function getName()
+  {
+    return $this->name;
+  }
+
+  public function getToken()
+  {
+    return Tokens::getTopOf($this->id);
   }
 }

@@ -4,7 +4,11 @@ namespace PaxRenaissance\Models;
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Locations;
+use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cards;
+use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 
@@ -30,6 +34,13 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
   public function getType()
   {
     return $this->type;
+  }
+
+    public function kill()
+  {
+    $oldLocation = $this->getLocation();
+    $this->move($this->getSupply());
+    Notifications::killToken(Players::get(), $this, $oldLocation);
   }
 
   // public function getUiData()

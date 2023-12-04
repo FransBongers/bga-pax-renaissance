@@ -6,7 +6,7 @@ class FranceHolyRomanEmpireBorder extends \PaxRenaissance\Models\Border
   public function __construct()
   {
     $this->id = BORDER_FRANCE_HOLY_ROMAN_EMPIRE;
-    $this->name = clienttranslate('FranceHolyRomanEmpireBorder');
+    $this->name = clienttranslate('France-Holy Roman Empire Border');
     $this->seaBorder = true;
   }
 }

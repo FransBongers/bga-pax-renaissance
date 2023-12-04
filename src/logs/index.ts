@@ -6,6 +6,7 @@ const LOG_TOKEN_PLAYER_NAME = "playerName";
 // Game specific
 const LOG_TOKEN_FLORIN = "florin";
 const LOG_TOKEN_MAP_TOKEN = "mapToken";
+const LOG_TOKEN_PAWN = "pawn";
 
 let tooltipIdCounter = 0;
 
@@ -29,7 +30,12 @@ const getTokenDiv = ({
     case LOG_TOKEN_NEW_LINE:
       return "<br>";
     case LOG_TOKEN_MAP_TOKEN:
-      return tplChessPiece({ type: value.split("_")[1], religion: value.split("_")[0] });
+      const mtValue = value.split("_");
+      return mtValue[1] === PAWN
+        ? tplPawn({ bank: mtValue[0] })
+        : tplChessPiece({ type: mtValue[1], religion: mtValue[0] });
+    case LOG_TOKEN_PAWN:
+
     case LOG_TOKEN_PLAYER_NAME:
       const player =
         value === "${you}"

@@ -37,6 +37,8 @@ class NotificationManager {
       // checked
       ["log", undefined],
       ["flipVictoryCard", undefined],
+      ["killToken", undefined],
+      ["placeAgent", undefined],
       ["playCard", undefined],
       ["purchaseCard", undefined],
       ["refreshMarket", undefined],
@@ -101,13 +103,70 @@ class NotificationManager {
     return Promise.resolve();
   }
 
+  async notif_killToken(notif: Notif<NotifKillTokenArgs>) {
+    const { playerId, token } = notif.args;
+
+    const node = document.getElementById(token.id);
+    if (node) {
+      node.remove();
+    }
+    const split = token.id.split("_");
+    if (split[0] === PAWN) {
+    } else {
+      this.game.supply.incValue({
+        religion: split[1],
+        type: split[0],
+        value: 1,
+      });
+    }
+
+    return Promise.resolve();
+  }
+
+  async notif_placeAgent(notif: Notif<NotifPlaceAgentArgs>) {
+    const { playerId, token } = notif.args;
+
+    const split = token.id.split("_");
+    const isPawn = split[0] === PAWN;
+    if (isPawn) {
+    } else {
+      this.game.supply.incValue({
+        religion: split[1],
+        type: split[0],
+        value: -1,
+      });
+    }
+
+    const node = document.getElementById(`pr_${token.location}`);
+    if (!node) {
+      return;
+    }
+
+    const type = token.id.split("_")[0];
+    const bankOrReligion = token.id.split("_")[1];
+
+    node.insertAdjacentHTML(
+      "beforeend",
+      isPawn
+        ? tplPawn({
+            id: token.id,
+            bank: bankOrReligion,
+          })
+        : tplChessPiece({ id: token.id, type, religion: bankOrReligion })
+    );
+
+    return Promise.resolve();
+  }
+
   async notif_playCard(notif: Notif<NotifPlayCardArgs>) {
     const { playerId, card } = notif.args;
     const player = this.getPlayer({ playerId });
 
     player.counters.cards[card.region].incValue(-1);
     await player.tableau.addCard(card);
-    card.prestige.forEach((prestige) => player.counters.prestige[prestige].incValue(1));
+    card.prestige.forEach((prestige) =>
+      player.counters.prestige[prestige].incValue(1)
+    );
     // return Promise.resolve();
   }
 
@@ -208,7 +267,7 @@ class NotificationManager {
 
   async notif_tradeFairPlaceLevy(notif: Notif<NotifTradeFairPlaceLevyArgs>) {
     const { token, cityId } = notif.args;
-    const node = document.getElementById(`pr_city_${cityId}`);
+    const node = document.getElementById(`pr_${cityId}`);
     if (!node) {
       return;
     }

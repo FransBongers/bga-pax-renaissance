@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN016_TheCompanyOfMerchantAdventurers extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN016_TheCompanyOfMerchantAdventurers extends \PaxRenaissance\Models\Tab
     parent::__construct($row);
     $this->id = 'PREN016_TheCompanyOfMerchantAdventurers';
     $this->agents = [
-      'number' => 1,
-      'religion' => null,
-      'type' => PAWN,
+      [
+        'religion' => null,
+        'type' => PAWN,
+      ]
     ];
     $this->empire = ENGLAND;
     $this->flavorText = [

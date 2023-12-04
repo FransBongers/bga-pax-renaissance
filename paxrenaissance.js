@@ -15,6 +15,10 @@ var DISABLED = "disabled";
 var PR_NONE = "pr_none";
 var PR_SELECTABLE = "pr_selectable";
 var PR_SELECTED = "pr_selected";
+var FUGGER = 'fugger';
+var MEDICI = 'medici';
+var COEUR = 'coeur';
+var MARCHIONNI = 'marchionni';
 var WEST = "west";
 var EAST = "east";
 var CARDINAL_DIRECTIONS = [
@@ -1744,7 +1748,7 @@ var PaxRenaissance = (function () {
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
-            _a.placeAgents = new PlaceAgentsState(this),
+            _a.placeAgent = new PlaceAgentState(this),
             _a.playerAction = new PlayerActionState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
@@ -1972,19 +1976,19 @@ var PaxRenaissance = (function () {
         }
         node.classList.add(PR_SELECTED);
     };
-    PaxRenaissance.prototype.setCitySelectable = function (_a) {
-        var cityId = _a.cityId, callback = _a.callback;
-        var nodeId = "pr_city_".concat(cityId);
+    PaxRenaissance.prototype.setLocationSelectable = function (_a) {
+        var id = _a.id, callback = _a.callback;
+        var nodeId = "pr_".concat(id);
         var node = $(nodeId);
         if (node === null) {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ cityId: cityId }); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ id: id }); }));
     };
-    PaxRenaissance.prototype.setCitySelected = function (_a) {
-        var cityId = _a.cityId;
-        var nodeId = "pr_city_".concat(cityId);
+    PaxRenaissance.prototype.setLocationSelected = function (_a) {
+        var id = _a.id;
+        var nodeId = "pr_".concat(id);
         var node = $(nodeId);
         if (node === null) {
             return;
@@ -2592,7 +2596,6 @@ var GameMap = (function () {
             node.insertAdjacentHTML("beforeend", type === PAWN
                 ? tplPawn({
                     id: chessPiece.id,
-                    type: type,
                     bank: bankOrReligion,
                 })
                 : tplChessPiece({ id: chessPiece.id, type: type, religion: bankOrReligion }));
@@ -2605,7 +2608,7 @@ var GameMap = (function () {
             if (!chessPiece) {
                 return;
             }
-            var node = document.getElementById("pr_city_".concat(city));
+            var node = document.getElementById("pr_".concat(city));
             if (!node) {
                 return;
             }
@@ -2703,8 +2706,9 @@ var tplChessPiece = function (_a) {
     return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_chess_piece pr_").concat(type, "\" ").concat(religion ? "data-religion=\"".concat(religion, "\"") : '').concat(color ? "data-color=\"".concat(color, "\"") : '', "></div>");
 };
 var tplPawn = function (_a) {
-    var id = _a.id, type = _a.type, bank = _a.bank;
-    return "<div id=\"".concat(id, "\" class=\"pr_chess_piece pr_").concat(type, "\" data-bank=\"").concat(bank, "\"></div>");
+    var id = _a.id, bank = _a.bank;
+    var type = PAWN;
+    return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_chess_piece pr_").concat(type, "\" data-bank=\"").concat(bank, "\"></div>");
 };
 var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map(function (_a, index) {
     var top = _a.top, left = _a.left;
@@ -2743,7 +2747,7 @@ var tplGameMapMapCards = function () {
         return "\n  <div id=\"pr_empire_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(data.top, "px); left: calc(var(--paxRenMapScale) * ").concat(data.left, "px);\">\n    ").concat(Object.entries(data.cities)
             .map(function (_a) {
             var city = _a[0], coords = _a[1];
-            return "<div id=\"pr_city_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
+            return "<div id=\"pr_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
         })
             .join(""), "\n  </div>\n");
     });
@@ -2872,6 +2876,7 @@ var LOG_TOKEN_NEW_LINE = "newLine";
 var LOG_TOKEN_PLAYER_NAME = "playerName";
 var LOG_TOKEN_FLORIN = "florin";
 var LOG_TOKEN_MAP_TOKEN = "mapToken";
+var LOG_TOKEN_PAWN = "pawn";
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
@@ -2886,7 +2891,11 @@ var getTokenDiv = function (_a) {
         case LOG_TOKEN_NEW_LINE:
             return "<br>";
         case LOG_TOKEN_MAP_TOKEN:
-            return tplChessPiece({ type: value.split("_")[1], religion: value.split("_")[0] });
+            var mtValue = value.split("_");
+            return mtValue[1] === PAWN
+                ? tplPawn({ bank: mtValue[0] })
+                : tplChessPiece({ type: mtValue[1], religion: mtValue[0] });
+        case LOG_TOKEN_PAWN:
         case LOG_TOKEN_PLAYER_NAME:
             var player = value === "${you}"
                 ? game.playerManager.getPlayer({ playerId: game.getPlayerId() })
@@ -3225,6 +3234,8 @@ var NotificationManager = (function () {
         var notifs = [
             ["log", undefined],
             ["flipVictoryCard", undefined],
+            ["killToken", undefined],
+            ["placeAgent", undefined],
             ["playCard", undefined],
             ["purchaseCard", undefined],
             ["refreshMarket", undefined],
@@ -3269,6 +3280,61 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_killToken = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, token, node, split;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, token = _a.token;
+                node = document.getElementById(token.id);
+                if (node) {
+                    node.remove();
+                }
+                split = token.id.split("_");
+                if (split[0] === PAWN) {
+                }
+                else {
+                    this.game.supply.incValue({
+                        religion: split[1],
+                        type: split[0],
+                        value: 1,
+                    });
+                }
+                return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_placeAgent = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, token, split, isPawn, node, type, bankOrReligion;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, token = _a.token;
+                split = token.id.split("_");
+                isPawn = split[0] === PAWN;
+                if (isPawn) {
+                }
+                else {
+                    this.game.supply.incValue({
+                        religion: split[1],
+                        type: split[0],
+                        value: -1,
+                    });
+                }
+                node = document.getElementById("pr_".concat(token.location));
+                if (!node) {
+                    return [2];
+                }
+                type = token.id.split("_")[0];
+                bankOrReligion = token.id.split("_")[1];
+                node.insertAdjacentHTML("beforeend", isPawn
+                    ? tplPawn({
+                        id: token.id,
+                        bank: bankOrReligion,
+                    })
+                    : tplChessPiece({ id: token.id, type: type, religion: bankOrReligion }));
+                return [2, Promise.resolve()];
+            });
+        });
+    };
     NotificationManager.prototype.notif_playCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, card, player;
@@ -3281,7 +3347,9 @@ var NotificationManager = (function () {
                         return [4, player.tableau.addCard(card)];
                     case 1:
                         _b.sent();
-                        card.prestige.forEach(function (prestige) { return player.counters.prestige[prestige].incValue(1); });
+                        card.prestige.forEach(function (prestige) {
+                            return player.counters.prestige[prestige].incValue(1);
+                        });
                         return [2];
                 }
             });
@@ -3437,7 +3505,7 @@ var NotificationManager = (function () {
             var _a, token, cityId, node, type, colorOrReligion;
             return __generator(this, function (_b) {
                 _a = notif.args, token = _a.token, cityId = _a.cityId;
-                node = document.getElementById("pr_city_".concat(cityId));
+                node = document.getElementById("pr_".concat(cityId));
                 if (!node) {
                     return [2];
                 }
@@ -3663,6 +3731,9 @@ var PRPlayer = (function () {
         });
     };
     PRPlayer.prototype.clearInterface = function () { };
+    PRPlayer.prototype.getBank = function () {
+        return FUGGER;
+    };
     PRPlayer.prototype.getColor = function () {
         return this.playerColor;
     };
@@ -3814,16 +3885,19 @@ var Supply = (function () {
             _a[CATHOLIC] = (_b = {},
                 _b[BISHOP] = new ChessPieceCounter(),
                 _b[KNIGHT] = new ChessPieceCounter(),
+                _b[PIRATE] = new ChessPieceCounter(),
                 _b[ROOK] = new ChessPieceCounter(),
                 _b),
             _a[ISLAMIC] = (_c = {},
                 _c[BISHOP] = new ChessPieceCounter(),
                 _c[KNIGHT] = new ChessPieceCounter(),
+                _c[PIRATE] = new ChessPieceCounter(),
                 _c[ROOK] = new ChessPieceCounter(),
                 _c),
             _a[REFORMIST] = (_d = {},
                 _d[BISHOP] = new ChessPieceCounter(),
                 _d[KNIGHT] = new ChessPieceCounter(),
+                _d[PIRATE] = new ChessPieceCounter(),
                 _d[ROOK] = new ChessPieceCounter(),
                 _d),
             _a);
@@ -3835,7 +3909,7 @@ var Supply = (function () {
         var _this = this;
         var gamedatas = _a.gamedatas;
         console.log('setupChessPieceCounters');
-        [BISHOP, KNIGHT, ROOK].forEach(function (type) {
+        [BISHOP, KNIGHT, ROOK, PIRATE].forEach(function (type) {
             RELIGIONS.forEach(function (religion) {
                 var counter = _this.chessPieceCounters[religion][type];
                 counter.setup({ religion: religion, type: type, value: gamedatas.tokens.supply[religion][type] });
@@ -3914,7 +3988,7 @@ var ClientStartTradeFairState = (function () {
         var _this = this;
         this.game.clearPossible();
         this.game.setCardSelected({ card: this.args.card, back: true });
-        this.game.setCitySelected({ cityId: this.args.city.id });
+        this.game.setLocationSelected({ id: this.args.city.id });
         this.game.clientUpdatePageTitle({
             text: "Convene ${region} trade fair from ${cityName}?",
             args: {
@@ -4042,18 +4116,18 @@ var FlipVictoryCardState = (function () {
     };
     return FlipVictoryCardState;
 }());
-var PlaceAgentsState = (function () {
-    function PlaceAgentsState(game) {
+var PlaceAgentState = (function () {
+    function PlaceAgentState(game) {
         this.game = game;
     }
-    PlaceAgentsState.prototype.onEnteringState = function (args) {
+    PlaceAgentState.prototype.onEnteringState = function (args) {
         this.args = args;
         this.updateInterfaceInitialStep();
     };
-    PlaceAgentsState.prototype.onLeavingState = function () {
+    PlaceAgentState.prototype.onLeavingState = function () {
         debug("Leaving ConfirmTurnState");
     };
-    PlaceAgentsState.prototype.setDescription = function (activePlayerId) {
+    PlaceAgentState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
             text: "${tkn_playerName} may place Agents",
             args: {
@@ -4064,16 +4138,69 @@ var PlaceAgentsState = (function () {
             nonActivePlayers: true,
         });
     };
-    PlaceAgentsState.prototype.updateInterfaceInitialStep = function () {
+    PlaceAgentState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must place an Agent",
+            text: "${tkn_playerName} must select a location to place ${agents}",
             args: {
                 tkn_playerName: "${you}",
+                agents: this.createAgentLog(),
             },
         });
+        this.setLocationsSelectable();
     };
-    return PlaceAgentsState;
+    PlaceAgentState.prototype.updateInterfaceConfirmLocation = function (_a) {
+        var _this = this;
+        var id = _a.id, name = _a.name;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: id });
+        this.game.clientUpdatePageTitle({
+            text: "Place ${agents} on ${location}?",
+            args: {
+                tkn_playerName: "${you}",
+                agents: this.createAgentLog(),
+                location: _(name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlaceAgent",
+                    args: {
+                        agent: _this.args.agents[0],
+                        locationId: id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    PlaceAgentState.prototype.setLocationsSelectable = function () {
+        var _this = this;
+        Object.values(this.args.locations).forEach(function (_a) {
+            var id = _a.id, name = _a.name;
+            _this.game.setLocationSelectable({
+                id: id,
+                callback: function () { return _this.updateInterfaceConfirmLocation({ id: id, name: name }); },
+            });
+        });
+    };
+    PlaceAgentState.prototype.createAgentLog = function () {
+        var _a = this.args.agents[0], type = _a.type, religion = _a.religion;
+        var isPawn = type === PAWN;
+        var result = {
+            log: isPawn ? '${tkn_pawn}' : '${tkn_mapToken}',
+            args: {}
+        };
+        if (isPawn) {
+            result.args['tkn_pawn'] = "".concat(this.game.playerManager.getPlayer({ playerId: this.game.getPlayerId() }).getBank(), "_pawn");
+        }
+        else {
+            result.args['tkn_mapToken'] = "".concat(religion, "_").concat(type);
+        }
+        return result;
+    };
+    return PlaceAgentState;
 }());
 var PlayerActionState = (function () {
     function PlayerActionState(game) {
@@ -4277,8 +4404,8 @@ var TradeFairLevyState = (function () {
             },
         });
         Object.keys(this.args.possibleLevies).forEach(function (cityId) {
-            _this.game.setCitySelectable({
-                cityId: cityId,
+            _this.game.setLocationSelectable({
+                id: cityId,
                 callback: function () { return _this.updateInterfaceConfirmPlaceLevy({ cityId: cityId }); },
             });
         });
@@ -4287,7 +4414,7 @@ var TradeFairLevyState = (function () {
         var _this = this;
         var cityId = _a.cityId;
         this.game.clearPossible();
-        this.game.setCitySelected({ cityId: cityId });
+        this.game.setLocationSelected({ id: cityId });
         var _b = this.args.possibleLevies[cityId].levy, religion = _b.religion, levyIcon = _b.levyIcon;
         this.game.clientUpdatePageTitle({
             text: "Place ${tkn_mapToken} in ${cityName}?",

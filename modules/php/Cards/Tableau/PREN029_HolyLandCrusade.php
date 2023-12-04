@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN029_HolyLandCrusade extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,14 @@ class PREN029_HolyLandCrusade extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN029_HolyLandCrusade';
     $this->agents = [
-      'number' => 2,
-      'religion' => CATHOLIC,
-      'type' => KNIGHT,
+      [
+        'religion' => CATHOLIC,
+        'type' => KNIGHT,
+      ],
+      [
+        'religion' => CATHOLIC,
+        'type' => KNIGHT,
+      ],
     ];
     $this->empire = MAMLUK;
     $this->flavorText = [

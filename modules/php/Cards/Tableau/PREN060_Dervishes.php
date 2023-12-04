@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN060_Dervishes extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN060_Dervishes extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN060_Dervishes';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => BISHOP,
+      [
+        'religion' => ISLAMIC,
+        'type' => BISHOP,
+      ]
     ];
     $this->empire = EAST;
     $this->flavorText = [

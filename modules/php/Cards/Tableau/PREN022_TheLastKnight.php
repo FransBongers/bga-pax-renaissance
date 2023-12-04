@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN022_TheLastKnight extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN022_TheLastKnight extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN022_TheLastKnight';
     $this->agents = [
-      'number' => 1,
-      'religion' => REFORMIST,
-      'type' => KNIGHT,
+      [
+        'religion' => REFORMIST,
+        'type' => KNIGHT,
+      ]
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
     $this->flavorText = [

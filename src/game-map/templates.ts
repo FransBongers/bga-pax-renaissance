@@ -2,8 +2,9 @@ const tplChessPiece = ({ id, type, religion, color }: { id?: string; type: strin
   return `<div ${id ? `id="${id}"` : ''} class="pr_chess_piece pr_${type}" ${religion ? `data-religion="${religion}"` : ''}${color ? `data-color="${color}"` : ''}></div>`;
 };
 
-const tplPawn = ({ id, type, bank }: { id: string; type: string; bank: string; }) => {
-  return `<div id="${id}" class="pr_chess_piece pr_${type}" data-bank="${bank}"></div>`;
+const tplPawn = ({ id, bank }: { id?: string; bank: string; }) => {
+  const type = PAWN;
+  return `<div ${id ? `id="${id}"` : ''} class="pr_chess_piece pr_${type}" data-bank="${bank}"></div>`;
 };
 
 
@@ -83,7 +84,7 @@ const tplGameMapMapCards = () => {
     ${Object.entries(data.cities)
       .map(
         ([city, coords]) =>
-          `<div id="pr_city_${city}" class="pr_city" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`
+          `<div id="pr_${city}" class="pr_city" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`
       )
       .join("")}
   </div>

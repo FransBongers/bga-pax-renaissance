@@ -6,7 +6,7 @@ class EnglandPortugalBorder extends \PaxRenaissance\Models\Border
   public function __construct()
   {
     $this->id = BORDER_ENGLAND_PORTUGAL;
-    $this->name = clienttranslate('EnglandPortugalBorder');
+    $this->name = clienttranslate('England-Portugal Border');
     $this->seaBorder = true;
   }
 }

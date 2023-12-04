@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN010_BonfireOfTheVanities extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN010_BonfireOfTheVanities extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN010_BonfireOfTheVanities';
     $this->agents = [
-      'number' => 1,
-      'religion' => REFORMIST,
-      'type' => BISHOP,
+      [
+        'religion' => REFORMIST,
+        'type' => BISHOP,
+      ]
     ];
     $this->empire = PAPAL_STATES;
     $this->flavorText = [

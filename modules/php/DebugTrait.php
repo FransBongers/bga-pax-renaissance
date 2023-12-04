@@ -12,12 +12,14 @@ use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\PlayersExtra;
 use PaxRenaissance\Managers\Tokens;
+use PaxRenaissance\Models\Border;
 
 trait DebugTrait
 {
   function test()
   {
-    Notifications::log('Border', Borders::get(BORDER_ARAGON_FRANCE));
+    Notifications::log('Token', Borders::get(BORDER_FRANCE_HOLY_ROMAN_EMPIRE)->getToken());
+    // Notifications::log('East', Empires::getRegion(EAST));
     // Notifications::log('Religion', $token->getReligion());
     // Notifications::log('Cities', Empires::get(BYZANTIUM)->getReligion());
   }

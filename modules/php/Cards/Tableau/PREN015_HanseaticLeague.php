@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN015_HanseaticLeague extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN015_HanseaticLeague extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN015_HanseaticLeague';
     $this->agents = [
-      'number' => 1,
-      'religion' => null,
-      'type' => PAWN,
+      [
+        'religion' => null,
+        'type' => PAWN,
+      ]
     ];
     $this->empire = FRANCE;
     $this->flavorText = [

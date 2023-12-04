@@ -37,7 +37,7 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
 
   public function argsTradeFairLevy()
   {
-    $player = Players::get();
+    // $player = Players::get();
     $empireId = $this->ctx->getInfo()['empireId'];
     $empire = Empires::get($empireId);
     $cities = $empire->getCities();

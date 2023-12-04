@@ -40,7 +40,7 @@ const ST_FLIP_VICTORY_CARD = 25;
 const ST_TRADE_FAIR = 26;
 const ST_TRADE_FAIR_PROFIT_DISPERSAL = 27;
 const ST_TRADE_FAIR_LEVY = 28;
-const ST_PLACE_AGENTS = 29;
+const ST_PLACE_AGENT = 29;
 
 const ST_CLEANUP = 88;
 const ST_RESOLVE_STACK = 90;
@@ -79,7 +79,7 @@ const AFTER_FINISHING_ACTION = 'afterFinishing';
  * ATOMIC ACTIONS
  */
 const FLIP_VICTORY_CARD = 'FLIP_VICTORY_CARD';
-const PLACE_AGENTS = 'PLACE_AGENTS';
+const PLACE_AGENT = 'PLACE_AGENT';
 const PLAYER_ACTION = 'PLAYER_ACTION';
 const PLAY_CARD = 'PLAY_CARD';
 const PURCHASE_CARD = 'PURCHASE_CARD';
@@ -246,6 +246,22 @@ const ARAGON = "aragon";
 const PAPAL_STATES = "papalStates";
 const OTTOMAN = "ottoman";
 const MAMLUK = "mamluk";
+
+const EAST_EMPIRES = [
+  BYZANTIUM,
+  HUNGARY,
+  MAMLUK,
+  OTTOMAN,
+
+];
+const WEST_EMPIRES = [
+  ARAGON,
+  ENGLAND,
+  FRANCE,
+  HOLY_ROMAN_EMIRE,
+  PAPAL_STATES,
+  PORTUGAL,
+];
 
 /**
  * Borders

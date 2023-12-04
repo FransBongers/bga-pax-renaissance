@@ -43,7 +43,7 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
     if ($card->getAgents() !== null) {
       $parent = $this->ctx->getParent();
       $parent->pushChild(new LeafNode([
-        'action' => PLACE_AGENTS,
+        'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $card->getAgents(),
         'empire' => $card->getEmpire(),

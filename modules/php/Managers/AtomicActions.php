@@ -11,7 +11,7 @@ class AtomicActions
   // Mapping of actionId and corresponding class
   static $classes = [
     FLIP_VICTORY_CARD => 'FlipVictoryCard',
-    PLACE_AGENTS => 'PlaceAgents',
+    PLACE_AGENT => 'PlaceAgent',
     PLAY_CARD => 'PlayCard',
     PLAYER_ACTION => 'PlayerAction',
     PURCHASE_CARD => 'PurchaseCard',

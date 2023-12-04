@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN068_BlackSheepTribe extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN068_BlackSheepTribe extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN068_BlackSheepTribe';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => KNIGHT,
+      [
+        'religion' => ISLAMIC,
+        'type' => KNIGHT,
+      ]
     ];
     $this->empire = BYZANTIUM;
     $this->flavorText = [

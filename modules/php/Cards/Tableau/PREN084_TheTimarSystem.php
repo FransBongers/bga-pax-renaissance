@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN084_TheTimarSystem extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN084_TheTimarSystem extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN084_TheTimarSystem';
     $this->agents = [
-      'number' => 1,
-      'religion' => ISLAMIC,
-      'type' => ROOK,
+      [
+        'religion' => ISLAMIC,
+        'type' => ROOK,
+      ]
     ];
     $this->empire = EAST;
     $this->flavorText = [

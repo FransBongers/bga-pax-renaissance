@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN024_Gonfalonier extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,14 @@ class PREN024_Gonfalonier extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN024_Gonfalonier';
     $this->agents = [
-      'number' => 2,
-      'religion' => CATHOLIC,
-      'type' => KNIGHT,
+      [
+        'religion' => CATHOLIC,
+        'type' => KNIGHT,
+      ],
+      [
+        'religion' => CATHOLIC,
+        'type' => KNIGHT,
+      ]
     ];
     $this->empire = PAPAL_STATES;
     $this->flavorText = [

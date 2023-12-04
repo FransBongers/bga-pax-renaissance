@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN026_Cromwell extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,14 @@ class PREN026_Cromwell extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN026_Cromwell';
     $this->agents = [
-      'number' => 2,
-      'religion' => REFORMIST,
-      'type' => KNIGHT,
+      [
+        'religion' => REFORMIST,
+        'type' => KNIGHT,
+      ],
+      [
+        'religion' => REFORMIST,
+        'type' => KNIGHT,
+      ],
     ];
     $this->empire = ENGLAND;
     $this->flavorText = [

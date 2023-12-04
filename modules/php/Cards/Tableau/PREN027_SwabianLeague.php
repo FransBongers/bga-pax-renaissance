@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN027_SwabianLeague extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,14 @@ class PREN027_SwabianLeague extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN027_SwabianLeague';
     $this->agents = [
-      'number' => 2,
-      'religion' => CATHOLIC,
-      'type' => KNIGHT,
+      [
+        'religion' => CATHOLIC,
+        'type' => KNIGHT,
+      ],
+      [
+        'religion' => CATHOLIC,
+        'type' => KNIGHT,
+      ],
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
     $this->flavorText = [

@@ -4,32 +4,38 @@ class Supply {
     [CATHOLIC]: {
       [BISHOP]: ChessPieceCounter;
       [KNIGHT]: ChessPieceCounter;
+      [PIRATE]: ChessPieceCounter;
       [ROOK]: ChessPieceCounter;
     };
     [ISLAMIC]: {
       [BISHOP]: ChessPieceCounter;
       [KNIGHT]: ChessPieceCounter;
+      [PIRATE]: ChessPieceCounter;
       [ROOK]: ChessPieceCounter;
     };
     [REFORMIST]: {
       [BISHOP]: ChessPieceCounter;
       [KNIGHT]: ChessPieceCounter;
+      [PIRATE]: ChessPieceCounter;
       [ROOK]: ChessPieceCounter;
     };
   } = {
     [CATHOLIC]: {
       [BISHOP]: new ChessPieceCounter(),
       [KNIGHT]: new ChessPieceCounter(),
+      [PIRATE]: new ChessPieceCounter(),
       [ROOK]: new ChessPieceCounter(),
     },
     [ISLAMIC]: {
       [BISHOP]: new ChessPieceCounter(),
       [KNIGHT]: new ChessPieceCounter(),
+      [PIRATE]: new ChessPieceCounter(),
       [ROOK]: new ChessPieceCounter(),
     },
     [REFORMIST]: {
       [BISHOP]: new ChessPieceCounter(),
       [KNIGHT]: new ChessPieceCounter(),
+      [PIRATE]: new ChessPieceCounter(),
       [ROOK]: new ChessPieceCounter(),
     },
   };
@@ -43,7 +49,7 @@ class Supply {
 
   private setupChessPieceCounters({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     console.log('setupChessPieceCounters');
-    [BISHOP, KNIGHT, ROOK].forEach((type) => {
+    [BISHOP, KNIGHT, ROOK, PIRATE].forEach((type) => {
       RELIGIONS.forEach((religion) => {
         const counter: ChessPieceCounter = this.chessPieceCounters[religion][type];
         counter.setup({religion, type, value: gamedatas.tokens.supply[religion][type]});

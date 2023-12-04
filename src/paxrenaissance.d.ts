@@ -33,11 +33,11 @@ interface PaxRenaissanceGame extends Game {
     back?: boolean;
   }) => void;
   setCardSelected: (props: { card: TableauCard; back?: boolean }) => void;
-  setCitySelectable: (props: {
-    cityId: string;
-    callback: (props: { cityId: string }) => void;
+  setLocationSelectable: (props: {
+    id: string;
+    callback: (props: { id: string }) => void;
   }) => void;
-  setCitySelected: (props: { cityId: string }) => void;
+  setLocationSelected: (props: { id: string }) => void;
   takeAction: (props: {
     action: string;
     args?: Record<string, unknown>;
@@ -160,5 +160,5 @@ interface PaxRenaissancePlayerData extends BgaPlayer {
   tableau: {
     east: TableauCard[];
     west: TableauCard[];
-  }
+  };
 }

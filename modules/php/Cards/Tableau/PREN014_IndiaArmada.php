@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN014_IndiaArmada extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN014_IndiaArmada extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN014_IndiaArmada';
     $this->agents = [
-      'number' => 1,
-      'religion' => null,
-      'type' => PAWN,
+      [
+        'religion' => null,
+        'type' => PAWN,
+      ]
     ];
     $this->empire = PORTUGAL;
     $this->flavorText = [

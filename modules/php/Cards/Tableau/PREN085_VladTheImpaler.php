@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN085_VladTheImpaler extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,14 @@ class PREN085_VladTheImpaler extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN085_VladTheImpaler';
     $this->agents = [
-      'number' => 2,
-      'religion' => CATHOLIC,
-      'type' => ROOK,
+      [
+        'religion' => CATHOLIC,
+        'type' => ROOK,
+      ],
+      [
+        'religion' => CATHOLIC,
+        'type' => ROOK,
+      ],
     ];
     $this->empire = HUNGARY;
     $this->flavorText = [

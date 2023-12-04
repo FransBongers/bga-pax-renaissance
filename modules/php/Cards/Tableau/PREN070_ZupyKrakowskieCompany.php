@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
 class PREN070_ZupyKrakowskieCompany extends \PaxRenaissance\Models\TableauCard
@@ -8,9 +9,10 @@ class PREN070_ZupyKrakowskieCompany extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN070_ZupyKrakowskieCompany';
     $this->agents = [
-      'number' => 1,
-      'religion' => CATHOLIC,
-      'type' => KNIGHT,
+      [
+        'religion' => CATHOLIC,
+        'type' => KNIGHT,
+      ]
     ];
     $this->empire = HUNGARY;
     $this->flavorText = [
