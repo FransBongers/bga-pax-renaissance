@@ -32,6 +32,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     flipVictoryCard: FlipVictoryCardState;
     placeAgent: PlaceAgentState;
     playerAction: PlayerActionState;
+    selectToken: SelectTokenState;
     tradeFairLevy: TradeFairLevyState
   };
 
@@ -69,6 +70,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       flipVictoryCard: new FlipVictoryCardState(this),
       placeAgent: new PlaceAgentState(this),
       playerAction: new PlayerActionState(this),
+      selectToken: new SelectTokenState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };
 
@@ -200,7 +202,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     ) {
       this.activeStates[stateName].onEnteringState(args.args);
     } else if (this.activeStates[stateName]) {
-      this.activeStates[stateName].setDescription(Number(args.active_player));
+      this.activeStates[stateName].setDescription(Number(args.active_player), args.args);
     }
   }
 
@@ -534,6 +536,34 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
   setLocationSelected({ id }: { id: string }) {
     const nodeId = `pr_${id}`;
+    const node = $(nodeId);
+    if (node === null) {
+      return;
+    }
+    node.classList.add(PR_SELECTED);
+  }
+
+  setTokenSelectable({
+    id,
+    callback,
+  }: {
+    id: string;
+    callback: (props: { id: string }) => void;
+  }) {
+    const nodeId = `${id}`;
+    const node = $(nodeId);
+
+    if (node === null) {
+      return;
+    }
+    node.classList.add(PR_SELECTABLE);
+    this._connections.push(
+      dojo.connect(node, "onclick", this, () => callback({ id }))
+    );
+  }
+
+  setTokenSelected({ id }: { id: string }) {
+    const nodeId = `${id}`;
     const node = $(nodeId);
     if (node === null) {
       return;

@@ -72,6 +72,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
         CATHOLIC => [],
         ISLAMIC => [],
         REFORMIST => [],
+        'banks' => []
       ],
     ];
 
@@ -80,6 +81,11 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       $data['supply'][$religion][KNIGHT] = count(self::getInLocation(Locations::supply(KNIGHT, $religion)));
       $data['supply'][$religion][PIRATE] = count(self::getInLocation(Locations::supply(PIRATE, $religion)));
       $data['supply'][$religion][ROOK] = count(self::getInLocation(Locations::supply(ROOK, $religion)));
+    }
+
+    foreach (Players::getAll() as $player) {
+      $bank = $player->getBank();
+      $data['supply']['banks'][$bank] = count(self::getInLocation(Locations::supply(PAWN, $bank)));
     }
 
     return $data;
@@ -185,9 +191,9 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       SPICE_ISLANDS => Locations::supply(DISK, WHITE),
       RED_SEA => Locations::supply(DISK, WHITE),
       // TODO: remove
-      BORDER_HUNGARY_OTTOMAN => Locations::supply(PIRATE, ISLAMIC),
-      BORDER_ARAGON_PORTUGAL => Locations::supply(PIRATE, REFORMIST),
-      BORDER_OTTOMAN_PAPAL_STATES => Locations::supply(PIRATE, CATHOLIC),
+      // BORDER_HUNGARY_OTTOMAN => Locations::supply(PIRATE, ISLAMIC),
+      // BORDER_ARAGON_PORTUGAL => Locations::supply(PIRATE, REFORMIST),
+      // BORDER_OTTOMAN_PAPAL_STATES => Locations::supply(PIRATE, CATHOLIC),
     ];
 
     foreach ($setup as $location => $pool) {

@@ -19,6 +19,12 @@ class Supply {
       [PIRATE]: ChessPieceCounter;
       [ROOK]: ChessPieceCounter;
     };
+    banks: {
+      [COEUR]?: ChessPieceCounter;
+      [FUGGER]?: ChessPieceCounter;
+      [MARCHIONNI]?: ChessPieceCounter;
+      [MEDICI]?: ChessPieceCounter;
+    }
   } = {
     [CATHOLIC]: {
       [BISHOP]: new ChessPieceCounter(),
@@ -38,6 +44,7 @@ class Supply {
       [PIRATE]: new ChessPieceCounter(),
       [ROOK]: new ChessPieceCounter(),
     },
+    banks: {}
   };
 
   constructor(game: PaxRenaissanceGame) {
@@ -54,11 +61,26 @@ class Supply {
         const counter: ChessPieceCounter = this.chessPieceCounters[religion][type];
         counter.setup({religion, type, value: gamedatas.tokens.supply[religion][type]});
       })
+    });
+
+    const entries = Object.entries(gamedatas.tokens.supply.banks);
+    console.log('entries',entries);
+    entries.forEach(([bank, count]) => {
+      console.log('entry', bank, count);
+      this.chessPieceCounters.banks[bank] = new ChessPieceCounter();
+      const counter: ChessPieceCounter = this.chessPieceCounters.banks[bank] 
+      counter.setup({bank, type: PAWN, value: count});
     })
   }
 
-  public incValue({religion, type, value}: {religion: string; type: string; value: number;}) {
-    const counter = this.chessPieceCounters?.[religion]?.[type];
+  public incValue({bank, religion, type, value}: {bank?: string; religion?: string; type: string; value: number;}) {
+    let counter = null;
+    if (type === PAWN) {
+      counter = this.chessPieceCounters?.banks?.[bank];
+    } else {
+      counter = this.chessPieceCounters?.[religion]?.[type];
+    }
+    
     if (!counter) {
       return;
     }

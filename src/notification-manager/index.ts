@@ -38,14 +38,15 @@ class NotificationManager {
       ["log", undefined],
       ["flipVictoryCard", undefined],
       ["killToken", undefined],
-      ["placeAgent", undefined],
+      ["placeToken", undefined],
       ["playCard", undefined],
       ["purchaseCard", undefined],
       ["refreshMarket", undefined],
+      ["repressToken", undefined],
       ["sellCard", undefined],
       ["tradeFairConvene", undefined],
       ["tradeFairEmporiumSubsidy", undefined],
-      ["tradeFairPlaceLevy", undefined],
+      // ["tradeFairPlaceLevy", undefined],
       ["tradeFairProfitDispersalPirates", undefined],
       ["tradeFairProfitDispersalPlayer", undefined],
     ];
@@ -123,13 +124,19 @@ class NotificationManager {
     return Promise.resolve();
   }
 
-  async notif_placeAgent(notif: Notif<NotifPlaceAgentArgs>) {
-    const { playerId, token } = notif.args;
+  async notif_placeToken(notif: Notif<NotifPlaceTokenArgs>) {
+    const { playerId, token, fromLocationId } = notif.args;
 
     const split = token.id.split("_");
     const isPawn = split[0] === PAWN;
-    if (isPawn) {
-    } else {
+    const fromSupply = fromLocationId.startsWith('supply');
+    if (fromSupply && isPawn) {
+      this.game.supply.incValue({
+        bank: split[1],
+        type: split[0],
+        value: -1,
+      });
+    } else if (fromSupply) {
       this.game.supply.incValue({
         religion: split[1],
         type: split[0],
@@ -145,15 +152,25 @@ class NotificationManager {
     const type = token.id.split("_")[0];
     const bankOrReligion = token.id.split("_")[1];
 
-    node.insertAdjacentHTML(
-      "beforeend",
-      isPawn
-        ? tplPawn({
-            id: token.id,
-            bank: bankOrReligion,
-          })
-        : tplChessPiece({ id: token.id, type, religion: bankOrReligion })
-    );
+    if (fromSupply) {
+      node.insertAdjacentHTML(
+        "beforeend",
+        isPawn
+          ? tplPawn({
+              id: token.id,
+              bank: bankOrReligion,
+            })
+          : tplChessPiece({ id: token.id, type, religion: bankOrReligion })
+      );
+    } else {
+      const tokenNode = document.getElementById(token.id);
+      if (tokenNode) {
+        await this.game.animationManager.attachWithAnimation(
+          new BgaSlideAnimation({ element: tokenNode }),
+          node
+        )
+      }
+    }
 
     return Promise.resolve();
   }
@@ -232,6 +249,28 @@ class NotificationManager {
     }
   }
 
+  async notif_repressToken(notif: Notif<NotifRepressTokenArgs>) {
+    const { playerId, token, cost } = notif.args;
+
+    const node = document.getElementById(token.id);
+    // TODO: move to empire carf
+    if (node) {
+      node.remove();
+    }
+    const split = token.id.split("_");
+    if (split[0] === PAWN) {
+    } else {
+      this.game.supply.incValue({
+        religion: split[1],
+        type: split[0],
+        value: 1,
+      });
+    }
+    this.getPlayer({playerId}).counters.florins.incValue(-cost);
+
+    return Promise.resolve();
+  }
+
   async notif_sellCard(notif: Notif<NotifSellCardArgs>) {
     const { playerId, card, value } = notif.args;
     const player = this.getPlayer({ playerId });
@@ -265,29 +304,29 @@ class NotificationManager {
     return Promise.resolve();
   }
 
-  async notif_tradeFairPlaceLevy(notif: Notif<NotifTradeFairPlaceLevyArgs>) {
-    const { token, cityId } = notif.args;
-    const node = document.getElementById(`pr_${cityId}`);
-    if (!node) {
-      return;
-    }
+  // async notif_tradeFairPlaceLevy(notif: Notif<NotifTradeFairPlaceLevyArgs>) {
+  //   const { token, cityId } = notif.args;
+  //   const node = document.getElementById(`pr_${cityId}`);
+  //   if (!node) {
+  //     return;
+  //   }
 
-    const type = token.id.split("_")[0];
-    const colorOrReligion = token.id.split("_")[1];
+  //   const type = token.id.split("_")[0];
+  //   const colorOrReligion = token.id.split("_")[1];
 
-    this.game.supply.incValue({ type, religion: colorOrReligion, value: -1 });
+  //   this.game.supply.incValue({ type, religion: colorOrReligion, value: -1 });
 
-    node.insertAdjacentHTML(
-      "beforeend",
-      tplChessPiece({
-        id: token.id,
-        type,
-        color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
-        religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
-      })
-    );
-    return Promise.resolve();
-  }
+  //   node.insertAdjacentHTML(
+  //     "beforeend",
+  //     tplChessPiece({
+  //       id: token.id,
+  //       type,
+  //       color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
+  //       religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
+  //     })
+  //   );
+  //   return Promise.resolve();
+  // }
 
   async notif_tradeFairProfitDispersalPirates(
     notif: Notif<NotifTradeFairProfitDispersalPiratesArgs>

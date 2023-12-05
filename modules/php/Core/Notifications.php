@@ -121,25 +121,24 @@ class Notifications
     $location = Utils::startsWith($locationId,'border') ? Borders::get($locationId) : Cities::get($locationId);
     
     $isPawn = $token->getType() === PAWN;
-    self::notifyAll("killToken",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${locationName}'), [
+    self::notifyAll("killToken",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-      'locationName' => $location->getName(),
+      'tkn_boldText' => $location->getName(),
       'token' => $token,
-      'i18n' => ['locationName'],
     ]);
   }
 
-  public static function placeAgent($player, $token, $location)
+  public static function placeToken($player, $token, $fromLocationId, $toLocation = null)
   {
     $isPawn = $token->getType() === PAWN;
     
-    self::notifyAll("placeAgent",  clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${locationName}'), [
+    self::notifyAll("placeToken",  clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${tkn_boldText}'), [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-      'locationName' => $location->getName(),
+      'tkn_boldText' => $toLocation !== null ? $toLocation->getName() : '',
       'token' => $token,
-      'i18n' => ['locationName'],
+      'fromLocationId' => $fromLocationId,
     ]);
   }
    
@@ -171,6 +170,20 @@ class Notifications
       'player' => $player,
       'cardMoves' => $cardMoves,
       'cardDraws' => $cardDraws,
+    ]);
+  }
+
+  public static function repressToken($player, $token, $locationId, $cost)
+  {
+    $location = Utils::startsWith($locationId,'border') ? Borders::get($locationId) : Cities::get($locationId);
+    
+    $isPawn = $token->getType() === PAWN;
+    self::notifyAll("repressToken",  clienttranslate('${tkn_playerName} represses ${tkn_mapToken} on ${tkn_boldText}'), [
+      'player' => $player,
+      'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
+      'tkn_boldText' => $location->getName(),
+      'token' => $token,
+      'cost' => $cost,
     ]);
   }
 
@@ -258,20 +271,20 @@ class Notifications
     self::message(clienttranslate('No profits left. The voyage does not start'), []);
   }
 
-  public static function tradeFairPlaceLevy($player, $city, $token)
-  {
-    $message = clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${cityName}');
-    // $chessPieceExploded = explode('_' );
+  // public static function tradeFairPlaceLevy($player, $city, $token)
+  // {
+  //   $message = clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${cityName}');
+  //   // $chessPieceExploded = explode('_' );
 
-    self::notifyAll("tradeFairPlaceLevy", $message, [
-      'player' => $player,
-      'cityId' => $city->getId(),
-      'cityName' => $city->getName(),
-      'token' => $token,
-      'tkn_mapToken' => $token->getReligion() . '_' . $token->getType(),
-      'i18n' => ['cityName'],
-    ]);
-  }
+  //   self::notifyAll("tradeFairPlaceLevy", $message, [
+  //     'player' => $player,
+  //     'cityId' => $city->getId(),
+  //     'cityName' => $city->getName(),
+  //     'token' => $token,
+  //     'tkn_mapToken' => $token->getReligion() . '_' . $token->getType(),
+  //     'i18n' => ['cityName'],
+  //   ]);
+  // }
 
   /*********************
    **** UPDATE ARGS ****

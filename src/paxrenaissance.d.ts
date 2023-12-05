@@ -38,6 +38,11 @@ interface PaxRenaissanceGame extends Game {
     callback: (props: { id: string }) => void;
   }) => void;
   setLocationSelected: (props: { id: string }) => void;
+  setTokenSelectable: (props: {
+    id: string;
+    callback: (props: { id: string }) => void;
+  }) => void;
+  setTokenSelected: (props: { id: string }) => void;
   takeAction: (props: {
     action: string;
     args?: Record<string, unknown>;
@@ -139,6 +144,7 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
         knight: number;
         rook: number;
       };
+      banks: Record<string, number>;
     };
   };
   victoryCards: VictoryCard[];

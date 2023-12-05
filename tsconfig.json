@@ -67,6 +67,7 @@
     "src/states/FlipVictoryCard.ts",
     "src/states/PlaceAgent.ts",
     "src/states/PlayerAction.ts",
+    "src/states/SelectToken.ts",
     "src/states/state.d.ts",
     "src/states/TradeFairLevy.ts",
     "src/tooltip-manager/templates.ts",

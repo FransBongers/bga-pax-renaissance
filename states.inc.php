@@ -241,6 +241,24 @@ $machinestates = [
         'possibleactions' => ['actPlaceAgent', 'pass'],
     ],
 
+    ST_RESOLVE_PLACE_TOKEN => [
+        'name' => 'resolvePlaceToken',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_SELECT_TOKEN => [
+        'name' => 'selectToken',
+        'description' => clienttranslate('${actplayer} must select a token'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actSelectToken', 'pass'],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',

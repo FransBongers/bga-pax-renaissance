@@ -4,6 +4,7 @@ namespace PaxRenaissance\Actions;
 
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\Flows;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
@@ -74,25 +75,20 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
     }
     $levy = $possible['possibleLevies'][$cityId]['levy'];
 
-    $location = Locations::supply($levy['levyIcon'], $levy['religion']);
+    $player = self::getPlayer();
+    $supply = Locations::supply($levy['levyIcon'], $levy['religion']);
 
-    $token = Tokens::getTopOf($location);
+    Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $cityId, CITY), $this->ctx);
 
-    // TODO: check what to do if supply is empty
-    if ($token !== null) {
-      $token = $token->move($cityId);
-      // Tokens::move($piece['id'], $cityId);
-      // $piece['location'] = $cityId;
-      Notifications::tradeFairPlaceLevy(self::getPlayer(),Cities::get($cityId),$token);
-    }
+    // $token = Tokens::getTopOf($location);
 
-    // $this->ctx->insertAsBrother(new LeafNode([
-    //   'action' => PURCHASE_CARD,
-    //   'playerId' => $this->ctx->getPlayerId(),
-    //   'args' => [
-    //     'cardId' => $args['cardId'],
-    //   ],
-    // ]));
+    // // TODO: check what to do if supply is empty
+    // if ($token !== null) {
+    //   $token = $token->move($cityId);
+    //   // Tokens::move($piece['id'], $cityId);
+    //   // $piece['location'] = $cityId;
+      // Notifications::tradeFairPlaceLevy(self::getPlayer(),Cities::get($cityId),$token);
+    // }
 
     $this->resolveAction($args);
   }

@@ -24,8 +24,9 @@ interface NotifKillTokenArgs extends NotifWithPlayerArgs {
   token: Token;
 }
 
-interface NotifPlaceAgentArgs extends NotifWithPlayerArgs {
+interface NotifPlaceTokenArgs extends NotifWithPlayerArgs {
   token: Token;
+  fromLocationId: string;
 }
 
 interface NotifPlayCardArgs extends NotifWithPlayerArgs {
@@ -50,6 +51,11 @@ interface NotifRefreshMarketArgs extends NotifWithPlayerArgs {
   cardDraws: TableauCard[];
 }
 
+interface NotifRepressTokenArgs extends NotifWithPlayerArgs {
+  token: Token;
+  cost: number;
+}
+
 interface NotifSellCardArgs extends NotifWithPlayerArgs {
   card: TableauCard;
   tkn_cardName: string;
@@ -66,11 +72,11 @@ interface NotifTradeFairEmporiumSubsidyArgs extends NotifWithPlayerArgs {
   region: string;
 }
 
-interface NotifTradeFairPlaceLevyArgs extends NotifWithPlayerArgs {
-  token: Token;
-  cityId: string;
-  cityName: string;
-}
+// interface NotifTradeFairPlaceLevyArgs extends NotifWithPlayerArgs {
+//   token: Token;
+//   cityId: string;
+//   cityName: string;
+// }
 
 interface NotifTradeFairProfitDispersalPiratesArgs {
   region: string;

@@ -53,3 +53,12 @@ const getTokenDiv = ({
       return value;
   }
 };
+
+const tknFlorin = () => {
+  return _("Florin(s)");
+}
+
+const tknMapToken = (tokenId: string) => {
+  const split = tokenId.split('_');
+  return `${split[1]}_${split[0]}`;
+}

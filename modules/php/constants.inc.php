@@ -41,6 +41,8 @@ const ST_TRADE_FAIR = 26;
 const ST_TRADE_FAIR_PROFIT_DISPERSAL = 27;
 const ST_TRADE_FAIR_LEVY = 28;
 const ST_PLACE_AGENT = 29;
+const ST_RESOLVE_PLACE_TOKEN = 30;
+const ST_SELECT_TOKEN = 31;
 
 const ST_CLEANUP = 88;
 const ST_RESOLVE_STACK = 90;
@@ -83,7 +85,9 @@ const PLACE_AGENT = 'PLACE_AGENT';
 const PLAYER_ACTION = 'PLAYER_ACTION';
 const PLAY_CARD = 'PLAY_CARD';
 const PURCHASE_CARD = 'PURCHASE_CARD';
+const RESOLVE_PLACE_TOKEN = 'RESOLVE_PLACE_TOKEN';
 const SELL_CARD = 'SELL_CARD';
+const SELECT_TOKEN = 'SELECT_TOKEN';
 const TRADE_FAIR = 'TRADE_FAIR';
 const TRADE_FAIR_PROFIT_DISPERSAL = 'TRADE_FAIR_PROFIT_DISPERSAL';
 const TRADE_FAIR_LEVY = 'TRADE_FAIR_LEVY';
@@ -201,7 +205,6 @@ const POOL_WEST = 'pool_' . WEST;
 /**
  * cities
  */
-
 const LONDON = 'london';
 const BORDEAUX = 'bordeaux';
 const BRUGES = 'bruges';
@@ -262,6 +265,13 @@ const WEST_EMPIRES = [
   PAPAL_STATES,
   PORTUGAL,
 ];
+
+/**
+ * Map location types
+ */
+const CITY = 'city';
+const BORDER = 'border';
+const CARD = 'card';
 
 /**
  * Borders

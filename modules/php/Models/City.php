@@ -77,9 +77,25 @@ class City implements \JsonSerializable
     return $this->levy[$religion];
   }
 
+  public function getToken()
+  {
+    return Tokens::getTopOf($this->id);
+  }
+
   public function getTradeRoute()
   {
     return null;
+  }
+
+  public function placeToken($token)
+  {
+    $currentToken = $this->getToken();
+    if ($currentToken !== null) {
+      $currentToken->repress();
+    }
+    $fromLocationId = $token->getLocation();
+    $token = $token->move($this->getId());
+    Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
   }
 
   /**

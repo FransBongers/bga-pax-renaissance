@@ -102,6 +102,15 @@
      self::ajaxResponse();
    }
 
+   public function actSelectToken()
+   {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actSelectToken', $args);
+    self::ajaxResponse();
+   }
+
    public function actTradeFairLevy()
    {
      self::setAjaxMode();

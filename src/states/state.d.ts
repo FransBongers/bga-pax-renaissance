@@ -1,7 +1,7 @@
 interface State {
-  onEnteringState: (args: any) => void;
+  onEnteringState: (args: unknown) => void;
   onLeavingState: () => void;
-  setDescription: (activePlayerId: number) => void;
+  setDescription: (activePlayerId: number, args: unknown) => void;
 }
 
 interface CommonArgs {
@@ -32,18 +32,20 @@ interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
   victoryCards: VictoryCard[];
 }
 
+interface PlaceAgentLocation {
+  id: string;
+  name: string;
+  type: 'border' | 'city',
+  cost: number;
+  repressed: Token;
+}
+
 interface OnEnteringPlaceAgentsArgs extends CommonArgs {
   agents: {
     type: string;
     religion: string | null;
   }[];
-  locations: Record<
-    string,
-    {
-      id: string;
-      name: string;
-    }
-  >;
+  locations: Record<string, PlaceAgentLocation>;
 }
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {
@@ -59,6 +61,10 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
       city: City;
     };
   };
+}
+
+interface OnEnteringSelectTokenArgs extends CommonArgs {
+  tokens: Token[];
 }
 
 interface OnEnteringTradeFairLevyArgs extends CommonArgs {

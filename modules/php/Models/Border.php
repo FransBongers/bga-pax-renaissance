@@ -41,15 +41,18 @@ class Border implements \JsonSerializable
     return $data;
   }
 
-  public function placeAgent($token)
+  public function placeToken($token)
   {
     $currentToken = $this->getToken();
-    if ($token->getType() === PIRATE && $currentToken !== null) {
+    if ($currentToken !== null && $token->getType() === PIRATE) {
       $currentToken->kill();
+    } else if ($currentToken !== null && $token->getType() === PAWN) {
+      $currentToken->repress();
     }
 
+    $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId());
-    Notifications::placeAgent(Players::get(),$token, $this);
+    Notifications::placeToken(Players::get(),$token, $fromLocationId, null);
   }
 
   public function isSeaBorder()

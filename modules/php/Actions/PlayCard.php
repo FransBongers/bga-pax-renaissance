@@ -46,7 +46,7 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
         'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $card->getAgents(),
-        'empire' => $card->getEmpire(),
+        'empireId' => $card->getEmpire(),
       ]));
     }
 

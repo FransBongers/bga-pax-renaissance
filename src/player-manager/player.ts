@@ -8,6 +8,7 @@
 
 class PRPlayer {
   protected game: PaxRenaissanceGame;
+  private bank: string;
   protected playerColor: string;
   private playerHexColor: string;
   protected playerId: number;
@@ -43,6 +44,7 @@ class PRPlayer {
   }) {
     // console.log("Player", player);
     this.game = game;
+    this.bank = player.bank;
     const playerId = player.id;
     this.playerId = Number(playerId);
     this.player = player;
@@ -195,7 +197,7 @@ class PRPlayer {
   // ..######..########....##.......##....########.##.....##..######.
 
   getBank(): string {
-    return FUGGER;
+    return this.bank;
   }
 
   getColor(): string {

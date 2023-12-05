@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Models;
 
 use PaxRenaissance\Core\Game;
@@ -25,7 +26,8 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     'state' => ['state', 'int'],
   ];
 
-  public function move($location) {
+  public function move($location)
+  {
     Tokens::move($this->getId(), $location);
     $this->location = $location;
     return $this;
@@ -36,11 +38,21 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     return $this->type;
   }
 
-    public function kill()
+  public function kill()
   {
     $oldLocation = $this->getLocation();
     $this->move($this->getSupply());
     Notifications::killToken(Players::get(), $this, $oldLocation);
+  }
+
+  public function repress()
+  {
+    $oldLocation = $this->getLocation();
+    // TODO: move to empire card
+    $this->move($this->getSupply());
+    $player = Players::get();
+    $player->incFlorins(-1);
+    Notifications::repressToken($player, $this, $oldLocation, 1);
   }
 
   // public function getUiData()

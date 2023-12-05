@@ -193,6 +193,11 @@ class AbstractNode
     return $this->info;
   }
 
+  public function updateInfo($key,$value)
+  {
+    $this->info[$key] = $value;
+  }
+
   public function isDoable($player)
   {
     return true;

@@ -1750,6 +1750,7 @@ var PaxRenaissance = (function () {
             _a.flipVictoryCard = new FlipVictoryCardState(this),
             _a.placeAgent = new PlaceAgentState(this),
             _a.playerAction = new PlayerActionState(this),
+            _a.selectToken = new SelectTokenState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
         this.animationManager = new AnimationManager(this, { duration: 500 });
@@ -1793,7 +1794,7 @@ var PaxRenaissance = (function () {
             this.activeStates[stateName].onEnteringState(args.args);
         }
         else if (this.activeStates[stateName]) {
-            this.activeStates[stateName].setDescription(Number(args.active_player));
+            this.activeStates[stateName].setDescription(Number(args.active_player), args.args);
         }
     };
     PaxRenaissance.prototype.onLeavingState = function (stateName) {
@@ -1989,6 +1990,25 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.setLocationSelected = function (_a) {
         var id = _a.id;
         var nodeId = "pr_".concat(id);
+        var node = $(nodeId);
+        if (node === null) {
+            return;
+        }
+        node.classList.add(PR_SELECTED);
+    };
+    PaxRenaissance.prototype.setTokenSelectable = function (_a) {
+        var id = _a.id, callback = _a.callback;
+        var nodeId = "".concat(id);
+        var node = $(nodeId);
+        if (node === null) {
+            return;
+        }
+        node.classList.add(PR_SELECTABLE);
+        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ id: id }); }));
+    };
+    PaxRenaissance.prototype.setTokenSelected = function (_a) {
+        var id = _a.id;
+        var nodeId = "".concat(id);
         var node = $(nodeId);
         if (node === null) {
             return;
@@ -2912,6 +2932,13 @@ var getTokenDiv = function (_a) {
             return value;
     }
 };
+var tknFlorin = function () {
+    return _("Florin(s)");
+};
+var tknMapToken = function (tokenId) {
+    var split = tokenId.split('_');
+    return "".concat(split[1], "_").concat(split[0]);
+};
 var tlpLogTokenBoldText = function (_a) {
     var text = _a.text;
     return "<span style=\"font-weight: 700;\">".concat(_(text), "</span>");
@@ -3235,14 +3262,14 @@ var NotificationManager = (function () {
             ["log", undefined],
             ["flipVictoryCard", undefined],
             ["killToken", undefined],
-            ["placeAgent", undefined],
+            ["placeToken", undefined],
             ["playCard", undefined],
             ["purchaseCard", undefined],
             ["refreshMarket", undefined],
+            ["repressToken", undefined],
             ["sellCard", undefined],
             ["tradeFairConvene", undefined],
             ["tradeFairEmporiumSubsidy", undefined],
-            ["tradeFairPlaceLevy", undefined],
             ["tradeFairProfitDispersalPirates", undefined],
             ["tradeFairProfitDispersalPlayer", undefined],
         ];
@@ -3303,35 +3330,53 @@ var NotificationManager = (function () {
             });
         });
     };
-    NotificationManager.prototype.notif_placeAgent = function (notif) {
+    NotificationManager.prototype.notif_placeToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, split, isPawn, node, type, bankOrReligion;
+            var _a, playerId, token, fromLocationId, split, isPawn, fromSupply, node, type, bankOrReligion, tokenNode;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, token = _a.token;
-                split = token.id.split("_");
-                isPawn = split[0] === PAWN;
-                if (isPawn) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, token = _a.token, fromLocationId = _a.fromLocationId;
+                        split = token.id.split("_");
+                        isPawn = split[0] === PAWN;
+                        fromSupply = fromLocationId.startsWith('supply');
+                        if (fromSupply && isPawn) {
+                            this.game.supply.incValue({
+                                bank: split[1],
+                                type: split[0],
+                                value: -1,
+                            });
+                        }
+                        else if (fromSupply) {
+                            this.game.supply.incValue({
+                                religion: split[1],
+                                type: split[0],
+                                value: -1,
+                            });
+                        }
+                        node = document.getElementById("pr_".concat(token.location));
+                        if (!node) {
+                            return [2];
+                        }
+                        type = token.id.split("_")[0];
+                        bankOrReligion = token.id.split("_")[1];
+                        if (!fromSupply) return [3, 1];
+                        node.insertAdjacentHTML("beforeend", isPawn
+                            ? tplPawn({
+                                id: token.id,
+                                bank: bankOrReligion,
+                            })
+                            : tplChessPiece({ id: token.id, type: type, religion: bankOrReligion }));
+                        return [3, 3];
+                    case 1:
+                        tokenNode = document.getElementById(token.id);
+                        if (!tokenNode) return [3, 3];
+                        return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), node)];
+                    case 2:
+                        _b.sent();
+                        _b.label = 3;
+                    case 3: return [2, Promise.resolve()];
                 }
-                else {
-                    this.game.supply.incValue({
-                        religion: split[1],
-                        type: split[0],
-                        value: -1,
-                    });
-                }
-                node = document.getElementById("pr_".concat(token.location));
-                if (!node) {
-                    return [2];
-                }
-                type = token.id.split("_")[0];
-                bankOrReligion = token.id.split("_")[1];
-                node.insertAdjacentHTML("beforeend", isPawn
-                    ? tplPawn({
-                        id: token.id,
-                        bank: bankOrReligion,
-                    })
-                    : tplChessPiece({ id: token.id, type: type, religion: bankOrReligion }));
-                return [2, Promise.resolve()];
             });
         });
     };
@@ -3451,6 +3496,30 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_repressToken = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, token, cost, node, split;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost;
+                node = document.getElementById(token.id);
+                if (node) {
+                    node.remove();
+                }
+                split = token.id.split("_");
+                if (split[0] === PAWN) {
+                }
+                else {
+                    this.game.supply.incValue({
+                        religion: split[1],
+                        type: split[0],
+                        value: 1,
+                    });
+                }
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
+                return [2, Promise.resolve()];
+            });
+        });
+    };
     NotificationManager.prototype.notif_sellCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, card, value, player;
@@ -3496,28 +3565,6 @@ var NotificationManager = (function () {
                     value: -amount,
                 });
                 this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
-                return [2, Promise.resolve()];
-            });
-        });
-    };
-    NotificationManager.prototype.notif_tradeFairPlaceLevy = function (notif) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, token, cityId, node, type, colorOrReligion;
-            return __generator(this, function (_b) {
-                _a = notif.args, token = _a.token, cityId = _a.cityId;
-                node = document.getElementById("pr_".concat(cityId));
-                if (!node) {
-                    return [2];
-                }
-                type = token.id.split("_")[0];
-                colorOrReligion = token.id.split("_")[1];
-                this.game.supply.incValue({ type: type, religion: colorOrReligion, value: -1 });
-                node.insertAdjacentHTML("beforeend", tplChessPiece({
-                    id: token.id,
-                    type: type,
-                    color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
-                    religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
-                }));
                 return [2, Promise.resolve()];
             });
         });
@@ -3634,6 +3681,7 @@ var PRPlayer = (function () {
             cards: {},
         };
         this.game = game;
+        this.bank = player.bank;
         var playerId = player.id;
         this.playerId = Number(playerId);
         this.player = player;
@@ -3732,7 +3780,7 @@ var PRPlayer = (function () {
     };
     PRPlayer.prototype.clearInterface = function () { };
     PRPlayer.prototype.getBank = function () {
-        return FUGGER;
+        return this.bank;
     };
     PRPlayer.prototype.getColor = function () {
         return this.playerColor;
@@ -3864,13 +3912,13 @@ var ChessPieceCounter = (function () {
         this.counter = new ebg.counter();
     }
     ChessPieceCounter.prototype.setup = function (_a) {
-        var religion = _a.religion, type = _a.type, value = _a.value;
+        var bank = _a.bank, religion = _a.religion, type = _a.type, value = _a.value;
         var supplyContainer = document.getElementById('pr_supply');
         if (!supplyContainer) {
             return;
         }
-        supplyContainer.insertAdjacentHTML('beforeend', tplChessPieceCounter({ id: "".concat(type, "_").concat(religion, "_supply"), type: type, religion: religion }));
-        this.counter.create("".concat(type, "_").concat(religion, "_supply_counter"));
+        supplyContainer.insertAdjacentHTML('beforeend', tplChessPieceCounter({ id: "".concat(type, "_").concat(religion !== null && religion !== void 0 ? religion : bank, "_supply"), bank: bank, type: type, religion: religion }));
+        this.counter.create("".concat(type, "_").concat(religion !== null && religion !== void 0 ? religion : bank, "_supply_counter"));
         this.counter.setValue(value);
     };
     ChessPieceCounter.prototype.incValue = function (value) {
@@ -3900,6 +3948,7 @@ var Supply = (function () {
                 _d[PIRATE] = new ChessPieceCounter(),
                 _d[ROOK] = new ChessPieceCounter(),
                 _d),
+            _a.banks = {},
             _a);
         this.game = game;
         var gamedatas = game.gamedatas;
@@ -3915,11 +3964,26 @@ var Supply = (function () {
                 counter.setup({ religion: religion, type: type, value: gamedatas.tokens.supply[religion][type] });
             });
         });
+        var entries = Object.entries(gamedatas.tokens.supply.banks);
+        console.log('entries', entries);
+        entries.forEach(function (_a) {
+            var bank = _a[0], count = _a[1];
+            console.log('entry', bank, count);
+            _this.chessPieceCounters.banks[bank] = new ChessPieceCounter();
+            var counter = _this.chessPieceCounters.banks[bank];
+            counter.setup({ bank: bank, type: PAWN, value: count });
+        });
     };
     Supply.prototype.incValue = function (_a) {
-        var _b, _c;
-        var religion = _a.religion, type = _a.type, value = _a.value;
-        var counter = (_c = (_b = this.chessPieceCounters) === null || _b === void 0 ? void 0 : _b[religion]) === null || _c === void 0 ? void 0 : _c[type];
+        var _b, _c, _d, _e;
+        var bank = _a.bank, religion = _a.religion, type = _a.type, value = _a.value;
+        var counter = null;
+        if (type === PAWN) {
+            counter = (_c = (_b = this.chessPieceCounters) === null || _b === void 0 ? void 0 : _b.banks) === null || _c === void 0 ? void 0 : _c[bank];
+        }
+        else {
+            counter = (_e = (_d = this.chessPieceCounters) === null || _d === void 0 ? void 0 : _d[religion]) === null || _e === void 0 ? void 0 : _e[type];
+        }
         if (!counter) {
             return;
         }
@@ -3966,8 +4030,8 @@ var SUPPLY_CHESS_PIECES_CONFIG = [
     },
 ];
 var tplChessPieceCounter = function (_a) {
-    var id = _a.id, religion = _a.religion, type = _a.type;
-    return "\n    <div class=\"pr_chess_piece_counter_container\">\n      <span id=\"".concat(id, "_counter\" ></span>\n      <div class=\"pr_chess_piece_counter_chess_piece\">\n        ").concat(tplChessPiece({ id: id, type: type, religion: religion }), "\n      </div>\n    </div>");
+    var id = _a.id, bank = _a.bank, religion = _a.religion, type = _a.type;
+    return "\n    <div class=\"pr_chess_piece_counter_container\">\n      <span id=\"".concat(id, "_counter\" ></span>\n      <div class=\"pr_chess_piece_counter_chess_piece\">\n        ").concat(type === PAWN ? tplPawn({ id: id, bank: bank }) : tplChessPiece({ id: id, type: type, religion: religion }), "\n      </div>\n    </div>");
 };
 var tplGameMapSupply = function () {
     return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
@@ -4141,27 +4205,43 @@ var PlaceAgentState = (function () {
     PlaceAgentState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must select a location to place ${agents}",
+            text: "${tkn_playerName} must select a location to place ${tkn_mapToken}",
             args: {
                 tkn_playerName: "${you}",
-                agents: this.createAgentLog(),
+                tkn_mapToken: this.createMapTokenId(),
             },
         });
         this.setLocationsSelectable();
     };
     PlaceAgentState.prototype.updateInterfaceConfirmLocation = function (_a) {
         var _this = this;
-        var id = _a.id, name = _a.name;
+        var id = _a.id, location = _a.location;
         this.game.clearPossible();
         this.game.setLocationSelected({ id: id });
-        this.game.clientUpdatePageTitle({
-            text: "Place ${agents} on ${location}?",
-            args: {
-                tkn_playerName: "${you}",
-                agents: this.createAgentLog(),
-                location: _(name),
-            },
-        });
+        var name = location.name, cost = location.cost, repressed = location.repressed;
+        if (repressed) {
+            this.game.clientUpdatePageTitle({
+                text: "Place ${tkn_mapToken} on ${location} and pay ${cost} ${tkn_florin} to Repress ${tkn_mapToken_repressed} ?",
+                args: {
+                    tkn_playerName: "${you}",
+                    tkn_mapToken: this.createMapTokenId(),
+                    location: _(name),
+                    cost: cost,
+                    tkn_florin: tknFlorin(),
+                    tkn_mapToken_repressed: tknMapToken(repressed.id),
+                },
+            });
+        }
+        else {
+            this.game.clientUpdatePageTitle({
+                text: "Place ${tkn_mapToken} on ${location}?",
+                args: {
+                    tkn_playerName: "${you}",
+                    tkn_mapToken: this.createMapTokenId(),
+                    location: _(name),
+                },
+            });
+        }
         this.game.addConfirmButton({
             callback: function () {
                 return _this.game.takeAction({
@@ -4175,30 +4255,27 @@ var PlaceAgentState = (function () {
         });
         this.game.addCancelButton();
     };
-    PlaceAgentState.prototype.setLocationsSelectable = function () {
-        var _this = this;
-        Object.values(this.args.locations).forEach(function (_a) {
-            var id = _a.id, name = _a.name;
-            _this.game.setLocationSelectable({
-                id: id,
-                callback: function () { return _this.updateInterfaceConfirmLocation({ id: id, name: name }); },
-            });
-        });
-    };
-    PlaceAgentState.prototype.createAgentLog = function () {
-        var _a = this.args.agents[0], type = _a.type, religion = _a.religion;
-        var isPawn = type === PAWN;
-        var result = {
-            log: isPawn ? '${tkn_pawn}' : '${tkn_mapToken}',
-            args: {}
-        };
-        if (isPawn) {
-            result.args['tkn_pawn'] = "".concat(this.game.playerManager.getPlayer({ playerId: this.game.getPlayerId() }).getBank(), "_pawn");
+    PlaceAgentState.prototype.createMapTokenId = function () {
+        var agent = this.args.agents[0];
+        var id = '';
+        if (agent.type === PAWN) {
+            var bank = this.game.playerManager.getPlayer({ playerId: this.game.getPlayerId() }).getBank();
+            id = "".concat(bank, "_pawn");
         }
         else {
-            result.args['tkn_mapToken'] = "".concat(religion, "_").concat(type);
+            id = "".concat(agent.religion, "_").concat(agent.type);
         }
-        return result;
+        return id;
+    };
+    PlaceAgentState.prototype.setLocationsSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.locations).forEach(function (_a) {
+            var id = _a[0], location = _a[1];
+            _this.game.setLocationSelectable({
+                id: id,
+                callback: function () { return _this.updateInterfaceConfirmLocation({ id: id, location: location }); },
+            });
+        });
     };
     return PlaceAgentState;
 }());
@@ -4370,6 +4447,76 @@ var PlayerActionState = (function () {
         });
     };
     return PlayerActionState;
+}());
+var SelectTokenState = (function () {
+    function SelectTokenState(game) {
+        this.game = game;
+    }
+    SelectTokenState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    SelectTokenState.prototype.onLeavingState = function () {
+        debug("Leaving SelectTokenState");
+    };
+    SelectTokenState.prototype.setDescription = function (activePlayerId, args) {
+        this.args = args;
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must select a ${tkn_mapToken} to place",
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+                tkn_mapToken: tknMapToken(this.args.tokens[0].id),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    SelectTokenState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must select a ${tkn_mapToken} to place",
+            args: {
+                tkn_playerName: "${you}",
+                tkn_mapToken: tknMapToken(this.args.tokens[0].id),
+            },
+        });
+        this.setTokensSelectable();
+    };
+    SelectTokenState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var id = _a.id;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: id });
+        this.game.clientUpdatePageTitle({
+            text: "Select ${tkn_mapToken} ?",
+            args: {
+                tkn_mapToken: tknMapToken(this.args.tokens[0].id),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actSelectToken",
+                    args: {
+                        tokenId: id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    SelectTokenState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        this.args.tokens.forEach(function (_a) {
+            var id = _a.id;
+            _this.game.setTokenSelectable({
+                id: id,
+                callback: function () { return _this.updateInterfaceConfirm({ id: id }); },
+            });
+        });
+    };
+    return SelectTokenState;
 }());
 var TradeFairLevyState = (function () {
     function TradeFairLevyState(game) {

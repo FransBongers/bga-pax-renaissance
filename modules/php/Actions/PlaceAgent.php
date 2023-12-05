@@ -4,6 +4,7 @@ namespace PaxRenaissance\Actions;
 
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\Flows;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
@@ -25,6 +26,22 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     return ST_PLACE_AGENT;
   }
 
+  // ..######..########....###....########.########
+  // .##....##....##......##.##......##....##......
+  // .##..........##.....##...##.....##....##......
+  // ..######.....##....##.....##....##....######..
+  // .......##....##....#########....##....##......
+  // .##....##....##....##.....##....##....##......
+  // ..######.....##....##.....##....##....########
+
+  // ....###.....######..########.####..#######..##....##
+  // ...##.##...##....##....##.....##..##.....##.###...##
+  // ..##...##..##..........##.....##..##.....##.####..##
+  // .##.....##.##..........##.....##..##.....##.##.##.##
+  // .#########.##..........##.....##..##.....##.##..####
+  // .##.....##.##....##....##.....##..##.....##.##...###
+  // .##.....##..######.....##....####..#######..##....##
+
   public function stPlaceAgent()
   {
     // $args = self::getPossibleLevies();
@@ -37,6 +54,14 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     // }
   }
 
+  // ....###....########...######....######.
+  // ...##.##...##.....##.##....##..##....##
+  // ..##...##..##.....##.##........##......
+  // .##.....##.########..##...####..######.
+  // .#########.##...##...##....##........##
+  // .##.....##.##....##..##....##..##....##
+  // .##.....##.##.....##..######....######.
+
   public function argsPlaceAgent()
   {
     // $player = Players::get();
@@ -45,32 +70,36 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     // $cities = $empire->getCities();
 
     $info = $this->ctx->getInfo();
-    $empireId = $info['empire'];
+    $empireId = $info['empireId'];
     $agents = $info['agents'];
 
+    $exludedLocationIds = isset($info['exludedLocationIds']) ? $info['exludedLocationIds'] : [];
     // $borders = ->getBorders();
 
     $data = [
       'agents' => $agents,
-      'locations' => $this->getBorders($this->getEmpires($empireId), $agents[0]['type']),
-      // 'info' => ,
-      // 'possibleLevies' => [],
-      // 'empire' => $empire,
+      // Assumption: card only place agents of the same type
+      'locations' => $this->getLocations($empireId, $agents[0]['type'], $exludedLocationIds),
     ];
-
-
-    // foreach($cities as $city) {
-    //   $levy = $city->getPossibleLevy();
-    //   if ($levy !== null) {
-    //     $data['possibleLevies'][$city->getId()] = [
-    //       'cityName' => $city->getName(),
-    //       'levy' => $levy
-    //     ];
-    //   }
-    // }
 
     return $data;
   }
+
+  //  .########..##..........###....##....##.########.########.
+  //  .##.....##.##.........##.##....##..##..##.......##.....##
+  //  .##.....##.##........##...##....####...##.......##.....##
+  //  .########..##.......##.....##....##....######...########.
+  //  .##........##.......#########....##....##.......##...##..
+  //  .##........##.......##.....##....##....##.......##....##.
+  //  .##........########.##.....##....##....########.##.....##
+
+  // ....###.....######..########.####..#######..##....##
+  // ...##.##...##....##....##.....##..##.....##.###...##
+  // ..##...##..##..........##.....##..##.....##.####..##
+  // .##.....##.##..........##.....##..##.....##.##.##.##
+  // .#########.##..........##.....##..##.....##.##..####
+  // .##.....##.##....##....##.....##..##.....##.##...###
+  // .##.....##..######.....##....####..#######..##....##
 
   // public function actPlayerAction($cardId, $strength)
   public function actPlaceAgent($args)
@@ -83,57 +112,64 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     Notifications::log('locationId', $locationId);
 
     $stateArgs = $this->argsPlaceAgent();
-    
+
     // Notifications::log('argsPlaceAgent', $this->argsPlaceAgent());
 
     if (!array_key_exists($locationId, $stateArgs['locations'])) {
-      throw new \feException("Not allowed to place Agent on selected location");  
+      throw new \feException("Not allowed to place Agent on selected location");
     }
+
+    $locationType = $stateArgs['locations'][$locationId]['type'];
 
     $player = self::getPlayer();
 
     $type = $agent['type'];
     $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
-    $token = Tokens::getTopOf($supply);
 
-    Notifications::log('token',$token);
-    // TODO: handle empty splice
-    if (Utils::startsWith($locationId, 'border')) {
-      Borders::get($locationId)->placeAgent($token);
-    } else {
-      Cities::get($locationId)->placeAgent($token);
+    Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType), $this->ctx);
+
+    $agents = $stateArgs['agents'];
+
+    if (count($agents) > 1) {
+      $index = Utils::array_find_index($agents, function ($argAgent) use ($agent) {
+        return $argAgent['type'] === $agent['type'] && $argAgent['religion'] === $agent['religion'];
+      });
+      unset($agents[$index]);
+      $agents = array_values($agents);
+
+      $this->ctx->insertAsBrother(new LeafNode([
+        'action' => PLACE_AGENT,
+        'playerId' => $this->ctx->getPlayerId(),
+        'agents' => $agents,
+        'empireId' => $this->ctx->getInfo()['empireId'],
+        'exludedLocationIds' => [$locationId],
+      ]));
     }
 
-    // $cityId = $args['cityId'];
-
-    // $possible = self::getPossibleLevies();
-
-    // if (!isset($possible['possibleLevies'][$cityId])) {
-    //   throw new \feException("Not allowed to place Levy in selected City");
-    // }
-    // $levy = $possible['possibleLevies'][$cityId]['levy'];
-
-    // $location = Locations::supply($levy['levyIcon'], $levy['religion']);
-
-    // $token = Tokens::getTopOf($location);
-
-    // // TODO: check what to do if supply is empty
-    // if ($token !== null) {
-    //   $token = $token->move($cityId);
-    //   // Tokens::move($piece['id'], $cityId);
-    //   // $piece['location'] = $cityId;
-    //   Notifications::tradeFairPlaceLevy(self::getPlayer(),Cities::get($cityId),$token);
-    // }
-
-    // // $this->ctx->insertAsBrother(new LeafNode([
-    // //   'action' => PURCHASE_CARD,
-    // //   'playerId' => $this->ctx->getPlayerId(),
-    // //   'args' => [
-    // //     'cardId' => $args['cardId'],
-    // //   ],
-    // // ]));
-
     $this->resolveAction($args);
+  }
+
+  //  .##.....##.########.####.##.......####.########.##....##
+  //  .##.....##....##.....##..##........##.....##.....##..##.
+  //  .##.....##....##.....##..##........##.....##......####..
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  ..#######.....##....####.########.####....##.......##...
+
+  private function getLocations($empireId, $type, $exludedLocationIds)
+  {
+    $empires = $this->getEmpires($empireId);
+    switch ($type) {
+      case PIRATE:
+      case PAWN:
+        return $this->getBorders($empires, $type, $exludedLocationIds);
+        break;
+      case KNIGHT:
+      case ROOK:
+        return $this->getCities($empires, $type, $exludedLocationIds);
+        break;
+    }
   }
 
   private function getEmpires($empireId)
@@ -145,7 +181,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
   }
 
-  private function getBorders($empires, $type)
+  private function getBorders($empires, $type, $exludedLocationIds)
   {
     $borders = array_merge(...array_map(function ($empire) {
       return $empire->getBorders();
@@ -157,13 +193,39 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
     foreach ($borders as $border) {
       $borderId = $border->getId();
+      if (in_array($borderId, $exludedLocationIds)) {
+        continue;
+      }
+
       if (array_key_exists($borderId, $locations)) {
         continue;
       }
       if ($type === PIRATE && !$border->isSeaBorder()) {
         continue;
       }
-      $locations[$borderId] = $border;
+
+      if ($type === PAWN) {
+        $tokenInLocation = $border->getToken();
+        if ($tokenInLocation !== null && $tokenInLocation->getType() === PIRATE) {
+          continue;
+        } else if ($tokenInLocation !== null) {
+          $locations[$borderId] = [
+            'id' => $borderId,
+            'type' => BORDER,
+            'cost' => 1,
+            'name' => $border->getName(),
+            'repressed' => $tokenInLocation,
+          ];
+          continue;
+        }
+      }
+
+      $locations[$borderId] = [
+        'id' => $borderId,
+        'type' => BORDER,
+        'cost' => 0,
+        'name' => $border->getName(),
+      ];
     }
 
     // foreach ($empires as $empire) {
@@ -173,6 +235,46 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     //   });
     //   $locations = array_merge($locations, $seaBorders);
     // }
+    return $locations;
+  }
+
+  private function getCities($empires, $type, $exludedLocationIds)
+  {
+    $cities = array_merge(...array_map(function ($empire) {
+      return $empire->getCities();
+    }, $empires));
+
+    $player = self::getPlayer();
+    $florins = $player->getFlorins();
+
+    $locations = [];
+    foreach ($cities as $city) {
+      $cityId = $city->getId();
+      if (in_array($cityId, $exludedLocationIds)) {
+        continue;
+      }
+
+      $token = $city->getToken();
+      if ($token === null) {
+        $locations[$cityId] = [
+          'id' => $cityId,
+          'type' => CITY,
+          'cost' => 0,
+          'name' => $city->getName(),
+        ];
+      } else if ($token->getType() === DISK || $florins === 0) {
+        continue;
+      } else {
+        $locations[$cityId] = [
+          'id' => $cityId,
+          'type' => CITY,
+          'cost' => 1,
+          'name' => $city->getName(),
+          'repressed' => $token,
+        ];
+      }
+    }
+
     return $locations;
   }
 }
