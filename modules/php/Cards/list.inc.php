@@ -1,16 +1,16 @@
 <?php
 $cardIds = [
   // Empire
-  'EmpireAragon',
-  'EmpireByzantium',
-  'EmpireEngland',
-  'EmpireFrance',
-  'EmpireHolyRomanEmpire',
-  'EmpireHungary',
-  'EmpireMamluk',
-  'EmpireOttoman',
-  'EmpirePapalStates',
-  'EmpirePortugal',
+  'EmpireSquare_Aragon',
+  'EmpireSquare_Byzantium',
+  'EmpireSquare_England',
+  'EmpireSquare_France',
+  'EmpireSquare_HolyRomanEmpire',
+  'EmpireSquare_Hungary',
+  'EmpireSquare_Mamluk',
+  'EmpireSquare_Ottoman',
+  'EmpireSquare_PapalStates',
+  'EmpireSquare_Portugal',
   // Victory
   'VictoryGlobalization',
   'VictoryHoly',

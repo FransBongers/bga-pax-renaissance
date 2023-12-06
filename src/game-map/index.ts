@@ -15,6 +15,19 @@ class GameMap {
   protected game: PaxRenaissanceGame;
   private zoomLevel: number;
 
+  private empireSquareStocks: {
+    [ARAGON]: LineStock<EmpireCard | TableauCard>;
+    [BYZANTIUM]: LineStock<EmpireCard | TableauCard>;
+    [ENGLAND]: LineStock<EmpireCard | TableauCard>;
+    [FRANCE]: LineStock<EmpireCard | TableauCard>;
+    [HOLY_ROMAN_EMIRE]: LineStock<EmpireCard | TableauCard>;
+    [HUNGARY]: LineStock<EmpireCard | TableauCard>;
+    [MAMLUK]: LineStock<EmpireCard | TableauCard>;
+    [OTTOMAN]: LineStock<EmpireCard | TableauCard>;
+    [PAPAL_STATES]: LineStock<EmpireCard | TableauCard>;
+    [PORTUGAL]: LineStock<EmpireCard | TableauCard>;
+  };
+
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
     this.zoomLevel =
@@ -98,13 +111,76 @@ class GameMap {
   }
 
   setupEmpireCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
-    gamedatas.gameMap.forEach((card) => {
-      const { id, location } = card;
-      const node = document.getElementById(`pr_${location}`);
-      if (!node) {
-        debug("Unable to get empire card node");
+    this.empireSquareStocks = {
+      [ARAGON]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${ARAGON}_throne`)
+      ),
+      [BYZANTIUM]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${BYZANTIUM}_throne`)
+      ),
+      [ENGLAND]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${ENGLAND}_throne`)
+      ),
+      [FRANCE]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${FRANCE}_throne`)
+      ),
+      [HOLY_ROMAN_EMIRE]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${HOLY_ROMAN_EMIRE}_throne`)
+      ),
+      [HUNGARY]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${HUNGARY}_throne`)
+      ),
+      [MAMLUK]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${MAMLUK}_throne`)
+      ),
+      [OTTOMAN]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${OTTOMAN}_throne`)
+      ),
+      [PAPAL_STATES]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${PAPAL_STATES}_throne`)
+      ),
+      [PORTUGAL]: new LineStock<EmpireCard | TableauCard>(
+        this.game.tableauCardManager,
+        document.getElementById(`pr_${PORTUGAL}_throne`)
+      ),
+    };
+
+    gamedatas.gameMap.thrones.cards.forEach((card) => {
+      const empire = card.location.split("_")[1];
+      if (this.empireSquareStocks[empire]) {
+        this.empireSquareStocks[empire].addCard(card);
       }
-      node.setAttribute("data-card-id", `${id}_king`);
+      // const { id, location } = card;
+      // const node = document.getElementById(`pr_${location}`);
+      // if (!node) {
+      //   debug("Unable to get empire card node");
+      // }
+      // node.setAttribute("data-card-id", `${id}_king`);
+    });
+    gamedatas.gameMap.thrones.tokens.forEach(({ id, location }) => {
+      const node = document.getElementById(`${location}_tokens`);
+      if (!node) {
+        return;
+      }
+      const split = id.split("_");
+      const type = split[0];
+      const isPawn = type === PAWN;
+
+      node.insertAdjacentHTML(
+        "beforeend",
+        isPawn
+          ? tplPawn({ id, bank: split[1] })
+          : tplChessPiece({ id, type, religion: split[1] })
+      );
     });
   }
 
@@ -159,6 +235,14 @@ class GameMap {
     return ZOOM_LEVELS.indexOf(
       Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1
     );
+  }
+
+  public getEmpireSquareStock({
+    empireId,
+  }: {
+    empireId: string;
+  }): LineStock<EmpireCard | TableauCard> {
+    return this.empireSquareStocks[empireId];
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

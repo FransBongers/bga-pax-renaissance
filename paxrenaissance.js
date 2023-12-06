@@ -1746,6 +1746,7 @@ var PaxRenaissance = (function () {
         this._connections = [];
         this.activeStates = (_a = {},
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
+            _a.bishopPacification = new BishopPacificationState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
             _a.placeAgent = new PlaceAgentState(this),
@@ -1960,7 +1961,7 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.setCardSelectable = function (_a) {
         var card = _a.card, callback = _a.callback, _b = _a.back, back = _b === void 0 ? false : _b;
-        var nodeId = "".concat(card.id.split("_")[0], "-").concat(back ? "back" : "front");
+        var nodeId = "".concat(card.id, "-").concat(back ? "back" : "front");
         var node = $(nodeId);
         if (node === null) {
             return;
@@ -1970,7 +1971,7 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.setCardSelected = function (_a) {
         var card = _a.card, _b = _a.back, back = _b === void 0 ? false : _b;
-        var nodeId = "".concat(card.id.split("_")[0], "-").concat(back ? "back" : "front");
+        var nodeId = "".concat(card.id, "-").concat(back ? "back" : "front");
         var node = $(nodeId);
         if (node === null) {
             return;
@@ -2142,10 +2143,17 @@ var TableauCardManager = (function (_super) {
     __extends(TableauCardManager, _super);
     function TableauCardManager(game) {
         var _this = _super.call(this, game, {
-            getId: function (card) { return card.id.split("_")[0]; },
+            getId: function (card) { return card.id; },
             setupDiv: function (card, div) {
-                div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-                div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+                if (card.type === TABLEAU_CARD) {
+                    div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+                    div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+                }
+                else {
+                    div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+                    div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+                }
+                div.insertAdjacentHTML('beforeend', tplTokensContainer({ id: card.id }));
             },
             setupFrontDiv: function (card, div) { return _this.setupFrontDiv(card, div); },
             setupBackDiv: function (card, div) { return _this.setupBackDiv(card, div); },
@@ -2156,22 +2164,38 @@ var TableauCardManager = (function (_super) {
         return _this;
     }
     TableauCardManager.prototype.setupFrontDiv = function (card, div) {
-        div.classList.add("pr_card");
-        div.setAttribute("data-card-id", card.id.split("_")[0]);
-        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-        if (!card.id.startsWith("FAKE")) {
+        if (card.type === TABLEAU_CARD) {
+            div.classList.add("pr_card");
+            div.setAttribute("data-card-id", card.id.split("_")[0]);
+            div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+            div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+        }
+        else if (card.type === EMPIRE_CARD) {
+            div.classList.add("pr_square_card");
+            div.setAttribute("data-card-id", "".concat(card.id, "_king"));
+            div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+            div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+        }
+        if (card.type === TABLEAU_CARD) {
             this.game.tooltipManager.addCardTooltip({
-                nodeId: card.id.split("_")[0] + "-front",
+                nodeId: card.id + "-front",
                 card: card,
             });
         }
     };
     TableauCardManager.prototype.setupBackDiv = function (card, div) {
-        div.classList.add("pr_card");
-        div.setAttribute("data-card-id", card.region === EAST ? "EAST_BACK" : "WEST_BACK");
-        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+        if (card.type === TABLEAU_CARD) {
+            div.classList.add("pr_card");
+            div.setAttribute("data-card-id", card.region === EAST ? "EAST_BACK" : "WEST_BACK");
+            div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+            div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+        }
+        else if (card.type === EMPIRE_CARD) {
+            div.classList.add("pr_square_card");
+            div.setAttribute("data-card-id", "".concat(card.id, "_republic"));
+            div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+            div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+        }
     };
     TableauCardManager.prototype.isCardVisible = function (_a) {
         var location = _a.location;
@@ -2185,6 +2209,10 @@ var TableauCardManager = (function (_super) {
     };
     return TableauCardManager;
 }(CardManager));
+var tplTokensContainer = function (_a) {
+    var id = _a.id;
+    return "\n  <div id=\"".concat(id, "_tokens\" class=\"pr_card_tokens_container\"></div>");
+};
 var VictoryCardManager = (function (_super) {
     __extends(VictoryCardManager, _super);
     function VictoryCardManager(game) {
@@ -2643,14 +2671,39 @@ var GameMap = (function () {
         });
     };
     GameMap.prototype.setupEmpireCards = function (_a) {
+        var _b;
+        var _this = this;
         var gamedatas = _a.gamedatas;
-        gamedatas.gameMap.forEach(function (card) {
-            var id = card.id, location = card.location;
-            var node = document.getElementById("pr_".concat(location));
-            if (!node) {
-                debug("Unable to get empire card node");
+        this.empireSquareStocks = (_b = {},
+            _b[ARAGON] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(ARAGON, "_throne"))),
+            _b[BYZANTIUM] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(BYZANTIUM, "_throne"))),
+            _b[ENGLAND] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(ENGLAND, "_throne"))),
+            _b[FRANCE] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(FRANCE, "_throne"))),
+            _b[HOLY_ROMAN_EMIRE] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(HOLY_ROMAN_EMIRE, "_throne"))),
+            _b[HUNGARY] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(HUNGARY, "_throne"))),
+            _b[MAMLUK] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(MAMLUK, "_throne"))),
+            _b[OTTOMAN] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(OTTOMAN, "_throne"))),
+            _b[PAPAL_STATES] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(PAPAL_STATES, "_throne"))),
+            _b[PORTUGAL] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(PORTUGAL, "_throne"))),
+            _b);
+        gamedatas.gameMap.thrones.cards.forEach(function (card) {
+            var empire = card.location.split("_")[1];
+            if (_this.empireSquareStocks[empire]) {
+                _this.empireSquareStocks[empire].addCard(card);
             }
-            node.setAttribute("data-card-id", "".concat(id, "_king"));
+        });
+        gamedatas.gameMap.thrones.tokens.forEach(function (_a) {
+            var id = _a.id, location = _a.location;
+            var node = document.getElementById("".concat(location, "_tokens"));
+            if (!node) {
+                return;
+            }
+            var split = id.split("_");
+            var type = split[0];
+            var isPawn = type === PAWN;
+            node.insertAdjacentHTML("beforeend", isPawn
+                ? tplPawn({ id: id, bank: split[1] })
+                : tplChessPiece({ id: id, type: type, religion: split[1] }));
         });
     };
     GameMap.prototype.updateGameMap = function (_a) {
@@ -2685,6 +2738,10 @@ var GameMap = (function () {
     GameMap.prototype.getCurrentZoomIndex = function () {
         console.log("zoomLevel", this.zoomLevel);
         return ZOOM_LEVELS.indexOf(Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1);
+    };
+    GameMap.prototype.getEmpireSquareStock = function (_a) {
+        var empireId = _a.empireId;
+        return this.empireSquareStocks[empireId];
     };
     GameMap.prototype.checkZoomButtonClasses = function () {
         var zoomInButton = $("pr_game_map_zoom_in_button");
@@ -2752,7 +2809,7 @@ var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map
 var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(EMPIRE_CARD_CONFIG)
     .map(function (_a) {
     var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left;
-    return "<div id=\"pr_empire_".concat(empire, "\" class=\"pr_square_card\" data-card-id=\"null\" style=\"position: absolute; top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
+    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
 })
     .join(""), "\n"); };
 var tplGameMapMapBorders = function () {
@@ -3318,6 +3375,11 @@ var NotificationManager = (function () {
                 }
                 split = token.id.split("_");
                 if (split[0] === PAWN) {
+                    this.game.supply.incValue({
+                        bank: split[1],
+                        type: split[0],
+                        value: 1,
+                    });
                 }
                 else {
                     this.game.supply.incValue({
@@ -3332,13 +3394,14 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_placeToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, fromLocationId, split, isPawn, fromSupply, node, type, bankOrReligion, tokenNode;
+            var _a, playerId, token, fromLocationId, split, isPawn, isBishop, fromSupply, node, type, bankOrReligion, tokenNode;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, token = _a.token, fromLocationId = _a.fromLocationId;
                         split = token.id.split("_");
                         isPawn = split[0] === PAWN;
+                        isBishop = split[0] === BISHOP;
                         fromSupply = fromLocationId.startsWith('supply');
                         if (fromSupply && isPawn) {
                             this.game.supply.incValue({
@@ -3354,7 +3417,7 @@ var NotificationManager = (function () {
                                 value: -1,
                             });
                         }
-                        node = document.getElementById("pr_".concat(token.location));
+                        node = document.getElementById(isBishop ? "".concat(token.location, "_tokens") : "pr_".concat(token.location));
                         if (!node) {
                             return [2];
                         }
@@ -3498,25 +3561,23 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_repressToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, cost, node, split;
+            var _a, playerId, token, cost, element, empireSquareId, toNode;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost;
-                node = document.getElementById(token.id);
-                if (node) {
-                    node.remove();
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost;
+                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
+                        element = document.getElementById(token.id);
+                        empireSquareId = token.location;
+                        toNode = document.getElementById("".concat(empireSquareId, "_tokens"));
+                        if (!(element && toNode)) {
+                            return [2];
+                        }
+                        return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: element }), toNode)];
+                    case 1:
+                        _b.sent();
+                        return [2];
                 }
-                split = token.id.split("_");
-                if (split[0] === PAWN) {
-                }
-                else {
-                    this.game.supply.incValue({
-                        religion: split[1],
-                        type: split[0],
-                        value: 1,
-                    });
-                }
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
-                return [2, Promise.resolve()];
             });
         });
     };
@@ -3770,10 +3831,9 @@ var PRPlayer = (function () {
                 .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
         }
         ;
-        var allCards = __spreadArray(__spreadArray([], playerGamedatas.tableau.east, true), playerGamedatas.tableau.west, true);
+        var allCards = __spreadArray(__spreadArray([], playerGamedatas.tableau.cards.east, true), playerGamedatas.tableau.cards.west, true);
         allCards.forEach(function (card) {
             card.prestige.forEach(function (prestige) {
-                console.log('prestigeCounter', prestige, _this.counters.prestige[prestige]);
                 _this.counters.prestige[prestige].incValue(1);
             });
         });
@@ -3864,8 +3924,21 @@ var PlayerTableau = (function () {
         }));
         this.tableauEast = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction('state') });
         this.tableauWest = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction('state') });
-        this.tableauEast.addCards(player.tableau[EAST]);
-        this.tableauWest.addCards(player.tableau[WEST]);
+        this.tableauEast.addCards(player.tableau.cards[EAST]);
+        this.tableauWest.addCards(player.tableau.cards[WEST]);
+        player.tableau.tokens.forEach(function (_a) {
+            var id = _a.id, location = _a.location;
+            var node = document.getElementById("".concat(location, "_tokens"));
+            if (!node) {
+                return;
+            }
+            var split = id.split("_");
+            var type = split[0];
+            var isPawn = type === PAWN;
+            node.insertAdjacentHTML("beforeend", isPawn
+                ? tplPawn({ id: id, bank: split[1] })
+                : tplChessPiece({ id: id, type: type, religion: split[1] }));
+        });
     };
     PlayerTableau.prototype.addCard = function (card) {
         return __awaiter(this, void 0, void 0, function () {
@@ -3965,10 +4038,8 @@ var Supply = (function () {
             });
         });
         var entries = Object.entries(gamedatas.tokens.supply.banks);
-        console.log('entries', entries);
         entries.forEach(function (_a) {
             var bank = _a[0], count = _a[1];
-            console.log('entry', bank, count);
             _this.chessPieceCounters.banks[bank] = new ChessPieceCounter();
             var counter = _this.chessPieceCounters.banks[bank];
             counter.setup({ bank: bank, type: PAWN, value: count });
@@ -4036,6 +4107,83 @@ var tplChessPieceCounter = function (_a) {
 var tplGameMapSupply = function () {
     return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
 };
+var BishopPacificationState = (function () {
+    function BishopPacificationState(game) {
+        this.game = game;
+    }
+    BishopPacificationState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    BishopPacificationState.prototype.onLeavingState = function () {
+        debug("Leaving ConfirmTurnState");
+    };
+    BishopPacificationState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} may select a Token to Kill",
+            args: {
+                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+            },
+            nonActivePlayers: true,
+        });
+    };
+    BishopPacificationState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} may choose a Token to Kill",
+            args: {
+                tkn_playerName: '${you}'
+            },
+        });
+        this.game.addSecondaryActionButton({
+            id: "skip_button",
+            text: _("Skip"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actBishopPacification",
+                    args: {
+                        tokenId: null,
+                    },
+                });
+            },
+        });
+        this.setTokensSelectable();
+    };
+    BishopPacificationState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var token = _a.token;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: token.id });
+        this.game.clientUpdatePageTitle({
+            text: "Kill ${tkn_mapToken} ?",
+            args: {
+                tkn_mapToken: tknMapToken(token.id),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actBishopPacification",
+                    args: {
+                        tokenId: token.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    BishopPacificationState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        this.args.tokens.forEach(function (token) {
+            _this.game.setTokenSelectable({
+                id: token.id,
+                callback: function () { return _this.updateInterfaceConfirm({ token: token }); },
+            });
+        });
+    };
+    return BishopPacificationState;
+}());
 var ClientStartTradeFairState = (function () {
     function ClientStartTradeFairState(game) {
         this.game = game;
@@ -4213,6 +4361,33 @@ var PlaceAgentState = (function () {
         });
         this.setLocationsSelectable();
     };
+    PlaceAgentState.prototype.updateInterfaceConfirmCard = function (_a) {
+        var _this = this;
+        var id = _a.id, card = _a.card;
+        this.game.clearPossible();
+        this.game.setCardSelected({ card: card });
+        var _b = card;
+        this.game.clientUpdatePageTitle({
+            text: "Place ${tkn_mapToken} on ${location}?",
+            args: {
+                tkn_playerName: "${you}",
+                tkn_mapToken: this.createMapTokenId(),
+                location: _(card.type === TABLEAU_CARD ? card.name : card.nameKing),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlaceAgent",
+                    args: {
+                        agent: _this.args.agents[0],
+                        locationId: id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
     PlaceAgentState.prototype.updateInterfaceConfirmLocation = function (_a) {
         var _this = this;
         var id = _a.id, location = _a.location;
@@ -4257,9 +4432,11 @@ var PlaceAgentState = (function () {
     };
     PlaceAgentState.prototype.createMapTokenId = function () {
         var agent = this.args.agents[0];
-        var id = '';
+        var id = "";
         if (agent.type === PAWN) {
-            var bank = this.game.playerManager.getPlayer({ playerId: this.game.getPlayerId() }).getBank();
+            var bank = this.game.playerManager
+                .getPlayer({ playerId: this.game.getPlayerId() })
+                .getBank();
             id = "".concat(bank, "_pawn");
         }
         else {
@@ -4271,10 +4448,20 @@ var PlaceAgentState = (function () {
         var _this = this;
         Object.entries(this.args.locations).forEach(function (_a) {
             var id = _a[0], location = _a[1];
-            _this.game.setLocationSelectable({
-                id: id,
-                callback: function () { return _this.updateInterfaceConfirmLocation({ id: id, location: location }); },
-            });
+            if ((location === null || location === void 0 ? void 0 : location.type) === TABLEAU_CARD || (location === null || location === void 0 ? void 0 : location.type) === EMPIRE_CARD) {
+                _this.game.setCardSelectable({
+                    card: location,
+                    callback: function () {
+                        return _this.updateInterfaceConfirmCard({ id: id, card: location });
+                    },
+                });
+            }
+            else {
+                _this.game.setLocationSelectable({
+                    id: id,
+                    callback: function () { return _this.updateInterfaceConfirmLocation({ id: id, location: location }); },
+                });
+            }
         });
     };
     return PlaceAgentState;
@@ -4313,10 +4500,7 @@ var PlayerActionState = (function () {
         var _this = this;
         var card = _a.card, column = _a.column;
         this.game.clearPossible();
-        var node = document.getElementById("".concat(card.id.split("_")[0], "-front"));
-        if (node) {
-            node.classList.add(PR_SELECTED);
-        }
+        this.game.setCardSelected({ card: card });
         this.game.clientUpdatePageTitle({
             text: "Purchase ${cardName} for ${amount} ${tkn_florin} ?",
             args: {
@@ -4367,7 +4551,7 @@ var PlayerActionState = (function () {
         });
         this.game.addPrimaryActionButton({
             id: "sell_card_button",
-            text: _('Sell'),
+            text: _("Sell"),
             callback: function () {
                 return _this.game.takeAction({
                     action: "actPlayerAction",
@@ -4379,6 +4563,23 @@ var PlayerActionState = (function () {
             },
         });
         this.game.addCancelButton();
+    };
+    PlayerActionState.prototype.addTest = function () {
+        var _this = this;
+        this.game.addPrimaryActionButton({
+            text: "Test",
+            id: "test_button",
+            callback: function () {
+                console.log("Testing");
+                var card = _this.game.gameMap
+                    .getEmpireSquareStock({ empireId: ENGLAND })
+                    .getCards()[0];
+                console.log("card", card);
+                _this.game.gameMap
+                    .getEmpireSquareStock({ empireId: ENGLAND })
+                    .flipCard(card);
+            },
+        });
     };
     PlayerActionState.prototype.updatePageTitle = function () {
         var remainingActions = this.args.remainingActions;
@@ -4401,7 +4602,7 @@ var PlayerActionState = (function () {
         var cards = this.game.hand.getCards();
         cards.forEach(function (card) {
             var id = card.id;
-            var nodeId = "".concat(id.split("_")[0], "-front");
+            var nodeId = "".concat(id, "-front");
             var node = $(nodeId);
             if (node === null) {
                 return;
@@ -4418,7 +4619,7 @@ var PlayerActionState = (function () {
         this.args.cardsPlayerCanPurchase.forEach(function (card) {
             var id = card.id, location = card.location;
             var _a = location.split("_"), market = _a[0], region = _a[1], column = _a[2];
-            var nodeId = "".concat(id.split("_")[0], "-front");
+            var nodeId = "".concat(id, "-front");
             var node = $(nodeId);
             if (node === null) {
                 return;

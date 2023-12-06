@@ -50,6 +50,7 @@ class PlayerActionState implements State {
     this.setMarketCardsSelectable();
     this.setHandCardsSelectable();
     this.setTradeFairSelectable();
+    // this.addTest();
   }
 
   private updateInterfaceConfirmPurchase({
@@ -60,10 +61,11 @@ class PlayerActionState implements State {
     column: number;
   }) {
     this.game.clearPossible();
-    const node = document.getElementById(`${card.id.split("_")[0]}-front`);
-    if (node) {
-      node.classList.add(PR_SELECTED);
-    }
+    // const node = document.getElementById(`${card.idit("_")[0]}-front`);
+    // if (node) {
+    //   node.classList.add(PR_SELECTED);
+    // }
+    this.game.setCardSelected({ card });
     this.game.clientUpdatePageTitle({
       text: "Purchase ${cardName} for ${amount} ${tkn_florin} ?",
       args: {
@@ -112,7 +114,7 @@ class PlayerActionState implements State {
     });
     this.game.addPrimaryActionButton({
       id: "sell_card_button",
-      text: _('Sell'),
+      text: _("Sell"),
       // text: this.game.format_string_recursive(
       //   "Sell for ${amount} ${tkn_florin}",
       //   {
@@ -150,6 +152,25 @@ class PlayerActionState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
+  private addTest() {
+    this.game.addPrimaryActionButton({
+      text: "Test",
+      id: "test_button",
+      callback: () => {
+        console.log("Testing");
+        const card = this.game.gameMap
+          .getEmpireSquareStock({ empireId: ENGLAND })
+          .getCards()[0];
+        console.log("card", card);
+        this.game.gameMap
+          .getEmpireSquareStock({ empireId: ENGLAND })
+          .flipCard(card);
+        // card.location = 'tableau_west';
+        // this.game.playerManager.getPlayers()[0].tableau.addCard(card);
+      },
+    });
+  }
+
   private updatePageTitle() {
     const remainingActions = this.args.remainingActions;
 
@@ -173,7 +194,7 @@ class PlayerActionState implements State {
     const cards = this.game.hand.getCards();
     cards.forEach((card) => {
       const { id } = card;
-      const nodeId = `${id.split("_")[0]}-front`;
+      const nodeId = `${id}-front`;
       const node = $(nodeId);
       if (node === null) {
         return;
@@ -192,7 +213,7 @@ class PlayerActionState implements State {
     this.args.cardsPlayerCanPurchase.forEach((card) => {
       const { id, location } = card;
       const [market, region, column] = location.split("_");
-      const nodeId = `${id.split("_")[0]}-front`;
+      const nodeId = `${id}-front`;
       const node = $(nodeId);
       if (node === null) {
         return;

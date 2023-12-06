@@ -25,11 +25,12 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
     return self::getCardInstance($card['card_id'], $card);
   }
 
-  private static function getClassPrefix($cardId) {
-    if (Utils::startsWith($cardId,'Victory')) {
+  private static function getClassPrefix($cardId)
+  {
+    if (Utils::startsWith($cardId, 'Victory')) {
       return 'Victory';
-    } 
-    if (Utils::startsWith($cardId,'Empire')) {
+    }
+    if (Utils::startsWith($cardId, 'Empire')) {
       return 'Empire';
     }
     return 'Tableau';
@@ -49,7 +50,19 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
   //////////////////////////////////
   //////////////////////////////////
 
+  public static function getAllCardsInTableaux()
+  {
+    return self::getSelectQuery()
+      ->where(static::$prefix . 'location', 'LIKE', 'tableau' . '%')
+      ->get();
+  }
 
+  public static function getAllCardsInThrones()
+  {
+    return self::getSelectQuery()
+      ->where(static::$prefix . 'location', 'LIKE', 'throne' . '%')
+      ->get();
+  }
 
   // public static function getOfTypeInLocation($type, $location)
   // {
@@ -81,9 +94,9 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
   {
     $numberOfAdditionalCards = count($players) * 4;
 
-    foreach(CARDINAL_DIRECTIONS as $direction) {
-      $pool = 'pool_'.$direction;
-      $deck = 'deck_'.$direction;
+    foreach (CARDINAL_DIRECTIONS as $direction) {
+      $pool = 'pool_' . $direction;
+      $deck = 'deck_' . $direction;
       self::pickForLocation(12, $pool, $deck);
       self::shuffle($deck);
       // Notifications::log('extra', $numberOfAdditionalCards);
@@ -94,7 +107,7 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
       foreach ($cardsInPile as $cardId => $cardInfo) {
         // Add 14 because that is the number of cards already in each deck, so all
         // picked cards will be added on top.
-        self::move($cardId,$deck,$cardInfo->getState() + 14);
+        self::move($cardId, $deck, $cardInfo->getState() + 14);
       }
     }
   }

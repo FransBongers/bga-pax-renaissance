@@ -113,6 +113,11 @@ class NotificationManager {
     }
     const split = token.id.split("_");
     if (split[0] === PAWN) {
+      this.game.supply.incValue({
+        bank: split[1],
+        type: split[0],
+        value: 1,
+      });
     } else {
       this.game.supply.incValue({
         religion: split[1],
@@ -129,6 +134,7 @@ class NotificationManager {
 
     const split = token.id.split("_");
     const isPawn = split[0] === PAWN;
+    const isBishop = split[0] === BISHOP;
     const fromSupply = fromLocationId.startsWith('supply');
     if (fromSupply && isPawn) {
       this.game.supply.incValue({
@@ -144,7 +150,7 @@ class NotificationManager {
       });
     }
 
-    const node = document.getElementById(`pr_${token.location}`);
+    const node = document.getElementById(isBishop ? `${token.location}_tokens` :  `pr_${token.location}`);
     if (!node) {
       return;
     }
@@ -252,23 +258,19 @@ class NotificationManager {
   async notif_repressToken(notif: Notif<NotifRepressTokenArgs>) {
     const { playerId, token, cost } = notif.args;
 
-    const node = document.getElementById(token.id);
-    // TODO: move to empire carf
-    if (node) {
-      node.remove();
-    }
-    const split = token.id.split("_");
-    if (split[0] === PAWN) {
-    } else {
-      this.game.supply.incValue({
-        religion: split[1],
-        type: split[0],
-        value: 1,
-      });
-    }
     this.getPlayer({playerId}).counters.florins.incValue(-cost);
-
-    return Promise.resolve();
+    const element = document.getElementById(token.id);
+    const empireSquareId = token.location;
+    const toNode = document.getElementById(`${empireSquareId}_tokens`);
+    // TODO: move to empire carf
+    if (!(element && toNode)) {
+      return;
+    }
+    
+    await this.game.animationManager.attachWithAnimation(
+      new BgaSlideAnimation({ element }),
+      toNode
+    )
   }
 
   async notif_sellCard(notif: Notif<NotifSellCardArgs>) {
@@ -401,7 +403,7 @@ class NotificationManager {
     location,
   }: {
     location: string;
-  }): LineStock<TableauCard> {
+  }): LineStock<EmpireCard | TableauCard> {
     const { region, column } = this.getRegionAndColumnMarketLocation({
       location,
     });

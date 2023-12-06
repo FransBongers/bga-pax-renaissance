@@ -28,6 +28,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
   public activeStates: {
     [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
+    bishopPacification: BishopPacificationState;
     confirmTurn: ConfirmTurnState;
     flipVictoryCard: FlipVictoryCardState;
     placeAgent: PlaceAgentState;
@@ -66,6 +67,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // Will store all data for active player and gets refreshed with entering player actions state
     this.activeStates = {
       [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),
+      bishopPacification: new BishopPacificationState(this),
       confirmTurn: new ConfirmTurnState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
       placeAgent: new PlaceAgentState(this),
@@ -485,11 +487,11 @@ class PaxRenaissance implements PaxRenaissanceGame {
     callback,
     back = false,
   }: {
-    card: TableauCard;
-    callback: (props: { card: TableauCard }) => void;
+    card: EmpireCard | TableauCard;
+    callback: (props: { card: EmpireCard | TableauCard }) => void;
     back?: boolean;
   }) {
-    const nodeId = `${card.id.split("_")[0]}-${back ? "back" : "front"}`;
+    const nodeId = `${card.id}-${back ? "back" : "front"}`;
     const node = $(nodeId);
     if (node === null) {
       return;
@@ -504,10 +506,10 @@ class PaxRenaissance implements PaxRenaissanceGame {
     card,
     back = false,
   }: {
-    card: TableauCard;
+    card: EmpireCard | TableauCard;
     back?: boolean;
   }) {
-    const nodeId = `${card.id.split("_")[0]}-${back ? "back" : "front"}`;
+    const nodeId = `${card.id}-${back ? "back" : "front"}`;
     const node = $(nodeId);
     if (node === null) {
       return;

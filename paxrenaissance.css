@@ -70,7 +70,7 @@
   height: 56px;
 }
 
-.pr_victory_slot {
+.pr_victory_slot, .pr_empire_throne {
   position: absolute;
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 151px);
@@ -545,6 +545,18 @@
 
 .pr_square_card[data-card-id=null] {
   opacity: 0;
+}
+
+.pr_card_tokens_container {
+  width: calc(var(--paxRenCardScale) * 81px);
+  height: calc(var(--paxRenCardScale) * 81px);
+  position: relative;
+  top: calc(var(--paxRenCardScale) * 35px);
+  left: calc(var(--paxRenCardScale) * 35px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px;
 }
 
 /* ------- EAST CARDS ------- */
@@ -1740,140 +1752,140 @@
 }
 
 /* ------- SQUARE CARDS ------- */
-.pr_square_card[data-card-id=EmpireEngland_king] {
+.pr_square_card[data-card-id=EmpireSquare_England_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 0%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpireEngland_republic] {
+.pr_square_card[data-card-id=EmpireSquare_England_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 11.1111111111%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpireFrance_king] {
+.pr_square_card[data-card-id=EmpireSquare_France_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 22.2222222222%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpireFrance_republic] {
+.pr_square_card[data-card-id=EmpireSquare_France_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 33.3333333333%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpireAragon_king] {
+.pr_square_card[data-card-id=EmpireSquare_Aragon_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 44.4444444444%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpireAragon_republic] {
+.pr_square_card[data-card-id=EmpireSquare_Aragon_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 55.5555555556%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpirePapalStates_king] {
+.pr_square_card[data-card-id=EmpireSquare_PapalStates_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 66.6666666667%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpirePapalStates_republic] {
+.pr_square_card[data-card-id=EmpireSquare_PapalStates_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 77.7777777778%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpirePortugal_king] {
+.pr_square_card[data-card-id=EmpireSquare_Portugal_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 88.8888888889%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpirePortugal_republic] {
+.pr_square_card[data-card-id=EmpireSquare_Portugal_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 100%;
   background-position-y: 0%;
 }
 
-.pr_square_card[data-card-id=EmpireHolyRomanEmpire_king] {
+.pr_square_card[data-card-id=EmpireSquare_HolyRomanEmpire_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 0%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireHolyRomanEmpire_republic] {
+.pr_square_card[data-card-id=EmpireSquare_HolyRomanEmpire_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 11.1111111111%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireHungary_king] {
+.pr_square_card[data-card-id=EmpireSquare_Hungary_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 22.2222222222%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireHungary_republic] {
+.pr_square_card[data-card-id=EmpireSquare_Hungary_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 33.3333333333%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireOttoman_king] {
+.pr_square_card[data-card-id=EmpireSquare_Ottoman_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 44.4444444444%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireOttoman_republic] {
+.pr_square_card[data-card-id=EmpireSquare_Ottoman_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 55.5555555556%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireByzantium_king] {
+.pr_square_card[data-card-id=EmpireSquare_Byzantium_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 66.6666666667%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireByzantium_republic] {
+.pr_square_card[data-card-id=EmpireSquare_Byzantium_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 77.7777777778%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireMamluk_king] {
+.pr_square_card[data-card-id=EmpireSquare_Mamluk_king] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 88.8888888889%;
   background-position-y: 50%;
 }
 
-.pr_square_card[data-card-id=EmpireMamluk_republic] {
+.pr_square_card[data-card-id=EmpireSquare_Mamluk_republic] {
   background-image: url("img/square_cards.webp");
   background-size: 1000% 300%;
   background-position-x: 100%;
@@ -2182,6 +2194,8 @@
 .pr_chess_piece {
   background-repeat: no-repeat;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
+  filter: drop-shadow(1px 0px 0px white) drop-shadow(-1px 0px 0px white) drop-shadow(0px 1px 0px white) drop-shadow(0px -1px 0px white);
 }
 
 .pr_chess_piece.pr_selectable {

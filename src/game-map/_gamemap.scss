@@ -44,7 +44,7 @@
   // background-color: yellow;
 }
 
-.pr_victory_slot {
+.pr_victory_slot, .pr_empire_throne {
   position: absolute;
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 151px);

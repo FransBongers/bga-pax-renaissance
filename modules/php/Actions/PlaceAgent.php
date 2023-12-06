@@ -119,14 +119,16 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("Not allowed to place Agent on selected location");
     }
 
-    $locationType = $stateArgs['locations'][$locationId]['type'];
+    $type = $agent['type'];
+
+    $locationType = $type === BISHOP ? $stateArgs['locations'][$locationId]->getType() : $stateArgs['locations'][$locationId]['type'];
 
     $player = self::getPlayer();
-
-    $type = $agent['type'];
+    $info = $this->ctx->getInfo();
+    
     $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
 
-    Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType), $this->ctx);
+    Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, $info['empireId']), $this->ctx);
 
     $agents = $stateArgs['agents'];
 
@@ -168,6 +170,9 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
       case KNIGHT:
       case ROOK:
         return $this->getCities($empires, $type, $exludedLocationIds);
+        break;
+      case BISHOP:
+        return $this->getCards($empireId, $type);
         break;
     }
   }
@@ -235,6 +240,29 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     //   });
     //   $locations = array_merge($locations, $seaBorders);
     // }
+    return $locations;
+  }
+
+  private function getCards($empireId, $type)
+  {
+    
+    $cards = array_merge(Cards::getAllCardsInTableaux()->toArray(), Cards::getAllCardsInThrones()->toArray());
+    $validEmpireIds = [$empireId];
+    if (in_array($empireId, [WEST, EAST])) {
+      $regionEmpireIds = array_map(function ($empire) {
+        return $empire->getId();
+      }, Empires::getRegion($empireId));
+      $validEmpireIds = array_merge($validEmpireIds, $regionEmpireIds);
+    } else {
+      $validEmpireIds[] = Empires::get($empireId)->getRegion();
+    }
+
+    $locations = [];
+    foreach ($cards as $card) {
+      if (in_array($card->getEmpire(), $validEmpireIds)) {
+        $locations[$card->getId()] = $card;
+      }
+    }
     return $locations;
   }
 

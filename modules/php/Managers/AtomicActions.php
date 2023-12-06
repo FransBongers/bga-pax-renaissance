@@ -10,6 +10,8 @@ class AtomicActions
 {
   // Mapping of actionId and corresponding class
   static $classes = [
+    BISHOP_DIET_OF_WORMS => 'BishopDietOfWorms',
+    BISHOP_PACIFICATION => 'BishopPacification',
     FLIP_VICTORY_CARD => 'FlipVictoryCard',
     PLACE_AGENT => 'PlaceAgent',
     PLAY_CARD => 'PlayCard',

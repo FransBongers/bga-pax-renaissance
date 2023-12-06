@@ -64,9 +64,7 @@ class Supply {
     });
 
     const entries = Object.entries(gamedatas.tokens.supply.banks);
-    console.log('entries',entries);
     entries.forEach(([bank, count]) => {
-      console.log('entry', bank, count);
       this.chessPieceCounters.banks[bank] = new ChessPieceCounter();
       const counter: ChessPieceCounter = this.chessPieceCounters.banks[bank] 
       counter.setup({bank, type: PAWN, value: count});

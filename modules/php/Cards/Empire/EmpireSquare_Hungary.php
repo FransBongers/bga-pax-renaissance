@@ -1,14 +1,15 @@
 <?php
 namespace PaxRenaissance\Cards\Empire;
 
-class EmpireHungary extends \PaxRenaissance\Models\EmpireCard
+class EmpireSquare_Hungary extends \PaxRenaissance\Models\EmpireCard
 {
   public function __construct($row)
   {
     parent::__construct($row);
-    $this->id = 'EmpireHungary';
+    $this->id = 'EmpireSquare_Hungary';
+    $this->empire = HUNGARY;
     $this->nameKing = clienttranslate('Mátyás Corvinus King of Hungary');
     $this->nameRepublic = clienttranslate('Polish-Lithuanian Sejm');
-    $this->startLocation = 'empire_hungary';
+    $this->startLocation = 'throne_hungary';
   }
 }

@@ -19,11 +19,11 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class SelectToken extends \PaxRenaissance\Models\AtomicAction
+class BishopPacification extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_SELECT_TOKEN;
+    return ST_BISHOP_PACIFICATION;
   }
 
   // ..######..########....###....########.########
@@ -42,7 +42,7 @@ class SelectToken extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stSelectToken()
+  public function stBishopPacification()
   {
     // $args = self::getPossibleLevies();
     // if (count($args['possibleLevies']) === 0) {
@@ -62,20 +62,13 @@ class SelectToken extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##..##....##..##....##
   // .##.....##.##.....##..######....######.
 
-  public function argsSelectToken()
+  public function argsBishopPacification()
   {
-    // $player = Players::get();
-    $info = $this->ctx->getInfo();
-
-    // This is where the token should have come from, but supply is empty
-    $supply = $info['fromSupply'];
-
-
-    $tokens = $this->getTokensToSelect($supply);
 
     $data = [
-      'tokens' => $tokens
+      'tokens' => $this->getTokens(),
     ];
+
 
     return $data;
   }
@@ -96,22 +89,30 @@ class SelectToken extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  // public function actPlayerAction($cardId, $strength)
-  public function actSelectToken($args)
+  public function actBishopPacification($args)
   {
-    self::checkAction('actSelectToken');
+    self::checkAction('actBishopPacification');
+
     $tokenId = $args['tokenId'];
-    Notifications::log('selectToken', $tokenId);
 
-    $selectableTokens = $this->getTokensToSelect($this->ctx->getInfo()['fromSupply']);
+    $player = self::getPlayer();
 
-    if (!Utils::array_some($selectableTokens, function ($token) use ($tokenId) {
-      return $token->getId() === $tokenId;
-    })) {
-      throw new \feException("Not allowed to select Token");
+    if ($tokenId === null) {
+      Notifications::chooseNotToKill($player);
+      $this->resolveAction($args);
+      return;  
     }
 
-    $this->ctx->getParent()->updateInfo('tokenId',$tokenId);
+    $tokens = $this->getTokens();
+
+    $token = Utils::array_find($tokens, function ($tkn) use ($tokenId) {
+      return $tkn->getId() === $tokenId;
+    });
+
+    if ($token === null) {
+      throw new \feException("Not allowed to select Token");
+    }
+    $token->kill();
 
     $this->resolveAction($args);
   }
@@ -124,14 +125,21 @@ class SelectToken extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getTokensToSelect($supply)
+  private function getTokens()
   {
-    $exploded = explode('_', $supply);
-    $type = $exploded[1] . '_' . $exploded[2];
-    $availableTokens = Tokens::getOfType($type);
+    $info = $this->ctx->getInfo();
 
-    // TODO: filter for repressed tokens, then all available tokens
+    $bishopId = $info['tokenId'];
 
-    return $availableTokens;
+    $token = Tokens::get($bishopId);
+    $locationId = $token->getLocationId();
+
+    $card = Cards::get($locationId);
+    $tokensOnCard = $card->getTokens();
+
+    $tokens = Utils::filter($tokensOnCard, function ($tokenOnCard) use ($bishopId) {
+      return $tokenOnCard->getId() !== $bishopId;
+    });
+    return $tokens;
   }
 }

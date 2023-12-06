@@ -259,6 +259,25 @@ $machinestates = [
         'possibleactions' => ['actSelectToken', 'pass'],
     ],
 
+    
+    ST_BISHOP_DIET_OF_WORMS => [
+        'name' => 'bishopDietOfWorms',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_BISHOP_PACIFICATION => [
+        'name' => 'bishopPacification',
+        'description' => clienttranslate('${actplayer} may choose a token to Kill'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actBishopPacification', 'pass'],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',

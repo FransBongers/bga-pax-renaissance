@@ -4,6 +4,7 @@ namespace PaxRenaissance\Actions;
 
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\Flows;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
@@ -18,11 +19,11 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
+class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_RESOLVE_PLACE_TOKEN;
+    return ST_BISHOP_DIET_OF_WORMS;
   }
 
   // ..######..########....###....########.########
@@ -41,60 +42,47 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stResolvePlaceToken()
+  public function stBishopDietOfWorms()
   {
+    $info = $this->ctx->getInfo();
+    Notifications::log('stBishopDietOfWorms', $info);
 
-    $info = $this->ctx->getParent()->getInfo();
-    Notifications::log('stResolvePlaceToken',$info);
-    $locationId = $info['toLocationId'];
-    $locationType = $info['toLocationType'];
-    $supply = $info['fromSupply'];
-    $empireId = isset($info['empireId']) ? $info['empireId'] : null;
+    $tokenId = $info['tokenId'];
 
-    // $locationType = $stateArgs['locations'][$locationId]['type'];
+    $token = Tokens::get($tokenId);
+    $locationId = $token->getLocationId();
 
-    // $player = self::getPlayer();
+    $card = Cards::get($locationId);
+    $tokensOnCard = $card->getTokens();
 
-    // $type = $agent['type'];
-    // $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
+    Notifications::log('tokensOnCard', $tokensOnCard);
 
-    $token = isset($info['tokenId']) ? Tokens::get($info['tokenId']) : Tokens::getTopOf($supply);
+    $bishopsOnCard = [];
+    $otherTokensOnCard = [];
 
-    Notifications::log('token to place',$token);
-
-    // Supply is empty and no token has been selected yet
-    if ($token === null) {
-      // Push child in front to select token
-      $this->ctx->getParent()->unshiftChild(
-        new LeafNode([
-          'action' => SELECT_TOKEN,
-          'playerId' => $this->ctx->getPlayerId(),
-          'fromSupply' => $supply
-        ])
-      );
-
-      Engine::save();
-      Engine::proceed();
-      return;
+    foreach ($tokensOnCard as $tokenOnCard) {
+      if ($tokenOnCard->getType() === BISHOP) {
+        $bishopsOnCard[] = $tokenOnCard;
+      } else {
+        $otherTokensOnCard[] = $tokenOnCard;
+      }
     }
-    
-    // Notifications::log('token', $token);
-    // TODO: handle empty supply
-    if ($locationType === BORDER) {
-      Borders::get($locationId)->placeToken($token, $empireId);
-    } else if ($locationType === CITY) {
-      Cities::get($locationId)->placeToken($token);
-    } else if ($locationType === TABLEAU_CARD) {
-      Cards::get($locationId)->placeToken($token, $this->ctx);
-    } else if ($locationType === EMPIRE_CARD) {
-      Cards::get($locationId)->placeToken($token, $this->ctx);
+
+    // This should never be more than 2
+    if (count($bishopsOnCard) >= 2) {
+      foreach($bishopsOnCard as $bishop) {
+        $bishop->kill();
+      }
+    } else if (count($otherTokensOnCard) > 0) {
+      $this->ctx->insertAsBrother(new LeafNode([
+        'action' => BISHOP_PACIFICATION,
+        'playerId' => $this->ctx->getPlayerId(),
+        'tokenId' => $tokenId,
+      ]));
     }
 
     $this->resolveAction([]);
   }
-
-
-
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -103,4 +91,6 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+
 }

@@ -1,14 +1,15 @@
 <?php
 namespace PaxRenaissance\Cards\Empire;
 
-class EmpireEngland extends \PaxRenaissance\Models\EmpireCard
+class EmpireSquare_England extends \PaxRenaissance\Models\EmpireCard
 {
   public function __construct($row)
   {
     parent::__construct($row);
-    $this->id = 'EmpireEngland';
+    $this->id = 'EmpireSquare_England';
+    $this->empire = ENGLAND;
     $this->nameKing = clienttranslate('King Edward IV House of York');
     $this->nameRepublic = clienttranslate('English Parliament');
-    $this->startLocation = 'empire_england';
+    $this->startLocation = 'throne_england';
   }
 }

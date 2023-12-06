@@ -6,6 +6,7 @@ class Portugal extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = PORTUGAL;
+    $this->empireSquareId = 'EmpireSquare_Portugal';
     $this->name = clienttranslate('Portugal');
     $this->borders = [
       BORDER_ARAGON_PORTUGAL,
@@ -16,5 +17,6 @@ class Portugal extends \PaxRenaissance\Models\Empire
       TOLEDO,
       SPICE_ISLANDS
     ];
+    $this->region = WEST;
   }
 }

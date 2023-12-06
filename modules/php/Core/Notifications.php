@@ -107,6 +107,15 @@ class Notifications
    **** GAME METHODS ****
    *************************/
 
+  public static function chooseNotToKill($player)
+  {
+
+    self::notifyAll("chooseNotToKill",  clienttranslate('${tkn_playerName} chooses not to Kill a Token'), [
+      'player' => $player,
+    ]);
+  }
+
+
   public static function flipVictoryCard($player, $card)
   {
     self::notifyAll("flipVictoryCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName}'), [
@@ -116,15 +125,14 @@ class Notifications
     ]);
   }
 
-  public static function killToken($player, $token, $locationId)
+  public static function killToken($player, $token, $fromLocation)
   {
-    $location = Utils::startsWith($locationId,'border') ? Borders::get($locationId) : Cities::get($locationId);
-    
+
     $isPawn = $token->getType() === PAWN;
     self::notifyAll("killToken",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-      'tkn_boldText' => $location->getName(),
+      'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
     ]);
   }
@@ -132,7 +140,7 @@ class Notifications
   public static function placeToken($player, $token, $fromLocationId, $toLocation = null)
   {
     $isPawn = $token->getType() === PAWN;
-    
+
     self::notifyAll("placeToken",  clienttranslate('${tkn_playerName} places ${tkn_mapToken} on ${tkn_boldText}'), [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
@@ -141,7 +149,7 @@ class Notifications
       'fromLocationId' => $fromLocationId,
     ]);
   }
-   
+
 
   public static function playCard($player, $card)
   {
@@ -173,15 +181,13 @@ class Notifications
     ]);
   }
 
-  public static function repressToken($player, $token, $locationId, $cost)
+  public static function repressToken($player, $token, $fromLocation, $cost)
   {
-    $location = Utils::startsWith($locationId,'border') ? Borders::get($locationId) : Cities::get($locationId);
-    
     $isPawn = $token->getType() === PAWN;
     self::notifyAll("repressToken",  clienttranslate('${tkn_playerName} represses ${tkn_mapToken} on ${tkn_boldText}'), [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-      'tkn_boldText' => $location->getName(),
+      'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
       'cost' => $cost,
     ]);

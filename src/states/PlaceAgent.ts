@@ -46,8 +46,6 @@ class PlaceAgentState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
 
-
-    
     this.game.clientUpdatePageTitle({
       text: "${tkn_playerName} must select a location to place ${tkn_mapToken}",
       args: {
@@ -59,6 +57,41 @@ class PlaceAgentState implements State {
     this.setLocationsSelectable();
   }
 
+  private updateInterfaceConfirmCard({
+    id,
+    card,
+  }: {
+    id: string;
+    card: EmpireCard | TableauCard;
+  }) {
+    this.game.clearPossible();
+    this.game.setCardSelected({ card });
+
+    const {} = card;
+    // TODO handle cases where there are two different agents
+
+    this.game.clientUpdatePageTitle({
+      text: "Place ${tkn_mapToken} on ${location}?",
+      args: {
+        tkn_playerName: "${you}",
+        tkn_mapToken: this.createMapTokenId(),
+        location: _(card.type === TABLEAU_CARD ? card.name : card.nameKing),
+      },
+    });
+
+    this.game.addConfirmButton({
+      callback: () =>
+        this.game.takeAction({
+          action: "actPlaceAgent",
+          args: {
+            agent: this.args.agents[0],
+            locationId: id,
+          },
+        }),
+    });
+    this.game.addCancelButton();
+  }
+
   private updateInterfaceConfirmLocation({
     id,
     location,
@@ -68,7 +101,7 @@ class PlaceAgentState implements State {
   }) {
     this.game.clearPossible();
     this.game.setLocationSelected({ id });
-    
+
     const { name, cost, repressed } = location;
     // TODO handle cases where there are two different agents
     if (repressed) {
@@ -124,9 +157,11 @@ class PlaceAgentState implements State {
 
   private createMapTokenId() {
     const agent = this.args.agents[0];
-    let id = '';
+    let id = "";
     if (agent.type === PAWN) {
-      const bank = this.game.playerManager.getPlayer({playerId: this.game.getPlayerId()}).getBank();
+      const bank = this.game.playerManager
+        .getPlayer({ playerId: this.game.getPlayerId() })
+        .getBank();
       id = `${bank}_pawn`;
     } else {
       id = `${agent.religion}_${agent.type}`;
@@ -136,10 +171,18 @@ class PlaceAgentState implements State {
 
   private setLocationsSelectable() {
     Object.entries(this.args.locations).forEach(([id, location]) => {
-      this.game.setLocationSelectable({
-        id,
-        callback: () => this.updateInterfaceConfirmLocation({ id, location }),
-      });
+      if (location?.type === TABLEAU_CARD || location?.type === EMPIRE_CARD) {
+        this.game.setCardSelectable({
+          card: location,
+          callback: () =>
+            this.updateInterfaceConfirmCard({ id, card: location }),
+        });
+      } else {
+        this.game.setLocationSelectable({
+          id,
+          callback: () => this.updateInterfaceConfirmLocation({ id, location }),
+        });
+      }
     });
   }
 

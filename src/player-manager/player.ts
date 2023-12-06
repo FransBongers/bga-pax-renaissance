@@ -168,10 +168,9 @@ class PRPlayer {
         .framework()
         .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
     };
-    const allCards = [...playerGamedatas.tableau.east, ...playerGamedatas.tableau.west];
+    const allCards = [...playerGamedatas.tableau.cards.east, ...playerGamedatas.tableau.cards.west];
     allCards.forEach((card) => {
       card.prestige.forEach((prestige) => {
-        console.log('prestigeCounter', prestige, this.counters.prestige[prestige]);
         this.counters.prestige[prestige].incValue(1)
       });
     });

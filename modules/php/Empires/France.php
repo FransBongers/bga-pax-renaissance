@@ -7,6 +7,7 @@ class France extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = FRANCE;
+    $this->empireSquareId = 'EmpireSquare_France';
     $this->name = clienttranslate('France');
     $this->borders = [
       BORDER_ARAGON_FRANCE,
@@ -18,5 +19,6 @@ class France extends \PaxRenaissance\Models\Empire
       LYON,
       PARIS,
     ];
+    $this->region = WEST;
   }
 }

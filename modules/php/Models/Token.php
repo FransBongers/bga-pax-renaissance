@@ -10,6 +10,7 @@ use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Cities;
+use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 
@@ -45,14 +46,31 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     Notifications::killToken(Players::get(), $this, $oldLocation);
   }
 
-  public function repress()
+  public function repress($empireId)
   {
     $oldLocation = $this->getLocation();
     // TODO: move to empire card
-    $this->move($this->getSupply());
+    $this->move(Empires::get($empireId)->getEmpireSquareId());
     $player = Players::get();
-    $player->incFlorins(-1);
+    $player->incFlorins(-1); // TODO depends on why token is repressed
     Notifications::repressToken($player, $this, $oldLocation, 1);
+  }
+
+  public function getLocation()
+  {
+    $locationId = $this->getLocationId();
+    if (Utils::startsWith($locationId, 'border')) {
+      Borders::get($locationId);
+    } else if (Utils::startsWith($locationId, 'PREN') || Utils::startsWith($locationId, 'EmpireSquare')) {
+      return Cards::get($locationId);
+    } else {
+      return Cities::get($locationId);
+    }
+  }
+
+  public function getLocationId()
+  {
+    return $this->location;
   }
 
   // public function getUiData()

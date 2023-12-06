@@ -11,6 +11,22 @@ class MapBoard
 
   public static function getUiData()
   {
-    return Cards::getSelectQuery()->where('card_location', 'LIKE', 'empire%')->get()->ui();
+    $cards = Cards::getAllCardsInThrones()->toArray();
+    return [
+      'thrones' => [
+        'cards' => $cards,
+        'tokens' => self::getTokensOnCards($cards),
+      ]
+    ];
+  }
+
+  public static function getTokensOnCards($cards)
+  {
+    $tokens = [];
+    foreach($cards as $card) {
+      $tokensOnCard = Tokens::getInLocation($card->getId())->toArray();
+      $tokens = array_merge($tokens, $tokensOnCard);
+    }
+    return $tokens;
   }
 }

@@ -1,8 +1,8 @@
 class PlayerTableau {
   private game: PaxRenaissanceGame;
 
-  private tableauEast: LineStock<TableauCard>;
-  private tableauWest: LineStock<TableauCard>;
+  private tableauEast: LineStock<EmpireCard | TableauCard>;
+  private tableauWest: LineStock<EmpireCard | TableauCard>;
 
   constructor({
     game,
@@ -45,11 +45,27 @@ class PlayerTableau {
       { center: false, sort: sortFunction('state') }
     );
 
-    this.tableauEast.addCards(player.tableau[EAST]);
-    this.tableauWest.addCards(player.tableau[WEST]);
+    this.tableauEast.addCards(player.tableau.cards[EAST]);
+    this.tableauWest.addCards(player.tableau.cards[WEST]);
+    player.tableau.tokens.forEach(({id, location}) => {
+      const node = document.getElementById(`${location}_tokens`);
+      if (!node) {
+        return;
+      }
+      const split = id.split("_");
+      const type = split[0];
+      const isPawn = type === PAWN;
+
+      node.insertAdjacentHTML(
+        "beforeend",
+        isPawn
+          ? tplPawn({ id, bank: split[1] })
+          : tplChessPiece({ id, type, religion: split[1] })
+      );
+    });
   }
 
-  public async addCard(card: TableauCard) {
+  public async addCard(card: EmpireCard | TableauCard) {
     console.log('location', card.location, )
     if (card.location.split('_')[1] === EAST) {
       await this.tableauEast.addCard(card);

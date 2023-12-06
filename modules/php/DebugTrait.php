@@ -20,8 +20,11 @@ trait DebugTrait
 {
   function test()
   {
+    Notifications::log('tableau', Cards::getAllCardsInTableaux());
+    Notifications::log('thrones', Cards::getAllCardsInThrones());
+    Notifications::log('merged', array_merge(Cards::getAllCardsInTableaux(),Cards::getAllCardsInThrones()));
     // $this->debugPlaceToken(PAWN, MEDICI, BORDER_ARAGON_FRANCE);
-    $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ENGLAND_FRANCE);
+    // $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ENGLAND_FRANCE);
 
     // Notifications::log('Token', Borders::get(BORDER_FRANCE_HOLY_ROMAN_EMPIRE)->getToken());
     // Notifications::log('East', Empires::getRegion(EAST));
@@ -36,7 +39,7 @@ trait DebugTrait
     $token = Tokens::getTopOf($supply);
     Notifications::log('token', $token);
 
-    $fromLocationId = $token->getLocation();
+    $fromLocationId = $token->getLocationId();
     $token = $token->move($locationId);
     Notifications::placeToken(Players::get(),$token, $fromLocationId);
   }

@@ -1,6 +1,6 @@
 @use "sass:math";
 @use "sass:map";
-@use "base";
+@use "../base";
 
 .pr_card.pr_selectable,
 .pr_square_card.pr_selectable,
@@ -66,6 +66,19 @@
 .pr_square_card[data-card-id="null"] {
   opacity: 0;
   // background-color: yellow;
+}
+
+.pr_card_tokens_container {
+  width: calc(var(--paxRenCardScale) * 81px);
+  height: calc(var(--paxRenCardScale) * 81px);
+  // background-color: orange;
+  position: relative;
+  top: calc(var(--paxRenCardScale) * 35px);
+  left: calc(var(--paxRenCardScale) * 35px);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px;
 }
 
 /* ------- EAST CARDS ------- */
@@ -293,26 +306,26 @@ $west-cards2: (
 /* ------- SQUARE CARDS ------- */
 
 $square-cards: (
-  1: "EmpireEngland_king",
-  2: "EmpireEngland_republic",
-  3: "EmpireFrance_king",
-  4: "EmpireFrance_republic",
-  5: "EmpireAragon_king",
-  6: "EmpireAragon_republic",
-  7: "EmpirePapalStates_king",
-  8: "EmpirePapalStates_republic",
-  9: "EmpirePortugal_king",
-  10: "EmpirePortugal_republic",
-  11: "EmpireHolyRomanEmpire_king",
-  12: "EmpireHolyRomanEmpire_republic",
-  13: "EmpireHungary_king",
-  14: "EmpireHungary_republic",
-  15: "EmpireOttoman_king",
-  16: "EmpireOttoman_republic",
-  17: "EmpireByzantium_king",
-  18: "EmpireByzantium_republic",
-  19: "EmpireMamluk_king",
-  20: "EmpireMamluk_republic",
+  1: "EmpireSquare_England_king",
+  2: "EmpireSquare_England_republic",
+  3: "EmpireSquare_France_king",
+  4: "EmpireSquare_France_republic",
+  5: "EmpireSquare_Aragon_king",
+  6: "EmpireSquare_Aragon_republic",
+  7: "EmpireSquare_PapalStates_king",
+  8: "EmpireSquare_PapalStates_republic",
+  9: "EmpireSquare_Portugal_king",
+  10: "EmpireSquare_Portugal_republic",
+  11: "EmpireSquare_HolyRomanEmpire_king",
+  12: "EmpireSquare_HolyRomanEmpire_republic",
+  13: "EmpireSquare_Hungary_king",
+  14: "EmpireSquare_Hungary_republic",
+  15: "EmpireSquare_Ottoman_king",
+  16: "EmpireSquare_Ottoman_republic",
+  17: "EmpireSquare_Byzantium_king",
+  18: "EmpireSquare_Byzantium_republic",
+  19: "EmpireSquare_Mamluk_king",
+  20: "EmpireSquare_Mamluk_republic",
   21: "victory_renaissance_active",
   22: "victory_globalization_active",
   23: "victory_holy_active",

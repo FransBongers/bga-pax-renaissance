@@ -7,6 +7,7 @@ class England extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = ENGLAND;
+    $this->empireSquareId = 'EmpireSquare_England';
     $this->name = clienttranslate('England');
     $this->borders = [
       BORDER_ENGLAND_FRANCE,
@@ -16,5 +17,6 @@ class England extends \PaxRenaissance\Models\Empire
       BORDEAUX,
       LONDON
     ];
+    $this->region = WEST;
   }
 }

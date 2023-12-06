@@ -1,13 +1,17 @@
-class TableauCardManager extends CardManager<TableauCard> {
-
+class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
   constructor(public game: PaxRenaissanceGame) {
     super(game, {
-      getId: (card) => card.id.split("_")[0],
+      getId: (card) => card.id,
       setupDiv: (card, div) => {
         // div.classList.add("pr_card");
-        div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-        div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-
+        if (card.type === TABLEAU_CARD) {
+          div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+          div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+        } else {
+          div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+          div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+        }
+        div.insertAdjacentHTML('beforeend', tplTokensContainer({id: card.id}));
         // div.style.position = 'relative';
       },
       setupFrontDiv: (card, div: HTMLElement) => this.setupFrontDiv(card, div),
@@ -17,35 +21,55 @@ class TableauCardManager extends CardManager<TableauCard> {
     });
   }
 
-  setupFrontDiv(card: TableauCard, div: HTMLElement) {
-    // console.log("setupFrontDiv", card);
-    div.classList.add("pr_card");
-    div.setAttribute("data-card-id", card.id.split("_")[0]);
-    div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-    div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+  // `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="position: absolute; top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
+
+  setupFrontDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
+    // if (!card.id.startsWith('Empire')) {
+    //   console.log('setupFrontDiv',card);
+    // }
+
+    if (card.type === TABLEAU_CARD) {
+      div.classList.add("pr_card");
+      div.setAttribute("data-card-id", card.id.split("_")[0]);
+      div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+      div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+    } else if (card.type === EMPIRE_CARD) {
+      div.classList.add("pr_square_card");
+      div.setAttribute("data-card-id", `${card.id}_king`);
+      div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+      div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+    }
+
     // div.style.background = 'blue';
     // div.classList.add('mygame-card-front');
     // div.id = `card-${card.id}-front`;
     // this.addTooltipHtml(div.id, `tooltip de ${card.type}`);
-    if (!card.id.startsWith("FAKE")) {
+    if (card.type === TABLEAU_CARD) {
       this.game.tooltipManager.addCardTooltip({
-        nodeId: card.id.split("_")[0] + "-front",
+        nodeId: card.id + "-front",
         card,
       });
     }
   }
 
-  setupBackDiv(card: TableauCard, div: HTMLElement) {
-    div.classList.add("pr_card");
-    div.setAttribute(
-      "data-card-id",
-      card.region === EAST ? "EAST_BACK" : "WEST_BACK"
-    );
-    div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-    div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+  setupBackDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
+    if (card.type === TABLEAU_CARD) {
+      div.classList.add("pr_card");
+      div.setAttribute(
+        "data-card-id",
+        card.region === EAST ? "EAST_BACK" : "WEST_BACK"
+      );
+      div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+      div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+    } else if (card.type === EMPIRE_CARD) {
+      div.classList.add("pr_square_card");
+      div.setAttribute("data-card-id", `${card.id}_republic`);
+      div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+      div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+    }
   }
 
-  isCardVisible({ location }: TableauCard) {
+  isCardVisible({ location }: EmpireCard | TableauCard) {
     if (location.startsWith("deck")) {
       return false;
     }
@@ -54,5 +78,4 @@ class TableauCardManager extends CardManager<TableauCard> {
     }
     return true;
   }
-  Ì;
 }

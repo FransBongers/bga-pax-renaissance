@@ -49,6 +49,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     $isCurrentPlayer = intval($currentPlayerId) == $this->getId();
     $extra = PlayersExtra::get($this->getId());
     $hand = $this->getHand();
+    $tableauCards = $this->getTableauCards();
     // return $data;
     return array_merge($data, [
       'bank' => $extra['bank'],
@@ -64,7 +65,10 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
           })),
         ]
       ],
-      'tableau' => $this->getTableauCards(),
+      'tableau' => [
+        'cards' => $tableauCards,
+        'tokens' => $this->getTokensOnTableauCards($tableauCards)
+      ],
     ]);
   }
 
@@ -106,6 +110,17 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       EAST => Cards::getInLocation(Locations::tableau($this->getId(), EAST))->toArray(),
       WEST => Cards::getInLocation(Locations::tableau($this->getId(), WEST))->toArray(),
     ];
+  }
+
+  public function getTokensOnTableauCards($tableauCards)
+  {
+    $cards = array_merge($tableauCards[EAST], $tableauCards[WEST]);
+    $tokens = [];
+    foreach($cards as $card) {
+      $tokensOnCard = Tokens::getInLocation($card->getId())->toArray();
+      $tokens = array_merge($tokens, $tokensOnCard);
+    }
+    return $tokens;
   }
 
   public function canTakeAction($action, $ctx)

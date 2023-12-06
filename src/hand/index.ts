@@ -8,7 +8,7 @@
 
 class Hand {
   private game: PaxRenaissanceGame;
-  private hand: LineStock<TableauCard>;
+  private hand: LineStock<EmpireCard | TableauCard>;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
@@ -28,7 +28,7 @@ class Hand {
       }
     });
 
-    this.hand = new LineStock<TableauCard>(
+    this.hand = new LineStock<EmpireCard |TableauCard>(
       this.game.tableauCardManager,
       document.getElementById("pr_player_hand"),
       { wrap: "wrap", gap: '12px', center: false }
@@ -44,10 +44,10 @@ class Hand {
   }
 
   public getCards(): TableauCard[] {
-    return this.hand.getCards();
+    return this.hand.getCards() as TableauCard[];
   }
 
-  public getStock(): LineStock<TableauCard> {
+  public getStock(): LineStock<EmpireCard | TableauCard> {
     return this.hand;
   }
 }

@@ -7,6 +7,7 @@ class HolyRomanEmpire extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = HOLY_ROMAN_EMIRE;
+    $this->empireSquareId = 'EmpireSquare_HolyRomanEmpire';
     $this->name = clienttranslate('Holy Roman Empire');
     $this->borders = [
       BORDER_FRANCE_HOLY_ROMAN_EMPIRE,
@@ -19,5 +20,6 @@ class HolyRomanEmpire extends \PaxRenaissance\Models\Empire
       NURNBERG,
       VIENNA,
     ];
+    $this->region = WEST;
   }
 }

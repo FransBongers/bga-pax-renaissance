@@ -66,10 +66,12 @@ const tplGameMapEmpireCards = () => `
   ${Object.entries(EMPIRE_CARD_CONFIG)
     .map(
       ([empire, { top, left }]) =>
-        `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="position: absolute; top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
+      `<div id="pr_${empire}_throne" class="pr_empire_throne" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
+      
     )
     .join("")}
 `;
+// `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="position: absolute; top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
 
 const tplGameMapMapBorders = () => {
   return Object.entries(BORDER_CONFIG).map(([border, coords]) => `<div id="pr_${border}" class="pr_border" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`).join('');

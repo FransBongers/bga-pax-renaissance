@@ -6,6 +6,7 @@ class PapalStates extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = PAPAL_STATES;
+    $this->empireSquareId = 'EmpireSquare_PapalStates';
     $this->name = clienttranslate('Papal States');
     $this->borders = [
       BORDER_ARAGON_PAPAL_STATES,
@@ -13,5 +14,6 @@ class PapalStates extends \PaxRenaissance\Models\Empire
       BORDER_OTTOMAN_PAPAL_STATES,
     ];
     $this->cities = [VENICE];
+    $this->region = WEST;
   }
 }

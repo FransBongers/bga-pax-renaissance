@@ -28,11 +28,14 @@ interface PaxRenaissanceGame extends Game {
   ) => string;
   getPlayerId: () => number;
   setCardSelectable: (props: {
-    card: TableauCard;
+    card: EmpireCard | TableauCard;
     callback: (props: { card: TableauCard }) => void;
     back?: boolean;
   }) => void;
-  setCardSelected: (props: { card: TableauCard; back?: boolean }) => void;
+  setCardSelected: (props: {
+    card: EmpireCard | TableauCard;
+    back?: boolean;
+  }) => void;
   setLocationSelectable: (props: {
     id: string;
     callback: (props: { id: string }) => void;
@@ -51,6 +54,7 @@ interface PaxRenaissanceGame extends Game {
   _connections: unknown[];
   animationManager: AnimationManager;
   // cardManager: CardManager<TableauCard>;
+  gameMap: GameMap;
   hand: Hand;
   market: Market;
   notificationManager: NotificationManager;
@@ -84,7 +88,19 @@ interface PaxRenCard {
   used: number;
 }
 
+interface EmpireCard extends PaxRenCard {
+  empire: string;
+  nameKing: string;
+  nameRepublic: string;
+  // flavorText: string[];
+  // name: string;
+  // prestige: string[];
+  // region: "east" | "west";
+  type: "empireCard";
+}
+
 interface TableauCard extends PaxRenCard {
+  empire: string;
   flavorText: string[];
   name: string;
   prestige: string[];
@@ -106,7 +122,12 @@ interface Token {
 
 interface PaxRenaissanceGamedatas extends Gamedatas {
   canceledNotifIds: string[];
-  gameMap: TableauCard[];
+  gameMap: {
+    thrones: {
+      cards: EmpireCard[];
+      tokens: Token[];
+    };
+  };
   market: {
     cards: TableauCard[];
     deckCounts: {
@@ -164,7 +185,10 @@ interface PaxRenaissancePlayerData extends BgaPlayer {
     };
   };
   tableau: {
-    east: TableauCard[];
-    west: TableauCard[];
+    cards: {
+      east: TableauCard[];
+      west: TableauCard[];
+    };
+    tokens: Token[];
   };
 }
