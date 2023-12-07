@@ -93,7 +93,7 @@ class City implements \JsonSerializable
     if ($currentToken !== null) {
       $currentToken->repress($this->empire);
     }
-    $fromLocationId = $token->getLocationId();
+    $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId());
     Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
   }

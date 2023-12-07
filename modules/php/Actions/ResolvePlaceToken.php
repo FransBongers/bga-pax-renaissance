@@ -62,6 +62,7 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
 
     Notifications::log('token to place',$token);
 
+    
     // Supply is empty and no token has been selected yet
     if ($token === null) {
       // Push child in front to select token
@@ -78,8 +79,7 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
       return;
     }
     
-    // Notifications::log('token', $token);
-    // TODO: handle empty supply
+    Notifications::log('token', $token);
     if ($locationType === BORDER) {
       Borders::get($locationId)->placeToken($token, $empireId);
     } else if ($locationType === CITY) {

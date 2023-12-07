@@ -492,6 +492,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     back?: boolean;
   }) {
     const nodeId = `${card.id}-${back ? "back" : "front"}`;
+    // const nodeId = `${card.id}`;
     const node = $(nodeId);
     if (node === null) {
       return;

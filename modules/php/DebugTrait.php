@@ -39,7 +39,7 @@ trait DebugTrait
     $token = Tokens::getTopOf($supply);
     Notifications::log('token', $token);
 
-    $fromLocationId = $token->getLocationId();
+    $fromLocationId = $token->getLocation();
     $token = $token->move($locationId);
     Notifications::placeToken(Players::get(),$token, $fromLocationId);
   }

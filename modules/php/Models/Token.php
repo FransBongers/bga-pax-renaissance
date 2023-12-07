@@ -41,36 +41,32 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
 
   public function kill()
   {
-    $oldLocation = $this->getLocation();
+    $oldLocation = $this->getLocationInstance();
     $this->move($this->getSupply());
     Notifications::killToken(Players::get(), $this, $oldLocation);
   }
 
   public function repress($empireId)
   {
-    $oldLocation = $this->getLocation();
-    // TODO: move to empire card
+    $oldLocation = $this->getLocationInstance();
+    Notifications::log('oldLocation',$oldLocation);
+
     $this->move(Empires::get($empireId)->getEmpireSquareId());
     $player = Players::get();
     $player->incFlorins(-1); // TODO depends on why token is repressed
     Notifications::repressToken($player, $this, $oldLocation, 1);
   }
 
-  public function getLocation()
+  public function getLocationInstance()
   {
-    $locationId = $this->getLocationId();
+    $locationId = $this->getLocation();
     if (Utils::startsWith($locationId, 'border')) {
-      Borders::get($locationId);
+      return Borders::get($locationId);
     } else if (Utils::startsWith($locationId, 'PREN') || Utils::startsWith($locationId, 'EmpireSquare')) {
       return Cards::get($locationId);
     } else {
       return Cities::get($locationId);
     }
-  }
-
-  public function getLocationId()
-  {
-    return $this->location;
   }
 
   // public function getUiData()

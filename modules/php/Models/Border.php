@@ -44,13 +44,14 @@ class Border implements \JsonSerializable
   public function placeToken($token, $empireId)
   {
     $currentToken = $this->getToken();
+    Notifications::log('currentToken',$currentToken);
     if ($currentToken !== null && $token->getType() === PIRATE) {
       $currentToken->kill();
     } else if ($currentToken !== null && $token->getType() === PAWN) {
       $currentToken->repress($empireId);
     }
 
-    $fromLocationId = $token->getLocationId();
+    $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId());
     Notifications::placeToken(Players::get(),$token, $fromLocationId, null);
   }

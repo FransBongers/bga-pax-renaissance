@@ -50,7 +50,7 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
     $tokenId = $info['tokenId'];
 
     $token = Tokens::get($tokenId);
-    $locationId = $token->getLocationId();
+    $locationId = $token->getLocation();
 
     $card = Cards::get($locationId);
     $tokensOnCard = $card->getTokens();

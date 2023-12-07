@@ -132,7 +132,7 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
     $bishopId = $info['tokenId'];
 
     $token = Tokens::get($bishopId);
-    $locationId = $token->getLocationId();
+    $locationId = $token->getLocation();
 
     $card = Cards::get($locationId);
     $tokensOnCard = $card->getTokens();
