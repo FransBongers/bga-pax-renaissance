@@ -20,9 +20,9 @@ trait DebugTrait
 {
   function test()
   {
-    Notifications::log('tableau', Cards::getAllCardsInTableaux());
-    Notifications::log('thrones', Cards::getAllCardsInThrones());
-    Notifications::log('merged', array_merge(Cards::getAllCardsInTableaux(),Cards::getAllCardsInThrones()));
+    Notifications::log('tableau', Cards::get('PREN101X_CivilEngineer'));
+    // Notifications::log('thrones', Cards::getAllCardsInThrones());
+    // Notifications::log('merged', array_merge(Cards::getAllCardsInTableaux(),Cards::getAllCardsInThrones()));
     // $this->debugPlaceToken(PAWN, MEDICI, BORDER_ARAGON_FRANCE);
     // $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ENGLAND_FRANCE);
 

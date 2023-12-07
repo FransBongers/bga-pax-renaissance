@@ -132,7 +132,8 @@ class Notifications
     self::notifyAll("killToken",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-      'tkn_boldText' => $fromLocation->getName(),
+      'tkn_boldText' => '',//$fromLocation->getName(),
+      'from' => $fromLocation,
       'token' => $token,
     ]);
   }
