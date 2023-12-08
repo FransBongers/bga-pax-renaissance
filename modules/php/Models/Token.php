@@ -18,6 +18,7 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
 {
   protected $location;
   protected $type;
+  protected $separator;
 
   protected $table = 'tokens';
   protected $primary = 'token_id';
@@ -26,6 +27,19 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     'location' => 'location',
     'state' => ['state', 'int'],
   ];
+
+  protected $staticAttributes = [
+    'separator',
+    'type',
+  ];
+
+  public function jsonSerialize()
+  {
+    $data = parent::jsonSerialize();
+    $data['separator'] = $this->separator;
+    $data['type'] = $this->type;
+    return $data;
+  }
 
   public function move($location, $notify = true)
   {

@@ -167,7 +167,7 @@ class NotificationManager {
   }
 
   async notif_placeToken(notif: Notif<NotifPlaceTokenArgs>) {
-    const { playerId, token, fromLocationId } = notif.args;
+    const { token, fromLocationId } = notif.args;
 
     const split = token.id.split("_");
     const isPawn = split[0] === PAWN;
@@ -192,18 +192,10 @@ class NotificationManager {
       return;
     }
 
-    const type = token.id.split("_")[0];
-    const bankOrReligion = token.id.split("_")[1];
-
     if (fromSupply) {
       node.insertAdjacentHTML(
         "beforeend",
-        isPawn
-          ? tplPawn({
-              id: token.id,
-              bank: bankOrReligion,
-            })
-          : tplChessPiece({ id: token.id, type, religion: bankOrReligion })
+        tplToken(token)
       );
     } else {
       const tokenNode = document.getElementById(token.id);
@@ -342,30 +334,6 @@ class NotificationManager {
     this.getPlayer({ playerId }).counters.florins.incValue(amount);
     return Promise.resolve();
   }
-
-  // async notif_tradeFairPlaceLevy(notif: Notif<NotifTradeFairPlaceLevyArgs>) {
-  //   const { token, cityId } = notif.args;
-  //   const node = document.getElementById(`pr_${cityId}`);
-  //   if (!node) {
-  //     return;
-  //   }
-
-  //   const type = token.id.split("_")[0];
-  //   const colorOrReligion = token.id.split("_")[1];
-
-  //   this.game.supply.incValue({ type, religion: colorOrReligion, value: -1 });
-
-  //   node.insertAdjacentHTML(
-  //     "beforeend",
-  //     tplChessPiece({
-  //       id: token.id,
-  //       type,
-  //       color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
-  //       religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
-  //     })
-  //   );
-  //   return Promise.resolve();
-  // }
 
   async notif_tradeFairProfitDispersalPirates(
     notif: Notif<NotifTradeFairProfitDispersalPiratesArgs>

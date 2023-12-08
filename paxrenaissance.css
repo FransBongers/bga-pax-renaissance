@@ -381,7 +381,7 @@
   display: flex;
   justify-content: center;
 }
-.pr_city .pr_chess_piece {
+.pr_city .pr_token {
   align-self: flex-end;
 }
 .pr_city .pr_disk {
@@ -2056,10 +2056,10 @@
   --paxRenIconScale: 0.5;
   margin-bottom: -4px;
 }
-#pagemaintitletext .pr_chess_piece {
+#pagemaintitletext .pr_token {
   display: inline-block;
   margin-bottom: -8px;
-  --paxRenChessPieceScale: 0.7;
+  --paxRenTokenScale: 0.7;
 }
 #pagemaintitletext .pr_one_shot {
   display: inline-block;
@@ -2073,9 +2073,9 @@
   --paxRenIconScale: 0.5;
   margin-bottom: -6px;
 }
-.log > .roundedbox .pr_chess_piece {
+.log > .roundedbox .pr_token {
   display: inline-block;
-  --paxRenChessPieceScale: 0.7;
+  --paxRenTokenScale: 0.7;
   margin-bottom: -5px;
 }
 
@@ -2404,19 +2404,19 @@
   background-position-y: 300%;
 }
 
-.pr_chess_piece {
+.pr_token {
   background-repeat: no-repeat;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
   filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
   filter: drop-shadow(1px 0px 0px white) drop-shadow(-1px 0px 0px white) drop-shadow(0px 1px 0px white) drop-shadow(0px -1px 0px white);
 }
 
-.pr_chess_piece.pr_selectable {
+.pr_token.pr_selectable {
   filter: drop-shadow(2px 0px 0px yellow) drop-shadow(-2px 0px 0px yellow) drop-shadow(0px 2px 0px yellow) drop-shadow(0px -2px 0px yellow);
 }
 
-.pr_chess_piece.pr_selected,
-.pr_chess_piece.pr_selectable:hover {
+.pr_token.pr_selected,
+.pr_token.pr_selectable:hover {
   filter: drop-shadow(3px 0px 0px blue) drop-shadow(-3px 0px 0px blue) drop-shadow(0px 3px 0px blue) drop-shadow(0px -3px 0px blue);
   cursor: pointer;
 }
@@ -2424,17 +2424,17 @@
 /* ------- PAWNS ------- */
 .pr_disk {
   box-sizing: border-box;
-  width: calc(var(--paxRenChessPieceScale) * 31px);
-  height: calc(var(--paxRenChessPieceScale) * 31px);
+  width: calc(var(--paxRenTokenScale) * 31px);
+  height: calc(var(--paxRenTokenScale) * 31px);
   border-radius: 50%;
   border: 1px solid;
 }
 
-.pr_disk[data-color=black] {
+.pr_disk[data-separator=black] {
   background-color: black;
 }
 
-.pr_disk[data-color=white] {
+.pr_disk[data-separator=white] {
   background-color: white;
 }
 
@@ -2442,66 +2442,66 @@
 .pr_pawn {
   background-image: url("img/pawns.webp");
   background-size: 400% 100%;
-  width: calc(var(--paxRenChessPieceScale) * 26px);
-  height: calc(var(--paxRenChessPieceScale) * 43px);
+  width: calc(var(--paxRenTokenScale) * 26px);
+  height: calc(var(--paxRenTokenScale) * 43px);
 }
 
-.pr_pawn[data-bank=fugger] {
+.pr_pawn[data-separator=fugger] {
   background-position-x: 0%;
 }
 
-.pr_pawn[data-bank=marchionni] {
+.pr_pawn[data-separator=marchionni] {
   background-position-x: 33.3333333333%;
 }
 
-.pr_pawn[data-bank=coeur] {
+.pr_pawn[data-separator=coeur] {
   background-position-x: 66.6666666667%;
 }
 
-.pr_pawn[data-bank=medici] {
+.pr_pawn[data-separator=medici] {
   background-position-x: 100%;
 }
 
 /* ------- RELIGION PIECES ------- */
-.pr_chess_piece[data-religion=catholic] {
+.pr_token[data-separator=catholic] {
   background-position-x: 0%;
 }
 
-.pr_chess_piece[data-religion=islamic] {
+.pr_token[data-separator=islamic] {
   background-position-x: 50%;
 }
 
-.pr_chess_piece[data-religion=reformist] {
+.pr_token[data-separator=reformist] {
   background-position-x: 100%;
 }
 
 .pr_bishop {
   background-image: url("img/bishops.webp");
   background-size: 300% 100%;
-  width: calc(var(--paxRenChessPieceScale) * 30px);
-  height: calc(var(--paxRenChessPieceScale) * 59px);
+  width: calc(var(--paxRenTokenScale) * 30px);
+  height: calc(var(--paxRenTokenScale) * 59px);
 }
 
 .pr_knight {
   background-image: url("img/knights.webp");
   background-size: 300% 100%;
-  max-width: calc(var(--paxRenChessPieceScale) * 36px);
-  min-width: calc(var(--paxRenChessPieceScale) * 36px);
-  height: calc(var(--paxRenChessPieceScale) * 46px);
+  max-width: calc(var(--paxRenTokenScale) * 36px);
+  min-width: calc(var(--paxRenTokenScale) * 36px);
+  height: calc(var(--paxRenTokenScale) * 46px);
 }
 
 .pr_pirate {
   background-image: url("img/pirates.webp");
   background-size: 300% 100%;
-  min-width: calc(var(--paxRenChessPieceScale) * 45px);
-  min-height: calc(var(--paxRenChessPieceScale) * 47px);
+  min-width: calc(var(--paxRenTokenScale) * 45px);
+  min-height: calc(var(--paxRenTokenScale) * 47px);
 }
 
 .pr_rook {
   background-image: url("img/rooks.webp");
   background-size: 300% 100%;
-  width: calc(var(--paxRenChessPieceScale) * 30px);
-  height: calc(var(--paxRenChessPieceScale) * 49px);
+  width: calc(var(--paxRenTokenScale) * 30px);
+  height: calc(var(--paxRenTokenScale) * 49px);
 }
 
 /* ------- PLAYER BOARD ------- */
@@ -2630,19 +2630,19 @@
   row-gap: 8px;
 }
 
-.pr_chess_piece_counter_container {
+.pr_token_counter_container {
   display: flex;
   flex-direction: row;
   width: 60px;
   gap: 4px;
 }
-.pr_chess_piece_counter_container .pr_chess_piece_counter_chess_piece {
+.pr_token_counter_container .pr_token_counter_token {
   width: 40px;
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
-.pr_chess_piece_counter_container span {
+.pr_token_counter_container span {
   align-self: center;
   font-weight: bold;
   font-size: 30px;
@@ -2996,7 +2996,7 @@ html {
   --paxRenIconScale: 1;
   --paxRenMapScale: 1;
   --paxRenCardScale: 1;
-  --paxRenChessPieceScale: 1;
+  --paxRenTokenScale: 1;
 }
 
 /*# sourceMappingURL=paxrenaissance.css.map */

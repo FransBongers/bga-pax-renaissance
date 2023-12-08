@@ -60,7 +60,7 @@
     "src/player-manager/tableau/templates.ts",
     "src/player-manager/templates.ts",
     "src/player-manager/types.d.ts",
-    "src/supply/chessPieceCounter.ts",
+    "src/supply/tokenCounter.ts",
     "src/supply/index.ts",
     "src/supply/templates.ts",
     "src/states/AnnounceOneShot.ts",

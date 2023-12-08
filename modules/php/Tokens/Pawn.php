@@ -7,7 +7,7 @@ use PaxRenaissance\Managers\Players;
 
 class Pawn extends \PaxRenaissance\Models\Token
 {
-  protected $bank;
+  // protected $bank;
   protected $type;
 
   public function __construct($row)
@@ -16,26 +16,19 @@ class Pawn extends \PaxRenaissance\Models\Token
 
     $exploded = explode('_', $row['id']);
     $this->type = $exploded[0];
-    $this->bank = $exploded[1];
-  }
-
-  public function jsonSerialize()
-  {
-    $data = parent::jsonSerialize();
-    $data['bank'] = $this->bank;
-    $data['type'] = $this->type;
-    return $data;
+    // $this->bank = $exploded[1];
+    $this->separator = $exploded[1];
   }
 
   public function getBank()
   {
-    return $this->bank;
+    return $this->separator;
   }
 
   public function getOwner()
   {
     return Utils::filter(Players::getAll()->toArray(), function ($plyr) {
-      return $plyr->getBank() === $this->bank;
+      return $plyr->getBank() === $this->separator;
     })[0];
   }
 

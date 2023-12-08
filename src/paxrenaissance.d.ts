@@ -119,6 +119,8 @@ interface Token {
   id: string;
   location: string;
   state: number;
+  separator: string;
+  type: string;
 }
 
 interface PaxRenaissanceGamedatas extends Gamedatas {

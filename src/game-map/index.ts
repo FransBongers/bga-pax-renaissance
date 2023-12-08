@@ -46,17 +46,17 @@ class GameMap {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  setupChessPiecesBorders({
+  setupTokensBorders({
     gamedatas,
   }: {
     gamedatas: PaxRenaissanceGamedatas;
   }) {
     BORDERS.forEach((border) => {
-      const chessPiece = gamedatas.tokens.inPlay.find(
+      const token = gamedatas.tokens.inPlay.find(
         (piece) => piece.location === border
       );
 
-      if (!chessPiece) {
+      if (!token) {
         return;
       }
 
@@ -65,47 +65,33 @@ class GameMap {
         return;
       }
 
-      const type = chessPiece.id.split("_")[0];
-      const bankOrReligion = chessPiece.id.split("_")[1];
-
       node.insertAdjacentHTML(
         "beforeend",
-        type === PAWN
-          ? tplPawn({
-              id: chessPiece.id,
-              bank: bankOrReligion,
-            })
-          : tplChessPiece({ id: chessPiece.id, type, religion: bankOrReligion })
+        tplToken(token)
       );
     });
   }
 
-  setupChessPiecesCities({
+  setupTokensCities({
     gamedatas,
   }: {
     gamedatas: PaxRenaissanceGamedatas;
   }) {
     CITIES.forEach((city) => {
-      const chessPiece = gamedatas.tokens.inPlay.find(
+      const token = gamedatas.tokens.inPlay.find(
         (piece) => piece.location === city
       );
-      if (!chessPiece) {
+      if (!token) {
         return;
       }
       const node = document.getElementById(`pr_${city}`);
       if (!node) {
         return;
       }
-      const type = chessPiece.id.split("_")[0];
-      const colorOrReligion = chessPiece.id.split("_")[1];
+
       node.insertAdjacentHTML(
         "beforeend",
-        tplChessPiece({
-          id: chessPiece.id,
-          type,
-          color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
-          religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
-        })
+        tplToken(token)
       );
     });
   }
@@ -166,20 +152,17 @@ class GameMap {
       // }
       // node.setAttribute("data-card-id", `${id}_king`);
     });
-    gamedatas.gameMap.thrones.tokens.forEach(({ id, location }) => {
+    gamedatas.gameMap.thrones.tokens.forEach((token) => {
+      const {location} = token;
       const node = document.getElementById(`${location}_tokens`);
       if (!node) {
         return;
       }
-      const split = id.split("_");
-      const type = split[0];
-      const isPawn = type === PAWN;
 
       node.insertAdjacentHTML(
         "beforeend",
-        isPawn
-          ? tplPawn({ id, bank: split[1] })
-          : tplChessPiece({ id, type, religion: split[1] })
+        tplToken(token)
+      
       );
     });
   }
@@ -198,8 +181,8 @@ class GameMap {
     });
     this.setupZoomButtons();
     this.setupEmpireCards({ gamedatas });
-    this.setupChessPiecesCities({ gamedatas });
-    this.setupChessPiecesBorders({ gamedatas });
+    this.setupTokensCities({ gamedatas });
+    this.setupTokensBorders({ gamedatas });
   }
 
   setupZoomButtons() {
@@ -293,7 +276,7 @@ class GameMap {
 
     // map.style.setProperty("--paxRenMapScale", `${mapScale}`);
     // map.style.setProperty("--paxRenCardScale", `${mapScale}`);
-    // map.style.setProperty("--paxRenChessPieceScale", `${mapScale}`);
+    // map.style.setProperty("--paxRenTokenScale", `${mapScale}`);
 
     map.style.transform = `scale(${this.zoomLevel})`;
     const mapContainer = document.getElementById("pr_game_map_container");

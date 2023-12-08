@@ -1,48 +1,48 @@
 class Supply {
   private game: PaxRenaissanceGame;
-  private chessPieceCounters: {
+  private tokenCounters: {
     [CATHOLIC]: {
-      [BISHOP]: ChessPieceCounter;
-      [KNIGHT]: ChessPieceCounter;
-      [PIRATE]: ChessPieceCounter;
-      [ROOK]: ChessPieceCounter;
+      [BISHOP]: TokenCounter;
+      [KNIGHT]: TokenCounter;
+      [PIRATE]: TokenCounter;
+      [ROOK]: TokenCounter;
     };
     [ISLAMIC]: {
-      [BISHOP]: ChessPieceCounter;
-      [KNIGHT]: ChessPieceCounter;
-      [PIRATE]: ChessPieceCounter;
-      [ROOK]: ChessPieceCounter;
+      [BISHOP]: TokenCounter;
+      [KNIGHT]: TokenCounter;
+      [PIRATE]: TokenCounter;
+      [ROOK]: TokenCounter;
     };
     [REFORMIST]: {
-      [BISHOP]: ChessPieceCounter;
-      [KNIGHT]: ChessPieceCounter;
-      [PIRATE]: ChessPieceCounter;
-      [ROOK]: ChessPieceCounter;
+      [BISHOP]: TokenCounter;
+      [KNIGHT]: TokenCounter;
+      [PIRATE]: TokenCounter;
+      [ROOK]: TokenCounter;
     };
     banks: {
-      [COEUR]?: ChessPieceCounter;
-      [FUGGER]?: ChessPieceCounter;
-      [MARCHIONNI]?: ChessPieceCounter;
-      [MEDICI]?: ChessPieceCounter;
+      [COEUR]?: TokenCounter;
+      [FUGGER]?: TokenCounter;
+      [MARCHIONNI]?: TokenCounter;
+      [MEDICI]?: TokenCounter;
     }
   } = {
     [CATHOLIC]: {
-      [BISHOP]: new ChessPieceCounter(),
-      [KNIGHT]: new ChessPieceCounter(),
-      [PIRATE]: new ChessPieceCounter(),
-      [ROOK]: new ChessPieceCounter(),
+      [BISHOP]: new TokenCounter(),
+      [KNIGHT]: new TokenCounter(),
+      [PIRATE]: new TokenCounter(),
+      [ROOK]: new TokenCounter(),
     },
     [ISLAMIC]: {
-      [BISHOP]: new ChessPieceCounter(),
-      [KNIGHT]: new ChessPieceCounter(),
-      [PIRATE]: new ChessPieceCounter(),
-      [ROOK]: new ChessPieceCounter(),
+      [BISHOP]: new TokenCounter(),
+      [KNIGHT]: new TokenCounter(),
+      [PIRATE]: new TokenCounter(),
+      [ROOK]: new TokenCounter(),
     },
     [REFORMIST]: {
-      [BISHOP]: new ChessPieceCounter(),
-      [KNIGHT]: new ChessPieceCounter(),
-      [PIRATE]: new ChessPieceCounter(),
-      [ROOK]: new ChessPieceCounter(),
+      [BISHOP]: new TokenCounter(),
+      [KNIGHT]: new TokenCounter(),
+      [PIRATE]: new TokenCounter(),
+      [ROOK]: new TokenCounter(),
     },
     banks: {}
   };
@@ -51,32 +51,32 @@ class Supply {
     this.game = game;
     const gamedatas = game.gamedatas;
 
-    this.setupChessPieceCounters({gamedatas});
+    this.setupTokenCounters({gamedatas});
   }
 
-  private setupChessPieceCounters({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
-    console.log('setupChessPieceCounters');
+  private setupTokenCounters({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    console.log('setupTokenCounters');
     [BISHOP, KNIGHT, ROOK, PIRATE].forEach((type) => {
       RELIGIONS.forEach((religion) => {
-        const counter: ChessPieceCounter = this.chessPieceCounters[religion][type];
-        counter.setup({religion, type, value: gamedatas.tokens.supply[religion][type]});
+        const counter: TokenCounter = this.tokenCounters[religion][type];
+        counter.setup({separator: religion, type, value: gamedatas.tokens.supply[religion][type]});
       })
     });
 
     const entries = Object.entries(gamedatas.tokens.supply.banks);
     entries.forEach(([bank, count]) => {
-      this.chessPieceCounters.banks[bank] = new ChessPieceCounter();
-      const counter: ChessPieceCounter = this.chessPieceCounters.banks[bank] 
-      counter.setup({bank, type: PAWN, value: count});
+      this.tokenCounters.banks[bank] = new TokenCounter();
+      const counter: TokenCounter = this.tokenCounters.banks[bank] 
+      counter.setup({separator: bank, type: PAWN, value: count});
     })
   }
 
   public incValue({bank, religion, type, value}: {bank?: string; religion?: string; type: string; value: number;}) {
     let counter = null;
     if (type === PAWN) {
-      counter = this.chessPieceCounters?.banks?.[bank];
+      counter = this.tokenCounters?.banks?.[bank];
     } else {
-      counter = this.chessPieceCounters?.[religion]?.[type];
+      counter = this.tokenCounters?.[religion]?.[type];
     }
     
     if (!counter) {

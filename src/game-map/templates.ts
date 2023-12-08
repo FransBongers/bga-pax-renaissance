@@ -1,10 +1,5 @@
-const tplChessPiece = ({ id, type, religion, color }: { id?: string; type: string; religion?: string; color?: string; }) => {
-  return `<div ${id ? `id="${id}"` : ''} class="pr_chess_piece pr_${type}" ${religion ? `data-religion="${religion}"` : ''}${color ? `data-color="${color}"` : ''}></div>`;
-};
-
-const tplPawn = ({ id, bank }: { id?: string; bank: string; }) => {
-  const type = PAWN;
-  return `<div ${id ? `id="${id}"` : ''} class="pr_chess_piece pr_${type}" data-bank="${bank}"></div>`;
+const tplToken = ({ id, type, separator }: { id?: string; type: string; separator: string; }) => {
+  return `<div ${id ? `id="${id}"` : ''} class="pr_token pr_${type}" data-separator="${separator}"></div>`;
 };
 
 
@@ -121,8 +116,3 @@ const tplGameMap = () => `
   </div>
 </div>`;
 
-// <div class="pr_chess_piece pr_bishop" data-religion="reformist" style="top: 831px; left: 1056px;"></div>
-// <i class="fa-regular fa-magnifying-glass-plus"></i>
-// <div class="pr_chess_piece pr_pawn" data-color="purple" style="top: 656px; left: 1028px;"></div>
-// <div class="pr_chess_piece pr_knight" data-religion="catholic" style="top: 389px; left: 1056px;"></div>
-// <div class="pr_chess_piece pr_rook" data-religion="islamic" style="top: 533px; left: 890px;"></div>

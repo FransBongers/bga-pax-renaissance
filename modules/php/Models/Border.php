@@ -8,8 +8,6 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Helpers\Utils;
-use PaxRenaissance\Managers\ChessPieces;
-use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 

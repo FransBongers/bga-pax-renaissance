@@ -10,18 +10,15 @@
   column-gap: 4px;
   row-gap: 8px;
 
-  // .pr_chess_piece {
-  //   margin: auto;
-  // }
 }
 
-.pr_chess_piece_counter_container {
+.pr_token_counter_container {
   display: flex;
   flex-direction: row;
   width: 60px;
   gap: 4px;
 
-  .pr_chess_piece_counter_chess_piece {
+  .pr_token_counter_token {
     width: 40px;
     display: flex;
     flex-direction: row;

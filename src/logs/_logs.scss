@@ -38,10 +38,10 @@
     margin-bottom: -4px;
   }
 
-  .pr_chess_piece {
+  .pr_token {
     display: inline-block;
     margin-bottom: -8px;
-    --paxRenChessPieceScale: 0.7;
+    --paxRenTokenScale: 0.7;
   }
 
   .pr_one_shot {
@@ -60,9 +60,9 @@
     margin-bottom: -6px;
   }
 
-  .pr_chess_piece {
+  .pr_token {
     display: inline-block;
-    --paxRenChessPieceScale: 0.7;
+    --paxRenTokenScale: 0.7;
     margin-bottom: -5px;
   }
 }

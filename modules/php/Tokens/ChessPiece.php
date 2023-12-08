@@ -16,14 +16,7 @@ class ChessPiece extends \PaxRenaissance\Models\Token
     $exploded = explode('_', $row['id']);
     $this->type = $exploded[0];
     $this->religion = $exploded[1];
-  }
-
-  public function jsonSerialize()
-  {
-    $data = parent::jsonSerialize();
-    $data['religion'] = $this->religion;
-    $data['type'] = $this->type;
-    return $data;
+    $this->separator = $exploded[1];
   }
 
   public function getLogToken()

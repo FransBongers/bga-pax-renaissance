@@ -32,11 +32,7 @@ const getTokenDiv = ({
       return "<br>";
     case LOG_TOKEN_MAP_TOKEN:
       const mtValue = value.split("_");
-      return mtValue[1] === PAWN
-        ? tplPawn({ bank: mtValue[0] })
-        : mtValue[1] === DISK
-        ? tplChessPiece({ type: DISK, color: mtValue[0] })
-        : tplChessPiece({ type: mtValue[1], religion: mtValue[0] });
+      return tplToken({ type: mtValue[1], separator: mtValue[0] })
     case LOG_TOKEN_ONE_SHOT:
       return tplOneShot({ oneShot: value });
     // case LOG_TOKEN_PAWN:

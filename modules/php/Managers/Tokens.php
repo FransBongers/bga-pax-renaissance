@@ -10,7 +10,7 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Helpers\Utils;
 
 /**
- * ChessPieces
+ * Tokens
  */
 class Tokens extends \PaxRenaissance\Helpers\Pieces
 {
@@ -54,7 +54,6 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
     }
 
     $className = "\PaxRenaissance\Tokens\\".self::$classes[$type];
-    // $className = "\PaxRenaissance\Tokens\\ChessPiece";
     return new $className($data);
   }
 
@@ -122,13 +121,13 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
   public static function setupNewGame($players = null, $options = null)
   {
     self::setupCreateTokens();
-    self::setupPlaceChessPieces($players, $options);
+    self::setupPlaceTokens($players, $options);
     self::setupPlaceStartingConcessions($players, $options);
   }
 
   public function setupCreateTokens()
   {
-    $chessPieces = [];
+    $tokens = [];
     $setup = [
       [BISHOP, CATHOLIC, 5],
       [BISHOP, ISLAMIC, 5],
@@ -151,7 +150,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
     ];
 
     foreach ($setup as $setupRecord) {
-      $chessPieces[] = [
+      $tokens[] = [
         "id" => $setupRecord[0] . "_" . $setupRecord[1] . "_{INDEX}",
         "nbr" => $setupRecord[2],
         "nbrStart" => 1,
@@ -159,7 +158,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       ];
     };
 
-    self::create($chessPieces);
+    self::create($tokens);
     foreach ([BISHOP, KNIGHT, PIRATE, ROOK] as $type) {
       foreach (RELIGIONS as $religion) {
         self::shuffle(Locations::supply($type, $religion));
@@ -171,7 +170,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
     }
   }
 
-  private function setupPlaceChessPieces($players, $options)
+  private function setupPlaceTokens($players, $options)
   {
     $setup = [
       LONDON => Locations::supply(ROOK, CATHOLIC),

@@ -1,8 +1,6 @@
 <?php
 namespace PaxRenaissance\Empires;
 
-use PaxRenaissance\Managers\ChessPieces;
-
 class Ottoman extends \PaxRenaissance\Models\Empire
 {
   public function __construct()

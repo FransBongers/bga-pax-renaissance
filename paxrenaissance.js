@@ -2637,46 +2637,32 @@ var GameMap = (function () {
         var gamedatas = game.gamedatas;
         this.setupGameMap({ gamedatas: gamedatas });
     }
-    GameMap.prototype.setupChessPiecesBorders = function (_a) {
+    GameMap.prototype.setupTokensBorders = function (_a) {
         var gamedatas = _a.gamedatas;
         BORDERS.forEach(function (border) {
-            var chessPiece = gamedatas.tokens.inPlay.find(function (piece) { return piece.location === border; });
-            if (!chessPiece) {
+            var token = gamedatas.tokens.inPlay.find(function (piece) { return piece.location === border; });
+            if (!token) {
                 return;
             }
             var node = document.getElementById("pr_".concat(border));
             if (!node) {
                 return;
             }
-            var type = chessPiece.id.split("_")[0];
-            var bankOrReligion = chessPiece.id.split("_")[1];
-            node.insertAdjacentHTML("beforeend", type === PAWN
-                ? tplPawn({
-                    id: chessPiece.id,
-                    bank: bankOrReligion,
-                })
-                : tplChessPiece({ id: chessPiece.id, type: type, religion: bankOrReligion }));
+            node.insertAdjacentHTML("beforeend", tplToken(token));
         });
     };
-    GameMap.prototype.setupChessPiecesCities = function (_a) {
+    GameMap.prototype.setupTokensCities = function (_a) {
         var gamedatas = _a.gamedatas;
         CITIES.forEach(function (city) {
-            var chessPiece = gamedatas.tokens.inPlay.find(function (piece) { return piece.location === city; });
-            if (!chessPiece) {
+            var token = gamedatas.tokens.inPlay.find(function (piece) { return piece.location === city; });
+            if (!token) {
                 return;
             }
             var node = document.getElementById("pr_".concat(city));
             if (!node) {
                 return;
             }
-            var type = chessPiece.id.split("_")[0];
-            var colorOrReligion = chessPiece.id.split("_")[1];
-            node.insertAdjacentHTML("beforeend", tplChessPiece({
-                id: chessPiece.id,
-                type: type,
-                color: [PAWN, DISK].includes(type) ? colorOrReligion : undefined,
-                religion: [PAWN, DISK].includes(type) ? undefined : colorOrReligion,
-            }));
+            node.insertAdjacentHTML("beforeend", tplToken(token));
         });
     };
     GameMap.prototype.setupEmpireCards = function (_a) {
@@ -2701,18 +2687,13 @@ var GameMap = (function () {
                 _this.empireSquareStocks[empire].addCard(card);
             }
         });
-        gamedatas.gameMap.thrones.tokens.forEach(function (_a) {
-            var id = _a.id, location = _a.location;
+        gamedatas.gameMap.thrones.tokens.forEach(function (token) {
+            var location = token.location;
             var node = document.getElementById("".concat(location, "_tokens"));
             if (!node) {
                 return;
             }
-            var split = id.split("_");
-            var type = split[0];
-            var isPawn = type === PAWN;
-            node.insertAdjacentHTML("beforeend", isPawn
-                ? tplPawn({ id: id, bank: split[1] })
-                : tplChessPiece({ id: id, type: type, religion: split[1] }));
+            node.insertAdjacentHTML("beforeend", tplToken(token));
         });
     };
     GameMap.prototype.updateGameMap = function (_a) {
@@ -2730,8 +2711,8 @@ var GameMap = (function () {
         });
         this.setupZoomButtons();
         this.setupEmpireCards({ gamedatas: gamedatas });
-        this.setupChessPiecesCities({ gamedatas: gamedatas });
-        this.setupChessPiecesBorders({ gamedatas: gamedatas });
+        this.setupTokensCities({ gamedatas: gamedatas });
+        this.setupTokensBorders({ gamedatas: gamedatas });
     };
     GameMap.prototype.setupZoomButtons = function () {
         var _this = this;
@@ -2787,14 +2768,9 @@ var GameMap = (function () {
     };
     return GameMap;
 }());
-var tplChessPiece = function (_a) {
-    var id = _a.id, type = _a.type, religion = _a.religion, color = _a.color;
-    return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_chess_piece pr_").concat(type, "\" ").concat(religion ? "data-religion=\"".concat(religion, "\"") : '').concat(color ? "data-color=\"".concat(color, "\"") : '', "></div>");
-};
-var tplPawn = function (_a) {
-    var id = _a.id, bank = _a.bank;
-    var type = PAWN;
-    return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_chess_piece pr_").concat(type, "\" data-bank=\"").concat(bank, "\"></div>");
+var tplToken = function (_a) {
+    var id = _a.id, type = _a.type, separator = _a.separator;
+    return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_token pr_").concat(type, "\" data-separator=\"").concat(separator, "\"></div>");
 };
 var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map(function (_a, index) {
     var top = _a.top, left = _a.left;
@@ -2982,11 +2958,7 @@ var getTokenDiv = function (_a) {
             return "<br>";
         case LOG_TOKEN_MAP_TOKEN:
             var mtValue = value.split("_");
-            return mtValue[1] === PAWN
-                ? tplPawn({ bank: mtValue[0] })
-                : mtValue[1] === DISK
-                    ? tplChessPiece({ type: DISK, color: mtValue[0] })
-                    : tplChessPiece({ type: mtValue[1], religion: mtValue[0] });
+            return tplToken({ type: mtValue[1], separator: mtValue[0] });
         case LOG_TOKEN_ONE_SHOT:
             return tplOneShot({ oneShot: value });
         case LOG_TOKEN_PLAYER_NAME:
@@ -3430,11 +3402,11 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_placeToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, fromLocationId, split, isPawn, isBishop, fromSupply, node, type, bankOrReligion, tokenNode;
+            var _a, token, fromLocationId, split, isPawn, isBishop, fromSupply, node, tokenNode;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, playerId = _a.playerId, token = _a.token, fromLocationId = _a.fromLocationId;
+                        _a = notif.args, token = _a.token, fromLocationId = _a.fromLocationId;
                         split = token.id.split("_");
                         isPawn = split[0] === PAWN;
                         isBishop = split[0] === BISHOP;
@@ -3457,15 +3429,8 @@ var NotificationManager = (function () {
                         if (!node) {
                             return [2];
                         }
-                        type = token.id.split("_")[0];
-                        bankOrReligion = token.id.split("_")[1];
                         if (!fromSupply) return [3, 1];
-                        node.insertAdjacentHTML("beforeend", isPawn
-                            ? tplPawn({
-                                id: token.id,
-                                bank: bankOrReligion,
-                            })
-                            : tplChessPiece({ id: token.id, type: type, religion: bankOrReligion }));
+                        node.insertAdjacentHTML("beforeend", tplToken(token));
                         return [3, 3];
                     case 1:
                         tokenNode = document.getElementById(token.id);
@@ -3958,22 +3923,17 @@ var PlayerTableau = (function () {
                 color: player.color,
             })),
         }));
-        this.tableauEast = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction('state') });
-        this.tableauWest = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction('state') });
+        this.tableauEast = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state") });
+        this.tableauWest = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state") });
         this.tableauEast.addCards(player.tableau.cards[EAST]);
         this.tableauWest.addCards(player.tableau.cards[WEST]);
-        player.tableau.tokens.forEach(function (_a) {
-            var id = _a.id, location = _a.location;
+        player.tableau.tokens.forEach(function (token) {
+            var location = token.location;
             var node = document.getElementById("".concat(location, "_tokens"));
             if (!node) {
                 return;
             }
-            var split = id.split("_");
-            var type = split[0];
-            var isPawn = type === PAWN;
-            node.insertAdjacentHTML("beforeend", isPawn
-                ? tplPawn({ id: id, bank: split[1] })
-                : tplChessPiece({ id: id, type: type, religion: split[1] }));
+            node.insertAdjacentHTML("beforeend", tplToken(token));
         });
     };
     PlayerTableau.prototype.addCard = function (card) {
@@ -3981,8 +3941,8 @@ var PlayerTableau = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log('location', card.location);
-                        if (!(card.location.split('_')[1] === EAST)) return [3, 2];
+                        console.log("location", card.location);
+                        if (!(card.location.split("_")[1] === EAST)) return [3, 2];
                         return [4, this.tableauEast.addCard(card)];
                     case 1:
                         _a.sent();
@@ -4016,69 +3976,69 @@ var tplPlayerTableauxContainer = function (_a) {
     })
         .join(""), "\n    </div>\n  ");
 };
-var ChessPieceCounter = (function () {
-    function ChessPieceCounter() {
+var TokenCounter = (function () {
+    function TokenCounter() {
         this.counter = new ebg.counter();
     }
-    ChessPieceCounter.prototype.setup = function (_a) {
-        var bank = _a.bank, religion = _a.religion, type = _a.type, value = _a.value;
+    TokenCounter.prototype.setup = function (_a) {
+        var separator = _a.separator, type = _a.type, value = _a.value;
         var supplyContainer = document.getElementById('pr_supply');
         if (!supplyContainer) {
             return;
         }
-        supplyContainer.insertAdjacentHTML('beforeend', tplChessPieceCounter({ id: "".concat(type, "_").concat(religion !== null && religion !== void 0 ? religion : bank, "_supply"), bank: bank, type: type, religion: religion }));
-        this.counter.create("".concat(type, "_").concat(religion !== null && religion !== void 0 ? religion : bank, "_supply_counter"));
+        supplyContainer.insertAdjacentHTML('beforeend', tplTokenCounter({ id: "".concat(type, "_").concat(separator, "_supply"), separator: separator, type: type }));
+        this.counter.create("".concat(type, "_").concat(separator, "_supply_counter"));
         this.counter.setValue(value);
     };
-    ChessPieceCounter.prototype.incValue = function (value) {
+    TokenCounter.prototype.incValue = function (value) {
         this.counter.incValue(value);
     };
-    return ChessPieceCounter;
+    return TokenCounter;
 }());
 var Supply = (function () {
     function Supply(game) {
         var _a, _b, _c, _d;
-        this.chessPieceCounters = (_a = {},
+        this.tokenCounters = (_a = {},
             _a[CATHOLIC] = (_b = {},
-                _b[BISHOP] = new ChessPieceCounter(),
-                _b[KNIGHT] = new ChessPieceCounter(),
-                _b[PIRATE] = new ChessPieceCounter(),
-                _b[ROOK] = new ChessPieceCounter(),
+                _b[BISHOP] = new TokenCounter(),
+                _b[KNIGHT] = new TokenCounter(),
+                _b[PIRATE] = new TokenCounter(),
+                _b[ROOK] = new TokenCounter(),
                 _b),
             _a[ISLAMIC] = (_c = {},
-                _c[BISHOP] = new ChessPieceCounter(),
-                _c[KNIGHT] = new ChessPieceCounter(),
-                _c[PIRATE] = new ChessPieceCounter(),
-                _c[ROOK] = new ChessPieceCounter(),
+                _c[BISHOP] = new TokenCounter(),
+                _c[KNIGHT] = new TokenCounter(),
+                _c[PIRATE] = new TokenCounter(),
+                _c[ROOK] = new TokenCounter(),
                 _c),
             _a[REFORMIST] = (_d = {},
-                _d[BISHOP] = new ChessPieceCounter(),
-                _d[KNIGHT] = new ChessPieceCounter(),
-                _d[PIRATE] = new ChessPieceCounter(),
-                _d[ROOK] = new ChessPieceCounter(),
+                _d[BISHOP] = new TokenCounter(),
+                _d[KNIGHT] = new TokenCounter(),
+                _d[PIRATE] = new TokenCounter(),
+                _d[ROOK] = new TokenCounter(),
                 _d),
             _a.banks = {},
             _a);
         this.game = game;
         var gamedatas = game.gamedatas;
-        this.setupChessPieceCounters({ gamedatas: gamedatas });
+        this.setupTokenCounters({ gamedatas: gamedatas });
     }
-    Supply.prototype.setupChessPieceCounters = function (_a) {
+    Supply.prototype.setupTokenCounters = function (_a) {
         var _this = this;
         var gamedatas = _a.gamedatas;
-        console.log('setupChessPieceCounters');
+        console.log('setupTokenCounters');
         [BISHOP, KNIGHT, ROOK, PIRATE].forEach(function (type) {
             RELIGIONS.forEach(function (religion) {
-                var counter = _this.chessPieceCounters[religion][type];
-                counter.setup({ religion: religion, type: type, value: gamedatas.tokens.supply[religion][type] });
+                var counter = _this.tokenCounters[religion][type];
+                counter.setup({ separator: religion, type: type, value: gamedatas.tokens.supply[religion][type] });
             });
         });
         var entries = Object.entries(gamedatas.tokens.supply.banks);
         entries.forEach(function (_a) {
             var bank = _a[0], count = _a[1];
-            _this.chessPieceCounters.banks[bank] = new ChessPieceCounter();
-            var counter = _this.chessPieceCounters.banks[bank];
-            counter.setup({ bank: bank, type: PAWN, value: count });
+            _this.tokenCounters.banks[bank] = new TokenCounter();
+            var counter = _this.tokenCounters.banks[bank];
+            counter.setup({ separator: bank, type: PAWN, value: count });
         });
     };
     Supply.prototype.incValue = function (_a) {
@@ -4086,10 +4046,10 @@ var Supply = (function () {
         var bank = _a.bank, religion = _a.religion, type = _a.type, value = _a.value;
         var counter = null;
         if (type === PAWN) {
-            counter = (_c = (_b = this.chessPieceCounters) === null || _b === void 0 ? void 0 : _b.banks) === null || _c === void 0 ? void 0 : _c[bank];
+            counter = (_c = (_b = this.tokenCounters) === null || _b === void 0 ? void 0 : _b.banks) === null || _c === void 0 ? void 0 : _c[bank];
         }
         else {
-            counter = (_e = (_d = this.chessPieceCounters) === null || _d === void 0 ? void 0 : _d[religion]) === null || _e === void 0 ? void 0 : _e[type];
+            counter = (_e = (_d = this.tokenCounters) === null || _d === void 0 ? void 0 : _d[religion]) === null || _e === void 0 ? void 0 : _e[type];
         }
         if (!counter) {
             return;
@@ -4098,7 +4058,7 @@ var Supply = (function () {
     };
     return Supply;
 }());
-var SUPPLY_CHESS_PIECES_CONFIG = [
+var SUPPLY_TOKENS_CONFIG = [
     {
         type: BISHOP,
         religion: CATHOLIC,
@@ -4136,9 +4096,9 @@ var SUPPLY_CHESS_PIECES_CONFIG = [
         religion: REFORMIST,
     },
 ];
-var tplChessPieceCounter = function (_a) {
-    var id = _a.id, bank = _a.bank, religion = _a.religion, type = _a.type;
-    return "\n    <div class=\"pr_chess_piece_counter_container\">\n      <span id=\"".concat(id, "_counter\" ></span>\n      <div class=\"pr_chess_piece_counter_chess_piece\">\n        ").concat(type === PAWN ? tplPawn({ id: id, bank: bank }) : tplChessPiece({ id: id, type: type, religion: religion }), "\n      </div>\n    </div>");
+var tplTokenCounter = function (_a) {
+    var id = _a.id, separator = _a.separator, type = _a.type;
+    return "\n    <div class=\"pr_token_counter_container\">\n      <span id=\"".concat(id, "_counter\" ></span>\n      <div class=\"pr_token_counter_token\">\n        ").concat(tplToken({ id: id, type: type, separator: separator }), "\n      </div>\n    </div>");
 };
 var tplGameMapSupply = function () {
     return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
