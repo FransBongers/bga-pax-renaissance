@@ -7,6 +7,7 @@ const LOG_TOKEN_PLAYER_NAME = "playerName";
 const LOG_TOKEN_FLORIN = "florin";
 const LOG_TOKEN_MAP_TOKEN = "mapToken";
 const LOG_TOKEN_ONE_SHOT = "oneShot";
+const LOG_TOKEN_PRESTIGE = 'prestige'
 // const LOG_TOKEN_PAWN = "pawn";
 
 let tooltipIdCounter = 0;
@@ -49,6 +50,8 @@ const getTokenDiv = ({
             color: player.getHexColor(),
           })
         : value;
+    case LOG_TOKEN_PRESTIGE:
+      return tplIcon({icon: `prestige_${value}`, classes: 'pr_prestige_icon'})
     default:
       return value;
   }

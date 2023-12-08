@@ -72,7 +72,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     $info = $this->ctx->getInfo();
     $empireId = $info['empireId'];
     $agents = $info['agents'];
-    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 0;
+    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 1;
 
     $exludedLocationIds = isset($info['exludedLocationIds']) ? $info['exludedLocationIds'] : [];
     // $borders = ->getBorders();
@@ -113,7 +113,8 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     Notifications::log('locationId', $locationId);
 
     $skipped = $locationId === null;
-    if ($skipped && !$this->ctx->isOptional()) {
+    $optional = $this->ctx->isOptional();
+    if ($skipped && !$optional) {
       throw new \feException("Not allowed to skip");
     }
 
@@ -126,13 +127,13 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
 
     $type = $agent['type'];
+    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 0;
 
     if (!$skipped) {
       $locationType = $type === BISHOP ? $stateArgs['locations'][$locationId]->getType() : $stateArgs['locations'][$locationId]['type'];
 
       $player = self::getPlayer();
       $info = $this->ctx->getInfo();
-      $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 0;
 
       $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
 
@@ -154,6 +155,8 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
         'agents' => $agents,
         'empireId' => $this->ctx->getInfo()['empireId'],
         'exludedLocationIds' => [$locationId],
+        'optional' => $optional,
+        'repressCost' => $repressCost,
       ]));
     }
 

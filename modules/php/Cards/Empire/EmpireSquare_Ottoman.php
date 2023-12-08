@@ -10,6 +10,7 @@ class EmpireSquare_Ottoman extends \PaxRenaissance\Models\EmpireCard
     $this->empire = OTTOMAN;
     $this->nameKing = clienttranslate('Sultan Mehmed II the Conqueror');
     $this->nameRepublic = clienttranslate('Ottoman Millet System');
+    $this->prestige = [ISLAMIC];
     $this->startLocation = 'throne_ottoman';
   }
 }

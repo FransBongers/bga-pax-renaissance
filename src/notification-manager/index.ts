@@ -36,14 +36,15 @@ class NotificationManager {
     const notifs: [id: string, wait: number][] = [
       // checked
       ["log", undefined],
+      ["discardCard", undefined],
       ["flipVictoryCard", undefined],
-      ["killToken", undefined],
       ["moveToken", undefined],
       ["placeToken", undefined],
       ["playCard", undefined],
       ["purchaseCard", undefined],
       ["refreshMarket", undefined],
       ["repressToken", undefined],
+      ["returnToSupply", undefined],
       ["sellCard", undefined],
       ["tradeFairConvene", undefined],
       ["tradeFairEmporiumSubsidy", undefined],
@@ -99,6 +100,15 @@ class NotificationManager {
     return Promise.resolve();
   }
 
+  async notif_discardCard(notif: Notif<NotifDiscardCardArgs>) {
+    const { playerId, card, toLocationId } = notif.args;
+    if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
+      this.game.tableauCardManager.removeCard(card);
+    } else if (card.type === EMPIRE_CARD) {
+      this.game.gameMap.getEmpireSquareStock({empireId: card.empire}).addCard(card);
+    }
+  }
+
   async notif_flipVictoryCard(notif: Notif<NotifFlipVictoryCardArgs>) {
     const { playerId, card } = notif.args;
     this.game.victoryCardManager.flipCard(card);
@@ -141,7 +151,7 @@ class NotificationManager {
     return Promise.resolve();
   }
 
-  async notif_killToken(notif: Notif<NotifKillTokenArgs>) {
+  async notif_returnToSupply(notif: Notif<NotifReturnToSupplyArgs>) {
     const { playerId, token } = notif.args;
 
     const node = document.getElementById(token.id);
@@ -302,6 +312,7 @@ class NotificationManager {
     )
   }
 
+  // TODO: check if we can replace this with discardCard
   async notif_sellCard(notif: Notif<NotifSellCardArgs>) {
     const { playerId, card, value } = notif.args;
     const player = this.getPlayer({ playerId });

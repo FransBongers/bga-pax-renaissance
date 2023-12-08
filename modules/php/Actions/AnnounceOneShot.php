@@ -66,6 +66,7 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
         'agents' => $card->getAgents(),
         'empireId' => $card->getEmpire(),
         'optional' => true,
+        'repressCost' => 1,
       ]));
     }
 
@@ -115,7 +116,7 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
   public function actAnnounceOneShot($args)
   {
     self::checkAction('actAnnounceOneShot');
-    
+
 
     $oneShotOccurs = $args['occurs'];
     Notifications::log('actAnnounceOneShot', $oneShotOccurs);
@@ -158,6 +159,10 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
   private function canOneShotOccur($oneShot)
   {
     switch ($oneShot) {
+      case APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT:
+      case APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT:
+      case APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT:
+        return true;
       case TRADE_SHIFT_NOVGOROD_ONE_SHOT:
       case TRADE_SHIFT_RED_SEA_ONE_SHOT:
       case TRADE_SHIFT_TIMBUKTU_ONE_SHOT:

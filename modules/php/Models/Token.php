@@ -54,6 +54,11 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     return $this;
   }
 
+  public function getSeparator()
+  {
+    return $this->separator;
+  }
+
   public function getType()
   {
     return $this->type;
@@ -77,6 +82,16 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
       $player->incFlorins(-$cost); // TODO depends on why token is repressed
     }
     Notifications::repressToken($player, $this, $oldLocation, $cost);
+  }
+
+  public function returnToSupply($player = null, $notify = true)
+  {
+    $fromLocation = $this->getLocationInstance();
+    $this->move(Locations::supply($this->type, $this->separator), false);
+    
+    if ($notify) {
+      Notifications::returnToSupply($player, $this, $fromLocation);
+    }
   }
 
   public function getLocationInstance($locationId = null)

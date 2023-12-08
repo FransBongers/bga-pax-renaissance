@@ -95,7 +95,7 @@ interface EmpireCard extends PaxRenCard {
   nameRepublic: string;
   // flavorText: string[];
   // name: string;
-  // prestige: string[];
+  prestige: string[];
   // region: "east" | "west";
   type: "empireCard";
 }
@@ -189,8 +189,8 @@ interface PaxRenaissancePlayerData extends BgaPlayer {
   };
   tableau: {
     cards: {
-      east: TableauCard[];
-      west: TableauCard[];
+      east: (EmpireCard | TableauCard)[];
+      west: (EmpireCard | TableauCard)[];
     };
     tokens: Token[];
   };

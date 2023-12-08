@@ -1,5 +1,7 @@
 <?php
+
 namespace PaxRenaissance\Managers;
+
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Managers\Players;
@@ -11,6 +13,9 @@ class AtomicActions
   // Mapping of actionId and corresponding class
   static $classes = [
     ANNOUNCE_ONE_SHOT => 'AnnounceOneShot',
+    APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT => 'ApostacyOneShot',
+    APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT => 'ApostacyOneShot',
+    APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT => 'ApostacyOneShot',
     BISHOP_DIET_OF_WORMS => 'BishopDietOfWorms',
     BISHOP_PACIFICATION => 'BishopPacification',
     FLIP_VICTORY_CARD => 'FlipVictoryCard',
@@ -18,6 +23,7 @@ class AtomicActions
     PLAY_CARD => 'PlayCard',
     PLAYER_ACTION => 'PlayerAction',
     PURCHASE_CARD => 'PurchaseCard',
+    RESOLVE_DISCARD_CARD => 'ResolveDiscardCard',
     RESOLVE_PLACE_TOKEN => 'ResolvePlaceToken',
     SELL_CARD => 'SellCard',
     SELECT_TOKEN => 'SelectToken',

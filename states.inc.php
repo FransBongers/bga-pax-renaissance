@@ -296,6 +296,22 @@ $machinestates = [
         'transitions' => [],
     ],
 
+    ST_APOSTACY_ONE_SHOT => [
+        'name' => 'apostacyOneShot',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_RESOLVE_DISCARD_CARD => [
+        'name' => 'resolveDiscardCard',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',

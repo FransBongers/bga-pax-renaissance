@@ -32,6 +32,11 @@ const PR_SELECTABLE = "pr_selectable";
 const PR_SELECTED = "pr_selected";
 
 /**
+ * Card locations
+ */
+const DISCARD = 'discard';
+
+/**
  * Banks
  */
 const FUGGER = 'fugger';

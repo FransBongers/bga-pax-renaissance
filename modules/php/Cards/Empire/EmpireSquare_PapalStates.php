@@ -10,6 +10,7 @@ class EmpireSquare_PapalStates extends \PaxRenaissance\Models\EmpireCard
     $this->empire = PAPAL_STATES;
     $this->nameKing = clienttranslate('Pope Julius II');
     $this->nameRepublic = clienttranslate('Florentine Signoria');
+    $this->prestige = [CATHOLIC, PATRON];
     $this->startLocation = 'throne_papalStates';
   }
 }

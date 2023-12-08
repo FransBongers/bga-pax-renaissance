@@ -53,7 +53,20 @@ class TableauCard extends Card
   // .##.....##.##..........##.....##..##.....##.##.##.##..######.
   // .#########.##..........##.....##..##.....##.##..####.......##
   // .##.....##.##....##....##.....##..##.....##.##...###.##....##
-  // .##.....##..######.....##....####..#######..##....##..######.Ì
+  // .##.....##..######.....##....####..#######..##....##..######.
+
+  public function discard($player = null)
+  {
+    $player = $player === null ? Players::get() : $player;
+    $tokens = $this->getTokens();
+    foreach ($tokens as $token) {
+      $token->returnToSupply($player, true);
+    }
+
+    Cards::insertOnTop($this->getId(), DISCARD);
+    $this->location = DISCARD;
+    Notifications::discardCard($player, $this, DISCARD);
+  }
 
   public function purchase($player, $ctx = null)
   {

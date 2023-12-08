@@ -2078,6 +2078,10 @@
   --paxRenTokenScale: 0.7;
   margin-bottom: -5px;
 }
+.log > .roundedbox .pr_prestige_icon {
+  margin-bottom: -6px;
+  --paxRenIconScale: 0.8;
+}
 
 #pr_market_west_deck,
 #pr_market_east_deck {

@@ -15,15 +15,17 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\PlayersExtra;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
+use PaxRenaissance\Models\Card;
 
 trait DebugTrait
 {
   function test()
   {
-    Notifications::log('tableau', Cards::get('PREN101X_CivilEngineer'));
+    // Cards::insertAtBottom('EmpireSquare_PapalStates', Locations::tableau(2371053, WEST));
+    // Notifications::log('tableau', Cards::get('PREN101X_CivilEngineer'));
     // Notifications::log('thrones', Cards::getAllCardsInThrones());
     // Notifications::log('merged', array_merge(Cards::getAllCardsInTableaux(),Cards::getAllCardsInThrones()));
-    // $this->debugPlaceToken(PAWN, MEDICI, BORDER_ARAGON_FRANCE);
+    $this->debugPlaceToken(BISHOP, REFORMIST, 'EmpireSquare_PapalStates');
     // $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ENGLAND_FRANCE);
 
     // Notifications::log('Token', Borders::get(BORDER_FRANCE_HOLY_ROMAN_EMPIRE)->getToken());
@@ -33,8 +35,8 @@ trait DebugTrait
   }
 
   //debugPlaceToken(pawn, medici, border_aragon_france)
-  function debugPlaceToken($type, $bankOrReligion, $locationId) {
-    $supply = Locations::supply($type, $bankOrReligion);
+  function debugPlaceToken($type, $separator, $locationId) {
+    $supply = Locations::supply($type, $separator);
     
     $token = Tokens::getTopOf($supply);
     Notifications::log('token', $token);

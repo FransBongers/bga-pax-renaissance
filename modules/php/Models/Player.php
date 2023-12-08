@@ -49,7 +49,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     $isCurrentPlayer = intval($currentPlayerId) == $this->getId();
     $extra = PlayersExtra::get($this->getId());
     $hand = $this->getHand();
-    $tableauCards = $this->getTableauCards();
+    $tableauCards = $this->getTableauCardsPerRegion();
     // return $data;
     return array_merge($data, [
       'bank' => $extra['bank'],
@@ -106,6 +106,12 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
 
   public function getTableauCards()
   {
+    $tableauCards = $this->getTableauCardsPerRegion();
+    return array_merge($tableauCards[EAST], $tableauCards[WEST]);
+  }
+
+  public function getTableauCardsPerRegion()
+  {
     return [
       EAST => Cards::getInLocation(Locations::tableau($this->getId(), EAST))->toArray(),
       WEST => Cards::getInLocation(Locations::tableau($this->getId(), WEST))->toArray(),
@@ -123,7 +129,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       PATRON => 0,
     ];
     $tableauCards = $this->getTableauCards();
-    foreach(array_merge($tableauCards[EAST], $tableauCards[WEST]) as $card) {
+    foreach($tableauCards as $card) {
       foreach($card->getPrestige() as $prestige) {
         $result[$prestige] = $result[$prestige] + 1;
       }

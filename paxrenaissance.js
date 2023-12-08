@@ -15,6 +15,7 @@ var DISABLED = "disabled";
 var PR_NONE = "pr_none";
 var PR_SELECTABLE = "pr_selectable";
 var PR_SELECTED = "pr_selected";
+var DISCARD = 'discard';
 var FUGGER = 'fugger';
 var MEDICI = 'medici';
 var COEUR = 'coeur';
@@ -2943,6 +2944,7 @@ var LOG_TOKEN_PLAYER_NAME = "playerName";
 var LOG_TOKEN_FLORIN = "florin";
 var LOG_TOKEN_MAP_TOKEN = "mapToken";
 var LOG_TOKEN_ONE_SHOT = "oneShot";
+var LOG_TOKEN_PRESTIGE = 'prestige';
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
@@ -2973,6 +2975,8 @@ var getTokenDiv = function (_a) {
                     color: player.getHexColor(),
                 })
                 : value;
+        case LOG_TOKEN_PRESTIGE:
+            return tplIcon({ icon: "prestige_".concat(value), classes: 'pr_prestige_icon' });
         default:
             return value;
     }
@@ -3305,14 +3309,15 @@ var NotificationManager = (function () {
         console.log("notifications subscriptions setup");
         var notifs = [
             ["log", undefined],
+            ["discardCard", undefined],
             ["flipVictoryCard", undefined],
-            ["killToken", undefined],
             ["moveToken", undefined],
             ["placeToken", undefined],
             ["playCard", undefined],
             ["purchaseCard", undefined],
             ["refreshMarket", undefined],
             ["repressToken", undefined],
+            ["returnToSupply", undefined],
             ["sellCard", undefined],
             ["tradeFairConvene", undefined],
             ["tradeFairEmporiumSubsidy", undefined],
@@ -3340,6 +3345,21 @@ var NotificationManager = (function () {
             return __generator(this, function (_a) {
                 debug("notif_log", notif.args);
                 return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_discardCard = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card, toLocationId;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, card = _a.card, toLocationId = _a.toLocationId;
+                if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
+                    this.game.tableauCardManager.removeCard(card);
+                }
+                else if (card.type === EMPIRE_CARD) {
+                    this.game.gameMap.getEmpireSquareStock({ empireId: card.empire }).addCard(card);
+                }
+                return [2];
             });
         });
     };
@@ -3372,7 +3392,7 @@ var NotificationManager = (function () {
             });
         });
     };
-    NotificationManager.prototype.notif_killToken = function (notif) {
+    NotificationManager.prototype.notif_returnToSupply = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, token, node, split;
             return __generator(this, function (_b) {

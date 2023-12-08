@@ -10,7 +10,7 @@ const tplIcon = ({
   children?: string;
   classes?: string;
   extra?: string;
-  icon: 'florin' | 'east_back';
+  icon: string;
   style?: string;
 }): string =>
   `<div ${id ? `id="${id}"` : ''} class="pr_icon${classes ? ` ${classes}`: ''}" data-icon="${icon}" ${extra} ${style ? `style="${style}"` : ''}>

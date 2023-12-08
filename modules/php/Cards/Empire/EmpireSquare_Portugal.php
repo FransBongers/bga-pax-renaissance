@@ -10,6 +10,7 @@ class EmpireSquare_Portugal extends \PaxRenaissance\Models\EmpireCard
     $this->empire = PORTUGAL;
     $this->nameKing = clienttranslate('Henry the Navigator');
     $this->nameRepublic = clienttranslate('Cortes Generales of Castile');
+    $this->prestige = [DISCOVERY];
     $this->startLocation = 'throne_portugal';
   }
 }

@@ -107,11 +107,30 @@ class Notifications
    **** GAME METHODS ****
    *************************/
 
+  public static function apostacy($player, $prestigeMap)
+  {
+    self::message(clienttranslate('${tkn_playerName} must Discard all cards with ${tkn_prestige_1} or ${tkn_prestige_2}'), [
+      'player' => $player,
+      'tkn_prestige_1' => $prestigeMap[0],
+      'tkn_prestige_2' => $prestigeMap[1],
+    ]);
+  }
+
   public static function chooseNotToKill($player)
   {
 
     self::notifyAll("chooseNotToKill",  clienttranslate('${tkn_playerName} chooses not to Kill a Token'), [
       'player' => $player,
+    ]);
+  }
+
+  public static function discardCard($player, $card, $toLocationId)
+  {
+    self::notifyAll("discardCard",  clienttranslate('${tkn_playerName} discards ${tkn_boldText}'), [
+      'player' => $player,
+      'tkn_boldText' => $card->getName(),
+      'card' => $card,
+      'toLocationId' => $toLocationId,
     ]);
   }
 
@@ -129,10 +148,10 @@ class Notifications
   {
 
     $isPawn = $token->getType() === PAWN;
-    self::notifyAll("killToken",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
+    self::notifyAll("returnToSupply",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-      'tkn_boldText' => '',//$fromLocation->getName(),
+      'tkn_boldText' => $fromLocation->getName(),
       'from' => $fromLocation,
       'token' => $token,
     ]);
@@ -171,7 +190,7 @@ class Notifications
       'tkn_oneShot' => $oneShot,
     ]);
   }
-  
+
   public static function placeToken($player, $token, $fromLocationId, $toLocation = null)
   {
     $isPawn = $token->getType() === PAWN;
@@ -225,6 +244,17 @@ class Notifications
       'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
       'cost' => $cost,
+    ]);
+  }
+
+  public static function returnToSupply($player, $token, $fromLocation)
+  {
+    self::notifyAll("returnToSupply", clienttranslate('${tkn_playerName} returns ${tkn_mapToken} from ${tkn_boldText} to the supply'), [
+      'player' => $player,
+      'tkn_mapToken' => $token->getSeparator() . '_'. $token->getType(),
+      'tkn_boldText' => $fromLocation->getName(),
+      'token' => $token,
+      'from' => $fromLocation,
     ]);
   }
 
