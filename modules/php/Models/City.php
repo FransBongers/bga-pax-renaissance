@@ -47,7 +47,7 @@ class City implements \JsonSerializable
 
   public function getEmpire()
   {
-    return Empires::get($this->empire);
+    return $this->empire;
   }
 
   public function getEmporium()
@@ -72,7 +72,7 @@ class City implements \JsonSerializable
       return null;
     }
 
-    $religion = self::getEmpire()->getReligion();
+    $religion = Empires::get($this->empire)->getReligion();
 
     return $this->levy[$religion];
   }
@@ -87,14 +87,14 @@ class City implements \JsonSerializable
     return null;
   }
 
-  public function placeToken($token)
+  public function placeToken($token, $repressCost = 1)
   {
     $currentToken = $this->getToken();
     if ($currentToken !== null) {
-      $currentToken->repress($this->empire);
+      $currentToken->repress($this->empire, $repressCost);
     }
     $fromLocationId = $token->getLocation();
-    $token = $token->move($this->getId());
+    $token = $token->move($this->getId(), false);
     Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
   }
 

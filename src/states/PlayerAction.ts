@@ -89,10 +89,11 @@ class PlayerActionState implements State {
 
   private updateInterfaceOnClickHandCard({ card }: { card: TableauCard }) {
     this.game.clearPossible();
-    const node = document.getElementById(`${card.id.split("_")[0]}-front`);
-    if (node) {
-      node.classList.add(PR_SELECTED);
-    }
+    this.game.setCardSelected({card});
+    // const node = document.getElementById(`${card.id.split("_")[0]}-front`);
+    // if (node) {
+    //   node.classList.add(PR_SELECTED);
+    // }
     this.game.clientUpdatePageTitle({
       text: "Play or sell ${cardName}?",
       args: {

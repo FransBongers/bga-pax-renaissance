@@ -12,7 +12,7 @@ class FlipVictoryCardState implements State {
   }
 
   onLeavingState() {
-    debug("Leaving ConfirmTurnState");
+    debug("Leaving FlipVictoryCardState");
   }
 
   setDescription(activePlayerId: number) {

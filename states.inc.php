@@ -278,6 +278,24 @@ $machinestates = [
         'possibleactions' => ['actBishopPacification', 'pass'],
     ],
 
+    ST_ANNOUNCE_ONE_SHOT => [
+        'name' => 'announceOneShot',
+        'description' => clienttranslate('${actplayer} must decide if One-shot occurs'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actAnnounceOneShot', 'pass'],
+    ],
+
+    ST_TRADE_SHIFT_ONE_SHOT => [
+        'name' => 'tradeShiftOneShot',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',

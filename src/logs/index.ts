@@ -6,7 +6,8 @@ const LOG_TOKEN_PLAYER_NAME = "playerName";
 // Game specific
 const LOG_TOKEN_FLORIN = "florin";
 const LOG_TOKEN_MAP_TOKEN = "mapToken";
-const LOG_TOKEN_PAWN = "pawn";
+const LOG_TOKEN_ONE_SHOT = "oneShot";
+// const LOG_TOKEN_PAWN = "pawn";
 
 let tooltipIdCounter = 0;
 
@@ -33,9 +34,12 @@ const getTokenDiv = ({
       const mtValue = value.split("_");
       return mtValue[1] === PAWN
         ? tplPawn({ bank: mtValue[0] })
+        : mtValue[1] === DISK
+        ? tplChessPiece({ type: DISK, color: mtValue[0] })
         : tplChessPiece({ type: mtValue[1], religion: mtValue[0] });
-    case LOG_TOKEN_PAWN:
-
+    case LOG_TOKEN_ONE_SHOT:
+      return tplOneShot({ oneShot: value });
+    // case LOG_TOKEN_PAWN:
     case LOG_TOKEN_PLAYER_NAME:
       const player =
         value === "${you}"
@@ -56,9 +60,9 @@ const getTokenDiv = ({
 
 const tknFlorin = () => {
   return _("Florin(s)");
-}
+};
 
 const tknMapToken = (tokenId: string) => {
-  const split = tokenId.split('_');
+  const split = tokenId.split("_");
   return `${split[1]}_${split[0]}`;
-}
+};

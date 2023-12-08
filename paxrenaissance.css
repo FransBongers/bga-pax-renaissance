@@ -2061,6 +2061,10 @@
   margin-bottom: -8px;
   --paxRenChessPieceScale: 0.7;
 }
+#pagemaintitletext .pr_one_shot {
+  display: inline-block;
+  margin-bottom: -14px;
+}
 
 .log > .roundedbox .pr_icon {
   display: inline-block;
@@ -2189,6 +2193,215 @@
 .pr_market_stock {
   width: 100%;
   height: 100%;
+}
+
+.pr_one_shot {
+  background-image: url("img/one_shots.webp");
+  background-size: 600% 300%;
+  background-repeat: no-repeat;
+  width: calc(var(--paxRenIconScale) * 100px);
+  height: calc(var(--paxRenIconScale) * 58px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
+}
+
+.pr_one_shot[data-one-shot-id=APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT] {
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_one_shot[data-one-shot-id=APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT] {
+  background-position-x: 20%;
+  background-position-y: 0%;
+}
+
+.pr_one_shot[data-one-shot-id=APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT] {
+  background-position-x: 40%;
+  background-position-y: 0%;
+}
+
+.pr_one_shot[data-one-shot-id=CONSPIRACY_ONE_SHOT] {
+  background-position-x: 60%;
+  background-position-y: 0%;
+}
+
+.pr_one_shot[data-one-shot-id=CORONATION_ONE_SHOT] {
+  background-position-x: 80%;
+  background-position-y: 0%;
+}
+
+.pr_one_shot[data-one-shot-id=CRUSADE_ONE_SHOT] {
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_one_shot[data-one-shot-id=JIHAD_ONE_SHOT] {
+  background-position-x: 0%;
+  background-position-y: 50%;
+}
+
+.pr_one_shot[data-one-shot-id=PEASANT_REVOLT_ONE_SHOT] {
+  background-position-x: 20%;
+  background-position-y: 50%;
+}
+
+.pr_one_shot[data-one-shot-id=REFORMATION_ONE_SHOT] {
+  background-position-x: 40%;
+  background-position-y: 50%;
+}
+
+.pr_one_shot[data-one-shot-id=TRADE_SHIFT_NOVGOROD_ONE_SHOT] {
+  background-position-x: 60%;
+  background-position-y: 50%;
+}
+
+.pr_one_shot[data-one-shot-id=TRADE_SHIFT_RED_SEA_ONE_SHOT] {
+  background-position-x: 80%;
+  background-position-y: 50%;
+}
+
+.pr_one_shot[data-one-shot-id=TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT] {
+  background-position-x: 100%;
+  background-position-y: 50%;
+}
+
+.pr_one_shot[data-one-shot-id=TRADE_SHIFT_TIMBUKTU_ONE_SHOT] {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 20%;
+  background-position-y: 100%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 40%;
+  background-position-y: 100%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 60%;
+  background-position-y: 100%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 80%;
+  background-position-y: 100%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 0%;
+  background-position-y: 150%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 20%;
+  background-position-y: 150%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 40%;
+  background-position-y: 150%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 60%;
+  background-position-y: 150%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 80%;
+  background-position-y: 150%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 100%;
+  background-position-y: 150%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 0%;
+  background-position-y: 200%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 20%;
+  background-position-y: 200%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 40%;
+  background-position-y: 200%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 60%;
+  background-position-y: 200%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 80%;
+  background-position-y: 200%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 100%;
+  background-position-y: 200%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 0%;
+  background-position-y: 250%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 20%;
+  background-position-y: 250%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 40%;
+  background-position-y: 250%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 60%;
+  background-position-y: 250%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 80%;
+  background-position-y: 250%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 100%;
+  background-position-y: 250%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 0%;
+  background-position-y: 300%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 20%;
+  background-position-y: 300%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 40%;
+  background-position-y: 300%;
+}
+
+.pr_one_shot[data-one-shot-id=""] {
+  background-position-x: 60%;
+  background-position-y: 300%;
 }
 
 .pr_chess_piece {

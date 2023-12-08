@@ -27,10 +27,16 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     'state' => ['state', 'int'],
   ];
 
-  public function move($location)
+  public function move($location, $notify = true)
   {
+    $fromLocationId = $this->getLocation();
     Tokens::move($this->getId(), $location);
     $this->location = $location;
+
+    if ($notify) {
+      Notifications::moveToken(Players::get(), $this, $this->getLocationInstance($fromLocationId), $this->getLocationInstance($location));
+    }
+
     return $this;
   }
 
@@ -42,24 +48,26 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
   public function kill()
   {
     $oldLocation = $this->getLocationInstance();
-    $this->move($this->getSupply());
+    $this->move($this->getSupply(), false);
     Notifications::killToken(Players::get(), $this, $oldLocation);
   }
 
-  public function repress($empireId)
+  public function repress($empireId, $cost = 1)
   {
     $oldLocation = $this->getLocationInstance();
-    Notifications::log('oldLocation',$oldLocation);
+    Notifications::log('oldLocation', $oldLocation);
 
-    $this->move(Empires::get($empireId)->getEmpireSquareId());
+    $this->move(Empires::get($empireId)->getEmpireSquareId(), false);
     $player = Players::get();
-    $player->incFlorins(-1); // TODO depends on why token is repressed
-    Notifications::repressToken($player, $this, $oldLocation, 1);
+    if ($cost > 0) {
+      $player->incFlorins(-$cost); // TODO depends on why token is repressed
+    }
+    Notifications::repressToken($player, $this, $oldLocation, $cost);
   }
 
-  public function getLocationInstance()
+  public function getLocationInstance($locationId = null)
   {
-    $locationId = $this->getLocation();
+    $locationId = $locationId === null ? $this->getLocation() : $locationId;
     if (Utils::startsWith($locationId, 'border')) {
       return Borders::get($locationId);
     } else if (Utils::startsWith($locationId, 'PREN') || Utils::startsWith($locationId, 'EmpireSquare')) {

@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Tokens;
 
 use PaxRenaissance\Helpers\Locations;
@@ -25,6 +26,11 @@ class ChessPiece extends \PaxRenaissance\Models\Token
     return $data;
   }
 
+  public function getLogToken()
+  {
+    return $this->getReligion() . '_' . $this->getType();
+  }
+
   public function getReligion()
   {
     return $this->religion;
@@ -32,6 +38,6 @@ class ChessPiece extends \PaxRenaissance\Models\Token
 
   public function getSupply()
   {
-    return Locations::supply($this->getType(),$this->getReligion());
+    return Locations::supply($this->getType(), $this->getReligion());
   }
 }

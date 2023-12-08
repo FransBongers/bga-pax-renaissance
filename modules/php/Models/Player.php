@@ -112,6 +112,25 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     ];
   }
 
+  public function getPrestige()
+  {
+    $result = [
+      CATHOLIC => 0,
+      ISLAMIC => 0,
+      REFORMIST => 0,
+      DISCOVERY => 0,
+      LAW => 0,
+      PATRON => 0,
+    ];
+    $tableauCards = $this->getTableauCards();
+    foreach(array_merge($tableauCards[EAST], $tableauCards[WEST]) as $card) {
+      foreach($card->getPrestige() as $prestige) {
+        $result[$prestige] = $result[$prestige] + 1;
+      }
+    }
+    return $result;
+  }
+
   public function getTokensOnTableauCards($tableauCards)
   {
     $cards = array_merge($tableauCards[EAST], $tableauCards[WEST]);

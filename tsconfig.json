@@ -63,6 +63,7 @@
     "src/supply/chessPieceCounter.ts",
     "src/supply/index.ts",
     "src/supply/templates.ts",
+    "src/states/AnnounceOneShot.ts",
     "src/states/BishopPacification.ts",
     "src/states/ClientStartTradeFair.ts",
     "src/states/ConfirmTurn.ts",

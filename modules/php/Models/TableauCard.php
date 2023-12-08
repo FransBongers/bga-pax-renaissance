@@ -114,9 +114,19 @@ class TableauCard extends Card
     return $this->agents;
   }
 
+  public function getOneShot()
+  {
+    return $this->oneShot;
+  }
+
   public function getEmpire()
   {
     return $this->empire;
+  }
+
+  public function getPrestige()
+  {
+    return $this->prestige;
   }
 
   public function getPurchaseCost()

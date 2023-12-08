@@ -12,7 +12,7 @@ class BishopPacificationState implements State {
   }
 
   onLeavingState() {
-    debug("Leaving ConfirmTurnState");
+    debug("Leaving BishopPacificationState");
   }
 
   setDescription(activePlayerId: number) {

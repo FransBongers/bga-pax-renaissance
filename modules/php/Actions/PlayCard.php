@@ -40,13 +40,22 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
 
     $card->play($player);
 
-    if ($card->getAgents() !== null) {
+    if ($card->getOneShot() !== null) {
+      $this->ctx->insertAsBrother(new LeafNode(
+        [
+          'action' => ANNOUNCE_ONE_SHOT,
+          'playerId' => $this->ctx->getPlayerId(),
+          'cardId' => $cardId,
+        ]
+      ));
+    } else if ($card->getAgents() !== null) {
       $parent = $this->ctx->getParent();
       $parent->pushChild(new LeafNode([
         'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $card->getAgents(),
         'empireId' => $card->getEmpire(),
+        'optional' => true,
       ]));
     }
 

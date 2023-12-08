@@ -32,3 +32,5 @@ const tplIcon = ({
   // }) =>
   //   `<div id="${id}" class="pr_icon" data-icon="${icon}" ${extra} style="width: 25px; height: 25px; position: absolute;"></div>`;
   
+  const tplOneShot = ({id, oneShot}: {oneShot: string; id?: string;}) => `
+  <div ${id ? `id="${id}"` : ''} class="pr_one_shot" data-one-shot-id="${oneShot}"></div>`

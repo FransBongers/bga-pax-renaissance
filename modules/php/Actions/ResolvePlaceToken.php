@@ -48,6 +48,7 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
     Notifications::log('stResolvePlaceToken',$info);
     $locationId = $info['toLocationId'];
     $locationType = $info['toLocationType'];
+    $repressCost = $info['repressCost'];
     $supply = $info['fromSupply'];
     $empireId = isset($info['empireId']) ? $info['empireId'] : null;
 
@@ -81,9 +82,9 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
     
     Notifications::log('token', $token);
     if ($locationType === BORDER) {
-      Borders::get($locationId)->placeToken($token, $empireId);
+      Borders::get($locationId)->placeToken($token, $empireId, $repressCost);
     } else if ($locationType === CITY) {
-      Cities::get($locationId)->placeToken($token);
+      Cities::get($locationId)->placeToken($token, $repressCost);
     } else if ($locationType === TABLEAU_CARD) {
       Cards::get($locationId)->placeToken($token, $this->ctx);
     } else if ($locationType === EMPIRE_CARD) {

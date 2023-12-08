@@ -38,6 +38,7 @@ class NotificationManager {
       ["log", undefined],
       ["flipVictoryCard", undefined],
       ["killToken", undefined],
+      ["moveToken", undefined],
       ["placeToken", undefined],
       ["playCard", undefined],
       ["purchaseCard", undefined],
@@ -101,6 +102,42 @@ class NotificationManager {
   async notif_flipVictoryCard(notif: Notif<NotifFlipVictoryCardArgs>) {
     const { playerId, card } = notif.args;
     this.game.victoryCardManager.flipCard(card);
+    return Promise.resolve();
+  }
+
+  async notif_moveToken(notif: Notif<NotifMoveTokenArgs>) {
+    const { playerId, token } = notif.args;
+
+
+    const tokenNode = document.getElementById(token.id);
+    const node: HTMLElement = document.getElementById(`pr_${token.location}`);
+    if (tokenNode) {
+      await this.game.animationManager.attachWithAnimation(
+        new BgaSlideAnimation({ element: tokenNode }),
+        node
+      )
+    }
+
+
+    // const node = document.getElementById(token.id);
+    // if (node) {
+    //   node.remove();
+    // }
+    // const split = token.id.split("_");
+    // if (split[0] === PAWN) {
+    //   this.game.supply.incValue({
+    //     bank: split[1],
+    //     type: split[0],
+    //     value: 1,
+    //   });
+    // } else {
+    //   this.game.supply.incValue({
+    //     religion: split[1],
+    //     type: split[0],
+    //     value: 1,
+    //   });
+    // }
+
     return Promise.resolve();
   }
 

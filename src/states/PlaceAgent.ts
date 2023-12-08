@@ -12,7 +12,7 @@ class PlaceAgentState implements State {
   }
 
   onLeavingState() {
-    debug("Leaving ConfirmTurnState");
+    debug("Leaving PlaceAgentState");
   }
 
   setDescription(activePlayerId: number) {
@@ -46,15 +46,21 @@ class PlaceAgentState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
 
-    this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must select a location to place ${tkn_mapToken}",
-      args: {
-        tkn_playerName: "${you}",
-        tkn_mapToken: this.createMapTokenId(),
-        // empireName: _(this.args.empire.name)
-      },
-    });
+    this.updatePageTitle();
     this.setLocationsSelectable();
+
+    if (this.args.optionalAction) {
+      this.game.addSkipButton({
+        callback: () =>
+          this.game.takeAction({
+            action: "actPlaceAgent",
+            args: {
+              agent: this.args.agents[0],
+              locationId: null,
+            },
+          }),
+      });
+    }
   }
 
   private updateInterfaceConfirmCard({
@@ -102,38 +108,9 @@ class PlaceAgentState implements State {
     this.game.clearPossible();
     this.game.setLocationSelected({ id });
 
-    const { name, cost, repressed } = location;
+    this.updatePageTitleConfirmLocation({ location });
     // TODO handle cases where there are two different agents
-    if (repressed) {
-      this.game.clientUpdatePageTitle({
-        text: "Place ${tkn_mapToken} on ${location} and pay ${cost} ${tkn_florin} to Repress ${tkn_mapToken_repressed} ?",
-        args: {
-          tkn_playerName: "${you}",
-          tkn_mapToken: this.createMapTokenId(),
-          location: _(name),
-          cost,
-          tkn_florin: tknFlorin(),
-          tkn_mapToken_repressed: tknMapToken(repressed.id),
-        },
-      });
-    } else {
-      this.game.clientUpdatePageTitle({
-        text: "Place ${tkn_mapToken} on ${location}?",
-        args: {
-          tkn_playerName: "${you}",
-          tkn_mapToken: this.createMapTokenId(),
-          location: _(name),
-        },
-      });
-    }
-    // const { religion, levyIcon } = this.args.possibleLevies[cityId].levy;
-    // this.game.clientUpdatePageTitle({
-    //   text: "Place ${tkn_mapToken} in ${cityName}?",
-    //   args: {
-    //     tkn_mapToken: [religion, levyIcon].join("_"),
-    //     cityName: _(this.args.possibleLevies[cityId].cityName),
-    //   },
-    // });
+
     this.game.addConfirmButton({
       callback: () =>
         this.game.takeAction({
@@ -184,6 +161,57 @@ class PlaceAgentState implements State {
         });
       }
     });
+  }
+
+  private updatePageTitle() {
+    this.game.clientUpdatePageTitle({
+      text: this.args.optionalAction
+        ? _("${tkn_playerName} may select a location to place ${tkn_mapToken}")
+        : _(
+            "${tkn_playerName} must select a location to place ${tkn_mapToken}"
+          ),
+      args: {
+        tkn_playerName: "${you}",
+        tkn_mapToken: this.createMapTokenId(),
+      },
+    });
+  }
+
+  private updatePageTitleConfirmLocation({
+    location,
+  }: {
+    location: PlaceAgentLocation;
+  }) {
+    const { name, cost, repressed } = location;
+    if (repressed) {
+      this.game.clientUpdatePageTitle({
+        text:
+          cost > 0
+            ? _(
+                "Place ${tkn_mapToken} on ${location} and pay ${cost} ${tkn_florin} to Repress ${tkn_mapToken_repressed} ?"
+              )
+            : _(
+                "Place ${tkn_mapToken} on ${location} and Repress ${tkn_mapToken_repressed} ?"
+              ),
+        args: {
+          tkn_playerName: "${you}",
+          tkn_mapToken: this.createMapTokenId(),
+          location: _(name),
+          cost,
+          tkn_florin: tknFlorin(),
+          tkn_mapToken_repressed: tknMapToken(repressed.id),
+        },
+      });
+    } else {
+      this.game.clientUpdatePageTitle({
+        text: _("Place ${tkn_mapToken} on ${location}?"),
+        args: {
+          tkn_playerName: "${you}",
+          tkn_mapToken: this.createMapTokenId(),
+          location: _(name),
+        },
+      });
+    }
   }
 
   // private createAgentLog() {

@@ -1,0 +1,36 @@
+@use "sass:math";
+@use "sass:map";
+
+.pr_one_shot {
+  background-image: url("img/one_shots.webp");
+  background-size: 600% 300%;
+  background-repeat: no-repeat;
+  // width: 302px;
+  // height: 175px;
+  width: calc(var(--paxRenIconScale) * 100px);
+  height: calc(var(--paxRenIconScale) * 58px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
+}
+
+$one-shots: (
+  1: "APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT",
+  2: "APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT",
+  3: "APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT",
+  4: "CONSPIRACY_ONE_SHOT",
+  5: "CORONATION_ONE_SHOT",
+  6: "CRUSADE_ONE_SHOT",
+  7: "JIHAD_ONE_SHOT",
+  8: "PEASANT_REVOLT_ONE_SHOT",
+  9: "REFORMATION_ONE_SHOT",
+  10: "TRADE_SHIFT_NOVGOROD_ONE_SHOT",
+  11: "TRADE_SHIFT_RED_SEA_ONE_SHOT",
+  12: "TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT",
+  13: "TRADE_SHIFT_TIMBUKTU_ONE_SHOT",
+);
+
+@for $i from 1 through 40 {
+  .pr_one_shot[data-one-shot-id="#{map.get($one-shots,$i)}"] {
+    background-position-x: math.div((($i - 1) % 6 * 100%), 5);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 6)) * 100%, 2);
+  }
+}

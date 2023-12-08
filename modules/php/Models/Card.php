@@ -57,7 +57,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
       // ]));
     }
     $fromLocationId = $token->getLocation();
-    $token = $token->move($this->getId());
+    $token = $token->move($this->getId(), false);
     Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
   }
 

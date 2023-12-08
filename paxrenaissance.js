@@ -1746,6 +1746,7 @@ var PaxRenaissance = (function () {
         this._connections = [];
         this.activeStates = (_a = {},
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
+            _a.announceOneShot = new AnnounceOneShotState(this),
             _a.bishopPacification = new BishopPacificationState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
@@ -1882,6 +1883,14 @@ var PaxRenaissance = (function () {
         this.addPrimaryActionButton({
             id: "confirm_btn",
             text: _("Confirm"),
+            callback: callback,
+        });
+    };
+    PaxRenaissance.prototype.addSkipButton = function (_a) {
+        var callback = _a.callback;
+        this.addSecondaryActionButton({
+            id: "skip_btn",
+            text: _("Skip"),
             callback: callback,
         });
     };
@@ -2947,13 +2956,17 @@ var tplIcon = function (_a) {
     var id = _a.id, children = _a.children, classes = _a.classes, _b = _a.extra, extra = _b === void 0 ? "" : _b, icon = _a.icon, style = _a.style;
     return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_icon").concat(classes ? " ".concat(classes) : '', "\" data-icon=\"").concat(icon, "\" ").concat(extra, " ").concat(style ? "style=\"".concat(style, "\"") : '', ">\n    ").concat(children || '', "\n  </div>");
 };
+var tplOneShot = function (_a) {
+    var id = _a.id, oneShot = _a.oneShot;
+    return "\n  <div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_one_shot\" data-one-shot-id=\"").concat(oneShot, "\"></div>");
+};
 var LOG_TOKEN_BOLD_TEXT = "boldText";
 var LOG_TOKEN_CARD_NAME = "cardName";
 var LOG_TOKEN_NEW_LINE = "newLine";
 var LOG_TOKEN_PLAYER_NAME = "playerName";
 var LOG_TOKEN_FLORIN = "florin";
 var LOG_TOKEN_MAP_TOKEN = "mapToken";
-var LOG_TOKEN_PAWN = "pawn";
+var LOG_TOKEN_ONE_SHOT = "oneShot";
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
@@ -2971,8 +2984,11 @@ var getTokenDiv = function (_a) {
             var mtValue = value.split("_");
             return mtValue[1] === PAWN
                 ? tplPawn({ bank: mtValue[0] })
-                : tplChessPiece({ type: mtValue[1], religion: mtValue[0] });
-        case LOG_TOKEN_PAWN:
+                : mtValue[1] === DISK
+                    ? tplChessPiece({ type: DISK, color: mtValue[0] })
+                    : tplChessPiece({ type: mtValue[1], religion: mtValue[0] });
+        case LOG_TOKEN_ONE_SHOT:
+            return tplOneShot({ oneShot: value });
         case LOG_TOKEN_PLAYER_NAME:
             var player = value === "${you}"
                 ? game.playerManager.getPlayer({ playerId: game.getPlayerId() })
@@ -2993,7 +3009,7 @@ var tknFlorin = function () {
     return _("Florin(s)");
 };
 var tknMapToken = function (tokenId) {
-    var split = tokenId.split('_');
+    var split = tokenId.split("_");
     return "".concat(split[1], "_").concat(split[0]);
 };
 var tlpLogTokenBoldText = function (_a) {
@@ -3319,6 +3335,7 @@ var NotificationManager = (function () {
             ["log", undefined],
             ["flipVictoryCard", undefined],
             ["killToken", undefined],
+            ["moveToken", undefined],
             ["placeToken", undefined],
             ["playCard", undefined],
             ["purchaseCard", undefined],
@@ -3361,6 +3378,25 @@ var NotificationManager = (function () {
                 _a = notif.args, playerId = _a.playerId, card = _a.card;
                 this.game.victoryCardManager.flipCard(card);
                 return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_moveToken = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, token, tokenNode, node;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, token = _a.token;
+                        tokenNode = document.getElementById(token.id);
+                        node = document.getElementById("pr_".concat(token.location));
+                        if (!tokenNode) return [3, 2];
+                        return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), node)];
+                    case 1:
+                        _b.sent();
+                        _b.label = 2;
+                    case 2: return [2, Promise.resolve()];
+                }
             });
         });
     };
@@ -4107,6 +4143,63 @@ var tplChessPieceCounter = function (_a) {
 var tplGameMapSupply = function () {
     return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
 };
+var AnnounceOneShotState = (function () {
+    function AnnounceOneShotState(game) {
+        this.game = game;
+    }
+    AnnounceOneShotState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    AnnounceOneShotState.prototype.onLeavingState = function () {
+        debug("Leaving AnnounceOneShotState");
+    };
+    AnnounceOneShotState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must decide if One-shot occurs",
+            args: {
+                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+            },
+            nonActivePlayers: true,
+        });
+    };
+    AnnounceOneShotState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: "${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs",
+            args: {
+                tkn_playerName: '${you}',
+                tkn_oneShot: this.args.oneShot,
+            },
+        });
+        this.game.addPrimaryActionButton({
+            id: "occurs_button",
+            text: _("Yes, occurs"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actAnnounceOneShot",
+                    args: {
+                        occurs: true,
+                    },
+                });
+            },
+        });
+        this.game.addSecondaryActionButton({
+            id: "does_not_occur_button",
+            text: _("No, does not occur"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actAnnounceOneShot",
+                    args: {
+                        occurs: false,
+                    },
+                });
+            },
+        });
+    };
+    return AnnounceOneShotState;
+}());
 var BishopPacificationState = (function () {
     function BishopPacificationState(game) {
         this.game = game;
@@ -4116,7 +4209,7 @@ var BishopPacificationState = (function () {
         this.updateInterfaceInitialStep();
     };
     BishopPacificationState.prototype.onLeavingState = function () {
-        debug("Leaving ConfirmTurnState");
+        debug("Leaving BishopPacificationState");
     };
     BishopPacificationState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
@@ -4265,7 +4358,7 @@ var FlipVictoryCardState = (function () {
         this.updateInterfaceInitialStep();
     };
     FlipVictoryCardState.prototype.onLeavingState = function () {
-        debug("Leaving ConfirmTurnState");
+        debug("Leaving FlipVictoryCardState");
     };
     FlipVictoryCardState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
@@ -4337,7 +4430,7 @@ var PlaceAgentState = (function () {
         this.updateInterfaceInitialStep();
     };
     PlaceAgentState.prototype.onLeavingState = function () {
-        debug("Leaving ConfirmTurnState");
+        debug("Leaving PlaceAgentState");
     };
     PlaceAgentState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
@@ -4351,15 +4444,23 @@ var PlaceAgentState = (function () {
         });
     };
     PlaceAgentState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
         this.game.clearPossible();
-        this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must select a location to place ${tkn_mapToken}",
-            args: {
-                tkn_playerName: "${you}",
-                tkn_mapToken: this.createMapTokenId(),
-            },
-        });
+        this.updatePageTitle();
         this.setLocationsSelectable();
+        if (this.args.optionalAction) {
+            this.game.addSkipButton({
+                callback: function () {
+                    return _this.game.takeAction({
+                        action: "actPlaceAgent",
+                        args: {
+                            agent: _this.args.agents[0],
+                            locationId: null,
+                        },
+                    });
+                },
+            });
+        }
     };
     PlaceAgentState.prototype.updateInterfaceConfirmCard = function (_a) {
         var _this = this;
@@ -4393,30 +4494,7 @@ var PlaceAgentState = (function () {
         var id = _a.id, location = _a.location;
         this.game.clearPossible();
         this.game.setLocationSelected({ id: id });
-        var name = location.name, cost = location.cost, repressed = location.repressed;
-        if (repressed) {
-            this.game.clientUpdatePageTitle({
-                text: "Place ${tkn_mapToken} on ${location} and pay ${cost} ${tkn_florin} to Repress ${tkn_mapToken_repressed} ?",
-                args: {
-                    tkn_playerName: "${you}",
-                    tkn_mapToken: this.createMapTokenId(),
-                    location: _(name),
-                    cost: cost,
-                    tkn_florin: tknFlorin(),
-                    tkn_mapToken_repressed: tknMapToken(repressed.id),
-                },
-            });
-        }
-        else {
-            this.game.clientUpdatePageTitle({
-                text: "Place ${tkn_mapToken} on ${location}?",
-                args: {
-                    tkn_playerName: "${you}",
-                    tkn_mapToken: this.createMapTokenId(),
-                    location: _(name),
-                },
-            });
-        }
+        this.updatePageTitleConfirmLocation({ location: location });
         this.game.addConfirmButton({
             callback: function () {
                 return _this.game.takeAction({
@@ -4463,6 +4541,46 @@ var PlaceAgentState = (function () {
                 });
             }
         });
+    };
+    PlaceAgentState.prototype.updatePageTitle = function () {
+        this.game.clientUpdatePageTitle({
+            text: this.args.optionalAction
+                ? _("${tkn_playerName} may select a location to place ${tkn_mapToken}")
+                : _("${tkn_playerName} must select a location to place ${tkn_mapToken}"),
+            args: {
+                tkn_playerName: "${you}",
+                tkn_mapToken: this.createMapTokenId(),
+            },
+        });
+    };
+    PlaceAgentState.prototype.updatePageTitleConfirmLocation = function (_a) {
+        var location = _a.location;
+        var name = location.name, cost = location.cost, repressed = location.repressed;
+        if (repressed) {
+            this.game.clientUpdatePageTitle({
+                text: cost > 0
+                    ? _("Place ${tkn_mapToken} on ${location} and pay ${cost} ${tkn_florin} to Repress ${tkn_mapToken_repressed} ?")
+                    : _("Place ${tkn_mapToken} on ${location} and Repress ${tkn_mapToken_repressed} ?"),
+                args: {
+                    tkn_playerName: "${you}",
+                    tkn_mapToken: this.createMapTokenId(),
+                    location: _(name),
+                    cost: cost,
+                    tkn_florin: tknFlorin(),
+                    tkn_mapToken_repressed: tknMapToken(repressed.id),
+                },
+            });
+        }
+        else {
+            this.game.clientUpdatePageTitle({
+                text: _("Place ${tkn_mapToken} on ${location}?"),
+                args: {
+                    tkn_playerName: "${you}",
+                    tkn_mapToken: this.createMapTokenId(),
+                    location: _(name),
+                },
+            });
+        }
     };
     return PlaceAgentState;
 }());
@@ -4526,10 +4644,7 @@ var PlayerActionState = (function () {
         var _this = this;
         var card = _a.card;
         this.game.clearPossible();
-        var node = document.getElementById("".concat(card.id.split("_")[0], "-front"));
-        if (node) {
-            node.classList.add(PR_SELECTED);
-        }
+        this.game.setCardSelected({ card: card });
         this.game.clientUpdatePageTitle({
             text: "Play or sell ${cardName}?",
             args: {
@@ -4728,7 +4843,7 @@ var TradeFairLevyState = (function () {
         this.updateInterfaceInitialStep();
     };
     TradeFairLevyState.prototype.onLeavingState = function () {
-        debug("Leaving ConfirmTurnState");
+        debug("Leaving TradeFairLevyState");
     };
     TradeFairLevyState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({

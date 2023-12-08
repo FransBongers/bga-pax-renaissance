@@ -40,7 +40,7 @@ trait DebugTrait
     Notifications::log('token', $token);
 
     $fromLocationId = $token->getLocation();
-    $token = $token->move($locationId);
+    $token = $token->move($locationId, false);
     Notifications::placeToken(Players::get(),$token, $fromLocationId);
   }
 

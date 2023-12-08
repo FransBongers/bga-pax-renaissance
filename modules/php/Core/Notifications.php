@@ -138,6 +138,40 @@ class Notifications
     ]);
   }
 
+  public static function moveToken($player, $token, $fromLocation, $toLocation)
+  {
+    self::notifyAll("moveToken",  clienttranslate('${tkn_playerName} moves ${tkn_mapToken} from ${tkn_boldText_from} to ${tkn_boldText_to}'), [
+      'player' => $player,
+      'tkn_mapToken' => $token->getLogToken(),
+      'tkn_boldText_from' => $fromLocation->getName(),
+      'tkn_boldText_to' => $toLocation->getName(),
+      'token' => $token,
+    ]);
+  }
+
+  public static function oneShotNotPossible($oneShot)
+  {
+    self::message(clienttranslate('Not possible to resolve One-shot ${tkn_oneShot}'), [
+      'tkn_oneShot' => $oneShot,
+    ]);
+  }
+
+  public static function oneShotDoesNotOccur($player, $oneShot)
+  {
+    self::message(clienttranslate('${tkn_playerName} decides One-shot not to occur ${tkn_oneShot}'), [
+      'player' => $player,
+      'tkn_oneShot' => $oneShot,
+    ]);
+  }
+
+  public static function oneShotOccurs($player, $oneShot)
+  {
+    self::message(clienttranslate('${tkn_playerName} decides One-shot to occur ${tkn_oneShot}'), [
+      'player' => $player,
+      'tkn_oneShot' => $oneShot,
+    ]);
+  }
+  
   public static function placeToken($player, $token, $fromLocationId, $toLocation = null)
   {
     $isPawn = $token->getType() === PAWN;

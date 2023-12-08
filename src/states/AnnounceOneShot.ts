@@ -1,27 +1,25 @@
-class TradeFairLevyState implements State {
+class AnnounceOneShotState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTradeFairLevyArgs;
+  private args: OnEnteringAnnounceOneShotArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTradeFairLevyArgs) {
+  onEnteringState(args: OnEnteringAnnounceOneShotArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TradeFairLevyState");
+    debug("Leaving AnnounceOneShotState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must select a City to place a Levy",
+      text: "${tkn_playerName} must decide if One-shot occurs",
       args: {
-        tkn_playerName: this.game.playerManager
-          .getPlayer({ playerId: activePlayerId })
-          .getName(),
+        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
       },
       nonActivePlayers: true,
     });
@@ -46,41 +44,35 @@ class TradeFairLevyState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must select a City in ${empireName} to place a Levy",
+      text: "${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs",
       args: {
-        tkn_playerName: "${you}",
-        empireName: _(this.args.empire.name)
+        tkn_playerName: '${you}',
+        tkn_oneShot: this.args.oneShot,
       },
     });
-    Object.keys(this.args.possibleLevies).forEach((cityId) => {
-      this.game.setLocationSelectable({
-        id: cityId,
-        callback: () => this.updateInterfaceConfirmPlaceLevy({cityId}),
-      });
-    });
-  }
-
-  private updateInterfaceConfirmPlaceLevy({cityId}: {cityId: string;}) {
-    this.game.clearPossible();
-    this.game.setLocationSelected({id: cityId});
-    const {religion, levyIcon} = this.args.possibleLevies[cityId].levy;
-    this.game.clientUpdatePageTitle({
-      text: "Place ${tkn_mapToken} in ${cityName}?",
-      args: {
-        tkn_mapToken: [religion, levyIcon].join('_'),
-        cityName: _(this.args.possibleLevies[cityId].cityName)
-      },
-    });
-    this.game.addConfirmButton({
+    this.game.addPrimaryActionButton({
+      id: "occurs_button",
+      text: _("Yes, occurs"),
       callback: () =>
         this.game.takeAction({
-          action: "actTradeFairLevy",
+          action: "actAnnounceOneShot",
           args: {
-            cityId,
+            occurs: true,
           },
         }),
     });
-    this.game.addCancelButton();
+    this.game.addSecondaryActionButton({
+      id: "does_not_occur_button",
+      text: _("No, does not occur"),
+      callback: () =>
+        this.game.takeAction({
+          action: "actAnnounceOneShot",
+          args: {
+            occurs: false,
+          },
+        }),
+    });
+    // this.setTokensSelectable();
   }
 
   //  .##.....##.########.####.##.......####.########.##....##
@@ -90,6 +82,8 @@ class TradeFairLevyState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.

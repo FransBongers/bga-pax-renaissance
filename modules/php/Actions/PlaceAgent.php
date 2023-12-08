@@ -72,6 +72,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     $info = $this->ctx->getInfo();
     $empireId = $info['empireId'];
     $agents = $info['agents'];
+    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 0;
 
     $exludedLocationIds = isset($info['exludedLocationIds']) ? $info['exludedLocationIds'] : [];
     // $borders = ->getBorders();
@@ -79,7 +80,8 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     $data = [
       'agents' => $agents,
       // Assumption: card only place agents of the same type
-      'locations' => $this->getLocations($empireId, $agents[0]['type'], $exludedLocationIds),
+      'locations' => $this->getLocations($empireId, $agents[0]['type'], $exludedLocationIds, $repressCost),
+      // 'repressCost' => $repressCost,
     ];
 
     return $data;
@@ -101,7 +103,6 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  // public function actPlayerAction($cardId, $strength)
   public function actPlaceAgent($args)
   {
     self::checkAction('actPlaceAgent');
@@ -111,24 +112,32 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     Notifications::log('agent', $agent);
     Notifications::log('locationId', $locationId);
 
+    $skipped = $locationId === null;
+    if ($skipped && !$this->ctx->isOptional()) {
+      throw new \feException("Not allowed to skip");
+    }
+
     $stateArgs = $this->argsPlaceAgent();
 
     // Notifications::log('argsPlaceAgent', $this->argsPlaceAgent());
 
-    if (!array_key_exists($locationId, $stateArgs['locations'])) {
+    if (!$skipped && !array_key_exists($locationId, $stateArgs['locations'])) {
       throw new \feException("Not allowed to place Agent on selected location");
     }
 
     $type = $agent['type'];
 
-    $locationType = $type === BISHOP ? $stateArgs['locations'][$locationId]->getType() : $stateArgs['locations'][$locationId]['type'];
+    if (!$skipped) {
+      $locationType = $type === BISHOP ? $stateArgs['locations'][$locationId]->getType() : $stateArgs['locations'][$locationId]['type'];
 
-    $player = self::getPlayer();
-    $info = $this->ctx->getInfo();
-    
-    $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
+      $player = self::getPlayer();
+      $info = $this->ctx->getInfo();
+      $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 0;
 
-    Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, $info['empireId']), $this->ctx);
+      $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
+
+      Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, $info['empireId'], $repressCost), $this->ctx);
+    }
 
     $agents = $stateArgs['agents'];
 
@@ -159,17 +168,17 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getLocations($empireId, $type, $exludedLocationIds)
+  private function getLocations($empireId, $type, $exludedLocationIds, $repressCost = 0)
   {
     $empires = $this->getEmpires($empireId);
     switch ($type) {
       case PIRATE:
       case PAWN:
-        return $this->getBorders($empires, $type, $exludedLocationIds);
+        return $this->getBorders($empires, $type, $exludedLocationIds, $repressCost);
         break;
       case KNIGHT:
       case ROOK:
-        return $this->getCities($empires, $type, $exludedLocationIds);
+        return $this->getCities($empires, $type, $exludedLocationIds, $repressCost);
         break;
       case BISHOP:
         return $this->getCards($empireId, $type);
@@ -186,7 +195,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
   }
 
-  private function getBorders($empires, $type, $exludedLocationIds)
+  private function getBorders($empires, $type, $exludedLocationIds, $repressCost)
   {
     $borders = array_merge(...array_map(function ($empire) {
       return $empire->getBorders();
@@ -217,7 +226,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
           $locations[$borderId] = [
             'id' => $borderId,
             'type' => BORDER,
-            'cost' => 1,
+            'cost' => $repressCost,
             'name' => $border->getName(),
             'repressed' => $tokenInLocation,
           ];
@@ -245,7 +254,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
   private function getCards($empireId, $type)
   {
-    
+
     $cards = array_merge(Cards::getAllCardsInTableaux()->toArray(), Cards::getAllCardsInThrones()->toArray());
     $validEmpireIds = [$empireId];
     if (in_array($empireId, [WEST, EAST])) {
@@ -266,7 +275,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     return $locations;
   }
 
-  private function getCities($empires, $type, $exludedLocationIds)
+  private function getCities($empires, $type, $exludedLocationIds, $repressCost)
   {
     $cities = array_merge(...array_map(function ($empire) {
       return $empire->getCities();
@@ -296,7 +305,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
         $locations[$cityId] = [
           'id' => $cityId,
           'type' => CITY,
-          'cost' => 1,
+          'cost' => $repressCost,
           'name' => $city->getName(),
           'repressed' => $token,
         ];

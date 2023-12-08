@@ -24,6 +24,10 @@ interface NotifKillTokenArgs extends NotifWithPlayerArgs {
   token: Token;
 }
 
+interface NotifMoveTokenArgs extends NotifWithPlayerArgs {
+  token: Token;
+}
+
 interface NotifPlaceTokenArgs extends NotifWithPlayerArgs {
   token: Token;
   fromLocationId: string;

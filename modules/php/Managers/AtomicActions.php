@@ -10,6 +10,7 @@ class AtomicActions
 {
   // Mapping of actionId and corresponding class
   static $classes = [
+    ANNOUNCE_ONE_SHOT => 'AnnounceOneShot',
     BISHOP_DIET_OF_WORMS => 'BishopDietOfWorms',
     BISHOP_PACIFICATION => 'BishopPacification',
     FLIP_VICTORY_CARD => 'FlipVictoryCard',
@@ -23,6 +24,10 @@ class AtomicActions
     TRADE_FAIR => 'TradeFair',
     TRADE_FAIR_PROFIT_DISPERSAL => 'TradeFairProfitDispersal',
     TRADE_FAIR_LEVY => 'TradeFairLevy',
+    TRADE_SHIFT_NOVGOROD_ONE_SHOT => 'TradeShiftOneShot',
+    TRADE_SHIFT_RED_SEA_ONE_SHOT => 'TradeShiftOneShot',
+    TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT => 'TradeShiftOneShot',
+    TRADE_SHIFT_TIMBUKTU_ONE_SHOT => 'TradeShiftOneShot',
   ];
 
   public static function get($actionId, $ctx = null)
@@ -59,10 +64,6 @@ class AtomicActions
 
   public static function getErrorMessage($actionId)
   {
-    // if ($actionId == VENOM_PAY) {
-    //   return Game::get()::translate('You no longer have enough money to pay for Venom. You must undo or restart your turn.');
-    // }
-
     $actionId = ucfirst(mb_strtolower($actionId));
     $msg = sprintf(
       Game::get()::translate(

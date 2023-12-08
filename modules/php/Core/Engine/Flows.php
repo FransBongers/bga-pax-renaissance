@@ -12,13 +12,14 @@ use PaxRenaissance\Core\Globals;
 abstract class Flows
 {
 
-  public static function placeToken($playerId, $fromSupply, $toLocationId, $toLocationType, $empireId = null)
+  public static function placeToken($playerId, $fromSupply, $toLocationId, $toLocationType, $empireId = null, $repressCost = 0)
   {
     return [
       'empireId' => $empireId,
       'fromSupply' => $fromSupply,
       'toLocationId' => $toLocationId,
       'toLocationType' => $toLocationType,
+      'repressCost' => $repressCost,
       'children' => [
         [
           'action' => RESOLVE_PLACE_TOKEN,

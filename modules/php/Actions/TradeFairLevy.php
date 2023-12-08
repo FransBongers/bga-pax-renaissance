@@ -80,16 +80,6 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
 
     Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $cityId, CITY), $this->ctx);
 
-    // $token = Tokens::getTopOf($location);
-
-    // // TODO: check what to do if supply is empty
-    // if ($token !== null) {
-    //   $token = $token->move($cityId);
-    //   // Tokens::move($piece['id'], $cityId);
-    //   // $piece['location'] = $cityId;
-      // Notifications::tradeFairPlaceLevy(self::getPlayer(),Cities::get($cityId),$token);
-    // }
-
     $this->resolveAction($args);
   }
 

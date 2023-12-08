@@ -39,6 +39,11 @@ class Pawn extends \PaxRenaissance\Models\Token
     })[0];
   }
 
+  public function getLogToken()
+  {
+    return $this->getBank() . '_' . PAWN;
+  }
+
   public function getSupply()
   {
     return Locations::supply($this->getType(),$this->getBank());

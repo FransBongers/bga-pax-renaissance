@@ -26,6 +26,11 @@ interface OnEnteringClientStartTradeFairArgs {
   city: City;
 }
 
+interface OnEnteringAnnounceOneShotArgs extends CommonArgs {
+  oneShot: string;
+}
+
+
 interface OnEnteringBishopPacificationArgs extends CommonArgs {
   tokens: Token[];
 }
@@ -50,6 +55,8 @@ interface OnEnteringPlaceAgentsArgs extends CommonArgs {
     religion: string | null;
   }[];
   locations: Record<string, PlaceAgentLocation | EmpireCard | TableauCard>;
+  optionalAction: boolean;
+  repressCost: number;
 }
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {

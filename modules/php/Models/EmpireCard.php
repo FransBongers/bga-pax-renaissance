@@ -8,6 +8,7 @@ class EmpireCard extends Card
   protected $empire;
   protected $nameKing;
   protected $nameRepublic;
+  protected $prestige = [];
   protected $startLocation;
     
   protected $staticAttributes = [
@@ -39,5 +40,10 @@ class EmpireCard extends Card
   {
     // TODO: return correct based on side that is face up
     return $this->nameKing;
+  }
+
+  public function getPrestige()
+  {
+    return $this->prestige;
   }
 }

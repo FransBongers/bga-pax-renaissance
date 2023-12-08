@@ -27,4 +27,9 @@ class Disk extends \PaxRenaissance\Models\Token
   {
     return $this->color;
   }
+
+  public function getLogToken()
+  {
+    return $this->getColor() . '_' . DISK;
+  }
 }
