@@ -17,7 +17,7 @@ class FlipVictoryCardState implements State {
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must flip an inactive Victory Card",
+      text: _("${tkn_playerName} must flip an inactive Victory Card"),
       args: {
         tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
       },
@@ -44,7 +44,7 @@ class FlipVictoryCardState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must flip an inactive Victory Card",
+      text: _("${tkn_playerName} must flip an inactive Victory Card"),
       args: {
         tkn_playerName: '${you}'
       },
@@ -60,7 +60,7 @@ class FlipVictoryCardState implements State {
     }
     node.classList.add(PR_SELECTED);
     this.game.clientUpdatePageTitle({
-      text: "Flip ${titleActive}?",
+      text: _("Flip ${titleActive}?"),
       args: {
         titleActive: _(card.titleActive),
       },

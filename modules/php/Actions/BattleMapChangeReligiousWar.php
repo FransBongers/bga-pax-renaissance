@@ -9,6 +9,7 @@ use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
+use PaxRenaissance\Helpers\OneShots;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cards;
@@ -19,11 +20,17 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
+class BattleMapChangeReligiousWar extends \PaxRenaissance\Models\AtomicAction
 {
+  private $religiousWarOneShots = [
+    CRUSADE_ONE_SHOT => CATHOLIC,
+    JIHAD_ONE_SHOT => ISLAMIC,
+    REFORMATION_ONE_SHOT => REFORMIST,
+  ];
+
   public function getState()
   {
-    return ST_BISHOP_DIET_OF_WORMS;
+    return ST_BATTLE_MAP_CHANGE_RELIGIOUS_WAR;
   }
 
   // ..######..########....###....########.########
@@ -42,45 +49,25 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stBishopDietOfWorms()
+  public function stBattleMapChangeReligiousWar()
   {
-    $info = $this->ctx->getInfo();
+    $parentInfo = $this->ctx->getParent()->getInfo();
     $player = self::getPlayer();
-    Notifications::log('stBishopDietOfWorms', $info);
+    $source = $parentInfo['source'];
+    
+    Notifications::log('stBattleMapChangeReligiousWar', $source);
 
-    $tokenId = $info['tokenId'];
-
-    $token = Tokens::get($tokenId);
-    $locationId = $token->getLocation();
-
-    $card = Cards::get($locationId);
-    $tokensOnCard = $card->getTokens();
-
-    Notifications::log('tokensOnCard', $tokensOnCard);
-
-    $bishopsOnCard = [];
-    $otherTokensOnCard = [];
-
-    foreach ($tokensOnCard as $tokenOnCard) {
-      if ($tokenOnCard->getType() === BISHOP) {
-        $bishopsOnCard[] = $tokenOnCard;
-      } else {
-        $otherTokensOnCard[] = $tokenOnCard;
-      }
+    if (!($parentInfo['battleVictorious'] && isset($this->religiousWarOneShots[$source]))) {
+      $this->resolveAction([]);
+      return;  
     }
 
-    // This should never be more than 2
-    if (count($bishopsOnCard) >= 2) {
-      foreach($bishopsOnCard as $bishop) {
-        $bishop->returnToSupply(KILL, $player);
-      }
-    } else if (count($otherTokensOnCard) > 0) {
-      $this->ctx->insertAsBrother(new LeafNode([
-        'action' => BISHOP_PACIFICATION,
-        'playerId' => $this->ctx->getPlayerId(),
-        'tokenId' => $tokenId,
-      ]));
-    }
+    $empireId = $parentInfo['empireId'];
+    $religion = $this->religiousWarOneShots[$source];
+
+    $empire = Empires::get($empireId);
+
+    $empire->changeToTheocracy($religion);
 
     $this->resolveAction([]);
   }
@@ -92,6 +79,5 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
-
 
 }

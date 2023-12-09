@@ -36,8 +36,10 @@ class NotificationManager {
     const notifs: [id: string, wait: number][] = [
       // checked
       ["log", undefined],
+      ["changeEmpireToTheocracy", undefined],
       ["discardCard", undefined],
       ["flipVictoryCard", undefined],
+      ["moveEmpireSquare", undefined],
       ["moveToken", undefined],
       ["placeToken", undefined],
       ["playCard", undefined],
@@ -100,12 +102,21 @@ class NotificationManager {
     return Promise.resolve();
   }
 
+  async notif_changeEmpireToTheocracy(
+    notif: Notif<NotifChangeEmpireToTheocracyArgs>
+  ) {
+    const { empire, religion } = notif.args;
+    this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion });
+  }
+
   async notif_discardCard(notif: Notif<NotifDiscardCardArgs>) {
     const { playerId, card, toLocationId } = notif.args;
     if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
       this.game.tableauCardManager.removeCard(card);
     } else if (card.type === EMPIRE_CARD) {
-      this.game.gameMap.getEmpireSquareStock({empireId: card.empire}).addCard(card);
+      this.game.gameMap
+        .getEmpireSquareStock({ empireId: card.empire })
+        .addCard(card);
     }
   }
 
@@ -115,9 +126,17 @@ class NotificationManager {
     return Promise.resolve();
   }
 
+  async notif_moveEmpireSquare(notif: Notif<NotifMoveEmpireSquareArgs>) {
+    const { playerId, card } = notif.args;
+
+    await this.getPlayer({ playerId }).tableau.addCard(card);
+    card.prestige.forEach((prestige) =>
+      this.getPlayer({ playerId }).counters.prestige[prestige].incValue(1)
+    );
+  }
+
   async notif_moveToken(notif: Notif<NotifMoveTokenArgs>) {
     const { playerId, token } = notif.args;
-
 
     const tokenNode = document.getElementById(token.id);
     const node: HTMLElement = document.getElementById(`pr_${token.location}`);
@@ -125,9 +144,8 @@ class NotificationManager {
       await this.game.animationManager.attachWithAnimation(
         new BgaSlideAnimation({ element: tokenNode }),
         node
-      )
+      );
     }
-
 
     // const node = document.getElementById(token.id);
     // if (node) {
@@ -182,7 +200,7 @@ class NotificationManager {
     const split = token.id.split("_");
     const isPawn = split[0] === PAWN;
     const isBishop = split[0] === BISHOP;
-    const fromSupply = fromLocationId.startsWith('supply');
+    const fromSupply = fromLocationId.startsWith("supply");
     if (fromSupply && isPawn) {
       this.game.supply.incValue({
         bank: split[1],
@@ -197,23 +215,22 @@ class NotificationManager {
       });
     }
 
-    const node = document.getElementById(isBishop ? `${token.location}_tokens` :  `pr_${token.location}`);
+    const node = document.getElementById(
+      isBishop ? `${token.location}_tokens` : `pr_${token.location}`
+    );
     if (!node) {
       return;
     }
 
     if (fromSupply) {
-      node.insertAdjacentHTML(
-        "beforeend",
-        tplToken(token)
-      );
+      node.insertAdjacentHTML("beforeend", tplToken(token));
     } else {
       const tokenNode = document.getElementById(token.id);
       if (tokenNode) {
         await this.game.animationManager.attachWithAnimation(
           new BgaSlideAnimation({ element: tokenNode }),
           node
-        )
+        );
       }
     }
 
@@ -297,7 +314,7 @@ class NotificationManager {
   async notif_repressToken(notif: Notif<NotifRepressTokenArgs>) {
     const { playerId, token, cost } = notif.args;
 
-    this.getPlayer({playerId}).counters.florins.incValue(-cost);
+    this.getPlayer({ playerId }).counters.florins.incValue(-cost);
     const element = document.getElementById(token.id);
     const empireSquareId = token.location;
     const toNode = document.getElementById(`${empireSquareId}_tokens`);
@@ -305,11 +322,11 @@ class NotificationManager {
     if (!(element && toNode)) {
       return;
     }
-    
+
     await this.game.animationManager.attachWithAnimation(
       new BgaSlideAnimation({ element }),
       toNode
-    )
+    );
   }
 
   // TODO: check if we can replace this with discardCard

@@ -6,6 +6,11 @@ class Portugal extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = PORTUGAL;
+    $this->adjacentEmpires = [
+      ARAGON,
+      ENGLAND,
+      FRANCE,
+    ];
     $this->empireSquareId = 'EmpireSquare_Portugal';
     $this->name = clienttranslate('Portugal');
     $this->borders = [

@@ -64,13 +64,6 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     return $this->type;
   }
 
-  public function kill()
-  {
-    $oldLocation = $this->getLocationInstance();
-    $this->move($this->getSupply(), false);
-    Notifications::killToken(Players::get(), $this, $oldLocation);
-  }
-
   public function repress($empireId, $cost = 1)
   {
     $oldLocation = $this->getLocationInstance();
@@ -84,15 +77,23 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     Notifications::repressToken($player, $this, $oldLocation, $cost);
   }
 
-  public function returnToSupply($player = null, $notify = true)
+  public function returnToSupply($messageType = RETURN_TO_SUPPLY, $player = null, $notify = true)
   {
-    $fromLocation = $this->getLocationInstance();
+    $fromLocationId = $this->location;
+    $fromLocation = $this->getLocationInstance($fromLocationId);
     $this->move(Locations::supply($this->type, $this->separator), false);
     
     if ($notify) {
-      Notifications::returnToSupply($player, $this, $fromLocation);
+      Notifications::returnToSupply($player, $this, $fromLocation, $messageType);
     }
   }
+
+  // public function kill()
+  // {
+  //   $oldLocation = $this->getLocationInstance();
+  //   $this->move($this->getSupply(), false);
+  //   Notifications::returnToSupply(Players::get(), $this, $oldLocation, KILL);
+  // }
 
   public function getLocationInstance($locationId = null)
   {

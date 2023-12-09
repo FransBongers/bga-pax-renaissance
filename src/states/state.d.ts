@@ -30,6 +30,17 @@ interface OnEnteringAnnounceOneShotArgs extends CommonArgs {
   oneShot: string;
 }
 
+interface OnEnteringBattleCasualtiesArgs extends CommonArgs {
+  agents: Agent[]
+  tokens: (Token & {locationName: string})[];
+  numberToEliminate: number
+}
+
+interface OnEnteringBattleLocationArgs extends CommonArgs {
+  empires: Empire[];
+  source: string;
+  data: unknown;
+}
 
 interface OnEnteringBishopPacificationArgs extends CommonArgs {
   tokens: Token[];
@@ -72,6 +83,11 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
       city: City;
     };
   };
+}
+
+interface OnEnteringRegimeChangeEmancipationArgs extends CommonArgs {
+  tokens: Token[];
+  options: Record<string, (City | Border)[]>
 }
 
 interface OnEnteringSelectTokenArgs extends CommonArgs {

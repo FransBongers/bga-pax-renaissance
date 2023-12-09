@@ -94,7 +94,7 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
   {
     $numberOfAdditionalCards = count($players) * 4;
 
-    foreach (CARDINAL_DIRECTIONS as $direction) {
+    foreach (REGIONS as $direction) {
       $pool = 'pool_' . $direction;
       $deck = 'deck_' . $direction;
       self::pickForLocation(12, $pool, $deck);

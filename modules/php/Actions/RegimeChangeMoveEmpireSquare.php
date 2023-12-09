@@ -9,6 +9,7 @@ use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
+use PaxRenaissance\Helpers\OneShots;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cards;
@@ -19,11 +20,11 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
+class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_BISHOP_DIET_OF_WORMS;
+    return ST_REGIME_CHANGE_MOVE_EMPIRE_SQUARE;
   }
 
   // ..######..########....###....########.########
@@ -42,48 +43,33 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stBishopDietOfWorms()
+  public function stRegimeChangeMoveEmpireSquare()
   {
-    $info = $this->ctx->getInfo();
+    $parentInfo = $this->ctx->getParent()->getInfo();
     $player = self::getPlayer();
-    Notifications::log('stBishopDietOfWorms', $info);
+    $playerId = $player->getId();
+    Notifications::log('stRegimeChangeMoveEmpireSquare',$parentInfo);
 
-    $tokenId = $info['tokenId'];
+    $empireId = $parentInfo['empireId'];
 
-    $token = Tokens::get($tokenId);
-    $locationId = $token->getLocation();
+    $empire = Empires::get($empireId);
 
-    $card = Cards::get($locationId);
-    $tokensOnCard = $card->getTokens();
+    $empireCard = Cards::get($empire->getEmpireSquareId());
+    $empireCardLocation = $empireCard->getLocation();
 
-    Notifications::log('tokensOnCard', $tokensOnCard);
+    $isInThrone = $empireCardLocation === Locations::throne($empireId);
+    $isInOwnTableau = $empireCardLocation === Locations::tableau($playerId, EAST) || Locations::tableau($playerId, WEST);
+    $isOnOtherPlayersTableau = !$isInOwnTableau && Utils::startsWith($empireCardLocation, 'tableau_');
 
-    $bishopsOnCard = [];
-    $otherTokensOnCard = [];
-
-    foreach ($tokensOnCard as $tokenOnCard) {
-      if ($tokenOnCard->getType() === BISHOP) {
-        $bishopsOnCard[] = $tokenOnCard;
-      } else {
-        $otherTokensOnCard[] = $tokenOnCard;
-      }
-    }
-
-    // This should never be more than 2
-    if (count($bishopsOnCard) >= 2) {
-      foreach($bishopsOnCard as $bishop) {
-        $bishop->returnToSupply(KILL, $player);
-      }
-    } else if (count($otherTokensOnCard) > 0) {
-      $this->ctx->insertAsBrother(new LeafNode([
-        'action' => BISHOP_PACIFICATION,
-        'playerId' => $this->ctx->getPlayerId(),
-        'tokenId' => $tokenId,
-      ]));
+    if ($isInThrone) {
+      $empireCard->moveToTableau($player);
     }
 
     $this->resolveAction([]);
   }
+
+
+
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -92,6 +78,5 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
-
 
 }

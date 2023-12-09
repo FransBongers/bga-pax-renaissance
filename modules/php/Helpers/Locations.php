@@ -33,4 +33,9 @@ abstract class Locations extends \APP_DbObject
   {
     return 'tableau_' . $region . '_' . $playerId;
   }
+
+  public static function throne($empireId)
+  {
+    return 'throne_' . $empireId;
+  }
 }

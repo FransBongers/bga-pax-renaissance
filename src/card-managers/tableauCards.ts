@@ -21,8 +21,6 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     });
   }
 
-  // `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="position: absolute; top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
-
   setupFrontDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
     // if (!card.id.startsWith('Empire')) {
     //   console.log('setupFrontDiv',card);

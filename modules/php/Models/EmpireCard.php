@@ -10,6 +10,7 @@ use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\AtomicActions;
 use PaxRenaissance\Managers\Cards;
+use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Events;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Managers\Players;
@@ -46,6 +47,15 @@ class EmpireCard extends Card
     ]);
   }
 
+  /**
+   * Returns array of empires that are valid for this cards actions
+   * ie, the empire of the card or all western / eastern empires if empire is east or west
+   */
+  public function getAllEmpiresIds($includeRegion = true)
+  {
+    return [$this->empire];
+  }
+
   public function getEmpire()
   {
     return $this->empire;
@@ -79,5 +89,19 @@ class EmpireCard extends Card
     Cards::insertOnTop($this->getId(), $this->startLocation);
     $this->location = $this->startLocation;
     Notifications::discardCard($player, $this, $this->startLocation);
+  }
+
+  public function moveToTableau($player)
+  {
+    $region = Empires::get($this->empire)->getRegion();
+    if ($region === EAST) {
+      $this->location = Locations::tableau($player->getId(), EAST);
+      $this->state = Cards::insertOnTop($this->getId(), $this->location);
+    } else {
+      $this->location = Locations::tableau($player->getId(), WEST);
+      $this->state = Cards::insertAtBottom($this->getId(), $this->location);
+    }
+
+    Notifications::moveEmpireSquare($player, $this);
   }
 }

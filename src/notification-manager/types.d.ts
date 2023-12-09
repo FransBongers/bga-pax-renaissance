@@ -15,6 +15,12 @@ interface NotifWithPlayerArgs {
   tkn_playerName: string;
 }
 
+
+interface NotifChangeEmpireToTheocracyArgs {
+  empire: Empire;
+  religion: string;
+}
+
 interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   card: TableauCard | EmpireCard;
   tkn_cardName: string;
@@ -28,6 +34,10 @@ interface NotifFlipVictoryCardArgs extends NotifWithPlayerArgs {
 
 interface NotifReturnToSupplyArgs extends NotifWithPlayerArgs {
   token: Token;
+}
+
+interface NotifMoveEmpireSquareArgs extends NotifWithPlayerArgs {
+  card: EmpireCard;
 }
 
 interface NotifMoveTokenArgs extends NotifWithPlayerArgs {

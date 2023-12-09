@@ -75,7 +75,7 @@ const tplGameMapMapBorders = () => {
 const tplGameMapMapCards = () => {
   const htmlArray = Object.entries(MAP_CONFIG).map(
     ([empire, data]) => `
-  <div id="pr_empire_${empire}" class="pr_map_card" data-card-id="medieval_${empire}" style="top: calc(var(--paxRenMapScale) * ${
+  <div id="pr_${empire}" class="pr_map_card" data-card-id="medieval_${empire}" style="top: calc(var(--paxRenMapScale) * ${
       data.top
     }px); left: calc(var(--paxRenMapScale) * ${data.left}px);">
     ${Object.entries(data.cities)

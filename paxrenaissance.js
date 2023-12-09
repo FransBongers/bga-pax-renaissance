@@ -22,7 +22,7 @@ var COEUR = 'coeur';
 var MARCHIONNI = 'marchionni';
 var WEST = "west";
 var EAST = "east";
-var CARDINAL_DIRECTIONS = [
+var REGIONS = [
     WEST,
     EAST,
 ];
@@ -1748,11 +1748,14 @@ var PaxRenaissance = (function () {
         this.activeStates = (_a = {},
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
             _a.announceOneShot = new AnnounceOneShotState(this),
+            _a.battleCasualties = new BattleCasualtiesState(this),
+            _a.battleLocation = new BattleLocationState(this),
             _a.bishopPacification = new BishopPacificationState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
             _a.placeAgent = new PlaceAgentState(this),
             _a.playerAction = new PlayerActionState(this),
+            _a.regimeChangeEmancipation = new RegimeChangeEmancipationState(this),
             _a.selectToken = new SelectTokenState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
@@ -2714,6 +2717,7 @@ var GameMap = (function () {
         this.setupEmpireCards({ gamedatas: gamedatas });
         this.setupTokensCities({ gamedatas: gamedatas });
         this.setupTokensBorders({ gamedatas: gamedatas });
+        gamedatas.gameMap.empires.forEach(function (empire) { return _this.setEmpireReligion({ empireId: empire.id, religion: empire.religion }); });
     };
     GameMap.prototype.setupZoomButtons = function () {
         var _this = this;
@@ -2733,6 +2737,19 @@ var GameMap = (function () {
     GameMap.prototype.getEmpireSquareStock = function (_a) {
         var empireId = _a.empireId;
         return this.empireSquareStocks[empireId];
+    };
+    GameMap.prototype.setEmpireReligion = function (_a) {
+        var empireId = _a.empireId, religion = _a.religion;
+        var node = document.getElementById("pr_".concat(empireId));
+        if (!node) {
+            return;
+        }
+        if ((empireId === PAPAL_STATES && religion === CATHOLIC) || (empireId === MAMLUK && religion === ISLAMIC)) {
+            node.setAttribute("data-card-id", "medieval_".concat(empireId));
+        }
+        else {
+            node.setAttribute("data-card-id", "".concat(religion, "_").concat(empireId));
+        }
     };
     GameMap.prototype.checkZoomButtonClasses = function () {
         var zoomInButton = $("pr_game_map_zoom_in_button");
@@ -2807,7 +2824,7 @@ var tplGameMapMapBorders = function () {
 var tplGameMapMapCards = function () {
     var htmlArray = Object.entries(MAP_CONFIG).map(function (_a) {
         var empire = _a[0], data = _a[1];
-        return "\n  <div id=\"pr_empire_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(data.top, "px); left: calc(var(--paxRenMapScale) * ").concat(data.left, "px);\">\n    ").concat(Object.entries(data.cities)
+        return "\n  <div id=\"pr_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(data.top, "px); left: calc(var(--paxRenMapScale) * ").concat(data.left, "px);\">\n    ").concat(Object.entries(data.cities)
             .map(function (_a) {
             var city = _a[0], coords = _a[1];
             return "<div id=\"pr_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
@@ -3017,7 +3034,7 @@ var Market = (function () {
             _b[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_east_deck")),
             _b[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_west_deck")),
             _b);
-        CARDINAL_DIRECTIONS.forEach(function (region) {
+        REGIONS.forEach(function (region) {
             _this.deckCounters[region].create("pr_market_".concat(region, "_deck_counter"));
             _this.deckCounters[region].setValue(gamedatas.market.deckCounts[region].cardCount);
         });
@@ -3309,8 +3326,10 @@ var NotificationManager = (function () {
         console.log("notifications subscriptions setup");
         var notifs = [
             ["log", undefined],
+            ["changeEmpireToTheocracy", undefined],
             ["discardCard", undefined],
             ["flipVictoryCard", undefined],
+            ["moveEmpireSquare", undefined],
             ["moveToken", undefined],
             ["placeToken", undefined],
             ["playCard", undefined],
@@ -3348,6 +3367,16 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_changeEmpireToTheocracy = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, empire, religion;
+            return __generator(this, function (_b) {
+                _a = notif.args, empire = _a.empire, religion = _a.religion;
+                this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: religion });
+                return [2];
+            });
+        });
+    };
     NotificationManager.prototype.notif_discardCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, card, toLocationId;
@@ -3357,7 +3386,9 @@ var NotificationManager = (function () {
                     this.game.tableauCardManager.removeCard(card);
                 }
                 else if (card.type === EMPIRE_CARD) {
-                    this.game.gameMap.getEmpireSquareStock({ empireId: card.empire }).addCard(card);
+                    this.game.gameMap
+                        .getEmpireSquareStock({ empireId: card.empire })
+                        .addCard(card);
                 }
                 return [2];
             });
@@ -3370,6 +3401,25 @@ var NotificationManager = (function () {
                 _a = notif.args, playerId = _a.playerId, card = _a.card;
                 this.game.victoryCardManager.flipCard(card);
                 return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_moveEmpireSquare = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, card = _a.card;
+                        return [4, this.getPlayer({ playerId: playerId }).tableau.addCard(card)];
+                    case 1:
+                        _b.sent();
+                        card.prestige.forEach(function (prestige) {
+                            return _this.getPlayer({ playerId: playerId }).counters.prestige[prestige].incValue(1);
+                        });
+                        return [2];
+                }
             });
         });
     };
@@ -3430,7 +3480,7 @@ var NotificationManager = (function () {
                         split = token.id.split("_");
                         isPawn = split[0] === PAWN;
                         isBishop = split[0] === BISHOP;
-                        fromSupply = fromLocationId.startsWith('supply');
+                        fromSupply = fromLocationId.startsWith("supply");
                         if (fromSupply && isPawn) {
                             this.game.supply.incValue({
                                 bank: split[1],
@@ -4136,7 +4186,7 @@ var AnnounceOneShotState = (function () {
     };
     AnnounceOneShotState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must decide if One-shot occurs",
+            text: _("${tkn_playerName} must decide if One-shot occurs"),
             args: {
                 tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
             },
@@ -4147,7 +4197,7 @@ var AnnounceOneShotState = (function () {
         var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs",
+            text: _("${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs"),
             args: {
                 tkn_playerName: '${you}',
                 tkn_oneShot: this.args.oneShot,
@@ -4180,6 +4230,191 @@ var AnnounceOneShotState = (function () {
     };
     return AnnounceOneShotState;
 }());
+var BattleCasualtiesState = (function () {
+    function BattleCasualtiesState(game) {
+        this.game = game;
+    }
+    BattleCasualtiesState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    BattleCasualtiesState.prototype.onLeavingState = function () {
+        debug("Leaving BattleLocationState");
+    };
+    BattleCasualtiesState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Token to eliminate"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    BattleCasualtiesState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Tokens to eliminate ${remaining}"),
+            args: {
+                tkn_playerName: "${you}",
+                remaining: {
+                    log: _("(${number} remaining)"),
+                    args: {
+                        number: this.args.numberToEliminate,
+                    },
+                },
+            },
+        });
+        this.setTokensSelectable();
+        this.addAgentButtons();
+    };
+    BattleCasualtiesState.prototype.updateInterfaceConfirmSelectAgent = function (_a) {
+        var _this = this;
+        var agent = _a.agent;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("Eliminate ${tkn_mapToken} Agent?"),
+            args: {
+                tkn_mapToken: this.createAgentMapTokenId(agent),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actBattleCasualties",
+                    args: {
+                        agent: agent,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    BattleCasualtiesState.prototype.updateInterfaceConfirmSelectToken = function (_a) {
+        var _this = this;
+        var token = _a.token;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: token.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Eliminate ${tkn_mapToken} on ${locationName}?"),
+            args: {
+                tkn_mapToken: tknMapToken(token.id),
+                locationName: _(token.locationName),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actBattleCasualties",
+                    args: {
+                        tokenId: token.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    BattleCasualtiesState.prototype.addAgentButtons = function () {
+        var _this = this;
+        this.args.agents.forEach(function (agent, index) {
+            _this.game.addPrimaryActionButton({
+                id: "agent_button_".concat(index),
+                text: "".concat(agent.type, " agent"),
+                callback: function () { return _this.updateInterfaceConfirmSelectAgent({ agent: agent }); },
+            });
+        });
+    };
+    BattleCasualtiesState.prototype.createAgentMapTokenId = function (agent) {
+        var id = "";
+        if (agent.type === PAWN) {
+            var bank = this.game.playerManager
+                .getPlayer({ playerId: this.game.getPlayerId() })
+                .getBank();
+            id = "".concat(bank, "_pawn");
+        }
+        else {
+            id = "".concat(agent.religion, "_").concat(agent.type);
+        }
+        return id;
+    };
+    BattleCasualtiesState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        this.args.tokens.forEach(function (token) {
+            _this.game.setTokenSelectable({
+                id: token.id,
+                callback: function () { return _this.updateInterfaceConfirmSelectToken({ token: token }); },
+            });
+        });
+    };
+    return BattleCasualtiesState;
+}());
+var BattleLocationState = (function () {
+    function BattleLocationState(game) {
+        this.game = game;
+    }
+    BattleLocationState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    BattleLocationState.prototype.onLeavingState = function () {
+        debug("Leaving BattleLocationState");
+    };
+    BattleLocationState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an Empire to Battle in"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    BattleLocationState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an Empire to Battle in"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setEmpiresSelectable();
+    };
+    BattleLocationState.prototype.updateInterfaceConfirmSelectEmpire = function (_a) {
+        var _this = this;
+        var empire = _a.empire;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: empire.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Battle in ${empireName}?"),
+            args: {
+                empireName: _(empire.name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actBattleLocation",
+                    args: {
+                        empireId: empire.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    BattleLocationState.prototype.setEmpiresSelectable = function () {
+        var _this = this;
+        this.args.empires.forEach(function (empire) {
+            _this.game.setLocationSelectable({
+                id: empire.id,
+                callback: function () { return _this.updateInterfaceConfirmSelectEmpire({ empire: empire }); },
+            });
+        });
+    };
+    return BattleLocationState;
+}());
 var BishopPacificationState = (function () {
     function BishopPacificationState(game) {
         this.game = game;
@@ -4193,7 +4428,7 @@ var BishopPacificationState = (function () {
     };
     BishopPacificationState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} may select a Token to Kill",
+            text: _("${tkn_playerName} may select a Token to Kill"),
             args: {
                 tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
             },
@@ -4204,7 +4439,7 @@ var BishopPacificationState = (function () {
         var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} may choose a Token to Kill",
+            text: _("${tkn_playerName} may choose a Token to Kill"),
             args: {
                 tkn_playerName: '${you}'
             },
@@ -4229,7 +4464,7 @@ var BishopPacificationState = (function () {
         this.game.clearPossible();
         this.game.setTokenSelected({ id: token.id });
         this.game.clientUpdatePageTitle({
-            text: "Kill ${tkn_mapToken} ?",
+            text: _("Kill ${tkn_mapToken} ?"),
             args: {
                 tkn_mapToken: tknMapToken(token.id),
             },
@@ -4275,7 +4510,7 @@ var ClientStartTradeFairState = (function () {
         this.game.setCardSelected({ card: this.args.card, back: true });
         this.game.setLocationSelected({ id: this.args.city.id });
         this.game.clientUpdatePageTitle({
-            text: "Convene ${region} trade fair from ${cityName}?",
+            text: _("Convene ${region} trade fair from ${cityName}?"),
             args: {
                 cityName: _(this.args.city.name),
                 region: this.args.city.emporium === EAST ? _("East") : _("West"),
@@ -4307,7 +4542,7 @@ var ConfirmTurnState = (function () {
     };
     ConfirmTurnState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must confirm or restart their turn",
+            text: _("${tkn_playerName} must confirm or restart their turn"),
             args: {
                 tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
             },
@@ -4318,7 +4553,7 @@ var ConfirmTurnState = (function () {
         var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must confirm or restart your turn",
+            text: _("${tkn_playerName} must confirm or restart your turn"),
             args: {
                 tkn_playerName: '${you}'
             },
@@ -4342,7 +4577,7 @@ var FlipVictoryCardState = (function () {
     };
     FlipVictoryCardState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must flip an inactive Victory Card",
+            text: _("${tkn_playerName} must flip an inactive Victory Card"),
             args: {
                 tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
             },
@@ -4352,7 +4587,7 @@ var FlipVictoryCardState = (function () {
     FlipVictoryCardState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must flip an inactive Victory Card",
+            text: _("${tkn_playerName} must flip an inactive Victory Card"),
             args: {
                 tkn_playerName: '${you}'
             },
@@ -4369,7 +4604,7 @@ var FlipVictoryCardState = (function () {
         }
         node.classList.add(PR_SELECTED);
         this.game.clientUpdatePageTitle({
-            text: "Flip ${titleActive}?",
+            text: _("Flip ${titleActive}?"),
             args: {
                 titleActive: _(card.titleActive),
             },
@@ -4414,7 +4649,7 @@ var PlaceAgentState = (function () {
     };
     PlaceAgentState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} may place Agents",
+            text: _("${tkn_playerName} may place Agents"),
             args: {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
@@ -4449,7 +4684,7 @@ var PlaceAgentState = (function () {
         this.game.setCardSelected({ card: card });
         var _b = card;
         this.game.clientUpdatePageTitle({
-            text: "Place ${tkn_mapToken} on ${location}?",
+            text: _("Place ${tkn_mapToken} on ${location}?"),
             args: {
                 tkn_playerName: "${you}",
                 tkn_mapToken: this.createMapTokenId(),
@@ -4578,7 +4813,7 @@ var PlayerActionState = (function () {
     PlayerActionState.prototype.setDescription = function (activePlayerId) {
         console.log("setDescription playerAction", activePlayerId);
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} may perform actions",
+            text: _("${tkn_playerName} may perform actions"),
             args: {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
@@ -4600,7 +4835,7 @@ var PlayerActionState = (function () {
         this.game.clearPossible();
         this.game.setCardSelected({ card: card });
         this.game.clientUpdatePageTitle({
-            text: "Purchase ${cardName} for ${amount} ${tkn_florin} ?",
+            text: _("Purchase ${cardName} for ${amount} ${tkn_florin} ?"),
             args: {
                 amount: column,
                 cardName: _(card.name),
@@ -4626,7 +4861,7 @@ var PlayerActionState = (function () {
         this.game.clearPossible();
         this.game.setCardSelected({ card: card });
         this.game.clientUpdatePageTitle({
-            text: "Play or sell ${cardName}?",
+            text: _("Play or sell ${cardName}?"),
             args: {
                 cardName: _(card.name),
             },
@@ -4710,7 +4945,6 @@ var PlayerActionState = (function () {
     };
     PlayerActionState.prototype.setMarketCardsSelectable = function () {
         var _this = this;
-        console.log("setMarketCardsSelectable");
         this.args.cardsPlayerCanPurchase.forEach(function (card) {
             var id = card.id, location = card.location;
             var _a = location.split("_"), market = _a[0], region = _a[1], column = _a[2];
@@ -4727,7 +4961,7 @@ var PlayerActionState = (function () {
     };
     PlayerActionState.prototype.setTradeFairSelectable = function () {
         var _this = this;
-        CARDINAL_DIRECTIONS.forEach(function (region) {
+        REGIONS.forEach(function (region) {
             if (!_this.args.tradeFair[region]) {
                 return;
             }
@@ -4744,6 +4978,120 @@ var PlayerActionState = (function () {
     };
     return PlayerActionState;
 }());
+var RegimeChangeEmancipationState = (function () {
+    function RegimeChangeEmancipationState(game) {
+        this.game = game;
+    }
+    RegimeChangeEmancipationState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    RegimeChangeEmancipationState.prototype.onLeavingState = function () {
+        debug("Leaving RegimeChangeEmancipationState");
+    };
+    RegimeChangeEmancipationState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may move Repress Tokens onto the Map"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    RegimeChangeEmancipationState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may select a Repressed Token to move onto the Map"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.game.addSkipButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actRegimeChangeEmancipation",
+                    args: {
+                        tokenId: null,
+                        locationId: null,
+                    },
+                });
+            },
+        });
+        this.setTokensSelectable();
+    };
+    RegimeChangeEmancipationState.prototype.updateInterfaceSelectLocation = function (_a) {
+        var locations = _a.locations, tokenId = _a.tokenId;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: tokenId });
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a ${borderOrCity} to move ${tkn_mapToken} onto"),
+            args: {
+                tkn_playerName: "${you}",
+                borderOrCity: this.args.tokens.find(function (token) { return token.id === tokenId; }).type === PAWN
+                    ? _("Border")
+                    : _("City"),
+                tkn_mapToken: tknMapToken(tokenId),
+            },
+        });
+        this.game.addCancelButton();
+        this.setLocationsSelectable({ locations: locations, tokenId: tokenId });
+    };
+    RegimeChangeEmancipationState.prototype.updateInterfaceConfirmLocation = function (_a) {
+        var _this = this;
+        var location = _a.location, tokenId = _a.tokenId;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: location.id });
+        this.game.setTokenSelected({ id: tokenId });
+        this.game.clientUpdatePageTitle({
+            text: _("Move ${tkn_mapToken} onto ${locationName}?"),
+            args: {
+                tkn_mapToken: tknMapToken(tokenId),
+                locationName: _(location.name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                _this.game.clearPossible();
+                _this.game.takeAction({
+                    action: "actRegimeChangeEmancipation",
+                    args: {
+                        tokenId: tokenId,
+                        locationId: location.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    RegimeChangeEmancipationState.prototype.setLocationsSelectable = function (_a) {
+        var _this = this;
+        var locations = _a.locations, tokenId = _a.tokenId;
+        locations.forEach(function (location) {
+            _this.game.setLocationSelectable({
+                id: location.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirmLocation({ location: location, tokenId: tokenId });
+                },
+            });
+        });
+    };
+    RegimeChangeEmancipationState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.options).forEach(function (_a) {
+            var tokenId = _a[0], locations = _a[1];
+            _this.game.setTokenSelectable({
+                id: tokenId,
+                callback: function () {
+                    return _this.updateInterfaceSelectLocation({ locations: locations, tokenId: tokenId });
+                },
+            });
+        });
+    };
+    return RegimeChangeEmancipationState;
+}());
 var SelectTokenState = (function () {
     function SelectTokenState(game) {
         this.game = game;
@@ -4758,7 +5106,7 @@ var SelectTokenState = (function () {
     SelectTokenState.prototype.setDescription = function (activePlayerId, args) {
         this.args = args;
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must select a ${tkn_mapToken} to place",
+            text: _("${tkn_playerName} must select a ${tkn_mapToken} to place"),
             args: {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
@@ -4771,7 +5119,7 @@ var SelectTokenState = (function () {
     SelectTokenState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must select a ${tkn_mapToken} to place",
+            text: _("${tkn_playerName} must select a ${tkn_mapToken} to place"),
             args: {
                 tkn_playerName: "${you}",
                 tkn_mapToken: tknMapToken(this.args.tokens[0].id),
@@ -4785,7 +5133,7 @@ var SelectTokenState = (function () {
         this.game.clearPossible();
         this.game.setTokenSelected({ id: id });
         this.game.clientUpdatePageTitle({
-            text: "Select ${tkn_mapToken} ?",
+            text: _("Select ${tkn_mapToken} ?"),
             args: {
                 tkn_mapToken: tknMapToken(this.args.tokens[0].id),
             },
@@ -4827,7 +5175,7 @@ var TradeFairLevyState = (function () {
     };
     TradeFairLevyState.prototype.setDescription = function (activePlayerId) {
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must select a City to place a Levy",
+            text: _("${tkn_playerName} must select a City to place a Levy"),
             args: {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
@@ -4840,7 +5188,7 @@ var TradeFairLevyState = (function () {
         var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: "${tkn_playerName} must select a City in ${empireName} to place a Levy",
+            text: _("${tkn_playerName} must select a City in ${empireName} to place a Levy"),
             args: {
                 tkn_playerName: "${you}",
                 empireName: _(this.args.empire.name)
@@ -4860,7 +5208,7 @@ var TradeFairLevyState = (function () {
         this.game.setLocationSelected({ id: cityId });
         var _b = this.args.possibleLevies[cityId].levy, religion = _b.religion, levyIcon = _b.levyIcon;
         this.game.clientUpdatePageTitle({
-            text: "Place ${tkn_mapToken} in ${cityName}?",
+            text: _("Place ${tkn_mapToken} in ${cityName}?"),
             args: {
                 tkn_mapToken: [religion, levyIcon].join('_'),
                 cityName: _(this.args.possibleLevies[cityId].cityName)

@@ -183,6 +183,7 @@ class GameMap {
     this.setupEmpireCards({ gamedatas });
     this.setupTokensCities({ gamedatas });
     this.setupTokensBorders({ gamedatas });
+    gamedatas.gameMap.empires.forEach((empire) => this.setEmpireReligion({empireId: empire.id, religion: empire.religion}));
   }
 
   setupZoomButtons() {
@@ -226,6 +227,18 @@ class GameMap {
     empireId: string;
   }): LineStock<EmpireCard | TableauCard> {
     return this.empireSquareStocks[empireId];
+  }
+
+  public setEmpireReligion({empireId, religion}: {empireId: string; religion: string;}) {
+    const node = document.getElementById(`pr_${empireId}`);
+    if (!node) {
+      return;
+    }
+    if ((empireId === PAPAL_STATES && religion === CATHOLIC) || (empireId === MAMLUK && religion === ISLAMIC)) {
+      node.setAttribute("data-card-id", `medieval_${empireId}`);
+    } else {
+      node.setAttribute("data-card-id", `${religion}_${empireId}`);  
+    }
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

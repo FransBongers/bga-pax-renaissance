@@ -20,7 +20,7 @@ class City implements \JsonSerializable
   protected $emporium = null;
   protected $levy;
   protected $name;
-  
+  protected $type = CITY;
 
 
   protected $attributes = [
@@ -30,6 +30,7 @@ class City implements \JsonSerializable
     'empire' => ['empire', 'str'],
     'levy' => ['levy', 'obj'],
     'emporium' => ['emporium', 'str'],
+    'type' => ['type', 'str'],
     // 'empire'
   ];
 
@@ -85,6 +86,11 @@ class City implements \JsonSerializable
   public function getTradeRoute()
   {
     return null;
+  }
+
+  public function getType()
+  {
+    return $this->type;
   }
 
   public function placeToken($token, $repressCost = 1)

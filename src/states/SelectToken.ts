@@ -18,7 +18,7 @@ class SelectTokenState implements State {
   setDescription(activePlayerId: number, args: OnEnteringSelectTokenArgs) {
     this.args = args;
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must select a ${tkn_mapToken} to place",
+      text: _("${tkn_playerName} must select a ${tkn_mapToken} to place"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -49,7 +49,7 @@ class SelectTokenState implements State {
     this.game.clearPossible();
 
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must select a ${tkn_mapToken} to place",
+      text: _("${tkn_playerName} must select a ${tkn_mapToken} to place"),
       args: {
         tkn_playerName: "${you}",
         tkn_mapToken: tknMapToken(this.args.tokens[0].id),
@@ -62,7 +62,7 @@ class SelectTokenState implements State {
     this.game.clearPossible();
     this.game.setTokenSelected({ id });
     this.game.clientUpdatePageTitle({
-      text: "Select ${tkn_mapToken} ?",
+      text: _("Select ${tkn_mapToken} ?"),
       args: {
         tkn_mapToken: tknMapToken(this.args.tokens[0].id),
       },

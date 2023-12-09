@@ -18,7 +18,7 @@ class PlayerActionState implements State {
   setDescription(activePlayerId: number) {
     console.log("setDescription playerAction", activePlayerId);
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} may perform actions",
+      text: _("${tkn_playerName} may perform actions"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -67,7 +67,7 @@ class PlayerActionState implements State {
     // }
     this.game.setCardSelected({ card });
     this.game.clientUpdatePageTitle({
-      text: "Purchase ${cardName} for ${amount} ${tkn_florin} ?",
+      text: _("Purchase ${cardName} for ${amount} ${tkn_florin} ?"),
       args: {
         amount: column,
         cardName: _(card.name),
@@ -95,7 +95,7 @@ class PlayerActionState implements State {
     //   node.classList.add(PR_SELECTED);
     // }
     this.game.clientUpdatePageTitle({
-      text: "Play or sell ${cardName}?",
+      text: _("Play or sell ${cardName}?"),
       args: {
         cardName: _(card.name),
       },
@@ -210,7 +210,6 @@ class PlayerActionState implements State {
   }
 
   private setMarketCardsSelectable() {
-    console.log("setMarketCardsSelectable");
     this.args.cardsPlayerCanPurchase.forEach((card) => {
       const { id, location } = card;
       const [market, region, column] = location.split("_");
@@ -233,7 +232,7 @@ class PlayerActionState implements State {
   }
 
   private setTradeFairSelectable() {
-    CARDINAL_DIRECTIONS.forEach((region) => {
+    REGIONS.forEach((region) => {
       if (!this.args.tradeFair[region]) {
         return;
       }

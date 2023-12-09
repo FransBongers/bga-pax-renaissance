@@ -312,6 +312,86 @@ $machinestates = [
         'transitions' => [],
     ],
 
+    ST_BATTLE_LOCATION => [
+        'name' => 'battleLocation',
+        'description' => clienttranslate('${actplayer} must select empire to battle'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actBattleLocation', 'pass'],
+    ],
+
+    ST_BATTLE_RESULT => [
+        'name' => 'battleResult',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_BATTLE_CASUALTIES => [
+        'name' => 'battleCasualties',
+        'description' => clienttranslate('${actplayer} must select casualties'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actBattleCasualties', 'pass'],
+    ],
+
+    ST_BATTLE_CHECK_BISHOP_AGENT => [
+        'name' => 'battleCheckBishopAgent',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_BATTLE_CHECK_REGIME_CHANGE => [
+        'name' => 'battleCheckRegimeChange',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_BATTLE_MAP_CHANGE_RELIGIOUS_WAR => [
+        'name' => 'battleMapChangeReligiousWar',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_REGIME_CHANGE_MOVE_EMPIRE_SQUARE => [
+        'name' => 'regimeChangeMoveEmpireSquare',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_REGIME_CHANGE_EMANCIPATION => [
+        'name' => 'regimeChangeEmancipation',
+        'description' => clienttranslate('${actplayer} may move Repressed Tokens onto the Map'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actRegimeChangeEmancipation', 'pass'],
+    ],
+
+    ST_REGIME_CHANGE_GOLDEN_LIBERTY => [
+        'name' => 'regimeChangeGoldenLiberty',
+        'description' => clienttranslate('${actplayer} may create a Medieval state'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actRegimeChangeGoldenLiberty', 'pass'],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',

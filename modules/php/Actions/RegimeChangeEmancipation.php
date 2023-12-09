@@ -19,11 +19,11 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class BishopPacification extends \PaxRenaissance\Models\AtomicAction
+class RegimeChangeEmancipation extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_BISHOP_PACIFICATION;
+    return ST_REGIME_CHANGE_EMANCIPATION;
   }
 
   // ..######..########....###....########.########
@@ -42,16 +42,16 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stBishopPacification()
+  public function stRegimeChangeEmancipation()
   {
-    // $args = self::getPossibleLevies();
-    // if (count($args['possibleLevies']) === 0) {
-    //   $this->resolveAction([]);
-    // } else if (count($args['possibleLevies']) === 1) {
-    //   $this->actTradeFairLevy([
-    //     'cityId' => array_keys($args['possibleLevies'])[0]
-    //   ]);
-    // }
+    $parentInfo = $this->ctx->getParent()->getInfo();
+    $empireId = $parentInfo['empireId'];
+
+    $data = $this->getTokensToEmancipate($empireId);
+
+    if (count($data['options']) === 0) {
+      $this->resolveAction([]);
+    }
   }
 
   // ....###....########...######....######.
@@ -62,12 +62,14 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##..##....##..##....##
   // .##.....##.##.....##..######....######.
 
-  public function argsBishopPacification()
+  public function argsRegimeChangeEmancipation()
   {
+    $parentInfo = $this->ctx->getParent()->getInfo();
+    $player = self::getPlayer();
 
-    $data = [
-      'tokens' => $this->getTokens(),
-    ];
+    $empireId = $parentInfo['empireId'];
+
+    $data = $this->getTokensToEmancipate($empireId);
 
 
     return $data;
@@ -89,32 +91,40 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function actBishopPacification($args)
+  public function actRegimeChangeEmancipation($args)
   {
-    self::checkAction('actBishopPacification');
-
+    self::checkAction('actRegimeChangeEmancipation');
     $tokenId = $args['tokenId'];
-
+    $locationId = $args['locationId'];
     $player = self::getPlayer();
 
     if ($tokenId === null) {
-      Notifications::chooseNotToKill($player);
+      Notifications::regimeChangeSkipEmancipation($player);
       $this->resolveAction($args);
-      return;  
+      return;
     }
 
-    $tokens = $this->getTokens();
+    $parentInfo = $this->ctx->getParent()->getInfo();
+    
+    $empireId = $parentInfo['empireId'];
 
-    $token = Utils::array_find($tokens, function ($tkn) use ($tokenId) {
-      return $tkn->getId() === $tokenId;
+    $data = $this->getTokensToEmancipate($empireId);
+
+    if (!isset($data['options'][$tokenId])) {
+      throw new \feException("Not allowed to move selected Token");
+    }
+
+    $options = $data['options'][$tokenId];
+    $location = Utils::array_find($options, function ($option) use ($locationId) {
+      return $option->getId() === $locationId;
     });
-
-    if ($token === null) {
-      throw new \feException("Not allowed to select Token");
+    if ($location === null) {
+      throw new \feException("Not allowed to move Token to selected location");
     }
-    $token->returnToSupply(KILL, $player);
 
-    $this->resolveAction($args);
+    Tokens::get($tokenId)->move($location->getId());
+
+    Engine::proceed();
   }
 
   //  .##.....##.########.####.##.......####.########.##....##
@@ -125,21 +135,31 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getTokens()
+  private function getTokensToEmancipate($empireId)
   {
-    $info = $this->ctx->getInfo();
+    $empire = Empires::get($empireId);
+    $empireCard = Cards::get($empire->getEmpireSquareId());
 
-    $bishopId = $info['tokenId'];
+    $borders = $empire->getBorders(true);
+    $cities = $empire->getCities(true);
+    $numberOfEmptyBorders = count($borders);
+    $numberOfEmptyCities = count($cities);
 
-    $token = Tokens::get($bishopId);
-    $locationId = $token->getLocation();
+    $tokensOnCard = $empireCard->getTokens();
 
-    $card = Cards::get($locationId);
-    $tokensOnCard = $card->getTokens();
+    $options = [];
 
-    $tokens = Utils::filter($tokensOnCard, function ($tokenOnCard) use ($bishopId) {
-      return $tokenOnCard->getId() !== $bishopId;
-    });
-    return $tokens;
+    foreach($tokensOnCard as $token) {
+      if (in_array($token->getType(), [KNIGHT, ROOK]) && $numberOfEmptyCities > 0) {
+        $options[$token->getId()] = $cities;
+      } else if ($token->getType() === PAWN && $numberOfEmptyBorders > 0) {
+        $options[$token->getId()] = $borders;
+      }
+    }
+
+    return [
+      'tokens' => $tokensOnCard,
+      'options' => $options,
+    ];
   }
 }

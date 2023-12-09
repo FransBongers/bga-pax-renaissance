@@ -17,7 +17,7 @@ class ConfirmTurnState implements State {
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must confirm or restart their turn",
+      text: _("${tkn_playerName} must confirm or restart their turn"),
       args: {
         tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
       },
@@ -44,7 +44,7 @@ class ConfirmTurnState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} must confirm or restart your turn",
+      text: _("${tkn_playerName} must confirm or restart your turn"),
       args: {
         tkn_playerName: '${you}'
       },

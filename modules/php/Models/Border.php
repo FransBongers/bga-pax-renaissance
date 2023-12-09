@@ -17,11 +17,13 @@ class Border implements \JsonSerializable
   protected $id;
   protected $name;
   protected $seaBorder = false;
+  protected $type = BORDER;
   
   protected $attributes = [
     'id' => ['id', 'str'],
     'name' => ['name', 'str'],
     'seaBorder' => ['seaBorder', 'bool'],
+    'type' => ['type', 'str'],
   ];
 
 
@@ -44,14 +46,14 @@ class Border implements \JsonSerializable
     $currentToken = $this->getToken();
     Notifications::log('currentToken',$currentToken);
     if ($currentToken !== null && $token->getType() === PIRATE) {
-      $currentToken->kill();
+      $currentToken->returnToSupply(KILL);
     } else if ($currentToken !== null && $token->getType() === PAWN) {
       $currentToken->repress($empireId, $repressCost);
     }
 
     $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId(), false);
-    Notifications::placeToken(Players::get(),$token, $fromLocationId, null);
+    Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
   }
 
   public function isSeaBorder()
@@ -72,5 +74,10 @@ class Border implements \JsonSerializable
   public function getToken()
   {
     return Tokens::getTopOf($this->id);
+  }
+
+  public function getType()
+  {
+    return $this->type;
   }
 }

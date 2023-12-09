@@ -67,6 +67,24 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actBattleCasualties()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actBattleCasualties', $args);
+    self::ajaxResponse();
+  }
+
+  public function actBattleLocation()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actBattleLocation', $args);
+    self::ajaxResponse();
+  }
+
   public function actBishopPacification()
   {
     self::setAjaxMode();
@@ -118,6 +136,15 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actRegimeChangeEmancipation()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actRegimeChangeEmancipation', $args);
+    self::ajaxResponse();
+  }
+  
   public function actSelectToken()
   {
     self::setAjaxMode();

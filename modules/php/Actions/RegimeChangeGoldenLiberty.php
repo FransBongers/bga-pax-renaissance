@@ -19,11 +19,11 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class BishopPacification extends \PaxRenaissance\Models\AtomicAction
+class RegimeChangeGoldenLiberty extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_BISHOP_PACIFICATION;
+    return ST_REGIME_CHANGE_GOLDEN_LIBERTY;
   }
 
   // ..######..########....###....########.########
@@ -42,16 +42,16 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stBishopPacification()
+  public function stRegimeChangeGoldenLiberty()
   {
-    // $args = self::getPossibleLevies();
-    // if (count($args['possibleLevies']) === 0) {
-    //   $this->resolveAction([]);
-    // } else if (count($args['possibleLevies']) === 1) {
-    //   $this->actTradeFairLevy([
-    //     'cityId' => array_keys($args['possibleLevies'])[0]
-    //   ]);
-    // }
+    Notifications::log('stRegimeChangeGoldenLiberty',[]);
+    $parentInfo = $this->ctx->getParent()->getInfo();
+    $source = $parentInfo['source'];
+    $empireId = $parentInfo['empireId'];
+
+    if ($source !== 'vote') {
+      $this->resolveAction([]);
+    }
   }
 
   // ....###....########...######....######.
@@ -62,12 +62,14 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##..##....##..##....##
   // .##.....##.##.....##..######....######.
 
-  public function argsBishopPacification()
+  public function argsRegimeChangeGoldenLiberty()
   {
+    // $parentInfo = $this->ctx->getParent()->getInfo();
+    // $player = self::getPlayer();
 
-    $data = [
-      'tokens' => $this->getTokens(),
-    ];
+    // $empireId = $parentInfo['empireId'];
+
+    $data = [];
 
 
     return $data;
@@ -89,30 +91,10 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function actBishopPacification($args)
+  public function actRegimeChangeGoldenLiberty($args)
   {
-    self::checkAction('actBishopPacification');
+    self::checkAction('actRegimeChangeGoldenLiberty');
 
-    $tokenId = $args['tokenId'];
-
-    $player = self::getPlayer();
-
-    if ($tokenId === null) {
-      Notifications::chooseNotToKill($player);
-      $this->resolveAction($args);
-      return;  
-    }
-
-    $tokens = $this->getTokens();
-
-    $token = Utils::array_find($tokens, function ($tkn) use ($tokenId) {
-      return $tkn->getId() === $tokenId;
-    });
-
-    if ($token === null) {
-      throw new \feException("Not allowed to select Token");
-    }
-    $token->returnToSupply(KILL, $player);
 
     $this->resolveAction($args);
   }
@@ -125,21 +107,4 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getTokens()
-  {
-    $info = $this->ctx->getInfo();
-
-    $bishopId = $info['tokenId'];
-
-    $token = Tokens::get($bishopId);
-    $locationId = $token->getLocation();
-
-    $card = Cards::get($locationId);
-    $tokensOnCard = $card->getTokens();
-
-    $tokens = Utils::filter($tokensOnCard, function ($tokenOnCard) use ($bishopId) {
-      return $tokenOnCard->getId() !== $bishopId;
-    });
-    return $tokens;
-  }
 }

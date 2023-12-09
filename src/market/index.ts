@@ -49,7 +49,7 @@ class Market {
       ),
     };
 
-    CARDINAL_DIRECTIONS.forEach((region) => {
+    REGIONS.forEach((region) => {
       this.deckCounters[region].create(`pr_market_${region}_deck_counter`);
       this.deckCounters[region].setValue(gamedatas.market.deckCounts[region].cardCount);
     });

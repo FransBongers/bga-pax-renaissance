@@ -17,7 +17,7 @@ class PlaceAgentState implements State {
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} may place Agents",
+      text: _("${tkn_playerName} may place Agents"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -77,7 +77,7 @@ class PlaceAgentState implements State {
     // TODO handle cases where there are two different agents
 
     this.game.clientUpdatePageTitle({
-      text: "Place ${tkn_mapToken} on ${location}?",
+      text: _("Place ${tkn_mapToken} on ${location}?"),
       args: {
         tkn_playerName: "${you}",
         tkn_mapToken: this.createMapTokenId(),

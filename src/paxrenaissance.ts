@@ -29,11 +29,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public activeStates: {
     [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
     announceOneShot: AnnounceOneShotState;
+    battleCasualties: BattleCasualtiesState;
+    battleLocation: BattleLocationState;
     bishopPacification: BishopPacificationState;
     confirmTurn: ConfirmTurnState;
     flipVictoryCard: FlipVictoryCardState;
     placeAgent: PlaceAgentState;
     playerAction: PlayerActionState;
+    regimeChangeEmancipation: RegimeChangeEmancipationState,
     selectToken: SelectTokenState;
     tradeFairLevy: TradeFairLevyState
   };
@@ -69,11 +72,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.activeStates = {
       [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),
       announceOneShot: new AnnounceOneShotState(this),
+      battleCasualties: new BattleCasualtiesState(this),
+      battleLocation: new BattleLocationState(this),
       bishopPacification: new BishopPacificationState(this),
       confirmTurn: new ConfirmTurnState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
       placeAgent: new PlaceAgentState(this),
       playerAction: new PlayerActionState(this),
+      regimeChangeEmancipation: new RegimeChangeEmancipationState(this),
       selectToken: new SelectTokenState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };

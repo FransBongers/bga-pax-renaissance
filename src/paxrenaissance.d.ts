@@ -67,18 +67,29 @@ interface PaxRenaissanceGame extends Game {
   victoryCardManager: VictoryCardManager;
 }
 
+interface Border {
+  id: string;
+  name: string;
+  type: 'border';
+}
+
 interface City {
   capital: boolean;
   empire: string;
   emporium: string | null;
   id: string;
   name: string;
+  type: 'city';
 }
 
 interface Empire {
-  cities: string[]; // cityIds/ Could also return actual cities
   id: string;
+  adjacentEmpires: string[];
+  borders: string[];
+  cities: string[]; // cityIds/ Could also return actual cities
+  empireSquareId: string;
   name: string;
+  region: string;
   religion: string;
 }
 
@@ -115,6 +126,12 @@ interface VictoryCard extends PaxRenCard {
   type: "victoryCard";
 }
 
+interface Agent {
+  religion: string | null;
+  type: string;
+}
+
+
 interface Token {
   id: string;
   location: string;
@@ -126,6 +143,7 @@ interface Token {
 interface PaxRenaissanceGamedatas extends Gamedatas {
   canceledNotifIds: string[];
   gameMap: {
+    empires: Empire[];
     thrones: {
       cards: EmpireCard[];
       tokens: Token[];

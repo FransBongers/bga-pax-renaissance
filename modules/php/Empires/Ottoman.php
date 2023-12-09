@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Empires;
 
 class Ottoman extends \PaxRenaissance\Models\Empire
@@ -6,6 +7,13 @@ class Ottoman extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = OTTOMAN;
+    $this->adjacentEmpires = [
+      BYZANTIUM,
+      HOLY_ROMAN_EMIRE,
+      HUNGARY,
+      MAMLUK,
+      PAPAL_STATES,
+    ];
     $this->empireSquareId = 'EmpireSquare_Ottoman';
     $this->name = clienttranslate('Ottoman');
     $this->borders = [

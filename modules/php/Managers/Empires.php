@@ -67,4 +67,9 @@ class Empires
       return self::get($empireId);
     }, $empires);
   }
+
+  public static function getRegionIds($region)
+  {
+    return $region === EAST ? EAST_EMPIRES : WEST_EMPIRES;
+  }
 }

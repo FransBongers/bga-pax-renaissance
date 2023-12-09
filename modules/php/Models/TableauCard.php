@@ -5,6 +5,7 @@ namespace PaxRenaissance\Models;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Managers\Cards;
+use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 
@@ -60,7 +61,7 @@ class TableauCard extends Card
     $player = $player === null ? Players::get() : $player;
     $tokens = $this->getTokens();
     foreach ($tokens as $token) {
-      $token->returnToSupply($player, true);
+      $token->returnToSupply(RETURN_TO_SUPPLY, $player, true);
     }
 
     Cards::insertOnTop($this->getId(), DISCARD);
@@ -125,6 +126,23 @@ class TableauCard extends Card
   public function getAgents()
   {
     return $this->agents;
+  }
+
+    /**
+   * Returns array of empires that are valid for this cards actions
+   * ie, the empire of the card or all western / eastern empires if empire is east or west
+   */
+  public function getAllEmpiresIds($includeRegion = true)
+  {
+    $empireId = $this->empire;
+    $empireIdIsRegion = in_array($empireId, REGIONS);
+    $validEmpireIds = $empireIdIsRegion && !$includeRegion ? [] : [$empireId];
+    if ($empireIdIsRegion) {
+      $validEmpireIds = array_merge($validEmpireIds, Empires::getRegionIds($empireId));
+    } else if ($includeRegion) {
+      $validEmpireIds[] = Empires::get($empireId)->getRegion();
+    }
+    return $validEmpireIds;
   }
 
   public function getOneShot()

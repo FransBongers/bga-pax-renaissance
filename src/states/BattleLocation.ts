@@ -1,25 +1,27 @@
-class AnnounceOneShotState implements State {
+class BattleLocationState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringAnnounceOneShotArgs;
+  private args: OnEnteringBattleLocationArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringAnnounceOneShotArgs) {
+  onEnteringState(args: OnEnteringBattleLocationArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving AnnounceOneShotState");
+    debug("Leaving BattleLocationState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must decide if One-shot occurs"),
+      text: _("${tkn_playerName} must select an Empire to Battle in"),
       args: {
-        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
+        tkn_playerName: this.game.playerManager
+          .getPlayer({ playerId: activePlayerId })
+          .getName(),
       },
       nonActivePlayers: true,
     });
@@ -44,35 +46,35 @@ class AnnounceOneShotState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs"),
+      text: _("${tkn_playerName} must select an Empire to Battle in"),
       args: {
-        tkn_playerName: '${you}',
-        tkn_oneShot: this.args.oneShot,
+        tkn_playerName: "${you}",
       },
     });
-    this.game.addPrimaryActionButton({
-      id: "occurs_button",
-      text: _("Yes, occurs"),
+    this.setEmpiresSelectable();
+  }
+
+  private updateInterfaceConfirmSelectEmpire({ empire }: { empire: Empire }) {
+    this.game.clearPossible();
+    this.game.setLocationSelected({ id: empire.id });
+
+    this.game.clientUpdatePageTitle({
+      text: _("Battle in ${empireName}?"),
+      args: {
+        empireName: _(empire.name),
+      },
+    });
+
+    this.game.addConfirmButton({
       callback: () =>
         this.game.takeAction({
-          action: "actAnnounceOneShot",
+          action: "actBattleLocation",
           args: {
-            occurs: true,
+            empireId: empire.id,
           },
         }),
     });
-    this.game.addSecondaryActionButton({
-      id: "does_not_occur_button",
-      text: _("No, does not occur"),
-      callback: () =>
-        this.game.takeAction({
-          action: "actAnnounceOneShot",
-          args: {
-            occurs: false,
-          },
-        }),
-    });
-    // this.setTokensSelectable();
+    this.game.addCancelButton();
   }
 
   //  .##.....##.########.####.##.......####.########.##....##
@@ -83,7 +85,14 @@ class AnnounceOneShotState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-
+  private setEmpiresSelectable() {
+    this.args.empires.forEach((empire) => {
+      this.game.setLocationSelectable({
+        id: empire.id,
+        callback: () => this.updateInterfaceConfirmSelectEmpire({ empire }),
+      });
+    });
+  }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.

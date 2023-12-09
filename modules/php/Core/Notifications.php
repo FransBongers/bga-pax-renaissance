@@ -5,6 +5,7 @@ namespace PaxRenaissance\Core;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cities;
+use PaxRenaissance\Managers\Players;
 
 class Notifications
 {
@@ -116,6 +117,159 @@ class Notifications
     ]);
   }
 
+  public static function battle($player, $source, $empire, $attackers, $defenders, $battleVictorious)
+  {
+    $sourceNameMap = [
+      CONSPIRACY_ONE_SHOT => clienttranslate('Conspiracy'),
+      CRUSADE_ONE_SHOT => clienttranslate('Crusade'),
+      JIHAD_ONE_SHOT => clienttranslate('Jihad'),
+      PEASANT_REVOLT_ONE_SHOT => clienttranslate('Peasant revolt'),
+      REFORMATION_ONE_SHOT => clienttranslate('Reformation'),
+    ];
+
+    $attackersLog = [];
+    $attackersArgs = [];
+
+    foreach ($attackers['agents'] as $index => $agent) {
+      $type = $agent['type'];
+      $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+      $attackersLog[] = '${tkn_mapToken_agent_' . $index . '}';
+      $attackersArgs['tkn_mapToken_agent_' . $index] = $separator . '_' . $type;
+    }
+
+    foreach ($attackers['tokens'] as $index => $token) {
+      $attackersLog[] = '${tkn_mapToken_' . $index . '}';
+      $attackersArgs['tkn_mapToken_' . $index] = $token->getSeparator() . '_' . $token->getType();
+    }
+
+    $defendersLog = [];
+    $defendersArgs = [];
+
+    foreach ($defenders['tokens'] as $index => $token) {
+      $defendersLog[] = '${tkn_mapToken_' . $index . '}';
+      $defendersArgs['tkn_mapToken_' . $index] = $token->getSeparator() . '_' . $token->getType();
+    }
+
+    self::message(clienttranslate('${tkn_boldText_name} in ${tkn_boldText_empire}${tkn_newLine}${tkn_newLine}Attackers: ${attackersLog}${tkn_newLine}Defenders: ${defendersLog}${tkn_newLine}${tkn_newLine}${resultLog}'), [
+      'tkn_boldText_name' => $sourceNameMap[$source],
+      'tkn_boldText_empire' => $empire->getName(),
+      'tkn_newLine' => '<br>',
+      'attackersLog' => [
+        'log' => implode('', $attackersLog),
+        'args' => $attackersArgs
+      ],
+      'defendersLog' => [
+        'log' => implode('', $defendersLog),
+        'args' => $defendersArgs
+      ],
+      'resultLog' => [
+        'log' => $battleVictorious ? clienttranslate('The Battle is Victorious') : clienttranslate('The Battle is not Victorious'),
+        'args' => []
+      ],
+      'i18n' => ['tkn_boldText_name'],
+    ]);
+  }
+
+  public static function battleAttackers($player, $attackers)
+  {
+    $log = [];
+    $args = [];
+
+    foreach ($attackers['agents'] as $index => $agent) {
+      $type = $agent['type'];
+      $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+      $log[] = '${tkn_mapToken_agent_' . $index . '}';
+      $args['tkn_mapToken_agent_' . $index] = $separator . '_' . $type;
+    }
+
+    foreach ($attackers['tokens'] as $index => $token) {
+      $log[] = '${tkn_mapToken_' . $index . '}';
+      $args['tkn_mapToken_' . $index] = $token->getSeparator() . '_' . $token->getType();
+    }
+
+    self::message(clienttranslate('Attackers: ${attackersLog}'), [
+      'attackersLog' => [
+        'log' => implode('', $log),
+        'args' => $args
+      ],
+    ]);
+  }
+
+  public static function battleDefenders($defenders)
+  {
+    $log = [];
+    $args = [];
+
+    foreach ($defenders['tokens'] as $index => $token) {
+      $log[] = '${tkn_mapToken_' . $index . '}';
+      $args['tkn_mapToken_' . $index] = $token->getSeparator() . '_' . $token->getType();
+    }
+
+    self::message(clienttranslate('Defenders: ${defendersLog}'), [
+      'defendersLog' => [
+        'log' => implode('', $log),
+        'args' => $args
+      ],
+    ]);
+  }
+
+  public static function battleEliminateAgent($player, $agent)
+  {
+    $type = $agent['type'];
+    $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+
+    self::message(clienttranslate('${tkn_playerName} eliminates Agent ${tkn_mapToken}'), [
+      'player' => $player,
+      'tkn_mapToken' => $separator . '_' . $type,
+    ]);
+  }
+
+  public static function battleEliminateAgents($player, $agents)
+  {
+    $attackersLog = [];
+    $attackersArgs = [];
+
+    foreach ($agents as $index => $agent) {
+      $type = $agent['type'];
+      $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+      $attackersLog[] = '${tkn_mapToken_agent_' . $index . '}';
+      $attackersArgs['tkn_mapToken_agent_' . $index] = $separator . '_' . $type;
+    }
+
+    self::message(clienttranslate('Eliminated agents: ${agentsLog}'), [
+      'agentsLog' => [
+        'log' => implode('', $attackersLog),
+        'args' => $attackersArgs,
+      ]
+    ]);
+  }
+
+  public static function battleEliminateAttackers()
+  {
+    self::message(clienttranslate('All attackers are eliminated'), []);
+  }
+
+  public static function battleEliminateDefenders()
+  {
+    self::message(clienttranslate('All defenders are eliminated'), []);
+  }
+
+  public static function battleLocation($player, $empire)
+  {
+    self::message(clienttranslate('${tkn_playerName} chooses ${tkn_boldText} as location of the Battle'), [
+      'player' => $player,
+      'tkn_boldText' => $empire->getName(),
+    ]);
+  }
+
+  public static function changeEmpireToTheocracy($empire, $religion) {
+    self::notifyAll("changeEmpireToTheocracy",  clienttranslate('${tkn_boldText_empire_name} changes into a ${religion} Theocracy'), [
+      'tkn_boldText_empire_name' => $empire->getName(),
+      'empire' => $empire,
+      'religion' => $religion,
+    ]);
+  }
+
   public static function chooseNotToKill($player)
   {
 
@@ -144,22 +298,18 @@ class Notifications
     ]);
   }
 
-  public static function killToken($player, $token, $fromLocation)
+  public static function moveEmpireSquare($player, $empireCard)
   {
-
-    $isPawn = $token->getType() === PAWN;
-    self::notifyAll("returnToSupply",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
+    self::notifyAll("moveEmpireSquare", clienttranslate('${tkn_playerName} moves ${tkn_boldText} to their tableau'), [
       'player' => $player,
-      'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-      'tkn_boldText' => $fromLocation->getName(),
-      'from' => $fromLocation,
-      'token' => $token,
+      'tkn_boldText' => $empireCard->getName(),
+      'card' => $empireCard,
     ]);
   }
 
   public static function moveToken($player, $token, $fromLocation, $toLocation)
   {
-    self::notifyAll("moveToken",  clienttranslate('${tkn_playerName} moves ${tkn_mapToken} from ${tkn_boldText_from} to ${tkn_boldText_to}'), [
+    self::notifyAll("moveToken", clienttranslate('${tkn_playerName} moves ${tkn_mapToken} from ${tkn_boldText_from} to ${tkn_boldText_to}'), [
       'player' => $player,
       'tkn_mapToken' => $token->getLogToken(),
       'tkn_boldText_from' => $fromLocation->getName(),
@@ -235,6 +385,13 @@ class Notifications
     ]);
   }
 
+  public static function regimeChangeSkipEmancipation($player)
+  {
+    self::message(clienttranslate('${tkn_playerName} skips moving Repressed Tokens'), [
+      'player' => $player,
+    ]);
+  }
+
   public static function repressToken($player, $token, $fromLocation, $cost)
   {
     $isPawn = $token->getType() === PAWN;
@@ -247,16 +404,39 @@ class Notifications
     ]);
   }
 
-  public static function returnToSupply($player, $token, $fromLocation)
+  public static function returnToSupply($player, $token, $fromLocation, $messageType = RETURN_TO_SUPPLY)
   {
-    self::notifyAll("returnToSupply", clienttranslate('${tkn_playerName} returns ${tkn_mapToken} from ${tkn_boldText} to the supply'), [
+    $player = $player === null ? Players::get() : $player;
+
+    // $fromType = $fromLocation->getType();
+
+    $messages = [
+      // KILL => $fromType === CITY ? clienttranslate('${tkn_playerName} kills ${tkn_mapToken} in ${tkn_boldText}') : clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'),
+      // ELIMINATE => $fromType === CITY ? clienttranslate('${tkn_playerName} eliminates ${tkn_mapToken} in ${tkn_boldText}') : clienttranslate('${tkn_playerName} eliminates ${tkn_mapToken} on ${tkn_boldText}'),
+      KILL =>  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'),
+      ELIMINATE => clienttranslate('${tkn_playerName} eliminates ${tkn_mapToken} on ${tkn_boldText}'),
+      RETURN_TO_SUPPLY => clienttranslate('${tkn_playerName} returns ${tkn_mapToken} from ${tkn_boldText} to the supply'),
+    ];
+
+    self::notifyAll("returnToSupply", $messages[$messageType], [
       'player' => $player,
-      'tkn_mapToken' => $token->getSeparator() . '_'. $token->getType(),
+      'tkn_mapToken' => $token->getSeparator() . '_' . $token->getType(),
       'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
       'from' => $fromLocation,
     ]);
   }
+  // public static function killToken($player, $token, $fromLocation)
+  // {
+  //   $isPawn = $token->getType() === PAWN;
+  //   self::notifyAll("returnToSupply",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
+  //     'player' => $player,
+  //     'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
+  //     'tkn_boldText' => $fromLocation->getName(),
+  //     'from' => $fromLocation,
+  //     'token' => $token,
+  //   ]);
+  // }
 
   public static function sellCard($player, $card, $value)
   {

@@ -16,7 +16,8 @@ class MapBoard
       'thrones' => [
         'cards' => $cards,
         'tokens' => self::getTokensOnCards($cards),
-      ]
+      ],
+      'empires' => Empires::getAll()
     ];
   }
 

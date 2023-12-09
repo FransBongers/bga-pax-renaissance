@@ -7,6 +7,13 @@ class HolyRomanEmpire extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = HOLY_ROMAN_EMIRE;
+    $this->adjacentEmpires = [
+      ARAGON,
+      FRANCE,
+      HUNGARY,
+      OTTOMAN,
+      PAPAL_STATES,
+    ];
     $this->empireSquareId = 'EmpireSquare_HolyRomanEmpire';
     $this->name = clienttranslate('Holy Roman Empire');
     $this->borders = [

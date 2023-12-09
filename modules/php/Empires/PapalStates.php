@@ -6,6 +6,13 @@ class PapalStates extends \PaxRenaissance\Models\Empire
   public function __construct()
   {
     $this->id = PAPAL_STATES;
+    $this->adjacentEmpires = [
+      ARAGON,
+      FRANCE,
+      HOLY_ROMAN_EMIRE,
+      HUNGARY,
+      OTTOMAN,
+    ];
     $this->empireSquareId = 'EmpireSquare_PapalStates';
     $this->name = clienttranslate('Papal States');
     $this->borders = [

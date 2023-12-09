@@ -57,7 +57,7 @@ class Market
       'florins' => self::getFlorins(),
       'deckCounts' => []
     ];
-    foreach (CARDINAL_DIRECTIONS as $direction) {
+    foreach (REGIONS as $direction) {
       $deck = Cards::getInLocation('deck_' . $direction)->toArray();
       $cardCount = count($deck);
       // $cometCount = count(Utils::filter($deck, function ($card) {
@@ -160,7 +160,7 @@ class Market
 
     // Go through market from left to right
     for ($column = 0; $column < 6; $column++) {
-      foreach (CARDINAL_DIRECTIONS as $region) {
+      foreach (REGIONS as $region) {
         $card = Cards::getTopOf(Locations::market($region, $column));
         // If no card in location mark it as empty
         if ($card === null) {
@@ -207,7 +207,7 @@ class Market
     // Need to check if unable to refresh as it will trigger end of the game.
     $unableToRefresh = false;
     for ($column = 0; $column < 6; $column++) {
-      foreach (CARDINAL_DIRECTIONS as $region) {
+      foreach (REGIONS as $region) {
         if (count($emptySpaces[$region]) === 0 || $emptySpaces[$region][0] !== $column) {
           continue;
         }
@@ -244,7 +244,7 @@ class Market
   public static function getTradeFairs() {
     $cities = Cities::getCitiesThatCanStartTradeFair();
     $data = [];
-    foreach(CARDINAL_DIRECTIONS as $region) {
+    foreach(REGIONS as $region) {
       $card = Cards::getTopOf(Locations::Market($region, 0));
       if ($card === null) {
         continue;

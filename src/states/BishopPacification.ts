@@ -17,7 +17,7 @@ class BishopPacificationState implements State {
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} may select a Token to Kill",
+      text: _("${tkn_playerName} may select a Token to Kill"),
       args: {
         tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
       },
@@ -44,7 +44,7 @@ class BishopPacificationState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: "${tkn_playerName} may choose a Token to Kill",
+      text: _("${tkn_playerName} may choose a Token to Kill"),
       args: {
         tkn_playerName: '${you}'
       },
@@ -68,7 +68,7 @@ class BishopPacificationState implements State {
     this.game.setTokenSelected({id: token.id});
 
     this.game.clientUpdatePageTitle({
-      text: "Kill ${tkn_mapToken} ?",
+      text: _("Kill ${tkn_mapToken} ?"),
       args: {
         tkn_mapToken: tknMapToken(token.id),
       },

@@ -22,6 +22,8 @@ use PaxRenaissance\Models\Border;
 
 class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
 {
+  private $battleOneShots = [CONSPIRACY_ONE_SHOT, PEASANT_REVOLT_ONE_SHOT, JIHAD_ONE_SHOT, CRUSADE_ONE_SHOT, REFORMATION_ONE_SHOT];
+
   public function getState()
   {
     return ST_ANNOUNCE_ONE_SHOT;
@@ -51,7 +53,7 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
     $card = Cards::get($cardId);
     $oneShot = $card->getOneShot();
 
-    $canOccur = $this->canOneShotOccur($oneShot);
+    $canOccur = $this->canOneShotOccur($oneShot, $card);
 
     if ($canOccur) {
       return;
@@ -127,7 +129,14 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
     $oneShot = $card->getOneShot();
     $player = self::getPlayer();
 
-    if ($oneShotOccurs) {
+
+
+    if ($oneShotOccurs && in_array($oneShot, $this->battleOneShots)) {
+      Notifications::oneShotOccurs($player, $oneShot);
+      $this->ctx->insertAsBrother(Engine::buildTree(Flows::battle($player->getId(), $oneShot, [
+        'cardId' => $cardId
+      ])));
+    } else if ($oneShotOccurs) {
       Notifications::oneShotOccurs($player, $oneShot);
       $this->ctx->insertAsBrother(new LeafNode([
         'action' => $oneShot,
@@ -156,13 +165,21 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function canOneShotOccur($oneShot)
+  private function canOneShotOccur($oneShot, $card)
   {
     switch ($oneShot) {
       case APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT:
       case APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT:
       case APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT:
+      case CONSPIRACY_ONE_SHOT:
+      case PEASANT_REVOLT_ONE_SHOT:
         return true;
+      case CRUSADE_ONE_SHOT:
+        return $this->religiousWarCanOccur($card, [ISLAMIC, REFORMIST]);
+      case JIHAD_ONE_SHOT:
+        return $this->religiousWarCanOccur($card, [CATHOLIC, REFORMIST]);
+      case REFORMATION_ONE_SHOT:
+        return $this->religiousWarCanOccur($card, [CATHOLIC, ISLAMIC]);
       case TRADE_SHIFT_NOVGOROD_ONE_SHOT:
       case TRADE_SHIFT_RED_SEA_ONE_SHOT:
       case TRADE_SHIFT_TIMBUKTU_ONE_SHOT:
@@ -210,5 +227,16 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
     }));
 
     return $playerPrestige[DISCOVERY] - $discoveryPrestigeOnCard >= 1;
+  }
+
+  private function religiousWarCanOccur($card, $opposingReligions)
+  {
+    $empiresIds = $card->getAllEmpiresIds(false);
+
+    return Utils::array_some($empiresIds, function ($empireId) use ($opposingReligions) {
+      $empire = Empires::get($empireId);
+      
+      return count($empire->getTokensInCities([KNIGHT, ROOK], $opposingReligions)) + count($empire->getTokensOnBorders([PIRATE], $opposingReligions)) > 0;
+    });
   }
 }

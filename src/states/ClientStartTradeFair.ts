@@ -39,7 +39,7 @@ class ClientStartTradeFairState implements State {
     this.game.setLocationSelected({ id: this.args.city.id });
 
     this.game.clientUpdatePageTitle({
-      text: "Convene ${region} trade fair from ${cityName}?",
+      text: _("Convene ${region} trade fair from ${cityName}?"),
       args: {
         cityName: _(this.args.city.name),
         region: this.args.city.emporium === EAST ? _("East") : _("West"),

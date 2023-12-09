@@ -50,7 +50,7 @@ const MARCHIONNI = 'marchionni';
 const WEST = "west";
 const EAST = "east";
 
-const CARDINAL_DIRECTIONS = [
+const REGIONS = [
   WEST,
   EAST,
 ]

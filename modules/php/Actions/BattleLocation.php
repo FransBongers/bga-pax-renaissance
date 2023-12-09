@@ -10,6 +10,7 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\AtomicActions;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Cities;
@@ -19,11 +20,11 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class BishopPacification extends \PaxRenaissance\Models\AtomicAction
+class BattleLocation extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_BISHOP_PACIFICATION;
+    return ST_BATTLE_LOCATION;
   }
 
   // ..######..########....###....########.########
@@ -42,16 +43,18 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stBishopPacification()
+  public function stBattleLocation()
   {
-    // $args = self::getPossibleLevies();
-    // if (count($args['possibleLevies']) === 0) {
-    //   $this->resolveAction([]);
-    // } else if (count($args['possibleLevies']) === 1) {
-    //   $this->actTradeFairLevy([
-    //     'cityId' => array_keys($args['possibleLevies'])[0]
-    //   ]);
-    // }
+    $locations = $this->getLocation(false);
+
+    if (count($locations) === 1) {
+      $this->ctx->getParent()->updateInfo('empireId', $locations[0]);
+      $this->resolveAction([]);
+      return;
+    }
+    // throw new \feException("Implement Empire selection for battle");
+
+    // $this->resolveAction([]);
   }
 
   // ....###....########...######....######.
@@ -62,13 +65,23 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##..##....##..##....##
   // .##.....##.##.....##..######....######.
 
-  public function argsBishopPacification()
+  public function argsBattleLocation()
   {
+    $parentInfo = $this->ctx->getParent()->getInfo();
+
+    $source = $parentInfo['source'];
+    $data = $parentInfo['data'];
+    
 
     $data = [
-      'tokens' => $this->getTokens(),
+      // 'info' => $info,
+      // 'parentInfo' => $parentInfo,
+      'source' => $source,
+      'data' => $data,
+      'empires' => array_map(function ($empireId) {
+        return Empires::get($empireId);
+      }, $this->getLocation(false)),
     ];
-
 
     return $data;
   }
@@ -89,30 +102,21 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function actBishopPacification($args)
+  public function actBattleLocation($args)
   {
-    self::checkAction('actBishopPacification');
+    self::checkAction('actBattleLocation');
+    $empireId = $args['empireId'];
 
-    $tokenId = $args['tokenId'];
+    $locations = $this->getLocation(false);
 
-    $player = self::getPlayer();
-
-    if ($tokenId === null) {
-      Notifications::chooseNotToKill($player);
-      $this->resolveAction($args);
-      return;  
+    if (!in_array($empireId, $locations)) {
+      throw new \feException("Not allowed to battle in selected Empire");
     }
+    $empire = Empires::get($empireId);
 
-    $tokens = $this->getTokens();
+    Notifications::battleLocation(self::getPlayer(), $empire);
 
-    $token = Utils::array_find($tokens, function ($tkn) use ($tokenId) {
-      return $tkn->getId() === $tokenId;
-    });
-
-    if ($token === null) {
-      throw new \feException("Not allowed to select Token");
-    }
-    $token->returnToSupply(KILL, $player);
+    $this->ctx->getParent()->updateInfo('empireId', $empireId);
 
     $this->resolveAction($args);
   }
@@ -125,21 +129,21 @@ class BishopPacification extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getTokens()
+  private function getLocation()
   {
-    $info = $this->ctx->getInfo();
+    $parentInfo = $this->ctx->getParent()->getInfo();
+    $source = $parentInfo['source'];
+    $data = $parentInfo['data'];
 
-    $bishopId = $info['tokenId'];
-
-    $token = Tokens::get($bishopId);
-    $locationId = $token->getLocation();
-
-    $card = Cards::get($locationId);
-    $tokensOnCard = $card->getTokens();
-
-    $tokens = Utils::filter($tokensOnCard, function ($tokenOnCard) use ($bishopId) {
-      return $tokenOnCard->getId() !== $bishopId;
-    });
-    return $tokens;
+    switch ($source) {
+      case CONSPIRACY_ONE_SHOT:
+      case PEASANT_REVOLT_ONE_SHOT:
+      case JIHAD_ONE_SHOT:
+      case REFORMATION_ONE_SHOT:
+      case CRUSADE_ONE_SHOT:
+        return Cards::get($data['cardId'])->getAllEmpiresIds(false);
+      default:
+        return [];
+    }
   }
 }
