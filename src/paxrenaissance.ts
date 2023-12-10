@@ -40,6 +40,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     selectToken: SelectTokenState;
     tableauOpCommerce: TableauOpCommerceState;
     tableauOpRepress: TableauOpRepressState;
+    tableauOpSiege: TableauOpSiegeState;
     tableauOpsSelect: TableauOpsSelectState;
     tradeFairLevy: TradeFairLevyState
   };
@@ -86,6 +87,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       selectToken: new SelectTokenState(this),
       tableauOpCommerce: new TableauOpCommerceState(this),
       tableauOpRepress: new TableauOpRepressState(this),
+      tableauOpSiege: new TableauOpSiegeState(this),
       tableauOpsSelect: new TableauOpsSelectState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };

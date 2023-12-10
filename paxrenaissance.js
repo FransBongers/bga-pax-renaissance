@@ -1759,6 +1759,7 @@ var PaxRenaissance = (function () {
             _a.selectToken = new SelectTokenState(this),
             _a.tableauOpCommerce = new TableauOpCommerceState(this),
             _a.tableauOpRepress = new TableauOpRepressState(this),
+            _a.tableauOpSiege = new TableauOpSiegeState(this),
             _a.tableauOpsSelect = new TableauOpsSelectState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
@@ -5350,6 +5351,77 @@ var TableauOpRepressState = (function () {
         });
     };
     return TableauOpRepressState;
+}());
+var TableauOpSiegeState = (function () {
+    function TableauOpSiegeState(game) {
+        this.game = game;
+    }
+    TableauOpSiegeState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpSiegeState.prototype.onLeavingState = function () {
+        debug("Leaving OnEnteringTableauOpSiegeArgs");
+    };
+    TableauOpSiegeState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may Kill a Token"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpSiegeState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Token to Kill"),
+            args: {
+                tkn_florin: tknFlorin(),
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setTokensSelectable();
+    };
+    TableauOpSiegeState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var token = _a.token;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: token.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Kill ${tkn_mapToken}?"),
+            args: {
+                tkn_mapToken: tknMapToken(token.id),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpSiege",
+                    args: {
+                        tokenId: token.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    TableauOpSiegeState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        Object.values(this.args.tokens).forEach(function (token) {
+            _this.game.setTokenSelectable({
+                id: token.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirm({
+                        token: token,
+                    });
+                },
+            });
+        });
+    };
+    return TableauOpSiegeState;
 }());
 var TableauOpsSelectState = (function () {
     function TableauOpsSelectState(game) {

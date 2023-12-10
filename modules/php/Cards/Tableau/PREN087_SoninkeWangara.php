@@ -20,7 +20,15 @@ class PREN087_SoninkeWangara extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The Zayyanids were vassals of the Hafsids, Marindis, Aragon, and the Ottomans.')
     ];
     $this->name = clienttranslate('Soninke Wangara');
-    $this->oneShot = TRADE_SHIFT_NOVGOROD_ONE_SHOT;
+    $this->oneShot = TRADE_SHIFT_TIMBUKTU_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => COMMERCE_OP_EAST,
+        'flavorText' => clienttranslate('Gold traders'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

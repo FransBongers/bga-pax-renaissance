@@ -106,6 +106,10 @@ interface OnEnteringTableauOpRepressArgs extends CommonArgs {
   tokens: Record<string, Token>;
 }
 
+interface OnEnteringTableauOpSiegeArgs extends CommonArgs {
+  tokens: Record<string, Token>;
+}
+
 interface OnEnteringTableauOpsSelectArgs extends CommonArgs {
   availableOps: Record<string, TableauOp[]>;
   tableauCards: EmpireCard | TableauCard;

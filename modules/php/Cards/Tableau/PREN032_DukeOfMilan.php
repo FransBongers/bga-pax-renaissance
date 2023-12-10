@@ -25,6 +25,20 @@ class PREN032_DukeOfMilan extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Duke of Milan');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      // [
+      //   'id' => TAX_OP,
+      //   'flavorText' => clienttranslate('Tax riots'),
+      //   'top' => 0,
+      //   'left' => 0,
+      // ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Condottiero'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [PATRON];
     $this->region = WEST;
   }

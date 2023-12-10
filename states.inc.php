@@ -402,6 +402,26 @@ $machinestates = [
         'possibleactions' => ['actTableauOpsSelect', 'pass'],
     ],
 
+    ST_TABLEAU_OP_BEHEAD => [
+        'name' => 'tableauOpBehead',
+        'description' => clienttranslate('${actplayer} may behead'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpBehead', 'pass'],
+    ],
+
+    ST_TABLEAU_OP_CAMPAIGN => [
+        'name' => 'tableauOpCampaign',
+        'description' => clienttranslate('${actplayer} may Campaign'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpCampaign', 'pass'],
+    ],
+
     ST_TABLEAU_OP_COMMERCE => [
         'name' => 'tableauOpCommerce',
         'description' => clienttranslate('${actplayer} may take one Florin'),
@@ -412,14 +432,64 @@ $machinestates = [
         'possibleactions' => ['actTableauOpCommerce', 'pass'],
     ],
 
+    ST_TABLEAU_OP_CORSAIR => [
+        'name' => 'tableauOpCorsair',
+        'description' => clienttranslate('${actplayer} may Corsair'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpCorsair', 'pass'],
+    ],
+
+    ST_TABLEAU_OP_INQUISITOR => [
+        'name' => 'tableauOpInquisitor',
+        'description' => clienttranslate('${actplayer} may move a Bishop'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpInquisitor', 'pass'],
+    ],
+
     ST_TABLEAU_OP_REPRESS => [
         'name' => 'tableauOpRepress',
-        'description' => clienttranslate('${actplayer} may repress a Token'),
+        'description' => clienttranslate('${actplayer} may Repress a Token'),
         'descriptionmyturn' => clienttranslate('${you}'),
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
         'possibleactions' => ['actTableauOpRepress', 'pass'],
+    ],
+
+    ST_TABLEAU_OP_SIEGE => [
+        'name' => 'tableauOpSiege',
+        'description' => clienttranslate('${actplayer} may Kill a Token'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpSiege', 'pass'],
+    ],
+
+    ST_TABLEAU_OP_TAX => [
+        'name' => 'tableauOpTax',
+        'description' => clienttranslate('${actplayer} may Tax'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpTax', 'pass'],
+    ],
+
+    ST_TABLEAU_OP_VOTE => [
+        'name' => 'tableauOpVote',
+        'description' => clienttranslate('${actplayer} may Vote'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpVote', 'pass'],
     ],
 
     ST_CLEANUP => [
