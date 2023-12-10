@@ -1,0 +1,27 @@
+<?php
+
+namespace PaxRenaissance\Cards\Tableau;
+
+class PREN037_TheHidden extends \PaxRenaissance\Models\TableauCard
+{
+  public function __construct($row)
+  {
+    parent::__construct($row);
+    $this->id = 'PREN037_TheHidden';
+    $this->agents = [
+      [
+        'religion' => null,
+        'type' => PAWN,
+      ]
+    ];
+    $this->empire = ARAGON;
+    $this->flavorText = [
+      clienttranslate('The Revolta de les Germanies (Revolt of the Brotherhoods) was an anti-monarchist, anti-feudal autonomist movement in the Kingdom of Aragon. Inspired by the Italian republics, the artisan guilds of Valancia fought against royalists from 1519-23.'),
+      clienttranslate('The final stage of the guerilla warfare was led by a mysterious shrouded leader "The Hidden", who claimed messianic powers. His true name and lineage remain unknown.')
+    ];
+    $this->name = clienttranslate('The Hidden');
+    $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->prestige = [LAW];
+    $this->region = WEST;
+  }
+}
