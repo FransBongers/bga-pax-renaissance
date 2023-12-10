@@ -21,6 +21,20 @@ class PREN073_TheCrimHorde extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('The Crim Horde');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate('Abdan Khan Gothian slave raids'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_EAST,
+        'flavorText' => clienttranslate('Zichian grain'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

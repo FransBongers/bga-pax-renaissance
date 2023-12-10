@@ -25,6 +25,20 @@ class PREN025_TeutonicKnights extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Teutonic Knights');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN_ROOK,
+        'flavorText' => clienttranslate('Großschäffer'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      // [
+      //   'id' => SIEGE_OP,
+      //   'flavorText' => clienttranslate('13-years war'),
+      //   'top' => 0,
+      //   'left' => 0,
+      // ]
+    ];
     $this->region = WEST;
   }
 }

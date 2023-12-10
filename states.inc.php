@@ -412,6 +412,16 @@ $machinestates = [
         'possibleactions' => ['actTableauOpCommerce', 'pass'],
     ],
 
+    ST_TABLEAU_OP_REPRESS => [
+        'name' => 'tableauOpRepress',
+        'description' => clienttranslate('${actplayer} may repress a Token'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpRepress', 'pass'],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',

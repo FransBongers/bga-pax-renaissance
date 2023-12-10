@@ -37,6 +37,7 @@ class AtomicActions
     SELL_CARD => 'SellCard',
     SELECT_TOKEN => 'SelectToken',
     TABLEAU_OP_COMMERCE => 'TableauOpCommerce',
+    TABLEAU_OP_REPRESS => 'TableauOpRepress',
     TABLEAU_OPS_SELECT => 'TableauOpsSelect',
     TRADE_FAIR => 'TradeFair',
     TRADE_FAIR_PROFIT_DISPERSAL => 'TradeFairProfitDispersal',

@@ -23,14 +23,14 @@ trait DebugTrait
 {
   function test()
   {
-    Notifications::log('Available ops', Cards::get('PREN039_FlorentineWool')->getAvailableOps());
+    // Notifications::log('Available ops', Cards::get('PREN039_FlorentineWool')->getAvailableOps());
     // Cards::setUsed('PREN039_FlorentineWool',0);
     // $this->debugPlaceToken(BISHOP, REFORMIST, 'PREN039_FlorentineWool');
-    // Notifications::log('commerce west', TableauOps::get(COMMERCE_OP_WEST)->canBePerformed(Players::get(), Cards::get('PREN040_SindicatRemenca')));
+    // Notifications::log('commerce west', TableauOps::get(REPRESS_OP_KNIGHT)->canBePerformed(Players::get(), Cards::get('PREN035_CommunerosGuilds')));
     // Notifications::log('Available ops', Cards::get('PREN040_SindicatRemenca')->getAvailableOps());
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_1);
-    // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_2);
+    $this->debugPlaceToken(PAWN, MEDICI, BORDER_BYZANTIUM_MAMLUK);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, MODON);
     // $this->debugPlaceToken(ROOK, REFORMIST, Empires::get(MAMLUK)->getEmpireSquareId());
     // $this->debugPlaceToken(ROOK, CATHOLIC, Empires::get(MAMLUK)->getEmpireSquareId());
