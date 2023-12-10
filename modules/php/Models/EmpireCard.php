@@ -25,6 +25,7 @@ class EmpireCard extends Card
   protected $nameRepublic;
   protected $prestige = [];
   protected $startLocation;
+  protected $republicOps;
 
   protected $staticAttributes = [
     'empire',

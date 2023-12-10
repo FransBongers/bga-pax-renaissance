@@ -10,6 +10,28 @@ class EmpireSquare_HolyRomanEmpire extends \PaxRenaissance\Models\EmpireCard
     $this->empire = HOLY_ROMAN_EMIRE;
     $this->nameKing = clienttranslate('Frederick III House of Habsburg');
     $this->nameRepublic = clienttranslate('Reichstag Imperial Diet');
+    $this->ops = [
+      [
+        'id' => CAMPAIGN_OP,
+        'flavorText' => clienttranslate("Bohemian War"),
+        'top' => 0,
+        'left' => 0,
+      ],
+    ];
+    $this->republicOps = [
+      [
+        'id' => VOTE_OP_WEST,
+        'flavorText' => clienttranslate("Imperial reform"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => '',
+        'top' => 0,
+        'left' => 0,
+      ],
+    ];
     $this->startLocation = 'throne_holyRomanEmpire';
   }
 }
