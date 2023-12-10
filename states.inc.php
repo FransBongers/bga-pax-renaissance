@@ -482,6 +482,16 @@ $machinestates = [
         'possibleactions' => ['actTableauOpTax', 'pass'],
     ],
 
+    ST_TABLEAU_OP_TAX_PAY_OR_REPRESS => [
+        'name' => 'tableauOpTaxPayOrRepress',
+        'description' => clienttranslate('${actplayer} must choose to pay or Repress'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpTaxPayOrRepress', 'pass'],
+    ],
+
     ST_TABLEAU_OP_VOTE => [
         'name' => 'tableauOpVote',
         'description' => clienttranslate('${actplayer} may Vote'),

@@ -1,27 +1,25 @@
-class TableauOpsSelectState implements State {
+class ConfirmPartialTurnState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTableauOpsSelectArgs;
+  private args: OnEnteringConfirmTurnArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTableauOpsSelectArgs) {
+  onEnteringState(args: OnEnteringConfirmTurnArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TableauOpsSelectState");
+    debug("Leaving ConfirmTurnState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select Ops to perform"),
+      text: _("${tkn_playerName} must confirm the switch of player"),
       args: {
-        tkn_playerName: this.game.playerManager
-          .getPlayer({ playerId: activePlayerId })
-          .getName(),
+        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
       },
       nonActivePlayers: true,
     });
@@ -46,41 +44,16 @@ class TableauOpsSelectState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select a card to perform Ops"),
+      text: _("${tkn_playerName} must confirm the switch of player. You will not be able to restart your turn"),
       args: {
-        tkn_playerName: "${you}",
+        tkn_playerName: '${you}'
       },
     });
-
-    this.setCardsSelectable();
-
+    this.game.addConfirmButton({
+      callback: () => this.game.takeAction({action: 'actConfirmPartialTurn'})
+    })
   }
 
-  private updateInterfaceConfirm({cardId, ops}: { cardId: string; ops: TableauOp[] }) {
-    this.game.clearPossible();
-    this.game.setCardSelected({id: cardId});
-    this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may choose an Op to perform"),
-      args: {
-        tkn_playerName: "${you}",
-      },
-    });
-    ops.forEach((tableauOp, index) => {
-      this.game.addPrimaryActionButton({
-        id: `${tableauOp.id}_${index}_btn`,
-        text: _(tableauOp.name),
-        callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpsSelect",
-          args: {
-            cardId,
-            tableauOpId: tableauOp.id,
-          },
-        }),
-      })
-    });
-    this.game.addCancelButton();
-  }
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -90,18 +63,6 @@ class TableauOpsSelectState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private setCardsSelectable() {
-    Object.keys(this.args.availableOps).forEach((id: string) => {
-      this.game.setCardSelectable({
-        id,
-        callback: () =>
-          this.updateInterfaceConfirm({
-            cardId: id,
-            ops: this.args.availableOps[id],
-          }),
-      });
-    });
-  }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.

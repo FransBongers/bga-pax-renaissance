@@ -49,6 +49,7 @@ class NotificationManager {
       ["returnToSupply", undefined],
       ["sellCard", undefined],
       ["tableauOpCommerce", undefined],
+      ["tableauOpTaxPay", undefined],
       ["tradeFairConvene", undefined],
       ["tradeFairEmporiumSubsidy", undefined],
       // ["tradeFairPlaceLevy", undefined],
@@ -339,10 +340,19 @@ class NotificationManager {
   }
 
   async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {
-    const {playerId, card} = notif.args;
-    const [_, region, column] = card.location.split('_')
-    this.game.market.incFlorinValue({region: region as 'east' | 'west', column: Number(column), value: -1});
-    this.getPlayer({playerId}).counters.florins.incValue(1);
+    const { playerId, card } = notif.args;
+    const [_, region, column] = card.location.split("_");
+    this.game.market.incFlorinValue({
+      region: region as "east" | "west",
+      column: Number(column),
+      value: -1,
+    });
+    this.getPlayer({ playerId }).counters.florins.incValue(1);
+  }
+
+  async notif_tableauOpTaxPay(notif: Notif<NotifTableauOpTaxPayArgs>) {
+    const { playerId } = notif.args;
+    this.getPlayer({ playerId }).counters.florins.incValue(-1);
   }
 
   async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {

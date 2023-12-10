@@ -20,11 +20,11 @@ use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class TableauOpTax extends \PaxRenaissance\Models\AtomicAction
+class TableauOpTaxPayOrRepress extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_TABLEAU_OP_TAX;
+    return ST_TABLEAU_OP_TAX_PAY_OR_REPRESS;
   }
 
   // ..######..########....###....########.########
@@ -43,8 +43,14 @@ class TableauOpTax extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stTableauOpTax()
+  public function stTableauOpTaxPayOrRepress()
   {
+    $player = self::getPlayer();
+    if ($player->getFlorins() > 0) {
+      return;
+    }
+    Notifications::tableauOpTaxNoFlorins($player);
+    $this->resolveRepress();
   }
 
   // ....###....########...######....######.
@@ -55,16 +61,15 @@ class TableauOpTax extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##..##....##..##....##
   // .##.....##.##.....##..######....######.
 
-  public function argsTableauOpTax()
+  public function argsTableauOpTaxPayOrRepress()
   {
     $info = $this->ctx->getInfo();
-    $tableauOpId = $info['tableauOpId'];
-
-    $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId'];
+    $tokenId = $info['tokenId'];
+    $empireId = $info['empireId'];
 
     $data = [
-      'tokens' => $tableauOp->getOptions(Cards::get($cardId)),
+      'token' => Tokens::get($tokenId),
+      'empire' => Empires::get($empireId),
     ];
 
     return $data;
@@ -86,54 +91,18 @@ class TableauOpTax extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function actTableauOpTax($args)
+  public function actTableauOpTaxPayOrRepress($args)
   {
-    self::checkAction('actTableauOpTax');
+    self::checkAction('actTableauOpTaxPayOrRepress');
 
-    $info = $this->ctx->getInfo();
-    $tableauOpId = $info['tableauOpId'];
-
-    $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId'];
-
-
-    $options = $tableauOp->getOptions(Cards::get($cardId));
-
-    $tokenId = $args['tokenId'];
-
-    if (!isset($options[$tokenId])) {
-      throw new \feException("Not allowed to Tax selected Token");
+    $pay = $args['pay'];
+    if ($pay) {
+      $player = self::getPlayer();
+      $player->incFlorins(-1);
+      Notifications::tableauOpTaxPay($player);
+    } else {
+      $this->resolveRepress();
     }
-
-    $empireId = $args['empireId'];
-    $empire = Utils::array_find($options[$tokenId]['empires'], function ($optionEmpire) use ($empireId) {
-      return $optionEmpire->getId() === $empireId;
-    });
-
-    if ($empire === null) {
-      throw new \feException("Not allowed to Tax in selected Empire");
-    }
-
-    $token = $options[$tokenId]['token'];
-    $owner = $token->getOwner();
-    $ownerId = $owner->getId();
-    $player = self::getPlayer();
-
-    Notifications::tableauOpTax($player, $token, $empire);
-
-    $this->ctx->getParent()->pushChild(new LeafNode([
-      'action' => TABLEAU_OP_TAX_PAY_OR_REPRESS,
-      'playerId' => $ownerId,
-      'empireId' => $empireId,
-      'tokenId' => $tokenId,
-    ]));
-
-    $this->ctx->getParent()->pushChild(new LeafNode([
-      'action' => TRADE_FAIR_LEVY,
-      'playerId' => $ownerId,
-      'empireId' => $empireId,
-    ]));
-
 
     $this->resolveAction($args);
   }
@@ -146,4 +115,11 @@ class TableauOpTax extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
+  private function resolveRepress()
+  {
+    $info = $this->ctx->getInfo();
+    $tokenId = $info['tokenId'];
+    $empireId = $info['empireId'];
+    Tokens::get($tokenId)->repress($empireId, 0);
+  }
 }

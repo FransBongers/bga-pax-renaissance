@@ -31,9 +31,9 @@ interface OnEnteringAnnounceOneShotArgs extends CommonArgs {
 }
 
 interface OnEnteringBattleCasualtiesArgs extends CommonArgs {
-  agents: Agent[]
-  tokens: (Token & {locationName: string})[];
-  numberToEliminate: number
+  agents: Agent[];
+  tokens: (Token & { locationName: string })[];
+  numberToEliminate: number;
 }
 
 interface OnEnteringBattleLocationArgs extends CommonArgs {
@@ -55,7 +55,7 @@ interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
 interface PlaceAgentLocation {
   id: string;
   name: string;
-  type: 'border' | 'city',
+  type: "border" | "city";
   cost: number;
   repressed: Token;
 }
@@ -72,8 +72,8 @@ interface OnEnteringPlaceAgentsArgs extends CommonArgs {
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {
   availableOps: {
-    east: Record<string, {id: string; text: string;}>
-    west: Record<string, {id: string; text: string;}>
+    east: Record<string, { id: string; text: string }>;
+    west: Record<string, { id: string; text: string }>;
   };
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];
@@ -91,7 +91,7 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
 
 interface OnEnteringRegimeChangeEmancipationArgs extends CommonArgs {
   tokens: Token[];
-  options: Record<string, (City | Border)[]>
+  options: Record<string, (City | Border)[]>;
 }
 
 interface OnEnteringSelectTokenArgs extends CommonArgs {
@@ -108,6 +108,15 @@ interface OnEnteringTableauOpRepressArgs extends CommonArgs {
 
 interface OnEnteringTableauOpSiegeArgs extends CommonArgs {
   tokens: Record<string, Token>;
+}
+
+interface OnEnteringTableauOpTaxArgs extends CommonArgs {
+  tokens: Record<string, { token: Token; empires: Empire[] }>;
+}
+
+interface OnEnteringTableauOpTaxPayOrRepressArgs extends CommonArgs {
+  token: Token;
+  empire: Token;
 }
 
 interface OnEnteringTableauOpsSelectArgs extends CommonArgs {

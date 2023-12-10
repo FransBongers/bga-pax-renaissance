@@ -86,6 +86,9 @@ interface NotifTableauOpCommerceArgs extends NotifWithPlayerArgs {
   card: TableauCard;
 }
 
+interface NotifTableauOpTaxPayArgs extends NotifWithPlayerArgs {
+}
+
 interface NotifTradeFairConveneArgs extends NotifWithPlayerArgs {
   region: string;
   florinsFromChina: number;

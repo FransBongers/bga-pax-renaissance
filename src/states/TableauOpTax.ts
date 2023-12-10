@@ -1,23 +1,23 @@
-class TableauOpsSelectState implements State {
+class TableauOpTaxState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTableauOpsSelectArgs;
+  private args: OnEnteringTableauOpTaxArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTableauOpsSelectArgs) {
+  onEnteringState(args: OnEnteringTableauOpTaxArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TableauOpsSelectState");
+    debug("Leaving TableauOpTaxState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select Ops to perform"),
+      text: _("${tkn_playerName} must select a Concession to Tax"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -46,38 +46,66 @@ class TableauOpsSelectState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select a card to perform Ops"),
+      text: _("${tkn_playerName} must select a Concession to Tax"),
       args: {
         tkn_playerName: "${you}",
       },
     });
 
-    this.setCardsSelectable();
-
+    this.setTokensSelectable();
   }
 
-  private updateInterfaceConfirm({cardId, ops}: { cardId: string; ops: TableauOp[] }) {
+  private updateInterfaceSelectEmpire({
+    token,
+    empires,
+  }: {
+    token: Token;
+    empires: Empire[];
+  }) {
     this.game.clearPossible();
-    this.game.setCardSelected({id: cardId});
+    this.game.setTokenSelected({ id: token.id });
+
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may choose an Op to perform"),
+      text: _("${tkn_playerName} must select the Empire to Tax"),
       args: {
         tkn_playerName: "${you}",
       },
     });
-    ops.forEach((tableauOp, index) => {
-      this.game.addPrimaryActionButton({
-        id: `${tableauOp.id}_${index}_btn`,
-        text: _(tableauOp.name),
-        callback: () =>
+
+    empires.forEach((empire) => {
+      this.game.setLocationSelectable({
+        id: empire.id,
+        callback: () => this.updateInterfaceConfirm({ token, empire }),
+      });
+    });
+  }
+
+  private updateInterfaceConfirm({
+    token,
+    empire,
+  }: {
+    token: Token;
+    empire: Empire;
+  }) {
+    this.game.clearPossible();
+    this.game.setTokenSelected({ id: token.id });
+    this.game.setLocationSelected({ id: empire.id });
+    this.game.clientUpdatePageTitle({
+      text: _("Tax ${tkn_mapToken} in ${tkn_boldText}?"),
+      args: {
+        tkn_mapToken: tknMapToken(token.id),
+        tkn_boldText: _(empire.name),
+      },
+    });
+    this.game.addConfirmButton({
+      callback: () =>
         this.game.takeAction({
-          action: "actTableauOpsSelect",
+          action: "actTableauOpTax",
           args: {
-            cardId,
-            tableauOpId: tableauOp.id,
+            tokenId: token.id,
+            empireId: empire.id,
           },
         }),
-      })
     });
     this.game.addCancelButton();
   }
@@ -90,15 +118,23 @@ class TableauOpsSelectState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private setCardsSelectable() {
-    Object.keys(this.args.availableOps).forEach((id: string) => {
-      this.game.setCardSelectable({
-        id,
-        callback: () =>
-          this.updateInterfaceConfirm({
-            cardId: id,
-            ops: this.args.availableOps[id],
-          }),
+  private setTokensSelectable() {
+    Object.values(this.args.tokens).forEach(({ token, empires }) => {
+      this.game.setTokenSelectable({
+        id: token.id,
+        callback: () => {
+          if (empires.length > 1) {
+            this.updateInterfaceSelectEmpire({
+              token,
+              empires,
+            });
+          } else {
+            this.updateInterfaceConfirm({
+              token,
+              empire: empires[0],
+            });
+          }
+        },
       });
     });
   }

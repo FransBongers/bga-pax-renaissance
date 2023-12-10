@@ -1751,6 +1751,7 @@ var PaxRenaissance = (function () {
             _a.battleCasualties = new BattleCasualtiesState(this),
             _a.battleLocation = new BattleLocationState(this),
             _a.bishopPacification = new BishopPacificationState(this),
+            _a.confirmPartialTurn = new ConfirmPartialTurnState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
             _a.placeAgent = new PlaceAgentState(this),
@@ -1761,6 +1762,8 @@ var PaxRenaissance = (function () {
             _a.tableauOpRepress = new TableauOpRepressState(this),
             _a.tableauOpSiege = new TableauOpSiegeState(this),
             _a.tableauOpsSelect = new TableauOpsSelectState(this),
+            _a.tableauOpTax = new TableauOpTaxState(this),
+            _a.tableauOpTaxPayOrRepress = new TableauOpTaxPayOrRepressState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
         this.animationManager = new AnimationManager(this, { duration: 500 });
@@ -3350,6 +3353,7 @@ var NotificationManager = (function () {
             ["returnToSupply", undefined],
             ["sellCard", undefined],
             ["tableauOpCommerce", undefined],
+            ["tableauOpTaxPay", undefined],
             ["tradeFairConvene", undefined],
             ["tradeFairEmporiumSubsidy", undefined],
             ["tradeFairProfitDispersalPirates", undefined],
@@ -3686,9 +3690,23 @@ var NotificationManager = (function () {
             var _a, playerId, card, _b, _, region, column;
             return __generator(this, function (_c) {
                 _a = notif.args, playerId = _a.playerId, card = _a.card;
-                _b = card.location.split('_'), _ = _b[0], region = _b[1], column = _b[2];
-                this.game.market.incFlorinValue({ region: region, column: Number(column), value: -1 });
+                _b = card.location.split("_"), _ = _b[0], region = _b[1], column = _b[2];
+                this.game.market.incFlorinValue({
+                    region: region,
+                    column: Number(column),
+                    value: -1,
+                });
                 this.getPlayer({ playerId: playerId }).counters.florins.incValue(1);
+                return [2];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_tableauOpTaxPay = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId;
+            return __generator(this, function (_a) {
+                playerId = notif.args.playerId;
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-1);
                 return [2];
             });
         });
@@ -4552,6 +4570,41 @@ var ClientStartTradeFairState = (function () {
         this.game.addCancelButton();
     };
     return ClientStartTradeFairState;
+}());
+var ConfirmPartialTurnState = (function () {
+    function ConfirmPartialTurnState(game) {
+        this.game = game;
+    }
+    ConfirmPartialTurnState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    ConfirmPartialTurnState.prototype.onLeavingState = function () {
+        debug("Leaving ConfirmTurnState");
+    };
+    ConfirmPartialTurnState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must confirm the switch of player"),
+            args: {
+                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+            },
+            nonActivePlayers: true,
+        });
+    };
+    ConfirmPartialTurnState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must confirm the switch of player. You will not be able to restart your turn"),
+            args: {
+                tkn_playerName: '${you}'
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () { return _this.game.takeAction({ action: 'actConfirmPartialTurn' }); }
+        });
+    };
+    return ConfirmPartialTurnState;
 }());
 var ConfirmTurnState = (function () {
     function ConfirmTurnState(game) {
@@ -5481,6 +5534,7 @@ var TableauOpsSelectState = (function () {
                 },
             });
         });
+        this.game.addCancelButton();
     };
     TableauOpsSelectState.prototype.setCardsSelectable = function () {
         var _this = this;
@@ -5497,6 +5551,169 @@ var TableauOpsSelectState = (function () {
         });
     };
     return TableauOpsSelectState;
+}());
+var TableauOpTaxState = (function () {
+    function TableauOpTaxState(game) {
+        this.game = game;
+    }
+    TableauOpTaxState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpTaxState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpTaxState");
+    };
+    TableauOpTaxState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Concession to Tax"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpTaxState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Concession to Tax"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setTokensSelectable();
+    };
+    TableauOpTaxState.prototype.updateInterfaceSelectEmpire = function (_a) {
+        var _this = this;
+        var token = _a.token, empires = _a.empires;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: token.id });
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select the Empire to Tax"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        empires.forEach(function (empire) {
+            _this.game.setLocationSelectable({
+                id: empire.id,
+                callback: function () { return _this.updateInterfaceConfirm({ token: token, empire: empire }); },
+            });
+        });
+    };
+    TableauOpTaxState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var token = _a.token, empire = _a.empire;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: token.id });
+        this.game.setLocationSelected({ id: empire.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Tax ${tkn_mapToken} in ${tkn_boldText}?"),
+            args: {
+                tkn_mapToken: tknMapToken(token.id),
+                tkn_boldText: _(empire.name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpTax",
+                    args: {
+                        tokenId: token.id,
+                        empireId: empire.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    TableauOpTaxState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        Object.values(this.args.tokens).forEach(function (_a) {
+            var token = _a.token, empires = _a.empires;
+            _this.game.setTokenSelectable({
+                id: token.id,
+                callback: function () {
+                    if (empires.length > 1) {
+                        _this.updateInterfaceSelectEmpire({
+                            token: token,
+                            empires: empires,
+                        });
+                    }
+                    else {
+                        _this.updateInterfaceConfirm({
+                            token: token,
+                            empire: empires[0],
+                        });
+                    }
+                },
+            });
+        });
+    };
+    return TableauOpTaxState;
+}());
+var TableauOpTaxPayOrRepressState = (function () {
+    function TableauOpTaxPayOrRepressState(game) {
+        this.game = game;
+    }
+    TableauOpTaxPayOrRepressState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpTaxPayOrRepressState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpTaxState");
+    };
+    TableauOpTaxPayOrRepressState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must pay or Repress Concession"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpTaxPayOrRepressState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: this.args.empire.id });
+        this.game.setTokenSelected({ id: this.args.token.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Your ${tkn_mapToken} is taxed. ${tkn_playerName} must pay 1 ${tkn_florin} to China or Repress your ${tkn_mapToken}"),
+            args: {
+                tkn_playerName: "${you}",
+                tkn_mapToken: tknMapToken(this.args.token.id),
+                tkn_florin: tknFlorin(),
+            },
+        });
+        this.game.addPrimaryActionButton({
+            id: "pay_btn",
+            text: _("Pay"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpTaxPayOrRepress",
+                    args: {
+                        pay: true,
+                    },
+                });
+            },
+        });
+        this.game.addPrimaryActionButton({
+            id: "repress_btn",
+            text: _("Repress"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpTaxPayOrRepress",
+                    args: {
+                        pay: false,
+                    },
+                });
+            },
+        });
+    };
+    return TableauOpTaxPayOrRepressState;
 }());
 var TradeFairLevyState = (function () {
     function TradeFairLevyState(game) {

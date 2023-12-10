@@ -32,17 +32,20 @@ class PaxRenaissance implements PaxRenaissanceGame {
     battleCasualties: BattleCasualtiesState;
     battleLocation: BattleLocationState;
     bishopPacification: BishopPacificationState;
+    confirmPartialTurn: ConfirmPartialTurnState;
     confirmTurn: ConfirmTurnState;
     flipVictoryCard: FlipVictoryCardState;
     placeAgent: PlaceAgentState;
     playerAction: PlayerActionState;
-    regimeChangeEmancipation: RegimeChangeEmancipationState,
+    regimeChangeEmancipation: RegimeChangeEmancipationState;
     selectToken: SelectTokenState;
     tableauOpCommerce: TableauOpCommerceState;
     tableauOpRepress: TableauOpRepressState;
     tableauOpSiege: TableauOpSiegeState;
     tableauOpsSelect: TableauOpsSelectState;
-    tradeFairLevy: TradeFairLevyState
+    tableauOpTax: TableauOpTaxState;
+    tableauOpTaxPayOrRepress: TableauOpTaxPayOrRepressState;
+    tradeFairLevy: TradeFairLevyState;
   };
 
   constructor() {
@@ -79,6 +82,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       battleCasualties: new BattleCasualtiesState(this),
       battleLocation: new BattleLocationState(this),
       bishopPacification: new BishopPacificationState(this),
+      confirmPartialTurn: new ConfirmPartialTurnState(this),
       confirmTurn: new ConfirmTurnState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
       placeAgent: new PlaceAgentState(this),
@@ -89,12 +93,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
       tableauOpRepress: new TableauOpRepressState(this),
       tableauOpSiege: new TableauOpSiegeState(this),
       tableauOpsSelect: new TableauOpsSelectState(this),
+      tableauOpTax: new TableauOpTaxState(this),
+      tableauOpTaxPayOrRepress: new TableauOpTaxPayOrRepressState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };
 
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
-    
+
     this.gameMap = new GameMap(this);
     this.tooltipManager = new TooltipManager(this);
     this.hand = new Hand(this);
@@ -167,7 +173,10 @@ class PaxRenaissance implements PaxRenaissanceGame {
     ) {
       this.activeStates[stateName].onEnteringState(args.args);
     } else if (this.activeStates[stateName]) {
-      this.activeStates[stateName].setDescription(Number(args.active_player), args.args);
+      this.activeStates[stateName].setDescription(
+        Number(args.active_player),
+        args.args
+      );
     }
   }
 
@@ -474,13 +483,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     );
   }
 
-  setCardSelected({
-    id,
-    back = false,
-  }: {
-    id: string;
-    back?: boolean;
-  }) {
+  setCardSelected({ id, back = false }: { id: string; back?: boolean }) {
     const nodeId = `${id}-${back ? "back" : "front"}`;
     const node = $(nodeId);
     if (node === null) {

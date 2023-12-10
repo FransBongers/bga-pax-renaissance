@@ -45,6 +45,7 @@ class AtomicActions
     TABLEAU_OPS_SELECT => 'TableauOpsSelect',
     TABLEAU_OP_SIEGE => 'TableauOpSiege',
     TABLEAU_OP_TAX => 'TableauOpTax',
+    TABLEAU_OP_TAX_PAY_OR_REPRESS => 'TableauOpTaxPayOrRepress',
     TABLEAU_OP_VOTE => 'TableauOpVote',
     TRADE_FAIR => 'TradeFair',
     TRADE_FAIR_PROFIT_DISPERSAL => 'TradeFairProfitDispersal',

@@ -2,11 +2,13 @@
 
 namespace PaxRenaissance\TableauOps;
 
+use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
+
 
 class TaxOp extends \PaxRenaissance\Models\TableauOp
 {
@@ -28,17 +30,21 @@ class TaxOp extends \PaxRenaissance\Models\TableauOp
     }
 
     $options = $this->getOptions($card);
-    Notifications::log('options',$options);
+    Notifications::log('options', $options);
     return count($options) > 0;
   }
 
   public function getFlow($player, $cardId)
   {
-    return new LeafNode([
-      'action' => TABLEAU_OP_TAX,
-      'playerId' => $player->getId(),
-      'tableauOpId' => $this->id,
-      'cardId' => $cardId,
+    return Engine::buildtree([
+      'children' => [
+        [
+          'action' => TABLEAU_OP_TAX,
+          'playerId' => $player->getId(),
+          'tableauOpId' => $this->id,
+          'cardId' => $cardId,
+        ]
+      ]
     ]);
   }
 
@@ -47,25 +53,29 @@ class TaxOp extends \PaxRenaissance\Models\TableauOp
     $empireIds = $card->getAllEmpiresIds(false);
     $options = [];
 
-    // foreach ($empireIds as $empireId) {
-    //   $empire = Empires::get($empireId);
+    foreach ($empireIds as $empireId) {
+      $empire = Empires::get($empireId);
 
-    //   $cities = $empire->getCities();
-    //   foreach ($cities as $city) {
-    //     $token = $city->getToken();
-    //     if ($token !== null && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
+      $cities = $empire->getCities(true);
 
-    //   $borders = $empire->getBorders();
-    //   foreach ($borders as $border) {
-    //     $token = $border->getToken();
-    //     if ($token !== null && !isset($options[$token->getId()]) && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
-    // }
+      if (count($cities) === 0) {
+        continue;
+      }
+
+      $borders = $empire->getBorders();
+      foreach ($borders as $border) {
+        $token = $border->getToken();
+        if ($token === null || $token->getType() !== PAWN) {
+          continue;
+        }
+
+        if (!isset($options[$token->getId()])) {
+          $options[$token->getId()] = ['token' => $token, 'empires' => [$empire]];
+        } else {
+          $options[$token->getId()]['empires'][] = $empire;
+        }
+      }
+    }
 
     return $options;
   }

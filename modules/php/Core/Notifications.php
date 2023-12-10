@@ -263,7 +263,8 @@ class Notifications
     ]);
   }
 
-  public static function changeEmpireToTheocracy($empire, $religion) {
+  public static function changeEmpireToTheocracy($empire, $religion)
+  {
     self::notifyAll("changeEmpireToTheocracy",  clienttranslate('${tkn_boldText_empire_name} changes into a ${religion} Theocracy'), [
       'tkn_boldText_empire_name' => $empire->getName(),
       'empire' => $empire,
@@ -452,7 +453,7 @@ class Notifications
 
   public static function tableauOpCommerce($player, $card)
   {
-    $cardName = in_array($card->getLocation(), [Locations::market(WEST,0), Locations::market(EAST,0)]) ? clienttranslate('trade fair card') : $card->getName();
+    $cardName = in_array($card->getLocation(), [Locations::market(WEST, 0), Locations::market(EAST, 0)]) ? clienttranslate('trade fair card') : $card->getName();
 
     self::notifyAll("tableauOpCommerce", clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} from ${tkn_cardName}'), [
       'player' => $player,
@@ -464,11 +465,36 @@ class Notifications
 
   public static function tableauOpSelected($player, $tableauOp, $card)
   {
-    self::message(clienttranslate('${tkn_playerName} performs ${tkn_boldText} Op from ${tkn_cardName} ${tkn_tableauOp}'),[
+    self::message(clienttranslate('${tkn_playerName} performs ${tkn_boldText} Op from ${tkn_cardName} ${tkn_tableauOp}'), [
       'player' => $player,
       'tkn_tableauOp' => $tableauOp->getId(),
       'tkn_boldText' => $tableauOp->getName(),
       'tkn_cardName' => $card->getName(),
+    ]);
+  }
+  
+  public static function tableauOpTax($player, $token, $empire)
+  {
+    self::message(clienttranslate('${tkn_playerName} Taxes ${tkn_mapToken} in ${tkn_boldText}'), [
+      'player' => $player,
+      'tkn_mapToken' => $token->getSeparator().'_'.$token->getType(),
+      'tkn_boldText' => $empire->getName(),
+    ]);
+  }
+
+
+  public static function tableauOpTaxNoFlorins($player)
+  {
+    self::message(clienttranslate('${tkn_playerName} cannot pay Tax'), [
+      'player' => $player,
+    ]);
+  }
+
+  public static function tableauOpTaxPay($player)
+  {
+    self::notifyAll("tableauOpTaxPay", clienttranslate('${tkn_playerName} pays 1 ${tkn_florin} to China'), [
+      'player' => $player,
+      'tkn_florin' => clienttranslate("Florin(s)"),
     ]);
   }
 
