@@ -46,7 +46,6 @@ class BattleCasualties extends \PaxRenaissance\Models\AtomicAction
   public function stBattleCasualties()
   {
     $parentInfo = $this->ctx->getParent()->getInfo();
-    $player = self::getPlayer();
     if ($parentInfo['numberToEliminate'] > 0) {
       return;
     }
@@ -129,11 +128,11 @@ class BattleCasualties extends \PaxRenaissance\Models\AtomicAction
 
     $data = [
       'numberToEliminate' => $info['numberToEliminate'],
-      'agents' => $info['agentsToEliminate'],
+      'agents' => isset($info['agentsToEliminate']) ? $info['agentsToEliminate'] : [],
       'tokens' => array_map(function ($tokenId) {
         $token = Tokens::get($tokenId);
         return array_merge($token->jsonSerialize(), ['locationName' => $token->getLocationInstance()->getName()]);
-      }, $info['tokensToEliminate']),
+      }, isset($info['tokensToEliminate']) ? $info['tokensToEliminate'] : []),
     ];
 
     return $data;

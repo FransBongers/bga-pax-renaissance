@@ -61,10 +61,6 @@ abstract class Flows
           'action' => BATTLE_CHECK_BISHOP_AGENT,
           'playerId' => $playerId,
         ],
-        // [
-        //   'action' => BATTLE_CASUALTIES,
-        //   'playerId' => $playerId,
-        // ]
         // Determine where there is a battle
         // Determine attackers / defenders and result
         // Choose casualties and eliminate 

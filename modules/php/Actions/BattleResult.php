@@ -66,7 +66,7 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
     $parent->updateInfo('numberOfAttackers', $numberAttackers);
     $parent->updateInfo('numberOfDefenders', $numberDefenders);
     $parent->updateInfo('battleVictorious', $battleVictorious);
-    $parent->updateInfo('numberToEliminate',min($numberAttackers, $numberDefenders));
+    
 
     $parent->updateInfo('attackers', [
       'agents' => $attackers['agents'],
@@ -94,6 +94,11 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
     $attackers = $parentInfo['attackers'];
     $defenders = $parentInfo['defenders'];
 
+    Notifications::log('resolveInitialCasualties', [
+      'attackers' => $attackers,
+      'defenders' => $defenders,
+    ]);
+
     $numberAttackers = $parentInfo['numberOfAttackers'];
     $numberDefenders = $parentInfo['numberOfDefenders'];
     $battleVictorious = $parentInfo['battleVictorious'];
@@ -115,6 +120,9 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
       Notifications::battleEliminateDefenders();
       $this->eliminateTokens($player, $defenders['tokens']);
       // $this->resolveAction([]);
+      $parent->updateInfo('numberToEliminate',0);
+      $parent->updateInfo('agentsToEliminate',[]);
+      $parent->updateInfo('tokensToEliminate',[]);
       return;
 
     } else {
@@ -126,6 +134,7 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
       $this->eliminateTokens($player, $attackers['tokens']);
     }
 
+    $parent->updateInfo('numberToEliminate',min($numberAttackers, $numberDefenders));
     $parent->updateInfo('agentsToEliminate',$battleVictorious ? $attackers['agents'] : []);
     $parent->updateInfo('tokensToEliminate',$battleVictorious ? $attackers['tokens'] : $defenders['tokens']);
 
