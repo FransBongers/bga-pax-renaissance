@@ -21,6 +21,20 @@ class PREN006_StarChamber extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Star Chamber');
     $this->oneShot = REFORMATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => BEHEAD_OP,
+        'flavorText' => clienttranslate('Tower of London'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Royal Bounty'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = WEST;
   }

@@ -21,6 +21,20 @@ class PREN089_GrandeOfSpain extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Grande of Spain');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Ebolist Party"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => REPRESS_OP_KNIGHT,
+        'flavorText' => clienttranslate("Prince of Eboli"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

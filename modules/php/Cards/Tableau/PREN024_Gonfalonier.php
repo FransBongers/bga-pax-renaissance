@@ -24,6 +24,26 @@ class PREN024_Gonfalonier extends \PaxRenaissance\Models\TableauCard
       clienttranslate('He used his mercenary profits to commission the construction of a great library in Urbino and sponsor the young Raphael.')
     ];
     $this->name = clienttranslate('Gonfalonier');
+    $this->ops = [
+      [
+        'id' => VOTE_OP_WEST,
+        'flavorText' => clienttranslate('Anti-Ghibelline'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Condottieri'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Noble Order of the Garter'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [PATRON, LAW];
     $this->region = WEST;
   }

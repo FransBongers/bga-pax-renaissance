@@ -20,6 +20,14 @@ class PREN023_SpanishTercio extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Composed of highly trained volunteers, they dominated supreme on European battlefields.')
     ];
     $this->name = clienttranslate('Spanish Tercio');
+    $this->ops = [
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Combined arms mercenaries'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

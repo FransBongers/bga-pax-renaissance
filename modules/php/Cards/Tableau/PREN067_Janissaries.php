@@ -25,6 +25,26 @@ class PREN067_Janissaries extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Janissaries');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Kanune Raya"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Sultan's elite bodyguard"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_ISLAMIC,
+        'flavorText' => clienttranslate("Grand Vizier"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

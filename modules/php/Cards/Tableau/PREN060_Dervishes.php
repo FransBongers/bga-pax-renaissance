@@ -21,6 +21,20 @@ class PREN060_Dervishes extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Dervishes');
     $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Bektaşî Sufi"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_ISLAMIC,
+        'flavorText' => clienttranslate("Sufi Pilgrimage Baba purge"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }

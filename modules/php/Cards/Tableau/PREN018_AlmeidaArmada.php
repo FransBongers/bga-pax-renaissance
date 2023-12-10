@@ -21,6 +21,20 @@ class PREN018_AlmeidaArmada extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Almeida Armada');
     $this->oneShot = TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate('Commerce raid'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => CORSAIR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Albuquerque the Great'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [DISCOVERY];
     $this->region = WEST;
   }

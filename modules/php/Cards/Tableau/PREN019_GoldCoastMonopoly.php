@@ -21,6 +21,20 @@ class PREN019_GoldCoastMonopoly extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Gold Coast Monopoly');
     $this->oneShot = TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => CORSAIR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Elmina castle'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Gulf of Guinea royal monopoly'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

@@ -21,6 +21,14 @@ class PREN008_Jesuits extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Jesuits');
     $this->oneShot = CRUSADE_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Council of Trent'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }

@@ -25,6 +25,20 @@ class PREN088_CemAntiHostage extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Cem Anti-Hostage');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => BEHEAD_OP,
+        'flavorText' => clienttranslate("Legal fratricide"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Janissary revolt"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

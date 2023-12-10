@@ -21,6 +21,20 @@ class PREN020_ArumerZwarteHoop extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Arumer Zwarte Hoop');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN_ROOK_KNIGHT,
+        'flavorText' => clienttranslate('Freedom fighters'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => CORSAIR_OP_ISLAMIC,
+        'flavorText' => clienttranslate('Arumer Zwarte'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

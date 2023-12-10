@@ -21,6 +21,20 @@ class PREN022_TheLastKnight extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('The Last Knight');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('Anti-noble 1522 revolt'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Brotherly Conventions of Knights'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

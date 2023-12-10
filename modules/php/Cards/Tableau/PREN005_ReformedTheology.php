@@ -21,6 +21,14 @@ class PREN005_ReformedTheology extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Reformed Theology');
     $this->oneShot = REFORMATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Marburg Colloquy'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = WEST;
   }

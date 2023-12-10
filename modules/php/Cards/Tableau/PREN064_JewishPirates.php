@@ -21,6 +21,20 @@ class PREN064_JewishPirates extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Jewish Pirates');
     $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate("Commerce raid"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => CORSAIR_OP_ISLAMIC,
+        'flavorText' => clienttranslate("Anti-Iberian vendetta"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

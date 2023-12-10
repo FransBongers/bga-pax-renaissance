@@ -26,6 +26,26 @@ class PREN085_VladTheImpaler extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Vlad the Impaler');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => BEHEAD_OP,
+        'flavorText' => clienttranslate("Impalement"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Night Attack"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate("Order of the Dragon"),
+        'top' => 0,
+        'left' => 0,
+      ],
+    ];
     $this->region = EAST;
   }
 }

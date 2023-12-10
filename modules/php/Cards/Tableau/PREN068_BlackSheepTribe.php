@@ -21,6 +21,20 @@ class PREN068_BlackSheepTribe extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Black Sheep Tribe');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Diyar Bakr annexation"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Kara Koyunlu Turkmen"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

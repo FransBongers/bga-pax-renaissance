@@ -21,6 +21,26 @@ class PREN058_TheGrim extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('The Grim');
     $this->oneShot = JIHAD_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => BEHEAD_OP,
+        'flavorText' => clienttranslate("Vizier of Selim's"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Janissaries'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_ISLAMIC,
+        'flavorText' => clienttranslate("Shi'i Alevi holocaust"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }

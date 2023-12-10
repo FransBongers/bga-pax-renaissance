@@ -21,6 +21,20 @@ class PREN030_SantaHermandad extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Santa Hermandad');
     $this->oneShot = APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('"Green Sleeves" police'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Alhambra Decree'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

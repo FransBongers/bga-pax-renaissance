@@ -21,6 +21,26 @@ class PREN010_BonfireOfTheVanities extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Bonfire of the Vanities');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('Medici banishment'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => VOTE_OP_WEST,
+        'flavorText' => clienttranslate('Consiglio Maggiore'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Piagioni disciples'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [LAW];
     $this->region = WEST;
   }

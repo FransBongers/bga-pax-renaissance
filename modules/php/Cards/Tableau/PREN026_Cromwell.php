@@ -25,6 +25,20 @@ class PREN026_Cromwell extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Cromwell');
     $this->oneShot = REFORMATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('Pilgrimage of Grace'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Dissolution of the Monasteries'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = WEST;
   }

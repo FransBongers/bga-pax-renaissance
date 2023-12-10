@@ -20,6 +20,20 @@ class PREN017_ScottishPrivateers extends \PaxRenaissance\Models\TableauCard
       clienttranslate('In this way, the Barton family was at war with Portugal from 1470 to 1563, subcontracting an entire fleet of privateers under their letter of reprisal.')
     ];
     $this->name = clienttranslate('Scottish Privateers');
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate('Commerce raid'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => CORSAIR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Yellow Carvel'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

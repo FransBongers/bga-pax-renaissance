@@ -21,6 +21,26 @@ class PREN093X_FunjNomads extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Funj Nomads');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate("Royal monopoly"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Amara Dunqas'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_EAST,
+        'flavorText' => clienttranslate("Red Sea trade"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

@@ -21,6 +21,14 @@ class PREN038_BundschuhRevolt extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Bundschuh Revolt');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Rammelsberg metals guild'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

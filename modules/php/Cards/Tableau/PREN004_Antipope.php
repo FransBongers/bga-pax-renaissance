@@ -21,6 +21,14 @@ class PREN004_Antipope extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Antipope');
     $this->oneShot = REFORMATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Council of Basel'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = WEST;
   }

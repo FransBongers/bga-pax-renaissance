@@ -21,6 +21,20 @@ class PREN094X_ZaporozhianHost extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Zaporozhian Host');
     $this->oneShot = REFORMATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Cossack Code"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Registered Cossack Uprisings'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = EAST;
   }

@@ -25,6 +25,20 @@ class PREN027_SwabianLeague extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Swabian League');
     $this->oneShot = APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN_ROOK,
+        'flavorText' => clienttranslate('Bauernjörg, scourge of the peasants'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Imperial Ban'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

@@ -13,6 +13,20 @@ class PREN076_SophiaPalaiologina extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Sophia Palaiologina');
     $this->oneShot = CORONATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate("Ivan's Sudebnik"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate("Latin-Greek Unification"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = EAST;
   }

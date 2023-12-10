@@ -21,6 +21,14 @@ class PREN090_DukeOfAthens extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Duke of Athens');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Acropolis fortification"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

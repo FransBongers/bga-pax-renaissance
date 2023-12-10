@@ -13,6 +13,20 @@ class PREN079_CarlottaLusignanOfCyprus extends \PaxRenaissance\Models\TableauCar
     ];
     $this->name = clienttranslate('Carlotta Lusignan of Cyprus');
     $this->oneShot = CORONATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Lusignan Civil War"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_EAST,
+        'flavorText' => clienttranslate("Episkopi sugar plantation"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

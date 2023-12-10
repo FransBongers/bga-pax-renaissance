@@ -14,6 +14,14 @@ class PREN095X_ElizabethBathory extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Elizabeth Báthory');
     $this->oneShot = CORONATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate("Conscription Long War"),
+        'top' => 0,
+        'left' => 0,
+      ],
+    ];
     $this->region = EAST;
   }
 }

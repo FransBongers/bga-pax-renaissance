@@ -21,6 +21,14 @@ class PREN011_AnabaptistReformation extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Anabaptist Reformation');
     $this->oneShot = REFORMATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Malleus maleficarum (hammer of witches)'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = WEST;
   }

@@ -21,6 +21,14 @@ class PREN074_TheKremlin extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('The Kremlin');
     $this->oneShot = TRADE_SHIFT_NOVGOROD_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => COMMERCE_OP_EAST,
+        'flavorText' => clienttranslate("Ivan's Hundred"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

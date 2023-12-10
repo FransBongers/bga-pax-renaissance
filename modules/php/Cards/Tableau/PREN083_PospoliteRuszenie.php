@@ -20,6 +20,20 @@ class PREN083_PospoliteRuszenie extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Pospolite Ruszenie');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => VOTE_OP_EAST,
+        'flavorText' => clienttranslate("Golden Liberty"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Szlachta levy"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [LAW];
     $this->region = EAST;
   }

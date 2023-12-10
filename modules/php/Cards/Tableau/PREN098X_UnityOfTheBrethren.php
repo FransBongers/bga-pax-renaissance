@@ -21,6 +21,20 @@ class PREN098X_UnityOfTheBrethren extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Unity of the Brethren');
     $this->oneShot = APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_KNIGHT,
+        'flavorText' => clienttranslate("Pacifism"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Bohemian Reformation'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = EAST;
   }

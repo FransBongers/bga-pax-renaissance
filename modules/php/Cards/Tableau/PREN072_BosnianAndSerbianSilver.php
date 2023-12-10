@@ -21,6 +21,20 @@ class PREN072_BosnianAndSerbianSilver extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Bosnian & Serbian Silver');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Anti-despot elections"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_EAST,
+        'flavorText' => clienttranslate("Srebrenica & Novo Brdo silver mines"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

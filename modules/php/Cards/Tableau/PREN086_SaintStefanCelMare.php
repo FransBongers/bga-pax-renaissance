@@ -26,6 +26,20 @@ class PREN086_SaintStefanCelMare extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Saint Stefan cel Mare');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Christianae fidei athleta"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate("Orthodox Putna monastery"),
+        'top' => 0,
+        'left' => 0,
+      ],
+    ];
     $this->prestige = [REFORMIST];
     $this->region = EAST;
   }

@@ -25,6 +25,20 @@ class PREN021_Conquistadors extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Conquistadors');
     $this->oneShot = TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('Council of the Indies'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Castilian professionals'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [DISCOVERY];
     $this->region = WEST;
   }

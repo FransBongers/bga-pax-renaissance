@@ -21,6 +21,20 @@ class PREN065_MamlukSlaveSoldiers extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Mamluk Slave Soldiers');
     $this->oneShot = JIHAD_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Abbasid caliphs"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Siege of Famagusta"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

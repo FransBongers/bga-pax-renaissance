@@ -21,6 +21,20 @@ class PREN100X_UnifiedChristendom extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Unified Christendom');
     $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate("Papal legate"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Anti-schism party'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [PATRON];
     $this->region = EAST;
   }

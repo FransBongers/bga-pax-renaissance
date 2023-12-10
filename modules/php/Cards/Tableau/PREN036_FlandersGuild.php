@@ -21,6 +21,26 @@ class PREN036_FlandersGuild extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Flanders Guild');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => VOTE_OP_WEST,
+        'flavorText' => clienttranslate('Golden Spurs'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Salt Wars'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Flemish weavers & spinners guild'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [LAW];
     $this->region = WEST;
   }

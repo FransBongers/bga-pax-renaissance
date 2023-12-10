@@ -21,6 +21,20 @@ class PREN099X_PapalLegateToPersia extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Papal Legate to Persia');
     $this->oneShot = APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate("Imperial & papal envoy"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Council of Florence'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [REFORMIST];
     $this->region = EAST;
   }

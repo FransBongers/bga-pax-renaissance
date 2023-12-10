@@ -21,6 +21,26 @@ class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Grand Inquisitor');
     $this->oneShot = CRUSADE_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => BEHEAD_OP,
+        'flavorText' => clienttranslate('Auto-da-fé'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('Consejo Real'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Alumbrados'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }

@@ -21,6 +21,26 @@ class PREN070_ZupyKrakowskieCompany extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Zupy Krakowskie Company');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Székely seizures"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => REPRESS_OP_ROOK,
+        'flavorText' => clienttranslate("Hajdú Parolees"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_EAST,
+        'flavorText' => clienttranslate("Salt mining company"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

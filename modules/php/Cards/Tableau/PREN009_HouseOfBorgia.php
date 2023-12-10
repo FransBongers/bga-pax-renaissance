@@ -21,6 +21,20 @@ class PREN009_HouseOfBorgia extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate("House of Borgia");
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Cesare Borgia'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Extravagantes Communes'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [PATRON];
     $this->region = WEST;
   }

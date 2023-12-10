@@ -20,6 +20,26 @@ class PREN084_TheTimarSystem extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The Sipahis were responsible for the peasants on the estate, end employed agents (Keetuda) to collect revenues and punish miscreants while they were away on campaign.')
     ];
     $this->name = clienttranslate('The Timar System');
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Kapikulu sipahi"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Timarli sipahi"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_ISLAMIC,
+        'flavorText' => clienttranslate("Keetuda"),
+        'top' => 0,
+        'left' => 0,
+      ],
+    ];
     $this->region = EAST;
   }
 }

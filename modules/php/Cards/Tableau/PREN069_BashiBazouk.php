@@ -20,6 +20,14 @@ class PREN069_BashiBazouk extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Bashi-bazouk');
     $this->oneShot = REFORMATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Ottoman irregulars"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

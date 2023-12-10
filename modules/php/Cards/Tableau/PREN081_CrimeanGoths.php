@@ -21,6 +21,20 @@ class PREN081_CrimeanGoths extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Crimean Goths');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => VOTE_OP_EAST,
+        'flavorText' => clienttranslate("Golden Horder Jarig Law"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Tatar goths"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [LAW];
     $this->region = EAST;
   }

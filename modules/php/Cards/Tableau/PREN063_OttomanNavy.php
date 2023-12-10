@@ -28,12 +28,12 @@ class PREN063_OttomanNavy extends \PaxRenaissance\Models\TableauCard
         'top' => 0,
         'left' => 0,
       ],
-      // [
-      //   'id' => CORSAIR_OP_ISLAMIC,
-      //   'flavorText' => clienttranslate('Göke flagship'),
-      //   'top' => 0,
-      //   'left' => 0,
-      // ]
+      [
+        'id' => CORSAIR_OP_ISLAMIC,
+        'flavorText' => clienttranslate('Göke flagship'),
+        'top' => 0,
+        'left' => 0,
+      ]
     ];
     $this->region = EAST;
   }

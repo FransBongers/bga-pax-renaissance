@@ -21,6 +21,26 @@ class PREN015_HanseaticLeague extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Hanseatic League');
     $this->oneShot = TRADE_SHIFT_NOVGOROD_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate('Commerce raid'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => CORSAIR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Peter von Danzig'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Hansa Guild'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

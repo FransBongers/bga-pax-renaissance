@@ -25,6 +25,20 @@ class PREN029_HolyLandCrusade extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Holy Land Crusade');
     $this->oneShot = CRUSADE_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('Crusader State'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Council of Mantua'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }

@@ -20,6 +20,14 @@ class PREN031_SwissRislaufer extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The Swiss had a virtual monopoly on the pike- and halbed-armed mercenary service.')
     ];
     $this->name = clienttranslate('Swiss Risläufer');
+    $this->ops = [
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Swiss Guard'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

@@ -21,6 +21,14 @@ class PREN035_CommunerosGuilds extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Communeros Guilds');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Almadén mercury mine'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

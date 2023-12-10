@@ -21,6 +21,20 @@ class PREN012_KnightsHospitaller extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Knights Hospitaller');
     $this->oneShot = APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate('Commerce raid'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => CORSAIR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Rhodes Navy'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
   }

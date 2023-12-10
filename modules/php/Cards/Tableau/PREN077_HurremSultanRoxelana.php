@@ -13,6 +13,20 @@ class PREN077_HurremSultanRoxelana extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Hürrem Sultan Roxelana');
     $this->oneShot = CORONATION_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate("Sultanate of Women"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => BEHEAD_OP,
+        'flavorText' => clienttranslate("Prince rivalry"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

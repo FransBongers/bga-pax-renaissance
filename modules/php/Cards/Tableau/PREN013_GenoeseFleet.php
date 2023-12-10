@@ -21,6 +21,20 @@ class PREN013_GenoeseFleet extends \PaxRenaissance\Models\TableauCard
       clienttranslate('As imperial admiral of the Genoese fleet reporting to Charles V, he waged war on the Turks and Barbary pirates.')
     ];
     $this->name = clienttranslate('Genoese Fleet');
+    $this->ops = [
+      [
+        'id' => REPRESS_OP_PAWN,
+        'flavorText' => clienttranslate('Commerce raid'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => CORSAIR_OP_CATHOLIC,
+        'flavorText' => clienttranslate('Imperial Navy'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

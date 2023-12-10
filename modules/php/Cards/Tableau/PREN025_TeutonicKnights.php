@@ -32,12 +32,12 @@ class PREN025_TeutonicKnights extends \PaxRenaissance\Models\TableauCard
         'top' => 0,
         'left' => 0,
       ],
-      // [
-      //   'id' => SIEGE_OP,
-      //   'flavorText' => clienttranslate('13-years war'),
-      //   'top' => 0,
-      //   'left' => 0,
-      // ]
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('13-years war'),
+        'top' => 0,
+        'left' => 0,
+      ]
     ];
     $this->region = WEST;
   }

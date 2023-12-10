@@ -25,6 +25,20 @@ class PREN071_TheHandsome extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('The Handsome');
     $this->oneShot = JIHAD_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Janissaries"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_ISLAMIC,
+        'flavorText' => clienttranslate("Pasha"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->prestige = [ISLAMIC];
     $this->region = EAST;
   }

@@ -23,6 +23,12 @@ class PREN040_SindicatRemenca extends \PaxRenaissance\Models\TableauCard
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
     $this->ops = [
       [
+        'id' => VOTE_OP_WEST,
+        'flavorText' => clienttranslate('Grande Guerra Irmandiño'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Catalan artisan guilds'),
         'top' => 0,

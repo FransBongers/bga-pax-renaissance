@@ -21,6 +21,20 @@ class PREN033_SchwarzerHaufen extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Schwarzer Haufen');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate('Reformatio Sigismundi'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate('Nulla crux, nulla corona'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

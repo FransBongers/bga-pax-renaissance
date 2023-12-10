@@ -21,6 +21,20 @@ class PREN080_GreekKlephts extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Greek Klephts');
     $this->oneShot = CONSPIRACY_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => TAX_OP,
+        'flavorText' => clienttranslate("Banditry"),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => SIEGE_OP,
+        'flavorText' => clienttranslate("Armatoloi militia"),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = EAST;
   }
 }

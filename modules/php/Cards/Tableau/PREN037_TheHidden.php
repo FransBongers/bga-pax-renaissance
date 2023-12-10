@@ -21,6 +21,26 @@ class PREN037_TheHidden extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('The Hidden');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => VOTE_OP_WEST,
+        'flavorText' => clienttranslate('Golden republic'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Valencian artisan guilds'),
+        'top' => 0,
+        'left' => 0,
+      ],
+      [
+        'id' => INQUISITOR_OP_REFORMIST,
+        'flavorText' => clienttranslate('Hidden Messiah'),
+        'top' => 0,
+        'left' => 0,
+      ],
+    ];
     $this->prestige = [LAW];
     $this->region = WEST;
   }
