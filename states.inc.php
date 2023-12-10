@@ -392,6 +392,26 @@ $machinestates = [
         'possibleactions' => ['actRegimeChangeGoldenLiberty', 'pass'],
     ],
 
+    ST_TABLEAU_OPS_SELECT => [
+        'name' => 'tableauOpsSelect',
+        'description' => clienttranslate('${actplayer} may select ops'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpsSelect', 'pass'],
+    ],
+
+    ST_TABLEAU_OP_COMMERCE => [
+        'name' => 'tableauOpCommerce',
+        'description' => clienttranslate('${actplayer} may take one Florin'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actTableauOpCommerce', 'pass'],
+    ],
+
     ST_CLEANUP => [
         'name' => 'cleanup',
         'description' => '',

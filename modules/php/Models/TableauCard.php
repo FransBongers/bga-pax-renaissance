@@ -21,6 +21,11 @@ class TableauCard extends Card
   protected $prestige = [];
   protected $region;
 
+  public function __construct($row)
+  {
+    parent::__construct($row);
+  }
+
   protected $staticAttributes = [
     'agents',
     'empire',

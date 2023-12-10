@@ -48,6 +48,7 @@ class NotificationManager {
       ["repressToken", undefined],
       ["returnToSupply", undefined],
       ["sellCard", undefined],
+      ["tableauOpCommerce", undefined],
       ["tradeFairConvene", undefined],
       ["tradeFairEmporiumSubsidy", undefined],
       // ["tradeFairPlaceLevy", undefined],
@@ -335,6 +336,13 @@ class NotificationManager {
     const player = this.getPlayer({ playerId });
     await player.removeCardFromHand({ card });
     player.counters.florins.incValue(value);
+  }
+
+  async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {
+    const {playerId, card} = notif.args;
+    const [_, region, column] = card.location.split('_')
+    this.game.market.incFlorinValue({region: region as 'east' | 'west', column: Number(column), value: -1});
+    this.getPlayer({playerId}).counters.florins.incValue(1);
   }
 
   async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {

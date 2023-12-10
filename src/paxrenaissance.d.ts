@@ -29,12 +29,12 @@ interface PaxRenaissanceGame extends Game {
   ) => string;
   getPlayerId: () => number;
   setCardSelectable: (props: {
-    card: EmpireCard | TableauCard;
-    callback: (props: { card: TableauCard }) => void;
+    id: string;
+    callback: (props: { id: string }) => void;
     back?: boolean;
   }) => void;
   setCardSelected: (props: {
-    card: EmpireCard | TableauCard;
+    id: string;
     back?: boolean;
   }) => void;
   setLocationSelectable: (props: {
@@ -118,6 +118,15 @@ interface TableauCard extends PaxRenCard {
   prestige: string[];
   region: "east" | "west";
   type: "tableauCard";
+}
+
+interface TableauOp {
+  id: string;
+  flavorText: string[];
+  name: string;
+  type: string;
+  top: number;
+  left: number;
 }
 
 interface VictoryCard extends PaxRenCard {

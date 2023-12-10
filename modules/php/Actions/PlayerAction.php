@@ -24,6 +24,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   public function argsPlayerAction()
   {
     $player = Players::get();
+    $availableOps = $player->getAvailableOps();
 
     $cardsPlayerCanSell = $player->getCardsPlayerCanSell();
     unset($cardsPlayerCanSell['hand']);
@@ -33,6 +34,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
       'cardsPlayerCanPurchase' => Market::getCardsPlayerCanPurchase($player),
       'cardsPlayerCanSell' => $cardsPlayerCanSell,
       'tradeFair' => Market::getTradeFairs(),
+      'availableOps' => $availableOps,
     ];
 
     return $data;
@@ -74,6 +76,17 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
               'action' => SELL_CARD,
               'playerId' => $this->ctx->getPlayerId(),
               'cardId' => $args['cardId'],
+            ]
+          ]
+        ]));
+        break;
+      case 'tableauOps':
+        $this->ctx->insertAsBrother(Engine::buildTree([
+          'children' => [
+            [
+              'action' => TABLEAU_OPS_SELECT,
+              'playerId' => $this->ctx->getPlayerId(),
+              'region' => $args['region'],
             ]
           ]
         ]));

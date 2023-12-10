@@ -1757,6 +1757,8 @@ var PaxRenaissance = (function () {
             _a.playerAction = new PlayerActionState(this),
             _a.regimeChangeEmancipation = new RegimeChangeEmancipationState(this),
             _a.selectToken = new SelectTokenState(this),
+            _a.tableauOpCommerce = new TableauOpCommerceState(this),
+            _a.tableauOpsSelect = new TableauOpsSelectState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
         this.animationManager = new AnimationManager(this, { duration: 500 });
@@ -1973,18 +1975,18 @@ var PaxRenaissance = (function () {
         this.framework().updatePageTitle();
     };
     PaxRenaissance.prototype.setCardSelectable = function (_a) {
-        var card = _a.card, callback = _a.callback, _b = _a.back, back = _b === void 0 ? false : _b;
-        var nodeId = "".concat(card.id, "-").concat(back ? "back" : "front");
+        var id = _a.id, callback = _a.callback, _b = _a.back, back = _b === void 0 ? false : _b;
+        var nodeId = "".concat(id, "-").concat(back ? "back" : "front");
         var node = $(nodeId);
         if (node === null) {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ card: card }); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ id: id }); }));
     };
     PaxRenaissance.prototype.setCardSelected = function (_a) {
-        var card = _a.card, _b = _a.back, back = _b === void 0 ? false : _b;
-        var nodeId = "".concat(card.id, "-").concat(back ? "back" : "front");
+        var id = _a.id, _b = _a.back, back = _b === void 0 ? false : _b;
+        var nodeId = "".concat(id, "-").concat(back ? "back" : "front");
         var node = $(nodeId);
         if (node === null) {
             return;
@@ -2954,6 +2956,10 @@ var tplOneShot = function (_a) {
     var id = _a.id, oneShot = _a.oneShot;
     return "\n  <div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_one_shot\" data-one-shot-id=\"").concat(oneShot, "\"></div>");
 };
+var tplTableauOp = function (_a) {
+    var id = _a.id, tableauOpId = _a.tableauOpId;
+    return "\n  <div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_tableau_op\" data-tableau-op-id=\"").concat(tableauOpId, "\"></div>");
+};
 var LOG_TOKEN_BOLD_TEXT = "boldText";
 var LOG_TOKEN_CARD_NAME = "cardName";
 var LOG_TOKEN_NEW_LINE = "newLine";
@@ -2962,6 +2968,7 @@ var LOG_TOKEN_FLORIN = "florin";
 var LOG_TOKEN_MAP_TOKEN = "mapToken";
 var LOG_TOKEN_ONE_SHOT = "oneShot";
 var LOG_TOKEN_PRESTIGE = 'prestige';
+var LOG_TOKEN_TABLEAU_OP = 'tableauOp';
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
@@ -2994,6 +3001,8 @@ var getTokenDiv = function (_a) {
                 : value;
         case LOG_TOKEN_PRESTIGE:
             return tplIcon({ icon: "prestige_".concat(value), classes: 'pr_prestige_icon' });
+        case LOG_TOKEN_TABLEAU_OP:
+            return tplTableauOp({ tableauOpId: value });
         default:
             return value;
     }
@@ -3338,6 +3347,7 @@ var NotificationManager = (function () {
             ["repressToken", undefined],
             ["returnToSupply", undefined],
             ["sellCard", undefined],
+            ["tableauOpCommerce", undefined],
             ["tradeFairConvene", undefined],
             ["tradeFairEmporiumSubsidy", undefined],
             ["tradeFairProfitDispersalPirates", undefined],
@@ -3666,6 +3676,18 @@ var NotificationManager = (function () {
                         player.counters.florins.incValue(value);
                         return [2];
                 }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_tableauOpCommerce = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card, _b, _, region, column;
+            return __generator(this, function (_c) {
+                _a = notif.args, playerId = _a.playerId, card = _a.card;
+                _b = card.location.split('_'), _ = _b[0], region = _b[1], column = _b[2];
+                this.game.market.incFlorinValue({ region: region, column: Number(column), value: -1 });
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(1);
+                return [2];
             });
         });
     };
@@ -4507,7 +4529,7 @@ var ClientStartTradeFairState = (function () {
     ClientStartTradeFairState.prototype.updateInterfaceInitialStep = function () {
         var _this = this;
         this.game.clearPossible();
-        this.game.setCardSelected({ card: this.args.card, back: true });
+        this.game.setCardSelected({ id: this.args.card.id, back: true });
         this.game.setLocationSelected({ id: this.args.city.id });
         this.game.clientUpdatePageTitle({
             text: _("Convene ${region} trade fair from ${cityName}?"),
@@ -4681,7 +4703,7 @@ var PlaceAgentState = (function () {
         var _this = this;
         var id = _a.id, card = _a.card;
         this.game.clearPossible();
-        this.game.setCardSelected({ card: card });
+        this.game.setCardSelected({ id: card.id });
         var _b = card;
         this.game.clientUpdatePageTitle({
             text: _("Place ${tkn_mapToken} on ${location}?"),
@@ -4743,7 +4765,7 @@ var PlaceAgentState = (function () {
             var id = _a[0], location = _a[1];
             if ((location === null || location === void 0 ? void 0 : location.type) === TABLEAU_CARD || (location === null || location === void 0 ? void 0 : location.type) === EMPIRE_CARD) {
                 _this.game.setCardSelectable({
-                    card: location,
+                    id: location.id,
                     callback: function () {
                         return _this.updateInterfaceConfirmCard({ id: id, card: location });
                     },
@@ -4828,12 +4850,13 @@ var PlayerActionState = (function () {
         this.setMarketCardsSelectable();
         this.setHandCardsSelectable();
         this.setTradeFairSelectable();
+        this.addActionButtons();
     };
     PlayerActionState.prototype.updateInterfaceConfirmPurchase = function (_a) {
         var _this = this;
         var card = _a.card, column = _a.column;
         this.game.clearPossible();
-        this.game.setCardSelected({ card: card });
+        this.game.setCardSelected({ id: card.id });
         this.game.clientUpdatePageTitle({
             text: _("Purchase ${cardName} for ${amount} ${tkn_florin} ?"),
             args: {
@@ -4859,7 +4882,7 @@ var PlayerActionState = (function () {
         var _this = this;
         var card = _a.card;
         this.game.clearPossible();
-        this.game.setCardSelected({ card: card });
+        this.game.setCardSelected({ id: card.id });
         this.game.clientUpdatePageTitle({
             text: _("Play or sell ${cardName}?"),
             args: {
@@ -4893,6 +4916,26 @@ var PlayerActionState = (function () {
             },
         });
         this.game.addCancelButton();
+    };
+    PlayerActionState.prototype.addActionButtons = function () {
+        var _this = this;
+        REGIONS.forEach(function (region) {
+            if (Object.keys(_this.args.availableOps[region]).length > 0) {
+                _this.game.addPrimaryActionButton({
+                    id: "".concat(region, "_ops_btn"),
+                    text: region === EAST ? _('Tableau Ops East') : _('Tableau Ops West'),
+                    callback: function () {
+                        return _this.game.takeAction({
+                            action: "actPlayerAction",
+                            args: {
+                                action: "tableauOps",
+                                region: region,
+                            },
+                        });
+                    },
+                });
+            }
+        });
     };
     PlayerActionState.prototype.addTest = function () {
         var _this = this;
@@ -4966,7 +5009,7 @@ var PlayerActionState = (function () {
                 return;
             }
             _this.game.setCardSelectable({
-                card: _this.args.tradeFair[region].card,
+                id: _this.args.tradeFair[region].card.id,
                 back: true,
                 callback: function () {
                     return _this.game
@@ -5161,6 +5204,155 @@ var SelectTokenState = (function () {
         });
     };
     return SelectTokenState;
+}());
+var TableauOpCommerceState = (function () {
+    function TableauOpCommerceState(game) {
+        this.game = game;
+    }
+    TableauOpCommerceState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpCommerceState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpCommerceState");
+    };
+    TableauOpCommerceState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may take one Florin"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpCommerceState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a card in the market to take 1 ${tkn_florin} from"),
+            args: {
+                tkn_florin: tknFlorin(),
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setCardsSelectable();
+    };
+    TableauOpCommerceState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var card = _a.card;
+        this.game.clearPossible();
+        var isTradeFairCard = Number(card.location.split("_")[2]) === 0;
+        this.game.setCardSelected({ id: card.id, back: isTradeFairCard });
+        this.game.clientUpdatePageTitle({
+            text: _("Take ${tkn_florin} from ${cardName}?"),
+            args: {
+                tkn_florin: tknFlorin(),
+                cardName: isTradeFairCard ? _("trade fair card") : card.name,
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpCommerce",
+                    args: {
+                        cardId: card.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    TableauOpCommerceState.prototype.setCardsSelectable = function () {
+        var _this = this;
+        this.args.cards.forEach(function (card) {
+            _this.game.setCardSelectable({
+                id: card.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirm({
+                        card: card,
+                    });
+                },
+                back: card.location.split("_")[2] === "0",
+            });
+        });
+    };
+    return TableauOpCommerceState;
+}());
+var TableauOpsSelectState = (function () {
+    function TableauOpsSelectState(game) {
+        this.game = game;
+    }
+    TableauOpsSelectState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpsSelectState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpsSelectState");
+    };
+    TableauOpsSelectState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may select Ops to perform"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpsSelectState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may select a card to perform Ops"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setCardsSelectable();
+    };
+    TableauOpsSelectState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var cardId = _a.cardId, ops = _a.ops;
+        this.game.clearPossible();
+        this.game.setCardSelected({ id: cardId });
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may choose an Op to perform"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        ops.forEach(function (tableauOp, index) {
+            _this.game.addPrimaryActionButton({
+                id: "".concat(tableauOp.id, "_").concat(index, "_btn"),
+                text: _(tableauOp.name),
+                callback: function () {
+                    return _this.game.takeAction({
+                        action: "actTableauOpsSelect",
+                        args: {
+                            cardId: cardId,
+                            tableauOpId: tableauOp.id,
+                        },
+                    });
+                },
+            });
+        });
+    };
+    TableauOpsSelectState.prototype.setCardsSelectable = function () {
+        var _this = this;
+        Object.keys(this.args.availableOps).forEach(function (id) {
+            _this.game.setCardSelectable({
+                id: id,
+                callback: function () {
+                    return _this.updateInterfaceConfirm({
+                        cardId: id,
+                        ops: _this.args.availableOps[id],
+                    });
+                },
+            });
+        });
+    };
+    return TableauOpsSelectState;
 }());
 var TradeFairLevyState = (function () {
     function TradeFairLevyState(game) {

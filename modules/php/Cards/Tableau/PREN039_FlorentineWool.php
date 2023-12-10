@@ -21,6 +21,14 @@ class PREN039_FlorentineWool extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Florentine Wool');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
+    $this->ops = [
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Arte Della Lana guild'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
     $this->region = WEST;
   }
 }

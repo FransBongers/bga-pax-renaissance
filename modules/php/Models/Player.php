@@ -77,6 +77,25 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     return (int) parent::getId();
   }
 
+  public function getAvailableOps()
+  {
+    $result = [
+      EAST => [],
+      WEST => [],
+    ];
+    $tableauCards = $this->getTableauCardsPerRegion();
+    foreach (REGIONS as $region) {
+      foreach ($tableauCards[$region] as $card) {
+        $availableOps = $card->getAvailableOps($this);
+
+        if (count($availableOps) > 0) {
+          $result[$region][$card->getId()] = $availableOps;
+        }
+      }
+    }
+    return $result;
+  }
+
   public function getBank()
   {
     return PlayersExtra::get($this->getId())['bank'];
@@ -129,8 +148,8 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       PATRON => 0,
     ];
     $tableauCards = $this->getTableauCards();
-    foreach($tableauCards as $card) {
-      foreach($card->getPrestige() as $prestige) {
+    foreach ($tableauCards as $card) {
+      foreach ($card->getPrestige() as $prestige) {
         $result[$prestige] = $result[$prestige] + 1;
       }
     }
@@ -141,7 +160,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   {
     $cards = array_merge($tableauCards[EAST], $tableauCards[WEST]);
     $tokens = [];
-    foreach($cards as $card) {
+    foreach ($cards as $card) {
       $tokensOnCard = Tokens::getInLocation($card->getId())->toArray();
       $tokens = array_merge($tokens, $tokensOnCard);
     }

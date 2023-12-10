@@ -71,6 +71,10 @@ interface OnEnteringPlaceAgentsArgs extends CommonArgs {
 }
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {
+  availableOps: {
+    east: Record<string, {id: string; text: string;}>
+    west: Record<string, {id: string; text: string;}>
+  };
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];
   tradeFair: {
@@ -92,6 +96,15 @@ interface OnEnteringRegimeChangeEmancipationArgs extends CommonArgs {
 
 interface OnEnteringSelectTokenArgs extends CommonArgs {
   tokens: Token[];
+}
+
+interface OnEnteringTableauOpCommerceArgs extends CommonArgs {
+  cards: TableauCard[];
+}
+
+interface OnEnteringTableauOpsSelectArgs extends CommonArgs {
+  availableOps: Record<string, TableauOp[]>;
+  tableauCards: EmpireCard | TableauCard;
 }
 
 interface OnEnteringTradeFairLevyArgs extends CommonArgs {

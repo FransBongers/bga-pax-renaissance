@@ -8,6 +8,7 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Players;
+use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
 
 class Card extends \PaxRenaissance\Helpers\DB_Model
@@ -16,11 +17,13 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   protected $table = 'cards';
   protected $primary = 'card_id';
   protected $location;
+  protected $ops = [];
   protected $state;
 
   protected $attributes = [
     'id' => ['card_id', 'int'],
     'location' => 'card_location',
+    'ops' => ['ops', 'obj'],
     'state' => ['card_state', 'int'],
     'used' => ['used', 'int'],
   ];
@@ -29,6 +32,21 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   {
     // Notifications::log('getUiData card model', []);
     return $this->jsonSerialize(); // Static datas are already in js file
+  }
+  
+  public function getOps()
+  {
+    // TODO: find out why this is null if not set on card level
+    return $this->ops === null ? [] : $this->ops;
+  }
+
+  public function isSilenced()
+  {
+    $tokens = $this->getTokens();
+    $hasBishop = Utils::array_some($tokens, function ($token) {
+      return $token->getType() === BISHOP;
+    });
+    return $hasBishop;
   }
 
   public function setState($state = 1)
@@ -64,5 +82,21 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function getTokens()
   {
     return Tokens::getInLocation($this->id)->toArray();
+  }
+
+  public function getAvailableOps($player = null)
+  {
+    $player = $player === null ? Players::get() : $player;
+    $available = [];
+    foreach($this->getOps() as $cardOp) {
+      $tableauOp = TableauOps::get($cardOp['id'], $cardOp);
+      if ($tableauOp->canBePerformed($player, $this)) {
+        $available[] = $tableauOp;
+      }
+    }
+    // Utils::filter(, function ($op) use ($player) {
+    //   return 
+    // });
+    return $available;
   }
 }

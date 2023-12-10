@@ -71,7 +71,7 @@ class PlaceAgentState implements State {
     card: EmpireCard | TableauCard;
   }) {
     this.game.clearPossible();
-    this.game.setCardSelected({ card });
+    this.game.setCardSelected({ id: card.id });
 
     const {} = card;
     // TODO handle cases where there are two different agents
@@ -150,7 +150,7 @@ class PlaceAgentState implements State {
     Object.entries(this.args.locations).forEach(([id, location]) => {
       if (location?.type === TABLEAU_CARD || location?.type === EMPIRE_CARD) {
         this.game.setCardSelectable({
-          card: location,
+          id: location.id,
           callback: () =>
             this.updateInterfaceConfirmCard({ id, card: location }),
         });

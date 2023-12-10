@@ -36,6 +36,8 @@ class AtomicActions
     RESOLVE_PLACE_TOKEN => 'ResolvePlaceToken',
     SELL_CARD => 'SellCard',
     SELECT_TOKEN => 'SelectToken',
+    TABLEAU_OP_COMMERCE => 'TableauOpCommerce',
+    TABLEAU_OPS_SELECT => 'TableauOpsSelect',
     TRADE_FAIR => 'TradeFair',
     TRADE_FAIR_PROFIT_DISPERSAL => 'TradeFairProfitDispersal',
     TRADE_FAIR_LEVY => 'TradeFairLevy',

@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance\Core;
 
+use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cities;
@@ -446,6 +447,28 @@ class Notifications
       'value' => $value,
       'tkn_cardName' => $card->getName(),
       'tkn_florin' => clienttranslate('Florin(s)'),
+    ]);
+  }
+
+  public static function tableauOpCommerce($player, $card)
+  {
+    $cardName = in_array($card->getLocation(), [Locations::market(WEST,0), Locations::market(EAST,0)]) ? clienttranslate('trade fair card') : $card->getName();
+
+    self::notifyAll("tableauOpCommerce", clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} from ${tkn_cardName}'), [
+      'player' => $player,
+      'tkn_florin' => clienttranslate("Florin(s)"),
+      'tkn_cardName' => $cardName,
+      'card' => $card,
+    ]);
+  }
+
+  public static function tableauOpSelected($player, $tableauOp, $card)
+  {
+    self::message(clienttranslate('${tkn_playerName} performs ${tkn_boldText} Op from ${tkn_cardName} ${tkn_tableauOp}'),[
+      'player' => $player,
+      'tkn_tableauOp' => $tableauOp->getId(),
+      'tkn_boldText' => $tableauOp->getName(),
+      'tkn_cardName' => $card->getName(),
     ]);
   }
 

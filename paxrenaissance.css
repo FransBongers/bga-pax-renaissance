@@ -2086,6 +2086,9 @@
   margin-bottom: -6px;
   --paxRenIconScale: 0.8;
 }
+.log > .roundedbox .pr_tableau_op {
+  --paxRenIconScale: 0.8;
+}
 
 #pr_market_west_deck,
 #pr_market_east_deck {
@@ -2510,6 +2513,215 @@
   background-size: 300% 100%;
   width: calc(var(--paxRenTokenScale) * 30px);
   height: calc(var(--paxRenTokenScale) * 49px);
+}
+
+.pr_tableau_op {
+  background-image: url("img/tableau_ops.webp");
+  background-size: 600% 400%;
+  background-repeat: no-repeat;
+  width: calc(var(--paxRenIconScale) * 100px);
+  height: calc(var(--paxRenIconScale) * 74px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
+}
+
+.pr_tableau_op[data-tableau-op-id=BEHEAD_OP] {
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_tableau_op[data-tableau-op-id=CAMPAIGN_OP] {
+  background-position-x: 20%;
+  background-position-y: 0%;
+}
+
+.pr_tableau_op[data-tableau-op-id=COMMERCE_OP_EAST] {
+  background-position-x: 40%;
+  background-position-y: 0%;
+}
+
+.pr_tableau_op[data-tableau-op-id=COMMERCE_OP_WEST] {
+  background-position-x: 60%;
+  background-position-y: 0%;
+}
+
+.pr_tableau_op[data-tableau-op-id=CORSAIR_OP_CATHOLIC] {
+  background-position-x: 80%;
+  background-position-y: 0%;
+}
+
+.pr_tableau_op[data-tableau-op-id=CORSAIR_OP_ISLAMIC] {
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_tableau_op[data-tableau-op-id=CORSAIR_OP_REFORMIST] {
+  background-position-x: 0%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=INQUISITOR_OP_CATHOLIC] {
+  background-position-x: 20%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=INQUISITOR_OP_ISLAMIC] {
+  background-position-x: 40%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=INQUISITOR_OP_REFORMIST] {
+  background-position-x: 60%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=REPRESS_OP_KNIGHT] {
+  background-position-x: 80%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=REPRESS_OP_PAWN] {
+  background-position-x: 100%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=REPRESS_OP_PAWN_KNIGHT] {
+  background-position-x: 0%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=REPRESS_OP_PAWN_ROOK] {
+  background-position-x: 20%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=REPRESS_OP_PAWN_ROOK_KNIGHT] {
+  background-position-x: 40%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=REPRESS_OP_ROOK] {
+  background-position-x: 60%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=REPRESS_OP_ROOK_KNIGHT] {
+  background-position-x: 80%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=SIEGE_OP] {
+  background-position-x: 100%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=TAX_OP] {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_tableau_op[data-tableau-op-id=VOTE_OP_EAST] {
+  background-position-x: 20%;
+  background-position-y: 100%;
+}
+
+.pr_tableau_op[data-tableau-op-id=VOTE_OP_WEST] {
+  background-position-x: 40%;
+  background-position-y: 100%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 60%;
+  background-position-y: 100%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 80%;
+  background-position-y: 100%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 0%;
+  background-position-y: 133.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 20%;
+  background-position-y: 133.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 40%;
+  background-position-y: 133.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 60%;
+  background-position-y: 133.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 80%;
+  background-position-y: 133.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 100%;
+  background-position-y: 133.3333333333%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 0%;
+  background-position-y: 166.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 20%;
+  background-position-y: 166.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 40%;
+  background-position-y: 166.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 60%;
+  background-position-y: 166.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 80%;
+  background-position-y: 166.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 100%;
+  background-position-y: 166.6666666667%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 0%;
+  background-position-y: 200%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 20%;
+  background-position-y: 200%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 40%;
+  background-position-y: 200%;
+}
+
+.pr_tableau_op[data-tableau-op-id=""] {
+  background-position-x: 60%;
+  background-position-y: 200%;
 }
 
 /* ------- PLAYER BOARD ------- */

@@ -75,6 +75,8 @@
     "src/states/RegimeChangeEmancipation.ts",
     "src/states/SelectToken.ts",
     "src/states/state.d.ts",
+    "src/states/TableauOpCommerce.ts",
+    "src/states/TableauOpsSelect.ts",
     "src/states/TradeFairLevy.ts",
     "src/tooltip-manager/templates.ts",
     "src/tooltip-manager/index.ts",

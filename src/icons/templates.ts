@@ -34,3 +34,6 @@ const tplIcon = ({
   
   const tplOneShot = ({id, oneShot}: {oneShot: string; id?: string;}) => `
   <div ${id ? `id="${id}"` : ''} class="pr_one_shot" data-one-shot-id="${oneShot}"></div>`
+
+  const tplTableauOp = ({id, tableauOpId}: {tableauOpId: string; id?: string;}) => `
+  <div ${id ? `id="${id}"` : ''} class="pr_tableau_op" data-tableau-op-id="${tableauOpId}"></div>`

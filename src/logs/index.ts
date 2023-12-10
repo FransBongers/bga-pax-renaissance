@@ -8,6 +8,7 @@ const LOG_TOKEN_FLORIN = "florin";
 const LOG_TOKEN_MAP_TOKEN = "mapToken";
 const LOG_TOKEN_ONE_SHOT = "oneShot";
 const LOG_TOKEN_PRESTIGE = 'prestige'
+const LOG_TOKEN_TABLEAU_OP = 'tableauOp'
 // const LOG_TOKEN_PAWN = "pawn";
 
 let tooltipIdCounter = 0;
@@ -52,6 +53,8 @@ const getTokenDiv = ({
         : value;
     case LOG_TOKEN_PRESTIGE:
       return tplIcon({icon: `prestige_${value}`, classes: 'pr_prestige_icon'})
+    case LOG_TOKEN_TABLEAU_OP:
+      return tplTableauOp({ tableauOpId: value });
     default:
       return value;
   }

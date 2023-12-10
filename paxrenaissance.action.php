@@ -154,6 +154,24 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actTableauOpCommerce()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actTableauOpCommerce', $args);
+    self::ajaxResponse();
+  }
+
+  public function actTableauOpsSelect()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actTableauOpsSelect', $args);
+    self::ajaxResponse();
+  }
+
   public function actTradeFairLevy()
   {
     self::setAjaxMode();

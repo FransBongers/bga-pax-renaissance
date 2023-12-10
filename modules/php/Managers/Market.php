@@ -68,12 +68,20 @@ class Market
         // 'cometCount' => $cometCount,
       ];
       if ($direction === EAST) {
-        $data['deckCounts'][$direction]['comet1'] = Utils::array_some($deck, function ($card) { return $card->getId() === 'COMET1_Copernicus'; });
-        $data['deckCounts'][$direction]['comet2'] = Utils::array_some($deck, function ($card) { return $card->getId() === 'COMET2_Nostradamus'; });
+        $data['deckCounts'][$direction]['comet1'] = Utils::array_some($deck, function ($card) {
+          return $card->getId() === 'COMET1_Copernicus';
+        });
+        $data['deckCounts'][$direction]['comet2'] = Utils::array_some($deck, function ($card) {
+          return $card->getId() === 'COMET2_Nostradamus';
+        });
       }
       if ($direction === WEST) {
-        $data['deckCounts'][$direction]['comet3'] = Utils::array_some($deck, function ($card) { return $card->getId() === 'COMET3_Halley'; });
-        $data['deckCounts'][$direction]['comet4'] = Utils::array_some($deck, function ($card) { return $card->getId() === 'COMET4_Regiomontanus'; });
+        $data['deckCounts'][$direction]['comet3'] = Utils::array_some($deck, function ($card) {
+          return $card->getId() === 'COMET3_Halley';
+        });
+        $data['deckCounts'][$direction]['comet4'] = Utils::array_some($deck, function ($card) {
+          return $card->getId() === 'COMET4_Regiomontanus';
+        });
       }
     }
 
@@ -88,6 +96,11 @@ class Market
   // .##.....##....##.....##..##........##.....##.......##...
   // ..#######.....##....####.########.####....##.......##...
 
+  public static function getCards()
+  {
+    return Cards::getSelectQuery()->where('card_location', 'LIKE', 'market%')->get()->toArray();
+  }
+
   public static function getCardsPlayerCanPurchase($player)
   {
     $atHandLimit = $player->isAtHandLimit();
@@ -96,7 +109,7 @@ class Market
     $cards = Cards::getSelectQuery()->where('card_location', 'LIKE', 'market%')->get()->toArray();
 
     return Utils::filter($cards, function ($card) use ($florins, $atHandLimit) {
-      if($card->getUsed() == 1 || ($atHandLimit && !$card->isCometCard())) {
+      if ($card->getUsed() == 1 || ($atHandLimit && !$card->isCometCard())) {
         return false;
       }
       $column = intval(explode('_', $card->getLocation())[2]);
@@ -241,10 +254,11 @@ class Market
     return $drawResult['unableToRefresh'];
   }
 
-  public static function getTradeFairs() {
+  public static function getTradeFairs()
+  {
     $cities = Cities::getCitiesThatCanStartTradeFair();
     $data = [];
-    foreach(REGIONS as $region) {
+    foreach (REGIONS as $region) {
       $card = Cards::getTopOf(Locations::Market($region, 0));
       if ($card === null) {
         continue;
@@ -259,16 +273,18 @@ class Market
     return $data;
   }
 
-  public static function incMarketFlorins(string $region, int $column, int $value) {
+  public static function incMarketFlorins(string $region, int $column, int $value)
+  {
     $marketFlorins = Globals::getMarketFlorins();
-    $location = Locations::marketFlorins($region,$column);
+    $location = Locations::marketFlorins($region, $column);
     $marketFlorins[$location] = $marketFlorins[$location] + $value;
     Globals::setMarketFlorins($marketFlorins);
   }
 
-  public static function getMarketFlorins(string $region, int $column) {
+  public static function getMarketFlorins(string $region, int $column)
+  {
     $marketFlorins = Globals::getMarketFlorins();
-    $location = Locations::marketFlorins($region,$column);
+    $location = Locations::marketFlorins($region, $column);
     return $marketFlorins[$location];
   }
 }

@@ -38,6 +38,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     playerAction: PlayerActionState;
     regimeChangeEmancipation: RegimeChangeEmancipationState,
     selectToken: SelectTokenState;
+    tableauOpCommerce: TableauOpCommerceState;
+    tableauOpsSelect: TableauOpsSelectState;
     tradeFairLevy: TradeFairLevyState
   };
 
@@ -81,6 +83,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
       playerAction: new PlayerActionState(this),
       regimeChangeEmancipation: new RegimeChangeEmancipationState(this),
       selectToken: new SelectTokenState(this),
+      tableauOpCommerce: new TableauOpCommerceState(this),
+      tableauOpsSelect: new TableauOpsSelectState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };
 
@@ -446,15 +450,15 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }
 
   setCardSelectable({
-    card,
+    id,
     callback,
     back = false,
   }: {
-    card: EmpireCard | TableauCard;
-    callback: (props: { card: EmpireCard | TableauCard }) => void;
+    id: string;
+    callback: (props: { id: string }) => void;
     back?: boolean;
   }) {
-    const nodeId = `${card.id}-${back ? "back" : "front"}`;
+    const nodeId = `${id}-${back ? "back" : "front"}`;
     // const nodeId = `${card.id}`;
     const node = $(nodeId);
     if (node === null) {
@@ -462,18 +466,18 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, () => callback({ card }))
+      dojo.connect(node, "onclick", this, () => callback({ id }))
     );
   }
 
   setCardSelected({
-    card,
+    id,
     back = false,
   }: {
-    card: EmpireCard | TableauCard;
+    id: string;
     back?: boolean;
   }) {
-    const nodeId = `${card.id}-${back ? "back" : "front"}`;
+    const nodeId = `${id}-${back ? "back" : "front"}`;
     const node = $(nodeId);
     if (node === null) {
       return;

@@ -14,6 +14,7 @@ use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\PlayersExtra;
+use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 use PaxRenaissance\Models\Card;
@@ -22,12 +23,18 @@ trait DebugTrait
 {
   function test()
   {
+    Notifications::log('Available ops', Cards::get('PREN039_FlorentineWool')->getAvailableOps());
+    // Cards::setUsed('PREN039_FlorentineWool',0);
+    // $this->debugPlaceToken(BISHOP, REFORMIST, 'PREN039_FlorentineWool');
+    // Notifications::log('commerce west', TableauOps::get(COMMERCE_OP_WEST)->canBePerformed(Players::get(), Cards::get('PREN040_SindicatRemenca')));
+    // Notifications::log('Available ops', Cards::get('PREN040_SindicatRemenca')->getAvailableOps());
+
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_1);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_2);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, MODON);
-    $this->debugPlaceToken(ROOK, REFORMIST, Empires::get(MAMLUK)->getEmpireSquareId());
-    $this->debugPlaceToken(ROOK, CATHOLIC, Empires::get(MAMLUK)->getEmpireSquareId());
-    $this->debugPlaceToken(PAWN, MARCHIONNI, Empires::get(MAMLUK)->getEmpireSquareId());
+    // $this->debugPlaceToken(ROOK, REFORMIST, Empires::get(MAMLUK)->getEmpireSquareId());
+    // $this->debugPlaceToken(ROOK, CATHOLIC, Empires::get(MAMLUK)->getEmpireSquareId());
+    // $this->debugPlaceToken(PAWN, MARCHIONNI, Empires::get(MAMLUK)->getEmpireSquareId());
     // Notifications::log('cardType', Cards::get('EmpireSquare_France')->getType());
     // Notifications::log('attackers', AtomicActions::get(BATTLE_RESULT)->getAttackers(Players::get(), BYZANTIUM, JIHAD_ONE_SHOT, ['cardId' => 'PREN059_Safavids']));
     // Notifications::log('defenders', AtomicActions::get(BATTLE_RESULT)->getDefenders(BYZANTIUM, JIHAD_ONE_SHOT, ['cardId' => 'PREN059_Safavids']));

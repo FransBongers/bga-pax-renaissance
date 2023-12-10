@@ -1,21 +1,31 @@
-class ClientStartTradeFairState implements State {
+class TableauOpsSelectState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringClientStartTradeFairArgs;
+  private args: OnEnteringTableauOpsSelectArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringClientStartTradeFairArgs) {
+  onEnteringState(args: OnEnteringTableauOpsSelectArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving ClientStartTradeFairState");
+    debug("Leaving TableauOpsSelectState");
   }
 
-  setDescription(activePlayerId: number) {}
+  setDescription(activePlayerId: number) {
+    this.game.clientUpdatePageTitle({
+      text: _("${tkn_playerName} may select Ops to perform"),
+      args: {
+        tkn_playerName: this.game.playerManager
+          .getPlayer({ playerId: activePlayerId })
+          .getName(),
+      },
+      nonActivePlayers: true,
+    });
+  }
 
   //  .####.##....##.########.########.########..########....###.....######..########
   //  ..##..###...##....##....##.......##.....##.##.........##.##...##....##.##......
@@ -35,26 +45,39 @@ class ClientStartTradeFairState implements State {
 
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
-    this.game.setCardSelected({ id: this.args.card.id, back: true });
-    this.game.setLocationSelected({ id: this.args.city.id });
-
     this.game.clientUpdatePageTitle({
-      text: _("Convene ${region} trade fair from ${cityName}?"),
+      text: _("${tkn_playerName} may select a card to perform Ops"),
       args: {
-        cityName: _(this.args.city.name),
-        region: this.args.city.emporium === EAST ? _("East") : _("West"),
+        tkn_playerName: "${you}",
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>         this.game.takeAction({
-        action: "actPlayerAction",
-        args: {
-          action: "tradeFair",
-          region: this.args.city.emporium,
-        },
-      }),
+
+    this.setCardsSelectable();
+  }
+
+  private updateInterfaceConfirm({cardId, ops}: { cardId: string; ops: TableauOp[] }) {
+    this.game.clearPossible();
+    this.game.setCardSelected({id: cardId});
+    this.game.clientUpdatePageTitle({
+      text: _("${tkn_playerName} may choose an Op to perform"),
+      args: {
+        tkn_playerName: "${you}",
+      },
     });
-    this.game.addCancelButton();
+    ops.forEach((tableauOp, index) => {
+      this.game.addPrimaryActionButton({
+        id: `${tableauOp.id}_${index}_btn`,
+        text: _(tableauOp.name),
+        callback: () =>
+        this.game.takeAction({
+          action: "actTableauOpsSelect",
+          args: {
+            cardId,
+            tableauOpId: tableauOp.id,
+          },
+        }),
+      })
+    })
   }
 
   //  .##.....##.########.####.##.......####.########.##....##
@@ -64,6 +87,19 @@ class ClientStartTradeFairState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private setCardsSelectable() {
+    Object.keys(this.args.availableOps).forEach((id: string) => {
+      this.game.setCardSelectable({
+        id,
+        callback: () =>
+          this.updateInterfaceConfirm({
+            cardId: id,
+            ops: this.args.availableOps[id],
+          }),
+      });
+    });
+  }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.

@@ -50,6 +50,7 @@ class PlayerActionState implements State {
     this.setMarketCardsSelectable();
     this.setHandCardsSelectable();
     this.setTradeFairSelectable();
+    this.addActionButtons();
     // this.addTest();
   }
 
@@ -65,7 +66,7 @@ class PlayerActionState implements State {
     // if (node) {
     //   node.classList.add(PR_SELECTED);
     // }
-    this.game.setCardSelected({ card });
+    this.game.setCardSelected({ id: card.id });
     this.game.clientUpdatePageTitle({
       text: _("Purchase ${cardName} for ${amount} ${tkn_florin} ?"),
       args: {
@@ -89,7 +90,7 @@ class PlayerActionState implements State {
 
   private updateInterfaceOnClickHandCard({ card }: { card: TableauCard }) {
     this.game.clearPossible();
-    this.game.setCardSelected({card});
+    this.game.setCardSelected({id: card.id});
     // const node = document.getElementById(`${card.id.split("_")[0]}-front`);
     // if (node) {
     //   node.classList.add(PR_SELECTED);
@@ -152,6 +153,26 @@ class PlayerActionState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private addActionButtons()
+  {
+    REGIONS.forEach((region) => {
+      if (Object.keys(this.args.availableOps[region]).length > 0) {
+        this.game.addPrimaryActionButton({
+          id: `${region}_ops_btn`,
+          text: region === EAST ? _('Tableau Ops East') : _('Tableau Ops West'),
+          callback: () =>
+          this.game.takeAction({
+            action: "actPlayerAction",
+            args: {
+              action: `tableauOps`,
+              region,
+            },
+          }),
+        })
+      }
+    })
+  }
 
   private addTest() {
     this.game.addPrimaryActionButton({
@@ -237,7 +258,7 @@ class PlayerActionState implements State {
         return;
       }
       this.game.setCardSelectable({
-        card: this.args.tradeFair[region].card,
+        id: this.args.tradeFair[region].card.id,
         back: true,
         callback: () =>
           this.game

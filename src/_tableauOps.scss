@@ -1,0 +1,44 @@
+@use "sass:math";
+@use "sass:map";
+
+.pr_tableau_op {
+  background-image: url("img/tableau_ops.webp");
+  background-size: 600% 400%;
+  background-repeat: no-repeat;
+  // width: 302px;
+  // height: 175px;
+  width: calc(var(--paxRenIconScale) * 100px);
+  height: calc(var(--paxRenIconScale) * 74px);
+  filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
+}
+
+$tableau-ops: (
+  1: "BEHEAD_OP",
+  2: "CAMPAIGN_OP",
+  3: "COMMERCE_OP_EAST",
+  4: "COMMERCE_OP_WEST",
+  5: "CORSAIR_OP_CATHOLIC",
+  6: "CORSAIR_OP_ISLAMIC",
+  7: "CORSAIR_OP_REFORMIST",
+  8: "INQUISITOR_OP_CATHOLIC",
+  9: "INQUISITOR_OP_ISLAMIC",
+  10: "INQUISITOR_OP_REFORMIST",
+  11: "REPRESS_OP_KNIGHT",
+  12: "REPRESS_OP_PAWN",
+  13: "REPRESS_OP_PAWN_KNIGHT",
+  14: "REPRESS_OP_PAWN_ROOK",
+  15: "REPRESS_OP_PAWN_ROOK_KNIGHT",
+  16: "REPRESS_OP_ROOK",
+  17: "REPRESS_OP_ROOK_KNIGHT",
+  18: "SIEGE_OP",
+  19: "TAX_OP",
+  20: "VOTE_OP_EAST",
+  21: "VOTE_OP_WEST",
+);
+
+@for $i from 1 through 40 {
+  .pr_tableau_op[data-tableau-op-id="#{map.get($tableau-ops,$i)}"] {
+    background-position-x: math.div((($i - 1) % 6 * 100%), 5);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 6)) * 100%, 3);
+  }
+}
