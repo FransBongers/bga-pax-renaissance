@@ -1,0 +1,33 @@
+<?php
+
+namespace PaxRenaissance\Cards\Tableau;
+
+class PREN042_HochstetterBank extends \PaxRenaissance\Models\TableauCard
+{
+  public function __construct($row)
+  {
+    parent::__construct($row);
+    $this->id = 'PREN042_HochstetterBank';
+    $this->agents = [
+      [
+        'separator' => null,
+        'type' => PAWN,
+      ]
+    ];
+    $this->empire = HOLY_ROMAN_EMIRE;
+    $this->flavorText = [
+      clienttranslate('The German banks were free of the church usury prohibitions against interest, and gradually adopted Italian bookkeeping innovations.'),
+      clienttranslate("The Höchstetter clan in the 1520's urged the populace to save, even if on a modest scale of a few florins, which led to a million florins annually in interest, rivaling the Fuggers and Welsers. They used their fortune to dominate the refining of silver from Tyrol.")
+    ];
+    $this->name = clienttranslate('Höchstetter Bank');
+    $this->ops = [
+      [
+        'id' => COMMERCE_OP_WEST,
+        'flavorText' => clienttranslate('Tyrolean Schwaz silver miners'),
+        'top' => 0,
+        'left' => 0,
+      ]
+    ];
+    $this->region = WEST;
+  }
+}
