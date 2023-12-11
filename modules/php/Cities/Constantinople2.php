@@ -12,19 +12,19 @@ class Constantinople2 extends \PaxRenaissance\Models\City
     $this->levy = [
       MEDIEVAL => [
         'levyIcon' => KNIGHT,
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
       ],
       CATHOLIC => [
         'levyIcon' => KNIGHT,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       ISLAMIC => [
         'levyIcon' => ROOK,
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
       ],
       REFORMIST => [
         'levyIcon' => KNIGHT,
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
       ],
     ];
   }

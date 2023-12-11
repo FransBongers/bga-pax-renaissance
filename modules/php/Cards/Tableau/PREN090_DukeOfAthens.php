@@ -10,7 +10,7 @@ class PREN090_DukeOfAthens extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN090_DukeOfAthens';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => ROOK,
       ]
     ];

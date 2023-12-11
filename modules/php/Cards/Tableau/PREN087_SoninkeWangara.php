@@ -10,7 +10,7 @@ class PREN087_SoninkeWangara extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN087_SoninkeWangara';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => ROOK,
       ]
     ];

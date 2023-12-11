@@ -10,7 +10,7 @@ class PREN009_HouseOfBorgia extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN009_HouseOfBorgia';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => BISHOP,
       ]
     ];

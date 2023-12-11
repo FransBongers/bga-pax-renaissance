@@ -95,7 +95,7 @@ abstract class Flows
           'agents' => [
             0 => [
               'type' => PAWN,
-              'religion' => null
+              'separator' => null
             ]
           ],
           'empireId' => $empireId,

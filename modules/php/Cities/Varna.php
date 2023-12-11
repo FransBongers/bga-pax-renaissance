@@ -11,19 +11,19 @@ class Varna extends \PaxRenaissance\Models\City
     $this->levy = [
       MEDIEVAL => [
         'levyIcon' => KNIGHT,
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
       ],
       CATHOLIC => [
         'levyIcon' => ROOK,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       ISLAMIC => [
         'levyIcon' => ROOK,
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
       ],
       REFORMIST => [
         'levyIcon' => ROOK,
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
       ],
     ];
   }

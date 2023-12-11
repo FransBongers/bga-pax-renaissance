@@ -76,7 +76,7 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
     $levy = $possible['possibleLevies'][$cityId]['levy'];
 
     $player = self::getPlayer();
-    $supply = Locations::supply($levy['levyIcon'], $levy['religion']);
+    $supply = Locations::supply($levy['levyIcon'], $levy['separator']);
 
     Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $cityId, CITY), $this->ctx);
 

@@ -10,11 +10,11 @@ class PREN071_TheHandsome extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN071_TheHandsome';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ],
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ],
     ];

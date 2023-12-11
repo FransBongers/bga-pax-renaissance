@@ -10,7 +10,7 @@ class PREN039_FlorentineWool extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN039_FlorentineWool';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

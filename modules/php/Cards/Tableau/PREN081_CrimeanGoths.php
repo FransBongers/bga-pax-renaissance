@@ -10,7 +10,7 @@ class PREN081_CrimeanGoths extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN081_CrimeanGoths';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => ROOK,
       ]
     ];

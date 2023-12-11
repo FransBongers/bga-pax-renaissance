@@ -10,7 +10,7 @@ class PREN023_SpanishTercio extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN023_SpanishTercio';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ]
     ];

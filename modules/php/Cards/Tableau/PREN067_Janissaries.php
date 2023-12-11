@@ -10,11 +10,11 @@ class PREN067_Janissaries extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN067_Janissaries';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ],
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ],
     ];

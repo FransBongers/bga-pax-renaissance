@@ -10,7 +10,7 @@ class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN003_GrandInquisitor';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => BISHOP,
       ]
     ];

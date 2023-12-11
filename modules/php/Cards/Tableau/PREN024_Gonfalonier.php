@@ -10,11 +10,11 @@ class PREN024_Gonfalonier extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN024_Gonfalonier';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ]
     ];

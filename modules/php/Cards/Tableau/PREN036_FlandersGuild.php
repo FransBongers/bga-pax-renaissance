@@ -10,7 +10,7 @@ class PREN036_FlandersGuild extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN036_FlandersGuild';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

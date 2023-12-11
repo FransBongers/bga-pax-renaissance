@@ -10,7 +10,7 @@ class PREN072_BosnianAndSerbianSilver extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN072_BosnianAndSerbianSilver';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

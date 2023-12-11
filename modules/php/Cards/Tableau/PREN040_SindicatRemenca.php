@@ -10,7 +10,7 @@ class PREN040_SindicatRemenca extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN040_SindicatRemenca';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

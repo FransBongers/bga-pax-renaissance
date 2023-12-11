@@ -12,19 +12,19 @@ class London extends \PaxRenaissance\Models\City
     $this->levy = [
       MEDIEVAL => [
         'levyIcon' => ROOK,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       CATHOLIC => [
         'levyIcon' => KNIGHT,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       ISLAMIC => [
         'levyIcon' => ROOK,
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
       ],
       REFORMIST => [
         'levyIcon' => KNIGHT,
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
       ],
     ];
   }

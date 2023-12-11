@@ -10,7 +10,7 @@ class PREN094X_ZaporozhianHost extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN094X_ZaporozhianHost';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => KNIGHT,
       ]
     ];

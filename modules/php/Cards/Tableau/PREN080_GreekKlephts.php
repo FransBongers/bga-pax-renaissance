@@ -10,7 +10,7 @@ class PREN080_GreekKlephts extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN080_GreekKlephts';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => ROOK,
       ]
     ];

@@ -10,11 +10,11 @@ class PREN026_Cromwell extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN026_Cromwell';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => KNIGHT,
       ],
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => KNIGHT,
       ],
     ];

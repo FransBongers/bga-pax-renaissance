@@ -10,7 +10,7 @@ class PREN004_Antipope extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN004_Antipope';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => BISHOP,
       ]
     ];

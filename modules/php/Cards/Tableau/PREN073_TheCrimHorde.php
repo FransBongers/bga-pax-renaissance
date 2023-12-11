@@ -10,7 +10,7 @@ class PREN073_TheCrimHorde extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN073_TheCrimHorde';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ]
     ];

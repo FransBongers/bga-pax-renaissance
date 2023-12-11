@@ -10,7 +10,7 @@ class PREN031_SwissRislaufer extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN031_SwissRislaufer';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
     ];

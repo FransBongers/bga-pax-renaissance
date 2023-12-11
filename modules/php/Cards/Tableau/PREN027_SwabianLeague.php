@@ -10,11 +10,11 @@ class PREN027_SwabianLeague extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN027_SwabianLeague';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
     ];

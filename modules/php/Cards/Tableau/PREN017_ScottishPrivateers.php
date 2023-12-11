@@ -10,7 +10,7 @@ class PREN017_ScottishPrivateers extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN017_ScottishPrivateers';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => PIRATE,
       ]
     ];

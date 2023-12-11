@@ -10,7 +10,7 @@ class PREN093X_FunjNomads extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN093X_FunjNomads';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ]
     ];

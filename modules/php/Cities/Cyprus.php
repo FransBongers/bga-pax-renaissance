@@ -11,19 +11,19 @@ class Cyprus extends \PaxRenaissance\Models\City
     $this->levy = [
       MEDIEVAL => [
         'levyIcon' => ROOK,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       CATHOLIC => [
         'levyIcon' => ROOK,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       ISLAMIC => [
         'levyIcon' => ROOK,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       REFORMIST => [
         'levyIcon' => KNIGHT,
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
       ],
     ];
   }

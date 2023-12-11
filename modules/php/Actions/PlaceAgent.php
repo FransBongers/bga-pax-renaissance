@@ -135,7 +135,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
       $player = self::getPlayer();
       $info = $this->ctx->getInfo();
 
-      $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
+      $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['separator']);
 
       Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, $info['empireId'], $repressCost), $this->ctx);
     }
@@ -144,7 +144,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
     if (count($agents) > 1) {
       $index = Utils::array_find_index($agents, function ($argAgent) use ($agent) {
-        return $argAgent['type'] === $agent['type'] && $argAgent['religion'] === $agent['religion'];
+        return $argAgent['type'] === $agent['type'] && $argAgent['separator'] === $agent['separator'];
       });
       unset($agents[$index]);
       $agents = array_values($agents);

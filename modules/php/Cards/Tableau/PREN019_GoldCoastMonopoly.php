@@ -10,7 +10,7 @@ class PREN019_GoldCoastMonopoly extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN019_GoldCoastMonopoly';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

@@ -10,11 +10,11 @@ class PREN028_TheBold extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN028_TheBold';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
     ];

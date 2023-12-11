@@ -10,7 +10,7 @@ class PREN065_MamlukSlaveSoldiers extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN065_MamlukSlaveSoldiers';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ]
     ];

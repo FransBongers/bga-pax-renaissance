@@ -4376,7 +4376,7 @@ var BattleCasualtiesState = (function () {
             id = "".concat(bank, "_pawn");
         }
         else {
-            id = "".concat(agent.religion, "_").concat(agent.type);
+            id = "".concat(agent.separator, "_").concat(agent.type);
         }
         return id;
     };

@@ -10,7 +10,7 @@ class PREN022_TheLastKnight extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN022_TheLastKnight';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => KNIGHT,
       ]
     ];

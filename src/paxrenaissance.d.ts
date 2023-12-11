@@ -136,7 +136,7 @@ interface VictoryCard extends PaxRenCard {
 }
 
 interface Agent {
-  religion: string | null;
+  separator: string | null;
   type: string;
 }
 

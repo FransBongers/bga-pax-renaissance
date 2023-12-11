@@ -10,7 +10,7 @@ class PREN016_TheCompanyOfMerchantAdventurers extends \PaxRenaissance\Models\Tab
     $this->id = 'PREN016_TheCompanyOfMerchantAdventurers';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

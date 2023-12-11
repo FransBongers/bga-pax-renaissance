@@ -10,7 +10,7 @@ class PREN035_CommunerosGuilds extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN035_CommunerosGuilds';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

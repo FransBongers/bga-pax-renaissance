@@ -10,7 +10,7 @@ class PREN033_SchwarzerHaufen extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN033_SchwarzerHaufen';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ]
     ];

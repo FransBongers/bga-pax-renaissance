@@ -10,7 +10,7 @@ class PREN069_BashiBazouk extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN069_BashiBazouk';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => KNIGHT,
       ]
     ];

@@ -57,7 +57,7 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
     // $player = self::getPlayer();
 
     // $type = $agent['type'];
-    // $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['religion']);
+    // $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['separator']);
 
     $token = isset($info['tokenId']) ? Tokens::get($info['tokenId']) : Tokens::getTopOf($supply);
 

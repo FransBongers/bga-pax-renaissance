@@ -10,7 +10,7 @@ class PREN098X_UnityOfTheBrethren extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN098X_UnityOfTheBrethren';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => BISHOP,
       ]
     ];

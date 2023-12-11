@@ -10,7 +10,7 @@ class PREN015_HanseaticLeague extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN015_HanseaticLeague';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

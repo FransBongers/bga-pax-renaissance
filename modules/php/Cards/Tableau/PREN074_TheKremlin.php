@@ -10,7 +10,7 @@ class PREN074_TheKremlin extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN074_TheKremlin';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

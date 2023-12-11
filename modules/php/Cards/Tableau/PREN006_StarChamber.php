@@ -10,7 +10,7 @@ class PREN006_StarChamber extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN006_StarChamber';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => BISHOP,
       ]
     ];

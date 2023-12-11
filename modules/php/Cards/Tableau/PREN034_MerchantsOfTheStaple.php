@@ -10,7 +10,7 @@ class PREN034_MerchantsOfTheStaple extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN034_MerchantsOfTheStaple';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

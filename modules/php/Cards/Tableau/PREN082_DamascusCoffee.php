@@ -10,7 +10,7 @@ class PREN082_DamascusCoffee extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN082_DamascusCoffee';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => ROOK,
       ]
     ];

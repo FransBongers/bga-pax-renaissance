@@ -10,7 +10,7 @@ class PREN058_TheGrim extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN058_TheGrim';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => BISHOP,
       ]
     ];

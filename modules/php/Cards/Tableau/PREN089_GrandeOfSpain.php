@@ -10,7 +10,7 @@ class PREN089_GrandeOfSpain extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN089_GrandeOfSpain';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => ROOK,
       ]
     ];

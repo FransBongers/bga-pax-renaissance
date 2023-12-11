@@ -10,7 +10,7 @@ class PREN059_Safavids extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN059_Safavids';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => BISHOP,
       ]
     ];

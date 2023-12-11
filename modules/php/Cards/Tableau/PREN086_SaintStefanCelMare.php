@@ -10,11 +10,11 @@ class PREN086_SaintStefanCelMare extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN086_SaintStefanCelMare';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => ROOK,
       ],
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => ROOK,
       ],
     ];

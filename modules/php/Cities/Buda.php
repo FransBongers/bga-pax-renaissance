@@ -12,19 +12,19 @@ class Buda extends \PaxRenaissance\Models\City
     $this->levy = [
       MEDIEVAL => [
         'levyIcon' => KNIGHT,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       CATHOLIC => [
         'levyIcon' => KNIGHT,
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
       ],
       ISLAMIC => [
         'levyIcon' => KNIGHT,
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
       ],
       REFORMIST => [
         'levyIcon' => ROOK,
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
       ],
     ];
   }

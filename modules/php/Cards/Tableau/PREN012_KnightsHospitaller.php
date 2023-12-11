@@ -10,7 +10,7 @@ class PREN012_KnightsHospitaller extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN012_KnightsHospitaller';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => PIRATE,
       ]
     ];

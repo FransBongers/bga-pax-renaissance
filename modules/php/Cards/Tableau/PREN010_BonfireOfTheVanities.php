@@ -10,7 +10,7 @@ class PREN010_BonfireOfTheVanities extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN010_BonfireOfTheVanities';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => BISHOP,
       ]
     ];

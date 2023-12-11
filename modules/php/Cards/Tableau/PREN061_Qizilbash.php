@@ -10,7 +10,7 @@ class PREN061_Qizilbash extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN061_Qizilbash';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => BISHOP,
       ]
     ];

@@ -10,11 +10,11 @@ class PREN088_CemAntiHostage extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN088_CemAntiHostage';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => ROOK,
       ],
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => ROOK,
       ]
     ];

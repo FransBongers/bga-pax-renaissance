@@ -10,11 +10,11 @@ class PREN085_VladTheImpaler extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN085_VladTheImpaler';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => ROOK,
       ],
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => ROOK,
       ],
     ];

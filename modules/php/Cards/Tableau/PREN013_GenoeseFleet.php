@@ -10,7 +10,7 @@ class PREN013_GenoeseFleet extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN013_GenoeseFleet';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => PIRATE,
       ]
     ];

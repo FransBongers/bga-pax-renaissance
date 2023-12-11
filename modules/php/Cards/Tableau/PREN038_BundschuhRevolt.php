@@ -10,7 +10,7 @@ class PREN038_BundschuhRevolt extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN038_BundschuhRevolt';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

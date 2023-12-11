@@ -277,7 +277,7 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
       if ($typeFilter !== null && !in_array($agent['type'], $typeFilter)) {
         return false;
       }
-      if ($separatorFilter !== null && !in_array($agent['religion'], $separatorFilter)) {
+      if ($separatorFilter !== null && !in_array($agent['separator'], $separatorFilter)) {
         return false;
       }
       return true;

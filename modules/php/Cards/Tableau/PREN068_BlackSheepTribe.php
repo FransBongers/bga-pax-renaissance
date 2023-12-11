@@ -10,7 +10,7 @@ class PREN068_BlackSheepTribe extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN068_BlackSheepTribe';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => KNIGHT,
       ]
     ];

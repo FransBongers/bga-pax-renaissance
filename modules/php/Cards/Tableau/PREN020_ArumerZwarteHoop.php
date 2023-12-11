@@ -10,7 +10,7 @@ class PREN020_ArumerZwarteHoop extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN020_ArumerZwarteHoop';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => PIRATE,
       ]
     ];

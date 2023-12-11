@@ -10,7 +10,7 @@ class PREN030_SantaHermandad extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN030_SantaHermandad';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ]
     ];

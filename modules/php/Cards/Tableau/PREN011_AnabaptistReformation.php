@@ -10,7 +10,7 @@ class PREN011_AnabaptistReformation extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN011_AnabaptistReformation';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => BISHOP,
       ]
     ];

@@ -10,11 +10,11 @@ class PREN025_TeutonicKnights extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN025_TeutonicKnights';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
     ];

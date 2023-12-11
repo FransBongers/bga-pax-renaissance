@@ -10,7 +10,7 @@ class PREN014_IndiaArmada extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN014_IndiaArmada';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

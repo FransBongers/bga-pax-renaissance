@@ -10,7 +10,7 @@ class PREN083_PospoliteRuszenie extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN083_PospoliteRuszenie';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => ROOK,
       ]
     ];

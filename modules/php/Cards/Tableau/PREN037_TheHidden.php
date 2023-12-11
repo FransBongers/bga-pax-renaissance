@@ -10,7 +10,7 @@ class PREN037_TheHidden extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN037_TheHidden';
     $this->agents = [
       [
-        'religion' => null,
+        'separator' => null,
         'type' => PAWN,
       ]
     ];

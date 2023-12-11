@@ -10,11 +10,11 @@ class PREN066_BlackArmy extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN066_BlackArmy';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => KNIGHT,
       ],
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => KNIGHT,
       ],
     ];

@@ -10,7 +10,7 @@ class PREN001_InquistionPope extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN001_InquistionPope';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => BISHOP,
       ]
     ];

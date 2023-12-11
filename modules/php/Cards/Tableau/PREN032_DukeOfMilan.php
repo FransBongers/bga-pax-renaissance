@@ -10,11 +10,11 @@ class PREN032_DukeOfMilan extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN032_DukeOfMilan';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ],
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ]
     ];

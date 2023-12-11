@@ -194,7 +194,7 @@ class BattleCasualties extends \PaxRenaissance\Models\AtomicAction
     $selectedAgent = $args['agent'];
 
     $index = Utils::array_find_index($agents, function ($agent) use ($selectedAgent) {
-      return $agent['type'] === $selectedAgent['type'] && $agent['religion'] === $selectedAgent['religion'];
+      return $agent['type'] === $selectedAgent['type'] && $agent['separator'] === $selectedAgent['separator'];
     });
 
     Notifications::battleEliminateAgent($player, $selectedAgent);

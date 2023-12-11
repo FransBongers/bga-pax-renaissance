@@ -10,7 +10,7 @@ class PREN063_OttomanNavy extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN063_OttomanNavy';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => PIRATE,
       ]
     ];

@@ -10,7 +10,7 @@ class PREN100X_UnifiedChristendom extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN100X_UnifiedChristendom';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => BISHOP,
       ]
     ];

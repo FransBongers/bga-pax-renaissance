@@ -10,7 +10,7 @@ class PREN060_Dervishes extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN060_Dervishes';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => BISHOP,
       ]
     ];

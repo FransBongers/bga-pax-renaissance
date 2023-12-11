@@ -133,7 +133,7 @@ class Notifications
 
     foreach ($attackers['agents'] as $index => $agent) {
       $type = $agent['type'];
-      $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+      $separator = $type === PAWN ? $player->getBank() : $agent['separator'];
       $attackersLog[] = '${tkn_mapToken_agent_' . $index . '}';
       $attackersArgs['tkn_mapToken_agent_' . $index] = $separator . '_' . $type;
     }
@@ -178,7 +178,7 @@ class Notifications
 
     foreach ($attackers['agents'] as $index => $agent) {
       $type = $agent['type'];
-      $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+      $separator = $type === PAWN ? $player->getBank() : $agent['separator'];
       $log[] = '${tkn_mapToken_agent_' . $index . '}';
       $args['tkn_mapToken_agent_' . $index] = $separator . '_' . $type;
     }
@@ -217,7 +217,7 @@ class Notifications
   public static function battleEliminateAgent($player, $agent)
   {
     $type = $agent['type'];
-    $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+    $separator = $type === PAWN ? $player->getBank() : $agent['separator'];
 
     self::message(clienttranslate('${tkn_playerName} eliminates Agent ${tkn_mapToken}'), [
       'player' => $player,
@@ -232,7 +232,7 @@ class Notifications
 
     foreach ($agents as $index => $agent) {
       $type = $agent['type'];
-      $separator = $type === PAWN ? $player->getBank() : $agent['religion'];
+      $separator = $type === PAWN ? $player->getBank() : $agent['separator'];
       $attackersLog[] = '${tkn_mapToken_agent_' . $index . '}';
       $attackersArgs['tkn_mapToken_agent_' . $index] = $separator . '_' . $type;
     }

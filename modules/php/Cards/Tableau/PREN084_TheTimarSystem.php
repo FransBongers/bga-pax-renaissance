@@ -10,7 +10,7 @@ class PREN084_TheTimarSystem extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN084_TheTimarSystem';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => ROOK,
       ]
     ];

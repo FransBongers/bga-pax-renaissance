@@ -142,7 +142,7 @@ class BattleCasualtiesState implements State {
         .getBank();
       id = `${bank}_pawn`;
     } else {
-      id = `${agent.religion}_${agent.type}`;
+      id = `${agent.separator}_${agent.type}`;
     }
     return id;
   }

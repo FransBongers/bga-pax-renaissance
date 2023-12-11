@@ -10,7 +10,7 @@ class PREN064_JewishPirates extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN064_JewishPirates';
     $this->agents = [
       [
-        'religion' => ISLAMIC,
+        'separator' => ISLAMIC,
         'type' => PIRATE,
       ]
     ];

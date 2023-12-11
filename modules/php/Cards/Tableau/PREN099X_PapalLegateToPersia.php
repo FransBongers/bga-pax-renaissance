@@ -10,7 +10,7 @@ class PREN099X_PapalLegateToPersia extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN099X_PapalLegateToPersia';
     $this->agents = [
       [
-        'religion' => REFORMIST,
+        'separator' => REFORMIST,
         'type' => BISHOP,
       ]
     ];

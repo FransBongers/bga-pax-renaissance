@@ -10,7 +10,7 @@ class PREN070_ZupyKrakowskieCompany extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN070_ZupyKrakowskieCompany';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => KNIGHT,
       ]
     ];

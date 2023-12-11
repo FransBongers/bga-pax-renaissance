@@ -10,7 +10,7 @@ class PREN002_PapalElephant extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN002_PapalElephant';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => BISHOP,
       ]
     ];

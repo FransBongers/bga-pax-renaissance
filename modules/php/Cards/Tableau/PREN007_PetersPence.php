@@ -10,7 +10,7 @@ class PREN007_PetersPence extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN007_PetersPence';
     $this->agents = [
       [
-        'religion' => CATHOLIC,
+        'separator' => CATHOLIC,
         'type' => BISHOP,
       ]
     ];
