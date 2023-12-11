@@ -20,7 +20,7 @@ class PREN002_PapalElephant extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Luther was scandalized enough to nail theses to a church door. But other than a mild condemnation, Leo hardly cards. "Since God has given us the papacy, let us enjoy it".'),
     ];
     $this->name = clienttranslate('Papal Elephant');
-    $this->oneShot = APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => TAX_OP,

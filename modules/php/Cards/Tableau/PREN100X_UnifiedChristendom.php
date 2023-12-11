@@ -20,7 +20,7 @@ class PREN100X_UnifiedChristendom extends \PaxRenaissance\Models\TableauCard
       clienttranslate("The East-West Union was proclaimed in 1452, but too late, Constantinople fell the next year. Bessarion became a Cardinal, humanist scholar, and Papal legate.")
     ];
     $this->name = clienttranslate('Unified Christendom');
-    $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => INQUISITOR_OP_CATHOLIC,

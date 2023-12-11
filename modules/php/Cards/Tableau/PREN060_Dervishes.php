@@ -20,7 +20,7 @@ class PREN060_Dervishes extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The Bektaşî Sufi order became the official order of the elite Janissaries.')
     ];
     $this->name = clienttranslate('Dervishes');
-    $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => TAX_OP,

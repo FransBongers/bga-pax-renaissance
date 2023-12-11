@@ -296,8 +296,8 @@ $machinestates = [
         'transitions' => [],
     ],
 
-    ST_APOSTACY_ONE_SHOT => [
-        'name' => 'apostacyOneShot',
+    ST_APOSTASY_ONE_SHOT => [
+        'name' => 'apostasyOneShot',
         'description' => '',
         'type' => 'game',
         'action' => 'stAtomicAction',

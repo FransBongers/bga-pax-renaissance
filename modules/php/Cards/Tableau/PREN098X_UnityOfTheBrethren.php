@@ -20,7 +20,7 @@ class PREN098X_UnityOfTheBrethren extends \PaxRenaissance\Models\TableauCard
       clienttranslate("The strictest standards of morals and modesty were exacted from the faithful. Luxuries, oaths, and military services were forbidden. Sins were publicly confessed and punished.")
     ];
     $this->name = clienttranslate('Unity of the Brethren');
-    $this->oneShot = APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => REPRESS_OP_KNIGHT,

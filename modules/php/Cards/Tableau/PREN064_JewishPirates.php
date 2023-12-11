@@ -20,7 +20,7 @@ class PREN064_JewishPirates extends \PaxRenaissance\Models\TableauCard
       clienttranslate("When Sinan's son was captured for ransom by imperial forces in 1540, Barbarossa led a successful rescue mission.")
     ];
     $this->name = clienttranslate('Jewish Pirates');
-    $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => REPRESS_OP_PAWN,

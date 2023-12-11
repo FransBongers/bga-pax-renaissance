@@ -20,7 +20,7 @@ class PREN062_BarbarossaBrothers extends \PaxRenaissance\Models\TableauCard
       clienttranslate('Upon his death, his brother Hizir Reis took his place (and his nickname).')
     ];
     $this->name = clienttranslate('Barbarossa Brothers');
-    $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => REPRESS_OP_PAWN,

@@ -20,7 +20,7 @@ class PREN030_SantaHermandad extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The rough and ready justice of the Santa Hermandades became infamous for brutality.')
     ];
     $this->name = clienttranslate('Santa Hermandad');
-    $this->oneShot = APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => TAX_OP,

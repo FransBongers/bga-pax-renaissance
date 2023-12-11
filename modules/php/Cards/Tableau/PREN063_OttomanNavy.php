@@ -20,7 +20,7 @@ class PREN063_OttomanNavy extends \PaxRenaissance\Models\TableauCard
       clienttranslate('The flagship of Admiral Kemal Reis was the Man of War Göke (shown), which carried 700 soldiers and the strongest cannons of her time.')
     ];
     $this->name = clienttranslate('Ottoman Navy');
-    $this->oneShot = APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => REPRESS_OP_PAWN,

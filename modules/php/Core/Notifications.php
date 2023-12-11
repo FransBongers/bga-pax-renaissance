@@ -109,7 +109,7 @@ class Notifications
    **** GAME METHODS ****
    *************************/
 
-  public static function apostacy($player, $prestigeMap)
+  public static function apostasy($player, $prestigeMap)
   {
     self::message(clienttranslate('${tkn_playerName} must Discard all cards with ${tkn_prestige_1} or ${tkn_prestige_2}'), [
       'player' => $player,

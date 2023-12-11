@@ -13,9 +13,9 @@ class AtomicActions
   // Mapping of actionId and corresponding class
   static $classes = [
     ANNOUNCE_ONE_SHOT => 'AnnounceOneShot',
-    APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT => 'ApostacyOneShot',
-    APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT => 'ApostacyOneShot',
-    APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT => 'ApostacyOneShot',
+    APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT => 'ApostasyOneShot',
+    APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT => 'ApostasyOneShot',
+    APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT => 'ApostasyOneShot',
     BATTLE_CASUALTIES => 'BattleCasualties',
     BATTLE_CHECK_BISHOP_AGENT => 'BattleCheckBishopAgent',
     BATTLE_CHECK_REGIME_CHANGE => 'BattleCheckRegimeChange',

@@ -168,9 +168,9 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
   private function canOneShotOccur($oneShot, $card)
   {
     switch ($oneShot) {
-      case APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT:
-      case APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT:
-      case APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT:
+      case APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT:
+      case APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT:
+      case APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT:
       case CONSPIRACY_ONE_SHOT:
       case PEASANT_REVOLT_ONE_SHOT:
         return true;

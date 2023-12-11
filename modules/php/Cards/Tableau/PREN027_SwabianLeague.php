@@ -24,7 +24,7 @@ class PREN027_SwabianLeague extends \PaxRenaissance\Models\TableauCard
       clienttranslate("The League's Landsknechte fought expansionist Bavarian duked, Kempton and Swiss peasants rebelling against feudal duties (1491,1499), and the Bundschuh Uprising of 1524-1525. The League was disbanded by the Reformation.")
     ];
     $this->name = clienttranslate('Swabian League');
-    $this->oneShot = APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => REPRESS_OP_PAWN_ROOK,

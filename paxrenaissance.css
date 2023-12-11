@@ -2215,17 +2215,17 @@
   filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
 }
 
-.pr_one_shot[data-one-shot-id=APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT] {
+.pr_one_shot[data-one-shot-id=APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT] {
   background-position-x: 0%;
   background-position-y: 0%;
 }
 
-.pr_one_shot[data-one-shot-id=APOSTACY_REFORMIST_CATHOLIC_ONE_SHOT] {
+.pr_one_shot[data-one-shot-id=APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT] {
   background-position-x: 20%;
   background-position-y: 0%;
 }
 
-.pr_one_shot[data-one-shot-id=APOSTACY_REFORMIST_ISLAMIC_ONE_SHOT] {
+.pr_one_shot[data-one-shot-id=APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT] {
   background-position-x: 40%;
   background-position-y: 0%;
 }

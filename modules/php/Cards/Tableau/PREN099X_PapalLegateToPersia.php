@@ -20,7 +20,7 @@ class PREN099X_PapalLegateToPersia extends \PaxRenaissance\Models\TableauCard
       clienttranslate("Uzun died in 1478, forcing Venice to sign an expensive peace treaty with the Ottomans.")
     ];
     $this->name = clienttranslate('Papal Legate to Persia');
-    $this->oneShot = APOSTACY_ISLAMIC_CATHOLIC_ONE_SHOT;
+    $this->oneShot = APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT;
     $this->ops = [
       [
         'id' => INQUISITOR_OP_CATHOLIC,
