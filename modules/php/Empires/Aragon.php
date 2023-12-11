@@ -13,6 +13,10 @@ class Aragon extends \PaxRenaissance\Models\Empire
       PAPAL_STATES,
       PORTUGAL,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      PAPAL_STATES,
+      PORTUGAL,
+    ];
     $this->empireSquareId = 'EmpireSquare_Aragon';
     $this->name = clienttranslate('Aragon');
     $this->borders = [

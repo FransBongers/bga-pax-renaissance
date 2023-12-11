@@ -84,7 +84,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
-              'action' => TABLEAU_OPS_SELECT,
+              'action' => $args['region'] === EAST ? TABLEAU_OPS_SELECT_EAST : TABLEAU_OPS_SELECT_WEST,
               'playerId' => $this->ctx->getPlayerId(),
               'region' => $args['region'],
             ]

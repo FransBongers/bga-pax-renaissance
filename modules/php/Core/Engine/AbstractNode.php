@@ -123,10 +123,10 @@ class AbstractNode
     return $this->children;
   }
 
-  // public function countChilds()
-  // {
-  //   return count($this->children);
-  // }
+  public function countChildren()
+  {
+    return count($this->children);
+  }
 
   public function toArray()
   {
@@ -287,5 +287,17 @@ class AbstractNode
     $this->info['actionResolved'] = true;
     $this->info['actionResolutionArgs'] = $args;
     $this->info['optional'] = false;
+  }
+
+  public function getResolvedActions($types)
+  {
+    $actions = [];
+    if (in_array($this->getAction(), $types) && $this->isActionResolved()) {
+      $actions[] = $this;
+    }
+    foreach ($this->children as $child) {
+      $actions = array_merge($actions, $child->getResolvedActions($types));
+    }
+    return $actions;
   }
 }

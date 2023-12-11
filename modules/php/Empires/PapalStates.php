@@ -13,6 +13,10 @@ class PapalStates extends \PaxRenaissance\Models\Empire
       HUNGARY,
       OTTOMAN,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      ARAGON,
+      OTTOMAN,
+    ];
     $this->empireSquareId = 'EmpireSquare_PapalStates';
     $this->name = clienttranslate('Papal States');
     $this->borders = [

@@ -14,6 +14,11 @@ class Ottoman extends \PaxRenaissance\Models\Empire
       MAMLUK,
       PAPAL_STATES,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      HUNGARY,
+      MAMLUK,
+      PAPAL_STATES,
+    ];
     $this->empireSquareId = 'EmpireSquare_Ottoman';
     $this->name = clienttranslate('Ottoman');
     $this->borders = [

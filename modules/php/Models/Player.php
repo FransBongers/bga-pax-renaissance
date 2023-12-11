@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance\Models;
 
+use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
@@ -85,6 +86,12 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     ];
     $tableauCards = $this->getTableauCardsPerRegion();
     foreach (REGIONS as $region) {
+      $regionHasAlreadyBeenResolved = $region === EAST ?
+        count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST])) > 0 :
+        count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_WEST])) > 0;
+      if ($regionHasAlreadyBeenResolved) {
+        continue;
+      }
       foreach ($tableauCards[$region] as $card) {
         $availableOps = $card->getAvailableOps($this);
 

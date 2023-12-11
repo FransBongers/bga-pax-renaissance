@@ -13,6 +13,10 @@ class Hungary extends \PaxRenaissance\Models\Empire
       OTTOMAN,
       PAPAL_STATES,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      BYZANTIUM,
+      OTTOMAN,
+    ];
     $this->empireSquareId = 'EmpireSquare_Hungary';
     $this->name = clienttranslate('Hungary');
     $this->borders = [

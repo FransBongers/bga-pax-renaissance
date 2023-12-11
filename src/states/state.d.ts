@@ -102,6 +102,20 @@ interface OnEnteringTableauOpCommerceArgs extends CommonArgs {
   cards: TableauCard[];
 }
 
+interface CorsairOpDestination {
+  border: Border;
+  token: Token | null;
+}
+
+interface CorsairOpOption {
+  token: Token;
+  destinations: Record<string, CorsairOpDestination>;
+}
+
+interface OnEnteringTableauOpCorsairArgs extends CommonArgs {
+  options: Record<string, CorsairOpOption>;
+}
+
 interface OnEnteringTableauOpRepressArgs extends CommonArgs {
   tokens: Record<string, Token>;
 }
@@ -122,6 +136,7 @@ interface OnEnteringTableauOpTaxPayOrRepressArgs extends CommonArgs {
 interface OnEnteringTableauOpsSelectArgs extends CommonArgs {
   availableOps: Record<string, TableauOp[]>;
   tableauCards: EmpireCard | TableauCard;
+  optional: boolean;
 }
 
 interface OnEnteringTradeFairLevyArgs extends CommonArgs {

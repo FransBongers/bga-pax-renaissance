@@ -14,6 +14,10 @@ class France extends \PaxRenaissance\Models\Empire
       PAPAL_STATES,
       PORTUGAL,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      ENGLAND,
+      HOLY_ROMAN_EMIRE,
+    ];
     $this->empireSquareId = 'EmpireSquare_France';
     $this->name = clienttranslate('France');
     $this->borders = [

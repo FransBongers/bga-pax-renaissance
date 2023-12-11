@@ -1759,6 +1759,7 @@ var PaxRenaissance = (function () {
             _a.regimeChangeEmancipation = new RegimeChangeEmancipationState(this),
             _a.selectToken = new SelectTokenState(this),
             _a.tableauOpCommerce = new TableauOpCommerceState(this),
+            _a.tableauOpCorsair = new TableauOpCorsairState(this),
             _a.tableauOpRepress = new TableauOpRepressState(this),
             _a.tableauOpSiege = new TableauOpSiegeState(this),
             _a.tableauOpsSelect = new TableauOpsSelectState(this),
@@ -5334,6 +5335,113 @@ var TableauOpCommerceState = (function () {
     };
     return TableauOpCommerceState;
 }());
+var TableauOpCorsairState = (function () {
+    function TableauOpCorsairState(game) {
+        this.game = game;
+    }
+    TableauOpCorsairState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpCorsairState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpCorsairState");
+    };
+    TableauOpCorsairState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must move a Pirate"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpCorsairState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Pirate to move"),
+            args: {
+                tkn_florin: tknFlorin(),
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setTokensSelectable();
+    };
+    TableauOpCorsairState.prototype.updateInterfaceSelectDestination = function (_a) {
+        var option = _a.option;
+        this.game.clearPossible();
+        var token = option.token, destinations = option.destinations;
+        this.game.setTokenSelected({ id: token.id });
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Sea Border to move ${tkn_mapToken} into"),
+            args: {
+                tkn_mapToken: tknMapToken(option.token.id),
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setDestinationBordersSelectable({ option: option });
+        this.game.addCancelButton();
+    };
+    TableauOpCorsairState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var destination = _a.destination, token = _a.token;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: token.id });
+        this.game.setLocationSelected({ id: destination.border.id });
+        this.game.clientUpdatePageTitle({
+            text: destination.token !== null ? _("Move ${tkn_mapToken} into ${borderName} and Kill ${tkn_mapToken_2}?") : _("Move ${tkn_mapToken} into ${borderName}?"),
+            args: {
+                tkn_mapToken: tknMapToken(token.id),
+                tkn_mapToken_2: destination.token !== null ? tknMapToken(destination.token.id) : '',
+                borderName: _(destination.border.name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpCorsair",
+                    args: {
+                        tokenId: token.id,
+                        destinationId: destination.border.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    TableauOpCorsairState.prototype.setDestinationBordersSelectable = function (_a) {
+        var _this = this;
+        var option = _a.option;
+        Object.entries(option.destinations).forEach(function (_a) {
+            var borderId = _a[0], destination = _a[1];
+            _this.game.setLocationSelectable({
+                id: borderId,
+                callback: function () {
+                    return _this.updateInterfaceConfirm({
+                        token: option.token,
+                        destination: destination,
+                    });
+                },
+            });
+        });
+    };
+    TableauOpCorsairState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.options).forEach(function (_a) {
+            var tokenId = _a[0], option = _a[1];
+            _this.game.setTokenSelectable({
+                id: tokenId,
+                callback: function () {
+                    return _this.updateInterfaceSelectDestination({
+                        option: option,
+                    });
+                },
+            });
+        });
+    };
+    return TableauOpCorsairState;
+}());
 var TableauOpRepressState = (function () {
     function TableauOpRepressState(game) {
         this.game = game;
@@ -5499,6 +5607,7 @@ var TableauOpsSelectState = (function () {
         });
     };
     TableauOpsSelectState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} may select a card to perform Ops"),
@@ -5507,6 +5616,19 @@ var TableauOpsSelectState = (function () {
             },
         });
         this.setCardsSelectable();
+        if (this.args.optional) {
+            this.game.addSkipButton({
+                callback: function () {
+                    return _this.game.takeAction({
+                        action: "actTableauOpsSelect",
+                        args: {
+                            cardId: null,
+                            tableauOpId: null,
+                        },
+                    });
+                },
+            });
+        }
     };
     TableauOpsSelectState.prototype.updateInterfaceConfirm = function (_a) {
         var _this = this;

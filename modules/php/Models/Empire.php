@@ -19,6 +19,7 @@ class Empire implements \JsonSerializable
 {
   protected $id;
   protected $adjacentEmpires;
+  protected $adjacentBySeaBorderEmpires;
   protected $empireSquareId;
   protected $borders;
   protected $cities;
@@ -50,6 +51,13 @@ class Empire implements \JsonSerializable
     return array_map(function ($empireId) {
       return Empires::get($empireId);
     }, $this->adjacentEmpires);
+  }
+
+  public function getAdjacentBySeaBorderEmpires()
+  {
+    return array_map(function ($empireId) {
+      return Empires::get($empireId);
+    }, $this->adjacentBySeaBorderEmpires);
   }
 
   public function getBorders($emptyOnly = false)

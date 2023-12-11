@@ -71,6 +71,7 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
     $data = [
       'availableOps' => $availableOps,
       'tableauCards' => $player->getTableauCardsPerRegion()[$region],
+      'optional' => $this->hasAtLeastOneOpBeenResolved(),
     ];
 
     return $data;
@@ -96,12 +97,16 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actTableauOpsSelect');
     $player = self::getPlayer();
+    
     $available = $this->getAvailableOps($player);
 
     $cardId = isset($args['cardId']) ? $args['cardId'] : null;
-    if ($cardId === null) {
+    if ($cardId === null && $this->hasAtLeastOneOpBeenResolved()) {
+      Notifications::tableauOpSkip($player);
       $this->resolveAction($args);
       return;  
+    } else if ($cardId === null) {
+      throw new \feException("At least one Op has to be performed");
     }
     $tableauOpId = $args['tableauOpId'];
     
@@ -141,5 +146,12 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
   {
     $info = $this->ctx->getInfo();
     return $player->getAvailableOps()[$info['region']];
+  }
+
+  private function hasAtLeastOneOpBeenResolved()
+  {
+    return Utils::array_some($this->ctx->getParent()->getChildren(), function ($child) {
+      return $child->isResolved();
+    });
   }
 }

@@ -45,7 +45,6 @@ class TableauOpCorsair extends \PaxRenaissance\Models\AtomicAction
 
   public function stTableauOpCorsair()
   {
-
   }
 
   // ....###....########...######....######.
@@ -62,10 +61,10 @@ class TableauOpCorsair extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+    $cardId = $info['cardId'];
 
     $data = [
-      'tokens' => $tableauOp->getOptions(Cards::get($cardId)),
+      'options' => $tableauOp->getOptions(Cards::get($cardId)),
     ];
 
     return $data;
@@ -95,23 +94,38 @@ class TableauOpCorsair extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+    $cardId = $info['cardId'];
+    $tokenId = $args['tokenId'];
+    $destinationId = $args['destinationId'];
 
-    
-    // $options = $tableauOp->getOptions(Cards::get($cardId));
-    
-    // $tokenId = $args['tokenId'];
-    
-    // if (!isset($options[$tokenId])) {
-    //   throw new \feException("Not allowed to Kill selected Token");
-    // }
+    $options = $tableauOp->getOptions(Cards::get($cardId));
+
+    if (!isset($options[$tokenId])) {
+      throw new \feException("Not allowed to move selected Pirate");
+    }
+
+    $option = $options[$tokenId];
+
+    if (!isset($option['destinations'][$destinationId])) {
+      throw new \feException("Not allowed to move Pirate to selected Border");
+    }
+
+    $player = self::getPlayer();
+
+    $destination = $option['destinations'][$destinationId];
+
+    if ($destination['token'] !== null) {
+      $destination['token']->returnToSupply(KILL,$player);
+    }
+
+    $option['token']->move($destinationId);
 
     // $player = self::getPlayer();
 
     // $token = Tokens::get($tokenId);
 
     // $token->returnToSupply(KILL, $player);
-    
+
     $this->resolveAction($args);
   }
 

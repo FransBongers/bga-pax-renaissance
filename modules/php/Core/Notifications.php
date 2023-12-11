@@ -472,6 +472,13 @@ class Notifications
       'tkn_cardName' => $card->getName(),
     ]);
   }
+
+  public static function tableauOpSkip($player)
+  {
+    self::message(clienttranslate('${tkn_playerName} skips further Ops'), [
+      'player' => $player,
+    ]);
+  }
   
   public static function tableauOpTax($player, $token, $empire)
   {

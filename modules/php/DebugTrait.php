@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance;
 
+use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Locations;
@@ -19,18 +20,20 @@ use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 use PaxRenaissance\Models\Card;
 
+
 trait DebugTrait
 {
   function test()
   {
+    // Notifications::log('engine',Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST]));
     // Notifications::log('Available ops', Cards::get('PREN039_FlorentineWool')->getAvailableOps());
     // Cards::setUsed('PREN039_FlorentineWool',0);
     // $this->debugPlaceToken(BISHOP, REFORMIST, 'PREN039_FlorentineWool');
-    // Notifications::log('commerce west', TableauOps::get(REPRESS_OP_KNIGHT)->canBePerformed(Players::get(), Cards::get('PREN035_CommunerosGuilds')));
+    // Notifications::log('options', TableauOps::get(CORSAIR_OP_ISLAMIC)->getOptions(Cards::get('PREN062_BarbarossaBrothers')));
     // Notifications::log('Available ops', Cards::get('PREN040_SindicatRemenca')->getAvailableOps());
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_1);
-    $this->debugPlaceToken(PAWN, MEDICI, BORDER_BYZANTIUM_MAMLUK);
+    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ARAGON_PAPAL_STATES);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, MODON);
     // $this->debugPlaceToken(ROOK, REFORMIST, Empires::get(MAMLUK)->getEmpireSquareId());
     // $this->debugPlaceToken(ROOK, CATHOLIC, Empires::get(MAMLUK)->getEmpireSquareId());

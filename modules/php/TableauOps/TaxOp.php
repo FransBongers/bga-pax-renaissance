@@ -30,7 +30,6 @@ class TaxOp extends \PaxRenaissance\Models\TableauOp
     }
 
     $options = $this->getOptions($card);
-    Notifications::log('options', $options);
     return count($options) > 0;
   }
 

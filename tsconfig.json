@@ -77,6 +77,7 @@
     "src/states/SelectToken.ts",
     "src/states/state.d.ts",
     "src/states/TableauOpCommerce.ts",
+    "src/states/TableauOpCorsair.ts",
     "src/states/TableauOpRepress.ts",
     "src/states/TableauOpSiege.ts",
     "src/states/TableauOpsSelect.ts",

@@ -1,23 +1,23 @@
-class TableauOpsSelectState implements State {
+class TableauOpCorsairState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTableauOpsSelectArgs;
+  private args: OnEnteringTableauOpCorsairArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTableauOpsSelectArgs) {
+  onEnteringState(args: OnEnteringTableauOpCorsairArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TableauOpsSelectState");
+    debug("Leaving TableauOpCorsairState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select Ops to perform"),
+      text: _("${tkn_playerName} must move a Pirate"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -46,55 +46,74 @@ class TableauOpsSelectState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select a card to perform Ops"),
+      text: _("${tkn_playerName} must select a Pirate to move"),
       args: {
+        tkn_florin: tknFlorin(),
         tkn_playerName: "${you}",
       },
     });
 
-    this.setCardsSelectable();
-    if (this.args.optional) {
-      this.game.addSkipButton({
-        callback: () =>
-          this.game.takeAction({
-            action: "actTableauOpsSelect",
-            args: {
-              cardId: null,
-              tableauOpId: null,
-            },
-          }),
-      });
-    }
+    this.setTokensSelectable();
+  }
+
+  private updateInterfaceSelectDestination({
+    option,
+  }: {
+    option: CorsairOpOption;
+  }) {
+    this.game.clearPossible();
+    const { token, destinations } = option;
+    this.game.setTokenSelected({ id: token.id });
+    this.game.clientUpdatePageTitle({
+      text: _(
+        "${tkn_playerName} must select a Sea Border to move ${tkn_mapToken} into"
+      ),
+      args: {
+        tkn_mapToken: tknMapToken(option.token.id),
+        tkn_playerName: "${you}",
+      },
+    });
+    this.setDestinationBordersSelectable({ option });
+    // this.game.addConfirmButton({
+    //   callback: () =>
+    //     this.game.takeAction({
+    //       action: "actTableauOpSiege",
+    //       args: {
+    //         tokenId: token.id,
+    //       },
+    //     }),
+    // });
+    this.game.addCancelButton();
   }
 
   private updateInterfaceConfirm({
-    cardId,
-    ops,
+    destination,
+    token,
   }: {
-    cardId: string;
-    ops: TableauOp[];
+    token: Token;
+    destination: CorsairOpDestination;
   }) {
     this.game.clearPossible();
-    this.game.setCardSelected({ id: cardId });
+    this.game.setTokenSelected({ id: token.id });
+    this.game.setLocationSelected({ id: destination.border.id });
+
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may choose an Op to perform"),
+      text: destination.token !== null ? _("Move ${tkn_mapToken} into ${borderName} and Kill ${tkn_mapToken_2}?") : _("Move ${tkn_mapToken} into ${borderName}?"),
       args: {
-        tkn_playerName: "${you}",
+        tkn_mapToken: tknMapToken(token.id),
+        tkn_mapToken_2: destination.token !== null ? tknMapToken(destination.token.id) : '',
+        borderName: _(destination.border.name),
       },
     });
-    ops.forEach((tableauOp, index) => {
-      this.game.addPrimaryActionButton({
-        id: `${tableauOp.id}_${index}_btn`,
-        text: _(tableauOp.name),
-        callback: () =>
-          this.game.takeAction({
-            action: "actTableauOpsSelect",
-            args: {
-              cardId,
-              tableauOpId: tableauOp.id,
-            },
-          }),
-      });
+    this.game.addConfirmButton({
+      callback: () =>
+        this.game.takeAction({
+          action: "actTableauOpCorsair",
+          args: {
+            tokenId: token.id,
+            destinationId: destination.border.id,
+          },
+        }),
     });
     this.game.addCancelButton();
   }
@@ -107,14 +126,30 @@ class TableauOpsSelectState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private setCardsSelectable() {
-    Object.keys(this.args.availableOps).forEach((id: string) => {
-      this.game.setCardSelectable({
-        id,
+  private setDestinationBordersSelectable({
+    option,
+  }: {
+    option: CorsairOpOption;
+  }) {
+    Object.entries(option.destinations).forEach(([borderId, destination]) => {
+      this.game.setLocationSelectable({
+        id: borderId,
         callback: () =>
           this.updateInterfaceConfirm({
-            cardId: id,
-            ops: this.args.availableOps[id],
+            token: option.token,
+            destination,
+          }),
+      });
+    });
+  }
+
+  private setTokensSelectable() {
+    Object.entries(this.args.options).forEach(([tokenId, option]) => {
+      this.game.setTokenSelectable({
+        id: tokenId,
+        callback: () =>
+          this.updateInterfaceSelectDestination({
+            option,
           }),
       });
     });

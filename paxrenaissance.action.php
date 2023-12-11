@@ -163,6 +163,15 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actTableauOpCorsair()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actTableauOpCorsair', $args);
+    self::ajaxResponse();
+  }
+  
   public function actTableauOpRepress()
   {
     self::setAjaxMode();

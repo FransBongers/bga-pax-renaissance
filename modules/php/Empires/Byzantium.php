@@ -11,6 +11,9 @@ class Byzantium extends \PaxRenaissance\Models\Empire
       MAMLUK,
       OTTOMAN,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      HUNGARY
+    ];
     $this->empireSquareId = 'EmpireSquare_Byzantium';
     $this->name = clienttranslate('Byzantium');
     $this->borders = [

@@ -12,6 +12,9 @@ class Mamluk extends \PaxRenaissance\Models\Empire
       HUNGARY,
       OTTOMAN,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      OTTOMAN,
+    ];
     $this->empireSquareId = 'EmpireSquare_Mamluk';
     $this->name = clienttranslate('Mamluk');
     $this->borders = [

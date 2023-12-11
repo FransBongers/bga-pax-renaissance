@@ -14,6 +14,9 @@ class HolyRomanEmpire extends \PaxRenaissance\Models\Empire
       OTTOMAN,
       PAPAL_STATES,
     ];
+    $this->adjacentBySeaBorderEmpires = [
+      FRANCE,
+    ];
     $this->empireSquareId = 'EmpireSquare_HolyRomanEmpire';
     $this->name = clienttranslate('Holy Roman Empire');
     $this->borders = [
