@@ -5,6 +5,7 @@ use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Players;
@@ -40,6 +41,15 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return $this->ops === null ? [] : $this->ops;
   }
 
+  // Returns player if in tableau, or null if not in tableau
+  public function getOwner()
+  {
+    if (!Utils::startsWith($this->location, 'tableau_')) {
+      return null;
+    }
+    return Players::get(intval(explode('_', $this->location)[2]));
+  }
+
   public function isSilenced()
   {
     $tokens = $this->getTokens();
@@ -57,6 +67,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function setUsed($value = 1)
   {
     Cards::setUsed($this->getId(), $value);
+  }
+
+  public function discard($messageType = DISCARD, $player)
+  {
+
   }
 
   public function placeToken($token, $ctx)

@@ -1758,6 +1758,7 @@ var PaxRenaissance = (function () {
             _a.playerAction = new PlayerActionState(this),
             _a.regimeChangeEmancipation = new RegimeChangeEmancipationState(this),
             _a.selectToken = new SelectTokenState(this),
+            _a.tableauOpBehead = new TableauOpBeheadState(this),
             _a.tableauOpCommerce = new TableauOpCommerceState(this),
             _a.tableauOpCorsair = new TableauOpCorsairState(this),
             _a.tableauOpRepress = new TableauOpRepressState(this),
@@ -5261,6 +5262,78 @@ var SelectTokenState = (function () {
     };
     return SelectTokenState;
 }());
+var TableauOpBeheadState = (function () {
+    function TableauOpBeheadState(game) {
+        this.game = game;
+    }
+    TableauOpBeheadState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpBeheadState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpBeheadState");
+    };
+    TableauOpBeheadState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a card to behead."),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpBeheadState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a card to behead"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setCardsSelectable();
+    };
+    TableauOpBeheadState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var card = _a.card;
+        this.game.clearPossible();
+        this.game.setCardSelected({ id: card.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Behead ${cardName}?"),
+            args: {
+                tkn_florin: tknFlorin(),
+                cardName: _(card.name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpBehead",
+                    args: {
+                        cardId: card.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    TableauOpBeheadState.prototype.setCardsSelectable = function () {
+        var _this = this;
+        this.args.cards.forEach(function (card) {
+            _this.game.setCardSelectable({
+                id: card.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirm({
+                        card: card,
+                    });
+                },
+                back: card.location.split("_")[2] === "0",
+            });
+        });
+    };
+    return TableauOpBeheadState;
+}());
 var TableauOpCommerceState = (function () {
     function TableauOpCommerceState(game) {
         this.game = game;
@@ -5304,7 +5377,7 @@ var TableauOpCommerceState = (function () {
             text: _("Take ${tkn_florin} from ${cardName}?"),
             args: {
                 tkn_florin: tknFlorin(),
-                cardName: isTradeFairCard ? _("trade fair card") : card.name,
+                cardName: isTradeFairCard ? _("trade fair card") : _(card.name),
             },
         });
         this.game.addConfirmButton({

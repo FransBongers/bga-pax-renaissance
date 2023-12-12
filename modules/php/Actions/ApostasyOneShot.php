@@ -66,8 +66,8 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
       $player = Players::get($playerId);
       Notifications::apostasy($player, $this->apostasyPrestigeMap[$oneShot]);
       foreach($cardsToDiscard as $cardToDiscard) {
-        // TODO: check if this can lead to players becoming active
-        $cardToDiscard->discard($player);
+        // TODO: check if this can lead to players becoming active -> discard empire cards?
+        $cardToDiscard->discard(DISCARD, $player);
       }
     }
 

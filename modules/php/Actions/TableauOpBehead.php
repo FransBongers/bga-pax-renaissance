@@ -65,7 +65,7 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
     $cardId = $info['cardId']; 
 
     $data = [
-      'tokens' => $tableauOp->getOptions(Cards::get($cardId)),
+      'cards' => $tableauOp->getOptions(Cards::get($cardId)),
     ];
 
     return $data;
@@ -91,26 +91,35 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actTableauOpBehead');
 
+    $selectedCardId = $args['cardId'];
     $info = $this->ctx->getInfo();
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+    $cardId = $info['cardId'];
+    $card = Cards::get($cardId);
 
-    
-    // $options = $tableauOp->getOptions(Cards::get($cardId));
-    
-    // $tokenId = $args['tokenId'];
-    
-    // if (!isset($options[$tokenId])) {
-    //   throw new \feException("Not allowed to Kill selected Token");
-    // }
+    $options = $tableauOp->getOptions($card);
 
-    // $player = self::getPlayer();
+    $selectedCard = Utils::array_find($options, function ($option) use ($selectedCardId) {
+      return $selectedCardId === $option->getId();
+    });
 
-    // $token = Tokens::get($tokenId);
+    if ($selectedCard === null) {
+      throw new \feException("Not allowed to behead selected card");
+    }
 
-    // $token->returnToSupply(KILL, $player);
+    $player = self::getPlayer();
+
+    Notifications::tableauOpBehead($player, $selectedCard);    
+
+    $owner = $selectedCard->getOwner();
+    $selectedCard->discard(DISCARD, $owner);
+
+    // Assassin
+    if ($selectedCard->getType() === EMPIRE_CARD) {
+      $card->discard(KILL, $player);
+    }
     
     $this->resolveAction($args);
   }

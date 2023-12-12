@@ -98,6 +98,11 @@ interface OnEnteringSelectTokenArgs extends CommonArgs {
   tokens: Token[];
 }
 
+interface OnEnteringTableauOpBeheadArgs extends CommonArgs {
+  cards: TableauCard[];
+}
+
+
 interface OnEnteringTableauOpCommerceArgs extends CommonArgs {
   cards: TableauCard[];
 }

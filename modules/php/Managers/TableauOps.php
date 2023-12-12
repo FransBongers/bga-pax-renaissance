@@ -28,6 +28,7 @@ class TableauOps
     REPRESS_OP_PAWN_KNIGHT => 'RepressOpPawnKnight',
     REPRESS_OP_PAWN_ROOK => 'RepressOpPawnRook',
     REPRESS_OP_PAWN_ROOK_KNIGHT => 'RepressOpPawnRookKnight',
+    REPRESS_OP_ROOK => 'RepressOpRook',
     REPRESS_OP_ROOK_KNIGHT => 'RepressOpRookKnight',
     SIEGE_OP => 'SiegeOp',
     TAX_OP => 'TaxOp',

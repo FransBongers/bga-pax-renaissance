@@ -7,6 +7,7 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
+use PaxRenaissance\Managers\Players;
 
 class BeheadOp extends \PaxRenaissance\Models\TableauOp
 {
@@ -15,7 +16,7 @@ class BeheadOp extends \PaxRenaissance\Models\TableauOp
     parent::__construct($cardOp);
     $this->id = BEHEAD_OP;
     $this->type = POLITICAL;
-    $this->name = clienttranslate('Tax');
+    $this->name = clienttranslate('Behead');
   }
 
   public function canBePerformed($player, $card)
@@ -41,29 +42,22 @@ class BeheadOp extends \PaxRenaissance\Models\TableauOp
 
   public function getOptions($card)
   {
-    $empireIds = $card->getAllEmpiresIds(false);
+    $empireIds = $card->getAllEmpiresIds();
     $options = [];
 
-    // foreach ($empireIds as $empireId) {
-    //   $empire = Empires::get($empireId);
+    $players = Players::getAll();
 
-    //   $cities = $empire->getCities();
-    //   foreach ($cities as $city) {
-    //     $token = $city->getToken();
-    //     if ($token !== null && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
-
-    //   $borders = $empire->getBorders();
-    //   foreach ($borders as $border) {
-    //     $token = $border->getToken();
-    //     if ($token !== null && !isset($options[$token->getId()]) && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
-    // }
-
+    foreach ($players as $player) {
+      $tableauCards = $player->getTableauCards();
+      foreach ($tableauCards as $tableauCard) {
+        if ($tableauCard->getId() === $card->getId()) {
+          continue;
+        }
+        if (in_array($tableauCard->getEmpire(), $empireIds)) {
+          $options[] = $tableauCard;
+        }
+      }
+    }
     return $options;
   }
 }

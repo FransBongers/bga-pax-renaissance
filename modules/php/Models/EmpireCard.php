@@ -44,6 +44,8 @@ class EmpireCard extends Card
       'type' => $this->type,
       'nameKing' => $this->nameKing,
       'nameRepublic' => $this->nameRepublic,
+      // TODO: return name based on current status
+      'name' => $this->nameKing,
       'prestige' => $this->prestige,
     ]);
   }
@@ -81,7 +83,7 @@ class EmpireCard extends Card
   // .##.....##.##....##....##.....##..##.....##.##...###.##....##
   // .##.....##..######.....##....####..#######..##....##..######.
 
-  public function discard($player = null)
+  public function discard($messageType = DISCARD, $player = null)
   {
     $player = $player === null ? Players::get() : $player;
 
@@ -89,7 +91,7 @@ class EmpireCard extends Card
 
     Cards::insertOnTop($this->getId(), $this->startLocation);
     $this->location = $this->startLocation;
-    Notifications::discardCard($player, $this, $this->startLocation);
+    Notifications::discardCard($player, $this, $this->startLocation, $messageType);
   }
 
   public function moveToTableau($player)

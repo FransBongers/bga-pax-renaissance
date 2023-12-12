@@ -1,23 +1,23 @@
-class TableauOpCommerceState implements State {
+class TableauOpBeheadState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTableauOpCommerceArgs;
+  private args: OnEnteringTableauOpBeheadArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTableauOpCommerceArgs) {
+  onEnteringState(args: OnEnteringTableauOpBeheadArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TableauOpCommerceState");
+    debug("Leaving TableauOpBeheadState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may take one Florin"),
+      text: _("${tkn_playerName} must select a card to behead."),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -47,10 +47,9 @@ class TableauOpCommerceState implements State {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a card in the market to take 1 ${tkn_florin} from"
+        "${tkn_playerName} must select a card to behead"
       ),
       args: {
-        tkn_florin: tknFlorin(),
         tkn_playerName: "${you}",
       },
     });
@@ -60,19 +59,18 @@ class TableauOpCommerceState implements State {
 
   private updateInterfaceConfirm({ card }: { card: TableauCard }) {
     this.game.clearPossible();
-    const isTradeFairCard = Number(card.location.split("_")[2]) === 0;
-    this.game.setCardSelected({ id: card.id, back: isTradeFairCard });
+    this.game.setCardSelected({ id: card.id });
     this.game.clientUpdatePageTitle({
-      text: _("Take ${tkn_florin} from ${cardName}?"),
+      text: _("Behead ${cardName}?"),
       args: {
         tkn_florin: tknFlorin(),
-        cardName: isTradeFairCard ? _("trade fair card") : _(card.name),
+        cardName: _(card.name),
       },
     });
     this.game.addConfirmButton({
       callback: () =>
         this.game.takeAction({
-          action: "actTableauOpCommerce",
+          action: "actTableauOpBehead",
           args: {
             cardId: card.id,
           },

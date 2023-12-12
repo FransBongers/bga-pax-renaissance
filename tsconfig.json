@@ -76,6 +76,7 @@
     "src/states/RegimeChangeEmancipation.ts",
     "src/states/SelectToken.ts",
     "src/states/state.d.ts",
+    "src/states/TableauOpBehead.ts",
     "src/states/TableauOpCommerce.ts",
     "src/states/TableauOpCorsair.ts",
     "src/states/TableauOpRepress.ts",

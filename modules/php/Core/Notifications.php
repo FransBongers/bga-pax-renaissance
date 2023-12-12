@@ -280,9 +280,14 @@ class Notifications
     ]);
   }
 
-  public static function discardCard($player, $card, $toLocationId)
+  public static function discardCard($player, $card, $toLocationId, $messageType = DISCARD)
   {
-    self::notifyAll("discardCard",  clienttranslate('${tkn_playerName} discards ${tkn_boldText}'), [
+    $messages = [
+      DISCARD => clienttranslate('${tkn_playerName} discards ${tkn_boldText}'),
+      KILL => clienttranslate('Assassin: ${tkn_boldText} is Killed'),
+    ];
+
+    self::notifyAll("discardCard", $messages[$messageType], [
       'player' => $player,
       'tkn_boldText' => $card->getName(),
       'card' => $card,
@@ -451,6 +456,14 @@ class Notifications
     ]);
   }
 
+  public static function tableauOpBehead($player, $card)
+  {
+    self::message(clienttranslate('${tkn_playerName} beheads ${tkn_cardName}'), [
+      'player' => $player,
+      'tkn_cardName' => $card->getName(),
+    ]);
+  }
+
   public static function tableauOpCommerce($player, $card)
   {
     $cardName = in_array($card->getLocation(), [Locations::market(WEST, 0), Locations::market(EAST, 0)]) ? clienttranslate('trade fair card') : $card->getName();
@@ -465,7 +478,7 @@ class Notifications
 
   public static function tableauOpSelected($player, $tableauOp, $card)
   {
-    self::message(clienttranslate('${tkn_playerName} performs ${tkn_boldText} Op from ${tkn_cardName} ${tkn_tableauOp}'), [
+    self::message(clienttranslate('${tkn_playerName} performs ${tkn_boldText} Op with ${tkn_cardName} ${tkn_tableauOp}'), [
       'player' => $player,
       'tkn_tableauOp' => $tableauOp->getId(),
       'tkn_boldText' => $tableauOp->getName(),
@@ -479,12 +492,12 @@ class Notifications
       'player' => $player,
     ]);
   }
-  
+
   public static function tableauOpTax($player, $token, $empire)
   {
     self::message(clienttranslate('${tkn_playerName} Taxes ${tkn_mapToken} in ${tkn_boldText}'), [
       'player' => $player,
-      'tkn_mapToken' => $token->getSeparator().'_'.$token->getType(),
+      'tkn_mapToken' => $token->getSeparator() . '_' . $token->getType(),
       'tkn_boldText' => $empire->getName(),
     ]);
   }
