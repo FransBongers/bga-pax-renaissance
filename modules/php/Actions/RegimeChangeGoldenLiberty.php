@@ -48,8 +48,9 @@ class RegimeChangeGoldenLiberty extends \PaxRenaissance\Models\AtomicAction
     $parentInfo = $this->ctx->getParent()->getInfo();
     $source = $parentInfo['source'];
     $empireId = $parentInfo['empireId'];
+    $empire = Empires::get($empireId);
 
-    if ($source !== 'vote') {
+    if ($source !== TABLEAU_OP_VOTE || $empire->getReligion() === MEDIEVAL) {
       $this->resolveAction([]);
     }
   }
@@ -64,13 +65,9 @@ class RegimeChangeGoldenLiberty extends \PaxRenaissance\Models\AtomicAction
 
   public function argsRegimeChangeGoldenLiberty()
   {
-    // $parentInfo = $this->ctx->getParent()->getInfo();
-    // $player = self::getPlayer();
-
-    // $empireId = $parentInfo['empireId'];
-
-    $data = [];
-
+    $data = [
+      'empire' => $this->getEmpire(),
+    ];
 
     return $data;
   }
@@ -95,6 +92,16 @@ class RegimeChangeGoldenLiberty extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actRegimeChangeGoldenLiberty');
 
+    $change = $args['change'];
+    Notifications::log('actRegimeChangeGoldenLiberty', $change);
+    $player = self::getPlayer();
+    $empire = $this->getEmpire();
+
+    if ($change) {
+      $empire->changeToMedievalState($player);
+    } else {
+      Notifications::regimeChangeSkipGoldenLiberty($player, $empire);
+    }
 
     $this->resolveAction($args);
   }
@@ -107,4 +114,10 @@ class RegimeChangeGoldenLiberty extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
+  private function getEmpire()
+  {
+    $parentInfo = $this->ctx->getParent()->getInfo();
+    $empireId = $parentInfo['empireId'];
+    return  Empires::get($empireId);
+  }
 }

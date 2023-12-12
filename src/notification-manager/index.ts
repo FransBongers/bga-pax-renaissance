@@ -36,8 +36,10 @@ class NotificationManager {
     const notifs: [id: string, wait: number][] = [
       // checked
       ["log", undefined],
+      ["changeEmpireToMedievalState", undefined],
       ["changeEmpireToTheocracy", undefined],
       ["discardCard", undefined],
+      ["flipEmpireCard", undefined],
       ["flipVictoryCard", undefined],
       ["moveEmpireSquare", undefined],
       ["moveToken", undefined],
@@ -50,6 +52,7 @@ class NotificationManager {
       ["sellCard", undefined],
       ["tableauOpCommerce", undefined],
       ["tableauOpTaxPay", undefined],
+      ["tableauOpVote", undefined],
       ["tradeFairConvene", undefined],
       ["tradeFairEmporiumSubsidy", undefined],
       // ["tradeFairPlaceLevy", undefined],
@@ -104,6 +107,13 @@ class NotificationManager {
     return Promise.resolve();
   }
 
+  async notif_changeEmpireToMedievalState(
+    notif: Notif<NotifChangeEmpireToMedievalStateArgs>
+  ) {
+    const { empire } = notif.args;
+    this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: MEDIEVAL });
+  }
+
   async notif_changeEmpireToTheocracy(
     notif: Notif<NotifChangeEmpireToTheocracyArgs>
   ) {
@@ -122,6 +132,19 @@ class NotificationManager {
     }
   }
 
+  async notif_flipEmpireCard(notif: Notif<NotifFlipEmpireCardArgs>) {
+    const { playerId, card } = notif.args;
+    const oldSide = card.side === REPUBLIC ? KING : REPUBLIC;
+    const player = this.getPlayer({ playerId });
+    card[oldSide].prestige.forEach((prestige) => {
+      player.counters.prestige[prestige].incValue(-1);
+    });
+    this.game.tableauCardManager.updateCardInformations(card);
+    card[card.side].prestige.forEach((prestige) => {
+      player.counters.prestige[prestige].incValue(1);
+    });
+  }
+
   async notif_flipVictoryCard(notif: Notif<NotifFlipVictoryCardArgs>) {
     const { playerId, card } = notif.args;
     this.game.victoryCardManager.flipCard(card);
@@ -132,7 +155,7 @@ class NotificationManager {
     const { playerId, card } = notif.args;
 
     await this.getPlayer({ playerId }).tableau.addCard(card);
-    card.prestige.forEach((prestige) =>
+    card[card.side].prestige.forEach((prestige) =>
       this.getPlayer({ playerId }).counters.prestige[prestige].incValue(1)
     );
   }
@@ -353,6 +376,11 @@ class NotificationManager {
   async notif_tableauOpTaxPay(notif: Notif<NotifTableauOpTaxPayArgs>) {
     const { playerId } = notif.args;
     this.getPlayer({ playerId }).counters.florins.incValue(-1);
+  }
+
+  async notif_tableauOpVote(notif: Notif<NotifTableauOpVoteArgs>) {
+    const { playerId, cost } = notif.args;
+    this.getPlayer({ playerId }).counters.florins.incValue(-cost);
   }
 
   async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {

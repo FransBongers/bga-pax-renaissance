@@ -1,27 +1,34 @@
-class TableauOpTaxPayOrRepressState implements State {
+class RegimeChangeGoldenLibertyState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTableauOpTaxPayOrRepressArgs;
+  private args: OnEnteringRegimeChangeGoldenLibertyArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTableauOpTaxPayOrRepressArgs) {
+  onEnteringState(args: OnEnteringRegimeChangeGoldenLibertyArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TableauOpTaxState");
+    debug("Leaving RegimeChangeGoldenLibertyState");
   }
 
-  setDescription(activePlayerId: number) {
+  setDescription(
+    activePlayerId: number,
+    args: OnEnteringRegimeChangeGoldenLibertyArgs
+  ) {
+    this.args = args;
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must pay or Repress Concession"),
+      text: _(
+        '${tkn_playerName} may change ${empireName} to a Medieval state'
+      ),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
           .getName(),
+        empireName: this.args.empire.name,
       },
       nonActivePlayers: true,
     });
@@ -46,42 +53,47 @@ class TableauOpTaxPayOrRepressState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.setLocationSelected({ id: this.args.empire.id });
-    this.game.setTokenSelected({ id: this.args.token.id });
+
     this.game.clientUpdatePageTitle({
       text: _(
-        "Your ${tkn_mapToken} is taxed. ${tkn_playerName} must pay 1 ${tkn_florin} to China or Repress your ${tkn_mapToken}"
+        "Golden Liberty: ${tkn_playerName} may change ${empireName} to a Medieval state"
       ),
       args: {
         tkn_playerName: "${you}",
-        tkn_mapToken: tknMapToken(this.args.token.id),
-        tkn_florin: tknFlorin(),
+        empireName: this.args.empire.name,
       },
     });
 
     this.game.addPrimaryActionButton({
-      id: "pay_btn",
-      text: _("Pay"),
+      id: "change_btn",
+      text: _("Change"),
       callback: () =>
         this.game.takeAction({
-          action: "actTableauOpTaxPayOrRepress",
+          action: "actRegimeChangeGoldenLiberty",
           args: {
-            pay: true,
+            change: true,
           },
         }),
     });
 
-    this.game.addPrimaryActionButton({
-      id: "repress_btn",
-      text: _("Repress"),
+    this.game.addSkipButton({
       callback: () =>
         this.game.takeAction({
-          action: "actTableauOpTaxPayOrRepress",
+          action: "actRegimeChangeGoldenLiberty",
           args: {
-            pay: false,
+            change: false,
           },
         }),
-    });
+    })
   }
 
-  
+  //  .##.....##.########.####.##.......####.########.##....##
+  //  .##.....##....##.....##..##........##.....##.....##..##.
+  //  .##.....##....##.....##..##........##.....##......####..
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  ..#######.....##....####.########.####....##.......##...
+
+
 }

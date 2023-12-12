@@ -263,6 +263,15 @@ class Notifications
     ]);
   }
 
+  public static function changeEmpireToMedievalState($player, $empire)
+  {
+    self::notifyAll("changeEmpireToMedievalState",  clienttranslate('${tkn_playerName} creates a Medieval ${tkn_boldText_empire_name} state'), [
+      'player' => $player,
+      'tkn_boldText_empire_name' => $empire->getName(),
+      'empire' => $empire,
+    ]);
+  }
+
   public static function changeEmpireToTheocracy($empire, $religion)
   {
     self::notifyAll("changeEmpireToTheocracy",  clienttranslate('${tkn_boldText_empire_name} changes into a ${religion} Theocracy'), [
@@ -295,6 +304,17 @@ class Notifications
     ]);
   }
 
+  public static function flipEmpireCard($player, $card)
+  {
+    $side = $card->getSide();
+    self::notifyAll("flipEmpireCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName} to ${side} side'), [
+      'player' => $player,
+      'card' => $card,
+      'tkn_cardName' => $card->getName($side === REPUBLIC ? KING : REPUBLIC),
+      'side' => $side === REPUBLIC ? clienttranslate('Republic') : clienttranslate('King'),
+      'i18n' => ['side'],
+    ]);
+  }
 
   public static function flipVictoryCard($player, $card)
   {
@@ -396,6 +416,14 @@ class Notifications
   {
     self::message(clienttranslate('${tkn_playerName} skips moving Repressed Tokens'), [
       'player' => $player,
+    ]);
+  }
+
+  public static function regimeChangeSkipGoldenLiberty($player, $empire)
+  {
+    self::message(clienttranslate('${tkn_playerName} does not change ${tkn_boldText} to a Medieval state'), [
+      'player' => $player,
+      'tkn_boldText' => $empire->getName(),
     ]);
   }
 
@@ -515,6 +543,20 @@ class Notifications
     self::notifyAll("tableauOpTaxPay", clienttranslate('${tkn_playerName} pays 1 ${tkn_florin} to China'), [
       'player' => $player,
       'tkn_florin' => clienttranslate("Florin(s)"),
+    ]);
+  }
+
+  public static function tableauOpVote($player, $empire, $cost)
+  {
+    $message = $cost > 0 ?
+      clienttranslate('${tkn_playerName} pays ${cost} ${tkn_florin} to China to Vote in ${tkn_boldText}') :
+      clienttranslate('${tkn_playerName} Votes in ${tkn_boldText}');
+
+    self::notifyAll("tableauOpVote", $message, [
+      'player' => $player,
+      'cost' => $cost,
+      'tkn_florin' => clienttranslate("Florin(s)"),
+      'tkn_boldText' => $empire->getName(),
     ]);
   }
 

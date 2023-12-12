@@ -15,6 +15,9 @@ interface NotifWithPlayerArgs {
   tkn_playerName: string;
 }
 
+interface NotifChangeEmpireToMedievalStateArgs {
+  empire: Empire;
+}
 
 interface NotifChangeEmpireToTheocracyArgs {
   empire: Empire;
@@ -25,6 +28,11 @@ interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   card: TableauCard | EmpireCard;
   tkn_cardName: string;
   toLocationId: string;
+}
+
+interface NotifFlipEmpireCardArgs extends NotifWithPlayerArgs {
+  card: EmpireCard;
+  tkn_cardName: string;
 }
 
 interface NotifFlipVictoryCardArgs extends NotifWithPlayerArgs {
@@ -87,6 +95,10 @@ interface NotifTableauOpCommerceArgs extends NotifWithPlayerArgs {
 }
 
 interface NotifTableauOpTaxPayArgs extends NotifWithPlayerArgs {
+}
+
+interface NotifTableauOpVoteArgs extends NotifWithPlayerArgs {
+  cost: number;
 }
 
 interface NotifTradeFairConveneArgs extends NotifWithPlayerArgs {

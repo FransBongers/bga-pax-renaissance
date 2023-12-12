@@ -20,17 +20,31 @@ class EmpireCard extends Card
 {
   protected $type = EMPIRE_CARD;
   protected $id;
+  protected $agents = [
+    KING => [
+      'separator' => null,
+      'type' => PAWN,
+    ],
+    REPUBLIC => [
+      'separator' => null,
+      'type' => PAWN,
+    ]
+  ];
   protected $empire;
-  protected $nameKing;
-  protected $nameRepublic;
-  protected $prestige = [];
+  protected $name;
+  protected $prestige = [
+    KING => [],
+    REPUBLIC => [],
+  ];
+  protected $flavorText;
   protected $startLocation;
-  protected $republicOps;
+  protected $ops;
+  protected $side;
 
   protected $staticAttributes = [
     'empire',
-    'nameKing',
-    'nameRepublic',
+    'name',
+    'name',
     'startLocation',
     'type',
   ];
@@ -40,13 +54,20 @@ class EmpireCard extends Card
     $data = parent::jsonSerialize();
 
     return array_merge($data, [
-      'empire' => $this->empire,
+      'side' => $this->side,
       'type' => $this->type,
-      'nameKing' => $this->nameKing,
-      'nameRepublic' => $this->nameRepublic,
-      // TODO: return name based on current status
-      'name' => $this->nameKing,
-      'prestige' => $this->prestige,
+      KING => [
+        'agents' => $this->agents[KING],
+        'name' => $this->name[KING],
+        'ops' => $this->ops[KING],
+        'prestige' => $this->prestige[KING],
+      ],
+      REPUBLIC => [
+        'agents' => $this->agents[REPUBLIC],
+        'name' => $this->name[REPUBLIC],
+        'ops' => $this->ops[REPUBLIC],
+        'prestige' => $this->prestige[REPUBLIC],
+      ]
     ]);
   }
 
@@ -64,15 +85,28 @@ class EmpireCard extends Card
     return $this->empire;
   }
 
-  public function getName()
+  public function getName($side  = null)
   {
-    // TODO: return correct based on side that is face up
-    return $this->nameKing;
+    if ($side !== null) {
+      return $this->name[$side];  
+    }
+    return $this->name[$this->side];
+  }
+
+  public function getOps()
+  {
+    // TODO: find out why this is null if not set on card level
+    return $this->ops[$this->side];
   }
 
   public function getPrestige()
   {
-    return $this->prestige;
+    return $this->prestige[$this->side];
+  }
+
+  public function getSide()
+  {
+    return $this->side;
   }
 
   // ....###.....######..########.####..#######..##....##..######.
@@ -92,6 +126,15 @@ class EmpireCard extends Card
     Cards::insertOnTop($this->getId(), $this->startLocation);
     $this->location = $this->startLocation;
     Notifications::discardCard($player, $this, $this->startLocation, $messageType);
+  }
+
+  public function flip($player = null)
+  {
+    $player = $player === null ? Players::get() : $player;
+
+    $this->side = $this->getExtraData('side') === KING ? REPUBLIC : KING;
+    $this->setExtraData('side',$this->side);
+    Notifications::flipEmpireCard($player, $this);
   }
 
   public function moveToTableau($player)

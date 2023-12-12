@@ -100,15 +100,19 @@ interface PaxRenCard {
   used: number;
 }
 
-interface EmpireCard extends PaxRenCard {
-  empire: string;
-  nameKing: string;
-  nameRepublic: string;
+interface EmpireCardSide {
+  name: string;
   // flavorText: string[];
-  // name: string;
   prestige: string[];
-  // region: "east" | "west";
+}
+
+interface EmpireCard extends PaxRenCard {
+  side: 'king' | 'republic';
+  king: EmpireCardSide;
+  republic: EmpireCardSide;
   type: "empireCard";
+  empire: string;
+  // region: "east" | "west";
 }
 
 interface TableauCard extends PaxRenCard {

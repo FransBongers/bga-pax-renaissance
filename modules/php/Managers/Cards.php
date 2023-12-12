@@ -15,7 +15,7 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
 {
   protected static $table = 'cards';
   protected static $prefix = 'card_';
-  protected static $customFields = ['used'];
+  protected static $customFields = ['used', 'extra_data'];
   protected static $autoremovePrefix = false;
   protected static $autoreshuffle = false;
   protected static $autoIncrement = false;
@@ -124,20 +124,27 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
       $type = $card->getType();
 
       $location = '';
+      $extraData = null;
       if ($type === TABLEAU_CARD && Utils::startsWith($card->getId(), 'COMET')) {
         $region = $card->getRegion();
         $location = 'deck_' . $region;
       } else if ($type === TABLEAU_CARD) {
         $region = $card->getRegion();
         $location = 'pool_' . $region;
-      } else if ($type === VICTORY_CARD || $type === EMPIRE_CARD) {
+      } else if ($type === VICTORY_CARD) {
         $location = $card->getStartLocation();
+      } else if ($type === EMPIRE_CARD) {
+        $location = $card->getStartLocation();
+        $extraData = [
+          'side' => KING,
+        ];
       }
 
       $cards[$cId] = [
         'id' => $cId,
         'location' => $location,
         'used' => 0,
+        'extra_data' => json_encode($extraData)
       ];
     }
 

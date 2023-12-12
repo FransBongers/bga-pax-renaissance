@@ -43,7 +43,6 @@ class CommerceOp extends \PaxRenaissance\Models\TableauOp
   {
     $marketCards = Market::getCards();
     $florins = Market::getFlorins();
-    Notifications::log('florins', $florins);
     return Utils::filter($marketCards, function ($card) use ($florins) {
       return $card->getRegion() === $this->region && $florins[$card->getLocation().'_florins'] > 0;
     });

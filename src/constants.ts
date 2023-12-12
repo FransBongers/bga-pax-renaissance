@@ -60,6 +60,10 @@ const EMPIRE_CARD = "empireCard";
 const TABLEAU_CARD = "tableauCard";
 const VICTORY_CARD = "victoryCard";
 
+// Sides for empire cards
+const KING = 'king';
+const REPUBLIC = 'republic';
+
 /**
  * Chess pieces 
  */
@@ -74,6 +78,7 @@ const ROOK = 'rook';
 /**
  * Religions
  */
+const MEDIEVAL = 'medieval';
 const CATHOLIC = "catholic";
 const ISLAMIC = "islamic";
 const REFORMIST = "reformist";

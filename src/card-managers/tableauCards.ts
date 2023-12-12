@@ -67,11 +67,15 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     }
   }
 
-  isCardVisible({ location }: EmpireCard | TableauCard) {
+  isCardVisible(card: EmpireCard | TableauCard) {
+    const { location, type, } = card;
     if (location.startsWith("deck")) {
       return false;
     }
     if (location === "market_west_0" || location === "market_east_0") {
+      return false;
+    }
+    if (type === EMPIRE_CARD && card.side === REPUBLIC) {
       return false;
     }
     return true;

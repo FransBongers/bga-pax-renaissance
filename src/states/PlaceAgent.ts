@@ -81,7 +81,7 @@ class PlaceAgentState implements State {
       args: {
         tkn_playerName: "${you}",
         tkn_mapToken: this.createMapTokenId(),
-        location: _(card.type === TABLEAU_CARD ? card.name : card.nameKing),
+        location: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
       },
     });
 

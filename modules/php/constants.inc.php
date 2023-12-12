@@ -249,6 +249,10 @@ const EMPIRE_CARD = 'empireCard';
 const TABLEAU_CARD = 'tableauCard';
 const VICTORY_CARD = 'victoryCard';
 
+// Sides for empire cards
+const KING = 'king';
+const REPUBLIC = 'republic';
+
 // Card locations
 const DECK_EAST = 'deck_east';
 const DECK_WEST = 'deck_west';

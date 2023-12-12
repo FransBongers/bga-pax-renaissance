@@ -62,10 +62,11 @@ class TableauOpVote extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+
+    $player = self::getPlayer();
 
     $data = [
-      'tokens' => $tableauOp->getOptions(Cards::get($cardId)),
+      'options' => $tableauOp->getOptions($player),
     ];
 
     return $data;
@@ -95,22 +96,25 @@ class TableauOpVote extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+    $cardId = $info['cardId'];
 
+    $empireId = $args['empireId'];
+    Notifications::log('$empireId',$empireId);
+    $player = self::getPlayer();
     
-    // $options = $tableauOp->getOptions(Cards::get($cardId));
+    $options = $tableauOp->getOptions($player);
     
-    // $tokenId = $args['tokenId'];
+    $chosenOption = Utils::array_find($options, function ($option) use ($empireId) {
+      return $option['empire']->getId() === $empireId;
+    });
     
-    // if (!isset($options[$tokenId])) {
-    //   throw new \feException("Not allowed to Kill selected Token");
-    // }
+    if ($chosenOption === null) {
+      throw new \feException("Not allowed to Vote in selected Empire");
+    }
 
-    // $player = self::getPlayer();
+    Notifications::tableauOpVote($player, Empires::get($empireId), $chosenOption['cost']);
 
-    // $token = Tokens::get($tokenId);
-
-    // $token->returnToSupply(KILL, $player);
+    $this->ctx->insertAsBrother(Engine::buildTree(Flows::regimeChange($player->getId(), $empireId, $this->ctx->getAction())));
     
     $this->resolveAction($args);
   }

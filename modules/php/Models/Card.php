@@ -27,6 +27,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     'ops' => ['ops', 'obj'],
     'state' => ['card_state', 'int'],
     'used' => ['used', 'int'],
+    'extraData' => ['extra_data', 'obj'],
   ];
 
   public function getUiData()
@@ -48,6 +49,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
       return null;
     }
     return Players::get(intval(explode('_', $this->location)[2]));
+  }
+
+  public function isInTableau()
+  {
+    return Utils::startsWith($this->getLocation(), 'tableau_');
   }
 
   public function isSilenced()

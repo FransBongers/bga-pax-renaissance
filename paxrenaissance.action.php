@@ -145,6 +145,15 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
   
+  public function actRegimeChangeGoldenLiberty()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actRegimeChangeGoldenLiberty', $args);
+    self::ajaxResponse();
+  }
+  
   public function actSelectToken()
   {
     self::setAjaxMode();
@@ -223,6 +232,15 @@ class action_paxrenaissance extends APP_GameAction
     $args = self::getArg('args', AT_json, true);
     Utils::validateJSonAlphaNum($args, 'args');
     $this->game->actTakeAtomicAction('actTableauOpTaxPayOrRepress', $args);
+    self::ajaxResponse();
+  }
+
+  public function actTableauOpVote()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actTableauOpVote', $args);
     self::ajaxResponse();
   }
   

@@ -27,7 +27,7 @@ class PRPlayer {
     cards?: {
       west?: IconCounter;
       east?: IconCounter;
-    }
+    };
     florins?: IconCounter;
   } = {
     prestige: {},
@@ -80,7 +80,6 @@ class PRPlayer {
     this.counters.cards.east.setValue(player.hand.counts.east);
     this.counters.cards.west.setValue(player.hand.counts.west);
     if (this.playerId === this.game.getPlayerId()) {
-      
       this.game.hand.getStock().addCards(player.hand.cards);
     }
   }
@@ -94,7 +93,7 @@ class PRPlayer {
     player: PaxRenaissancePlayerData;
   }) {
     const playerGamedatas = gamedatas.players[this.playerId];
-    this.tableau = new PlayerTableau({game: this.game, player});
+    this.tableau = new PlayerTableau({ game: this.game, player });
     // this.setupPlayerTableau({ playerGamedatas });
     this.setupPlayerPanel({ playerGamedatas, player });
     this.setupHand({ gamedatas, player });
@@ -162,19 +161,31 @@ class PRPlayer {
     this.updatePlayerPanel({ playerGamedatas });
   }
 
-  updatePlayerPanel({ playerGamedatas }: { playerGamedatas: PaxRenaissancePlayerData }) {
+  updatePlayerPanel({
+    playerGamedatas,
+  }: {
+    playerGamedatas: PaxRenaissancePlayerData;
+  }) {
     if (this.game.framework().scoreCtrl?.[this.playerId]) {
       this.game
         .framework()
         .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
-    };
-    const allCards = [...playerGamedatas.tableau.cards.east, ...playerGamedatas.tableau.cards.west];
+    }
+    const allCards = [
+      ...playerGamedatas.tableau.cards.east,
+      ...playerGamedatas.tableau.cards.west,
+    ];
     allCards.forEach((card) => {
-      card.prestige.forEach((prestige) => {
-        this.counters.prestige[prestige].incValue(1)
-      });
+      if (card.type === TABLEAU_CARD) {
+        card.prestige.forEach((prestige) => {
+          this.counters.prestige[prestige].incValue(1);
+        });
+      } else if (card.type === EMPIRE_CARD) {
+        card[card.side].prestige.forEach((prestige) => {
+          this.counters.prestige[prestige].incValue(1);
+        });
+      }
     });
-
   }
 
   clearInterface() {}
@@ -247,7 +258,11 @@ class PRPlayer {
     this.counters.cards[card.region].incValue(1);
   }
 
-  public async removeCardFromHand({ card }: { card: TableauCard }): Promise<void> {
+  public async removeCardFromHand({
+    card,
+  }: {
+    card: TableauCard;
+  }): Promise<void> {
     if (this.getPlayerId() === this.game.getPlayerId()) {
       await this.game.hand.removeCard(card);
     }

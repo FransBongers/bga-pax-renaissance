@@ -29,12 +29,15 @@ var REGIONS = [
 var EMPIRE_CARD = "empireCard";
 var TABLEAU_CARD = "tableauCard";
 var VICTORY_CARD = "victoryCard";
+var KING = 'king';
+var REPUBLIC = 'republic';
 var BISHOP = 'bishop';
 var DISK = 'disk';
 var KNIGHT = 'knight';
 var PAWN = 'pawn';
 var PIRATE = 'pirate';
 var ROOK = 'rook';
+var MEDIEVAL = 'medieval';
 var CATHOLIC = "catholic";
 var ISLAMIC = "islamic";
 var REFORMIST = "reformist";
@@ -1757,6 +1760,7 @@ var PaxRenaissance = (function () {
             _a.placeAgent = new PlaceAgentState(this),
             _a.playerAction = new PlayerActionState(this),
             _a.regimeChangeEmancipation = new RegimeChangeEmancipationState(this),
+            _a.regimeChangeGoldenLiberty = new RegimeChangeGoldenLibertyState(this),
             _a.selectToken = new SelectTokenState(this),
             _a.tableauOpBehead = new TableauOpBeheadState(this),
             _a.tableauOpCommerce = new TableauOpCommerceState(this),
@@ -1766,6 +1770,7 @@ var PaxRenaissance = (function () {
             _a.tableauOpsSelect = new TableauOpsSelectState(this),
             _a.tableauOpTax = new TableauOpTaxState(this),
             _a.tableauOpTaxPayOrRepress = new TableauOpTaxPayOrRepressState(this),
+            _a.tableauOpVote = new TableauOpVoteState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
         this.animationManager = new AnimationManager(this, { duration: 500 });
@@ -2219,12 +2224,15 @@ var TableauCardManager = (function (_super) {
             div.style.height = "calc(var(--paxRenCardScale) * 151px)";
         }
     };
-    TableauCardManager.prototype.isCardVisible = function (_a) {
-        var location = _a.location;
+    TableauCardManager.prototype.isCardVisible = function (card) {
+        var location = card.location, type = card.type;
         if (location.startsWith("deck")) {
             return false;
         }
         if (location === "market_west_0" || location === "market_east_0") {
+            return false;
+        }
+        if (type === EMPIRE_CARD && card.side === REPUBLIC) {
             return false;
         }
         return true;
@@ -3342,8 +3350,10 @@ var NotificationManager = (function () {
         console.log("notifications subscriptions setup");
         var notifs = [
             ["log", undefined],
+            ["changeEmpireToMedievalState", undefined],
             ["changeEmpireToTheocracy", undefined],
             ["discardCard", undefined],
+            ["flipEmpireCard", undefined],
             ["flipVictoryCard", undefined],
             ["moveEmpireSquare", undefined],
             ["moveToken", undefined],
@@ -3356,6 +3366,7 @@ var NotificationManager = (function () {
             ["sellCard", undefined],
             ["tableauOpCommerce", undefined],
             ["tableauOpTaxPay", undefined],
+            ["tableauOpVote", undefined],
             ["tradeFairConvene", undefined],
             ["tradeFairEmporiumSubsidy", undefined],
             ["tradeFairProfitDispersalPirates", undefined],
@@ -3382,6 +3393,16 @@ var NotificationManager = (function () {
             return __generator(this, function (_a) {
                 debug("notif_log", notif.args);
                 return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_changeEmpireToMedievalState = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var empire;
+            return __generator(this, function (_a) {
+                empire = notif.args.empire;
+                this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: MEDIEVAL });
+                return [2];
             });
         });
     };
@@ -3412,6 +3433,24 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_flipEmpireCard = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card, oldSide, player;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, card = _a.card;
+                oldSide = card.side === REPUBLIC ? KING : REPUBLIC;
+                player = this.getPlayer({ playerId: playerId });
+                card[oldSide].prestige.forEach(function (prestige) {
+                    player.counters.prestige[prestige].incValue(-1);
+                });
+                this.game.tableauCardManager.updateCardInformations(card);
+                card[card.side].prestige.forEach(function (prestige) {
+                    player.counters.prestige[prestige].incValue(1);
+                });
+                return [2];
+            });
+        });
+    };
     NotificationManager.prototype.notif_flipVictoryCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, card;
@@ -3433,7 +3472,7 @@ var NotificationManager = (function () {
                         return [4, this.getPlayer({ playerId: playerId }).tableau.addCard(card)];
                     case 1:
                         _b.sent();
-                        card.prestige.forEach(function (prestige) {
+                        card[card.side].prestige.forEach(function (prestige) {
                             return _this.getPlayer({ playerId: playerId }).counters.prestige[prestige].incValue(1);
                         });
                         return [2];
@@ -3713,6 +3752,16 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_tableauOpVote = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, cost;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, cost = _a.cost;
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
+                return [2];
+            });
+        });
+    };
     NotificationManager.prototype.notif_tradeFairConvene = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, florinsFromChina, region, stock, card;
@@ -3945,12 +3994,18 @@ var PRPlayer = (function () {
                 .framework()
                 .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
         }
-        ;
         var allCards = __spreadArray(__spreadArray([], playerGamedatas.tableau.cards.east, true), playerGamedatas.tableau.cards.west, true);
         allCards.forEach(function (card) {
-            card.prestige.forEach(function (prestige) {
-                _this.counters.prestige[prestige].incValue(1);
-            });
+            if (card.type === TABLEAU_CARD) {
+                card.prestige.forEach(function (prestige) {
+                    _this.counters.prestige[prestige].incValue(1);
+                });
+            }
+            else if (card.type === EMPIRE_CARD) {
+                card[card.side].prestige.forEach(function (prestige) {
+                    _this.counters.prestige[prestige].incValue(1);
+                });
+            }
         });
     };
     PRPlayer.prototype.clearInterface = function () { };
@@ -4767,7 +4822,7 @@ var PlaceAgentState = (function () {
             args: {
                 tkn_playerName: "${you}",
                 tkn_mapToken: this.createMapTokenId(),
-                location: _(card.type === TABLEAU_CARD ? card.name : card.nameKing),
+                location: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
             },
         });
         this.game.addConfirmButton({
@@ -5191,6 +5246,66 @@ var RegimeChangeEmancipationState = (function () {
         });
     };
     return RegimeChangeEmancipationState;
+}());
+var RegimeChangeGoldenLibertyState = (function () {
+    function RegimeChangeGoldenLibertyState(game) {
+        this.game = game;
+    }
+    RegimeChangeGoldenLibertyState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    RegimeChangeGoldenLibertyState.prototype.onLeavingState = function () {
+        debug("Leaving RegimeChangeGoldenLibertyState");
+    };
+    RegimeChangeGoldenLibertyState.prototype.setDescription = function (activePlayerId, args) {
+        this.args = args;
+        this.game.clientUpdatePageTitle({
+            text: _('${tkn_playerName} may change ${empireName} to a Medieval state'),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+                empireName: this.args.empire.name,
+            },
+            nonActivePlayers: true,
+        });
+    };
+    RegimeChangeGoldenLibertyState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: this.args.empire.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Golden Liberty: ${tkn_playerName} may change ${empireName} to a Medieval state"),
+            args: {
+                tkn_playerName: "${you}",
+                empireName: this.args.empire.name,
+            },
+        });
+        this.game.addPrimaryActionButton({
+            id: "change_btn",
+            text: _("Change"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actRegimeChangeGoldenLiberty",
+                    args: {
+                        change: true,
+                    },
+                });
+            },
+        });
+        this.game.addSkipButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actRegimeChangeGoldenLiberty",
+                    args: {
+                        change: false,
+                    },
+                });
+            },
+        });
+    };
+    return RegimeChangeGoldenLibertyState;
 }());
 var SelectTokenState = (function () {
     function SelectTokenState(game) {
@@ -5909,6 +6024,74 @@ var TableauOpTaxPayOrRepressState = (function () {
         });
     };
     return TableauOpTaxPayOrRepressState;
+}());
+var TableauOpVoteState = (function () {
+    function TableauOpVoteState(game) {
+        this.game = game;
+    }
+    TableauOpVoteState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpVoteState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpVoteState");
+    };
+    TableauOpVoteState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an Empire to vote in"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpVoteState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an Empire to vote in"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setEmpiresSelectable();
+    };
+    TableauOpVoteState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var cost = _a.cost, empire = _a.empire;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: empire.id });
+        this.game.clientUpdatePageTitle({
+            text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to Vote in ${empireName}?") : _("Vote in ${empireName}?"),
+            args: {
+                empireName: _(empire.name),
+                cost: cost,
+                tkn_florin: tknFlorin(),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpVote",
+                    args: {
+                        empireId: empire.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    TableauOpVoteState.prototype.setEmpiresSelectable = function () {
+        var _this = this;
+        this.args.options.forEach(function (option) {
+            _this.game.setLocationSelectable({
+                id: option.empire.id,
+                callback: function () { return _this.updateInterfaceConfirm(option); },
+            });
+        });
+    };
+    return TableauOpVoteState;
 }());
 var TradeFairLevyState = (function () {
     function TradeFairLevyState(game) {

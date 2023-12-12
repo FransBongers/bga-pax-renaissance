@@ -94,6 +94,10 @@ interface OnEnteringRegimeChangeEmancipationArgs extends CommonArgs {
   options: Record<string, (City | Border)[]>;
 }
 
+interface OnEnteringRegimeChangeGoldenLibertyArgs extends CommonArgs {
+  empire: Empire;
+}
+
 interface OnEnteringSelectTokenArgs extends CommonArgs {
   tokens: Token[];
 }
@@ -131,6 +135,13 @@ interface OnEnteringTableauOpSiegeArgs extends CommonArgs {
 
 interface OnEnteringTableauOpTaxArgs extends CommonArgs {
   tokens: Record<string, { token: Token; empires: Empire[] }>;
+}
+
+interface OnEnteringTableauOpVoteArgs extends CommonArgs {
+  options: {
+    empire: Empire;
+    cost: number;
+  }[];
 }
 
 interface OnEnteringTableauOpTaxPayOrRepressArgs extends CommonArgs {

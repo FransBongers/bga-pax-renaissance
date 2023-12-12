@@ -38,6 +38,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     placeAgent: PlaceAgentState;
     playerAction: PlayerActionState;
     regimeChangeEmancipation: RegimeChangeEmancipationState;
+    regimeChangeGoldenLiberty: RegimeChangeGoldenLibertyState;
     selectToken: SelectTokenState;
     tableauOpBehead: TableauOpBeheadState
     tableauOpCommerce: TableauOpCommerceState;
@@ -47,6 +48,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     tableauOpsSelect: TableauOpsSelectState;
     tableauOpTax: TableauOpTaxState;
     tableauOpTaxPayOrRepress: TableauOpTaxPayOrRepressState;
+    tableauOpVote: TableauOpVoteState;
     tradeFairLevy: TradeFairLevyState;
   };
 
@@ -90,6 +92,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       placeAgent: new PlaceAgentState(this),
       playerAction: new PlayerActionState(this),
       regimeChangeEmancipation: new RegimeChangeEmancipationState(this),
+      regimeChangeGoldenLiberty: new RegimeChangeGoldenLibertyState(this),
       selectToken: new SelectTokenState(this),
       tableauOpBehead: new TableauOpBeheadState(this),
       tableauOpCommerce: new TableauOpCommerceState(this),
@@ -99,6 +102,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       tableauOpsSelect: new TableauOpsSelectState(this),
       tableauOpTax: new TableauOpTaxState(this),
       tableauOpTaxPayOrRepress: new TableauOpTaxPayOrRepressState(this),
+      tableauOpVote: new TableauOpVoteState(this),
       tradeFairLevy: new TradeFairLevyState(this),
     };
 

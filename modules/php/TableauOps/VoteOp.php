@@ -2,9 +2,11 @@
 
 namespace PaxRenaissance\TableauOps;
 
+use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 
@@ -26,44 +28,80 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
       return false;
     }
 
-    $options = $this->getOptions($card);
+    $options = $this->getOptions($player);
     return count($options) > 0;
   }
 
   public function getFlow($player, $cardId)
   {
-    return new LeafNode([
-      'action' => TABLEAU_OP_VOTE,
-      'playerId' => $player->getId(),
-      'tableauOpId' => $this->id,
-      'cardId' => $cardId,
+    return Engine::buildtree([
+      'children' => [
+        [
+          'action' => TABLEAU_OP_VOTE,
+          'playerId' => $player->getId(),
+          'tableauOpId' => $this->id,
+          'cardId' => $cardId,
+
+        ]
+      ]
     ]);
   }
 
-  public function getOptions($card)
+  public function getOptions($player)
   {
-    $empireIds = $card->getAllEmpiresIds(false);
+    $empireIds = Empires::getRegionIds($this->region);
     $options = [];
 
-    // foreach ($empireIds as $empireId) {
-    //   $empire = Empires::get($empireId);
+    foreach ($empireIds as $empireId) {
+      $empire = Empires::get($empireId);
 
-    //   $cities = $empire->getCities();
-    //   foreach ($cities as $city) {
-    //     $token = $city->getToken();
-    //     if ($token !== null && in_array($token->getType(), $this->tokenTypes)) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
+      $empireCard = Cards::get($empire->getEmpireSquareId());
 
-    //   $borders = $empire->getBorders();
-    //   foreach ($borders as $border) {
-    //     $token = $border->getToken();
-    //     if ($token !== null && !isset($options[$token->getId()]) && in_array($token->getType(), $this->tokenTypes)) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
-    // }
+      // 1. Card must be in tableau
+      if (!$empireCard->isInTableau()) {
+        continue;
+      }
+
+      // 2. Player needs to be able to pay for Repressed Tokens
+      $cost = count(Utils::filter($empireCard->getTokens(), function ($token) {
+        return in_array($token->getType(), [PAWN, ROOK, KNIGHT]);
+      }));
+      if ($player->getFlorins() < $cost) {
+        continue;
+      }
+
+      // 3. Player must have more Concessions than any other player on the Empire's borders
+      $borders = $empire->getBorders();
+      $concessions = [];
+      foreach ($borders as $border) {
+        $token = $border->getToken();
+        if ($token === null || $token->getType() !== PAWN) {
+          continue;
+        }
+        $bank = $token->getSeparator();
+        if (isset($concessions[$bank])) {
+          $concessions[$bank]['count'] = $concessions[$bank]['count'] + 1;
+        } else {
+          $concessions[$bank] = [
+            'count' => 1,
+            'bank' => $bank,
+          ];
+        }
+      }
+      $concessions = array_values($concessions);
+      usort($concessions, function ($a, $b) {
+        return $b['count'] - $a['count'];
+      });
+      if (!($player->getBank() === $concessions[0]['bank'] && (count($concessions) === 1 || $concessions[0]['count'] > $concessions[1]['count']))) {
+        continue;
+      }
+
+      // Add to options
+      $options[] = [
+        'empire' => $empire,
+        'cost' => $cost,
+      ];
+    }
 
     return $options;
   }
