@@ -63,9 +63,10 @@ class TableauOpCampaign extends \PaxRenaissance\Models\AtomicAction
 
     $tableauOp = TableauOps::get($tableauOpId);
     $cardId = $info['cardId']; 
+    $player = self::getPlayer();
 
     $data = [
-      'tokens' => $tableauOp->getOptions(Cards::get($cardId)),
+      'options' => $tableauOp->getOptions($player, Cards::get($cardId)),
     ];
 
     return $data;
@@ -96,21 +97,28 @@ class TableauOpCampaign extends \PaxRenaissance\Models\AtomicAction
 
     $tableauOp = TableauOps::get($tableauOpId);
     $cardId = $info['cardId']; 
-
+    $player = self::getPlayer();
     
-    // $options = $tableauOp->getOptions(Cards::get($cardId));
+    $options = $tableauOp->getOptions($player, Cards::get($cardId));
     
-    // $tokenId = $args['tokenId'];
+    $empireId = $args['empireId'];
     
-    // if (!isset($options[$tokenId])) {
-    //   throw new \feException("Not allowed to Kill selected Token");
-    // }
+    $chosenOption = Utils::array_find($options, function ($option) use ($empireId) {
+      return $option['empire']->getId() === $empireId;
+    });
 
-    // $player = self::getPlayer();
+    if ($chosenOption === null) {
+      throw new \feException("Not allowed to campaign against selected Empire");
+    }
 
-    // $token = Tokens::get($tokenId);
+    $player->incFlorins(-$chosenOption['cost']);
+    Notifications::tableauOpCampaign($player, Empires::get($empireId), $chosenOption['cost']);
 
-    // $token->returnToSupply(KILL, $player);
+    $this->ctx->insertAsBrother(Engine::buildTree(Flows::battle($player->getId(), CAMPAIGN_OP, [
+      'cardId' => $cardId,
+      'attackingEmpireId' => Cards::get($cardId)->getEmpire(),
+      'defendingEmpireId' => $empireId,
+    ])));
     
     $this->resolveAction($args);
   }

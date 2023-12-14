@@ -1,8 +1,8 @@
 <?php
 
-namespace PREN165X_TransylvanianSaxons\Cards\Tableau;
+namespace PaxRenaissance\Cards\Tableau;
 
-class PREN163X_JizyaTaxRevolt extends \PaxRenaissance\Models\TableauCard
+class PREN165X_TransylvanianSaxons extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
   {

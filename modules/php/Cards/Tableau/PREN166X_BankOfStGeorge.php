@@ -1,6 +1,6 @@
 <?php
 
-namespace PREN165X_TransylvanianSaxons\Cards\Tableau;
+namespace PaxRenaissance\Cards\Tableau;
 
 class PREN166X_BankOfStGeorge extends \PaxRenaissance\Models\TableauCard
 {

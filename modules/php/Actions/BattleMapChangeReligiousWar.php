@@ -55,8 +55,6 @@ class BattleMapChangeReligiousWar extends \PaxRenaissance\Models\AtomicAction
     $player = self::getPlayer();
     $source = $parentInfo['source'];
     
-    Notifications::log('stBattleMapChangeReligiousWar', $source);
-
     if (!($parentInfo['battleVictorious'] && isset($this->religiousWarOneShots[$source]))) {
       $this->resolveAction([]);
       return;  

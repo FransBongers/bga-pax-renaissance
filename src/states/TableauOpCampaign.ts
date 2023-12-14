@@ -1,23 +1,23 @@
-class TableauOpVoteState implements State {
+class TableauOpCampaignState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTableauOpVoteArgs;
+  private args: OnEnteringTableauOpCampaignArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTableauOpVoteArgs) {
+  onEnteringState(args: OnEnteringTableauOpCampaignArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TableauOpVoteState");
+    debug("Leaving TableauOpCampaignState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select an Empire to vote in"),
+      text: _("${tkn_playerName} must select an Empire to campaign against"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -46,7 +46,7 @@ class TableauOpVoteState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select an Empire to vote in"),
+      text: _("${tkn_playerName} must select an Empire to campaign against"),
       args: {
         tkn_playerName: "${you}",
       },
@@ -65,7 +65,7 @@ class TableauOpVoteState implements State {
     this.game.clearPossible();
     this.game.setLocationSelected({ id: empire.id });
     this.game.clientUpdatePageTitle({
-      text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to vote in ${empireName}?") : _("Vote in ${empireName}?"),
+      text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to campaign against ${empireName}?") : _("Campaign against ${empireName}?"),
       args: {
         empireName: _(empire.name),
         cost,
@@ -75,7 +75,7 @@ class TableauOpVoteState implements State {
     this.game.addConfirmButton({
       callback: () =>
         this.game.takeAction({
-          action: "actTableauOpVote",
+          action: "actTableauOpCampaign",
           args: {
             empireId: empire.id,
           },

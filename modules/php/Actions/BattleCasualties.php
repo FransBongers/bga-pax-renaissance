@@ -64,54 +64,6 @@ class BattleCasualties extends \PaxRenaissance\Models\AtomicAction
     }
 
     $this->resolveAction([]);
-
-    // $info = $this->ctx->getInfo();
-    // // Check to make sure this state action is only resolved once, because the player action is recurring
-    // if (isset($info['defaultCasualtiesResolved']) && $info['defaultCasualtiesResolved']) {
-    //   return;
-    // }
-
-    // $parentInfo = $this->ctx->getParent()->getInfo();
-    // Notifications::log('parentInfo', $parentInfo);
-
-    // $attackers = $parentInfo['attackers'];
-    // $defenders = $parentInfo['defenders'];
-
-    // $numberAttackers = $parentInfo['numberOfAttackers'];
-    // $numberDefenders = $parentInfo['numberOfDefenders'];
-    // $battleVictorious = $parentInfo['battleVictorious'];
-
-    // $player = self::getPlayer();
-    // if ($battleVictorious) {
-    //   Notifications::battleEliminateDefenders();
-    //   $this->eliminateTokens($player, $defenders['tokens']);
-    //   // eliminate all defenders
-    // } else if ($numberAttackers === $numberDefenders) {
-    //   Notifications::battleEliminateAttackers();
-    //   if (count($attackers['agents']) > 0) {
-    //     Notifications::battleEliminateAgents($player, $attackers['agents']);
-    //   }
-    //   $this->eliminateTokens($player, $attackers['tokens']);
-    //   // eliminate everything
-    //   Notifications::battleEliminateDefenders();
-    //   $this->eliminateTokens($player, $defenders['tokens']);
-    //   $this->resolveAction([]);
-    //   return;
-    // } else {
-    //   // eliminate all attackers
-    //   Notifications::battleEliminateAttackers();
-    //   if (count($attackers['agents']) > 0) {
-    //     Notifications::battleEliminateAgents($player, $attackers['agents']);
-    //   }
-    //   $this->eliminateTokens($player, $attackers['tokens']);
-    // }
-
-    // $this->ctx->updateInfo('numberToEliminate', abs($numberAttackers - $numberDefenders));
-    // $this->ctx->updateInfo('agentsToEliminate', $battleVictorious ? $attackers['agents'] : []);
-    // $this->ctx->updateInfo('tokensToEliminate', $battleVictorious ? $attackers['tokens'] : $defenders['tokens']);
-    // $this->ctx->updateInfo('defaultCasualtiesResolved', true);
-
-    // Engine::save();
   }
 
   // ....###....########...######....######.

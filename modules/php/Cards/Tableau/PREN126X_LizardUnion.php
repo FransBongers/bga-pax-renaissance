@@ -45,7 +45,7 @@ class PREN126X_LizardUnion extends \PaxRenaissance\Models\TableauCard
         'left' => 0,
       ],
     ];
-    $this->prestige [LAW];
+    $this->prestige = [LAW];
     $this->region = EAST;
   }
 }

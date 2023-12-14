@@ -41,6 +41,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     regimeChangeGoldenLiberty: RegimeChangeGoldenLibertyState;
     selectToken: SelectTokenState;
     tableauOpBehead: TableauOpBeheadState
+    tableauOpCampaign: TableauOpCampaignState;
     tableauOpCommerce: TableauOpCommerceState;
     tableauOpCorsair: TableauOpCorsairState;
     tableauOpInquisitor: TableauOpInquisitorState
@@ -96,6 +97,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       regimeChangeGoldenLiberty: new RegimeChangeGoldenLibertyState(this),
       selectToken: new SelectTokenState(this),
       tableauOpBehead: new TableauOpBeheadState(this),
+      tableauOpCampaign: new TableauOpCampaignState(this),
       tableauOpCommerce: new TableauOpCommerceState(this),
       tableauOpCorsair: new TableauOpCorsairState(this),
       tableauOpInquisitor: new TableauOpInquisitorState(this),

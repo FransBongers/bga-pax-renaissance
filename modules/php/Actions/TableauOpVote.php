@@ -96,7 +96,6 @@ class TableauOpVote extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId'];
 
     $empireId = $args['empireId'];
     Notifications::log('$empireId',$empireId);
@@ -109,12 +108,14 @@ class TableauOpVote extends \PaxRenaissance\Models\AtomicAction
     });
     
     if ($chosenOption === null) {
-      throw new \feException("Not allowed to Vote in selected Empire");
+      throw new \feException("Not allowed to vote in selected Empire");
     }
 
+    $player->incFlorins(-$chosenOption['cost']);
     Notifications::tableauOpVote($player, Empires::get($empireId), $chosenOption['cost']);
+    // TODO: make player pay
 
-    $this->ctx->insertAsBrother(Engine::buildTree(Flows::regimeChange($player->getId(), $empireId, $this->ctx->getAction())));
+    $this->ctx->insertAsBrother(Engine::buildTree(Flows::regimeChange($player->getId(), $empireId, $this->ctx->getAction(),[])));
     
     $this->resolveAction($args);
   }

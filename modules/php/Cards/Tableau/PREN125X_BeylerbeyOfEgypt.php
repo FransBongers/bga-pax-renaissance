@@ -39,7 +39,7 @@ class PREN125X_BeylerbeyOfEgypt extends \PaxRenaissance\Models\TableauCard
         'left' => 0,
       ],
     ];
-    $this->prestige [LAW];
+    $this->prestige = [LAW];
     $this->region = EAST;
   }
 }

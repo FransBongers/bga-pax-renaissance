@@ -48,17 +48,22 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     $parentInfo = $this->ctx->getParent()->getInfo();
     $player = self::getPlayer();
     $playerId = $player->getId();
-
+    Notifications::log('playerId', $playerId);
     $empireId = $parentInfo['empireId'];
 
     $empire = Empires::get($empireId);
-
+    Notifications::log('empire', $empire);
     $empireCard = Cards::get($empire->getEmpireSquareId());
     $empireCardLocation = $empireCard->getLocation();
 
+    // TODO handle Vassal
+
     $isInThrone = $empireCardLocation === Locations::throne($empireId);
-    $isInOwnTableau = $empireCardLocation === Locations::tableau($playerId, EAST) || Locations::tableau($playerId, WEST);
+    Notifications::log('empireCardLocation', $empireCardLocation);
+    $isInOwnTableau = in_array($empireCardLocation, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
+    Notifications::log('isInOwnTableau', $isInOwnTableau);
     $isInEnemeyTableau = !$isInOwnTableau && Utils::startsWith($empireCardLocation, 'tableau_');
+    Notifications::log('isInEnemeyTableau', $isInEnemeyTableau);
 
     if ($isInThrone) {
       // Comes with bishop and queen

@@ -106,6 +106,15 @@ interface OnEnteringTableauOpBeheadArgs extends CommonArgs {
   cards: TableauCard[];
 }
 
+interface CampaignOpOption {
+  empire: Empire;
+  cost: number;
+}
+
+interface OnEnteringTableauOpCampaignArgs extends CommonArgs {
+  options: CampaignOpOption[];
+}
+
 interface OnEnteringTableauOpCommerceArgs extends CommonArgs {
   cards: TableauCard[];
 }

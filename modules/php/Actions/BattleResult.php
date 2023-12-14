@@ -66,7 +66,7 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
     $parent->updateInfo('numberOfAttackers', $numberAttackers);
     $parent->updateInfo('numberOfDefenders', $numberDefenders);
     $parent->updateInfo('battleVictorious', $battleVictorious);
-    
+
 
     $parent->updateInfo('attackers', [
       'agents' => $attackers['agents'],
@@ -89,15 +89,9 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
   {
     $parent = $this->ctx->getParent();
     $parentInfo = $parent->getInfo();
-    Notifications::log('parentInfo', $parentInfo);
 
     $attackers = $parentInfo['attackers'];
     $defenders = $parentInfo['defenders'];
-
-    Notifications::log('resolveInitialCasualties', [
-      'attackers' => $attackers,
-      'defenders' => $defenders,
-    ]);
 
     $numberAttackers = $parentInfo['numberOfAttackers'];
     $numberDefenders = $parentInfo['numberOfDefenders'];
@@ -109,7 +103,6 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
       // eliminate all defenders
       Notifications::battleEliminateDefenders();
       $this->eliminateTokens($player, $defenders['tokens']);
-      
     } else if ($numberAttackers === $numberDefenders) {
       Notifications::battleEliminateAttackers();
       if (count($attackers['agents']) > 0) {
@@ -120,11 +113,10 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
       Notifications::battleEliminateDefenders();
       $this->eliminateTokens($player, $defenders['tokens']);
       // $this->resolveAction([]);
-      $parent->updateInfo('numberToEliminate',0);
-      $parent->updateInfo('agentsToEliminate',[]);
-      $parent->updateInfo('tokensToEliminate',[]);
+      $parent->updateInfo('numberToEliminate', 0);
+      $parent->updateInfo('agentsToEliminate', []);
+      $parent->updateInfo('tokensToEliminate', []);
       return;
-
     } else {
       // eliminate all attackers
       Notifications::battleEliminateAttackers();
@@ -134,9 +126,9 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
       $this->eliminateTokens($player, $attackers['tokens']);
     }
 
-    $parent->updateInfo('numberToEliminate',min($numberAttackers, $numberDefenders));
-    $parent->updateInfo('agentsToEliminate',$battleVictorious ? $attackers['agents'] : []);
-    $parent->updateInfo('tokensToEliminate',$battleVictorious ? $attackers['tokens'] : $defenders['tokens']);
+    $parent->updateInfo('numberToEliminate', min($numberAttackers, $numberDefenders));
+    $parent->updateInfo('agentsToEliminate', $battleVictorious ? $attackers['agents'] : []);
+    $parent->updateInfo('tokensToEliminate', $battleVictorious ? $attackers['tokens'] : $defenders['tokens']);
 
     // $this->ctx->insertAsBrother(new LeafNode(
     //   [
@@ -176,6 +168,13 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
     $empire = Empires::get($empireId);
 
     switch ($source) {
+      case CAMPAIGN_OP:
+        return [
+          'agents' => [],
+          'tokens' => array_merge(
+            Empires::get($data['attackingEmpireId'])->getTokensInCities([KNIGHT]),
+          ),
+        ];
       case CONSPIRACY_ONE_SHOT:
         return [
           'agents' => $this->getAgents($data['cardId'], [ROOK, KNIGHT, PIRATE, PAWN]),
@@ -230,6 +229,12 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
     $empire = Empires::get($empireId);
 
     switch ($source) {
+      case CAMPAIGN_OP:
+        return [
+          'tokens' => array_merge(
+            $empire->getTokensInCities([KNIGHT, ROOK]),
+          ),
+        ];
       case CONSPIRACY_ONE_SHOT:
         return [
           'tokens' => array_merge(

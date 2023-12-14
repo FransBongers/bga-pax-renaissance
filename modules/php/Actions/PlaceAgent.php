@@ -76,11 +76,12 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
     $exludedLocationIds = isset($info['exludedLocationIds']) ? $info['exludedLocationIds'] : [];
     // $borders = ->getBorders();
+    $player = self::getPlayer();
 
     $data = [
       'agents' => $agents,
       // Assumption: card only place agents of the same type
-      'locations' => $this->getLocations($empireId, $agents[0]['type'], $exludedLocationIds, $repressCost),
+      'locations' => $this->getLocations($player, $empireId, $agents[0]['type'], $exludedLocationIds, $repressCost),
       // 'repressCost' => $repressCost,
     ];
 
@@ -171,17 +172,18 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getLocations($empireId, $type, $exludedLocationIds, $repressCost = 0)
+  private function getLocations($player, $empireId, $type, $exludedLocationIds, $repressCost = 0)
   {
     $empires = $this->getEmpires($empireId);
+    $playerFlorins = $player->getFlorins();
     switch ($type) {
       case PIRATE:
       case PAWN:
-        return $this->getBorders($empires, $type, $exludedLocationIds, $repressCost);
+        return $this->getBorders($playerFlorins, $empires, $type, $exludedLocationIds, $repressCost);
         break;
       case KNIGHT:
       case ROOK:
-        return $this->getCities($empires, $type, $exludedLocationIds, $repressCost);
+        return $this->getCities($playerFlorins, $empires, $type, $exludedLocationIds, $repressCost);
         break;
       case BISHOP:
         return $this->getCards($empireId, $type);
@@ -198,7 +200,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
   }
 
-  private function getBorders($empires, $type, $exludedLocationIds, $repressCost)
+  private function getBorders($playerFlorins, $empires, $type, $exludedLocationIds, $repressCost)
   {
     $borders = array_merge(...array_map(function ($empire) {
       return $empire->getBorders();
@@ -223,7 +225,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
       if ($type === PAWN) {
         $tokenInLocation = $border->getToken();
-        if ($tokenInLocation !== null && $tokenInLocation->getType() === PIRATE) {
+        if ($tokenInLocation !== null && ($tokenInLocation->getType() === PIRATE || $repressCost > $playerFlorins)) {
           continue;
         } else if ($tokenInLocation !== null) {
           $locations[$borderId] = [
@@ -278,7 +280,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     return $locations;
   }
 
-  private function getCities($empires, $type, $exludedLocationIds, $repressCost)
+  private function getCities($playerFlorins, $empires, $type, $exludedLocationIds, $repressCost)
   {
     $cities = array_merge(...array_map(function ($empire) {
       return $empire->getCities();

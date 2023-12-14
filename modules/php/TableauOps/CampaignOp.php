@@ -2,9 +2,11 @@
 
 namespace PaxRenaissance\TableauOps;
 
+use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 
@@ -25,45 +27,56 @@ class CampaignOp extends \PaxRenaissance\Models\TableauOp
       return false;
     }
 
-    $options = $this->getOptions($card);
+    $options = $this->getOptions($player, $card);
     return count($options) > 0;
   }
 
   public function getFlow($player, $cardId)
   {
-    return new LeafNode([
-      'action' => TABLEAU_OP_CAMPAIGN,
-      'playerId' => $player->getId(),
-      'tableauOpId' => $this->id,
-      'cardId' => $cardId,
+    return Engine::buildtree([
+      'children' => [
+        [
+          'action' => TABLEAU_OP_CAMPAIGN,
+          'playerId' => $player->getId(),
+          'tableauOpId' => $this->id,
+          'cardId' => $cardId,
+        ]
+      ]
     ]);
   }
 
-  public function getOptions($card)
+  public function getOptions($player, $card)
   {
     $empireIds = $card->getAllEmpireIds(false);
     $options = [];
 
-    // foreach ($empireIds as $empireId) {
-    //   $empire = Empires::get($empireId);
+    foreach ($empireIds as $empireId) {
+      $empire = Empires::get($empireId);
+      $cities = $empire->getCities();
+      $cost = count(Utils::filter($cities, function ($city) {
+        $token = $city->getToken();
+        return $token !== null && $token->getType() === KNIGHT;
+      }));
+      if ($cost > $player->getFlorins()) {
+        continue;
+      }
 
-    //   $cities = $empire->getCities();
-    //   foreach ($cities as $city) {
-    //     $token = $city->getToken();
-    //     if ($token !== null && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
+      $adjacentEmpires = $empire->getAdjacentEmpires();
+      foreach ($adjacentEmpires as $adjacentEmpire) {
+        $empireCard = Cards::get($adjacentEmpire->getEmpireSquareId());
+        if ($empireCard->isInPlayerTableau($player)) {
+          continue;
+        }
+        if (isset($options[$adjacentEmpire->getId()])) {
+          continue;
+        }
+        $options[$adjacentEmpire->getId()] = [
+          'empire' => $adjacentEmpire,
+          'cost' => $cost,
+        ];
+      }
+    }
 
-    //   $borders = $empire->getBorders();
-    //   foreach ($borders as $border) {
-    //     $token = $border->getToken();
-    //     if ($token !== null && !isset($options[$token->getId()]) && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
-    // }
-
-    return $options;
+    return array_values($options);
   }
 }

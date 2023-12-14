@@ -97,8 +97,8 @@ interface NotifTableauOpCommerceArgs extends NotifWithPlayerArgs {
 interface NotifTableauOpTaxPayArgs extends NotifWithPlayerArgs {
 }
 
-interface NotifTableauOpVoteArgs extends NotifWithPlayerArgs {
-  cost: number;
+interface NotifPayFlorinsToChinaArgs extends NotifWithPlayerArgs {
+  amount: number;
 }
 
 interface NotifTradeFairConveneArgs extends NotifWithPlayerArgs {

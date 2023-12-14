@@ -49,7 +49,7 @@ class BattleCheckRegimeChange extends \PaxRenaissance\Models\AtomicAction
     $player = self::getPlayer();
 
     if ($parentInfo['battleVictorious']) {
-      $this->ctx->insertAsBrother(Engine::buildTree(Flows::regimeChange($player->getId(), $parentInfo['empireId'], $parentInfo['source'])));
+      $this->ctx->insertAsBrother(Engine::buildTree(Flows::regimeChange($player->getId(), $parentInfo['empireId'], $parentInfo['source'], $parentInfo['data'])));
     }
 
     $this->resolveAction([]);

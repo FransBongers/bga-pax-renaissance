@@ -11,6 +11,7 @@ use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
+use PgSql\Lob;
 
 class Card extends \PaxRenaissance\Helpers\DB_Model
 {
@@ -49,6 +50,13 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
       return null;
     }
     return Players::get(intval(explode('_', $this->location)[2]));
+  }
+
+  public function isInPlayerTableau($player)
+  {
+    $playerId = $player->getId();
+    // TODO: empire squares that are vassels
+    return in_array($this->location, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
   }
 
   public function isInTableau()

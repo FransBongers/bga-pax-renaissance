@@ -126,6 +126,7 @@ class Notifications
       JIHAD_ONE_SHOT => clienttranslate('Jihad'),
       PEASANT_REVOLT_ONE_SHOT => clienttranslate('Peasant revolt'),
       REFORMATION_ONE_SHOT => clienttranslate('Reformation'),
+      CAMPAIGN_OP => clienttranslate("Campaign"),
     ];
 
     $attackersLog = [];
@@ -492,6 +493,21 @@ class Notifications
     ]);
   }
 
+  public static function tableauOpCampaign($player, $empire, $cost)
+  {
+    $message = $cost > 0 ?
+      clienttranslate('${tkn_playerName} pays ${amount} ${tkn_florin} to China to campaign against ${tkn_boldText}') :
+      clienttranslate('${tkn_playerName} campaigns against ${tkn_boldText}');
+
+    self::notifyAll("payFlorinsToChina", $message, [
+      'player' => $player,
+      'amount' => $cost,
+      'tkn_florin' => clienttranslate("Florin(s)"),
+      'tkn_boldText' => $empire->getName(),
+    ]);
+  }
+
+
   public static function tableauOpCommerce($player, $card)
   {
     $cardName = in_array($card->getLocation(), [Locations::market(WEST, 0), Locations::market(EAST, 0)]) ? clienttranslate('trade fair card') : $card->getName();
@@ -549,12 +565,12 @@ class Notifications
   public static function tableauOpVote($player, $empire, $cost)
   {
     $message = $cost > 0 ?
-      clienttranslate('${tkn_playerName} pays ${cost} ${tkn_florin} to China to Vote in ${tkn_boldText}') :
-      clienttranslate('${tkn_playerName} Votes in ${tkn_boldText}');
+      clienttranslate('${tkn_playerName} pays ${amount} ${tkn_florin} to China to vote in ${tkn_boldText}') :
+      clienttranslate('${tkn_playerName} votes in ${tkn_boldText}');
 
-    self::notifyAll("tableauOpVote", $message, [
+    self::notifyAll("payFlorinsToChina", $message, [
       'player' => $player,
-      'cost' => $cost,
+      'amount' => $cost,
       'tkn_florin' => clienttranslate("Florin(s)"),
       'tkn_boldText' => $empire->getName(),
     ]);

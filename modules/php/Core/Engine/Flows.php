@@ -79,11 +79,12 @@ abstract class Flows
    * d. Tokens & Queens
    * e. Vassalage
    */
-  public static function regimeChange($playerId, $empireId, $source)
+  public static function regimeChange($playerId, $empireId, $source, $data = [])
   {
     return [
       'source' => $source,
       'empireId' => $empireId,
+      'data' => $data,
       'children' => [
         [
           'action' => REGIME_CHANGE_MOVE_EMPIRE,

@@ -42,7 +42,7 @@ class PREN124X_TheLastByzantine extends \PaxRenaissance\Models\TableauCard
         'left' => 0,
       ],
     ];
-    $this->prestige [REFORMIST];
+    $this->prestige = [REFORMIST];
     $this->region = EAST;
   }
 }

@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
 
 CREATE TABLE IF NOT EXISTS `tokens` (
   `token_id` varchar(32) NOT NULL,
-  `token_location` varchar(32) NOT NULL,
+  `token_location` varchar(64) NOT NULL,
   `token_state` int(10) DEFAULT 0,
   PRIMARY KEY (`token_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8;

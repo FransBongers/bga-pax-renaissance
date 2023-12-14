@@ -1763,6 +1763,7 @@ var PaxRenaissance = (function () {
             _a.regimeChangeGoldenLiberty = new RegimeChangeGoldenLibertyState(this),
             _a.selectToken = new SelectTokenState(this),
             _a.tableauOpBehead = new TableauOpBeheadState(this),
+            _a.tableauOpCampaign = new TableauOpCampaignState(this),
             _a.tableauOpCommerce = new TableauOpCommerceState(this),
             _a.tableauOpCorsair = new TableauOpCorsairState(this),
             _a.tableauOpInquisitor = new TableauOpInquisitorState(this),
@@ -3358,6 +3359,7 @@ var NotificationManager = (function () {
             ["flipVictoryCard", undefined],
             ["moveEmpireSquare", undefined],
             ["moveToken", undefined],
+            ["payFlorinsToChina", undefined],
             ["placeToken", undefined],
             ["playCard", undefined],
             ["purchaseCard", undefined],
@@ -3367,7 +3369,6 @@ var NotificationManager = (function () {
             ["sellCard", undefined],
             ["tableauOpCommerce", undefined],
             ["tableauOpTaxPay", undefined],
-            ["tableauOpVote", undefined],
             ["tradeFairConvene", undefined],
             ["tradeFairEmporiumSubsidy", undefined],
             ["tradeFairProfitDispersalPirates", undefined],
@@ -3500,31 +3501,13 @@ var NotificationManager = (function () {
             });
         });
     };
-    NotificationManager.prototype.notif_returnToSupply = function (notif) {
+    NotificationManager.prototype.notif_payFlorinsToChina = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, node, split;
+            var _a, playerId, amount;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, token = _a.token;
-                node = document.getElementById(token.id);
-                if (node) {
-                    node.remove();
-                }
-                split = token.id.split("_");
-                if (split[0] === PAWN) {
-                    this.game.supply.incValue({
-                        bank: split[1],
-                        type: split[0],
-                        value: 1,
-                    });
-                }
-                else {
-                    this.game.supply.incValue({
-                        religion: split[1],
-                        type: split[0],
-                        value: 1,
-                    });
-                }
-                return [2, Promise.resolve()];
+                _a = notif.args, playerId = _a.playerId, amount = _a.amount;
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-amount);
+                return [2];
             });
         });
     };
@@ -3727,6 +3710,34 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_returnToSupply = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, token, node, split;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, token = _a.token;
+                node = document.getElementById(token.id);
+                if (node) {
+                    node.remove();
+                }
+                split = token.id.split("_");
+                if (split[0] === PAWN) {
+                    this.game.supply.incValue({
+                        bank: split[1],
+                        type: split[0],
+                        value: 1,
+                    });
+                }
+                else {
+                    this.game.supply.incValue({
+                        religion: split[1],
+                        type: split[0],
+                        value: 1,
+                    });
+                }
+                return [2, Promise.resolve()];
+            });
+        });
+    };
     NotificationManager.prototype.notif_tableauOpCommerce = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, card, _b, _, region, column;
@@ -3749,16 +3760,6 @@ var NotificationManager = (function () {
             return __generator(this, function (_a) {
                 playerId = notif.args.playerId;
                 this.getPlayer({ playerId: playerId }).counters.florins.incValue(-1);
-                return [2];
-            });
-        });
-    };
-    NotificationManager.prototype.notif_tableauOpVote = function (notif) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, cost;
-            return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, cost = _a.cost;
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
                 return [2];
             });
         });
@@ -5450,6 +5451,74 @@ var TableauOpBeheadState = (function () {
     };
     return TableauOpBeheadState;
 }());
+var TableauOpCampaignState = (function () {
+    function TableauOpCampaignState(game) {
+        this.game = game;
+    }
+    TableauOpCampaignState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    TableauOpCampaignState.prototype.onLeavingState = function () {
+        debug("Leaving TableauOpCampaignState");
+    };
+    TableauOpCampaignState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an Empire to campaign against"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    TableauOpCampaignState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an Empire to campaign against"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setEmpiresSelectable();
+    };
+    TableauOpCampaignState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var cost = _a.cost, empire = _a.empire;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: empire.id });
+        this.game.clientUpdatePageTitle({
+            text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to campaign against ${empireName}?") : _("Campaign against ${empireName}?"),
+            args: {
+                empireName: _(empire.name),
+                cost: cost,
+                tkn_florin: tknFlorin(),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpCampaign",
+                    args: {
+                        empireId: empire.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    TableauOpCampaignState.prototype.setEmpiresSelectable = function () {
+        var _this = this;
+        this.args.options.forEach(function (option) {
+            _this.game.setLocationSelectable({
+                id: option.empire.id,
+                callback: function () { return _this.updateInterfaceConfirm(option); },
+            });
+        });
+    };
+    return TableauOpCampaignState;
+}());
 var TableauOpCommerceState = (function () {
     function TableauOpCommerceState(game) {
         this.game = game;
@@ -6165,7 +6234,7 @@ var TableauOpVoteState = (function () {
         this.game.clearPossible();
         this.game.setLocationSelected({ id: empire.id });
         this.game.clientUpdatePageTitle({
-            text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to Vote in ${empireName}?") : _("Vote in ${empireName}?"),
+            text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to vote in ${empireName}?") : _("Vote in ${empireName}?"),
             args: {
                 empireName: _(empire.name),
                 cost: cost,

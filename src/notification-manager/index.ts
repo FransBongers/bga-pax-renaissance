@@ -43,6 +43,7 @@ class NotificationManager {
       ["flipVictoryCard", undefined],
       ["moveEmpireSquare", undefined],
       ["moveToken", undefined],
+      ["payFlorinsToChina", undefined],
       ["placeToken", undefined],
       ["playCard", undefined],
       ["purchaseCard", undefined],
@@ -52,7 +53,6 @@ class NotificationManager {
       ["sellCard", undefined],
       ["tableauOpCommerce", undefined],
       ["tableauOpTaxPay", undefined],
-      ["tableauOpVote", undefined],
       ["tradeFairConvene", undefined],
       ["tradeFairEmporiumSubsidy", undefined],
       // ["tradeFairPlaceLevy", undefined],
@@ -175,6 +175,7 @@ class NotificationManager {
         node
       );
     }
+    
 
     // const node = document.getElementById(token.id);
     // if (node) {
@@ -198,29 +199,9 @@ class NotificationManager {
     return Promise.resolve();
   }
 
-  async notif_returnToSupply(notif: Notif<NotifReturnToSupplyArgs>) {
-    const { playerId, token } = notif.args;
-
-    const node = document.getElementById(token.id);
-    if (node) {
-      node.remove();
-    }
-    const split = token.id.split("_");
-    if (split[0] === PAWN) {
-      this.game.supply.incValue({
-        bank: split[1],
-        type: split[0],
-        value: 1,
-      });
-    } else {
-      this.game.supply.incValue({
-        religion: split[1],
-        type: split[0],
-        value: 1,
-      });
-    }
-
-    return Promise.resolve();
+  async notif_payFlorinsToChina(notif: Notif<NotifPayFlorinsToChinaArgs>) {
+    const { playerId, amount } = notif.args;
+    this.getPlayer({ playerId }).counters.florins.incValue(-amount);
   }
 
   async notif_placeToken(notif: Notif<NotifPlaceTokenArgs>) {
@@ -366,6 +347,32 @@ class NotificationManager {
     player.counters.florins.incValue(value);
   }
 
+  async notif_returnToSupply(notif: Notif<NotifReturnToSupplyArgs>) {
+    const { playerId, token } = notif.args;
+
+    const node = document.getElementById(token.id);
+    if (node) {
+      node.remove();
+    }
+    const split = token.id.split("_");
+    if (split[0] === PAWN) {
+      this.game.supply.incValue({
+        bank: split[1],
+        type: split[0],
+        value: 1,
+      });
+    } else {
+      this.game.supply.incValue({
+        religion: split[1],
+        type: split[0],
+        value: 1,
+      });
+    }
+
+    return Promise.resolve();
+  }
+
+
   async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {
     const { playerId, card } = notif.args;
     const [_, region, column] = card.location.split("_");
@@ -380,11 +387,6 @@ class NotificationManager {
   async notif_tableauOpTaxPay(notif: Notif<NotifTableauOpTaxPayArgs>) {
     const { playerId } = notif.args;
     this.getPlayer({ playerId }).counters.florins.incValue(-1);
-  }
-
-  async notif_tableauOpVote(notif: Notif<NotifTableauOpVoteArgs>) {
-    const { playerId, cost } = notif.args;
-    this.getPlayer({ playerId }).counters.florins.incValue(-cost);
   }
 
   async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {

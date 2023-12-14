@@ -41,7 +41,6 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
           'playerId' => $player->getId(),
           'tableauOpId' => $this->id,
           'cardId' => $cardId,
-
         ]
       ]
     ]);

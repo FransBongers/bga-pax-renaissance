@@ -37,7 +37,7 @@ trait DebugTrait
     // Notifications::log('Available ops', Cards::get('PREN039_FlorentineWool')->getAvailableOps());
     // Cards::setUsed('PREN039_FlorentineWool',0);
     // $this->debugPlaceToken(BISHOP, REFORMIST, 'PREN039_FlorentineWool');
-    Notifications::log('options', TableauOps::get(INQUISITOR_OP_REFORMIST)->getOptions());
+    Notifications::log('options', TableauOps::get(CAMPAIGN_OP)->getOptions(Players::get(), Cards::get('EmpireSquare_HolyRomanEmpire')));
     // Notifications::log('Available ops', Cards::get('PREN040_SindicatRemenca')->getAvailableOps());
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_1);
@@ -49,7 +49,7 @@ trait DebugTrait
     // Notifications::log('cardType', Cards::get('EmpireSquare_France')->getType());
     // Notifications::log('attackers', AtomicActions::get(BATTLE_RESULT)->getAttackers(Players::get(), BYZANTIUM, JIHAD_ONE_SHOT, ['cardId' => 'PREN059_Safavids']));
     // Notifications::log('defenders', AtomicActions::get(BATTLE_RESULT)->getDefenders(BYZANTIUM, JIHAD_ONE_SHOT, ['cardId' => 'PREN059_Safavids']));
-    
+
 
     // $this->debugPlaceToken(BISHOP, REFORMIST, 'EmpireSquare_Byzantium');
     // $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_Byzantium');
@@ -57,7 +57,7 @@ trait DebugTrait
     // $this->debugPlaceToken(PAWN, MEDICI, 'EmpireSquare_Byzantium');
     // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_BYZANTIUM_HUNGARY);
     // $this->debugPlaceToken(PAWN, MEDICI, BORDER_BYZANTIUM_MAMLUK);
-    
+
     // Cards::insertAtBottom('EmpireSquare_PapalStates', Locations::tableau(2371053, WEST));
     // Notifications::log('tableau', Cards::get('PREN101X_CivilEngineer'));
     // Notifications::log('thrones', Cards::getAllCardsInThrones());
