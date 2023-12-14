@@ -42,7 +42,7 @@ class BeheadOp extends \PaxRenaissance\Models\TableauOp
 
   public function getOptions($card)
   {
-    $empireIds = $card->getAllEmpiresIds();
+    $empireIds = $card->getAllEmpireIds();
     $options = [];
 
     $players = Players::getAll();

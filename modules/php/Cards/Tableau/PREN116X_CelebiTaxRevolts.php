@@ -7,7 +7,7 @@ class PREN116X_CelebiTaxRevolts extends \PaxRenaissance\Models\TableauCard
   public function __construct($row)
   {
     parent::__construct($row);
-    $this->id = 'PREN115X_SahkuluShiiteRevolt';
+    $this->id = 'PREN116X_CelebiTaxRevolts';
     $this->agents = [
       [
         'separator' => ISLAMIC,

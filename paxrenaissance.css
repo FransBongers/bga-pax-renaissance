@@ -2053,19 +2053,19 @@
 }
 
 /* ------- LOG TOKENS ------- */
-#pagemaintitletext .pr_icon {
+#pagemaintitletext .pr_icon, #gameaction_status .pr_icon {
   display: inline-block;
 }
-#pagemaintitletext .pr_icon[data-icon=florin] {
+#pagemaintitletext .pr_icon[data-icon=florin], #gameaction_status .pr_icon[data-icon=florin] {
   --paxRenIconScale: 0.5;
   margin-bottom: -4px;
 }
-#pagemaintitletext .pr_token {
+#pagemaintitletext .pr_token, #gameaction_status .pr_token {
   display: inline-block;
   margin-bottom: -8px;
   --paxRenTokenScale: 0.7;
 }
-#pagemaintitletext .pr_one_shot {
+#pagemaintitletext .pr_one_shot, #gameaction_status .pr_one_shot {
   display: inline-block;
   margin-bottom: -14px;
 }

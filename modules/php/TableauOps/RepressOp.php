@@ -42,7 +42,7 @@ class RepressOp extends \PaxRenaissance\Models\TableauOp
 
   public function getOptions($card)
   {
-    $empireIds = $card->getAllEmpiresIds(false);
+    $empireIds = $card->getAllEmpireIds(false);
     $options = [];
 
     foreach ($empireIds as $empireId) {

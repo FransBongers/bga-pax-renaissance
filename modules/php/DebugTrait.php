@@ -25,7 +25,7 @@ trait DebugTrait
 {
   function test()
   {
-    Tokens::get('rook_catholic_8')->repress(MAMLUK);
+    // Tokens::get('rook_catholic_8')->repress(MAMLUK);
     // Cards::move('PREN083_PospoliteRuszenie', Locations::market(EAST, 1));
     // Cards::get('EmpireSquare_Mamluk')->flip();
     // Notifications::flipEmpireCard(Players::get(), Cards::get('EmpireSquare_Mamluk'));
@@ -37,7 +37,7 @@ trait DebugTrait
     // Notifications::log('Available ops', Cards::get('PREN039_FlorentineWool')->getAvailableOps());
     // Cards::setUsed('PREN039_FlorentineWool',0);
     // $this->debugPlaceToken(BISHOP, REFORMIST, 'PREN039_FlorentineWool');
-    // Notifications::log('options', TableauOps::get(CORSAIR_OP_ISLAMIC)->getOptions(Cards::get('PREN062_BarbarossaBrothers')));
+    Notifications::log('options', TableauOps::get(INQUISITOR_OP_REFORMIST)->getOptions());
     // Notifications::log('Available ops', Cards::get('PREN040_SindicatRemenca')->getAvailableOps());
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_1);

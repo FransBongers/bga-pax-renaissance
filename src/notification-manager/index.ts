@@ -164,7 +164,11 @@ class NotificationManager {
     const { playerId, token } = notif.args;
 
     const tokenNode = document.getElementById(token.id);
-    const node: HTMLElement = document.getElementById(`pr_${token.location}`);
+    
+    // const node: HTMLElement = document.getElementById(`pr_${token.location}`);
+    const node = document.getElementById(
+      token['type'] === BISHOP ? `${token.location}_tokens` : `pr_${token.location}`
+    );
     if (tokenNode) {
       await this.game.animationManager.attachWithAnimation(
         new BgaSlideAnimation({ element: tokenNode }),

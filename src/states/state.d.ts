@@ -106,7 +106,6 @@ interface OnEnteringTableauOpBeheadArgs extends CommonArgs {
   cards: TableauCard[];
 }
 
-
 interface OnEnteringTableauOpCommerceArgs extends CommonArgs {
   cards: TableauCard[];
 }
@@ -123,6 +122,15 @@ interface CorsairOpOption {
 
 interface OnEnteringTableauOpCorsairArgs extends CommonArgs {
   options: Record<string, CorsairOpOption>;
+}
+
+interface InquisitorOpOption {
+  token: Token;
+  destinations: (EmpireCard | TableauCard)[];
+}
+
+interface OnEnteringTableauOpInquisitorArgs extends CommonArgs {
+  tokens: Record<string, InquisitorOpOption>;
 }
 
 interface OnEnteringTableauOpRepressArgs extends CommonArgs {

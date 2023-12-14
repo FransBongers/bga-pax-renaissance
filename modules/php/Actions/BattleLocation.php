@@ -141,7 +141,7 @@ class BattleLocation extends \PaxRenaissance\Models\AtomicAction
       case JIHAD_ONE_SHOT:
       case REFORMATION_ONE_SHOT:
       case CRUSADE_ONE_SHOT:
-        return Cards::get($data['cardId'])->getAllEmpiresIds(false);
+        return Cards::get($data['cardId'])->getAllEmpireIds(false);
       default:
         return [];
     }

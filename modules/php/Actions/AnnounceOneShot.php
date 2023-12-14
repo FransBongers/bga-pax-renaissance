@@ -231,7 +231,7 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
 
   private function religiousWarCanOccur($card, $opposingReligions)
   {
-    $empiresIds = $card->getAllEmpiresIds(false);
+    $empiresIds = $card->getAllEmpireIds(false);
 
     return Utils::array_some($empiresIds, function ($empireId) use ($opposingReligions) {
       $empire = Empires::get($empireId);

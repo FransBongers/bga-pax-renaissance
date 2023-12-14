@@ -80,6 +80,7 @@
     "src/states/TableauOpBehead.ts",
     "src/states/TableauOpCommerce.ts",
     "src/states/TableauOpCorsair.ts",
+    "src/states/TableauOpInquisitor.ts",
     "src/states/TableauOpRepress.ts",
     "src/states/TableauOpSiege.ts",
     "src/states/TableauOpsSelect.ts",

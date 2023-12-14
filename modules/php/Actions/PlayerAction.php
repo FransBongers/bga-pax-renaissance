@@ -24,6 +24,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   public function argsPlayerAction()
   {
     $player = Players::get();
+    $playerId = $player->getId();
     $availableOps = $player->getAvailableOps();
 
     $cardsPlayerCanSell = $player->getCardsPlayerCanSell();
@@ -35,7 +36,14 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
       'cardsPlayerCanSell' => $cardsPlayerCanSell,
       'tradeFair' => Market::getTradeFairs(),
       'availableOps' => $availableOps,
+      '_private' => [
+        $playerId => [
+          'hello' => 'world'
+        ]
+      ]
     ];
+
+    // args['_private'][specificPid]=
 
     return $data;
   }

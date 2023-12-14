@@ -75,9 +75,13 @@ class EmpireCard extends Card
    * Returns array of empires that are valid for this cards actions
    * ie, the empire of the card or all western / eastern empires if empire is east or west
    */
-  public function getAllEmpiresIds($includeRegion = true)
+  public function getAllEmpireIds($includeRegion = true)
   {
-    return [$this->empire];
+    $result = [$this->empire];
+    if ($includeRegion) {
+      $result[] = Empires::get($this->empire)->getRegion();
+    }
+    return $result;
   }
 
   public function getEmpire()

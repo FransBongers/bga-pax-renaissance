@@ -95,22 +95,25 @@ class TableauOpInquisitor extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
-
     
-    // $options = $tableauOp->getOptions(Cards::get($cardId));
+    $tokenId = $args['tokenId'];
+    $destinationId = $args['destinationId'];
     
-    // $tokenId = $args['tokenId'];
+    $options = $tableauOp->getOptions();
     
-    // if (!isset($options[$tokenId])) {
-    //   throw new \feException("Not allowed to Kill selected Token");
-    // }
+    if (!isset($options[$tokenId])) {
+      throw new \feException("Not allowed to move selected Bishop");
+    }
 
-    // $player = self::getPlayer();
+    $destination = Utils::array_find($options[$tokenId]['destinations'], function ($cardOption) use ($destinationId) {
+      return $cardOption->getId() === $destinationId;
+    });
 
-    // $token = Tokens::get($tokenId);
+    if ($destination === null) {
+      throw new \feException("Not allowed to move Bishop to selected card");
+    }
 
-    // $token->returnToSupply(KILL, $player);
+    $options[$tokenId]['token']->move($destination->getId());
     
     $this->resolveAction($args);
   }

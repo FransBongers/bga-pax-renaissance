@@ -139,8 +139,8 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   public function getTableauCardsPerRegion()
   {
     return [
-      EAST => Cards::getInLocation(Locations::tableau($this->getId(), EAST))->toArray(),
-      WEST => Cards::getInLocation(Locations::tableau($this->getId(), WEST))->toArray(),
+      EAST => Cards::getInLocationOrdered(Locations::tableau($this->getId(), EAST))->toArray(),
+      WEST => Cards::getInLocationOrdered(Locations::tableau($this->getId(), WEST))->toArray(),
     ];
   }
 

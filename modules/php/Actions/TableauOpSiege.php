@@ -108,7 +108,7 @@ class TableauOpSiege extends \PaxRenaissance\Models\AtomicAction
 
     $player = self::getPlayer();
     // $card = Cards::get($cardId);
-    // $empireIds = $card->getAllEmpiresIds(false);
+    // $empireIds = $card->getAllEmpireIds(false);
     // // Notifications::log('empires', $)
     // if (count($empireIds) > 1) {
     //   throw new \feException("Multiple empires to select from. Please create a bug report.");

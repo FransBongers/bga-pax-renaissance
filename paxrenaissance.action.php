@@ -190,6 +190,15 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
   
+  public function actTableauOpInquisitor()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actTableauOpInquisitor', $args);
+    self::ajaxResponse();
+  }
+
   public function actTableauOpRepress()
   {
     self::setAjaxMode();

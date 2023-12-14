@@ -43,6 +43,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     tableauOpBehead: TableauOpBeheadState
     tableauOpCommerce: TableauOpCommerceState;
     tableauOpCorsair: TableauOpCorsairState;
+    tableauOpInquisitor: TableauOpInquisitorState
     tableauOpRepress: TableauOpRepressState;
     tableauOpSiege: TableauOpSiegeState;
     tableauOpsSelect: TableauOpsSelectState;
@@ -97,6 +98,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       tableauOpBehead: new TableauOpBeheadState(this),
       tableauOpCommerce: new TableauOpCommerceState(this),
       tableauOpCorsair: new TableauOpCorsairState(this),
+      tableauOpInquisitor: new TableauOpInquisitorState(this),
       tableauOpRepress: new TableauOpRepressState(this),
       tableauOpSiege: new TableauOpSiegeState(this),
       tableauOpsSelect: new TableauOpsSelectState(this),
