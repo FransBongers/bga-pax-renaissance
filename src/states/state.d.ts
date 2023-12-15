@@ -63,7 +63,7 @@ interface PlaceAgentLocation {
 interface OnEnteringPlaceAgentsArgs extends CommonArgs {
   agents: {
     type: string;
-    religion: string | null;
+    separator: string | null;
   }[];
   locations: Record<string, PlaceAgentLocation | EmpireCard | TableauCard>;
   optionalAction: boolean;

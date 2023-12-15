@@ -305,7 +305,7 @@ class Notifications
     ]);
   }
 
-  public static function flipEmpireCard($player, $card)
+  public static function flipEmpireCard($player, $card,$formerSuzerain)
   {
     $side = $card->getSide();
     self::notifyAll("flipEmpireCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName} to ${side} side'), [
@@ -313,6 +313,7 @@ class Notifications
       'card' => $card,
       'tkn_cardName' => $card->getName($side === REPUBLIC ? KING : REPUBLIC),
       'side' => $side === REPUBLIC ? clienttranslate('Republic') : clienttranslate('King'),
+      'formerSuzerain' => $formerSuzerain,
       'i18n' => ['side'],
     ]);
   }
@@ -326,12 +327,13 @@ class Notifications
     ]);
   }
 
-  public static function moveEmpireSquare($player, $empireCard)
+  public static function moveEmpireSquare($player, $empireCard, $from)
   {
     self::notifyAll("moveEmpireSquare", clienttranslate('${tkn_playerName} moves ${tkn_boldText} to their tableau'), [
       'player' => $player,
       'tkn_boldText' => $empireCard->getName(),
       'card' => $empireCard,
+      'from' => $from,
     ]);
   }
 
@@ -647,6 +649,19 @@ class Notifications
   public static function tradeFairNoVoyage()
   {
     self::message(clienttranslate('No profits left. The voyage does not start'), []);
+  }
+
+  
+  public static function vassalage($player, $empireCard, $suzerain, $from)
+  {
+    self::notifyAll("vassalage", clienttranslate('${tkn_boldText_vassal} becomes a Vassal to ${tkn_boldText_vassal_suzerain}'), [
+      'player' => $player,
+      'tkn_boldText_vassal' => $empireCard->getName(),
+      'tkn_boldText_vassal_suzerain' => $suzerain->getName(),
+      'vassal' => $empireCard,
+      'suzerain' => $suzerain,
+      'from' => $from,
+    ]);
   }
 
   /*********************

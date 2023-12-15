@@ -58,6 +58,7 @@ class NotificationManager {
       // ["tradeFairPlaceLevy", undefined],
       ["tradeFairProfitDispersalPirates", undefined],
       ["tradeFairProfitDispersalPlayer", undefined],
+      ["vassalage", undefined],
     ];
 
     // example: https://github.com/thoun/knarr/blob/main/src/knarr.ts
@@ -111,7 +112,10 @@ class NotificationManager {
     notif: Notif<NotifChangeEmpireToMedievalStateArgs>
   ) {
     const { empire } = notif.args;
-    this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: MEDIEVAL });
+    this.game.gameMap.setEmpireReligion({
+      empireId: empire.id,
+      religion: MEDIEVAL,
+    });
   }
 
   async notif_changeEmpireToTheocracy(
@@ -133,16 +137,20 @@ class NotificationManager {
   }
 
   async notif_flipEmpireCard(notif: Notif<NotifFlipEmpireCardArgs>) {
-    const { playerId, card } = notif.args;
+    const { playerId, card, formerSuzerain } = notif.args;
     const oldSide = card.side === REPUBLIC ? KING : REPUBLIC;
     const player = this.getPlayer({ playerId });
-    card[oldSide].prestige.forEach((prestige) => {
-      player.counters.prestige[prestige].incValue(-1);
-    });
-    this.game.tableauCardManager.updateCardInformations(card);
-    card[card.side].prestige.forEach((prestige) => {
-      player.counters.prestige[prestige].incValue(1);
-    });
+
+    this.removePrestige({ prestige: card[oldSide].prestige, player });
+
+    if (formerSuzerain !== null) {
+      this.game.tableauCardManager.removeVassal({suzerain: formerSuzerain});
+      await player.tableau.addCard(card)
+    } else {
+      this.game.tableauCardManager.updateCardInformations(card);
+    }
+    
+    this.addPrestige({ prestige: card[card.side].prestige, player });
   }
 
   async notif_flipVictoryCard(notif: Notif<NotifFlipVictoryCardArgs>) {
@@ -152,22 +160,27 @@ class NotificationManager {
   }
 
   async notif_moveEmpireSquare(notif: Notif<NotifMoveEmpireSquareArgs>) {
-    const { playerId, card } = notif.args;
+    const { playerId, card, from } = notif.args;
 
-    await this.getPlayer({ playerId }).tableau.addCard(card);
-    card[card.side].prestige.forEach((prestige) =>
-      this.getPlayer({ playerId }).counters.prestige[prestige].incValue(1)
-    );
+    this.handleEmpireSquareOririnData({ card, from });
+
+    const player = this.getPlayer({ playerId });
+
+    await player.tableau.addCard(card);
+
+    this.addPrestige({ prestige: card[card.side].prestige, player });
   }
 
   async notif_moveToken(notif: Notif<NotifMoveTokenArgs>) {
     const { playerId, token } = notif.args;
 
     const tokenNode = document.getElementById(token.id);
-    
+
     // const node: HTMLElement = document.getElementById(`pr_${token.location}`);
     const node = document.getElementById(
-      token['type'] === BISHOP ? `${token.location}_tokens` : `pr_${token.location}`
+      token["type"] === BISHOP
+        ? `${token.location}_tokens`
+        : `pr_${token.location}`
     );
     if (tokenNode) {
       await this.game.animationManager.attachWithAnimation(
@@ -175,7 +188,6 @@ class NotificationManager {
         node
       );
     }
-    
 
     // const node = document.getElementById(token.id);
     // if (node) {
@@ -372,7 +384,6 @@ class NotificationManager {
     return Promise.resolve();
   }
 
-
   async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {
     const { playerId, card } = notif.args;
     const [_, region, column] = card.location.split("_");
@@ -440,6 +451,15 @@ class NotificationManager {
     return Promise.resolve();
   }
 
+  async notif_vassalage(notif: Notif<NotifVassalageArgs>) {
+    const { from, vassal, suzerain, playerId } = notif.args;
+    this.handleEmpireSquareOririnData({ from, card: vassal });
+    // vassalage
+    this.game.tableauCardManager.addVassal({ vassal, suzerain });
+    const player = this.getPlayer({ playerId });
+    this.addPrestige({ player, prestige: vassal[vassal.side].prestige });
+  }
+
   // notif_smallRefreshHand(notif: Notif<NotifSmallRefreshHandArgs>) {
   //   const { hand, playerId } = notif.args;
   //   const player = this.getPlayer({ playerId });
@@ -464,6 +484,50 @@ class NotificationManager {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private handleEmpireSquareOririnData({
+    card,
+    from,
+  }: {
+    card: EmpireCard;
+    from: EmpireCardOriginData;
+  }) {
+    const { suzerain, previousOwnerId, wasRepublic } = from;
+    if (suzerain && previousOwnerId) {
+      this.game.tableauCardManager.removeVassal({ suzerain });
+    }
+    if (previousOwnerId) {
+      const previousOwner = this.getPlayer({ playerId: previousOwnerId });
+      this.removePrestige({
+        player: previousOwner,
+        prestige: card[wasRepublic ? REPUBLIC : KING].prestige,
+      });
+    }
+  }
+
+  private addPrestige({
+    player,
+    prestige,
+  }: {
+    player: PRPlayer;
+    prestige: string[];
+  }) {
+    prestige.forEach((prestige) => {
+      player.counters.prestige[prestige].incValue(1);
+    });
+  }
+
+  private removePrestige({
+    player,
+    prestige,
+  }: {
+    player: PRPlayer;
+    prestige: string[];
+  }) {
+    prestige.forEach((prestige) => {
+      player.counters.prestige[prestige].incValue(-1);
+    });
+  }
 
   destroy() {
     dojo.forEach(this.subscriptions, dojo.unsubscribe);

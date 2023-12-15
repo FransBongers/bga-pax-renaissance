@@ -3,7 +3,7 @@ const MIN_PLAY_AREA_WIDTH = 1516;
 /**
  * Client states
  */
-const CLIENT_START_TRADE_FAIR_STATE = 'clientStartTradeFairState';
+const CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 
 /**
  * Player colors
@@ -34,15 +34,15 @@ const PR_SELECTED = "pr_selected";
 /**
  * Card locations
  */
-const DISCARD = 'discard';
+const DISCARD = "discard";
 
 /**
  * Banks
  */
-const FUGGER = 'fugger';
-const MEDICI = 'medici';
-const COEUR = 'coeur';
-const MARCHIONNI = 'marchionni';
+const FUGGER = "fugger";
+const MEDICI = "medici";
+const COEUR = "coeur";
+const MARCHIONNI = "marchionni";
 
 /**
  * Regions
@@ -50,10 +50,7 @@ const MARCHIONNI = 'marchionni';
 const WEST = "west";
 const EAST = "east";
 
-const REGIONS = [
-  WEST,
-  EAST,
-]
+const REGIONS = [WEST, EAST];
 
 // Card types
 const EMPIRE_CARD = "empireCard";
@@ -61,40 +58,35 @@ const TABLEAU_CARD = "tableauCard";
 const VICTORY_CARD = "victoryCard";
 
 // Sides for empire cards
-const KING = 'king';
-const REPUBLIC = 'republic';
+const KING = "king";
+const REPUBLIC = "republic";
 
 /**
- * Chess pieces 
+ * Chess pieces
  */
-const BISHOP = 'bishop';
-const DISK = 'disk'; // for busted disks
-const KNIGHT = 'knight';
-const PAWN = 'pawn';
-const PIRATE = 'pirate';
-const ROOK = 'rook';
-
+const BISHOP = "bishop";
+const DISK = "disk"; // for busted disks
+const KNIGHT = "knight";
+const PAWN = "pawn";
+const PIRATE = "pirate";
+const ROOK = "rook";
 
 /**
  * Religions
  */
-const MEDIEVAL = 'medieval';
+const MEDIEVAL = "medieval";
 const CATHOLIC = "catholic";
 const ISLAMIC = "islamic";
 const REFORMIST = "reformist";
 
-const RELIGIONS = [
-  CATHOLIC,
-  ISLAMIC,
-  REFORMIST
-];
+const RELIGIONS = [CATHOLIC, ISLAMIC, REFORMIST];
 
 /**
  * PRESTIGE
  */
-const DISCOVERY = 'discovery';
-const LAW = 'law';
-const PATRON = 'patron';
+const DISCOVERY = "discovery";
+const LAW = "law";
+const PATRON = "patron";
 
 /**
  * Empires
@@ -110,22 +102,36 @@ const PAPAL_STATES = "papalStates";
 const OTTOMAN = "ottoman";
 const MAMLUK = "mamluk";
 
+const EMPIRES = [
+  ENGLAND,
+  FRANCE,
+  HOLY_ROMAN_EMIRE,
+  HUNGARY,
+  BYZANTIUM,
+  PORTUGAL,
+  ARAGON,
+  PAPAL_STATES,
+  OTTOMAN,
+  MAMLUK,
+];
+
 /**
  * Borders
  */
-const BORDER_ARAGON_FRANCE = 'border_aragon_france';
-const BORDER_ARAGON_PAPAL_STATES = 'border_aragon_papalStates';
-const BORDER_ARAGON_PORTUGAL = 'border_aragon_portugal';
-const BORDER_BYZANTIUM_HUNGARY = 'border_byzantium_hungary';
-const BORDER_BYZANTIUM_MAMLUK = 'border_byzantium_mamluk';
-const BORDER_ENGLAND_FRANCE = 'border_england_france';
-const BORDER_ENGLAND_PORTUGAL = 'border_england_portugal';
-const BORDER_FRANCE_HOLY_ROMAN_EMPIRE = 'border_france_holyRomanEmpire';
-const BORDER_HOLY_ROMAN_EMPIRE_HUNGARY = 'border_holyRomanEmpire_hungary';
-const BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES = 'border_holyRomanEmpire_papalStates';
-const BORDER_HUNGARY_OTTOMAN = 'border_hungary_ottoman';
-const BORDER_MAMLUK_OTTOMAN = 'border_mamluk_ottoman';
-const BORDER_OTTOMAN_PAPAL_STATES = 'border_ottoman_papalStates';
+const BORDER_ARAGON_FRANCE = "border_aragon_france";
+const BORDER_ARAGON_PAPAL_STATES = "border_aragon_papalStates";
+const BORDER_ARAGON_PORTUGAL = "border_aragon_portugal";
+const BORDER_BYZANTIUM_HUNGARY = "border_byzantium_hungary";
+const BORDER_BYZANTIUM_MAMLUK = "border_byzantium_mamluk";
+const BORDER_ENGLAND_FRANCE = "border_england_france";
+const BORDER_ENGLAND_PORTUGAL = "border_england_portugal";
+const BORDER_FRANCE_HOLY_ROMAN_EMPIRE = "border_france_holyRomanEmpire";
+const BORDER_HOLY_ROMAN_EMPIRE_HUNGARY = "border_holyRomanEmpire_hungary";
+const BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES =
+  "border_holyRomanEmpire_papalStates";
+const BORDER_HUNGARY_OTTOMAN = "border_hungary_ottoman";
+const BORDER_MAMLUK_OTTOMAN = "border_mamluk_ottoman";
+const BORDER_OTTOMAN_PAPAL_STATES = "border_ottoman_papalStates";
 
 const BORDERS = [
   BORDER_ARAGON_FRANCE,

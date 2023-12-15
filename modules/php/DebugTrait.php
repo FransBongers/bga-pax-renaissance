@@ -25,6 +25,13 @@ trait DebugTrait
 {
   function test()
   {
+    Cards::get('EmpireSquare_England')->setExtraData('suzerainId','EmpireSquare_PapalStates');
+    // Notifications::log('options', TableauOps::get(INQUISITOR_OP_REFORMIST)->getOptions());
+    // Notifications::log('options', TableauOps::get(INQUISITOR_OP_ISLAMIC)->getOptions());
+    // Cards::get('EmpireSquare_Portugal')->setExtraData('suzerain', null);
+    // Notifications::log('isNull', Cards::get('EmpireSquare_Aragon')->getExtraData('suzerainId') === null);
+    // Notifications::log('owner', Cards::get('EmpireSquare_Aragon')->getSuzerain());
+    // Notifications::log('empire squares', Cards::getAllEmpireSquares());
     // Tokens::get('rook_catholic_8')->repress(MAMLUK);
     // Cards::move('PREN083_PospoliteRuszenie', Locations::market(EAST, 1));
     // Cards::get('EmpireSquare_Mamluk')->flip();
@@ -37,7 +44,7 @@ trait DebugTrait
     // Notifications::log('Available ops', Cards::get('PREN039_FlorentineWool')->getAvailableOps());
     // Cards::setUsed('PREN039_FlorentineWool',0);
     // $this->debugPlaceToken(BISHOP, REFORMIST, 'PREN039_FlorentineWool');
-    Notifications::log('options', TableauOps::get(CAMPAIGN_OP)->getOptions(Players::get(), Cards::get('EmpireSquare_HolyRomanEmpire')));
+    
     // Notifications::log('Available ops', Cards::get('PREN040_SindicatRemenca')->getAvailableOps());
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_1);

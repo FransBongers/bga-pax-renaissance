@@ -64,6 +64,26 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return Utils::startsWith($this->getLocation(), 'tableau_');
   }
 
+  public function getVassals()
+  {
+    return [];
+  }
+
+  public function getSuzerain()
+  {
+    return null;
+  }
+
+  public function isVassal()
+  {
+    return false;
+  }
+
+  public function isSuzerain()
+  {
+    return false;
+  }
+
   public function isSilenced()
   {
     $tokens = $this->getTokens();

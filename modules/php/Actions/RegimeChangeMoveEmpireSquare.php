@@ -46,38 +46,49 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
   public function stRegimeChangeMoveEmpireSquare()
   {
     $parentInfo = $this->ctx->getParent()->getInfo();
+    $source = $parentInfo['source'];
+    Notifications::log('stRegimeChangeMoveEmpireSquare', $parentInfo['data']);
+
     $player = self::getPlayer();
-    $playerId = $player->getId();
-    Notifications::log('playerId', $playerId);
+    // $playerId = $player->getId();
+
     $empireId = $parentInfo['empireId'];
 
     $empire = Empires::get($empireId);
-    Notifications::log('empire', $empire);
     $empireCard = Cards::get($empire->getEmpireSquareId());
-    $empireCardLocation = $empireCard->getLocation();
+    // $empireCardLocation = $empireCard->getLocation();
 
-    // TODO handle Vassal
+    $isCampaign = $source === CAMPAIGN_OP;
 
-    $isInThrone = $empireCardLocation === Locations::throne($empireId);
-    Notifications::log('empireCardLocation', $empireCardLocation);
-    $isInOwnTableau = in_array($empireCardLocation, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
-    Notifications::log('isInOwnTableau', $isInOwnTableau);
-    $isInEnemeyTableau = !$isInOwnTableau && Utils::startsWith($empireCardLocation, 'tableau_');
-    Notifications::log('isInEnemeyTableau', $isInEnemeyTableau);
+    // $isInThrone = $empireCardLocation === Locations::throne($empireId);
+    // $isInOwnTableau = in_array($empireCardLocation, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
+    // $isInEnemeyTableau = !$isInOwnTableau && Utils::startsWith($empireCardLocation, 'tableau_');
 
-    if ($isInThrone) {
-      // Comes with bishop and queen
-      $empireCard->moveToTableau($player); 
-    } else if ($isInEnemeyTableau) {
-      // Discard bishop, queen, vassals
-      $this->discardBishopQueenVassals($player, $empireCard);
-      $empireCard->moveToTableau($player); 
-    } else if ($isInOwnTableau) {
-      // Flip card to republic, discard bishop, queen vassals
-      $this->discardBishopQueenVassals($player, $empireCard);
-      $empireCard->flip($player);
-      
-    }
+    // TODO: handle cards that are a Vassal right now
+    $empireCard->resolveRegimeChange($player, $isCampaign, $isCampaign ?
+      Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard() :
+      null);
+
+    // if ($isInThrone) {
+    //   // Comes with bishop and queen
+    //   if ($isCampaign) {
+    //     $empireCard->vassalage($player, Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard());
+    //   } else {
+    //     $empireCard->moveToTableau($player); 
+    //   }
+    // } else if ($isInEnemeyTableau) {
+    //   // Discard bishop, queen, vassals
+    //   $empireCard->discardBishopQueenVassals($player);
+    //   if ($isCampaign) {
+    //     $empireCard->vassalage($player, Empires::get($parentInfo['data']['attackingEmpireId']));
+    //   } else {
+    //     $empireCard->moveToTableau($player);
+    //   }
+    // } else if ($isInOwnTableau) {
+    //   // Flip card to republic, discard bishop, queen vassals
+    //   $empireCard->discardBishopQueenVassals($player, $empireCard);
+    //   $empireCard->flip($player);
+    // }
 
     $this->resolveAction([]);
   }
@@ -93,17 +104,5 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function discardBishopQueenVassals($player, $empireCard) {
-    $tokens = $empireCard->getTokens();
-    // Note should never be more than 1 bishop
-    foreach($tokens as $token) {
-      if ($token->getType() !== BISHOP) {
-        continue;
-      }
-      $token->returnToSupply(RETURN_TO_SUPPLY, $player);
-    }
 
-    // TODO: discard queen
-    // TODO: return Vassals
-  }
 }

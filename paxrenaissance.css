@@ -563,6 +563,13 @@
   gap: 2px;
 }
 
+.pr_vassals_container {
+  position: relative;
+  top: calc(var(--paxRenCardScale) * 82px);
+  left: 0px;
+  width: calc(var(--paxRenCardScale) * 151px);
+}
+
 /* ------- EAST CARDS ------- */
 .pr_card[data-card-id=PREN058] {
   background-image: url("img/east_cards1.webp");

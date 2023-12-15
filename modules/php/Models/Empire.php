@@ -7,6 +7,7 @@ use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Managers\Borders;
+use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Players;
@@ -93,6 +94,11 @@ class Empire implements \JsonSerializable
       });
     }
     return $cities;
+  }
+
+  public function getEmpireCard()
+  {
+    return Cards::get($this->empireSquareId);
   }
 
   public function getEmpireSquareId()

@@ -38,4 +38,8 @@ abstract class Locations extends \APP_DbObject
   {
     return 'throne_' . $empireId;
   }
+
+  public static function vassal($cardId) {
+    return 'vassals_'. $cardId;
+  }
 }

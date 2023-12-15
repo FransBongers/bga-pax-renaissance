@@ -33,6 +33,7 @@ interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
 interface NotifFlipEmpireCardArgs extends NotifWithPlayerArgs {
   card: EmpireCard;
   tkn_cardName: string;
+  formerSuzerain: EmpireCard | null;
 }
 
 interface NotifFlipVictoryCardArgs extends NotifWithPlayerArgs {
@@ -44,8 +45,15 @@ interface NotifReturnToSupplyArgs extends NotifWithPlayerArgs {
   token: Token;
 }
 
+interface EmpireCardOriginData {
+  suzerain: EmpireCard | null;
+  wasRepublic: boolean;
+  previousOwnerId: number | null;
+}
+
 interface NotifMoveEmpireSquareArgs extends NotifWithPlayerArgs {
   card: EmpireCard;
+  from: EmpireCardOriginData;
 }
 
 interface NotifMoveTokenArgs extends NotifWithPlayerArgs {
@@ -123,4 +131,10 @@ interface NotifTradeFairProfitDispersalPiratesArgs {
 
 interface NotifTradeFairProfitDispersalPlayerArgs extends NotifWithPlayerArgs {
   region: string;
+}
+
+interface NotifVassalageArgs extends NotifWithPlayerArgs {
+  vassal: EmpireCard;
+  suzerain: EmpireCard;
+  from: EmpireCardOriginData;
 }

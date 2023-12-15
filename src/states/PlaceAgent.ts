@@ -15,13 +15,15 @@ class PlaceAgentState implements State {
     debug("Leaving PlaceAgentState");
   }
 
-  setDescription(activePlayerId: number) {
+  setDescription(activePlayerId: number, args: OnEnteringPlaceAgentsArgs) {
+    this.args = args;
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may place Agents"),
+      text: _("${tkn_playerName} may place ${tkn_mapToken}"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
           .getName(),
+          tkn_mapToken: this.createMapTokenId(),
       },
       nonActivePlayers: true,
     });
@@ -141,7 +143,7 @@ class PlaceAgentState implements State {
         .getBank();
       id = `${bank}_pawn`;
     } else {
-      id = `${agent.religion}_${agent.type}`;
+      id = `${agent.separator}_${agent.type}`;
     }
     return id;
   }

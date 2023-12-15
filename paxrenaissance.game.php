@@ -123,6 +123,7 @@ class PaxRenaissance extends Table
 
         $data = [
             'canceledNotifIds' => Log::getCanceledNotifIds(),
+            'empireSquares' => Cards::getAllEmpireSquares(),
             'gameMap' => MapBoard::getUiData(),
             'market' => Market::getUiData(),
             'players' => Players::getUiData($playerId),

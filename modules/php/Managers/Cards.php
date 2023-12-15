@@ -64,6 +64,11 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
       ->get();
   }
 
+  public static function getAllEmpireSquares()
+  {
+    return self::get(EMPIRE_SQUARE_IDS)->toArray();
+  }
+
   // public static function getOfTypeInLocation($type, $location)
   // {
   //   return self::getSelectQuery()

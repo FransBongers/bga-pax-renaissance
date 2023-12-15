@@ -90,7 +90,7 @@ class PlayerActionState implements State {
 
   private updateInterfaceOnClickHandCard({ card }: { card: TableauCard }) {
     this.game.clearPossible();
-    this.game.setCardSelected({id: card.id});
+    this.game.setCardSelected({ id: card.id });
     // const node = document.getElementById(`${card.id.split("_")[0]}-front`);
     // if (node) {
     //   node.classList.add(PR_SELECTED);
@@ -154,24 +154,23 @@ class PlayerActionState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private addActionButtons()
-  {
+  private addActionButtons() {
     REGIONS.forEach((region) => {
       if (Object.keys(this.args.availableOps[region]).length > 0) {
         this.game.addPrimaryActionButton({
           id: `${region}_ops_btn`,
-          text: region === EAST ? _('Tableau Ops East') : _('Tableau Ops West'),
+          text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
           callback: () =>
-          this.game.takeAction({
-            action: "actPlayerAction",
-            args: {
-              action: `tableauOps`,
-              region,
-            },
-          }),
-        })
+            this.game.takeAction({
+              action: "actPlayerAction",
+              args: {
+                action: `tableauOps`,
+                region,
+              },
+            }),
+        });
       }
-    })
+    });
   }
 
   private addTest() {
@@ -184,14 +183,57 @@ class PlayerActionState implements State {
           .getEmpireSquareStock({ empireId: ENGLAND })
           .getCards()[0];
         console.log("card", card);
-        this.game.gameMap
-          .getEmpireSquareStock({ empireId: ENGLAND })
-          .flipCard(card);
-        // card.location = 'tableau_west';
-        // this.game.playerManager.getPlayers()[0].tableau.addCard(card);
+
+        const node = document.getElementById('EmpireSquare_Aragon');
+        console.log('node', node);
+        node.style.minHeight = `calc(var(--paxRenCardScale) * ${2 * 151}px)`;
+
+        console.log(this.game.tableauCardManager.vassalStocks);
+      this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
+      },
+    });
+
+
+    this.game.addPrimaryActionButton({
+      text: "Test2",
+      id: "test2_button",
+      callback: () => {
+        console.log("Testing");
+        const card = this.game.gameMap
+          .getEmpireSquareStock({ empireId: HOLY_ROMAN_EMIRE })
+          .getCards()[0];
+        console.log("card", card);
+
+        const node = document.getElementById('EmpireSquare_Aragon');
+        console.log('node', node);
+        node.style.minHeight = `calc(var(--paxRenCardScale) * ${3 * 151}px)`;
+
+        console.log(this.game.tableauCardManager.vassalStocks);
+      this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
+      },
+    });
+
+
+    this.game.addPrimaryActionButton({
+      text: "Test3",
+      id: "test3_button",
+      callback: () => {
+        console.log("Testing");
+        const card = this.game.gameMap
+          .getEmpireSquareStock({ empireId: HUNGARY })
+          .getCards()[0];
+        console.log("card", card);
+
+        const node = document.getElementById('EmpireSquare_Aragon');
+        console.log('node', node);
+        node.style.minHeight = `calc(var(--paxRenCardScale) * ${4 * 151}px)`;
+
+        console.log(this.game.tableauCardManager.vassalStocks);
+      this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
       },
     });
   }
+
 
   private updatePageTitle() {
     const remainingActions = this.args.remainingActions;

@@ -1,5 +1,5 @@
 var MIN_PLAY_AREA_WIDTH = 1516;
-var CLIENT_START_TRADE_FAIR_STATE = 'clientStartTradeFairState';
+var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -15,40 +15,33 @@ var DISABLED = "disabled";
 var PR_NONE = "pr_none";
 var PR_SELECTABLE = "pr_selectable";
 var PR_SELECTED = "pr_selected";
-var DISCARD = 'discard';
-var FUGGER = 'fugger';
-var MEDICI = 'medici';
-var COEUR = 'coeur';
-var MARCHIONNI = 'marchionni';
+var DISCARD = "discard";
+var FUGGER = "fugger";
+var MEDICI = "medici";
+var COEUR = "coeur";
+var MARCHIONNI = "marchionni";
 var WEST = "west";
 var EAST = "east";
-var REGIONS = [
-    WEST,
-    EAST,
-];
+var REGIONS = [WEST, EAST];
 var EMPIRE_CARD = "empireCard";
 var TABLEAU_CARD = "tableauCard";
 var VICTORY_CARD = "victoryCard";
-var KING = 'king';
-var REPUBLIC = 'republic';
-var BISHOP = 'bishop';
-var DISK = 'disk';
-var KNIGHT = 'knight';
-var PAWN = 'pawn';
-var PIRATE = 'pirate';
-var ROOK = 'rook';
-var MEDIEVAL = 'medieval';
+var KING = "king";
+var REPUBLIC = "republic";
+var BISHOP = "bishop";
+var DISK = "disk";
+var KNIGHT = "knight";
+var PAWN = "pawn";
+var PIRATE = "pirate";
+var ROOK = "rook";
+var MEDIEVAL = "medieval";
 var CATHOLIC = "catholic";
 var ISLAMIC = "islamic";
 var REFORMIST = "reformist";
-var RELIGIONS = [
-    CATHOLIC,
-    ISLAMIC,
-    REFORMIST
-];
-var DISCOVERY = 'discovery';
-var LAW = 'law';
-var PATRON = 'patron';
+var RELIGIONS = [CATHOLIC, ISLAMIC, REFORMIST];
+var DISCOVERY = "discovery";
+var LAW = "law";
+var PATRON = "patron";
 var ENGLAND = "england";
 var FRANCE = "france";
 var HOLY_ROMAN_EMIRE = "holyRomanEmpire";
@@ -59,19 +52,31 @@ var ARAGON = "aragon";
 var PAPAL_STATES = "papalStates";
 var OTTOMAN = "ottoman";
 var MAMLUK = "mamluk";
-var BORDER_ARAGON_FRANCE = 'border_aragon_france';
-var BORDER_ARAGON_PAPAL_STATES = 'border_aragon_papalStates';
-var BORDER_ARAGON_PORTUGAL = 'border_aragon_portugal';
-var BORDER_BYZANTIUM_HUNGARY = 'border_byzantium_hungary';
-var BORDER_BYZANTIUM_MAMLUK = 'border_byzantium_mamluk';
-var BORDER_ENGLAND_FRANCE = 'border_england_france';
-var BORDER_ENGLAND_PORTUGAL = 'border_england_portugal';
-var BORDER_FRANCE_HOLY_ROMAN_EMPIRE = 'border_france_holyRomanEmpire';
-var BORDER_HOLY_ROMAN_EMPIRE_HUNGARY = 'border_holyRomanEmpire_hungary';
-var BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES = 'border_holyRomanEmpire_papalStates';
-var BORDER_HUNGARY_OTTOMAN = 'border_hungary_ottoman';
-var BORDER_MAMLUK_OTTOMAN = 'border_mamluk_ottoman';
-var BORDER_OTTOMAN_PAPAL_STATES = 'border_ottoman_papalStates';
+var EMPIRES = [
+    ENGLAND,
+    FRANCE,
+    HOLY_ROMAN_EMIRE,
+    HUNGARY,
+    BYZANTIUM,
+    PORTUGAL,
+    ARAGON,
+    PAPAL_STATES,
+    OTTOMAN,
+    MAMLUK,
+];
+var BORDER_ARAGON_FRANCE = "border_aragon_france";
+var BORDER_ARAGON_PAPAL_STATES = "border_aragon_papalStates";
+var BORDER_ARAGON_PORTUGAL = "border_aragon_portugal";
+var BORDER_BYZANTIUM_HUNGARY = "border_byzantium_hungary";
+var BORDER_BYZANTIUM_MAMLUK = "border_byzantium_mamluk";
+var BORDER_ENGLAND_FRANCE = "border_england_france";
+var BORDER_ENGLAND_PORTUGAL = "border_england_portugal";
+var BORDER_FRANCE_HOLY_ROMAN_EMPIRE = "border_france_holyRomanEmpire";
+var BORDER_HOLY_ROMAN_EMPIRE_HUNGARY = "border_holyRomanEmpire_hungary";
+var BORDER_HOLY_ROMAN_EMPIRE_PAPAL_STATES = "border_holyRomanEmpire_papalStates";
+var BORDER_HUNGARY_OTTOMAN = "border_hungary_ottoman";
+var BORDER_MAMLUK_OTTOMAN = "border_mamluk_ottoman";
+var BORDER_OTTOMAN_PAPAL_STATES = "border_ottoman_papalStates";
 var BORDERS = [
     BORDER_ARAGON_FRANCE,
     BORDER_ARAGON_PAPAL_STATES,
@@ -2173,25 +2178,31 @@ var TableauCardManager = (function (_super) {
     function TableauCardManager(game) {
         var _this = _super.call(this, game, {
             getId: function (card) { return card.id; },
-            setupDiv: function (card, div) {
-                if (card.type === TABLEAU_CARD) {
-                    div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-                    div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-                }
-                else {
-                    div.style.width = "calc(var(--paxRenCardScale) * 151px)";
-                    div.style.height = "calc(var(--paxRenCardScale) * 151px)";
-                }
-                div.insertAdjacentHTML('beforeend', tplTokensContainer({ id: card.id }));
-            },
+            setupDiv: function (card, div) { return _this.setupDiv(card, div); },
             setupFrontDiv: function (card, div) { return _this.setupFrontDiv(card, div); },
             setupBackDiv: function (card, div) { return _this.setupBackDiv(card, div); },
             isCardVisible: function (card) { return _this.isCardVisible(card); },
             animationManager: game.animationManager,
         }) || this;
         _this.game = game;
+        _this.vassalStocks = {};
         return _this;
     }
+    TableauCardManager.prototype.setupDiv = function (card, div) {
+        if (card.type === TABLEAU_CARD) {
+            div.style.width = "calc(var(--paxRenCardScale) * 151px)";
+            div.style.height = "calc(var(--paxRenCardScale) * 230px)";
+        }
+        else {
+            div.style.minWidth = "calc(var(--paxRenCardScale) * 151px)";
+            div.style.minHeight = "calc(var(--paxRenCardScale) * 151px)";
+        }
+        div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
+        if (card.type === EMPIRE_CARD) {
+            div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
+            this.vassalStocks[card.empire] = new LineStock(this, document.getElementById("vassals_".concat(card.id)), { gap: "12px", sort: sortFunction('state') });
+        }
+    };
     TableauCardManager.prototype.setupFrontDiv = function (card, div) {
         if (card.type === TABLEAU_CARD) {
             div.classList.add("pr_card");
@@ -2239,11 +2250,36 @@ var TableauCardManager = (function (_super) {
         }
         return true;
     };
+    TableauCardManager.prototype.addVassal = function (_a) {
+        var vassal = _a.vassal, suzerain = _a.suzerain;
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_b) {
+                this.updateEmpireCardHeight({ card: suzerain, vassalChange: 1 });
+                this.vassalStocks[suzerain.empire].addCard(vassal);
+                return [2];
+            });
+        });
+    };
+    TableauCardManager.prototype.removeVassal = function (_a) {
+        var suzerain = _a.suzerain;
+        this.updateEmpireCardHeight({ card: suzerain, vassalChange: -1 });
+    };
+    TableauCardManager.prototype.updateEmpireCardHeight = function (_a) {
+        var card = _a.card, vassalChange = _a.vassalChange;
+        var empire = card.empire;
+        var numberOfVassals = this.vassalStocks[empire].getCards().length + vassalChange;
+        var node = document.getElementById(card.id);
+        node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat((numberOfVassals + 1) * 151 + numberOfVassals * 12, "px)");
+    };
     return TableauCardManager;
 }(CardManager));
 var tplTokensContainer = function (_a) {
     var id = _a.id;
     return "\n  <div id=\"".concat(id, "_tokens\" class=\"pr_card_tokens_container\"></div>");
+};
+var tplVassalsContainer = function (_a) {
+    var id = _a.id;
+    return "\n  <div id=\"vassals_".concat(id, "\" class=\"pr_vassals_container\"></div>");
 };
 var VictoryCardManager = (function (_super) {
     __extends(VictoryCardManager, _super);
@@ -3373,6 +3409,7 @@ var NotificationManager = (function () {
             ["tradeFairEmporiumSubsidy", undefined],
             ["tradeFairProfitDispersalPirates", undefined],
             ["tradeFairProfitDispersalPlayer", undefined],
+            ["vassalage", undefined],
         ];
         notifs.forEach(function (notif) {
             _this.subscriptions.push(dojo.subscribe(notif[0], _this, function (notifDetails) {
@@ -3403,7 +3440,10 @@ var NotificationManager = (function () {
             var empire;
             return __generator(this, function (_a) {
                 empire = notif.args.empire;
-                this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: MEDIEVAL });
+                this.game.gameMap.setEmpireReligion({
+                    empireId: empire.id,
+                    religion: MEDIEVAL,
+                });
                 return [2];
             });
         });
@@ -3437,19 +3477,27 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_flipEmpireCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card, oldSide, player;
+            var _a, playerId, card, formerSuzerain, oldSide, player;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, card = _a.card;
-                oldSide = card.side === REPUBLIC ? KING : REPUBLIC;
-                player = this.getPlayer({ playerId: playerId });
-                card[oldSide].prestige.forEach(function (prestige) {
-                    player.counters.prestige[prestige].incValue(-1);
-                });
-                this.game.tableauCardManager.updateCardInformations(card);
-                card[card.side].prestige.forEach(function (prestige) {
-                    player.counters.prestige[prestige].incValue(1);
-                });
-                return [2];
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, card = _a.card, formerSuzerain = _a.formerSuzerain;
+                        oldSide = card.side === REPUBLIC ? KING : REPUBLIC;
+                        player = this.getPlayer({ playerId: playerId });
+                        this.removePrestige({ prestige: card[oldSide].prestige, player: player });
+                        if (!(formerSuzerain !== null)) return [3, 2];
+                        this.game.tableauCardManager.removeVassal({ suzerain: formerSuzerain });
+                        return [4, player.tableau.addCard(card)];
+                    case 1:
+                        _b.sent();
+                        return [3, 3];
+                    case 2:
+                        this.game.tableauCardManager.updateCardInformations(card);
+                        _b.label = 3;
+                    case 3:
+                        this.addPrestige({ prestige: card[card.side].prestige, player: player });
+                        return [2];
+                }
             });
         });
     };
@@ -3465,18 +3513,17 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_moveEmpireSquare = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card;
-            var _this = this;
+            var _a, playerId, card, from, player;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, playerId = _a.playerId, card = _a.card;
-                        return [4, this.getPlayer({ playerId: playerId }).tableau.addCard(card)];
+                        _a = notif.args, playerId = _a.playerId, card = _a.card, from = _a.from;
+                        this.handleEmpireSquareOririnData({ card: card, from: from });
+                        player = this.getPlayer({ playerId: playerId });
+                        return [4, player.tableau.addCard(card)];
                     case 1:
                         _b.sent();
-                        card[card.side].prestige.forEach(function (prestige) {
-                            return _this.getPlayer({ playerId: playerId }).counters.prestige[prestige].incValue(1);
-                        });
+                        this.addPrestige({ prestige: card[card.side].prestige, player: player });
                         return [2];
                 }
             });
@@ -3490,7 +3537,9 @@ var NotificationManager = (function () {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, token = _a.token;
                         tokenNode = document.getElementById(token.id);
-                        node = document.getElementById(token['type'] === BISHOP ? "".concat(token.location, "_tokens") : "pr_".concat(token.location));
+                        node = document.getElementById(token["type"] === BISHOP
+                            ? "".concat(token.location, "_tokens")
+                            : "pr_".concat(token.location));
                         if (!tokenNode) return [3, 2];
                         return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), node)];
                     case 1:
@@ -3825,11 +3874,50 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_vassalage = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, from, vassal, suzerain, playerId, player;
+            return __generator(this, function (_b) {
+                _a = notif.args, from = _a.from, vassal = _a.vassal, suzerain = _a.suzerain, playerId = _a.playerId;
+                this.handleEmpireSquareOririnData({ from: from, card: vassal });
+                this.game.tableauCardManager.addVassal({ vassal: vassal, suzerain: suzerain });
+                player = this.getPlayer({ playerId: playerId });
+                this.addPrestige({ player: player, prestige: vassal[vassal.side].prestige });
+                return [2];
+            });
+        });
+    };
     NotificationManager.prototype.notif_smallRefreshInterface = function (notif) {
         var updatedGamedatas = __assign(__assign({}, this.game.gamedatas), notif.args);
         this.game.clearInterface();
         this.game.gamedatas = updatedGamedatas;
         this.game.playerManager.updatePlayers({ gamedatas: updatedGamedatas });
+    };
+    NotificationManager.prototype.handleEmpireSquareOririnData = function (_a) {
+        var card = _a.card, from = _a.from;
+        var suzerain = from.suzerain, previousOwnerId = from.previousOwnerId, wasRepublic = from.wasRepublic;
+        if (suzerain && previousOwnerId) {
+            this.game.tableauCardManager.removeVassal({ suzerain: suzerain });
+        }
+        if (previousOwnerId) {
+            var previousOwner = this.getPlayer({ playerId: previousOwnerId });
+            this.removePrestige({
+                player: previousOwner,
+                prestige: card[wasRepublic ? REPUBLIC : KING].prestige,
+            });
+        }
+    };
+    NotificationManager.prototype.addPrestige = function (_a) {
+        var player = _a.player, prestige = _a.prestige;
+        prestige.forEach(function (prestige) {
+            player.counters.prestige[prestige].incValue(1);
+        });
+    };
+    NotificationManager.prototype.removePrestige = function (_a) {
+        var player = _a.player, prestige = _a.prestige;
+        prestige.forEach(function (prestige) {
+            player.counters.prestige[prestige].incValue(-1);
+        });
     };
     NotificationManager.prototype.destroy = function () {
         dojo.forEach(this.subscriptions, dojo.unsubscribe);
@@ -4084,6 +4172,7 @@ var PlayerTableau = (function () {
         this.setup({ player: player });
     }
     PlayerTableau.prototype.setup = function (_a) {
+        var _this = this;
         var player = _a.player;
         document
             .getElementById("pr_player_tableau_".concat(player.id))
@@ -4094,10 +4183,10 @@ var PlayerTableau = (function () {
                 color: player.color,
             })),
         }));
-        this.tableauEast = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state") });
-        this.tableauWest = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state") });
-        this.tableauEast.addCards(player.tableau.cards[EAST]);
-        this.tableauWest.addCards(player.tableau.cards[WEST]);
+        this.tableauEast = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state"), gap: "12px" });
+        this.tableauWest = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state"), gap: "12px" });
+        this.tableauEast.addCards(player.tableau.cards[EAST].filter(function (card) { return card.type === TABLEAU_CARD || !card.isVassal; }));
+        this.tableauWest.addCards(player.tableau.cards[WEST].filter(function (card) { return card.type === TABLEAU_CARD || !card.isVassal; }));
         player.tableau.tokens.forEach(function (token) {
             var location = token.location;
             var node = document.getElementById("".concat(location, "_tokens"));
@@ -4106,13 +4195,19 @@ var PlayerTableau = (function () {
             }
             node.insertAdjacentHTML("beforeend", tplToken(token));
         });
+        __spreadArray(__spreadArray([], player.tableau.cards[EAST], true), player.tableau.cards[WEST], true).filter(function (card) { return card.type === EMPIRE_CARD && card.isVassal; })
+            .forEach(function (card) {
+            _this.game.tableauCardManager.addVassal({
+                vassal: card,
+                suzerain: _this.game.gamedatas.empireSquares.find(function (empireCard) { return empireCard.id === card.suzerainId; }),
+            });
+        });
     };
     PlayerTableau.prototype.addCard = function (card) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log("location", card.location);
                         if (!(card.location.split("_")[1] === EAST)) return [3, 2];
                         return [4, this.tableauEast.addCard(card)];
                     case 1:
@@ -4783,13 +4878,15 @@ var PlaceAgentState = (function () {
     PlaceAgentState.prototype.onLeavingState = function () {
         debug("Leaving PlaceAgentState");
     };
-    PlaceAgentState.prototype.setDescription = function (activePlayerId) {
+    PlaceAgentState.prototype.setDescription = function (activePlayerId, args) {
+        this.args = args;
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} may place Agents"),
+            text: _("${tkn_playerName} may place ${tkn_mapToken}"),
             args: {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
                     .getName(),
+                tkn_mapToken: this.createMapTokenId(),
             },
             nonActivePlayers: true,
         });
@@ -4869,7 +4966,7 @@ var PlaceAgentState = (function () {
             id = "".concat(bank, "_pawn");
         }
         else {
-            id = "".concat(agent.religion, "_").concat(agent.type);
+            id = "".concat(agent.separator, "_").concat(agent.type);
         }
         return id;
     };
@@ -5037,7 +5134,7 @@ var PlayerActionState = (function () {
             if (Object.keys(_this.args.availableOps[region]).length > 0) {
                 _this.game.addPrimaryActionButton({
                     id: "".concat(region, "_ops_btn"),
-                    text: region === EAST ? _('Tableau Ops East') : _('Tableau Ops West'),
+                    text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
                     callback: function () {
                         return _this.game.takeAction({
                             action: "actPlayerAction",
@@ -5062,9 +5159,43 @@ var PlayerActionState = (function () {
                     .getEmpireSquareStock({ empireId: ENGLAND })
                     .getCards()[0];
                 console.log("card", card);
-                _this.game.gameMap
-                    .getEmpireSquareStock({ empireId: ENGLAND })
-                    .flipCard(card);
+                var node = document.getElementById('EmpireSquare_Aragon');
+                console.log('node', node);
+                node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(2 * 151, "px)");
+                console.log(_this.game.tableauCardManager.vassalStocks);
+                _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
+            },
+        });
+        this.game.addPrimaryActionButton({
+            text: "Test2",
+            id: "test2_button",
+            callback: function () {
+                console.log("Testing");
+                var card = _this.game.gameMap
+                    .getEmpireSquareStock({ empireId: HOLY_ROMAN_EMIRE })
+                    .getCards()[0];
+                console.log("card", card);
+                var node = document.getElementById('EmpireSquare_Aragon');
+                console.log('node', node);
+                node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(3 * 151, "px)");
+                console.log(_this.game.tableauCardManager.vassalStocks);
+                _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
+            },
+        });
+        this.game.addPrimaryActionButton({
+            text: "Test3",
+            id: "test3_button",
+            callback: function () {
+                console.log("Testing");
+                var card = _this.game.gameMap
+                    .getEmpireSquareStock({ empireId: HUNGARY })
+                    .getCards()[0];
+                console.log("card", card);
+                var node = document.getElementById('EmpireSquare_Aragon');
+                console.log('node', node);
+                node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(4 * 151, "px)");
+                console.log(_this.game.tableauCardManager.vassalStocks);
+                _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
             },
         });
     };

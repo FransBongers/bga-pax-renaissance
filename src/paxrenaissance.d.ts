@@ -33,10 +33,7 @@ interface PaxRenaissanceGame extends Game {
     callback: (props: { id: string }) => void;
     back?: boolean;
   }) => void;
-  setCardSelected: (props: {
-    id: string;
-    back?: boolean;
-  }) => void;
+  setCardSelected: (props: { id: string; back?: boolean }) => void;
   setLocationSelectable: (props: {
     id: string;
     callback: (props: { id: string }) => void;
@@ -70,7 +67,7 @@ interface PaxRenaissanceGame extends Game {
 interface Border {
   id: string;
   name: string;
-  type: 'border';
+  type: "border";
 }
 
 interface City {
@@ -79,7 +76,7 @@ interface City {
   emporium: string | null;
   id: string;
   name: string;
-  type: 'city';
+  type: "city";
 }
 
 interface Empire {
@@ -100,18 +97,39 @@ interface PaxRenCard {
   used: number;
 }
 
+// TODO: check interface compared to below one
+interface TableauOp {
+  id: string;
+  flavorText: string[];
+  name: string;
+  type: string;
+  top: number;
+  left: number;
+}
+
+interface TableauOpCardData {
+  id: string;
+  flavorText: string;
+  left: number;
+  top: number;
+}
+
 interface EmpireCardSide {
   name: string;
   // flavorText: string[];
   prestige: string[];
+  ops: TableauOpCardData[];
+  agents: Agent[];
 }
 
 interface EmpireCard extends PaxRenCard {
-  side: 'king' | 'republic';
+  empire: string;
+  isVassal: boolean;
+  suzerainId: string | null;
   king: EmpireCardSide;
   republic: EmpireCardSide;
+  side: "king" | "republic";
   type: "empireCard";
-  empire: string;
   // region: "east" | "west";
 }
 
@@ -124,14 +142,7 @@ interface TableauCard extends PaxRenCard {
   type: "tableauCard";
 }
 
-interface TableauOp {
-  id: string;
-  flavorText: string[];
-  name: string;
-  type: string;
-  top: number;
-  left: number;
-}
+
 
 interface VictoryCard extends PaxRenCard {
   titleActive: string;
@@ -144,7 +155,6 @@ interface Agent {
   type: string;
 }
 
-
 interface Token {
   id: string;
   location: string;
@@ -155,6 +165,7 @@ interface Token {
 
 interface PaxRenaissanceGamedatas extends Gamedatas {
   canceledNotifIds: string[];
+  empireSquares: EmpireCard[];
   gameMap: {
     empires: Empire[];
     thrones: {
@@ -225,4 +236,8 @@ interface PaxRenaissancePlayerData extends BgaPlayer {
     };
     tokens: Token[];
   };
+  // vassals: {
+  //   suzerain: EmpireCard;
+  //   vassal: EmpireCard;
+  // }[];
 }

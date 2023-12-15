@@ -324,6 +324,19 @@ const WEST_EMPIRES = [
   PORTUGAL,
 ];
 
+const EMPIRE_SQUARE_IDS = [
+  "EmpireSquare_Aragon",
+  "EmpireSquare_Byzantium",
+  "EmpireSquare_England",
+  "EmpireSquare_France",
+  "EmpireSquare_HolyRomanEmpire",
+  "EmpireSquare_Hungary",
+  "EmpireSquare_Mamluk",
+  "EmpireSquare_Ottoman",
+  "EmpireSquare_PapalStates",
+  "EmpireSquare_Portugal",
+];
+
 /**
  * Map location types
  */

@@ -165,6 +165,7 @@ class GameMap {
       
       );
     });
+
   }
 
   updateGameMap({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {}

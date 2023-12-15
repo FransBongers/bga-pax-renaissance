@@ -52,63 +52,41 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
 
   public function getOptions()
   {
-    
+
     $options = [];
 
-    $tokens = Utils::filter(Tokens::getOfType(BISHOP.'_'.$this->religion), function ($token) {
+    $tokens = Utils::filter(Tokens::getOfType(BISHOP . '_' . $this->religion), function ($token) {
       return $token->getLocation() !== Locations::supply(BISHOP, $this->religion);
     });
 
     if (count($tokens) === 0) {
       return $options;
     }
-    // $players = Players::getAll();
-    $cardsInPlay = array_merge(Cards::getAllCardsInTableaux()->toArray(), Cards::getAllCardsInThrones()->toArray());
-    // foreach($players as $player) {
-    //   $tableausCards = array_merge($tableausCards, $player->getTableauCards());
-    // }
-    // $cardsInThrones = Cards::getAllCardsInThrones();
 
-    foreach($tokens as $token) {
+    $cardsInPlay = array_merge(Cards::getAllCardsInTableaux()->toArray(), Cards::getAllCardsInThrones()->toArray());
+
+    foreach ($tokens as $token) {
       $bishopLocation = $token->getLocation();
       $cardBishopIsOn = Cards::get($bishopLocation);
       $empireIds = $cardBishopIsOn->getAllEmpireIds();
       $destinations = [];
 
-      foreach($cardsInPlay as $card) {
+      foreach ($cardsInPlay as $card) {
         if (in_array($card->getEmpire(), $empireIds) && $card->getId() !== $bishopLocation && !isset($destinations[$card->getId()])) {
           $destinations[$card->getId()] = $card;
         }
       }
 
-      if ($cardBishopIsOn->isInTableau()) {
-        $explodedLocation = explode('_', $cardBishopIsOn->getLocation());
-        $playerId = intval($explodedLocation[2]);
-        $region = $explodedLocation[1];
-        $tableau = Players::get($playerId)->getTableauCardsPerRegion()[$region];
-        Notifications::log('tableau',$tableau);
+      $destinationsInTableau = $this->getDestinationsInTableau($cardBishopIsOn);
 
+      foreach ($destinationsInTableau as $card) {
+        
+        $cardId = $card->getId();
 
-        $cardIndex = Utils::array_find_index($tableau, function ($tableauCard) use ($cardBishopIsOn) {
-          return $tableauCard->getId() === $cardBishopIsOn->getId();
-        });
-        Notifications::log('cardIndex', $cardIndex);
-        if ($cardIndex !== count($tableau) - 1) {
-          $card = $tableau[$cardIndex + 1];
-          $cardId = $card->getId();
-          if (!isset($destinations[$cardId])) {
-            $destinations[$cardId] = $card;
-          }
+        if (isset($destinations[$cardId]) || ($card->getId() === $cardBishopIsOn->getId())) {
+          continue;
         }
-
-        if ($cardIndex !== 0) {
-          $card = $tableau[$cardIndex - 1];
-          $cardId = $card->getId();
-          if (!isset($destinations[$cardId])) {
-            $destinations[$cardId] = $card;
-          }
-        }
-
+        $destinations[$cardId] = $card;
       }
 
       $options[$token->getId()] = [
@@ -116,27 +94,74 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
         'destinations' => array_values($destinations),
       ];
     }
+    return $options;
+  }
 
-    // foreach ($empireIds as $empireId) {
-    //   $empire = Empires::get($empireId);
+  /**
+   * If in tableau
+   * - may move to any vassal / suzerain if on vassal or suzerain
+   */
+  private function getDestinationsInTableau($cardBishopIsOn)
+  {
+    // return [];
+    if (!$cardBishopIsOn->isInTableau()) {
+      return [];
+    }
+    $tableauDestinations = [];
 
-    //   $cities = $empire->getCities();
-    //   foreach ($cities as $city) {
-    //     $token = $city->getToken();
-    //     if ($token !== null && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
+    $explodedLocation = explode('_', $cardBishopIsOn->getLocation());
+    $playerIdTableau = intval($explodedLocation[2]);
+    $region = $explodedLocation[1];
 
-    //   $borders = $empire->getBorders();
-    //   foreach ($borders as $border) {
-    //     $token = $border->getToken();
-    //     if ($token !== null && !isset($options[$token->getId()]) && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-    //       $options[$token->getId()] = $token;
-    //     }
-    //   }
-    // }
+    // Get all card in tableau and filter out Vassals so we get correct order in tableau
+    $tableau = Utils::filter(Players::get($playerIdTableau)->getTableauCardsPerRegion()[$region], function ($cardInTableau) {
+      return $cardInTableau->getType() === TABLEAU_CARD || !$cardInTableau->isVassal();
+    });
 
+    // Use suzerain index to determine position in tableau if card is vassal
+    $cardToUseForIndex = $cardBishopIsOn->isVassal() ? $cardBishopIsOn->getSuzerain() : $cardBishopIsOn;
+
+    $cardIndex = Utils::array_find_index($tableau, function ($tableauCard) use ($cardToUseForIndex) {
+      return $tableauCard->getId() === $cardToUseForIndex->getId();
+    });
+
+    // Add card to left (including vassals / suzerain)
+    if ($cardIndex !== count($tableau) - 1) {
+      $tableauDestinations = array_merge($tableauDestinations, $this->getOptionsForCard($tableau, $cardIndex + 1));
+    }
+
+    // Add card to right (including vassals / suzerain)
+    if ($cardIndex !== 0) {
+      $tableauDestinations = array_merge($tableauDestinations, $this->getOptionsForCard($tableau, $cardIndex - 1));
+    }
+
+    // If vassal / suzerain add all options
+    if ($cardBishopIsOn->getType() === TABLEAU_CARD) {
+      return $tableauDestinations;
+    }
+
+
+    if ($cardBishopIsOn->isVassal()) {
+      $suzerain = $cardBishopIsOn->getSuzerain();
+      $vassals = $suzerain->getVassals();
+      $tableauDestinations[] = $suzerain;
+      $tableauDestinations = array_merge($tableauDestinations, $vassals);
+    } else if ($cardBishopIsOn->isSuzerain()) {
+      $tableauDestinations = array_merge($tableauDestinations, $cardBishopIsOn->getVassals());
+    }
+    return $tableauDestinations;
+  }
+
+  private function getOptionsForCard($tableau, $index)
+  {
+    $options = [];
+    $card = $tableau[$index];
+    $options[] = $card;
+    if ($card->getType() === TABLEAU_CARD) {
+      return $options;
+    }
+    $vassals = $card->getVassals();
+    $options = array_merge($options, $vassals);
     return $options;
   }
 }
