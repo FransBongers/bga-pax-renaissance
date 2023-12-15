@@ -195,7 +195,7 @@ class EmpireCard extends Card
       return null;
     }
     $suzerain = Cards::get($suzerainId);
-    Notifications::log('suzerain', $suzerain);
+    // Notifications::log('suzerain', $suzerain);
     return $suzerain;
   }
 

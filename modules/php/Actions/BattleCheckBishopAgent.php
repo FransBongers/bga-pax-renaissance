@@ -53,7 +53,6 @@ class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
 
   public function stBattleCheckBishopAgent()
   {
-    Notifications::log('stBattleCheckBishopAgent', []);
     $parentInfo = $this->ctx->getParent()->getInfo();
     $player = self::getPlayer();
 

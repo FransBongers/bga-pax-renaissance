@@ -50,6 +50,7 @@ class PlayerActionState implements State {
     this.setMarketCardsSelectable();
     this.setHandCardsSelectable();
     this.setTradeFairSelectable();
+    this.setVictoryCardsSelectable();
     this.addActionButtons();
     // this.addTest();
   }
@@ -184,15 +185,14 @@ class PlayerActionState implements State {
           .getCards()[0];
         console.log("card", card);
 
-        const node = document.getElementById('EmpireSquare_Aragon');
-        console.log('node', node);
+        const node = document.getElementById("EmpireSquare_Aragon");
+        console.log("node", node);
         node.style.minHeight = `calc(var(--paxRenCardScale) * ${2 * 151}px)`;
 
         console.log(this.game.tableauCardManager.vassalStocks);
-      this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
+        this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
       },
     });
-
 
     this.game.addPrimaryActionButton({
       text: "Test2",
@@ -204,15 +204,14 @@ class PlayerActionState implements State {
           .getCards()[0];
         console.log("card", card);
 
-        const node = document.getElementById('EmpireSquare_Aragon');
-        console.log('node', node);
+        const node = document.getElementById("EmpireSquare_Aragon");
+        console.log("node", node);
         node.style.minHeight = `calc(var(--paxRenCardScale) * ${3 * 151}px)`;
 
         console.log(this.game.tableauCardManager.vassalStocks);
-      this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
+        this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
       },
     });
-
 
     this.game.addPrimaryActionButton({
       text: "Test3",
@@ -224,16 +223,15 @@ class PlayerActionState implements State {
           .getCards()[0];
         console.log("card", card);
 
-        const node = document.getElementById('EmpireSquare_Aragon');
-        console.log('node', node);
+        const node = document.getElementById("EmpireSquare_Aragon");
+        console.log("node", node);
         node.style.minHeight = `calc(var(--paxRenCardScale) * ${4 * 151}px)`;
 
         console.log(this.game.tableauCardManager.vassalStocks);
-      this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
+        this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
       },
     });
   }
-
 
   private updatePageTitle() {
     const remainingActions = this.args.remainingActions;
@@ -308,6 +306,25 @@ class PlayerActionState implements State {
             .setClientState<OnEnteringClientStartTradeFairArgs>(
               CLIENT_START_TRADE_FAIR_STATE,
               { args: this.args.tradeFair[region] }
+            ),
+      });
+    });
+  }
+
+  private setVictoryCardsSelectable() {
+    this.args.declarableVictories.forEach((victoryCard) => {
+      this.game.setCardSelectable({
+        id: victoryCard.id,
+        callback: () =>
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientDeclareVictoryArgs>(
+              CLIENT_DECLARE_VICTORY_STATE,
+              {
+                args: {
+                  victoryCard,
+                },
+              }
             ),
       });
     });

@@ -25,7 +25,7 @@ class FlipVictoryCard extends \PaxRenaissance\Models\AtomicAction
 
     $data = [
       'victoryCards' => Utils::filter($cards, function ($card) {
-        return $card->getUsed() == 0;
+        return !$card->isActive();
       })
     ];
 
@@ -47,7 +47,7 @@ class FlipVictoryCard extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("Not allowed to flip victory card");
     }
 
-    $card->setState(1);
+    $card->setActive();
     $player = self::getPlayer();
 
     Notifications::flipVictoryCard($player, Cards::get($cardId));

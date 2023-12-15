@@ -32,7 +32,6 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
     $player = self::getPlayer();
 
     $card = Cards::get($cardId);
-    Notifications::log('played card', $card);
     if ($card === null || $card->getLocation() !== Locations::hand($player->getId())) {
       throw new \feException("Not allowed to purchase card");
     }

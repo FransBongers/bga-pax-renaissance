@@ -21,9 +21,17 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
     return ST_PLAYER_ACTION;
   }
 
+    // ....###....########...######....######.
+  // ...##.##...##.....##.##....##..##....##
+  // ..##...##..##.....##.##........##......
+  // .##.....##.########..##...####..######.
+  // .#########.##...##...##....##........##
+  // .##.....##.##....##..##....##..##....##
+  // .##.....##.##.....##..######....######.
+
   public function argsPlayerAction()
   {
-    $player = Players::get();
+    $player = self::getPlayer();
     $playerId = $player->getId();
     $availableOps = $player->getAvailableOps();
 
@@ -36,6 +44,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
       'cardsPlayerCanSell' => $cardsPlayerCanSell,
       'tradeFair' => Market::getTradeFairs(),
       'availableOps' => $availableOps,
+      'declarableVictories' => $this->getDeclarableVictrories($player),
       '_private' => [
         $playerId => [
           'hello' => 'world'
@@ -48,6 +57,22 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
     return $data;
   }
 
+    //  .########..##..........###....##....##.########.########.
+  //  .##.....##.##.........##.##....##..##..##.......##.....##
+  //  .##.....##.##........##...##....####...##.......##.....##
+  //  .########..##.......##.....##....##....######...########.
+  //  .##........##.......#########....##....##.......##...##..
+  //  .##........##.......##.....##....##....##.......##....##.
+  //  .##........########.##.....##....##....########.##.....##
+
+  // ....###.....######..########.####..#######..##....##
+  // ...##.##...##....##....##.....##..##.....##.###...##
+  // ..##...##..##..........##.....##..##.....##.####..##
+  // .##.....##.##..........##.....##..##.....##.##.##.##
+  // .#########.##..........##.....##..##.....##.##..####
+  // .##.....##.##....##....##.....##..##.....##.##...###
+  // .##.....##..######.....##....####..#######..##....##
+
   // public function actPlayerAction($cardId, $strength)
   public function actPlayerAction($args)
   {
@@ -55,6 +80,17 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
     $parent = $this->ctx->getParent();
     // Notifications::log('actPlayerAction', $args);
     switch ($args['action']) {
+      case 'declareVictory':
+        $this->ctx->insertAsBrother(Engine::buildTree([
+          'children' => [
+            [
+              'action' => DECLARE_VICTORY,
+              'playerId' => $this->ctx->getPlayerId(),
+              'cardId' => $args['cardId'],
+            ]
+          ]
+        ]));
+        break;
       case 'playCard':
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
@@ -122,5 +158,20 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
     // ]));
 
     $this->resolveAction($args);
+  }
+
+    //  .##.....##.########.####.##.......####.########.##....##
+  //  .##.....##....##.....##..##........##.....##.....##..##.
+  //  .##.....##....##.....##..##........##.....##......####..
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  ..#######.....##....####.########.####....##.......##...
+
+  private function getDeclarableVictrories($player)
+  {
+    return Utils::filter(Cards::getVictoryCards(), function ($victoryCard) use ($player) {
+      return $victoryCard->canBeDeclaredByPlayer($player);
+    });
   }
 }

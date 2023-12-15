@@ -121,7 +121,6 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
 
 
     $oneShotOccurs = $args['occurs'];
-    Notifications::log('actAnnounceOneShot', $oneShotOccurs);
 
     $info = $this->ctx->getInfo();
     $cardId = $info['cardId'];

@@ -145,8 +145,13 @@ interface TableauCard extends PaxRenCard {
 
 
 interface VictoryCard extends PaxRenCard {
-  titleActive: string;
-  titleInactive: string;
+  side: 'active' | 'inactive';
+  active: {
+    title: string;
+  };
+  inactive: {
+    title: string;
+  };
   type: "victoryCard";
 }
 

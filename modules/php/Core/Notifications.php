@@ -290,6 +290,14 @@ class Notifications
     ]);
   }
 
+  public static function declareVictory($player,$victoryCard )
+  {
+    self::notifyAll("declareVictory", clienttranslate('${tkn_playerName} declares ${tkn_boldText}'), [
+      'player' => $player,
+      'tkn_boldText' => $victoryCard->getTitle(),
+    ]);
+  }
+
   public static function discardCard($player, $card, $toLocationId, $messageType = DISCARD)
   {
     $messages = [
@@ -323,7 +331,7 @@ class Notifications
     self::notifyAll("flipVictoryCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName}'), [
       'player' => $player,
       'card' => $card,
-      'tkn_cardName' => $card->getTitleActive(),
+      'tkn_cardName' => $card->getTitle(),
     ]);
   }
 
@@ -369,6 +377,11 @@ class Notifications
       'player' => $player,
       'tkn_oneShot' => $oneShot,
     ]);
+  }
+
+  public static function patronVictory()
+  {
+    self::message(clienttranslate('The market cannot be refreshed. Winner is decided by Patron Victory'));
   }
 
   public static function placeToken($player, $token, $fromLocationId, $toLocation = null)

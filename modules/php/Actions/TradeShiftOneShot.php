@@ -55,7 +55,7 @@ class TradeShiftOneShot extends \PaxRenaissance\Models\AtomicAction
     $info = $this->ctx->getInfo();
     $cardId = $info['cardId'];
     $card = Cards::get($cardId);
-    Notifications::log('stTradeShiftOneShot', $info);
+    // Notifications::log('stTradeShiftOneShot', $info);
     $oneShot = $card->getOneShot();
 
     $cityId = OneShots::getTradeShiftLocationMap()[$oneShot];

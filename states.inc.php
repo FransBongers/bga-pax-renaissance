@@ -510,6 +510,22 @@ $machinestates = [
         'type' => 'game',
     ],
 
+    ST_DECLARE_VICTORY => array(
+        "name" => "declareVictory",
+        'description' => '',
+        'descriptionmyturn' => '',
+        'action' => 'stAtomicAction',
+        "type" => "game",
+    ),
+
+    ST_PATRON_VICTORY => array(
+        "name" => "patronVictory",
+        'description' => '',
+        'descriptionmyturn' => '',
+        'action' => 'stAtomicAction',
+        "type" => "game",
+    ),
+
     // // Generic state to change player
     // ST_CHANGE_ACTIVE_PLAYER => [
     //     'name' => ST_CHANGE_ACTIVE_PLAYER_NAME,

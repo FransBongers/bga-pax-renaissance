@@ -80,7 +80,10 @@ const ST_CONFIRM_PARTIAL_TURN = 94;
 
 // const ST_CHANGE_ACTIVE_PLAYER = 95;
 // const ST_CHANGE_ACTIVE_PLAYER_NAME = 'changeActivePlayer';
-const ST_GENERIC_NEXT_PLAYER = 97;
+const ST_GENERIC_NEXT_PLAYER = 95;
+
+const ST_PATRON_VICTORY = 97;
+const ST_DECLARE_VICTORY = 98;
 const ST_END_GAME = 99;
 const ST_END_GAME_NAME = 'gameEnd';
 
@@ -116,7 +119,9 @@ const BATTLE_MAP_CHANGE_RELIGIOUS_WAR = 'BATTLE_MAP_CHANGE_RELIGIOUS_WAR';
 const BATTLE_RESULT = 'BATTLE_RESULT';
 const BISHOP_DIET_OF_WORMS = 'BISHOP_DIET_OF_WORMS';
 const BISHOP_PACIFICATION = 'BISHOP_PACIFICATION';
+const DECLARE_VICTORY = 'DECLARE_VICTORY';
 const FLIP_VICTORY_CARD = 'FLIP_VICTORY_CARD';
+const PATRON_VICTORY = 'PATRON_VICTORY';
 const PLACE_AGENT = 'PLACE_AGENT';
 const PLAYER_ACTION = 'PLAYER_ACTION';
 const PLAY_CARD = 'PLAY_CARD';
@@ -248,6 +253,10 @@ const REGIONS = [
 const EMPIRE_CARD = 'empireCard';
 const TABLEAU_CARD = 'tableauCard';
 const VICTORY_CARD = 'victoryCard';
+
+// State victory card
+const ACTIVE = 'active';
+const INACTIVE = 'inactive';
 
 // Sides for empire cards
 const KING = 'king';

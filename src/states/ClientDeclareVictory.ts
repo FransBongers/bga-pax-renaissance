@@ -1,29 +1,21 @@
-class FlipVictoryCardState implements State {
+class ClientDeclareVictoryState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringFlipVictoryCardArgs;
+  private args: OnEnteringClientDeclareVictoryArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringFlipVictoryCardArgs) {
+  onEnteringState(args: OnEnteringClientDeclareVictoryArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving FlipVictoryCardState");
+    debug("Leaving ClientStartTradeFairState");
   }
 
-  setDescription(activePlayerId: number) {
-    this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must flip an inactive Victory Card"),
-      args: {
-        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
-      },
-      nonActivePlayers: true,
-    });
-  }
+  setDescription(activePlayerId: number) {}
 
   //  .####.##....##.########.########.########..########....###.....######..########
   //  ..##..###...##....##....##.......##.....##.##.........##.##...##....##.##......
@@ -43,36 +35,22 @@ class FlipVictoryCardState implements State {
 
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
-    this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must flip an inactive Victory Card"),
-      args: {
-        tkn_playerName: '${you}'
-      },
-    });
-    this.setVictoryCardsSelectable();
-  }
+    this.game.setCardSelected({ id: this.args.victoryCard.id });
 
-  private updateInterfaceConfirmSelectCard({card}: {card: VictoryCard}) {
-    this.game.clearPossible();
-    const node = document.getElementById(`${card.id}-back`);
-    if (!node) {
-      return;
-    }
-    node.classList.add(PR_SELECTED);
     this.game.clientUpdatePageTitle({
-      text: _("Flip ${titleActive}?"),
+      text: _("Declare ${victoryTitle}?"),
       args: {
-        titleActive: _(card.active.title),
+        victoryTitle: _(this.args.victoryCard.active.title),
       },
     });
     this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actFlipVictoryCard",
-          args: {
-            cardId: card.id,
-          },
-        }),
+      callback: () =>         this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: "declareVictory",
+          cardId: this.args.victoryCard.id,
+        },
+      }),
     });
     this.game.addCancelButton();
   }
@@ -84,21 +62,6 @@ class FlipVictoryCardState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
-
-  private setVictoryCardsSelectable() {
-    this.args.victoryCards.forEach((card) => {
-      const node = document.getElementById(`${card.id}-back`);
-      if (!node) {
-        return;
-      }
-      node.classList.add(PR_SELECTABLE);
-      this.game._connections.push(
-        dojo.connect(node, "onclick", this, () =>
-          this.updateInterfaceConfirmSelectCard({ card })
-        )
-      );
-    });
-  }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.

@@ -16,7 +16,7 @@ class VictoryCardManager extends CardManager<VictoryCard> {
       setupFrontDiv: (card, div: HTMLElement) => this.setupFrontDiv(card, div),
       setupBackDiv: (card, div: HTMLElement) => this.setupBackDiv(card, div),
       isCardVisible: (card) => {
-        return card.state === 1;
+        return card.side === ACTIVE;
       },
       animationManager: game.animationManager,
     });

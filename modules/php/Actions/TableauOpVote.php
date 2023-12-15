@@ -98,7 +98,7 @@ class TableauOpVote extends \PaxRenaissance\Models\AtomicAction
     $tableauOp = TableauOps::get($tableauOpId);
 
     $empireId = $args['empireId'];
-    Notifications::log('$empireId',$empireId);
+    // Notifications::log('$empireId',$empireId);
     $player = self::getPlayer();
     
     $options = $tableauOp->getOptions($player);

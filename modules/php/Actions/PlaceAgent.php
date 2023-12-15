@@ -110,9 +110,6 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     $agent = $args['agent'];
     $locationId = $args['locationId'];
 
-    Notifications::log('agent', $agent);
-    Notifications::log('locationId', $locationId);
-
     $skipped = $locationId === null;
     $optional = $this->ctx->isOptional();
     if ($skipped && !$optional) {
@@ -121,7 +118,6 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
     $stateArgs = $this->argsPlaceAgent();
 
-    // Notifications::log('argsPlaceAgent', $this->argsPlaceAgent());
 
     if (!$skipped && !array_key_exists($locationId, $stateArgs['locations'])) {
       throw new \feException("Not allowed to place Agent on selected location");

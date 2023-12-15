@@ -21,6 +21,11 @@ interface PlayAction {
 
 type PaxRenAction = PurchaseAction | PlayAction;
 
+
+interface OnEnteringClientDeclareVictoryArgs {
+  victoryCard: VictoryCard;
+}
+
 interface OnEnteringClientStartTradeFairArgs {
   card: TableauCard;
   city: City;
@@ -75,6 +80,7 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
     east: Record<string, { id: string; text: string }>;
     west: Record<string, { id: string; text: string }>;
   };
+  declarableVictories: VictoryCard[];
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];
   tradeFair: {

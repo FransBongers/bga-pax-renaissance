@@ -44,7 +44,7 @@ class RegimeChangeGoldenLiberty extends \PaxRenaissance\Models\AtomicAction
 
   public function stRegimeChangeGoldenLiberty()
   {
-    Notifications::log('stRegimeChangeGoldenLiberty',[]);
+    // Notifications::log('stRegimeChangeGoldenLiberty',[]);
     $parentInfo = $this->ctx->getParent()->getInfo();
     $source = $parentInfo['source'];
     $empireId = $parentInfo['empireId'];
@@ -93,7 +93,7 @@ class RegimeChangeGoldenLiberty extends \PaxRenaissance\Models\AtomicAction
     self::checkAction('actRegimeChangeGoldenLiberty');
 
     $change = $args['change'];
-    Notifications::log('actRegimeChangeGoldenLiberty', $change);
+    // Notifications::log('actRegimeChangeGoldenLiberty', $change);
     $player = self::getPlayer();
     $empire = $this->getEmpire();
 

@@ -121,7 +121,7 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
     if ($tableauOp === null) {
       throw new \feException("Not allowed to perform selected Op");
     }
-    Notifications::log('tableauOp', $tableauOp);
+    // Notifications::log('tableauOp', $tableauOp);
     $this->ctx->getParent()->unshiftChild($tableauOp->getFlow($player, $cardId));
     $card = Cards::get($cardId);
     $card->setUsed();

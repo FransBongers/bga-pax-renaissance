@@ -1,5 +1,6 @@
 var MIN_PLAY_AREA_WIDTH = 1516;
 var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
+var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -28,6 +29,8 @@ var TABLEAU_CARD = "tableauCard";
 var VICTORY_CARD = "victoryCard";
 var KING = "king";
 var REPUBLIC = "republic";
+var ACTIVE = 'active';
+var INACTIVE = 'inactive';
 var BISHOP = "bishop";
 var DISK = "disk";
 var KNIGHT = "knight";
@@ -1754,6 +1757,7 @@ var PaxRenaissance = (function () {
         debug("gamedatas", gamedatas);
         this._connections = [];
         this.activeStates = (_a = {},
+            _a[CLIENT_DECLARE_VICTORY_STATE] = new ClientDeclareVictoryState(this),
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
             _a.announceOneShot = new AnnounceOneShotState(this),
             _a.battleCasualties = new BattleCasualtiesState(this),
@@ -2293,7 +2297,7 @@ var VictoryCardManager = (function (_super) {
             setupFrontDiv: function (card, div) { return _this.setupFrontDiv(card, div); },
             setupBackDiv: function (card, div) { return _this.setupBackDiv(card, div); },
             isCardVisible: function (card) {
-                return card.state === 1;
+                return card.side === ACTIVE;
             },
             animationManager: game.animationManager,
         }) || this;
@@ -3390,6 +3394,7 @@ var NotificationManager = (function () {
             ["log", undefined],
             ["changeEmpireToMedievalState", undefined],
             ["changeEmpireToTheocracy", undefined],
+            ["declareVictory", undefined],
             ["discardCard", undefined],
             ["flipEmpireCard", undefined],
             ["flipVictoryCard", undefined],
@@ -3454,6 +3459,16 @@ var NotificationManager = (function () {
             return __generator(this, function (_b) {
                 _a = notif.args, empire = _a.empire, religion = _a.religion;
                 this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: religion });
+                return [2];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_declareVictory = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var playerId;
+            return __generator(this, function (_a) {
+                playerId = notif.args.playerId;
+                this.game.framework().scoreCtrl[playerId].toValue(1);
                 return [2];
             });
         });
@@ -4688,6 +4703,41 @@ var BishopPacificationState = (function () {
     };
     return BishopPacificationState;
 }());
+var ClientDeclareVictoryState = (function () {
+    function ClientDeclareVictoryState(game) {
+        this.game = game;
+    }
+    ClientDeclareVictoryState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    ClientDeclareVictoryState.prototype.onLeavingState = function () {
+        debug("Leaving ClientStartTradeFairState");
+    };
+    ClientDeclareVictoryState.prototype.setDescription = function (activePlayerId) { };
+    ClientDeclareVictoryState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.setCardSelected({ id: this.args.victoryCard.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Declare ${victoryTitle}?"),
+            args: {
+                victoryTitle: _(this.args.victoryCard.active.title),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () { return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "declareVictory",
+                    cardId: _this.args.victoryCard.id,
+                },
+            }); },
+        });
+        this.game.addCancelButton();
+    };
+    return ClientDeclareVictoryState;
+}());
 var ClientStartTradeFairState = (function () {
     function ClientStartTradeFairState(game) {
         this.game = game;
@@ -4837,7 +4887,7 @@ var FlipVictoryCardState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("Flip ${titleActive}?"),
             args: {
-                titleActive: _(card.titleActive),
+                titleActive: _(card.active.title),
             },
         });
         this.game.addConfirmButton({
@@ -5061,6 +5111,7 @@ var PlayerActionState = (function () {
         this.setMarketCardsSelectable();
         this.setHandCardsSelectable();
         this.setTradeFairSelectable();
+        this.setVictoryCardsSelectable();
         this.addActionButtons();
     };
     PlayerActionState.prototype.updateInterfaceConfirmPurchase = function (_a) {
@@ -5159,8 +5210,8 @@ var PlayerActionState = (function () {
                     .getEmpireSquareStock({ empireId: ENGLAND })
                     .getCards()[0];
                 console.log("card", card);
-                var node = document.getElementById('EmpireSquare_Aragon');
-                console.log('node', node);
+                var node = document.getElementById("EmpireSquare_Aragon");
+                console.log("node", node);
                 node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(2 * 151, "px)");
                 console.log(_this.game.tableauCardManager.vassalStocks);
                 _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
@@ -5175,8 +5226,8 @@ var PlayerActionState = (function () {
                     .getEmpireSquareStock({ empireId: HOLY_ROMAN_EMIRE })
                     .getCards()[0];
                 console.log("card", card);
-                var node = document.getElementById('EmpireSquare_Aragon');
-                console.log('node', node);
+                var node = document.getElementById("EmpireSquare_Aragon");
+                console.log("node", node);
                 node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(3 * 151, "px)");
                 console.log(_this.game.tableauCardManager.vassalStocks);
                 _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
@@ -5191,8 +5242,8 @@ var PlayerActionState = (function () {
                     .getEmpireSquareStock({ empireId: HUNGARY })
                     .getCards()[0];
                 console.log("card", card);
-                var node = document.getElementById('EmpireSquare_Aragon');
-                console.log('node', node);
+                var node = document.getElementById("EmpireSquare_Aragon");
+                console.log("node", node);
                 node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(4 * 151, "px)");
                 console.log(_this.game.tableauCardManager.vassalStocks);
                 _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
@@ -5260,6 +5311,23 @@ var PlayerActionState = (function () {
                     return _this.game
                         .framework()
                         .setClientState(CLIENT_START_TRADE_FAIR_STATE, { args: _this.args.tradeFair[region] });
+                },
+            });
+        });
+    };
+    PlayerActionState.prototype.setVictoryCardsSelectable = function () {
+        var _this = this;
+        this.args.declarableVictories.forEach(function (victoryCard) {
+            _this.game.setCardSelectable({
+                id: victoryCard.id,
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_DECLARE_VICTORY_STATE, {
+                        args: {
+                            victoryCard: victoryCard,
+                        },
+                    });
                 },
             });
         });

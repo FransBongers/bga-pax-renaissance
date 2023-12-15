@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance;
 
+use Locale;
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
@@ -19,13 +20,22 @@ use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 use PaxRenaissance\Models\Card;
-
+use PaxRenaissance\Models\Player;
 
 trait DebugTrait
 {
   function test()
   {
-    Cards::get('EmpireSquare_England')->setExtraData('suzerainId','EmpireSquare_PapalStates');
+    // $card = Cards::getTopOf(Locations::market(WEST,1));
+    // Cards::move($card->getId(), DISCARD);
+    // Cards::insertOnTop('PREN002_PapalElephant', Locations::market(WEST,1));
+    Notifications::log('canDeclare', Cards::get('VictoryHoly')->canBeDeclaredByPlayer(Players::get()));
+    
+    // AtomicActions::get(PATRON_VICTORY)->stPatronVictory();
+    // Notifications::declareVictory(Players::get(),Cards::get('VictoryImperial'));
+    // $this->debugMoveCardToTableau('EmpireSquare_France', EAST);
+    
+    // Cards::get('EmpireSquare_England')->setExtraData('suzerainId','EmpireSquare_PapalStates');
     // Notifications::log('options', TableauOps::get(INQUISITOR_OP_REFORMIST)->getOptions());
     // Notifications::log('options', TableauOps::get(INQUISITOR_OP_ISLAMIC)->getOptions());
     // Cards::get('EmpireSquare_Portugal')->setExtraData('suzerain', null);
@@ -45,37 +55,13 @@ trait DebugTrait
     // Cards::setUsed('PREN039_FlorentineWool',0);
     // $this->debugPlaceToken(BISHOP, REFORMIST, 'PREN039_FlorentineWool');
     
-    // Notifications::log('Available ops', Cards::get('PREN040_SindicatRemenca')->getAvailableOps());
 
-    // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_1);
-    // $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ARAGON_PAPAL_STATES);
-    // $this->debugPlaceToken(KNIGHT, REFORMIST, MODON);
-    // $this->debugPlaceToken(ROOK, REFORMIST, Empires::get(MAMLUK)->getEmpireSquareId());
-    // $this->debugPlaceToken(ROOK, CATHOLIC, Empires::get(MAMLUK)->getEmpireSquareId());
-    // $this->debugPlaceToken(PAWN, MARCHIONNI, Empires::get(MAMLUK)->getEmpireSquareId());
-    // Notifications::log('cardType', Cards::get('EmpireSquare_France')->getType());
-    // Notifications::log('attackers', AtomicActions::get(BATTLE_RESULT)->getAttackers(Players::get(), BYZANTIUM, JIHAD_ONE_SHOT, ['cardId' => 'PREN059_Safavids']));
-    // Notifications::log('defenders', AtomicActions::get(BATTLE_RESULT)->getDefenders(BYZANTIUM, JIHAD_ONE_SHOT, ['cardId' => 'PREN059_Safavids']));
+  }
 
-
-    // $this->debugPlaceToken(BISHOP, REFORMIST, 'EmpireSquare_Byzantium');
-    // $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_Byzantium');
-    // $this->debugPlaceToken(PAWN, FUGGER, 'EmpireSquare_Byzantium');
-    // $this->debugPlaceToken(PAWN, MEDICI, 'EmpireSquare_Byzantium');
-    // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_BYZANTIUM_HUNGARY);
-    // $this->debugPlaceToken(PAWN, MEDICI, BORDER_BYZANTIUM_MAMLUK);
-
-    // Cards::insertAtBottom('EmpireSquare_PapalStates', Locations::tableau(2371053, WEST));
-    // Notifications::log('tableau', Cards::get('PREN101X_CivilEngineer'));
-    // Notifications::log('thrones', Cards::getAllCardsInThrones());
-    // Notifications::log('merged', array_merge(Cards::getAllCardsInTableaux(),Cards::getAllCardsInThrones()));
-    // $this->debugPlaceToken(BISHOP, REFORMIST, 'EmpireSquare_PapalStates');
-    // $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ENGLAND_FRANCE);
-
-    // Notifications::log('Token', Borders::get(BORDER_FRANCE_HOLY_ROMAN_EMPIRE)->getToken());
-    // Notifications::log('East', Empires::getRegion(EAST));
-    // Notifications::log('Religion', $token->getReligion());
-    // Notifications::log('Cities', Empires::get(BYZANTIUM)->getReligion());
+  function debugMoveCardToTableau($cardId, $region = WEST, $playerId = null)
+  {
+    $playerId = $playerId === null ? Players::get()->getId() : $playerId;
+    Cards::move($cardId, Locations::tableau($playerId, $region));
   }
 
   //debugPlaceToken(pawn, medici, border_aragon_france)

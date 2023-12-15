@@ -138,6 +138,9 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
         $location = 'pool_' . $region;
       } else if ($type === VICTORY_CARD) {
         $location = $card->getStartLocation();
+        $extraData = [
+          'active' => false,
+        ];
       } else if ($type === EMPIRE_CARD) {
         $location = $card->getStartLocation();
         $extraData = [

@@ -101,7 +101,7 @@ class SelectToken extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actSelectToken');
     $tokenId = $args['tokenId'];
-    Notifications::log('selectToken', $tokenId);
+    // Notifications::log('selectToken', $tokenId);
 
     $selectableTokens = $this->getTokensToSelect($this->ctx->getInfo()['fromSupply']);
 

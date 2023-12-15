@@ -47,7 +47,7 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
   {
     $parentInfo = $this->ctx->getParent()->getInfo();
     $source = $parentInfo['source'];
-    Notifications::log('stRegimeChangeMoveEmpireSquare', $parentInfo['data']);
+    // Notifications::log('stRegimeChangeMoveEmpireSquare', $parentInfo['data']);
 
     $player = self::getPlayer();
     // $playerId = $player->getId();

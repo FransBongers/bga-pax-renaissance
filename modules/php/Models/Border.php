@@ -44,7 +44,7 @@ class Border implements \JsonSerializable
   public function placeToken($token, $empireId, $repressCost)
   {
     $currentToken = $this->getToken();
-    Notifications::log('currentToken',$currentToken);
+    // Notifications::log('currentToken',$currentToken);
     if ($currentToken !== null && $token->getType() === PIRATE) {
       $currentToken->returnToSupply(KILL);
     } else if ($currentToken !== null && $token->getType() === PAWN) {

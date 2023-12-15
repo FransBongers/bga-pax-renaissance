@@ -107,6 +107,20 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       ->toArray();
   }
 
+
+  public static function getBishopsInPlay()
+  {
+    $bishops = self::getOfType('bishop_');
+    return Utils::filter($bishops, function ($bishop) {
+      return !Utils::startsWith($bishop->getLocation(), 'supply');
+    });
+  }
+
+  public static function getConcessions()
+  {
+    return self::getOfTypeInLocation('pawn_','border_');
+  }
+
   // ..######..########.########.##.....##.########.
   // .##....##.##..........##....##.....##.##.....##
   // .##.......##..........##....##.....##.##.....##

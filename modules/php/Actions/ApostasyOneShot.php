@@ -54,12 +54,10 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
     $info = $this->ctx->getInfo();
     $cardId = $info['cardId'];
     $card = Cards::get($cardId);
-    Notifications::log('stApostasyOneShot', $info);
+
     $oneShot = $card->getOneShot();
-    Notifications::log('oneShot', $oneShot);
 
     $affectedPlayers = $this->getAffectedPlayers($oneShot);
-    Notifications::log('affectedPlayers', $affectedPlayers);
 
     foreach($affectedPlayers as $playerId => $cardsToDiscard)
     {

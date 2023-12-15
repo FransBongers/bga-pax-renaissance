@@ -4,6 +4,7 @@ const MIN_PLAY_AREA_WIDTH = 1516;
  * Client states
  */
 const CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
+const CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 
 /**
  * Player colors
@@ -60,6 +61,10 @@ const VICTORY_CARD = "victoryCard";
 // Sides for empire cards
 const KING = "king";
 const REPUBLIC = "republic";
+
+// State victory card
+const ACTIVE = 'active';
+const INACTIVE = 'inactive';
 
 /**
  * Chess pieces

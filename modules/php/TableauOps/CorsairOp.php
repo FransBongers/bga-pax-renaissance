@@ -91,7 +91,7 @@ class CorsairOp extends \PaxRenaissance\Models\TableauOp
     // 1. get all borders.
 
     $empires = array_merge([$empire], $empire->getAdjacentBySeaBorderEmpires());
-    Notifications::log('empires', $empires);
+    // Notifications::log('empires', $empires);
     $borders = [];
     foreach ($empires as $destinationEmpire) {
       $empireBorders = $destinationEmpire->getBorders();

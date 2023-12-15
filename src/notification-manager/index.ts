@@ -38,6 +38,7 @@ class NotificationManager {
       ["log", undefined],
       ["changeEmpireToMedievalState", undefined],
       ["changeEmpireToTheocracy", undefined],
+      ["declareVictory", undefined],
       ["discardCard", undefined],
       ["flipEmpireCard", undefined],
       ["flipVictoryCard", undefined],
@@ -123,6 +124,11 @@ class NotificationManager {
   ) {
     const { empire, religion } = notif.args;
     this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion });
+  }
+
+  async notif_declareVictory(notif: Notif<NotifDeclareVictoryArgs>) {
+    const {playerId} = notif.args;
+    this.game.framework().scoreCtrl[playerId].toValue(1);
   }
 
   async notif_discardCard(notif: Notif<NotifDiscardCardArgs>) {

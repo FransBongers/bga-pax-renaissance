@@ -24,6 +24,11 @@ interface NotifChangeEmpireToTheocracyArgs {
   religion: string;
 }
 
+interface NotifDeclareVictoryArgs extends NotifWithPlayerArgs {
+  victoryCard: VictoryCard;
+}
+
+
 interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   card: TableauCard | EmpireCard;
   tkn_cardName: string;

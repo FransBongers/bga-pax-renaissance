@@ -46,7 +46,6 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
   {
     $info = $this->ctx->getInfo();
     $player = self::getPlayer();
-    Notifications::log('stBishopDietOfWorms', $info);
 
     $tokenId = $info['tokenId'];
 
@@ -55,8 +54,6 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
 
     $card = Cards::get($locationId);
     $tokensOnCard = $card->getTokens();
-
-    Notifications::log('tokensOnCard', $tokensOnCard);
 
     $bishopsOnCard = [];
     $otherTokensOnCard = [];

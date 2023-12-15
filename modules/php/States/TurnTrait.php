@@ -76,7 +76,7 @@ trait TurnTrait
     $unableToRefresh = Market::refresh($player);
 
     if ($unableToRefresh) {
-      Game::get()->gamestate->jumpToState(ST_END_GAME);
+      Game::get()->gamestate->jumpToState(ST_PATRON_VICTORY);
     } else {
       $this->nextPlayerCustomOrder('default');
     }

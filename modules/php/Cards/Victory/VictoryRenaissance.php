@@ -1,14 +1,60 @@
 <?php
 namespace PaxRenaissance\Cards\Victory;
 
+use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Players;
+
 class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
 {
   public function __construct($row)
   {
     parent::__construct($row);
     $this->id = 'VictoryRenaissance';
-    $this->titleActive = clienttranslate('Renaissance Victory');
-    $this->titleInactive = clienttranslate('The Medieval Age');
+    $this->title = [
+      ACTIVE =>clienttranslate('Renaissance Victory'),
+      INACTIVE => clienttranslate('The Medieval Age'),
+    ];
     $this->startLocation = 'victory_renaissance';
+  }
+
+  public function canBeDeclaredByPlayer($activePlayer)
+  {
+    if (!$this->isActive()) {
+      return false;
+    }
+    $players = Players::getAll()->toArray();
+    
+    $requiredDifference = 2;
+
+    $republicRanking = [];
+    $lawPrestigeRanking = [];
+    foreach ($players as $player) {
+      $numberOfRepublics = count(Utils::filter($player->getTableauCards(), function ($cardInTableau) {
+        return $cardInTableau->getType() === EMPIRE_CARD && $cardInTableau->getSide() === REPUBLIC;
+      }));
+
+      $lawPrestige = $player->getPrestige()[LAW];
+
+      $republicRanking[] = [
+        'playerId' => $player->getId(),
+        'numberOfRepublics' => $numberOfRepublics,
+      ];
+      $lawPrestigeRanking[] = [
+        'playerId' => $player->getId(),
+        'lawPrestige' => $lawPrestige,
+      ];
+    }
+
+    usort($republicRanking, function ($a, $b) {
+      return $b['numberOfRepublics'] - $a['numberOfRepublics'];
+    });
+    usort($lawPrestigeRanking, function ($a, $b) {
+      return $b['lawPrestige'] - $a['lawPrestige'];
+    });
+
+    $hasAtLeastTwoMoreLawPrestigeThanEachOpponent = $lawPrestigeRanking[0]['playerId'] === $activePlayer->getId() && $lawPrestigeRanking[0]['lawPrestige'] - $lawPrestigeRanking[1]['lawPrestige'] >= $requiredDifference;
+    $hasMoreRepublicsThanEachOpponent = $republicRanking[0]['playerId'] === $activePlayer->getId() && $republicRanking[0]['numberOfRepublics'] > $republicRanking[1]['numberOfRepublics'];
+    return $hasAtLeastTwoMoreLawPrestigeThanEachOpponent && $hasMoreRepublicsThanEachOpponent;
   }
 }
