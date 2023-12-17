@@ -51,7 +51,8 @@ class ConfirmPartialTurnState implements State {
     });
     this.game.addConfirmButton({
       callback: () => this.game.takeAction({action: 'actConfirmPartialTurn'})
-    })
+    });
+    this.game.addUndoButtons(this.args);
   }
 
 

@@ -44,20 +44,31 @@ class action_paxrenaissance extends APP_GameAction
    **** GENERIC METHODS ****
    *************************/
 
-  public function endGame()
+  public function actRestart()
   {
     self::setAjaxMode();
-    $result = $this->game->endGame();
+    $this->game->actRestart();
     self::ajaxResponse();
   }
 
-  public function restart()
+  // public function actUndoToStep()
+  // {
+  //   self::setAjaxMode();
+  //   $stepId = self::getArg('stepId', AT_posint, false);
+  //   $this->game->actUndoToStep($stepId);
+  //   self::ajaxResponse();
+  // }
+
+  public function actUndoToStep()
   {
     self::setAjaxMode();
-    $result = $this->game->restart();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $stepId = $args['stepId'];
+    $this->game->actUndoToStep($stepId);
     self::ajaxResponse();
   }
-  
+
   public function actAnnounceOneShot()
   {
     self::setAjaxMode();
@@ -144,7 +155,7 @@ class action_paxrenaissance extends APP_GameAction
     $this->game->actTakeAtomicAction('actRegimeChangeEmancipation', $args);
     self::ajaxResponse();
   }
-  
+
   public function actRegimeChangeGoldenLiberty()
   {
     self::setAjaxMode();
@@ -153,7 +164,7 @@ class action_paxrenaissance extends APP_GameAction
     $this->game->actTakeAtomicAction('actRegimeChangeGoldenLiberty', $args);
     self::ajaxResponse();
   }
-  
+
   public function actSelectToken()
   {
     self::setAjaxMode();
@@ -198,7 +209,7 @@ class action_paxrenaissance extends APP_GameAction
     $this->game->actTakeAtomicAction('actTableauOpCorsair', $args);
     self::ajaxResponse();
   }
-  
+
   public function actTableauOpInquisitor()
   {
     self::setAjaxMode();
@@ -261,7 +272,7 @@ class action_paxrenaissance extends APP_GameAction
     $this->game->actTakeAtomicAction('actTableauOpVote', $args);
     self::ajaxResponse();
   }
-  
+
   public function actTradeFairLevy()
   {
     self::setAjaxMode();

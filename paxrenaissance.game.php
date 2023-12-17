@@ -156,15 +156,6 @@ class PaxRenaissance extends Table
         return self::$instance;
     }
 
-    function endGame()
-    {
-        Notifications::message(clienttranslate('${tkn_playerName} end the game'), [
-            'player' => Players::get(),
-        ]);
-        $this->gamestate->nextState('gameEnd');
-    }
-
-
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
     ////////////   Custom Turn Order   ////////////

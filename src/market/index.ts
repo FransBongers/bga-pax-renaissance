@@ -37,6 +37,33 @@ class Market {
     this.setupMarket({ gamedatas });
   }
 
+  clearInterface() {
+    const comets = {
+      comet1: EAST,
+      comet2: EAST,
+      comet3: WEST,
+      comet4: WEST,
+    };
+    Object.entries(comets).forEach(([comet, region]) => {
+      this.removeCometOpacity(comet);
+    });
+    REGIONS.forEach((region) => {
+      this.stocks[region].forEach(
+        (stock: LineStock<EmpireCard | TableauCard>) => {
+          stock.removeAll();
+        }
+      );
+      this.counters[region].forEach((counter: Counter, index) =>
+        this.setFlorinValue({ region, column: index, value: 0 })
+      );
+    });
+  }
+
+  updateMarket({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    this.updateDecks({ gamedatas });
+    this.setupMarket({ gamedatas });
+  }
+
   setupDecks({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     this.decks = {
       [EAST]: new LineStock(
@@ -51,7 +78,16 @@ class Market {
 
     REGIONS.forEach((region) => {
       this.deckCounters[region].create(`pr_market_${region}_deck_counter`);
-      this.deckCounters[region].setValue(gamedatas.market.deckCounts[region].cardCount);
+    });
+
+    this.updateDecks({ gamedatas });
+  }
+
+  updateDecks({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    REGIONS.forEach((region) => {
+      this.deckCounters[region].setValue(
+        gamedatas.market.deckCounts[region].cardCount
+      );
     });
     const comets = {
       comet1: EAST,
@@ -115,8 +151,8 @@ class Market {
   async drawCard(card: TableauCard): Promise<void> {
     await this.decks[card.region].addCard({ ...card, location: "deck" });
     this.deckCounters[card.region].incValue(-1);
-    if (card.id.startsWith('COMET')) {
-      this.setCometOpacity(card.id.split('_')[0].toLowerCase());
+    if (card.id.startsWith("COMET")) {
+      this.setCometOpacity(card.id.split("_")[0].toLowerCase());
     }
     const [_, region, column] = card.location.split("_");
     await this.getStock({ region, column: Number(column) }).addCard(card);
@@ -218,6 +254,13 @@ class Market {
     const node = document.getElementById(`pr_deck_counter_${comet}`);
     if (node) {
       node.classList.add(PR_NONE);
+    }
+  }
+
+  private removeCometOpacity(comet: string) {
+    const node = document.getElementById(`pr_deck_counter_${comet}`);
+    if (node) {
+      node.classList.remove(PR_NONE);
     }
   }
 

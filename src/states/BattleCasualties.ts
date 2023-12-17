@@ -61,6 +61,7 @@ class BattleCasualtiesState implements State {
     });
     this.setTokensSelectable();
     this.addAgentButtons();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirmSelectAgent({ agent }: { agent: Agent }) {

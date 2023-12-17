@@ -72,6 +72,7 @@ class AnnounceOneShotState implements State {
           },
         }),
     });
+    this.game.addUndoButtons(this.args);
     // this.setTokensSelectable();
   }
 

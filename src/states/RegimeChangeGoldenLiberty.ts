@@ -85,6 +85,7 @@ class RegimeChangeGoldenLibertyState implements State {
           },
         }),
     })
+    this.game.addUndoButtons(this.args);
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

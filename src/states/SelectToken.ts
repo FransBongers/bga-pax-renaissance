@@ -56,6 +56,7 @@ class SelectTokenState implements State {
       },
     });
     this.setTokensSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirm({ id }: { id: string }) {

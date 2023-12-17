@@ -56,6 +56,7 @@ class TableauOpRepressState implements State {
     });
 
     this.setTokensSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirm({ token }: { token: Token }) {

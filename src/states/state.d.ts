@@ -6,7 +6,7 @@ interface State {
 
 interface CommonArgs {
   previousEngineChoices: number;
-  previousSteps: unknown[];
+  previousSteps: number[];
 }
 
 interface PurchaseAction {

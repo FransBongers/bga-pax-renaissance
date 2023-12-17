@@ -50,6 +50,7 @@ class FlipVictoryCardState implements State {
       },
     });
     this.setVictoryCardsSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirmSelectCard({card}: {card: VictoryCard}) {

@@ -48,7 +48,9 @@ class NotificationManager {
       ["placeToken", undefined],
       ["playCard", undefined],
       ["purchaseCard", undefined],
+      ["refreshHand", undefined],
       ["refreshMarket", undefined],
+      ["refreshUI", undefined],
       ["repressToken", undefined],
       ["returnToSupply", undefined],
       ["sellCard", undefined],
@@ -127,7 +129,7 @@ class NotificationManager {
   }
 
   async notif_declareVictory(notif: Notif<NotifDeclareVictoryArgs>) {
-    const {playerId} = notif.args;
+    const { playerId } = notif.args;
     this.game.framework().scoreCtrl[playerId].toValue(1);
   }
 
@@ -150,12 +152,12 @@ class NotificationManager {
     this.removePrestige({ prestige: card[oldSide].prestige, player });
 
     if (formerSuzerain !== null) {
-      this.game.tableauCardManager.removeVassal({suzerain: formerSuzerain});
-      await player.tableau.addCard(card)
+      this.game.tableauCardManager.removeVassal({ suzerain: formerSuzerain });
+      await player.tableau.addCard(card);
     } else {
       this.game.tableauCardManager.updateCardInformations(card);
     }
-    
+
     this.addPrestige({ prestige: card[card.side].prestige, player });
   }
 
@@ -297,6 +299,12 @@ class NotificationManager {
     }
   }
 
+  async notif_refreshHand(notif: Notif<NotifRefreshHandArgs>) {
+    const { playerId, hand } = notif.args;
+    this.game.hand.clearInterface();
+    this.game.hand.getStock().addCards(hand);
+  }
+
   async notif_refreshMarket(notif: Notif<NotifRefreshMarketArgs>) {
     const { cardMoves, cardDraws } = notif.args;
 
@@ -337,6 +345,21 @@ class NotificationManager {
     for (let card of cardDraws) {
       await this.game.market.drawCard(card);
     }
+  }
+
+  async notif_refreshUI(notif: Notif<NotifRefreshUIArgs>) {
+    const { datas: gamedatas } = notif.args;
+    const updatedGamedatas = {
+      ...this.game.gamedatas,
+      ...gamedatas,
+    };
+    this.game.gamedatas = updatedGamedatas;
+    this.game.clearInterface();
+    this.game.victoryCardManager.updateInterface({ gamedatas });
+    this.game.gameMap.updateInterface({ gamedatas });
+    this.game.market.updateMarket({ gamedatas });
+    this.game.supply.updateInterdace({ gamedatas });
+    this.game.playerManager.updatePlayers({ gamedatas });
   }
 
   async notif_repressToken(notif: Notif<NotifRepressTokenArgs>) {

@@ -51,7 +51,8 @@ class ConfirmTurnState implements State {
     });
     this.game.addConfirmButton({
       callback: () => this.game.takeAction({action: 'actConfirmTurn'})
-    })
+    });
+    this.game.addUndoButtons(this.args);
   }
 
 

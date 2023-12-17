@@ -41,11 +41,11 @@ class PaxRenaissance implements PaxRenaissanceGame {
     regimeChangeEmancipation: RegimeChangeEmancipationState;
     regimeChangeGoldenLiberty: RegimeChangeGoldenLibertyState;
     selectToken: SelectTokenState;
-    tableauOpBehead: TableauOpBeheadState
+    tableauOpBehead: TableauOpBeheadState;
     tableauOpCampaign: TableauOpCampaignState;
     tableauOpCommerce: TableauOpCommerceState;
     tableauOpCorsair: TableauOpCorsairState;
-    tableauOpInquisitor: TableauOpInquisitorState
+    tableauOpInquisitor: TableauOpInquisitorState;
     tableauOpRepress: TableauOpRepressState;
     tableauOpSiege: TableauOpSiegeState;
     tableauOpsSelect: TableauOpsSelectState;
@@ -333,13 +333,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
     });
   }
 
-  addUndoButton() {
-    this.addDangerActionButton({
-      id: "undo_btn",
-      text: _("Undo"),
-      callback: () => this.takeAction({ action: "restart" }),
-    });
-  }
+  // addUndoButton() {
+  //   this.addDangerActionButton({
+  //     id: "undo_btn",
+  //     text: _("Undo"),
+  //     callback: () => this.takeAction({ action: "restart" }),
+  //   });
+  // }
 
   addPrimaryActionButton({
     id,
@@ -422,8 +422,50 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
   }
 
+  addRestartButton({ previousEngineChoices }: CommonArgs) {
+    if (previousEngineChoices < 1) {
+      return;
+    }
+    this.addDangerActionButton({
+      id: "restart_btn",
+      text: _("Restart turn"),
+      callback: () => this.takeAction({ action: "actRestart" }),
+    });
+  }
+
+  addUndoButtons({ previousSteps, previousEngineChoices }: CommonArgs) {
+    const lastStep = Math.max(0, ...previousSteps);
+    if (lastStep > 0) {
+      // this.addDangerActionButton('btnUndoLastStep', _('Undo last step'), () => this.undoToStep(lastStep), 'restartAction');
+      this.addDangerActionButton({
+        id: "undo_last_step_btn",
+        text: _("Undo last step"),
+        callback: () =>
+          this.takeAction({
+            action: "actUndoToStep",
+            args: {
+              stepId: lastStep,
+            },
+            checkAction: "actRestart",
+          }),
+      });
+    }
+
+    if (previousEngineChoices > 0) {
+      this.addDangerActionButton({
+        id: "restart_btn",
+        text: _("Restart turn"),
+        callback: () => this.takeAction({ action: "actRestart" }),
+      });
+    }
+  }
+
   public clearInterface() {
     console.log("clear interface");
+    this.tableauCardManager.clearInterface();
+    this.victoryCardManager.clearInterface();
+    this.gameMap.clearInterface();
+    this.market.clearInterface();
     this.playerManager.clearInterface();
   }
 
@@ -562,6 +604,18 @@ class PaxRenaissance implements PaxRenaissanceGame {
     node.classList.add(PR_SELECTED);
   }
 
+  undoToStep({ stepId }: { stepId: string }) {
+    // this.stopActionTimer();
+    this.framework().checkAction("actRestart");
+    // this.takeAction('actUndoToStep', args: { stepId });
+    this.takeAction({
+      action: "actUndoToStep",
+      args: {
+        stepId,
+      },
+    });
+  }
+
   // .########.########.....###....##.....##.########.##......##..#######..########..##....##
   // .##.......##.....##...##.##...###...###.##.......##..##..##.##.....##.##.....##.##...##.
   // .##.......##.....##..##...##..####.####.##.......##..##..##.##.....##.##.....##.##..##..
@@ -693,12 +747,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
   takeAction({
     action,
     args = {},
+    checkAction,
   }: {
     action: string;
     args?: Record<string, unknown>;
+    checkAction?: string;
   }) {
     console.log(`takeAction ${action}`, args);
-    if (!this.framework().checkAction(action)) {
+    if (!this.framework().checkAction(checkAction ? checkAction : action)) {
       this.actionError(action);
       return;
     }

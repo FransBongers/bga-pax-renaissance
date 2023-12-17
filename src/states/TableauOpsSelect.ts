@@ -65,6 +65,7 @@ class TableauOpsSelectState implements State {
           }),
       });
     }
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirm({

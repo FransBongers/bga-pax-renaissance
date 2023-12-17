@@ -53,6 +53,7 @@ class TableauOpCampaignState implements State {
     });
 
     this.setEmpiresSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirm({

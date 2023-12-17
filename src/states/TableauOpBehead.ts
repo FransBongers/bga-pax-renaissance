@@ -55,6 +55,7 @@ class TableauOpBeheadState implements State {
     });
 
     this.setCardsSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirm({ card }: { card: TableauCard }) {

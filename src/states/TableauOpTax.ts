@@ -53,6 +53,7 @@ class TableauOpTaxState implements State {
     });
 
     this.setTokensSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceSelectEmpire({

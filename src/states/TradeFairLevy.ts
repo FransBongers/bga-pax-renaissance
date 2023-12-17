@@ -58,6 +58,7 @@ class TradeFairLevyState implements State {
         callback: () => this.updateInterfaceConfirmPlaceLevy({cityId}),
       });
     });
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirmPlaceLevy({cityId}: {cityId: string;}) {

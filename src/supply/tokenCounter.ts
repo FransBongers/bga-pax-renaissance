@@ -18,4 +18,8 @@ class TokenCounter {
   public incValue(value: number) {
     this.counter.incValue(value);
   }
+
+  public setValue(value: number) {
+    this.counter.setValue(value);
+  }
 }

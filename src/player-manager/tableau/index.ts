@@ -15,6 +15,31 @@ class PlayerTableau {
     this.setup({ player });
   }
 
+  // .##.....##.##....##.########...#######.
+  // .##.....##.###...##.##.....##.##.....##
+  // .##.....##.####..##.##.....##.##.....##
+  // .##.....##.##.##.##.##.....##.##.....##
+  // .##.....##.##..####.##.....##.##.....##
+  // .##.....##.##...###.##.....##.##.....##
+  // ..#######..##....##.########...#######.
+
+  clearInterface() {
+    this.tableauEast.removeAll();
+    this.tableauWest.removeAll();
+  }
+
+  updateInterface({ player }: { player: PaxRenaissancePlayerData }) {
+    this.updateCards({player});
+  }
+
+  // ..######..########.########.##.....##.########.
+  // .##....##.##..........##....##.....##.##.....##
+  // .##.......##..........##....##.....##.##.....##
+  // ..######..######......##....##.....##.########.
+  // .......##.##..........##....##.....##.##.......
+  // .##....##.##..........##....##.....##.##.......
+  // ..######..########....##.....#######..##.......
+
   private setup({ player }: { player: PaxRenaissancePlayerData }) {
     document
       .getElementById(`pr_player_tableau_${player.id}`)
@@ -45,6 +70,10 @@ class PlayerTableau {
       { center: false, sort: sortFunction("state"), gap: "12px" }
     );
 
+    this.updateCards({player});
+  }
+
+  updateCards({ player }: { player: PaxRenaissancePlayerData }) {
     this.tableauEast.addCards(
       player.tableau.cards[EAST].filter(
         (card) => card.type === TABLEAU_CARD || !card.isVassal
@@ -70,7 +99,9 @@ class PlayerTableau {
       .forEach((card: EmpireCard) => {
         this.game.tableauCardManager.addVassal({
           vassal: card,
-          suzerain: this.game.gamedatas.empireSquares.find((empireCard) => empireCard.id === card.suzerainId),
+          suzerain: this.game.gamedatas.empireSquares.find(
+            (empireCard) => empireCard.id === card.suzerainId
+          ),
         });
       });
   }

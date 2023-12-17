@@ -38,6 +38,38 @@ class GameMap {
     this.setupGameMap({ gamedatas });
   }
 
+  // .##.....##.##....##.########...#######.
+  // .##.....##.###...##.##.....##.##.....##
+  // .##.....##.####..##.##.....##.##.....##
+  // .##.....##.##.##.##.##.....##.##.....##
+  // .##.....##.##..####.##.....##.##.....##
+  // .##.....##.##...###.##.....##.##.....##
+  // ..#######..##....##.########...#######.
+
+  clearInterface() {
+    [...BORDERS, ...CITIES].forEach((border) => {
+      const node = document.getElementById(`pr_${border}`);
+      if (!node) {
+        return;
+      }
+      const children = node.children;
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+        child.remove();
+      }
+    });
+
+    Object.keys(this.empireSquareStocks).forEach((stockId) => {
+      this.empireSquareStocks[stockId].removeAll();
+    })
+  }
+
+  updateInterface({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    this.setupTokensBorders({gamedatas});
+    this.setupTokensCities({gamedatas});
+    this.updateEmpireCards({gamedatas});
+  }
+
   // ..######..########.########.##.....##.########.
   // .##....##.##..........##....##.....##.##.....##
   // .##.......##..........##....##.....##.##.....##
@@ -46,11 +78,7 @@ class GameMap {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  setupTokensBorders({
-    gamedatas,
-  }: {
-    gamedatas: PaxRenaissanceGamedatas;
-  }) {
+  setupTokensBorders({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     BORDERS.forEach((border) => {
       const token = gamedatas.tokens.inPlay.find(
         (piece) => piece.location === border
@@ -65,18 +93,11 @@ class GameMap {
         return;
       }
 
-      node.insertAdjacentHTML(
-        "beforeend",
-        tplToken(token)
-      );
+      node.insertAdjacentHTML("beforeend", tplToken(token));
     });
   }
 
-  setupTokensCities({
-    gamedatas,
-  }: {
-    gamedatas: PaxRenaissanceGamedatas;
-  }) {
+  setupTokensCities({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     CITIES.forEach((city) => {
       const token = gamedatas.tokens.inPlay.find(
         (piece) => piece.location === city
@@ -89,10 +110,7 @@ class GameMap {
         return;
       }
 
-      node.insertAdjacentHTML(
-        "beforeend",
-        tplToken(token)
-      );
+      node.insertAdjacentHTML("beforeend", tplToken(token));
     });
   }
 
@@ -140,6 +158,10 @@ class GameMap {
       ),
     };
 
+    this.updateEmpireCards({gamedatas});
+  }
+
+  updateEmpireCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     gamedatas.gameMap.thrones.cards.forEach((card) => {
       const empire = card.location.split("_")[1];
       if (this.empireSquareStocks[empire]) {
@@ -153,22 +175,15 @@ class GameMap {
       // node.setAttribute("data-card-id", `${id}_king`);
     });
     gamedatas.gameMap.thrones.tokens.forEach((token) => {
-      const {location} = token;
+      const { location } = token;
       const node = document.getElementById(`${location}_tokens`);
       if (!node) {
         return;
       }
 
-      node.insertAdjacentHTML(
-        "beforeend",
-        tplToken(token)
-      
-      );
+      node.insertAdjacentHTML("beforeend", tplToken(token));
     });
-
   }
-
-  updateGameMap({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {}
 
   // Setup functions
   setupGameMap({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
@@ -184,7 +199,9 @@ class GameMap {
     this.setupEmpireCards({ gamedatas });
     this.setupTokensCities({ gamedatas });
     this.setupTokensBorders({ gamedatas });
-    gamedatas.gameMap.empires.forEach((empire) => this.setEmpireReligion({empireId: empire.id, religion: empire.religion}));
+    gamedatas.gameMap.empires.forEach((empire) =>
+      this.setEmpireReligion({ empireId: empire.id, religion: empire.religion })
+    );
   }
 
   setupZoomButtons() {
@@ -196,8 +213,6 @@ class GameMap {
     );
     this.checkZoomButtonClasses();
   }
-
-  clearInterface() {}
 
   // ..######...########.########.########.########.########...######.
   // .##....##..##..........##.......##....##.......##.....##.##....##
@@ -230,15 +245,24 @@ class GameMap {
     return this.empireSquareStocks[empireId];
   }
 
-  public setEmpireReligion({empireId, religion}: {empireId: string; religion: string;}) {
+  public setEmpireReligion({
+    empireId,
+    religion,
+  }: {
+    empireId: string;
+    religion: string;
+  }) {
     const node = document.getElementById(`pr_${empireId}`);
     if (!node) {
       return;
     }
-    if ((empireId === PAPAL_STATES && religion === CATHOLIC) || (empireId === MAMLUK && religion === ISLAMIC)) {
+    if (
+      (empireId === PAPAL_STATES && religion === CATHOLIC) ||
+      (empireId === MAMLUK && religion === ISLAMIC)
+    ) {
       node.setAttribute("data-card-id", `medieval_${empireId}`);
     } else {
-      node.setAttribute("data-card-id", `${religion}_${empireId}`);  
+      node.setAttribute("data-card-id", `${religion}_${empireId}`);
     }
   }
 

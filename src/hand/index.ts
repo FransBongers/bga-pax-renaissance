@@ -15,6 +15,14 @@ class Hand {
     this.setupHand();
   }
 
+  clearInterface() {
+    this.hand.removeAll();
+  }
+
+  updateHand() {
+    
+  }
+
   public setupHand() {
     const node: HTMLElement = $("game_play_area");
     node.insertAdjacentHTML("beforeend", tplHand());

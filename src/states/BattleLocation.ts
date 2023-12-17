@@ -52,6 +52,7 @@ class BattleLocationState implements State {
       },
     });
     this.setEmpiresSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirmSelectEmpire({ empire }: { empire: Empire }) {

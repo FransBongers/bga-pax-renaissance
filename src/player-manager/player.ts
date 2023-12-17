@@ -33,7 +33,7 @@ class PRPlayer {
     prestige: {},
     cards: {},
   };
-  private hand: LineStock<TableauCard>;
+  // private hand: LineStock<TableauCard>;
 
   constructor({
     game,
@@ -60,6 +60,25 @@ class PRPlayer {
     this.setupPlayer({ gamedatas, player });
   }
 
+  // .##.....##.##....##.########...#######.
+  // .##.....##.###...##.##.....##.##.....##
+  // .##.....##.####..##.##.....##.##.....##
+  // .##.....##.##.##.##.##.....##.##.....##
+  // .##.....##.##..####.##.....##.##.....##
+  // .##.....##.##...###.##.....##.##.....##
+  // ..#######..##....##.########...#######.
+
+  clearInterface() {
+    this.tableau.clearInterface();
+  }
+
+  updatePlayer({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    const playerGamedatas = gamedatas.players[this.playerId];
+    this.player = playerGamedatas;
+    this.updatePlayerPanel({ playerGamedatas });
+    this.tableau.updateInterface({player: playerGamedatas});
+  }
+
   // ..######..########.########.##.....##.########.
   // .##....##.##..........##....##.....##.##.....##
   // .##.......##..........##....##.....##.##.....##
@@ -68,8 +87,6 @@ class PRPlayer {
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  updatePlayer({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {}
-
   private setupHand({
     gamedatas,
     player,
@@ -77,8 +94,6 @@ class PRPlayer {
     gamedatas: PaxRenaissanceGamedatas;
     player: PaxRenaissancePlayerData;
   }) {
-    this.counters.cards.east.setValue(player.hand.counts.east);
-    this.counters.cards.west.setValue(player.hand.counts.west);
     if (this.playerId === this.game.getPlayerId()) {
       this.game.hand.getStock().addCards(player.hand.cards);
     }
@@ -166,6 +181,8 @@ class PRPlayer {
   }: {
     playerGamedatas: PaxRenaissancePlayerData;
   }) {
+    this.counters.cards.east.setValue(this.player.hand.counts.east);
+    this.counters.cards.west.setValue(this.player.hand.counts.west);
     if (this.game.framework().scoreCtrl?.[this.playerId]) {
       this.game
         .framework()
@@ -187,8 +204,6 @@ class PRPlayer {
       }
     });
   }
-
-  clearInterface() {}
 
   // ..######...########.########.########.########.########...######.
   // .##....##..##..........##.......##....##.......##.....##.##....##

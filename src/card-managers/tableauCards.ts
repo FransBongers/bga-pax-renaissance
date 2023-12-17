@@ -23,6 +23,13 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     });
   }
 
+  clearInterface() {
+    Object.keys(this.vassalStocks).forEach((key) => {
+      this.vassalStocks[key].removeAll();
+      this.removeStock(this.vassalStocks[key]);
+    }) 
+  }
+
   setupDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
     // div.classList.add("pr_card");
     if (card.type === TABLEAU_CARD) {

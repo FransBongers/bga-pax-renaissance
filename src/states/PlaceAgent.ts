@@ -63,6 +63,7 @@ class PlaceAgentState implements State {
           }),
       });
     }
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirmCard({

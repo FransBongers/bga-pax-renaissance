@@ -83,6 +83,10 @@ interface NotifPurchaseCardArgs extends NotifWithPlayerArgs {
   discard: boolean;
 }
 
+interface NotifRefreshHandArgs extends NotifWithPlayerArgs {
+  hand: TableauCard[];
+}
+
 interface NotifRefreshMarketArgs extends NotifWithPlayerArgs {
   cardMoves: {
     from: string;
@@ -90,6 +94,10 @@ interface NotifRefreshMarketArgs extends NotifWithPlayerArgs {
     card: TableauCard;
   }[];
   cardDraws: TableauCard[];
+}
+
+interface NotifRefreshUIArgs {
+  datas: PaxRenaissanceGamedatas;
 }
 
 interface NotifRepressTokenArgs extends NotifWithPlayerArgs {

@@ -59,6 +59,7 @@ class TableauOpInquisitorState implements State {
     });
 
     this.setTokensSelectable();
+    this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceSelectDestination(option: InquisitorOpOption) {

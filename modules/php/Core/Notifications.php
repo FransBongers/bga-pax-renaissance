@@ -37,12 +37,13 @@ class Notifications
     self::notify($playerId, 'message', $txt, $args);
   }
 
+  // TODO: check how to handle this in game log
   public static function newUndoableStep($player, $stepId)
   {
-    self::notify($player, 'newUndoableStep', clienttranslate('Undo here'), [
-      'stepId' => $stepId,
-      'preserve' => ['stepId'],
-    ]);
+    // self::notify($player, 'newUndoableStep', clienttranslate('Undo here'), [
+    //   'stepId' => $stepId,
+    //   'preserve' => ['stepId'],
+    // ]);
   }
 
   public static function clearTurn($player, $notifIds)
@@ -80,6 +81,18 @@ class Notifications
   //   }
   // }
 
+
+  public static function refreshHand($player, $hand)
+  {
+    // foreach ($hand as &$card) {
+    //   $card = self::filterCardDatas($card);
+    // }
+    self::notify($player, 'refreshHand', '', [
+      'player' => $player,
+      'hand' => $hand,
+    ]);
+  }
+
   public static function refreshUI($datas)
   {
     // Keep only the thing that matters
@@ -88,7 +101,8 @@ class Notifications
     ];
 
     self::notifyAll('refreshUI', '', [
-      'datas' => $fDatas,
+      // 'datas' => $fDatas,
+      'datas' => $datas,
     ]);
   }
 

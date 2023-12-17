@@ -24,6 +24,16 @@ class VictoryCardManager extends CardManager<VictoryCard> {
     this.setupVictorySquares();
   }
 
+  clearInterface() {
+    Object.keys(this.victoryCardStocks).forEach((key) => {
+      this.victoryCardStocks[key].removeAll();
+    });
+  }
+
+  updateInterface({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    this.setupCards({ gamedatas });
+  }
+
   setupFrontDiv(card: VictoryCard, div: HTMLElement) {
     div.setAttribute("data-card-id", `${card.location}_active`);
     div.classList.add("pr_square_card");
@@ -53,11 +63,12 @@ class VictoryCardManager extends CardManager<VictoryCard> {
         document.getElementById(`pr_${VICTORY_HOLY}_slot`)
       ),
     };
-    (this.game.gamedatas as PaxRenaissanceGamedatas).victoryCards.forEach(
-      (card) => {
-        console.log("cardications");
-        this.victoryCardStocks[card.location].addCard(card);
-      }
-    );
+    this.setupCards({ gamedatas: this.game.gamedatas });
+  }
+
+  setupCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    gamedatas.victoryCards.forEach((card) => {
+      this.victoryCardStocks[card.location].addCard(card);
+    });
   }
 }

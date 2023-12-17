@@ -51,7 +51,7 @@ const MARCHIONNI = "marchionni";
 const WEST = "west";
 const EAST = "east";
 
-const REGIONS = [WEST, EAST];
+const REGIONS: ('east' | 'west')[] = [WEST, EAST];
 
 // Card types
 const EMPIRE_CARD = "empireCard";

@@ -81,6 +81,7 @@ class TableauOpTaxPayOrRepressState implements State {
           },
         }),
     });
+    this.game.addUndoButtons(this.args);
   }
 
   
