@@ -151,6 +151,6 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
    */
   public static function setupNewGame($players, $options)
   {
-    Globals::setRemainingActions(2);
+    // Globals::setRemainingActions(2);
   }
 }

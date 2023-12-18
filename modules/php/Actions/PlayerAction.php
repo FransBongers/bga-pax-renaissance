@@ -33,23 +33,22 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   {
     $player = self::getPlayer();
     $playerId = $player->getId();
+    Notifications::log('playerId PLAYER_ACTION',$playerId);
     $availableOps = $player->getAvailableOps();
-
-    $cardsPlayerCanSell = $player->getCardsPlayerCanSell();
-    unset($cardsPlayerCanSell['hand']);
+    $remainingActions = 2 - count(Engine::getResolvedActions([PLAYER_ACTION]));
     // Return possible actions
     $data = [
-      'remainingActions' => Globals::getRemainingActions(),
+      'remainingActions' => $remainingActions,
       'cardsPlayerCanPurchase' => Market::getCardsPlayerCanPurchase($player),
-      'cardsPlayerCanSell' => $cardsPlayerCanSell,
       'tradeFair' => Market::getTradeFairs(),
       'availableOps' => $availableOps,
       'declarableVictories' => $this->getDeclarableVictrories($player),
-      '_private' => [
-        $playerId => [
-          'hello' => 'world'
-        ]
-      ]
+      'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
+      // '_private' => [
+      //   $playerId => [
+      //     'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
+      //   ]
+      // ]
     ];
 
     // args['_private'][specificPid]=

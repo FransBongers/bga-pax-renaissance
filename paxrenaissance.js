@@ -1,6 +1,7 @@
 var MIN_PLAY_AREA_WIDTH = 1516;
-var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
+var CLIENT_SELL_CARD_STATE = 'clientSellCardState';
+var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -1758,6 +1759,7 @@ var PaxRenaissance = (function () {
         this._connections = [];
         this.activeStates = (_a = {},
             _a[CLIENT_DECLARE_VICTORY_STATE] = new ClientDeclareVictoryState(this),
+            _a[CLIENT_SELL_CARD_STATE] = new ClientSellCardState(this),
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
             _a.announceOneShot = new AnnounceOneShotState(this),
             _a.battleCasualties = new BattleCasualtiesState(this),
@@ -2893,13 +2895,7 @@ var GameMap = (function () {
         if (!node) {
             return;
         }
-        if ((empireId === PAPAL_STATES && religion === CATHOLIC) ||
-            (empireId === MAMLUK && religion === ISLAMIC)) {
-            node.setAttribute("data-card-id", "medieval_".concat(empireId));
-        }
-        else {
-            node.setAttribute("data-card-id", "".concat(religion, "_").concat(empireId));
-        }
+        node.setAttribute("data-card-id", "".concat(religion, "_").concat(empireId));
     };
     GameMap.prototype.checkZoomButtonClasses = function () {
         var zoomInButton = $("pr_game_map_zoom_in_button");
@@ -3926,16 +3922,10 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, card, value, player;
             return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _a = notif.args, playerId = _a.playerId, card = _a.card, value = _a.value;
-                        player = this.getPlayer({ playerId: playerId });
-                        return [4, player.removeCardFromHand({ card: card })];
-                    case 1:
-                        _b.sent();
-                        player.counters.florins.incValue(value);
-                        return [2];
-                }
+                _a = notif.args, playerId = _a.playerId, card = _a.card, value = _a.value;
+                player = this.getPlayer({ playerId: playerId });
+                player.counters.florins.incValue(value);
+                return [2];
             });
         });
     };
@@ -4948,6 +4938,64 @@ var ClientDeclareVictoryState = (function () {
     };
     return ClientDeclareVictoryState;
 }());
+var ClientSellCardState = (function () {
+    function ClientSellCardState(game) {
+        this.game = game;
+    }
+    ClientSellCardState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    ClientSellCardState.prototype.onLeavingState = function () {
+        debug("Leaving ClientSellCardState");
+    };
+    ClientSellCardState.prototype.setDescription = function (activePlayerId) { };
+    ClientSellCardState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.setCardsSelectable();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a card to sell"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.game.addCancelButton();
+    };
+    ClientSellCardState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var card = _a.card;
+        this.game.clearPossible();
+        this.game.setCardSelected({ id: card.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Sell ${cardName}?"),
+            args: {
+                cardName: card.type === TABLEAU_CARD ? card.name : card[card.side].name,
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "sellCard",
+                        cardId: card.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    ClientSellCardState.prototype.setCardsSelectable = function () {
+        var _this = this;
+        this.args.cards.forEach(function (card) {
+            _this.game.setCardSelectable({
+                id: card.id,
+                callback: function () { return _this.updateInterfaceConfirm({ card: card }); },
+            });
+        });
+    };
+    return ClientSellCardState;
+}());
 var ClientStartTradeFairState = (function () {
     function ClientStartTradeFairState(game) {
         this.game = game;
@@ -5361,32 +5409,17 @@ var PlayerActionState = (function () {
         this.game.clearPossible();
         this.game.setCardSelected({ id: card.id });
         this.game.clientUpdatePageTitle({
-            text: _("Play or sell ${cardName}?"),
+            text: _("Play ${cardName} to tableau?"),
             args: {
                 cardName: _(card.name),
             },
         });
-        this.game.addPrimaryActionButton({
-            id: "play_card_button",
-            text: _("Play"),
+        this.game.addConfirmButton({
             callback: function () {
                 return _this.game.takeAction({
                     action: "actPlayerAction",
                     args: {
                         action: "playCard",
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
-        this.game.addPrimaryActionButton({
-            id: "sell_card_button",
-            text: _("Sell"),
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlayerAction",
-                    args: {
-                        action: "sellCard",
                         cardId: card.id,
                     },
                 });
@@ -5413,6 +5446,21 @@ var PlayerActionState = (function () {
                 });
             }
         });
+        if (this.args.cardsPlayerCanSell.length > 0) {
+            this.game.addPrimaryActionButton({
+                id: 'sell_card_btn',
+                text: _('Sell card'),
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_SELL_CARD_STATE, {
+                        args: {
+                            cards: _this.args.cardsPlayerCanSell
+                        },
+                    });
+                },
+            });
+        }
     };
     PlayerActionState.prototype.addTest = function () {
         var _this = this;

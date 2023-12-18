@@ -22,7 +22,7 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
   {
     $cardId = $this->ctx->getCardId();
     $player = self::getPlayer();
-    $cardsPlayerCanSell =  $player->getCardsPlayerCanSell()['hand'];
+    $cardsPlayerCanSell =  $player->getCardsPlayerCanSell();
 
 
     $card = Utils::array_find($cardsPlayerCanSell, function ($card) use ($cardId) {
@@ -32,7 +32,6 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
     if ($card === null) {
       throw new \feException("Not allowed to sell card");
     }
-    Globals::incRemainingActions(-1);
     $card->sell($player);
 
     $this->resolveAction(['cardId' => $cardId]);

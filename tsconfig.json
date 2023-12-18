@@ -68,6 +68,7 @@
     "src/states/BattleLocation.ts",
     "src/states/BishopPacification.ts",
     "src/states/ClientDeclareVictory.ts",
+    "src/states/ClientSellCard.ts",
     "src/states/ClientStartTradeFair.ts",
     "src/states/ConfirmPartialTurn.ts",
     "src/states/ConfirmTurn.ts",

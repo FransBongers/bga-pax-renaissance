@@ -159,7 +159,7 @@ $cardIds = [
   'PREN140X_VenetianNavy',
   'PREN141X_WelserKleinVenedig',
   'PREN142X_KalmarUnion',
-  'PREN143X_WolfOfRimini',
+  // 'PREN143X_WolfOfRimini',
   'PREN144X_MonsMeg',
   // 'PREN145X_KappelerMilchsuppe',
   // 'PREN146X_BankOfStrozzi',

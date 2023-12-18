@@ -40,5 +40,23 @@ class PREN088_CemAntiHostage extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_SELL_FOR_4,
+        'title' => clienttranslate('RANSOM:'),
+        'text' => [
+          'log' => clienttranslate('Sell this card for 4 instead of 2 Florins.'),
+          'args' => [],
+        ],
+      ]
+    ];
+  }
+
+  public function getSellValue()
+  {
+    if (!$this->isInTableau() && !$this->isSilenced()) {
+      return 4;
+    }
+    return 2;
   }
 }

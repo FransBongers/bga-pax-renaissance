@@ -226,6 +226,10 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
 
 interface PaxRenaissancePlayerData extends BgaPlayer {
   // hexColor: string;
+  cardsPlayerCanSell: {
+    hand: TableauCard[];
+    tableau: TableauCard[];
+  };
   florins: number;
   bank: "coeur" | "fugger" | "marchionni" | "medici";
   hand: {

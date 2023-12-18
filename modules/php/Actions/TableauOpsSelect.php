@@ -126,7 +126,6 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
     $card = Cards::get($cardId);
     $card->setUsed();
 
-    Globals::incRemainingActions(-1);
     Notifications::tableauOpSelected($player, $tableauOp, $card);
 
     Engine::save();

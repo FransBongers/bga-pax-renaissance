@@ -98,43 +98,53 @@ class PlayerActionState implements State {
     //   node.classList.add(PR_SELECTED);
     // }
     this.game.clientUpdatePageTitle({
-      text: _("Play or sell ${cardName}?"),
+      text: _("Play ${cardName} to tableau?"),
       args: {
         cardName: _(card.name),
       },
     });
-    //
-    this.game.addPrimaryActionButton({
-      id: "play_card_button",
-      text: _("Play"),
+    this.game.addConfirmButton({
       callback: () =>
-        this.game.takeAction({
-          action: "actPlayerAction",
-          args: {
-            action: "playCard",
-            cardId: card.id,
-          },
-        }),
-    });
-    this.game.addPrimaryActionButton({
-      id: "sell_card_button",
-      text: _("Sell"),
-      // text: this.game.format_string_recursive(
-      //   "Sell for ${amount} ${tkn_florin}",
-      //   {
-      //     amount: 2,
-      //     tkn_florin: _("Florin(s)"),
-      //   }
-      // ),
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlayerAction",
-          args: {
-            action: "sellCard",
-            cardId: card.id,
-          },
-        }),
-    });
+      this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: "playCard",
+          cardId: card.id,
+        },
+      }),
+    })
+
+    // this.game.addPrimaryActionButton({
+    //   id: "play_card_button",
+    //   text: _("Play"),
+    //   callback: () =>
+    //     this.game.takeAction({
+    //       action: "actPlayerAction",
+    //       args: {
+    //         action: "playCard",
+    //         cardId: card.id,
+    //       },
+    //     }),
+    // });
+    // this.game.addPrimaryActionButton({
+    //   id: "sell_card_button",
+    //   text: _("Sell"),
+    //   // text: this.game.format_string_recursive(
+    //   //   "Sell for ${amount} ${tkn_florin}",
+    //   //   {
+    //   //     amount: 2,
+    //   //     tkn_florin: _("Florin(s)"),
+    //   //   }
+    //   // ),
+    //   callback: () =>
+    //     this.game.takeAction({
+    //       action: "actPlayerAction",
+    //       args: {
+    //         action: "sellCard",
+    //         cardId: card.id,
+    //       },
+    //     }),
+    // });
     // this.game.addConfirmButton({
     //   callback: () =>
     //     this.game.takeAction({
@@ -173,6 +183,23 @@ class PlayerActionState implements State {
         });
       }
     });
+    if (this.args.cardsPlayerCanSell.length > 0) {
+      this.game.addPrimaryActionButton({
+        id: 'sell_card_btn',
+        text: _('Sell card'),
+        callback: () =>
+        this.game
+          .framework()
+          .setClientState<OnEnteringClientSellCardArgs>(
+            CLIENT_SELL_CARD_STATE,
+            {
+              args: {
+                cards: this.args.cardsPlayerCanSell
+              },
+            }
+          ),
+      });
+    }
   }
 
   private addTest() {

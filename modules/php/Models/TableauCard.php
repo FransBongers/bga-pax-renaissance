@@ -20,6 +20,7 @@ class TableauCard extends Card
   protected $oneShot = null;
   protected $prestige = [];
   protected $region;
+  protected $specialAbilities = [];
 
   public function __construct($row)
   {
@@ -35,6 +36,7 @@ class TableauCard extends Card
     'prestige',
     'region',
     'type',
+    'specialAbilities',
   ];
 
   public function jsonSerialize()
@@ -50,6 +52,8 @@ class TableauCard extends Card
       'prestige' => $this->prestige,
       'region' => $this->region,
       'type' => $this->type,
+      'sellValue' => $this->getSellValue(),
+      'specialAbilities' => $this->specialAbilities,
     ]);
   }
 
@@ -103,17 +107,17 @@ class TableauCard extends Card
     Notifications::playCard($player, $this);
   }
 
-  public function sell($player)
-  {
-    $playerId = $player->getId();
+  // public function sell($player)
+  // {
+  //   $playerId = $player->getId();
 
-    $value = $this->getSellValue();
-    Players::incFlorins($playerId, $value);
+  //   $value = $this->getSellValue();
+  //   Players::incFlorins($playerId, $value);
 
-    Cards::move($this->getId(), DISCARD);
-
-    Notifications::sellCard($player, $this, $value);
-  }
+  //   Notifications::sellCard($player, $this, $value);
+  //   // Cards::move($this->getId(), DISCARD);
+  //   $this->discard(DISCARD, $player);
+  // }
 
   // .##.....##.########.####.##.......####.########.##....##
   // .##.....##....##.....##..##........##.....##.....##..##.
@@ -172,10 +176,7 @@ class TableauCard extends Card
     return $column;
   }
 
-  public function getSellValue()
-  {
-    return 2;
-  }
+
 
   // public function getIcons()
   // {

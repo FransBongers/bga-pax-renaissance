@@ -110,9 +110,8 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
 
   public function getCardsPlayerCanSell()
   {
-    return [
-      'hand' => $this->getHand()
-    ];
+    // TODO, add old maids.
+    return array_merge($this->getTableauCards(), $this->getHand());
   }
 
   public function getFlorins()

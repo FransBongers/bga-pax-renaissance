@@ -26,6 +26,10 @@ interface OnEnteringClientDeclareVictoryArgs {
   victoryCard: VictoryCard;
 }
 
+interface OnEnteringClientSellCardArgs {
+  cards: (EmpireCard | TableauCard)[];
+}
+
 interface OnEnteringClientStartTradeFairArgs {
   card: TableauCard;
   city: City;
@@ -83,6 +87,7 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
   declarableVictories: VictoryCard[];
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];
+  cardsPlayerCanSell: (EmpireCard | TableauCard)[];
   tradeFair: {
     east?: {
       card: TableauCard;

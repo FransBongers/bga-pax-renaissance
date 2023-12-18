@@ -43,6 +43,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return $this->ops === null ? [] : $this->ops;
   }
 
+  public function getSellValue()
+  {
+    return 2;
+  }
+
   // Returns player if in tableau, or null if not in tableau
   public function getOwner()
   {
@@ -126,6 +131,17 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId(), false);
     Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
+  }
+
+  public function sell($player)
+  {
+    $playerId = $player->getId();
+
+    $value = $this->getSellValue();
+    Players::incFlorins($playerId, $value);
+
+    Notifications::sellCard($player, $this, $value);
+    $this->discard(DISCARD, $player);
   }
 
   public function getTokens()

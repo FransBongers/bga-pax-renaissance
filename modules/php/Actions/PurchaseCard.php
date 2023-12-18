@@ -31,7 +31,6 @@ class PurchaseCard extends \PaxRenaissance\Models\AtomicAction
     if ($card === null) {
       throw new \feException("Not allowed to purchase card");
     }
-    Globals::incRemainingActions(-1);
     // Notifications::log('card',$card);
     $card->purchase($player, $this->ctx);
 

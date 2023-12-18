@@ -41,5 +41,23 @@ class PREN021_Conquistadors extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [DISCOVERY];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_SELL_FOR_4,
+        'title' => clienttranslate('AZTEC GOLD'),
+        'text' => [
+          'log' => clienttranslate('Sell card for 4 Florins instead of 2 Florins'),
+          'args' => [],
+        ],
+      ]
+    ];
+  }
+
+  public function getSellValue()
+  {
+    if (!$this->isInTableau() && !$this->isSilenced()) {
+      return 4;
+    }
+    return 2;
   }
 }

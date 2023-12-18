@@ -61,13 +61,13 @@ class GameMap {
 
     Object.keys(this.empireSquareStocks).forEach((stockId) => {
       this.empireSquareStocks[stockId].removeAll();
-    })
+    });
   }
 
   updateInterface({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
-    this.setupTokensBorders({gamedatas});
-    this.setupTokensCities({gamedatas});
-    this.updateEmpireCards({gamedatas});
+    this.setupTokensBorders({ gamedatas });
+    this.setupTokensCities({ gamedatas });
+    this.updateEmpireCards({ gamedatas });
   }
 
   // ..######..########.########.##.....##.########.
@@ -158,7 +158,7 @@ class GameMap {
       ),
     };
 
-    this.updateEmpireCards({gamedatas});
+    this.updateEmpireCards({ gamedatas });
   }
 
   updateEmpireCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
@@ -256,14 +256,14 @@ class GameMap {
     if (!node) {
       return;
     }
-    if (
-      (empireId === PAPAL_STATES && religion === CATHOLIC) ||
-      (empireId === MAMLUK && religion === ISLAMIC)
-    ) {
-      node.setAttribute("data-card-id", `medieval_${empireId}`);
-    } else {
-      node.setAttribute("data-card-id", `${religion}_${empireId}`);
-    }
+    // if (
+    //   (empireId === PAPAL_STATES && religion === CATHOLIC) ||
+    //   (empireId === MAMLUK && religion === ISLAMIC)
+    // ) {
+    //   node.setAttribute("data-card-id", `medieval_${empireId}`);
+    // } else {
+    node.setAttribute("data-card-id", `${religion}_${empireId}`);
+    // }
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

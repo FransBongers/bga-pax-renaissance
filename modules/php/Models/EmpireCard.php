@@ -58,6 +58,7 @@ class EmpireCard extends Card
       'side' => $this->side,
       'type' => $this->type,
       'isVassal' => $suzerainId !== null,
+      'sellValue' => $this->getSellValue(),
       'suzerainId' => $suzerainId,
       KING => [
         'agents' => $this->agents[KING],
@@ -153,6 +154,17 @@ class EmpireCard extends Card
     $this->location = $this->startLocation;
     Notifications::discardCard($player, $this, $this->startLocation, $messageType);
   }
+
+  // public function sell($player)
+  // {
+  //   $playerId = $player->getId();
+
+  //   $value = $this->getSellValue();
+  //   Players::incFlorins($playerId, $value);
+
+  //   Notifications::sellCard($player, $this, $value);
+  //   $this->discard(DISCARD, $player);
+  // }
 
   public function discardBishopQueenVassals($player)
   {

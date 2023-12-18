@@ -428,3 +428,9 @@ const SIEGE_OP = 'SIEGE_OP';
 const TAX_OP = 'TAX_OP';
 const VOTE_OP_EAST = 'VOTE_OP_EAST';
 const VOTE_OP_WEST = 'VOTE_OP_WEST';
+
+
+/**
+ * Special Abilities
+ */
+const SA_SELL_FOR_4 = 'SA_SELL_FOR_4';

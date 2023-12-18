@@ -45,7 +45,6 @@ class TableauOpInquisitor extends \PaxRenaissance\Models\AtomicAction
 
   public function stTableauOpInquisitor()
   {
-
   }
 
   // ....###....########...######....######.
@@ -62,7 +61,7 @@ class TableauOpInquisitor extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+    $cardId = $info['cardId'];
 
     $data = [
       'tokens' => $tableauOp->getOptions(Cards::get($cardId)),
@@ -95,12 +94,12 @@ class TableauOpInquisitor extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    
+
     $tokenId = $args['tokenId'];
     $destinationId = $args['destinationId'];
-    
+
     $options = $tableauOp->getOptions();
-    
+
     if (!isset($options[$tokenId])) {
       throw new \feException("Not allowed to move selected Bishop");
     }
@@ -114,7 +113,14 @@ class TableauOpInquisitor extends \PaxRenaissance\Models\AtomicAction
     }
 
     $options[$tokenId]['token']->move($destination->getId());
-    
+
+  
+    $this->ctx->insertAsBrother(new LeafNode([
+      'action' => BISHOP_DIET_OF_WORMS,
+      'playerId' => $this->ctx->getPlayerId(),
+      'tokenId' => $tokenId,
+    ]));
+
     $this->resolveAction($args);
   }
 

@@ -44,7 +44,6 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
     $florinsFromChina = self::florinsFromChina($region);
     Notifications::tradeFairConvene($player, $region, $florinsFromChina);
 
-    Globals::incRemainingActions(-1);
     self::emporiumSubsidy($player, $region);
 
     $profits = Market::getMarketFlorins($region, 0);

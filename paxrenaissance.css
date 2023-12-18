@@ -82,15 +82,24 @@
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
-  background-size: 1000% 300%;
+  background-size: 1000% 400%;
+  background-repeat: no-repeat;
+  border-radius: 5px;
+}
+
+/* ------- MAP CARDS ------- */
+.pr_map_card {
+  box-sizing: border-box;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
+  position: absolute;
+  background-size: 1000% 400%;
   background-repeat: no-repeat;
   border-radius: 5px;
 }
 
 .pr_map_card[data-card-id=catholic_england] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 0%;
   background-position-y: 0%;
@@ -98,8 +107,6 @@
 
 .pr_map_card[data-card-id=catholic_france] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 11.1111111111%;
   background-position-y: 0%;
@@ -107,8 +114,6 @@
 
 .pr_map_card[data-card-id=catholic_holyRomanEmpire] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 22.2222222222%;
   background-position-y: 0%;
@@ -116,8 +121,6 @@
 
 .pr_map_card[data-card-id=catholic_hungary] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 33.3333333333%;
   background-position-y: 0%;
@@ -125,8 +128,6 @@
 
 .pr_map_card[data-card-id=catholic_byzantium] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 44.4444444444%;
   background-position-y: 0%;
@@ -134,8 +135,6 @@
 
 .pr_map_card[data-card-id=catholic_portugal] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 55.5555555556%;
   background-position-y: 0%;
@@ -143,26 +142,13 @@
 
 .pr_map_card[data-card-id=catholic_aragon] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 66.6666666667%;
   background-position-y: 0%;
 }
 
-.pr_map_card[data-card-id=catholic_papalStates] {
-  border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
-  background-image: url("img/map_cards.webp");
-  background-position-x: 77.7777777778%;
-  background-position-y: 0%;
-}
-
 .pr_map_card[data-card-id=catholic_ottoman] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 88.8888888889%;
   background-position-y: 0%;
@@ -170,8 +156,6 @@
 
 .pr_map_card[data-card-id=catholic_mamluk] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 100%;
   background-position-y: 0%;
@@ -179,98 +163,83 @@
 
 .pr_map_card[data-card-id=islamic_england] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 0%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_france] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 11.1111111111%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_holyRomanEmpire] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 22.2222222222%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_hungary] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 33.3333333333%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_byzantium] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 44.4444444444%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_portugal] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 55.5555555556%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_aragon] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 66.6666666667%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_papalStates] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 77.7777777778%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
 .pr_map_card[data-card-id=islamic_ottoman] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 88.8888888889%;
-  background-position-y: 50%;
+  background-position-y: 33.3333333333%;
 }
 
-.pr_map_card[data-card-id=islamic_mamluk] {
+.pr_map_card[data-card-id=medieval_papalStates] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
+  background-image: url("img/map_cards.webp");
+  background-position-x: 77.7777777778%;
+  background-position-y: 66.6666666667%;
+}
+
+.pr_map_card[data-card-id=medieval_mamluk] {
+  border: 1px black solid;
   background-image: url("img/map_cards.webp");
   background-position-x: 100%;
-  background-position-y: 50%;
+  background-position-y: 66.6666666667%;
 }
 
 .pr_map_card[data-card-id=reformist_england] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 0%;
   background-position-y: 100%;
@@ -278,8 +247,6 @@
 
 .pr_map_card[data-card-id=reformist_france] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 11.1111111111%;
   background-position-y: 100%;
@@ -287,8 +254,6 @@
 
 .pr_map_card[data-card-id=reformist_holyRomanEmpire] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 22.2222222222%;
   background-position-y: 100%;
@@ -296,8 +261,6 @@
 
 .pr_map_card[data-card-id=reformist_hungary] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 33.3333333333%;
   background-position-y: 100%;
@@ -305,8 +268,6 @@
 
 .pr_map_card[data-card-id=reformist_byzantium] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 44.4444444444%;
   background-position-y: 100%;
@@ -314,8 +275,6 @@
 
 .pr_map_card[data-card-id=reformist_portugal] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 55.5555555556%;
   background-position-y: 100%;
@@ -323,8 +282,6 @@
 
 .pr_map_card[data-card-id=reformist_aragon] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 66.6666666667%;
   background-position-y: 100%;
@@ -332,8 +289,6 @@
 
 .pr_map_card[data-card-id=reformist_papalStates] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 77.7777777778%;
   background-position-y: 100%;
@@ -341,8 +296,6 @@
 
 .pr_map_card[data-card-id=reformist_ottoman] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 88.8888888889%;
   background-position-y: 100%;
@@ -350,8 +303,6 @@
 
 .pr_map_card[data-card-id=reformist_mamluk] {
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
   background-image: url("img/map_cards.webp");
   background-position-x: 100%;
   background-position-y: 100%;

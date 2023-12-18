@@ -26,10 +26,11 @@ trait DebugTrait
 {
   function test()
   {
+    Notifications::log('globals', Engine::getResolvedActions([PLAYER_ACTION]));
     // $card = Cards::getTopOf(Locations::market(WEST,1));
     // Cards::move($card->getId(), DISCARD);
     // Cards::insertOnTop('PREN002_PapalElephant', Locations::market(WEST,1));
-    Notifications::log('canDeclare', Cards::get('VictoryHoly')->canBeDeclaredByPlayer(Players::get()));
+    // Notifications::log('canDeclare', Cards::get('VictoryHoly')->canBeDeclaredByPlayer(Players::get()));
     
     // AtomicActions::get(PATRON_VICTORY)->stPatronVictory();
     // Notifications::declareVictory(Players::get(),Cards::get('VictoryImperial'));

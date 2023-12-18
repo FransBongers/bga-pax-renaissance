@@ -36,7 +36,7 @@ trait TurnTrait
   {
     $player = Players::getActive();
     self::giveExtraTime($player->getId());
-    Globals::setRemainingActions(2);
+    // Globals::setRemainingActions(2);
     Cards::resetUsed();
 
     Stats::incTurns($player);

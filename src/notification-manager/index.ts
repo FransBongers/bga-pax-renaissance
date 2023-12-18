@@ -384,7 +384,7 @@ class NotificationManager {
   async notif_sellCard(notif: Notif<NotifSellCardArgs>) {
     const { playerId, card, value } = notif.args;
     const player = this.getPlayer({ playerId });
-    await player.removeCardFromHand({ card });
+    // await player.removeCardFromHand({ card });
     player.counters.florins.incValue(value);
   }
 

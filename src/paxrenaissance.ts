@@ -28,6 +28,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
   public activeStates: {
     [CLIENT_DECLARE_VICTORY_STATE]: ClientDeclareVictoryState;
+    [CLIENT_SELL_CARD_STATE]: ClientSellCardState;
     [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
     announceOneShot: AnnounceOneShotState;
     battleCasualties: BattleCasualtiesState;
@@ -85,6 +86,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // Will store all data for active player and gets refreshed with entering player actions state
     this.activeStates = {
       [CLIENT_DECLARE_VICTORY_STATE]: new ClientDeclareVictoryState(this),
+      [CLIENT_SELL_CARD_STATE]: new ClientSellCardState(this),
       [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),
       announceOneShot: new AnnounceOneShotState(this),
       battleCasualties: new BattleCasualtiesState(this),
