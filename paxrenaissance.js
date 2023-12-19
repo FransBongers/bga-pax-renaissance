@@ -1756,6 +1756,7 @@ var PaxRenaissance = (function () {
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
         this.gamedatas = gamedatas;
         debug("gamedatas", gamedatas);
+        this.setupPlayerOrder({ customPlayerOrder: gamedatas.customPlayerOrder });
         this._connections = [];
         this.activeStates = (_a = {},
             _a[CLIENT_DECLARE_VICTORY_STATE] = new ClientDeclareVictoryState(this),
@@ -1790,7 +1791,9 @@ var PaxRenaissance = (function () {
         this.tableauCardManager = new TableauCardManager(this);
         this.gameMap = new GameMap(this);
         this.tooltipManager = new TooltipManager(this);
-        this.hand = new Hand(this);
+        if (this.playerOrder.includes(this.getPlayerId())) {
+            this.hand = new Hand(this);
+        }
         this.playerManager = new PlayerManager(this);
         this.supply = new Supply(this);
         this.market = new Market(this);
@@ -1806,6 +1809,18 @@ var PaxRenaissance = (function () {
         this.notificationManager.setupNotifications();
         this.tooltipManager.setupTooltips();
         debug("Ending game setup");
+    };
+    PaxRenaissance.prototype.setupPlayerOrder = function (_a) {
+        var customPlayerOrder = _a.customPlayerOrder;
+        var currentPlayerId = this.getPlayerId();
+        var isInGame = customPlayerOrder.includes(currentPlayerId);
+        if (isInGame) {
+            while (customPlayerOrder[0] !== currentPlayerId) {
+                var firstItem = customPlayerOrder.shift();
+                customPlayerOrder.push(firstItem);
+            }
+        }
+        this.playerOrder = customPlayerOrder;
     };
     PaxRenaissance.prototype.updatePlayAreaSize = function () {
         var playAreaContainer = document.getElementById("pr_play_area_container");
@@ -2012,9 +2027,6 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.getPlayerId = function () {
         return Number(this.framework().player_id);
-    };
-    PaxRenaissance.prototype.getCurrentPlayer = function () {
-        return this.playerManager.getPlayer({ playerId: this.getPlayerId() });
     };
     PaxRenaissance.prototype.framework = function () {
         return this;
@@ -3608,18 +3620,30 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_discardCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card, toLocationId;
+            var _a, playerId, card, toLocationId, wasVassalTo;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, card = _a.card, toLocationId = _a.toLocationId;
-                if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
-                    this.game.tableauCardManager.removeCard(card);
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, card = _a.card, toLocationId = _a.toLocationId, wasVassalTo = _a.wasVassalTo;
+                        if (!(card.type === TABLEAU_CARD && toLocationId === DISCARD)) return [3, 2];
+                        return [4, this.game.tableauCardManager.removeCard(card)];
+                    case 1:
+                        _b.sent();
+                        return [3, 4];
+                    case 2:
+                        if (!(card.type === EMPIRE_CARD)) return [3, 4];
+                        return [4, this.game.gameMap
+                                .getEmpireSquareStock({ empireId: card.empire })
+                                .addCard(card)];
+                    case 3:
+                        _b.sent();
+                        _b.label = 4;
+                    case 4:
+                        if (wasVassalTo) {
+                            this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
+                        }
+                        return [2];
                 }
-                else if (card.type === EMPIRE_CARD) {
-                    this.game.gameMap
-                        .getEmpireSquareStock({ empireId: card.empire })
-                        .addCard(card);
-                }
-                return [2];
             });
         });
     };
@@ -4119,7 +4143,7 @@ var PlayerManager = (function () {
         this.game = game;
         this.players = {};
         this.setupPlayerTableaux({
-            playerOrder: game.gamedatas.playerorder.map(function (playerId) {
+            playerOrder: game.playerOrder.map(function (playerId) {
                 return Number(playerId);
             }),
         });
@@ -4967,9 +4991,11 @@ var ClientSellCardState = (function () {
         this.game.clearPossible();
         this.game.setCardSelected({ id: card.id });
         this.game.clientUpdatePageTitle({
-            text: _("Sell ${cardName}?"),
+            text: _("Sell ${cardName} for ${amount} ${tkn_florin} ?"),
             args: {
                 cardName: card.type === TABLEAU_CARD ? card.name : card[card.side].name,
+                amount: card.sellValue,
+                tkn_florin: tknFlorin(),
             },
         });
         this.game.addConfirmButton({

@@ -149,10 +149,22 @@ class EmpireCard extends Card
     $player = $player === null ? Players::get() : $player;
 
     // TODO: handle discarding of queens / vassals
+    $vassals = $this->getVassals();
+
+    foreach($vassals as $vassal) {
+      $vassal->discard(DISCARD, $player);
+    }
+
+    $wasVassalTo = $this->getSuzerain();
+    if ($wasVassalTo !== null) {
+      $this->setExtraData('suzerainId', null);
+    }
 
     Cards::insertOnTop($this->getId(), $this->startLocation);
     $this->location = $this->startLocation;
-    Notifications::discardCard($player, $this, $this->startLocation, $messageType);
+
+
+    Notifications::discardCard($player, $this, $this->startLocation, $messageType, $wasVassalTo);
   }
 
   // public function sell($player)
@@ -177,8 +189,13 @@ class EmpireCard extends Card
       $token->returnToSupply(RETURN_TO_SUPPLY, $player);
     }
 
+    // Discard vassals
+    $vassals = $this->getVassals();
+    foreach($vassals as $vassal) {
+      $vassal->discard(DISCARD, $player);
+    }
+
     // TODO: discard queen
-    // TODO: return Vassals
   }
 
   public function flip($player = null)

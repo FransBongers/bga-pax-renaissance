@@ -155,6 +155,18 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     });
   }
 
+  public static function getPlayerOrder()
+  {
+    $players = self::getAll()->toArray();
+    usort($players, function ($a, $b) {
+      return $a->getNo() - $b->getNo();
+    });
+    $playerOrder = array_map(function ($player) {
+      return $player->getId();
+    }, $players);
+    return $playerOrder;
+  }
+
   /*
    * Get current turn order according to first player variable
    */

@@ -122,16 +122,15 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     if (!$skipped && !array_key_exists($locationId, $stateArgs['locations'])) {
       throw new \feException("Not allowed to place Agent on selected location");
     }
-
+    $info = $this->ctx->getInfo();
     $type = $agent['type'];
-    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 0;
+    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 1;
 
     if (!$skipped) {
       $locationType = $type === BISHOP ? $stateArgs['locations'][$locationId]->getType() : $stateArgs['locations'][$locationId]['type'];
 
       $player = self::getPlayer();
-      $info = $this->ctx->getInfo();
-
+      
       $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['separator']);
 
       Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, $info['empireId'], $repressCost), $this->ctx);

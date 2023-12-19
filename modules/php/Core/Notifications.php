@@ -312,7 +312,7 @@ class Notifications
     ]);
   }
 
-  public static function discardCard($player, $card, $toLocationId, $messageType = DISCARD)
+  public static function discardCard($player, $card, $toLocationId, $messageType = DISCARD, $wasVassalTo = null)
   {
     $messages = [
       DISCARD => clienttranslate('${tkn_playerName} discards ${tkn_boldText}'),
@@ -324,6 +324,7 @@ class Notifications
       'tkn_boldText' => $card->getName(),
       'card' => $card,
       'toLocationId' => $toLocationId,
+      'wasVassalTo' => $wasVassalTo,
     ]);
   }
 

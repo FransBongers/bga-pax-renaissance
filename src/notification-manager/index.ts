@@ -134,13 +134,16 @@ class NotificationManager {
   }
 
   async notif_discardCard(notif: Notif<NotifDiscardCardArgs>) {
-    const { playerId, card, toLocationId } = notif.args;
+    const { playerId, card, toLocationId, wasVassalTo } = notif.args;
     if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
-      this.game.tableauCardManager.removeCard(card);
+      await this.game.tableauCardManager.removeCard(card);
     } else if (card.type === EMPIRE_CARD) {
-      this.game.gameMap
+      await this.game.gameMap
         .getEmpireSquareStock({ empireId: card.empire })
         .addCard(card);
+    }
+    if (wasVassalTo) {
+      this.game.tableauCardManager.removeVassal({suzerain: wasVassalTo});
     }
   }
 

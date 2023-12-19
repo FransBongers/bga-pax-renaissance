@@ -16,6 +16,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public market: Market;
   public notificationManager: NotificationManager;
   public playerManager: PlayerManager;
+  public playerOrder: number[];
   public tooltipManager: TooltipManager;
   public playAreaScale: number;
   public supply: Supply;
@@ -81,6 +82,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.gamedatas = gamedatas;
     // this.gameOptions = gamedatas.gameOptions;
     debug("gamedatas", gamedatas);
+    this.setupPlayerOrder({ customPlayerOrder: gamedatas.customPlayerOrder });
 
     this._connections = [];
     // Will store all data for active player and gets refreshed with entering player actions state
@@ -119,7 +121,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
     this.gameMap = new GameMap(this);
     this.tooltipManager = new TooltipManager(this);
-    this.hand = new Hand(this);
+    if (this.playerOrder.includes(this.getPlayerId())) {
+      this.hand = new Hand(this);
+    }
     this.playerManager = new PlayerManager(this);
     this.supply = new Supply(this);
     this.market = new Market(this);
@@ -146,6 +150,19 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // this.setupNotifications();
     this.tooltipManager.setupTooltips();
     debug("Ending game setup");
+  }
+
+  // Sets player order with current player at index 0 if player is in the game
+  setupPlayerOrder({ customPlayerOrder }: { customPlayerOrder: number[] }) {
+    const currentPlayerId = this.getPlayerId();
+    const isInGame = customPlayerOrder.includes(currentPlayerId);
+    if (isInGame) {
+      while (customPlayerOrder[0] !== currentPlayerId) {
+        const firstItem = customPlayerOrder.shift();
+        customPlayerOrder.push(firstItem);
+      }
+    }
+    this.playerOrder = customPlayerOrder;
   }
 
   public updatePlayAreaSize() {
@@ -486,9 +503,10 @@ class PaxRenaissance implements PaxRenaissanceGame {
     return Number(this.framework().player_id);
   }
 
-  public getCurrentPlayer(): PRPlayer {
-    return this.playerManager.getPlayer({ playerId: this.getPlayerId() });
-  }
+  // NOTE: we should probably not use this as current player can also be a spectator?
+  // public getCurrentPlayer(): PRPlayer {
+  //   return this.playerManager.getPlayer({ playerId: this.getPlayerId() });
+  // }
 
   /**
    * Typescript wrapper for framework functions

@@ -54,6 +54,7 @@ class PlayCard extends \PaxRenaissance\Models\AtomicAction
         'agents' => $card->getAgents(),
         'empireId' => $card->getEmpire(),
         'optional' => true,
+        'repressCost' => 1,
       ]));
     }
 

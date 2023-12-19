@@ -33,6 +33,7 @@ interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   card: TableauCard | EmpireCard;
   tkn_cardName: string;
   toLocationId: string;
+  wasVassalTo: EmpireCard | null;
 }
 
 interface NotifFlipEmpireCardArgs extends NotifWithPlayerArgs {

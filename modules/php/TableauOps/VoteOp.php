@@ -61,6 +61,10 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
         continue;
       }
 
+      if ($empireCard->isVassal()) {
+        continue;
+      }
+
       // 2. Player needs to be able to pay for Repressed Tokens
       $cost = count(Utils::filter($empireCard->getTokens(), function ($token) {
         return in_array($token->getType(), [PAWN, ROOK, KNIGHT]);

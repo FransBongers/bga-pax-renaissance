@@ -24,7 +24,7 @@ class PlayerManager {
     this.players = {};
 
     this.setupPlayerTableaux({
-      playerOrder: game.gamedatas.playerorder.map((playerId: string | number) =>
+      playerOrder: game.playerOrder.map((playerId: string | number) =>
         Number(playerId)
       ),
     });

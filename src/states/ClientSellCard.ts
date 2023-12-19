@@ -61,9 +61,11 @@ class ClientSellCardState implements State {
     this.game.setCardSelected({ id: card.id });
 
     this.game.clientUpdatePageTitle({
-      text: _("Sell ${cardName}?"),
+      text: _("Sell ${cardName} for ${amount} ${tkn_florin} ?"),
       args: {
         cardName: card.type === TABLEAU_CARD ? card.name : card[card.side].name,
+        amount: card.sellValue,
+        tkn_florin: tknFlorin(),
       },
     });
     this.game.addConfirmButton({

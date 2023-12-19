@@ -59,6 +59,7 @@ interface PaxRenaissanceGame extends Game {
   notificationManager: NotificationManager;
   playAreaScale: number;
   playerManager: PlayerManager;
+  playerOrder: number[];
   supply: Supply;
   tooltipManager: TooltipManager;
   tableauCardManager: TableauCardManager;
@@ -125,6 +126,7 @@ interface EmpireCardSide {
 
 interface EmpireCard extends PaxRenCard {
   empire: string;
+  sellValue: number;
   isVassal: boolean;
   suzerainId: string | null;
   king: EmpireCardSide;
@@ -141,6 +143,7 @@ interface TableauCard extends PaxRenCard {
   prestige: string[];
   region: "east" | "west";
   type: "tableauCard";
+  sellValue: number;
 }
 
 
@@ -171,6 +174,7 @@ interface Token {
 
 interface PaxRenaissanceGamedatas extends Gamedatas {
   canceledNotifIds: string[];
+  customPlayerOrder: number[];
   empireSquares: EmpireCard[];
   gameMap: {
     empires: Empire[];

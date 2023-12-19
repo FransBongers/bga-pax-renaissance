@@ -31,7 +31,7 @@ class PREN104X_TheftOfTheHolyCrown extends \PaxRenaissance\Models\TableauCard
 
   public function getSellValue()
   {
-    if (!$this->isInTableau() && !$this->isSilenced()) {
+    if ($this->isInTableau() && !$this->isSilenced()) {
       return 4;
     }
     return 2;

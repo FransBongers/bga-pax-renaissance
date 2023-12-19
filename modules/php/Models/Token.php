@@ -67,7 +67,6 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
   public function repress($empireId, $cost = 1)
   {
     $oldLocation = $this->getLocationInstance();
-    // Notifications::log('oldLocation', $oldLocation);
 
     $this->move(Empires::get($empireId)->getEmpireSquareId(), false);
     $player = Players::get();
