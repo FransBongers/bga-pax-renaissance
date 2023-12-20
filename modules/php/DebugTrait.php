@@ -27,8 +27,8 @@ trait DebugTrait
 {
   function test()
   {
-    $this->debugPlaceCardInMarket('PREN088_CemAntiHostage');
-    // Notifications::log('discard', Cards::get('EmpireSquare_Aragon')->discard());
+    // $this->debugPlaceCardInMarket('PREN088_CemAntiHostage');
+    Notifications::log('EmpireSquare_Portugal', Cards::get('EmpireSquare_Portugal'));
     // Notifications::log('globals', Engine::getResolvedActions([PLAYER_ACTION]));
 
     // Notifications::log('canDeclare', Cards::get('VictoryHoly')->canBeDeclaredByPlayer(Players::get()));

@@ -211,7 +211,7 @@ $machinestates = [
         'transitions' => [],
     ],
 
-    
+
     ST_TRADE_FAIR_PROFIT_DISPERSAL => [
         'name' => 'tradeFairProfitDispersal',
         'description' => '',
@@ -231,14 +231,14 @@ $machinestates = [
         'possibleactions' => ['actTradeFairLevy', 'actRestart'],
     ],
 
-    ST_PLACE_AGENT=> [
+    ST_PLACE_AGENT => [
         'name' => 'placeAgent',
         'description' => clienttranslate('${actplayer} may place agent'),
         'descriptionmyturn' => clienttranslate('${you}'),
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actPlaceAgent', 'pass'],
+        'possibleactions' => ['actPlaceAgent', 'pass', 'actRestart'],
     ],
 
     ST_RESOLVE_PLACE_TOKEN => [
@@ -259,7 +259,7 @@ $machinestates = [
         'possibleactions' => ['actSelectToken', 'pass', 'actRestart'],
     ],
 
-    
+
     ST_BISHOP_DIET_OF_WORMS => [
         'name' => 'bishopDietOfWorms',
         'description' => '',

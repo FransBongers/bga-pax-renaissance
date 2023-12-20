@@ -20,7 +20,7 @@ class PREN051_Kingmaker extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = ENGLAND;
     $this->flavorText = [
-      clienttranslate("Richard Neville, Earl of Warwick, was the wealthiest and most powerful of the Enlish noblemen and originally supported the Lancastrian King Henry VI. In a territorial dispute, he defected to become the Yorkist commander, installing Edward IV onto the throne."),
+      clienttranslate("Richard Neville, Earl of Warwick, was the wealthiest and most powerful of the English noblemen and originally supported the Lancastrian King Henry VI. In a territorial dispute, he defected to become the Yorkist commander, installing Edward IV onto the throne."),
       clienttranslate('After yet another dispute, he deposed Edward in 1470 and restored Henry VI, but died in battle soon after.')
     ];
     $this->name = clienttranslate('Kingmaker');

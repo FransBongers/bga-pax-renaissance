@@ -4275,28 +4275,41 @@ var PRPlayer = (function () {
         this.updatePlayerPanel({ playerGamedatas: playerGamedatas });
     };
     PRPlayer.prototype.updatePlayerPanel = function (_a) {
-        var _this = this;
         var _b;
+        var _this = this;
+        var _c;
         var playerGamedatas = _a.playerGamedatas;
-        this.counters.cards.east.setValue(this.player.hand.counts.east);
-        this.counters.cards.west.setValue(this.player.hand.counts.west);
-        if ((_b = this.game.framework().scoreCtrl) === null || _b === void 0 ? void 0 : _b[this.playerId]) {
+        this.counters.cards.east.setValue(playerGamedatas.hand.counts.east);
+        this.counters.cards.west.setValue(playerGamedatas.hand.counts.west);
+        this.counters.florins.setValue(playerGamedatas.florins);
+        if ((_c = this.game.framework().scoreCtrl) === null || _c === void 0 ? void 0 : _c[this.playerId]) {
             this.game
                 .framework()
                 .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
         }
         var allCards = __spreadArray(__spreadArray([], playerGamedatas.tableau.cards.east, true), playerGamedatas.tableau.cards.west, true);
+        var prestigeCount = (_b = {},
+            _b[CATHOLIC] = 0,
+            _b[ISLAMIC] = 0,
+            _b[REFORMIST] = 0,
+            _b[LAW] = 0,
+            _b[DISCOVERY] = 0,
+            _b[PATRON] = 0,
+            _b);
         allCards.forEach(function (card) {
             if (card.type === TABLEAU_CARD) {
                 card.prestige.forEach(function (prestige) {
-                    _this.counters.prestige[prestige].incValue(1);
+                    prestigeCount[prestige] = prestigeCount[prestige] + 1;
                 });
             }
             else if (card.type === EMPIRE_CARD) {
                 card[card.side].prestige.forEach(function (prestige) {
-                    _this.counters.prestige[prestige].incValue(1);
+                    prestigeCount[prestige] = prestigeCount[prestige] + 1;
                 });
             }
+        });
+        Object.keys(prestigeCount).forEach(function (prestige) {
+            _this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
         });
     };
     PRPlayer.prototype.getBank = function () {
@@ -4399,6 +4412,13 @@ var PlayerTableau = (function () {
         var player = _a.player;
         this.tableauEast.addCards(player.tableau.cards[EAST].filter(function (card) { return card.type === TABLEAU_CARD || !card.isVassal; }));
         this.tableauWest.addCards(player.tableau.cards[WEST].filter(function (card) { return card.type === TABLEAU_CARD || !card.isVassal; }));
+        __spreadArray(__spreadArray([], player.tableau.cards[EAST], true), player.tableau.cards[WEST], true).filter(function (card) { return card.type === EMPIRE_CARD && card.isVassal; })
+            .forEach(function (card) {
+            _this.game.tableauCardManager.addVassal({
+                vassal: card,
+                suzerain: _this.game.gamedatas.empireSquares.find(function (empireCard) { return empireCard.id === card.suzerainId; }),
+            });
+        });
         player.tableau.tokens.forEach(function (token) {
             var location = token.location;
             var node = document.getElementById("".concat(location, "_tokens"));
@@ -4406,13 +4426,6 @@ var PlayerTableau = (function () {
                 return;
             }
             node.insertAdjacentHTML("beforeend", tplToken(token));
-        });
-        __spreadArray(__spreadArray([], player.tableau.cards[EAST], true), player.tableau.cards[WEST], true).filter(function (card) { return card.type === EMPIRE_CARD && card.isVassal; })
-            .forEach(function (card) {
-            _this.game.tableauCardManager.addVassal({
-                vassal: card,
-                suzerain: _this.game.gamedatas.empireSquares.find(function (empireCard) { return empireCard.id === card.suzerainId; }),
-            });
         });
     };
     PlayerTableau.prototype.addCard = function (card) {
@@ -6811,11 +6824,11 @@ var TradeFairLevyState = (function () {
         var cityId = _a.cityId;
         this.game.clearPossible();
         this.game.setLocationSelected({ id: cityId });
-        var _b = this.args.possibleLevies[cityId].levy, religion = _b.religion, levyIcon = _b.levyIcon;
+        var _b = this.args.possibleLevies[cityId].levy, separator = _b.separator, levyIcon = _b.levyIcon;
         this.game.clientUpdatePageTitle({
             text: _("Place ${tkn_mapToken} in ${cityName}?"),
             args: {
-                tkn_mapToken: [religion, levyIcon].join('_'),
+                tkn_mapToken: [separator, levyIcon].join('_'),
                 cityName: _(this.args.possibleLevies[cityId].cityName)
             },
         });

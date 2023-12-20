@@ -181,8 +181,9 @@ class PRPlayer {
   }: {
     playerGamedatas: PaxRenaissancePlayerData;
   }) {
-    this.counters.cards.east.setValue(this.player.hand.counts.east);
-    this.counters.cards.west.setValue(this.player.hand.counts.west);
+    this.counters.cards.east.setValue(playerGamedatas.hand.counts.east);
+    this.counters.cards.west.setValue(playerGamedatas.hand.counts.west);
+    this.counters.florins.setValue(playerGamedatas.florins);
     if (this.game.framework().scoreCtrl?.[this.playerId]) {
       this.game
         .framework()
@@ -192,17 +193,30 @@ class PRPlayer {
       ...playerGamedatas.tableau.cards.east,
       ...playerGamedatas.tableau.cards.west,
     ];
+    const prestigeCount = {
+      [CATHOLIC]: 0,
+      [ISLAMIC]: 0,
+      [REFORMIST]: 0,
+      [LAW]: 0,
+      [DISCOVERY]: 0,
+      [PATRON]: 0
+    };
     allCards.forEach((card) => {
       if (card.type === TABLEAU_CARD) {
         card.prestige.forEach((prestige) => {
-          this.counters.prestige[prestige].incValue(1);
+          prestigeCount[prestige] = prestigeCount[prestige] + 1; 
+          // this.counters.prestige[prestige].incValue(1);
         });
       } else if (card.type === EMPIRE_CARD) {
         card[card.side].prestige.forEach((prestige) => {
-          this.counters.prestige[prestige].incValue(1);
+          prestigeCount[prestige] = prestigeCount[prestige] + 1;
+          // this.counters.prestige[prestige].incValue(1);
         });
       }
     });
+    Object.keys(prestigeCount).forEach((prestige) => {
+      this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
+    })
   }
 
   // ..######...########.########.########.########.########...######.

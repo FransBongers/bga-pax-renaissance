@@ -64,11 +64,11 @@ class TradeFairLevyState implements State {
   private updateInterfaceConfirmPlaceLevy({cityId}: {cityId: string;}) {
     this.game.clearPossible();
     this.game.setLocationSelected({id: cityId});
-    const {religion, levyIcon} = this.args.possibleLevies[cityId].levy;
+    const {separator, levyIcon} = this.args.possibleLevies[cityId].levy;
     this.game.clientUpdatePageTitle({
       text: _("Place ${tkn_mapToken} in ${cityName}?"),
       args: {
-        tkn_mapToken: [religion, levyIcon].join('_'),
+        tkn_mapToken: [separator, levyIcon].join('_'),
         cityName: _(this.args.possibleLevies[cityId].cityName)
       },
     });

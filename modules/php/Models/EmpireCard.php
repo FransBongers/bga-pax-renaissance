@@ -231,7 +231,7 @@ class EmpireCard extends Card
   /**
    * suzerain is the empire square, not the empire
    */
-  public function resolveRegimeChange($player, $isCampaign, $suzerain = null) {
+  public function resolveRegimeChange($player, $isCampaign, $attackingEmpire = null) {
     // $isInThrone = $this->location === $this->startLocation;
     $playerId = $player->getId();
 
@@ -260,7 +260,7 @@ class EmpireCard extends Card
     if ($isInOwnTableau) {
       $this->flip($player);
     } else if ($isCampaign) {
-      $this->vassalage($player, $suzerain, $from);
+      $this->vassalage($player, $attackingEmpire, $from);
     } else {
       $this->moveToTableau($player, $from);
     }
@@ -274,8 +274,10 @@ class EmpireCard extends Card
     Notifications::moveEmpireSquare($player, $this, $from);
   }
 
-  public function vassalage($player, $suzerain, $from)
+  public function vassalage($player, $attackingEmpire, $from)
   {
+    $suzerain = $attackingEmpire->isVassal() ? $attackingEmpire->getSuzerain() : $attackingEmpire;
+
     $suzerainLocation = $suzerain->getLocation();
 
     $region = explode('_', $suzerainLocation)[1];

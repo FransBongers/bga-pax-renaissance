@@ -29,7 +29,7 @@ class PlayerTableau {
   }
 
   updateInterface({ player }: { player: PaxRenaissancePlayerData }) {
-    this.updateCards({player});
+    this.updateCards({ player });
   }
 
   // ..######..########.########.##.....##.########.
@@ -70,7 +70,7 @@ class PlayerTableau {
       { center: false, sort: sortFunction("state"), gap: "12px" }
     );
 
-    this.updateCards({player});
+    this.updateCards({ player });
   }
 
   updateCards({ player }: { player: PaxRenaissancePlayerData }) {
@@ -84,15 +84,6 @@ class PlayerTableau {
         (card) => card.type === TABLEAU_CARD || !card.isVassal
       )
     );
-    player.tableau.tokens.forEach((token) => {
-      const { location } = token;
-      const node = document.getElementById(`${location}_tokens`);
-      if (!node) {
-        return;
-      }
-
-      node.insertAdjacentHTML("beforeend", tplToken(token));
-    });
 
     [...player.tableau.cards[EAST], ...player.tableau.cards[WEST]]
       .filter((card) => card.type === EMPIRE_CARD && card.isVassal)
@@ -104,6 +95,16 @@ class PlayerTableau {
           ),
         });
       });
+
+    player.tableau.tokens.forEach((token) => {
+      const { location } = token;
+      const node = document.getElementById(`${location}_tokens`);
+      if (!node) {
+        return;
+      }
+
+      node.insertAdjacentHTML("beforeend", tplToken(token));
+    });
   }
 
   public async addCard(card: EmpireCard | TableauCard) {

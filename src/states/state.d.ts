@@ -190,7 +190,7 @@ interface OnEnteringTradeFairLevyArgs extends CommonArgs {
       cityName: string;
       levy: {
         levyIcon: string;
-        religion: string;
+        separator: string;
       };
     };
   };

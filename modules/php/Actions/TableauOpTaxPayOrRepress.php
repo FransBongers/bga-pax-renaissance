@@ -51,6 +51,7 @@ class TableauOpTaxPayOrRepress extends \PaxRenaissance\Models\AtomicAction
     }
     Notifications::tableauOpTaxNoFlorins($player);
     $this->resolveRepress();
+    // $this->resolveAction([]);
   }
 
   // ....###....########...######....######.
