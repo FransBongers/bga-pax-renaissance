@@ -20,7 +20,7 @@ class PREN052_Luther extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
     $this->flavorText = [
-      clienttranslate("Martin Luther's powerful testimony of faith and the Diet of Worms in 1521, caused the emperor to brand him as a heretic, but ir made an indelible impression upon some powerful German princes."),
+      clienttranslate("Martin Luther's powerful testimony of faith at the Diet of Worms in 1521, caused the emperor to brand him as a heretic, but it made an indelible impression upon some powerful German princes."),
       clienttranslate("They formed a defensive alliance of Lutheranism, the League of Schmalkaldic, which sought to replace the Holy Roman Empire as their source of political allegiance.")
     ];
     $this->name = clienttranslate('Luther');
