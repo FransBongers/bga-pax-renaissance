@@ -17,7 +17,7 @@ class PREN041_PeasantRepublicOfDithmarschen extends \PaxRenaissance\Models\Table
     $this->empire = WEST;
     $this->flavorText = [
       clienttranslate('From 1484 to 1500 many feudal attempts were made to subdue the free peasants of the North Sea marsh of Dithmarshen. Prince-archbishop Rode of Bremen formed an alliance with other Hansa cities to guard the republic and their access to free maritime trade.'),
-      clienttranslate('The allies prevailed against the ruthless Black Guard mercenaries, who were promised the spoils of they could subdue the peasants.')
+      clienttranslate('The allies prevailed against the ruthless Black Guard mercenaries, who were promised the spoils if they could subdue the peasants.')
     ];
     $this->name = clienttranslate('Peasant Republic of Dithmarschen');
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;

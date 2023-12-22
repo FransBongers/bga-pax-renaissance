@@ -443,6 +443,11 @@ $map-cards: (
   .pr_token {
     align-self: flex-end;
   }
+
+  .pr_token:hover:not([class*="pr_selectable"]) {
+    transform: translateY(calc(var(--paxRenMapScale) * -30px));
+    transition: transform 500ms;
+  }
   
   .pr_disk {
     margin-bottom: calc(var(--paxRenMapScale) * 3px);

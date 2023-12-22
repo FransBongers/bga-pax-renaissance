@@ -36,6 +36,7 @@ class ClientSellCardState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.setCardsSelectable();
+    this.setRoyalCouplesSelectable();
 
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} must select a card to sell"),
@@ -75,6 +76,35 @@ class ClientSellCardState implements State {
           args: {
             action: "sellCard",
             cardId: card.id,
+            royalCouple: false,
+          },
+        }),
+    });
+    this.game.addCancelButton();
+  }
+
+  private updateInterfaceConfirmRoyalCouple({ king, queen }: RoyalCouple) {
+    this.game.clearPossible();
+    this.game.setCardSelected({ id: king.id });
+    this.game.setCardSelected({ id: queen.id });
+
+    this.game.clientUpdatePageTitle({
+      text: _("Sell ${kingName} and ${queenName} for ${amount} ${tkn_florin} ?"),
+      args: {
+        kingName: king[king.side].name,
+        queenName: queen.name,
+        amount: king.sellValue + queen.sellValue,
+        tkn_florin: tknFlorin(),
+      },
+    });
+    this.game.addConfirmButton({
+      callback: () =>
+        this.game.takeAction({
+          action: "actPlayerAction",
+          args: {
+            action: "sellCard",
+            cardId: king.id,
+            royalCouple: true,
           },
         }),
     });
@@ -95,6 +125,22 @@ class ClientSellCardState implements State {
         this.game.setCardSelectable({
           id: card.id,
           callback: () => this.updateInterfaceConfirm({ card }),
+        });
+      }
+    );
+  }
+
+  private setRoyalCouplesSelectable() {
+    this.args.royalCouples.forEach(
+      (couple: RoyalCouple) => {
+        const {king, queen} = couple;
+        this.game.setCardSelectable({
+          id: king.id,
+          callback: () => this.updateInterfaceConfirmRoyalCouple(couple),
+        });
+        this.game.setCardSelectable({
+          id: queen.id,
+          callback: () => this.updateInterfaceConfirmRoyalCouple(couple),
         });
       }
     );

@@ -20,7 +20,7 @@ class PREN049_OrderOfSantiago extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = PORTUGAL;
     $this->flavorText = [
-      clienttranslate('Rodrigo Manrique de Lara, a hero of the Reconquista and a rebellious Spanish noble, led a committee of magnates agains Henry IV "the impotent" of Castile. In 1465, de Lara participated in the "Farce of Ávila", symbolically executing an effigy of Henry IV.'),
+      clienttranslate('Rodrigo Manrique de Lara, a hero of the Reconquista and a rebellious Spanish noble, led a committee of magnates against Henry IV "the impotent" of Castile. In 1465, de Lara participated in the "Farce of Ávila", symbolically executing an effigy of Henry IV.'),
       clienttranslate('After three years of civil war the nobles gained more power and Castile became less centralized.')
     ];
     $this->name = clienttranslate('Order of Santiago');

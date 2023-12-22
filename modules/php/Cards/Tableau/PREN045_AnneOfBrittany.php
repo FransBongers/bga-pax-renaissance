@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN045_AnneOfBrittany extends \PaxRenaissance\Models\TableauCard
+class PREN045_AnneOfBrittany extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -23,5 +23,13 @@ class PREN045_AnneOfBrittany extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->region = WEST;
+    // Queen specific props
+    $this->height = 85;
+    $this->suitors = [
+      FRANCE,
+      ENGLAND,
+      ARAGON,
+      HOLY_ROMAN_EMIRE
+    ];
   }
 }

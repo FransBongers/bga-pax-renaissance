@@ -60,6 +60,8 @@ class EmpireCard extends Card
       'isVassal' => $suzerainId !== null,
       'sellValue' => $this->getSellValue(),
       'suzerainId' => $suzerainId,
+      'queenId' => $this->getExtraData('queenId'),
+      'isQueen' => false,
       KING => [
         'agents' => $this->agents[KING],
         'name' => $this->name[KING],
@@ -160,13 +162,32 @@ class EmpireCard extends Card
       $this->setExtraData('suzerainId', null);
     }
 
+    $queen = $this->getQueen();
+    if ($queen !== null) {
+      Cards::move($queen->getId(), $this->startLocation);
+    }
+
     Cards::insertOnTop($this->getId(), $this->startLocation);
     $this->location = $this->startLocation;
-
 
     Notifications::discardCard($player, $this, $this->startLocation, $messageType, $wasVassalTo);
   }
 
+  public function sellRoyalCouple($player, $queen)
+  {
+    $playerId = $player->getId();
+
+    $kingValue = $this->getSellValue();
+    $queenValue = $queen->getSellValue();
+    $value = $kingValue + $queenValue;
+    Players::incFlorins($playerId, $value);
+
+    Cards::move($queen->getId(), $this->startLocation);
+    Cards::move($this->getId(), $this->startLocation);
+    $queen = $this->getQueen();
+    Notifications::sellRoyalCouple($player, $this, $queen, $value);
+    $this->discard(DISCARD, $player);
+  }
   // public function sell($player)
   // {
   //   $playerId = $player->getId();
@@ -195,7 +216,10 @@ class EmpireCard extends Card
       $vassal->discard(DISCARD, $player);
     }
 
-    // TODO: discard queen
+    $queen = $this->getQueen();
+    if ($queen !== null) {
+      $queen->discard(DISCARD, $player);
+    }
   }
 
   public function flip($player = null)
@@ -226,6 +250,23 @@ class EmpireCard extends Card
     $suzerain = Cards::get($suzerainId);
     // Notifications::log('suzerain', $suzerain);
     return $suzerain;
+  }
+
+  public function setQueen($queenCard)
+  {
+    if ($queenCard === null) {
+      $this->setExtraData('queenId', null);
+    } else {
+      $this->setExtraData('queenId', $queenCard->getId());
+    }
+  }
+
+  public function getQueen() {
+    $queenCardId = $this->getExtraData('queenId');
+    if ($queenCardId === null) {
+      return null;
+    }
+    return Cards::get($queenCardId);
   }
 
   /**
@@ -264,6 +305,16 @@ class EmpireCard extends Card
     } else {
       $this->moveToTableau($player, $from);
     }
+  }
+
+  public function marry($player,$queen)
+  {
+    if ($this->location === $this->startLocation) {
+      $this->moveToTableau($player,[]);
+    }
+    $this->setQueen($queen);
+    $queen->setKing($this);
+    Cards::move($queen->getId(), $this->location);
   }
 
   public function moveToTableau($player, $from)

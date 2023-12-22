@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance\Actions;
 
+use Locale;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\Flows;
@@ -173,6 +174,8 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
       case CONSPIRACY_ONE_SHOT:
       case PEASANT_REVOLT_ONE_SHOT:
         return true;
+      case CORONATION_ONE_SHOT:
+        return $this->coronationCanOccur($card);
       case CRUSADE_ONE_SHOT:
         return $this->religiousWarCanOccur($card, [ISLAMIC, REFORMIST]);
       case JIHAD_ONE_SHOT:
@@ -190,6 +193,19 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
       default:
         return false;
     }
+  }
+
+  private function coronationCanOccur($card)
+  {
+    $suitors = $card->getSuitors();
+    $playerId = self::getPlayer()->getId();
+    return Utils::array_some($suitors, function ($empireCard) use ($playerId) {
+      if ($empireCard->getSide() === REPUBLIC) {
+        return false;
+      }
+      $location = $empireCard->getLocation();
+      return Utils::startsWith($location, 'throne') || $location === Locations::tableau($playerId, WEST) || $location === Locations::tableau($playerId, EAST);
+    });
   }
 
   private function tradeShiftCanOccur($oneShot)
@@ -234,7 +250,7 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
 
     return Utils::array_some($empiresIds, function ($empireId) use ($opposingReligions) {
       $empire = Empires::get($empireId);
-      
+
       return count($empire->getTokensInCities([KNIGHT, ROOK], $opposingReligions)) + count($empire->getTokensOnBorders([PIRATE], $opposingReligions)) > 0;
     });
   }

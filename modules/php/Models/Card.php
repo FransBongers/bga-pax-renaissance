@@ -98,6 +98,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return $hasBishop;
   }
 
+  public function isQueen()
+  {
+    return false;
+  }
+
   public function setState($state = 1)
   {
     Cards::setState($this->getId(), $state);

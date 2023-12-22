@@ -12,6 +12,19 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     [PORTUGAL]?: LineStock<EmpireCard | TableauCard>;
   } = {};
 
+  public queenStocks: {
+    [ARAGON]?: LineStock<QueenCard>;
+    [BYZANTIUM]?: LineStock<QueenCard>;
+    [ENGLAND]?: LineStock<QueenCard>;
+    [FRANCE]?: LineStock<QueenCard>;
+    [HOLY_ROMAN_EMIRE]?: LineStock<QueenCard>;
+    [HUNGARY]?: LineStock<QueenCard>;
+    [MAMLUK]?: LineStock<QueenCard>;
+    [OTTOMAN]?: LineStock<QueenCard>;
+    [PAPAL_STATES]?: LineStock<QueenCard>;
+    [PORTUGAL]?: LineStock<QueenCard>;
+  } = {};
+
   constructor(public game: PaxRenaissanceGame) {
     super(game, {
       getId: (card) => card.id,
@@ -27,7 +40,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     Object.keys(this.vassalStocks).forEach((key) => {
       this.vassalStocks[key].removeAll();
       this.removeStock(this.vassalStocks[key]);
-    }) 
+    });
   }
 
   setupDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
@@ -45,15 +58,21 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     // div.insertAdjacentHTML('beforebegin', `<div id="constainer_${card.id}">`);
     // div.insertAdjacentHTML('afterend', '</div>');
     if (card.type === EMPIRE_CARD) {
+      div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
       div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
       // const wrapper =
       // div.insertAdjacentHTML('beforeend',`<div id="${card.id}_wrapper"></div>`)
       // div.parentElement.insertBefore()
+      this.queenStocks[card.empire] = new LineStock<EmpireCard | TableauCard>(
+        this,
+        document.getElementById(`queen_${card.id}`),
+        {}
+      );
 
       this.vassalStocks[card.empire] = new LineStock<EmpireCard | TableauCard>(
         this,
         document.getElementById(`vassals_${card.id}`),
-        { gap: "12px", sort: sortFunction('state') },
+        { gap: "12px", sort: sortFunction("state") }
       );
     }
   }
@@ -134,19 +153,61 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     this.updateEmpireCardHeight({ card: suzerain, vassalChange: -1 });
   }
 
+  public async addQueen({
+    queen,
+    king,
+  }: {
+    queen: QueenCard;
+    king: EmpireCard;
+  }) {
+    this.updateEmpireCardHeight({
+      card: king,
+      queenHeightChange: queen.height,
+    });
+    const node = document.getElementById(`queen_${king.id}`);
+    if (node) {
+      node.style.height = `calc(var(--paxRenCardScale) * ${queen.height}px)`;
+    }
+    this.queenStocks[king.empire].addCard(queen);
+  }
+
+  public async removeQueen({
+    queen,
+    king,
+  }: {
+    queen: QueenCard;
+    king: EmpireCard;
+  }) {
+    const node = document.getElementById(`queen_${king.id}`);
+    if (node) {
+      node.style.height = `0px`;
+    }
+    this.updateEmpireCardHeight({ card: king });
+  }
+
   private updateEmpireCardHeight({
     card,
-    vassalChange,
+    vassalChange = 0,
+    queenHeightChange = 0,
   }: {
     card: EmpireCard;
-    vassalChange: number;
+    vassalChange?: number;
+    queenHeightChange?: number;
   }) {
+    console.log('queenCards', card, 'vassalChange', vassalChange, 'queenHeightChange', queenHeightChange);
     const empire = card.empire;
     const numberOfVassals =
       this.vassalStocks[empire].getCards().length + vassalChange;
+    let queenHeight = 0 + queenHeightChange;
+    const queenCards = this.queenStocks[empire].getCards();
+    console.log('queenCards', queenCards);
+    queenCards.forEach((card: QueenCard) => {
+      queenHeight = queenHeight + card.height;
+    });
+
     const node = document.getElementById(card.id);
     node.style.minHeight = `calc(var(--paxRenCardScale) * ${
-      (numberOfVassals + 1) * 151 + numberOfVassals * 12
+      (numberOfVassals + 1) * 151 + numberOfVassals * 12 + queenHeight
     }px)`;
   }
 }

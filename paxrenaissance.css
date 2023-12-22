@@ -336,6 +336,10 @@
 .pr_city .pr_token {
   align-self: flex-end;
 }
+.pr_city .pr_token:hover:not([class*=pr_selectable]) {
+  transform: translateY(calc(var(--paxRenMapScale) * -30px));
+  transition: transform 500ms;
+}
 .pr_city .pr_disk {
   margin-bottom: calc(var(--paxRenMapScale) * 3px);
 }
@@ -518,6 +522,11 @@
   position: relative;
   top: calc(var(--paxRenCardScale) * 82px);
   left: 0px;
+  width: calc(var(--paxRenCardScale) * 151px);
+}
+
+.pr_queen_container {
+  position: relative;
   width: calc(var(--paxRenCardScale) * 151px);
 }
 

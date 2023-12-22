@@ -38,6 +38,7 @@ class NotificationManager {
       ["log", undefined],
       ["changeEmpireToMedievalState", undefined],
       ["changeEmpireToTheocracy", undefined],
+      ["coronation", undefined],
       ["declareVictory", undefined],
       ["discardCard", undefined],
       ["flipEmpireCard", undefined],
@@ -128,13 +129,22 @@ class NotificationManager {
     this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion });
   }
 
+  async notif_coronation(notif: Notif<NotifCoronationArgs>) {
+    const { queen, king, playerId } = notif.args;
+    // const player = this.getPlayer({ playerId });
+    // await player.tableau.tableau[queen.region].addCard(king);
+    await this.game.tableauCardManager.removeCard(queen);
+    await this.game.tableauCardManager.addQueen({ queen, king });
+  }
+
   async notif_declareVictory(notif: Notif<NotifDeclareVictoryArgs>) {
     const { playerId } = notif.args;
     this.game.framework().scoreCtrl[playerId].toValue(1);
   }
 
   async notif_discardCard(notif: Notif<NotifDiscardCardArgs>) {
-    const { playerId, card, toLocationId, wasVassalTo } = notif.args;
+    const { playerId, card, toLocationId, wasVassalTo, wasQueenTo } =
+      notif.args;
     if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
       await this.game.tableauCardManager.removeCard(card);
     } else if (card.type === EMPIRE_CARD) {
@@ -143,7 +153,13 @@ class NotificationManager {
         .addCard(card);
     }
     if (wasVassalTo) {
-      this.game.tableauCardManager.removeVassal({suzerain: wasVassalTo});
+      this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
+    }
+    if (wasQueenTo) {
+      this.game.tableauCardManager.removeQueen({
+        king: wasQueenTo,
+        queen: card as QueenCard,
+      });
     }
   }
 

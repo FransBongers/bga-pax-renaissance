@@ -95,6 +95,13 @@
   // padding-top: 12px;
 }
 
+.pr_queen_container {
+  position: relative;
+  width: calc(var(--paxRenCardScale) * 151px);
+  // height: 20px;
+  // background-color: blue;
+}
+
 /* ------- EAST CARDS ------- */
 
 $east-cards1: (

@@ -1,23 +1,23 @@
-class TableauOpsSelectState implements State {
+class CoronationState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTableauOpsSelectArgs;
+  private args: OnEnteringCoronationArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTableauOpsSelectArgs) {
+  onEnteringState(args: OnEnteringCoronationArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TableauOpsSelectState");
+    debug("Leaving FlipVictoryCardState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select Ops to perform"),
+      text: _("${tkn_playerName} must select a King to marry"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -46,56 +46,34 @@ class TableauOpsSelectState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select a card to perform Ops"),
+      text: _("${tkn_playerName} must select a King to marry"),
       args: {
         tkn_playerName: "${you}",
       },
     });
-
     this.setCardsSelectable();
-    if (this.args.optional) {
-      this.game.addSkipButton({
-        callback: () =>
-          this.game.takeAction({
-            action: "actTableauOpsSelect",
-            args: {
-              cardId: null,
-              tableauOpId: null,
-            },
-          }),
-      });
-    }
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceConfirm({
-    cardId,
-    ops,
-  }: {
-    cardId: string;
-    ops: TableauOp[];
-  }) {
+  private updateInterfaceConfirmSelectCard({ card }: { card: EmpireCard }) {
     this.game.clearPossible();
-    this.game.setCardSelected({ id: cardId });
+    this.game.setCardSelected({id: card.id});
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may choose an Op to perform"),
+      text: _("Marry ${queenName} to ${kingName}?"),
       args: {
-        tkn_playerName: "${you}",
+        kingName: _(card[card.side].name),
+        queenName: _(this.args.queen.name),
       },
     });
-    ops.forEach((tableauOp, index) => {
-      this.game.addPrimaryActionButton({
-        id: `${tableauOp.id}_${index}_btn`,
-        text: _(tableauOp.name),
-        callback: () =>
-          this.game.takeAction({
-            action: "actTableauOpsSelect",
-            args: {
-              cardId,
-              tableauOpId: tableauOp.id,
-            },
-          }),
-      });
+
+    this.game.addConfirmButton({
+      callback: () =>
+        this.game.takeAction({
+          action: "actCoronationOneShot",
+          args: {
+            cardId: card.id,
+          },
+        }),
     });
     this.game.addCancelButton();
   }
@@ -109,17 +87,10 @@ class TableauOpsSelectState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private setCardsSelectable() {
-    Object.keys(this.args.availableOps).forEach((id: string) => {
-      const card = this.args.tableauCards.find((card) => card.id === id);
-
+    this.args.suitors.forEach((card) => {
       this.game.setCardSelectable({
-        id,
-        back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
-        callback: () =>
-          this.updateInterfaceConfirm({
-            cardId: id,
-            ops: this.args.availableOps[id],
-          }),
+        id: card.id,
+        callback: () => this.updateInterfaceConfirmSelectCard({ card }),
       });
     });
   }

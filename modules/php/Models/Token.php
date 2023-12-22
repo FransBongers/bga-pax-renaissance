@@ -70,7 +70,7 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
 
     $this->move(Empires::get($empireId)->getEmpireSquareId(), false);
     $player = Players::get();
-    if ($cost > 0) {
+    if ($cost !== 0) {
       $player->incFlorins(-$cost); // TODO depends on why token is repressed
     }
     Notifications::repressToken($player, $this, $oldLocation, $cost);

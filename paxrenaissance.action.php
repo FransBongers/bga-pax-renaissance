@@ -118,6 +118,15 @@ class action_paxrenaissance extends APP_GameAction
     $this->game->actConfirmPartialTurn();
     self::ajaxResponse();
   }
+  
+  public function actCoronationOneShot()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actCoronationOneShot', $args);
+    self::ajaxResponse();
+  }
 
   public function actFlipVictoryCard()
   {

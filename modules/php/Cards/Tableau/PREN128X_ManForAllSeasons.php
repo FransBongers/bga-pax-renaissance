@@ -16,7 +16,7 @@ class PREN128X_ManForAllSeasons extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = ENGLAND;
     $this->flavorText = [
-      clienttranslate("As Lord High Chancellor of England, Sir Thomas More attacked the Reformation, banning Lutheran books, spying on suspected Protestants, especially publishers, and arresting anyone holding in this possession, transporting, or selling books of the Protestant Reformation."),
+      clienttranslate("As Lord High Chancellor of England, Sir Thomas More attacked the Reformation, banning Lutheran books, spying on suspected Protestants, especially publishers, and arresting anyone holding in his possession, transporting, or selling books of the Protestant Reformation."),
       clienttranslate('But when King Henry VIII broke with the Roman Church, More disapproved and was tried for treason and decapitated.')
     ];
     $this->name = clienttranslate('Man for all Seasons');

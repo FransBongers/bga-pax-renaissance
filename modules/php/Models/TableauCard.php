@@ -54,6 +54,7 @@ class TableauCard extends Card
       'type' => $this->type,
       'sellValue' => $this->getSellValue(),
       'specialAbilities' => $this->specialAbilities,
+      'isQueen' => $this->isQueen(),
     ]);
   }
 
@@ -143,7 +144,7 @@ class TableauCard extends Card
    */
   public function getAllEmpireIds($includeRegion = true)
   {
-    $empireId = $this->empire;
+    $empireId = $this->isQueen() ? $this->getKing()->getEmpire() : $this->empire;
     $empireIdIsRegion = in_array($empireId, REGIONS);
     $validEmpireIds = $empireIdIsRegion && !$includeRegion ? [] : [$empireId];
     if ($empireIdIsRegion) {

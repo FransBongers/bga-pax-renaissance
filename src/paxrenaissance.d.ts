@@ -97,6 +97,7 @@ interface PaxRenCard {
   location: string;
   state: number;
   used: number;
+  isQueen: boolean;
 }
 
 // TODO: check interface compared to below one
@@ -129,6 +130,7 @@ interface EmpireCard extends PaxRenCard {
   sellValue: number;
   isVassal: boolean;
   suzerainId: string | null;
+  queenId: string | null;
   king: EmpireCardSide;
   republic: EmpireCardSide;
   side: "king" | "republic";
@@ -144,9 +146,13 @@ interface TableauCard extends PaxRenCard {
   region: "east" | "west";
   type: "tableauCard";
   sellValue: number;
+  
 }
 
-
+interface QueenCard extends TableauCard {
+  height: number;
+  suitors: string[];
+}
 
 interface VictoryCard extends PaxRenCard {
   side: 'active' | 'inactive';

@@ -110,8 +110,32 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
 
   public function getCardsPlayerCanSell()
   {
+    $allTableauCards = $this->getTableauCards();
+    $tableauCards = [];
+    $royalCouples = [];
+
+    foreach ($allTableauCards as $card) {
+      if ($card->isQueen()) {
+        continue;
+      }
+      if ($card->getType() === EMPIRE_CARD && $card->getQueen() !== null) {
+        $queen = $card->getQueen();
+        $royalCouples[] = [
+          'king' => $card,
+          'queen' => $queen,
+        ];
+        continue;
+      }
+      $tableauCards[] = $card;
+    }
+    // Utils::filter($allTableauCards, function ($card) {
+
+    // });
     // TODO, add old maids.
-    return array_merge($this->getTableauCards(), $this->getHand());
+    return [
+      'cards' => array_merge($tableauCards, $this->getHand()),
+      'royalCouples' => $royalCouples,
+    ];
   }
 
   public function getFlorins()

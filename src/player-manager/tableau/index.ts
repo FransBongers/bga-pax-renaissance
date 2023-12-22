@@ -1,8 +1,10 @@
 class PlayerTableau {
   private game: PaxRenaissanceGame;
 
-  private tableauEast: LineStock<EmpireCard | TableauCard>;
-  private tableauWest: LineStock<EmpireCard | TableauCard>;
+  public tableau: {
+    [EAST]?: LineStock<EmpireCard | TableauCard>;
+    [WEST]?: LineStock<EmpireCard | TableauCard>;
+  } = {};
 
   constructor({
     game,
@@ -24,8 +26,8 @@ class PlayerTableau {
   // ..#######..##....##.########...#######.
 
   clearInterface() {
-    this.tableauEast.removeAll();
-    this.tableauWest.removeAll();
+    this.tableau[EAST].removeAll();
+    this.tableau[WEST].removeAll();
   }
 
   updateInterface({ player }: { player: PaxRenaissancePlayerData }) {
@@ -59,12 +61,12 @@ class PlayerTableau {
         })
       );
 
-    this.tableauEast = new LineStock(
+    this.tableau[EAST] = new LineStock(
       this.game.tableauCardManager,
       document.getElementById(`tableau_east_${player.id}`),
       { center: false, sort: sortFunction("state"), gap: "12px" }
     );
-    this.tableauWest = new LineStock(
+    this.tableau[WEST] = new LineStock(
       this.game.tableauCardManager,
       document.getElementById(`tableau_west_${player.id}`),
       { center: false, sort: sortFunction("state"), gap: "12px" }
@@ -74,15 +76,21 @@ class PlayerTableau {
   }
 
   updateCards({ player }: { player: PaxRenaissancePlayerData }) {
-    this.tableauEast.addCards(
-      player.tableau.cards[EAST].filter(
-        (card) => card.type === TABLEAU_CARD || !card.isVassal
-      )
+    this.tableau[EAST].addCards(
+      player.tableau.cards[EAST].filter((card) => {
+        if (card.isQueen) {
+          return false;
+        }
+        return card.type === TABLEAU_CARD || !card.isVassal;
+      })
     );
-    this.tableauWest.addCards(
-      player.tableau.cards[WEST].filter(
-        (card) => card.type === TABLEAU_CARD || !card.isVassal
-      )
+    this.tableau[WEST].addCards(
+      player.tableau.cards[WEST].filter((card) => {
+        if (card.isQueen) {
+          return false;
+        }
+        return card.type === TABLEAU_CARD || !card.isVassal;
+      })
     );
 
     [...player.tableau.cards[EAST], ...player.tableau.cards[WEST]]
@@ -92,6 +100,17 @@ class PlayerTableau {
           vassal: card,
           suzerain: this.game.gamedatas.empireSquares.find(
             (empireCard) => empireCard.id === card.suzerainId
+          ),
+        });
+      });
+
+    [...player.tableau.cards[EAST], ...player.tableau.cards[WEST]]
+      .filter((card) => card.isQueen)
+      .forEach((card: QueenCard) => {
+        this.game.tableauCardManager.addQueen({
+          queen: card,
+          king: this.game.gamedatas.empireSquares.find(
+            (empireCard: EmpireCard) => empireCard.queenId === card.id
           ),
         });
       });
@@ -109,9 +128,9 @@ class PlayerTableau {
 
   public async addCard(card: EmpireCard | TableauCard) {
     if (card.location.split("_")[1] === EAST) {
-      await this.tableauEast.addCard(card);
+      await this.tableau[EAST].addCard(card);
     } else {
-      await this.tableauWest.addCard(card);
+      await this.tableau[WEST].addCard(card);
     }
   }
 }

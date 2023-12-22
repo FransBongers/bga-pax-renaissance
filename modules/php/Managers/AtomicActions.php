@@ -24,6 +24,7 @@ class AtomicActions
     BATTLE_RESULT => 'BattleResult',
     BISHOP_DIET_OF_WORMS => 'BishopDietOfWorms',
     BISHOP_PACIFICATION => 'BishopPacification',
+    CORONATION_ONE_SHOT => 'CoronationOneShot',
     DECLARE_VICTORY => 'DeclareVictory',
     FLIP_VICTORY_CARD => 'FlipVictoryCard',
     PATRON_VICTORY => 'PatronVictory',

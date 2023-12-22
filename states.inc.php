@@ -382,6 +382,16 @@ $machinestates = [
         'possibleactions' => ['actRegimeChangeEmancipation', 'pass', 'actRestart'],
     ],
 
+    ST_CORONATION_ONE_SHOT => [
+        'name' => 'coronationOneShot',
+        'description' => clienttranslate('${actplayer} may select a suitor'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actCoronationOneShot', 'pass', 'actRestart'],
+    ],
+
     ST_REGIME_CHANGE_GOLDEN_LIBERTY => [
         'name' => 'regimeChangeGoldenLiberty',
         'description' => clienttranslate('${actplayer} may create a Medieval state'),

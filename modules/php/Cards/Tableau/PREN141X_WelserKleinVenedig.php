@@ -17,7 +17,7 @@ class PREN141X_WelserKleinVenedig extends \PaxRenaissance\Models\TableauCard
     $this->empire = PORTUGAL;
     $this->flavorText = [
       clienttranslate("In 1528 the banker Bartholomeus Welser of Augsburg was commissioned by Charles V to outfit a fleet to conquer Venezuela at his own expense."),
-      clienttranslate('Welser\'s colony of Klein-Venedig ("little Venice") established a trade between the Netherlands, Germany and South America.'),
+      clienttranslate('Welser\'s colony of Klein-Venedig ("little Venice") established trade between the Netherlands, Germany and South America.'),
     ];
     $this->name = clienttranslate('Welser Klein-Venedig');
     $this->oneShot = TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT;

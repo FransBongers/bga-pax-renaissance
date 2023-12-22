@@ -105,14 +105,14 @@ class PlayerActionState implements State {
     });
     this.game.addConfirmButton({
       callback: () =>
-      this.game.takeAction({
-        action: "actPlayerAction",
-        args: {
-          action: "playCard",
-          cardId: card.id,
-        },
-      }),
-    })
+        this.game.takeAction({
+          action: "actPlayerAction",
+          args: {
+            action: "playCard",
+            cardId: card.id,
+          },
+        }),
+    });
 
     // this.game.addPrimaryActionButton({
     //   id: "play_card_button",
@@ -183,21 +183,23 @@ class PlayerActionState implements State {
         });
       }
     });
-    if (this.args.cardsPlayerCanSell.length > 0) {
+    if (
+      this.args.cardsPlayerCanSell.cards.length +
+        this.args.cardsPlayerCanSell.royalCouples.length >
+      0
+    ) {
       this.game.addPrimaryActionButton({
-        id: 'sell_card_btn',
-        text: _('Sell card'),
+        id: "sell_card_btn",
+        text: _("Sell card"),
         callback: () =>
-        this.game
-          .framework()
-          .setClientState<OnEnteringClientSellCardArgs>(
-            CLIENT_SELL_CARD_STATE,
-            {
-              args: {
-                cards: this.args.cardsPlayerCanSell
-              },
-            }
-          ),
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientSellCardArgs>(
+              CLIENT_SELL_CARD_STATE,
+              {
+                args: this.args.cardsPlayerCanSell,
+              }
+            ),
       });
     }
   }

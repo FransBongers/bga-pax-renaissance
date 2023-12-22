@@ -27,8 +27,11 @@ trait DebugTrait
 {
   function test()
   {
-    // $this->debugPlaceCardInMarket('PREN088_CemAntiHostage');
-    Notifications::log('EmpireSquare_Portugal', Cards::get('EmpireSquare_Portugal'));
+    Cards::get('PREN044_IsabellaOfCastille')->discard();
+    // Cards::get('EmpireSquare_England')->flip();
+    // Notifications::log('king', Cards::get('PREN044_IsabellaOfCastille')->getKing());
+    // $this->debugPlaceCardInMarket('PREN044_IsabellaOfCastille');
+    // Notifications::log('EmpireSquare_Portugal', Cards::get('EmpireSquare_Portugal'));
     // Notifications::log('globals', Engine::getResolvedActions([PLAYER_ACTION]));
 
     // Notifications::log('canDeclare', Cards::get('VictoryHoly')->canBeDeclaredByPlayer(Players::get()));

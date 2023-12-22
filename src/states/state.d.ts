@@ -21,13 +21,13 @@ interface PlayAction {
 
 type PaxRenAction = PurchaseAction | PlayAction;
 
-
 interface OnEnteringClientDeclareVictoryArgs {
   victoryCard: VictoryCard;
 }
 
 interface OnEnteringClientSellCardArgs {
   cards: (EmpireCard | TableauCard)[];
+  royalCouples: RoyalCouple[];
 }
 
 interface OnEnteringClientStartTradeFairArgs {
@@ -57,6 +57,11 @@ interface OnEnteringBishopPacificationArgs extends CommonArgs {
 
 interface OnEnteringConfirmTurnArgs extends CommonArgs {}
 
+interface OnEnteringCoronationArgs extends CommonArgs {
+  suitors: EmpireCard[];
+  queen: TableauCard;
+}
+
 interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
   victoryCards: VictoryCard[];
 }
@@ -79,6 +84,11 @@ interface OnEnteringPlaceAgentsArgs extends CommonArgs {
   repressCost: number;
 }
 
+interface RoyalCouple {
+  king: EmpireCard;
+  queen: QueenCard;
+}
+
 interface OnEnteringPlayerActionArgs extends CommonArgs {
   availableOps: {
     east: Record<string, { id: string; text: string }>;
@@ -87,7 +97,10 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
   declarableVictories: VictoryCard[];
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];
-  cardsPlayerCanSell: (EmpireCard | TableauCard)[];
+  cardsPlayerCanSell: {
+    cards: (EmpireCard | TableauCard)[];
+    royalCouples: RoyalCouple[];
+  };
   tradeFair: {
     east?: {
       card: TableauCard;
@@ -114,7 +127,7 @@ interface OnEnteringSelectTokenArgs extends CommonArgs {
 }
 
 interface OnEnteringTableauOpBeheadArgs extends CommonArgs {
-  cards: TableauCard[];
+  cards: (EmpireCard | TableauCard)[];
 }
 
 interface CampaignOpOption {
@@ -179,7 +192,7 @@ interface OnEnteringTableauOpTaxPayOrRepressArgs extends CommonArgs {
 
 interface OnEnteringTableauOpsSelectArgs extends CommonArgs {
   availableOps: Record<string, TableauOp[]>;
-  tableauCards: EmpireCard | TableauCard;
+  tableauCards: (EmpireCard | TableauCard)[];
   optional: boolean;
 }
 

@@ -24,6 +24,11 @@ interface NotifChangeEmpireToTheocracyArgs {
   religion: string;
 }
 
+interface NotifCoronationArgs extends NotifWithPlayerArgs {
+  queen: QueenCard;
+  king: EmpireCard;
+}
+
 interface NotifDeclareVictoryArgs extends NotifWithPlayerArgs {
   victoryCard: VictoryCard;
 }
@@ -34,6 +39,7 @@ interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   tkn_cardName: string;
   toLocationId: string;
   wasVassalTo: EmpireCard | null;
+  wasQueenTo: EmpireCard | null;
 }
 
 interface NotifFlipEmpireCardArgs extends NotifWithPlayerArgs {

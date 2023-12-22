@@ -19,7 +19,9 @@ class AnnounceOneShotState implements State {
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} must decide if One-shot occurs"),
       args: {
-        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
+        tkn_playerName: this.game.playerManager
+          .getPlayer({ playerId: activePlayerId })
+          .getName(),
       },
       nonActivePlayers: true,
     });
@@ -44,9 +46,11 @@ class AnnounceOneShotState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs"),
+      text: _(
+        "${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs"
+      ),
       args: {
-        tkn_playerName: '${you}',
+        tkn_playerName: "${you}",
         tkn_oneShot: this.args.oneShot,
       },
     });

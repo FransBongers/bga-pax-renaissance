@@ -304,6 +304,17 @@ class Notifications
     ]);
   }
 
+  public static function coronation($player, $queen, $king)
+  {
+    self::notifyAll("coronation",  clienttranslate('${tkn_playerName} marries ${tkn_boldText_queen} to ${tkn_boldText_king}'), [
+      'player' => $player,
+      'tkn_boldText_queen' => $queen->getName(),
+      'tkn_boldText_king' => $king->getName(),
+      'queen' => $queen,
+      'king' => $king,
+    ]);
+  }
+
   public static function declareVictory($player,$victoryCard )
   {
     self::notifyAll("declareVictory", clienttranslate('${tkn_playerName} declares ${tkn_boldText}'), [
@@ -312,7 +323,7 @@ class Notifications
     ]);
   }
 
-  public static function discardCard($player, $card, $toLocationId, $messageType = DISCARD, $wasVassalTo = null)
+  public static function discardCard($player, $card, $toLocationId, $messageType = DISCARD, $wasVassalTo = null, $wasQueenTo = null)
   {
     $messages = [
       DISCARD => clienttranslate('${tkn_playerName} discards ${tkn_boldText}'),
@@ -325,6 +336,7 @@ class Notifications
       'card' => $card,
       'toLocationId' => $toLocationId,
       'wasVassalTo' => $wasVassalTo,
+      'wasQueenTo' => $wasQueenTo,
     ]);
   }
 
@@ -515,6 +527,19 @@ class Notifications
     ]);
   }
 
+  public static function sellRoyalCouple($player, $king, $queen, $value)
+  {
+    self::notifyAll("sellRoyalCouple",  clienttranslate('${tkn_playerName} sells Royal Couple ${tkn_cardName_queen} and ${tkn_cardName_king} for ${value} ${tkn_florin}'), [
+      'player' => $player,
+      'king' => $king,
+      'queen' => $queen,
+      'value' => $value,
+      'tkn_cardName_king' => $king->getName(),
+      'tkn_cardName_queen' => $queen->getName(),
+      'tkn_florin' => clienttranslate('Florin(s)'),
+    ]);
+  }
+  
   public static function tableauOpBehead($player, $card)
   {
     self::message(clienttranslate('${tkn_playerName} beheads ${tkn_cardName}'), [

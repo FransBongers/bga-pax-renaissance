@@ -119,6 +119,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
               'action' => SELL_CARD,
               'playerId' => $this->ctx->getPlayerId(),
               'cardId' => $args['cardId'],
+              'royalCouple' => $args['royalCouple'],
             ]
           ]
         ]));

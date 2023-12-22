@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN048_MaryTheRich extends \PaxRenaissance\Models\TableauCard
+class PREN048_MaryTheRich extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -16,5 +16,13 @@ class PREN048_MaryTheRich extends \PaxRenaissance\Models\TableauCard
     $this->oneShot = CORONATION_ONE_SHOT;
     $this->prestige = [LAW];
     $this->region = WEST;
+    // Queen specific props
+    $this->height = 85;
+    $this->suitors = [
+      FRANCE,
+      ENGLAND,
+      PORTUGAL,
+      HOLY_ROMAN_EMIRE,
+    ];
   }
 }

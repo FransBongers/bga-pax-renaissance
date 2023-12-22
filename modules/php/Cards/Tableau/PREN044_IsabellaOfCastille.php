@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN044_IsabellaOfCastille extends \PaxRenaissance\Models\TableauCard
+class PREN044_IsabellaOfCastille extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -30,5 +30,13 @@ class PREN044_IsabellaOfCastille extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
+    // Queen specific props
+    $this->height = 108;
+    $this->suitors = [
+      PORTUGAL,
+      ARAGON,
+      FRANCE,
+      HOLY_ROMAN_EMIRE,
+    ];
   }
 }
