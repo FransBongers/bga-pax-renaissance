@@ -66,6 +66,11 @@ class TableauCard extends Card
   // .##.....##.##....##....##.....##..##.....##.##...###.##....##
   // .##.....##..######.....##....####..#######..##....##..######.
 
+  public function behead($player)
+  {
+      $this->discard(DISCARD, $player);
+  }
+
   public function discard($messageType = DISCARD, $player = null)
   {
     $player = $player === null ? Players::get() : $player;
@@ -73,10 +78,11 @@ class TableauCard extends Card
     foreach ($tokens as $token) {
       $token->returnToSupply(RETURN_TO_SUPPLY, $player, true);
     }
+    $adjustPrestige = $this->isInTableau();
 
     Cards::insertOnTop($this->getId(), DISCARD);
     $this->location = DISCARD;
-    Notifications::discardCard($player, $this, DISCARD, $messageType);
+    Notifications::discardCard($adjustPrestige,$player, $this, DISCARD, $messageType);
   }
 
   public function purchase($player, $ctx = null)
@@ -160,7 +166,7 @@ class TableauCard extends Card
     return $this->oneShot;
   }
 
-  public function getEmpire()
+  public function getEmpireId()
   {
     return $this->empire;
   }

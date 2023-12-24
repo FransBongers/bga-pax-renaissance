@@ -25,7 +25,7 @@ class PREN046_JoannaTheMad extends \PaxRenaissance\Models\QueenCard
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
     // Queen specific props
-    $this->height = 85;
+    $this->height = 100;
     $this->suitors = [
       PORTUGAL,
       ARAGON,

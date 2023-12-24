@@ -1790,8 +1790,8 @@ var PaxRenaissance = (function () {
             _a);
         this.animationManager = new AnimationManager(this, { duration: 500 });
         this.tableauCardManager = new TableauCardManager(this);
-        this.gameMap = new GameMap(this);
         this.tooltipManager = new TooltipManager(this);
+        this.gameMap = new GameMap(this);
         if (this.playerOrder.includes(this.getPlayerId())) {
             this.hand = new Hand(this);
         }
@@ -2250,7 +2250,6 @@ var TableauCardManager = (function (_super) {
         }) || this;
         _this.game = game;
         _this.vassalStocks = {};
-        _this.queenStocks = {};
         return _this;
     }
     TableauCardManager.prototype.clearInterface = function () {
@@ -2271,10 +2270,17 @@ var TableauCardManager = (function (_super) {
         }
         div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
         if (card.type === EMPIRE_CARD) {
-            div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
+            if (card.queen) {
+                console.log('queen', card.queen);
+                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id, queen: card.queen }));
+                this.game.tooltipManager.addCardTooltip({
+                    nodeId: "PREN048_MaryTheRich-front",
+                    card: card.queen,
+                });
+            }
             div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
-            this.queenStocks[card.empire] = new LineStock(this, document.getElementById("queen_".concat(card.id)), {});
             this.vassalStocks[card.empire] = new LineStock(this, document.getElementById("vassals_".concat(card.id)), { gap: "12px", sort: sortFunction("state") });
+            this.updateEmpireCardHeight({ card: card });
         }
     };
     TableauCardManager.prototype.setupFrontDiv = function (card, div) {
@@ -2339,31 +2345,35 @@ var TableauCardManager = (function (_super) {
         this.updateEmpireCardHeight({ card: suzerain, vassalChange: -1 });
     };
     TableauCardManager.prototype.addQueen = function (_a) {
-        var queen = _a.queen, king = _a.king;
+        var king = _a.king;
         return __awaiter(this, void 0, void 0, function () {
-            var node;
+            var id, queen, div;
             return __generator(this, function (_b) {
+                id = king.id, queen = king.queen;
+                div = document.getElementById(id);
+                if (!div) {
+                    return [2];
+                }
+                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: id, queen: queen, }));
+                this.game.tooltipManager.addCardTooltip({
+                    nodeId: king.queen.id + "-front",
+                    card: king.queen,
+                });
                 this.updateEmpireCardHeight({
                     card: king,
-                    queenHeightChange: queen.height,
                 });
-                node = document.getElementById("queen_".concat(king.id));
-                if (node) {
-                    node.style.height = "calc(var(--paxRenCardScale) * ".concat(queen.height, "px)");
-                }
-                this.queenStocks[king.empire].addCard(queen);
                 return [2];
             });
         });
     };
     TableauCardManager.prototype.removeQueen = function (_a) {
-        var queen = _a.queen, king = _a.king;
+        var king = _a.king;
         return __awaiter(this, void 0, void 0, function () {
             var node;
             return __generator(this, function (_b) {
                 node = document.getElementById("queen_".concat(king.id));
                 if (node) {
-                    node.style.height = "0px";
+                    node.remove();
                 }
                 this.updateEmpireCardHeight({ card: king });
                 return [2];
@@ -2371,16 +2381,11 @@ var TableauCardManager = (function (_super) {
         });
     };
     TableauCardManager.prototype.updateEmpireCardHeight = function (_a) {
-        var card = _a.card, _b = _a.vassalChange, vassalChange = _b === void 0 ? 0 : _b, _c = _a.queenHeightChange, queenHeightChange = _c === void 0 ? 0 : _c;
-        console.log('queenCards', card, 'vassalChange', vassalChange, 'queenHeightChange', queenHeightChange);
+        var _b;
+        var card = _a.card, _c = _a.vassalChange, vassalChange = _c === void 0 ? 0 : _c;
         var empire = card.empire;
         var numberOfVassals = this.vassalStocks[empire].getCards().length + vassalChange;
-        var queenHeight = 0 + queenHeightChange;
-        var queenCards = this.queenStocks[empire].getCards();
-        console.log('queenCards', queenCards);
-        queenCards.forEach(function (card) {
-            queenHeight = queenHeight + card.height;
-        });
+        var queenHeight = ((_b = card.queen) === null || _b === void 0 ? void 0 : _b.height) || 0;
         var node = document.getElementById(card.id);
         node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat((numberOfVassals + 1) * 151 + numberOfVassals * 12 + queenHeight, "px)");
     };
@@ -2395,8 +2400,8 @@ var tplVassalsContainer = function (_a) {
     return "\n  <div id=\"vassals_".concat(id, "\" class=\"pr_vassals_container\"></div>");
 };
 var tplQueenContainer = function (_a) {
-    var id = _a.id;
-    return "\n  <div id=\"queen_".concat(id, "\" class=\"pr_queen_container\"></div>");
+    var id = _a.id, queen = _a.queen;
+    return "\n  <div id=\"queen_".concat(id, "\" class=\"pr_queen_container\" style=\"height: calc(var(--paxRenCardScale) * ").concat((queen === null || queen === void 0 ? void 0 : queen.height) || 0, "px);\">\n    ").concat(queen === null ? '' : "<div id=\"".concat(queen.id, "-front\" class=\"pr_card\" data-card-id=\"").concat(queen.id.split("_")[0], "\"></div>"), "\n  </div>");
 };
 var VictoryCardManager = (function (_super) {
     __extends(VictoryCardManager, _super);
@@ -2469,46 +2474,56 @@ var pxNumber = function (px) {
     }
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
-var EMPIRE_CARD_CONFIG = (_a = {},
+var THRONES_CONFIG = (_a = {},
     _a[ENGLAND] = {
         top: 120,
         left: 349,
+        location: 'top',
     },
     _a[FRANCE] = {
         top: 120,
         left: 526,
+        location: 'top',
     },
     _a[HOLY_ROMAN_EMIRE] = {
         top: 120,
         left: 700,
+        location: 'top',
     },
     _a[HUNGARY] = {
         top: 120,
         left: 876,
+        location: 'top',
     },
     _a[BYZANTIUM] = {
         top: 120,
         left: 1052,
+        location: 'top',
     },
     _a[PORTUGAL] = {
         top: 754,
         left: 349,
+        location: 'bottom',
     },
     _a[ARAGON] = {
         top: 754,
         left: 526,
+        location: 'bottom',
     },
     _a[PAPAL_STATES] = {
         top: 754,
         left: 700,
+        location: 'bottom',
     },
     _a[OTTOMAN] = {
         top: 754,
         left: 876,
+        location: 'bottom',
     },
     _a[MAMLUK] = {
         top: 754,
         left: 1052,
+        location: 'bottom',
     },
     _a);
 var MARKET_EAST_CONFIG = [
@@ -2881,23 +2896,25 @@ var GameMap = (function () {
         var _b;
         var gamedatas = _a.gamedatas;
         this.empireSquareStocks = (_b = {},
-            _b[ARAGON] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(ARAGON, "_throne"))),
-            _b[BYZANTIUM] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(BYZANTIUM, "_throne"))),
-            _b[ENGLAND] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(ENGLAND, "_throne"))),
-            _b[FRANCE] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(FRANCE, "_throne"))),
-            _b[HOLY_ROMAN_EMIRE] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(HOLY_ROMAN_EMIRE, "_throne"))),
-            _b[HUNGARY] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(HUNGARY, "_throne"))),
-            _b[MAMLUK] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(MAMLUK, "_throne"))),
-            _b[OTTOMAN] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(OTTOMAN, "_throne"))),
-            _b[PAPAL_STATES] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(PAPAL_STATES, "_throne"))),
-            _b[PORTUGAL] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(PORTUGAL, "_throne"))),
+            _b[ARAGON] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(ARAGON, "_throne")), { direction: "column", center: false }),
+            _b[BYZANTIUM] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(BYZANTIUM, "_throne")), { direction: "column", center: false }),
+            _b[ENGLAND] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(ENGLAND, "_throne")), { direction: "column", center: false }),
+            _b[FRANCE] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(FRANCE, "_throne")), { direction: "column", center: false }),
+            _b[HOLY_ROMAN_EMIRE] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(HOLY_ROMAN_EMIRE, "_throne")), { direction: "column", center: false }),
+            _b[HUNGARY] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(HUNGARY, "_throne")), { direction: "column", center: false }),
+            _b[MAMLUK] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(MAMLUK, "_throne")), { direction: "column", center: false }),
+            _b[OTTOMAN] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(OTTOMAN, "_throne")), { direction: "column", center: false }),
+            _b[PAPAL_STATES] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(PAPAL_STATES, "_throne")), { direction: "column", center: false }),
+            _b[PORTUGAL] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_".concat(PORTUGAL, "_throne")), { direction: "column", center: false }),
             _b);
         this.updateEmpireCards({ gamedatas: gamedatas });
     };
     GameMap.prototype.updateEmpireCards = function (_a) {
         var _this = this;
         var gamedatas = _a.gamedatas;
-        gamedatas.gameMap.thrones.cards.forEach(function (card) {
+        gamedatas.gameMap.thrones.cards
+            .filter(function (card) { return !card.isQueen; })
+            .forEach(function (card) {
             var empire = card.location.split("_")[1];
             if (_this.empireSquareStocks[empire]) {
                 _this.empireSquareStocks[empire].addCard(card);
@@ -3014,10 +3031,10 @@ var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map
         children: "<span id=\"pr_market_east_".concat(index, "_counter\" class=\"pr_counter\"></span>"),
     }), "\n  </div>");
 }).join(""), "\n  <div id=\"pr_market_east_deck_container\" class=\"pr_market pr_card\" data-card-id=\"EAST_BACK\" style=\"top: calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_east_deck\"></div>\n    <div id=\"pr_market_east_deck_counter_container\" class=\"pr_deck_counter\">\n      <span id=\"pr_market_east_deck_counter\" class=\"pr_deck_counter_text\"></span>\n      <span class=\"pr_deck_counter_text\">/</span>\n      <div id=\"pr_deck_counter_comet1\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET1\"></div>\n      <div id=\"pr_deck_counter_comet2\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET2\"></div>\n    </div>\n  </div>\n"); };
-var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(EMPIRE_CARD_CONFIG)
+var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(THRONES_CONFIG)
     .map(function (_a) {
-    var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left;
-    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
+    var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left, location = _b.location;
+    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne pr_empire_throne_").concat(location, "\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
 })
     .join(""), "\n"); };
 var tplGameMapMapBorders = function () {
@@ -3591,6 +3608,7 @@ var NotificationManager = (function () {
             ["flipVictoryCard", undefined],
             ["moveEmpireSquare", undefined],
             ["moveToken", undefined],
+            ["oldMaid", undefined],
             ["payFlorinsToChina", undefined],
             ["placeToken", undefined],
             ["playCard", undefined],
@@ -3601,6 +3619,7 @@ var NotificationManager = (function () {
             ["repressToken", undefined],
             ["returnToSupply", undefined],
             ["sellCard", undefined],
+            ["sellRoyalCouple", undefined],
             ["tableauOpCommerce", undefined],
             ["tableauOpTaxPay", undefined],
             ["tradeFairConvene", undefined],
@@ -3666,8 +3685,11 @@ var NotificationManager = (function () {
                         return [4, this.game.tableauCardManager.removeCard(queen)];
                     case 1:
                         _b.sent();
-                        return [4, this.game.tableauCardManager.addQueen({ queen: queen, king: king })];
+                        return [4, this.game.tableauCardManager.updateCardInformations(king)];
                     case 2:
+                        _b.sent();
+                        return [4, this.game.tableauCardManager.addQueen({ king: king })];
+                    case 3:
                         _b.sent();
                         return [2];
                 }
@@ -3686,11 +3708,11 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_discardCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card, toLocationId, wasVassalTo, wasQueenTo;
+            var _a, adjustPrestige, playerId, card, toLocationId, wasVassalTo, king, wasOldMaid, player, prestige;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, playerId = _a.playerId, card = _a.card, toLocationId = _a.toLocationId, wasVassalTo = _a.wasVassalTo, wasQueenTo = _a.wasQueenTo;
+                        _a = notif.args, adjustPrestige = _a.adjustPrestige, playerId = _a.playerId, card = _a.card, toLocationId = _a.toLocationId, wasVassalTo = _a.wasVassalTo, king = _a.wasQueenTo, wasOldMaid = _a.wasOldMaid;
                         if (!(card.type === TABLEAU_CARD && toLocationId === DISCARD)) return [3, 2];
                         return [4, this.game.tableauCardManager.removeCard(card)];
                     case 1:
@@ -3705,14 +3727,22 @@ var NotificationManager = (function () {
                         _b.sent();
                         _b.label = 4;
                     case 4:
+                        player = this.getPlayer({ playerId: playerId });
                         if (wasVassalTo) {
                             this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
                         }
-                        if (wasQueenTo) {
+                        if (king) {
+                            this.game.tableauCardManager.updateCardInformations(king);
                             this.game.tableauCardManager.removeQueen({
-                                king: wasQueenTo,
-                                queen: card,
+                                king: king,
                             });
+                        }
+                        if (wasOldMaid) {
+                            player.tableau.checkOldMaidContainerHeight();
+                        }
+                        if (adjustPrestige) {
+                            prestige = card.type === EMPIRE_CARD ? card[card.side].prestige : card.prestige;
+                            prestige.forEach(function (item) { return player.counters.prestige[item].incValue(-1); });
                         }
                         return [2];
                 }
@@ -3790,6 +3820,22 @@ var NotificationManager = (function () {
                         _b.sent();
                         _b.label = 2;
                     case 2: return [2, Promise.resolve()];
+                }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_oldMaid = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, card, player;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, card = _a.card;
+                        player = this.getPlayer({ playerId: playerId });
+                        return [4, player.tableau.addOldMaid(card)];
+                    case 1:
+                        _b.sent();
+                        return [2];
                 }
             });
         });
@@ -4050,6 +4096,16 @@ var NotificationManager = (function () {
                     });
                 }
                 return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_sellRoyalCouple = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, value;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, value = _a.value;
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(value);
+                return [2];
             });
         });
     };
@@ -4359,7 +4415,7 @@ var PRPlayer = (function () {
                 .framework()
                 .scoreCtrl[this.playerId].setValue(Number(playerGamedatas.score));
         }
-        var allCards = __spreadArray(__spreadArray([], playerGamedatas.tableau.cards.east, true), playerGamedatas.tableau.cards.west, true);
+        var allCards = __spreadArray(__spreadArray(__spreadArray([], playerGamedatas.tableau.cards.east, true), playerGamedatas.tableau.cards.west, true), playerGamedatas.oldMaids, true);
         var prestigeCount = (_b = {},
             _b[CATHOLIC] = 0,
             _b[ISLAMIC] = 0,
@@ -4455,6 +4511,7 @@ var PlayerTableau = (function () {
         var game = _a.game, player = _a.player;
         this.tableau = {};
         this.game = game;
+        this.playerId = Number(player.id);
         this.setup({ player: player });
     }
     PlayerTableau.prototype.clearInterface = function () {
@@ -4478,19 +4535,20 @@ var PlayerTableau = (function () {
         }));
         this.tableau[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state"), gap: "12px" });
         this.tableau[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state"), gap: "12px" });
+        this.tableau.oldMaids = new LineStock(this.game.tableauCardManager, document.getElementById("old_maids_".concat(player.id)));
         this.updateCards({ player: player });
     };
     PlayerTableau.prototype.updateCards = function (_a) {
         var _this = this;
         var player = _a.player;
         this.tableau[EAST].addCards(player.tableau.cards[EAST].filter(function (card) {
-            if (card.isQueen) {
+            if (card.isQueen && card.hasKing) {
                 return false;
             }
             return card.type === TABLEAU_CARD || !card.isVassal;
         }));
         this.tableau[WEST].addCards(player.tableau.cards[WEST].filter(function (card) {
-            if (card.isQueen) {
+            if (card.isQueen && card.hasKing) {
                 return false;
             }
             return card.type === TABLEAU_CARD || !card.isVassal;
@@ -4502,13 +4560,10 @@ var PlayerTableau = (function () {
                 suzerain: _this.game.gamedatas.empireSquares.find(function (empireCard) { return empireCard.id === card.suzerainId; }),
             });
         });
-        __spreadArray(__spreadArray([], player.tableau.cards[EAST], true), player.tableau.cards[WEST], true).filter(function (card) { return card.isQueen; })
-            .forEach(function (card) {
-            _this.game.tableauCardManager.addQueen({
-                queen: card,
-                king: _this.game.gamedatas.empireSquares.find(function (empireCard) { return empireCard.queenId === card.id; }),
-            });
+        player.oldMaids.forEach(function (card) {
+            _this.tableau.oldMaids.addCard(card);
         });
+        this.checkOldMaidContainerHeight();
         player.tableau.tokens.forEach(function (token) {
             var location = token.location;
             var node = document.getElementById("".concat(location, "_tokens"));
@@ -4537,12 +4592,44 @@ var PlayerTableau = (function () {
             });
         });
     };
+    PlayerTableau.prototype.addOldMaid = function (card) {
+        return __awaiter(this, void 0, void 0, function () {
+            var node, currentZIndex;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        node = document.getElementById("player_bank_board_".concat(this.playerId));
+                        currentZIndex = node.style.zIndex;
+                        node.style.zIndex = '50';
+                        this.checkOldMaidContainerHeight({ increase: 1 });
+                        return [4, this.tableau.oldMaids.addCard(card)];
+                    case 1:
+                        _a.sent();
+                        node.style.zIndex = currentZIndex;
+                        return [2];
+                }
+            });
+        });
+    };
+    PlayerTableau.prototype.checkOldMaidContainerHeight = function (_a) {
+        var _b = _a === void 0 ? { increase: 0 } : _a, increase = _b.increase;
+        var node = document.getElementById("old_maids_".concat(this.playerId));
+        if (!node) {
+            return;
+        }
+        if (this.tableau.oldMaids.getCards().length + increase > 0) {
+            node.setAttribute("data-has-old-maids", 'true');
+        }
+        else {
+            node.setAttribute("data-has-old-maids", 'false');
+        }
+    };
     return PlayerTableau;
 }());
 var tplPlayerTableauContent = function (_a) {
     var player = _a.player, title = _a.title;
     var playerId = player.id;
-    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\"></div>\n    <div class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\"></div>\n  </div>\n    ");
+    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\"></div>\n    <div class=\"pr_player_board_container\">\n      <div id=\"old_maids_").concat(playerId, "\" class=\"pr_old_maids_container\"></div>\n      <div id=\"player_bank_board_").concat(playerId, "\" class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    </div>\n\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\"></div>\n  </div>\n    ");
 };
 var tplPlayerPanel = function (_a) {
     var playerId = _a.playerId;
@@ -5493,12 +5580,36 @@ var PlaceAgentState = (function () {
         });
         this.game.addCancelButton();
     };
-    PlaceAgentState.prototype.updateInterfaceConfirmLocation = function (_a) {
+    PlaceAgentState.prototype.updateInterfaceSelectEmpireToRepressTo = function (_a) {
         var _this = this;
         var id = _a.id, location = _a.location;
         this.game.clearPossible();
         this.game.setLocationSelected({ id: id });
-        this.updatePageTitleConfirmLocation({ location: location });
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an empire repress ${tkn_mapToken} to"),
+            args: {
+                tkn_playerName: "${you}",
+                tkn_mapToken: tknMapToken(location.repressed.token.id),
+            },
+        });
+        location.repressed.empires.forEach(function (empire) {
+            _this.game.setLocationSelectable({
+                id: empire.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirmLocation({ id: id, location: location, empire: empire });
+                },
+            });
+        });
+    };
+    PlaceAgentState.prototype.updateInterfaceConfirmLocation = function (_a) {
+        var _this = this;
+        var id = _a.id, location = _a.location, empire = _a.empire;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: id });
+        if (empire) {
+            this.game.setLocationSelected({ id: empire.id });
+        }
+        this.updatePageTitleConfirmLocation({ location: location, empire: empire });
         this.game.addConfirmButton({
             callback: function () {
                 return _this.game.takeAction({
@@ -5506,6 +5617,7 @@ var PlaceAgentState = (function () {
                     args: {
                         agent: _this.args.agents[0],
                         locationId: id,
+                        empireId: empire ? empire.id : null,
                     },
                 });
             },
@@ -5541,7 +5653,15 @@ var PlaceAgentState = (function () {
             else {
                 _this.game.setLocationSelectable({
                     id: id,
-                    callback: function () { return _this.updateInterfaceConfirmLocation({ id: id, location: location }); },
+                    callback: function () {
+                        var _a;
+                        if ((_a = location === null || location === void 0 ? void 0 : location.repressed) === null || _a === void 0 ? void 0 : _a.empires) {
+                            _this.updateInterfaceSelectEmpireToRepressTo({ id: id, location: location });
+                        }
+                        else {
+                            _this.updateInterfaceConfirmLocation({ id: id, location: location });
+                        }
+                    },
                 });
             }
         });
@@ -5558,7 +5678,7 @@ var PlaceAgentState = (function () {
         });
     };
     PlaceAgentState.prototype.updatePageTitleConfirmLocation = function (_a) {
-        var location = _a.location;
+        var location = _a.location, empire = _a.empire;
         var name = location.name, cost = location.cost, repressed = location.repressed;
         if (repressed) {
             this.game.clientUpdatePageTitle({
@@ -5571,7 +5691,7 @@ var PlaceAgentState = (function () {
                     location: _(name),
                     cost: cost,
                     tkn_florin: tknFlorin(),
-                    tkn_mapToken_repressed: tknMapToken(repressed.id),
+                    tkn_mapToken_repressed: tknMapToken(repressed.token.id),
                 },
             });
         }
@@ -6130,7 +6250,7 @@ var TableauOpBeheadState = (function () {
             text: _("Behead ${cardName}?"),
             args: {
                 tkn_florin: tknFlorin(),
-                cardName: _(card.name),
+                cardName: card.type === EMPIRE_CARD ? _(card[card.side].name) : _(card.name),
             },
         });
         this.game.addConfirmButton({
@@ -6155,7 +6275,7 @@ var TableauOpBeheadState = (function () {
                         card: card,
                     });
                 },
-                back: card.location.split("_")[2] === "0",
+                back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
             });
         });
     };

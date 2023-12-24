@@ -1,43 +1,53 @@
-const EMPIRE_CARD_CONFIG = {
+const THRONES_CONFIG: Record<string, {top: number; left: number; location: 'top' | 'bottom'}> = {
   [ENGLAND]: {
     top: 120,
     left: 349,
+    location: 'top',
   },
   [FRANCE]: {
     top: 120,
     left: 526,
+    location: 'top',
   },
   [HOLY_ROMAN_EMIRE]: {
     top: 120,
     left: 700,
+    location: 'top',
   },
   [HUNGARY]: {
     top: 120,
     left: 876,
+    location: 'top',
   },
   [BYZANTIUM]: {
     top: 120,
     left: 1052,
+    location: 'top',
   },
   [PORTUGAL]: {
     top: 754,
     left: 349,
+    location: 'bottom',
   },
   [ARAGON]: {
     top: 754,
     left: 526,
+    location: 'bottom',
   },
   [PAPAL_STATES]: {
     top: 754,
     left: 700,
+    location: 'bottom',
   },
   [OTTOMAN]: {
     top: 754,
     left: 876,
+    location: 'bottom',
   },
   [MAMLUK]: {
     top: 754,
     left: 1052,
+    location: 'bottom',
   },
 };
 

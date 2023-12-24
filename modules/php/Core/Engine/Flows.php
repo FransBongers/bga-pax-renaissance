@@ -25,7 +25,7 @@ abstract class Flows
           'action' => RESOLVE_PLACE_TOKEN,
           'playerId' => $playerId,
           // 'agents' => $card->getAgents(),
-          // 'empireId' => $card->getEmpire(),
+          // 'empireId' => $card->getEmpireId(),
         ]
       ]
     ];

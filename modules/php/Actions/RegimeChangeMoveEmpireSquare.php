@@ -64,10 +64,17 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     // $isInOwnTableau = in_array($empireCardLocation, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
     // $isInEnemeyTableau = !$isInOwnTableau && Utils::startsWith($empireCardLocation, 'tableau_');
 
-    // TODO: handle cards that are a Vassal right now
-    $empireCard->resolveRegimeChange($player, $isCampaign, $isCampaign ?
-      Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard() :
-      null);
+    if ($source === CORONATION_ONE_SHOT) {
+      $king = Cards::get($parentInfo['data']['kingId']);
+      $queen = Cards::get($parentInfo['data']['queenId']);
+      $king->marry($player, $queen);
+      Notifications::coronation($player, $queen, $king);
+    } else {
+      // TODO: handle cards that are a Vassal right now
+      $empireCard->resolveRegimeChange($player, $isCampaign, $isCampaign ?
+        Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard() :
+        null);
+    }
 
     // if ($isInThrone) {
     //   // Comes with bishop and queen

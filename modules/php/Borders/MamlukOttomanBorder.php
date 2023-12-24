@@ -8,5 +8,9 @@ class MamlukOttomanBorder extends \PaxRenaissance\Models\Border
     $this->id = BORDER_MAMLUK_OTTOMAN;
     $this->name = clienttranslate('Mamluk-Ottoman Border');
     $this->seaBorder = true;
+    $this->adjacentEmpires = [
+      MAMLUK,
+      OTTOMAN,
+    ];
   }
 }

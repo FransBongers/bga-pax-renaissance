@@ -1,9 +1,11 @@
 class PlayerTableau {
   private game: PaxRenaissanceGame;
+  private playerId: number;
 
   public tableau: {
     [EAST]?: LineStock<EmpireCard | TableauCard>;
     [WEST]?: LineStock<EmpireCard | TableauCard>;
+    oldMaids?: LineStock<EmpireCard | TableauCard>;
   } = {};
 
   constructor({
@@ -14,6 +16,7 @@ class PlayerTableau {
     player: PaxRenaissancePlayerData;
   }) {
     this.game = game;
+    this.playerId = Number(player.id)
     this.setup({ player });
   }
 
@@ -71,6 +74,11 @@ class PlayerTableau {
       document.getElementById(`tableau_west_${player.id}`),
       { center: false, sort: sortFunction("state"), gap: "12px" }
     );
+    this.tableau.oldMaids = new LineStock(
+      this.game.tableauCardManager,
+      document.getElementById(`old_maids_${player.id}`)
+      // { center: false, sort: sortFunction("state"), gap: "12px" }
+    );
 
     this.updateCards({ player });
   }
@@ -78,7 +86,7 @@ class PlayerTableau {
   updateCards({ player }: { player: PaxRenaissancePlayerData }) {
     this.tableau[EAST].addCards(
       player.tableau.cards[EAST].filter((card) => {
-        if (card.isQueen) {
+        if (card.isQueen && (card as QueenCard).hasKing) {
           return false;
         }
         return card.type === TABLEAU_CARD || !card.isVassal;
@@ -86,7 +94,7 @@ class PlayerTableau {
     );
     this.tableau[WEST].addCards(
       player.tableau.cards[WEST].filter((card) => {
-        if (card.isQueen) {
+        if (card.isQueen && (card as QueenCard).hasKing) {
           return false;
         }
         return card.type === TABLEAU_CARD || !card.isVassal;
@@ -104,16 +112,21 @@ class PlayerTableau {
         });
       });
 
-    [...player.tableau.cards[EAST], ...player.tableau.cards[WEST]]
-      .filter((card) => card.isQueen)
-      .forEach((card: QueenCard) => {
-        this.game.tableauCardManager.addQueen({
-          queen: card,
-          king: this.game.gamedatas.empireSquares.find(
-            (empireCard: EmpireCard) => empireCard.queenId === card.id
-          ),
-        });
-      });
+    player.oldMaids.forEach((card: QueenCard) => {
+      this.tableau.oldMaids.addCard(card);
+    });
+
+    this.checkOldMaidContainerHeight();
+    // [...player.tableau.cards[EAST], ...player.tableau.cards[WEST]]
+    //   .filter((card) => card.isQueen)
+    //   .forEach((card: QueenCard) => {
+    //     this.game.tableauCardManager.addQueen({
+    //       queen: card,
+    //       king: this.game.gamedatas.empireSquares.find(
+    //         (empireCard: EmpireCard) => empireCard.queenId === card.id
+    //       ),
+    //     });
+    //   });
 
     player.tableau.tokens.forEach((token) => {
       const { location } = token;
@@ -131,6 +144,29 @@ class PlayerTableau {
       await this.tableau[EAST].addCard(card);
     } else {
       await this.tableau[WEST].addCard(card);
+    }
+  }
+
+  public async addOldMaid(card: QueenCard) {
+    const node = document.getElementById(`player_bank_board_${this.playerId}`);
+    const currentZIndex = node.style.zIndex;
+    node.style.zIndex = '50';
+
+    this.checkOldMaidContainerHeight({increase: 1});
+    await this.tableau.oldMaids.addCard(card);
+    node.style.zIndex = currentZIndex;
+  }
+
+  public checkOldMaidContainerHeight({increase}: {increase: number} = {increase: 0})
+  {
+    const node = document.getElementById(`old_maids_${this.playerId}`);
+    if (!node) {
+      return;
+    }
+    if (this.tableau.oldMaids.getCards().length + increase > 0) {
+      node.setAttribute("data-has-old-maids", 'true');
+    } else {
+      node.setAttribute("data-has-old-maids", 'false');
     }
   }
 }

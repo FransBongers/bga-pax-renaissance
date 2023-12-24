@@ -53,28 +53,37 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
   {
     $info = $this->ctx->getInfo();
     $cardId = $info['cardId'];
-    $card = Cards::get($cardId);
+    $playerdCard = Cards::get($cardId);
 
-    $oneShot = $card->getOneShot();
+    $oneShot = $playerdCard->getOneShot();
 
     $affectedPlayers = $this->getAffectedPlayers($oneShot);
 
-    foreach($affectedPlayers as $playerId => $cardsToDiscard)
-    {
+    foreach ($affectedPlayers as $playerId => $cardsToDiscard) {
       $player = Players::get($playerId);
       Notifications::apostasy($player, $this->apostasyPrestigeMap[$oneShot]);
-      foreach($cardsToDiscard as $cardToDiscard) {
+      foreach ($cardsToDiscard as $cardToDiscard) {
+
+        if ($cardToDiscard->isQueen() && Utils::array_find($cardsToDiscard, function ($card) use ($cardToDiscard) {
+          return $card->getType() === EMPIRE_CARD && $card->getQueen()->getId() === $cardToDiscard->getId();
+        }) !== null) {
+          continue;
+        }
         // TODO: check if this can lead to players becoming active -> discard empire cards?
+        // if ($cardsToDiscard->getType() === EMPIRE_CARD && $cardsToDiscard->getSide() === KING) {
+        //   $cardsToDiscard->returnT
+        // } else {
         $cardToDiscard->discard(DISCARD, $player);
+        // }
       }
     }
 
-    if ($card->getAgents() !== null) {
+    if ($playerdCard->getAgents() !== null) {
       $this->ctx->getParent()->pushChild(new LeafNode([
         'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
-        'agents' => $card->getAgents(),
-        'empireId' => $card->getEmpire(),
+        'agents' => $playerdCard->getAgents(),
+        'empireId' => $playerdCard->getEmpireId(),
         'optional' => false,
         'repressCost' => 0, // TODO: check this => do cards with apostasy only have bishops?
       ]));
@@ -98,19 +107,31 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
   {
     $result = [];
     $prestige = $this->apostasyPrestigeMap[$oneShot];
-    foreach(Players::getAll() as $player) {
+    foreach (Players::getAll() as $player) {
       $playerPrestige = $player->getPrestige();
 
       if (!($playerPrestige[$prestige[0]] > 0 && $playerPrestige[$prestige[1]] > 0)) {
         continue;
       }
-      
+
+      $playerId = $player->getId();
+      $result[$playerId] = [];
+
       $tableauCards = $player->getTableauCards();
-      $result[$player->getId()] = Utils::filter($tableauCards, function ($card) use ($prestige) {
-        return Utils::array_some($card->getPrestige(), function ($cardPrestige) use ($prestige) {
+      foreach ($tableauCards as $card) {
+        $cardIsAffected = Utils::array_some($card->getPrestige(), function ($cardPrestige) use ($prestige) {
           return in_array($cardPrestige, $prestige);
         });
-      });
+        if (!$cardIsAffected) {
+          continue;
+        }
+        $result[$playerId][] = $card;
+      }
+      // $result[$player->getId()] = Utils::filter($tableauCards, function ($card) use ($prestige) {
+      //   return Utils::array_some($card->getPrestige(), function ($cardPrestige) use ($prestige) {
+      //     return in_array($cardPrestige, $prestige);
+      //   });
+      // });
     }
     return $result;
   }

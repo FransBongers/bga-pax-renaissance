@@ -192,6 +192,7 @@ class PRPlayer {
     const allCards = [
       ...playerGamedatas.tableau.cards.east,
       ...playerGamedatas.tableau.cards.west,
+      ...playerGamedatas.oldMaids,
     ];
     const prestigeCount = {
       [CATHOLIC]: 0,

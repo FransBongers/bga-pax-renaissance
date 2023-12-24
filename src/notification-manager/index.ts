@@ -45,6 +45,7 @@ class NotificationManager {
       ["flipVictoryCard", undefined],
       ["moveEmpireSquare", undefined],
       ["moveToken", undefined],
+      ["oldMaid", undefined],
       ["payFlorinsToChina", undefined],
       ["placeToken", undefined],
       ["playCard", undefined],
@@ -54,7 +55,9 @@ class NotificationManager {
       ["refreshUI", undefined],
       ["repressToken", undefined],
       ["returnToSupply", undefined],
+      // ["returnToThrone", undefined],
       ["sellCard", undefined],
+      ["sellRoyalCouple", undefined],
       ["tableauOpCommerce", undefined],
       ["tableauOpTaxPay", undefined],
       ["tradeFairConvene", undefined],
@@ -132,9 +135,10 @@ class NotificationManager {
   async notif_coronation(notif: Notif<NotifCoronationArgs>) {
     const { queen, king, playerId } = notif.args;
     // const player = this.getPlayer({ playerId });
-    // await player.tableau.tableau[queen.region].addCard(king);
+    // await player.tableau.tableau[queen.region].
     await this.game.tableauCardManager.removeCard(queen);
-    await this.game.tableauCardManager.addQueen({ queen, king });
+    await this.game.tableauCardManager.updateCardInformations(king);
+    await this.game.tableauCardManager.addQueen({ king });
   }
 
   async notif_declareVictory(notif: Notif<NotifDeclareVictoryArgs>) {
@@ -143,8 +147,15 @@ class NotificationManager {
   }
 
   async notif_discardCard(notif: Notif<NotifDiscardCardArgs>) {
-    const { playerId, card, toLocationId, wasVassalTo, wasQueenTo } =
-      notif.args;
+    const {
+      adjustPrestige,
+      playerId,
+      card,
+      toLocationId,
+      wasVassalTo,
+      wasQueenTo: king,
+      wasOldMaid,
+    } = notif.args;
     if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
       await this.game.tableauCardManager.removeCard(card);
     } else if (card.type === EMPIRE_CARD) {
@@ -152,14 +163,25 @@ class NotificationManager {
         .getEmpireSquareStock({ empireId: card.empire })
         .addCard(card);
     }
+    const player = this.getPlayer({ playerId });
     if (wasVassalTo) {
       this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
     }
-    if (wasQueenTo) {
+    if (king) {
+      this.game.tableauCardManager.updateCardInformations(king);
+
       this.game.tableauCardManager.removeQueen({
-        king: wasQueenTo,
-        queen: card as QueenCard,
+        king,
       });
+    }
+    if (wasOldMaid) {
+      player.tableau.checkOldMaidContainerHeight();
+    }
+    if (adjustPrestige) {
+      // TODO: check discarding of republics
+      const prestige =
+        card.type === EMPIRE_CARD ? card[card.side].prestige : card.prestige;
+      prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
     }
   }
 
@@ -236,6 +258,12 @@ class NotificationManager {
     // }
 
     return Promise.resolve();
+  }
+
+  async notif_oldMaid(notif: Notif<NotifOldMaidArgs>) {
+    const { playerId, card } = notif.args;
+    const player = this.getPlayer({ playerId });
+    await player.tableau.addOldMaid(card);
   }
 
   async notif_payFlorinsToChina(notif: Notif<NotifPayFlorinsToChinaArgs>) {
@@ -399,6 +427,26 @@ class NotificationManager {
     );
   }
 
+  // async notif_returnToThrone(notif: Notif<NotifReturnToThroneArgs>) {
+  //   const { king, queen, playerId } = notif.args;
+
+  //   await this.game.gameMap
+  //     .getEmpireSquareStock({ empireId: king.empire })
+  //     .addCard(king);
+
+  //   const player = this.getPlayer({ playerId });
+  //   // TODO: check discarding of republics
+  //   const prestigeCards: (EmpireCard | QueenCard)[] = [king];
+  //   if (queen) {
+  //     prestigeCards.push(queen);
+  //   }
+  //   prestigeCards.forEach((card) => {
+  //     const prestige =
+  //       card.type === EMPIRE_CARD ? card[card.side].prestige : card.prestige;
+  //     prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
+  //   });
+  // }
+
   // TODO: check if we can replace this with discardCard
   async notif_sellCard(notif: Notif<NotifSellCardArgs>) {
     const { playerId, card, value } = notif.args;
@@ -430,6 +478,11 @@ class NotificationManager {
     }
 
     return Promise.resolve();
+  }
+
+  async notif_sellRoyalCouple(notif: Notif<NotifSellRoyalCoupleArgs>) {
+    const { playerId, value } = notif.args;
+    this.getPlayer({ playerId }).counters.florins.incValue(value);
   }
 
   async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {

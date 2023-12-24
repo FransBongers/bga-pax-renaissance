@@ -49,11 +49,14 @@ class BeheadOp extends \PaxRenaissance\Models\TableauOp
 
     foreach ($players as $player) {
       $tableauCards = $player->getTableauCards();
+      
       foreach ($tableauCards as $tableauCard) {
+        Notifications::log('tableauCard',$tableauCard);
         if ($tableauCard->getId() === $card->getId()) {
           continue;
         }
-        if (in_array($tableauCard->getEmpire(), $empireIds)) {
+        Notifications::log('empireId',$tableauCard->getEmpireId());
+        if (in_array($tableauCard->getEmpireId(), $empireIds)) {
           $options[] = $tableauCard;
         }
       }

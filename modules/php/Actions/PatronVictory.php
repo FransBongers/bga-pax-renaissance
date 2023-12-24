@@ -53,7 +53,7 @@ class PatronVictory extends \PaxRenaissance\Models\AtomicAction
     // $requiredDifference = $numberOfPlayers === 2 ? 3 : 2;
 
     foreach($players as $player) {
-      $patronPrestige = $player->getPrestige()[PATRON];
+      $patronPrestige = $player->getPrestige(true)[PATRON];
       $florins = $player->getFlorins();
 
       Players::setPlayerScoreAux($player->getId(), $patronPrestige * 100 + $florins);

@@ -66,6 +66,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
           })),
         ]
       ],
+      'oldMaids' => $this->getOldMaids(),
       'tableau' => [
         'cards' => $tableauCards,
         'tokens' => $this->getTokensOnTableauCards($tableauCards)
@@ -133,7 +134,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     // });
     // TODO, add old maids.
     return [
-      'cards' => array_merge($tableauCards, $this->getHand()),
+      'cards' => array_merge($tableauCards, $this->getHand(), $this->getOldMaids()),
       'royalCouples' => $royalCouples,
     ];
   }
@@ -153,6 +154,11 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     return Cards::getInLocation(Locations::hand($this->getId()))->toArray();
   }
 
+  public function getOldMaids()
+  {
+    return Cards::getInLocationOrdered(Locations::oldMaids($this->getId()))->toArray();
+  }
+
   public function getTableauCards()
   {
     $tableauCards = $this->getTableauCardsPerRegion();
@@ -167,7 +173,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     ];
   }
 
-  public function getPrestige()
+  public function getPrestige($victoryCalculation = false)
   {
     $result = [
       CATHOLIC => 0,
@@ -177,12 +183,16 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       LAW => 0,
       PATRON => 0,
     ];
-    $tableauCards = $this->getTableauCards();
-    foreach ($tableauCards as $card) {
+    $cards = $this->getTableauCards();
+    if ($victoryCalculation) {
+      $cards = array_merge($cards, $this->getOldMaids());
+    }
+    foreach ($cards as $card) {
       foreach ($card->getPrestige() as $prestige) {
         $result[$prestige] = $result[$prestige] + 1;
       }
     }
+    
     return $result;
   }
 

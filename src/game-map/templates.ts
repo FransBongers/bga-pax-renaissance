@@ -58,10 +58,10 @@ const tplGameMapMarket = () => `
 `;
 
 const tplGameMapEmpireCards = () => `
-  ${Object.entries(EMPIRE_CARD_CONFIG)
+  ${Object.entries(THRONES_CONFIG)
     .map(
-      ([empire, { top, left }]) =>
-      `<div id="pr_${empire}_throne" class="pr_empire_throne" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
+      ([empire, { top, left, location }]) =>
+      `<div id="pr_${empire}_throne" class="pr_empire_throne pr_empire_throne_${location}" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
       
     )
     .join("")}

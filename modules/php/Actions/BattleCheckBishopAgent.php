@@ -75,7 +75,7 @@ class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
         'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $bishopAgents,
-        'empireId' => $card->getEmpire(),
+        'empireId' => $card->getEmpireId(),
         'optional' => false,
         'emptyCitiesFirst' => true,
         'repressCost' => 0,

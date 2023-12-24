@@ -62,12 +62,16 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
 
     Notifications::oneShotNotPossible($oneShot);
 
+    if ($oneShot === CORONATION_ONE_SHOT) {
+      $card->oldMaid(self::getPlayer());
+    }
+
     if ($card->getAgents() !== null) {
       $this->ctx->insertAsBrother(new LeafNode([
         'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $card->getAgents(),
-        'empireId' => $card->getEmpire(),
+        'empireId' => $card->getEmpireId(),
         'optional' => true,
         'repressCost' => 1,
       ]));
@@ -131,32 +135,49 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
 
 
 
-    if ($oneShotOccurs && in_array($oneShot, $this->battleOneShots)) {
+    if ($oneShotOccurs) {
+      $this->oneShotOccurs($player, $cardId, $oneShot);
+    } else {
+      $this->oneShotDoesNotOccur($player, $card, $oneShot);
+    }
+
+    $this->resolveAction($args);
+  }
+
+  private function oneShotOccurs($player, $cardId, $oneShot)
+  {
+    if (in_array($oneShot, $this->battleOneShots)) {
       Notifications::oneShotOccurs($player, $oneShot);
       $this->ctx->insertAsBrother(Engine::buildTree(Flows::battle($player->getId(), $oneShot, [
         'cardId' => $cardId
       ])));
-    } else if ($oneShotOccurs) {
+    } else {
       Notifications::oneShotOccurs($player, $oneShot);
       $this->ctx->insertAsBrother(new LeafNode([
         'action' => $oneShot,
         'playerId' => $this->ctx->getPlayerId(),
         'cardId' => $cardId,
       ]));
-    } else if ($card->getAgents() !== null) {
-      Notifications::oneShotDoesNotOccur($player, $oneShot);
+    }
+  }
+
+  private function oneShotDoesNotOccur($player, $card, $oneShot)
+  {
+    Notifications::oneShotDoesNotOccur($player, $oneShot);
+    if ($card->getAgents() !== null) {
       $this->ctx->insertAsBrother(new LeafNode([
         'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $card->getAgents(),
-        'empireId' => $card->getEmpire(),
+        'empireId' => $card->getEmpireId(),
         'optional' => true,
       ]));
     }
 
-    $this->resolveAction($args);
+    if ($oneShot === CORONATION_ONE_SHOT) {
+      $card->oldMaid($player);
+    }
   }
-
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
   //  .##.....##....##.....##..##........##.....##......####..

@@ -121,8 +121,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
 
-    this.gameMap = new GameMap(this);
     this.tooltipManager = new TooltipManager(this);
+    this.gameMap = new GameMap(this);
     if (this.playerOrder.includes(this.getPlayerId())) {
       this.hand = new Hand(this);
     }

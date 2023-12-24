@@ -72,7 +72,7 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
       $destinations = [];
 
       foreach ($cardsInPlay as $card) {
-        if (in_array($card->getEmpire(), $empireIds) && $card->getId() !== $bishopLocation && !isset($destinations[$card->getId()])) {
+        if (in_array($card->getEmpireId(), $empireIds) && $card->getId() !== $bishopLocation && !isset($destinations[$card->getId()])) {
           $destinations[$card->getId()] = $card;
         }
       }

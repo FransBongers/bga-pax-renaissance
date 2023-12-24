@@ -7,5 +7,9 @@ class AragonFranceBorder extends \PaxRenaissance\Models\Border
   {
     $this->id = BORDER_ARAGON_FRANCE;
     $this->name = clienttranslate('Aragon-France border');
+    $this->adjacentEmpires = [
+      ARAGON,
+      FRANCE,
+    ];
   }
 }

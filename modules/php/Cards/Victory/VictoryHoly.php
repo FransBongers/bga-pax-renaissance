@@ -37,7 +37,7 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
     $supremeReligionRanking = [];
     foreach ($players as $player) {
 
-      $supremeReligionPrestige = $player->getPrestige()[$supremeReligion];
+      $supremeReligionPrestige = $player->getPrestige(true)[$supremeReligion];
 
       $supremeReligionRanking[] = [
         'playerId' => $player->getId(),

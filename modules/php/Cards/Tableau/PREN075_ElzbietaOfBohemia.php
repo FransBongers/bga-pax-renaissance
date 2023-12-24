@@ -1,7 +1,8 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN075_ElzbietaOfBohemia extends \PaxRenaissance\Models\TableauCard
+class PREN075_ElzbietaOfBohemia extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -14,5 +15,12 @@ class PREN075_ElzbietaOfBohemia extends \PaxRenaissance\Models\TableauCard
     $this->name = clienttranslate('Elzbieta of Bohemia');
     $this->oneShot = CORONATION_ONE_SHOT;
     $this->region = EAST;
+    // Queen specific props
+    $this->height = 114;
+    $this->suitors = [
+      HUNGARY,
+      PORTUGAL,
+      HOLY_ROMAN_EMIRE,
+    ];
   }
 }

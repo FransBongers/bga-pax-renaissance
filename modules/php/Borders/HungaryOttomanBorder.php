@@ -8,5 +8,9 @@ class HungaryOttomanBorder extends \PaxRenaissance\Models\Border
     $this->id = BORDER_HUNGARY_OTTOMAN;
     $this->name = clienttranslate('Hungary-Ottoman Border');
     $this->seaBorder = true;
+    $this->adjacentEmpires = [
+      HUNGARY,
+      OTTOMAN,
+    ];
   }
 }

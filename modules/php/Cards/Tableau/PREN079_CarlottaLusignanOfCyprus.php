@@ -1,7 +1,8 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN079_CarlottaLusignanOfCyprus extends \PaxRenaissance\Models\TableauCard
+class PREN079_CarlottaLusignanOfCyprus extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -28,5 +29,12 @@ class PREN079_CarlottaLusignanOfCyprus extends \PaxRenaissance\Models\TableauCar
       ]
     ];
     $this->region = EAST;
+    // Queen specific props
+    $this->height = 111;
+    $this->suitors = [
+      BYZANTIUM,
+      OTTOMAN,
+      MAMLUK,
+    ];
   }
 }

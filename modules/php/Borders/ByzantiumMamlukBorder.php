@@ -7,5 +7,9 @@ class ByzantiumMamlukBorder extends \PaxRenaissance\Models\Border
   {
     $this->id = BORDER_BYZANTIUM_MAMLUK;
     $this->name = clienttranslate('Byzantium-Mamluk Border');
+    $this->adjacentEmpires = [
+      BYZANTIUM,
+      MAMLUK,
+    ];
   }
 }

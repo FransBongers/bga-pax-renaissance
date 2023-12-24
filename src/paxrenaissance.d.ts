@@ -130,7 +130,7 @@ interface EmpireCard extends PaxRenCard {
   sellValue: number;
   isVassal: boolean;
   suzerainId: string | null;
-  queenId: string | null;
+  queen: QueenCard | null;
   king: EmpireCardSide;
   republic: EmpireCardSide;
   side: "king" | "republic";
@@ -152,6 +152,7 @@ interface TableauCard extends PaxRenCard {
 interface QueenCard extends TableauCard {
   height: number;
   suitors: string[];
+  hasKing: boolean;
 }
 
 interface VictoryCard extends PaxRenCard {
@@ -249,6 +250,7 @@ interface PaxRenaissancePlayerData extends BgaPlayer {
       west: number;
     };
   };
+  oldMaids: QueenCard[];
   tableau: {
     cards: {
       east: (EmpireCard | TableauCard)[];

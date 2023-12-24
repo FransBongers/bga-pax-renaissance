@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN117X_DespinaKhatun extends \PaxRenaissance\Models\TableauCard
+class PREN117X_DespinaKhatun extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -29,5 +29,12 @@ class PREN117X_DespinaKhatun extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = EAST;
+    // Queen specific props
+    $this->height = 110;
+    $this->suitors = [
+      BYZANTIUM,
+      OTTOMAN,
+      MAMLUK,
+    ];
   }
 }

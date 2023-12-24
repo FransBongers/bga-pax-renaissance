@@ -100,7 +100,7 @@ class CoronationOneShot extends \PaxRenaissance\Models\AtomicAction
     $queen = Cards::get($this->ctx->getInfo()['cardId']);
 
     $cardId = $args['cardId'];
-    
+
     $suitors = $this->getSuitors($queen);
 
     $king = Utils::array_find($suitors, function ($suitor) use ($cardId) {
@@ -112,12 +112,11 @@ class CoronationOneShot extends \PaxRenaissance\Models\AtomicAction
     }
 
     $player = self::getPlayer();
-    // TODO: update locations
-    $king->marry($player, $queen);
 
-    Notifications::coronation($player, $queen, $king);
+    // $king->marry($player, $queen);
+    // Notifications::coronation($player, $queen, $king);
 
-    // Notifications::log('selected king', $king);
+    $this->ctx->insertAsBrother(Engine::buildTree(Flows::regimeChange($player->getId(), $king->getEmpireId(), CORONATION_ONE_SHOT, ['kingId' => $king->getId(), 'queenId' => $queen->getId()])));
 
 
     $this->resolveAction($args);
@@ -131,7 +130,7 @@ class CoronationOneShot extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getSuitors($queen) 
+  private function getSuitors($queen)
   {
 
 

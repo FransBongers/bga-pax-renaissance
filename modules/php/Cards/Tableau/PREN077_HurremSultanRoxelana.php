@@ -1,7 +1,8 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN077_HurremSultanRoxelana extends \PaxRenaissance\Models\TableauCard
+class PREN077_HurremSultanRoxelana extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -28,5 +29,12 @@ class PREN077_HurremSultanRoxelana extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->region = EAST;
+    // Queen specific props
+    $this->height = 103;
+    $this->suitors = [
+      BYZANTIUM,
+      OTTOMAN,
+      MAMLUK,
+    ];
   }
 }

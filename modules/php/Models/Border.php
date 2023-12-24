@@ -8,6 +8,7 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 
@@ -18,6 +19,7 @@ class Border implements \JsonSerializable
   protected $name;
   protected $seaBorder = false;
   protected $type = BORDER;
+  protected $adjacentEmpires = [];
   
   protected $attributes = [
     'id' => ['id', 'str'],
@@ -59,6 +61,13 @@ class Border implements \JsonSerializable
   public function isSeaBorder()
   {
     return $this->seaBorder;
+  }
+
+  public function getAdjacentEmpires()
+  {
+    return array_map(function ($empireId) {
+      return Empires::get($empireId);
+    }, $this->adjacentEmpires);
   }
 
   public function getId()

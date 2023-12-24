@@ -1,7 +1,8 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN076_SophiaPalaiologina extends \PaxRenaissance\Models\TableauCard
+class PREN076_SophiaPalaiologina extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -29,5 +30,12 @@ class PREN076_SophiaPalaiologina extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [REFORMIST];
     $this->region = EAST;
+    // Queen specific props
+    $this->height = 111;
+    $this->suitors = [
+      HUNGARY,
+      BYZANTIUM,
+      HOLY_ROMAN_EMIRE,
+    ];
   }
 }

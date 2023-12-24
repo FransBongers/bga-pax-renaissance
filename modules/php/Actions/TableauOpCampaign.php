@@ -116,7 +116,7 @@ class TableauOpCampaign extends \PaxRenaissance\Models\AtomicAction
 
     $this->ctx->insertAsBrother(Engine::buildTree(Flows::battle($player->getId(), CAMPAIGN_OP, [
       'cardId' => $cardId,
-      'attackingEmpireId' => Cards::get($cardId)->getEmpire(),
+      'attackingEmpireId' => Cards::get($cardId)->getEmpireId(),
       'defendingEmpireId' => $empireId,
     ])));
     

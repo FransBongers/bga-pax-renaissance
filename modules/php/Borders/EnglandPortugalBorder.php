@@ -8,5 +8,9 @@ class EnglandPortugalBorder extends \PaxRenaissance\Models\Border
     $this->id = BORDER_ENGLAND_PORTUGAL;
     $this->name = clienttranslate('England-Portugal Border');
     $this->seaBorder = true;
+    $this->adjacentEmpires = [
+      ENGLAND,
+      PORTUGAL,
+    ];
   }
 }

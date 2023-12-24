@@ -27,7 +27,11 @@ trait DebugTrait
 {
   function test()
   {
-    Cards::get('PREN044_IsabellaOfCastille')->discard();
+    // $this->debugChangeQueen('PREN151X_CatherineOfNavarre');
+    // $this->debugChangeQueen('PREN162X_CatherineDeMedici');
+
+    $this->debugPlaceCardInMarket('PREN078_SittIHatunOfDulkadir');
+    // Cards::get('PREN044_IsabellaOfCastille')->discard();
     // Cards::get('EmpireSquare_England')->flip();
     // Notifications::log('king', Cards::get('PREN044_IsabellaOfCastille')->getKing());
     // $this->debugPlaceCardInMarket('PREN044_IsabellaOfCastille');
@@ -41,7 +45,7 @@ trait DebugTrait
     // $this->debugMoveCardToTableau('EmpireSquare_France', EAST);
 
     // Cards::get('EmpireSquare_England')->setExtraData('suzerainId','EmpireSquare_PapalStates');
-    // Notifications::log('options', TableauOps::get(INQUISITOR_OP_REFORMIST)->getOptions());
+    // Notifications::log('options', TableauOps::get(BEHEAD_OP)->getOptions(Cards::get('PREN088_CemAntiHostage')));
     // Notifications::log('options', TableauOps::get(INQUISITOR_OP_ISLAMIC)->getOptions());
     // Cards::get('EmpireSquare_Portugal')->setExtraData('suzerain', null);
     // Notifications::log('isNull', Cards::get('EmpireSquare_Aragon')->getExtraData('suzerainId') === null);
@@ -68,6 +72,14 @@ trait DebugTrait
     $card = Cards::getTopOf(Locations::market($region, $column));
     Cards::move($card->getId(), DISCARD);
     Cards::insertOnTop($cardId, Locations::market($region, $column));
+  }
+
+  function debugChangeQueen($newQueen)
+  {
+    $king = Cards::get('EmpireSquare_Portugal');
+    $currentQueen = $king->getQueen();
+    $currentQueen->setKing(null);
+    $king->setQueen(Cards::get($newQueen));
   }
 
   function debugMoveCardToTableau($cardId, $region = WEST, $playerId = null)

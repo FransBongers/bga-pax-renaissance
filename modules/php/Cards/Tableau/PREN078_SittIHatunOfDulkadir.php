@@ -1,7 +1,8 @@
 <?php
+
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN078_SittIHatunOfDulkadir extends \PaxRenaissance\Models\TableauCard
+class PREN078_SittIHatunOfDulkadir extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -15,5 +16,12 @@ class PREN078_SittIHatunOfDulkadir extends \PaxRenaissance\Models\TableauCard
     $this->oneShot = CORONATION_ONE_SHOT;
     $this->prestige = [ISLAMIC];
     $this->region = EAST;
+    // Queen specific props
+    $this->height = 79;
+    $this->suitors = [
+      MAMLUK,
+      OTTOMAN,
+      HUNGARY,
+    ];
   }
 }

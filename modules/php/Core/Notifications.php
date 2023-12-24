@@ -323,11 +323,11 @@ class Notifications
     ]);
   }
 
-  public static function discardCard($player, $card, $toLocationId, $messageType = DISCARD, $wasVassalTo = null, $wasQueenTo = null)
+  public static function discardCard($adjustPrestige, $player, $card, $toLocationId, $messageType = DISCARD, $wasVassalTo = null, $wasQueenTo = null, $wasOldMaid = false)
   {
     $messages = [
       DISCARD => clienttranslate('${tkn_playerName} discards ${tkn_boldText}'),
-      KILL => clienttranslate('Assassin: ${tkn_boldText} is Killed'),
+      KILL => clienttranslate('${tkn_boldText} is killed'),
     ];
 
     self::notifyAll("discardCard", $messages[$messageType], [
@@ -337,6 +337,8 @@ class Notifications
       'toLocationId' => $toLocationId,
       'wasVassalTo' => $wasVassalTo,
       'wasQueenTo' => $wasQueenTo,
+      'wasOldMaid' => $wasOldMaid,
+      'adjustPrestige' => $adjustPrestige,
     ]);
   }
 
@@ -380,6 +382,15 @@ class Notifications
       'tkn_boldText_from' => $fromLocation->getName(),
       'tkn_boldText_to' => $toLocation->getName(),
       'token' => $token,
+    ]);
+  }
+
+  public static function oldMaid($player, $queenCard)
+  {
+    self::notifyAll("oldMaid", clienttranslate('${tkn_playerName} plays ${tkn_cardName} as an Old Maid'), [
+      'player' => $player,
+      'tkn_cardName' => $queenCard->getName(),
+      'card' => $queenCard
     ]);
   }
 
@@ -502,6 +513,16 @@ class Notifications
       'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
       'from' => $fromLocation,
+    ]);
+  }
+
+  public static function returnToThrone($player, $king, $queen)
+  {
+    self::notifyAll("returnToThrone",  clienttranslate('${tkn_playerName} returns ${tkn_cardName_king} to his throne'), [
+      'player' => $player,
+      'king' => $king,
+      'queen' => $queen,
+      'tkn_cardName_king' => $king->getName(),
     ]);
   }
   // public static function killToken($player, $token, $fromLocation)

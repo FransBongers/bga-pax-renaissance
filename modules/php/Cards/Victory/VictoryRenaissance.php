@@ -34,7 +34,7 @@ class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
         return $cardInTableau->getType() === EMPIRE_CARD && $cardInTableau->getSide() === REPUBLIC;
       }));
 
-      $lawPrestige = $player->getPrestige()[LAW];
+      $lawPrestige = $player->getPrestige(true)[LAW];
 
       $republicRanking[] = [
         'playerId' => $player->getId(),

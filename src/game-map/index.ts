@@ -118,43 +118,53 @@ class GameMap {
     this.empireSquareStocks = {
       [ARAGON]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${ARAGON}_throne`)
+        document.getElementById(`pr_${ARAGON}_throne`),
+        { direction: "column", center: false }
       ),
       [BYZANTIUM]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${BYZANTIUM}_throne`)
+        document.getElementById(`pr_${BYZANTIUM}_throne`),
+        { direction: "column", center: false }
       ),
       [ENGLAND]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${ENGLAND}_throne`)
+        document.getElementById(`pr_${ENGLAND}_throne`),
+        { direction: "column", center: false }
       ),
       [FRANCE]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${FRANCE}_throne`)
+        document.getElementById(`pr_${FRANCE}_throne`),
+        { direction: "column", center: false },
       ),
       [HOLY_ROMAN_EMIRE]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${HOLY_ROMAN_EMIRE}_throne`)
+        document.getElementById(`pr_${HOLY_ROMAN_EMIRE}_throne`),
+        { direction: "column", center: false }
       ),
       [HUNGARY]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${HUNGARY}_throne`)
+        document.getElementById(`pr_${HUNGARY}_throne`),
+        { direction: "column", center: false }
       ),
       [MAMLUK]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${MAMLUK}_throne`)
+        document.getElementById(`pr_${MAMLUK}_throne`),
+        { direction: "column", center: false }
       ),
       [OTTOMAN]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${OTTOMAN}_throne`)
+        document.getElementById(`pr_${OTTOMAN}_throne`),
+        { direction: "column", center: false }
       ),
       [PAPAL_STATES]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${PAPAL_STATES}_throne`)
+        document.getElementById(`pr_${PAPAL_STATES}_throne`),
+        { direction: "column", center: false }
       ),
       [PORTUGAL]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
-        document.getElementById(`pr_${PORTUGAL}_throne`)
+        document.getElementById(`pr_${PORTUGAL}_throne`),
+        { direction: "column", center: false }
       ),
     };
 
@@ -162,18 +172,20 @@ class GameMap {
   }
 
   updateEmpireCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
-    gamedatas.gameMap.thrones.cards.forEach((card) => {
-      const empire = card.location.split("_")[1];
-      if (this.empireSquareStocks[empire]) {
-        this.empireSquareStocks[empire].addCard(card);
-      }
-      // const { id, location } = card;
-      // const node = document.getElementById(`pr_${location}`);
-      // if (!node) {
-      //   debug("Unable to get empire card node");
-      // }
-      // node.setAttribute("data-card-id", `${id}_king`);
-    });
+    gamedatas.gameMap.thrones.cards
+      .filter((card) => !card.isQueen)
+      .forEach((card) => {
+        const empire = card.location.split("_")[1];
+        if (this.empireSquareStocks[empire]) {
+          this.empireSquareStocks[empire].addCard(card);
+        }
+        // const { id, location } = card;
+        // const node = document.getElementById(`pr_${location}`);
+        // if (!node) {
+        //   debug("Unable to get empire card node");
+        // }
+        // node.setAttribute("data-card-id", `${id}_king`);
+      });
     gamedatas.gameMap.thrones.tokens.forEach((token) => {
       const { location } = token;
       const node = document.getElementById(`${location}_tokens`);

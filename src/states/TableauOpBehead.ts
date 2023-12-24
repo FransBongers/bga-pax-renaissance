@@ -58,14 +58,14 @@ class TableauOpBeheadState implements State {
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceConfirm({ card }: { card: TableauCard }) {
+  private updateInterfaceConfirm({ card }: { card: TableauCard | EmpireCard }) {
     this.game.clearPossible();
     this.game.setCardSelected({ id: card.id });
     this.game.clientUpdatePageTitle({
       text: _("Behead ${cardName}?"),
       args: {
         tkn_florin: tknFlorin(),
-        cardName: _(card.name),
+        cardName: card.type === EMPIRE_CARD ? _(card[card.side].name) : _(card.name),
       },
     });
     this.game.addConfirmButton({
@@ -89,14 +89,15 @@ class TableauOpBeheadState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private setCardsSelectable() {
-    this.args.cards.forEach((card: TableauCard) => {
+    this.args.cards.forEach((card: TableauCard | EmpireCard) => {
       this.game.setCardSelectable({
         id: card.id,
         callback: () =>
           this.updateInterfaceConfirm({
             card,
           }),
-        back: card.location.split("_")[2] === "0",
+        // back: card.location.split("_")[2] === "0",
+        back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
       });
     });
   }

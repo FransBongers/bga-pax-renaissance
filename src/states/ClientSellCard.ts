@@ -134,6 +134,14 @@ class ClientSellCardState implements State {
     this.args.royalCouples.forEach(
       (couple: RoyalCouple) => {
         const {king, queen} = couple;
+        // const node = document.getElementById(king.id);
+        // if (!node) {
+        //   return;
+        // }
+        // node.classList.add(PR_SELECTABLE);
+        // this.game._connections.push(
+        //   dojo.connect(node, "onclick", this, () => this.updateInterfaceConfirmRoyalCouple(couple))
+        // );
         this.game.setCardSelectable({
           id: king.id,
           callback: () => this.updateInterfaceConfirmRoyalCouple(couple),

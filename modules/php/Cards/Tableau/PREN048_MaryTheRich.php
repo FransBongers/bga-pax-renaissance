@@ -17,7 +17,7 @@ class PREN048_MaryTheRich extends \PaxRenaissance\Models\QueenCard
     $this->prestige = [LAW];
     $this->region = WEST;
     // Queen specific props
-    $this->height = 85;
+    $this->height = 95;
     $this->suitors = [
       FRANCE,
       ENGLAND,

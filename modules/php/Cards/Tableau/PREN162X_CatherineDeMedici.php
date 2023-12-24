@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN162X_CatherineDeMedici extends \PaxRenaissance\Models\TableauCard
+class PREN162X_CatherineDeMedici extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -23,5 +23,12 @@ class PREN162X_CatherineDeMedici extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = WEST;
+    // Queen specific props
+    $this->height = 115;
+    $this->suitors = [
+      FRANCE,
+      ARAGON,
+      HOLY_ROMAN_EMIRE,
+    ];
   }
 }

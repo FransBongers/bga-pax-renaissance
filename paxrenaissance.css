@@ -76,6 +76,14 @@
   height: calc(var(--paxRenCardScale) * 151px);
 }
 
+.pr_empire_throne_bottom {
+  justify-content: flex-start;
+}
+
+.pr_empire_throne_top {
+  justify-content: flex-end;
+}
+
 /* ------- MAP CARDS ------- */
 .pr_map_card {
   box-sizing: border-box;
@@ -2776,14 +2784,27 @@
 /**
 * PLAYER BOARDS
 */
+.pr_old_maids_container {
+  margin-bottom: calc(var(--paxRenCardScale) * -230px);
+  height: calc(var(--paxRenCardScale) * 230px);
+}
+
+.pr_old_maids_container[data-has-old-maids=true] {
+  margin-bottom: calc(var(--paxRenCardScale) * -190px);
+}
+
+.pr_player_board_container {
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
 .pr_player_board {
+  position: relative;
   background-image: url("img/player_boards.webp");
   background-size: 200% 200%;
   height: 400px;
   min-width: 293px;
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
-  margin-left: 8px;
-  margin-right: 8px;
 }
 
 .pr_player_board[data-color=blue] {

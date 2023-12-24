@@ -33,7 +33,6 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   {
     $player = self::getPlayer();
     $playerId = $player->getId();
-    Notifications::log('playerId PLAYER_ACTION',$playerId);
     $availableOps = $player->getAvailableOps();
     $remainingActions = 2 - count(Engine::getResolvedActions([PLAYER_ACTION]));
     // Return possible actions

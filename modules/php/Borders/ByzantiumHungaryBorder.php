@@ -8,5 +8,9 @@ class ByzantiumHungaryBorder extends \PaxRenaissance\Models\Border
     $this->id = BORDER_BYZANTIUM_HUNGARY;
     $this->name = clienttranslate('Byzantium-Hungary Border');
     $this->seaBorder = true;
+    $this->adjacentEmpires = [
+      BYZANTIUM,
+      HUNGARY,
+    ];
   }
 }

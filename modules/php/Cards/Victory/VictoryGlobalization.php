@@ -36,7 +36,7 @@ class VictoryGlobalization extends \PaxRenaissance\Models\VictoryCard
       $numberOfConcessions = count(Utils::filter($concessions, function ($concession) use ($player) {
         return $concession->getOwner()->getId() === $player->getId();
       }));
-      $discoveryPrestige = $player->getPrestige()[DISCOVERY];
+      $discoveryPrestige = $player->getPrestige(true)[DISCOVERY];
 
       $concessionRanking[] = [
         'playerId' => $player->getId(),

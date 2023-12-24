@@ -23,7 +23,7 @@ class PlaceAgentState implements State {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
           .getName(),
-          tkn_mapToken: this.createMapTokenId(),
+        tkn_mapToken: this.createMapTokenId(),
       },
       nonActivePlayers: true,
     });
@@ -84,7 +84,9 @@ class PlaceAgentState implements State {
       args: {
         tkn_playerName: "${you}",
         tkn_mapToken: this.createMapTokenId(),
-        location: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
+        location: _(
+          card.type === EMPIRE_CARD ? card[card.side].name : card.name
+        ),
       },
     });
 
@@ -101,7 +103,7 @@ class PlaceAgentState implements State {
     this.game.addCancelButton();
   }
 
-  private updateInterfaceConfirmLocation({
+  private updateInterfaceSelectEmpireToRepressTo({
     id,
     location,
   }: {
@@ -111,7 +113,41 @@ class PlaceAgentState implements State {
     this.game.clearPossible();
     this.game.setLocationSelected({ id });
 
-    this.updatePageTitleConfirmLocation({ location });
+    this.game.clientUpdatePageTitle({
+      text: _(
+        "${tkn_playerName} must select an empire repress ${tkn_mapToken} to"
+      ),
+      args: {
+        tkn_playerName: "${you}",
+        tkn_mapToken: tknMapToken(location.repressed.token.id),
+      },
+    });
+
+    location.repressed.empires.forEach((empire: Empire) => {
+      this.game.setLocationSelectable({
+        id: empire.id,
+        callback: () =>
+          this.updateInterfaceConfirmLocation({ id, location, empire }),
+      });
+    });
+  }
+
+  private updateInterfaceConfirmLocation({
+    id,
+    location,
+    empire,
+  }: {
+    id: string;
+    location: PlaceAgentLocation;
+    empire?: Empire;
+  }) {
+    this.game.clearPossible();
+    this.game.setLocationSelected({ id });
+    if (empire) {
+      this.game.setLocationSelected({ id: empire.id });
+    }
+
+    this.updatePageTitleConfirmLocation({ location, empire });
     // TODO handle cases where there are two different agents
 
     this.game.addConfirmButton({
@@ -121,6 +157,7 @@ class PlaceAgentState implements State {
           args: {
             agent: this.args.agents[0],
             locationId: id,
+            empireId: empire ? empire.id : null,
           },
         }),
     });
@@ -160,7 +197,13 @@ class PlaceAgentState implements State {
       } else {
         this.game.setLocationSelectable({
           id,
-          callback: () => this.updateInterfaceConfirmLocation({ id, location }),
+          callback: () => {
+            if (location?.repressed?.empires) {
+              this.updateInterfaceSelectEmpireToRepressTo({ id, location });
+            } else {
+              this.updateInterfaceConfirmLocation({ id, location });
+            }
+          },
         });
       }
     });
@@ -182,8 +225,10 @@ class PlaceAgentState implements State {
 
   private updatePageTitleConfirmLocation({
     location,
+    empire,
   }: {
     location: PlaceAgentLocation;
+    empire?: Empire;
   }) {
     const { name, cost, repressed } = location;
     if (repressed) {
@@ -202,7 +247,7 @@ class PlaceAgentState implements State {
           location: _(name),
           cost,
           tkn_florin: tknFlorin(),
-          tkn_mapToken_repressed: tknMapToken(repressed.id),
+          tkn_mapToken_repressed: tknMapToken(repressed.token.id),
         },
       });
     } else {

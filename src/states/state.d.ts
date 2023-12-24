@@ -71,7 +71,7 @@ interface PlaceAgentLocation {
   name: string;
   type: "border" | "city";
   cost: number;
-  repressed: Token;
+  repressed: { token: Token; empires: Empire[] | null };
 }
 
 interface OnEnteringPlaceAgentsArgs extends CommonArgs {

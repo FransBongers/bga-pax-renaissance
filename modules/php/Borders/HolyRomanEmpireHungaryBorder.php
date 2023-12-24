@@ -7,5 +7,9 @@ class HolyRomanEmpireHungaryBorder extends \PaxRenaissance\Models\Border
   {
     $this->id = BORDER_HOLY_ROMAN_EMPIRE_HUNGARY;
     $this->name = clienttranslate('Holy Roman Empire-Hungary Border');
+    $this->adjacentEmpires = [
+      HOLY_ROMAN_EMIRE,
+      HUNGARY,
+    ];
   }
 }

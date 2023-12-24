@@ -24,7 +24,7 @@ class EmpireSquare_Hungary extends \PaxRenaissance\Models\EmpireCard
       ],
       REPUBLIC => [
         [
-          'id' => VOTE_OP_WEST,
+          'id' => VOTE_OP_EAST,
           'flavorText' => clienttranslate("Mielnik Privilege"),
           'top' => 0,
           'left' => 0,

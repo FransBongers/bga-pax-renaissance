@@ -40,6 +40,8 @@ interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   toLocationId: string;
   wasVassalTo: EmpireCard | null;
   wasQueenTo: EmpireCard | null;
+  wasOldMaid: boolean;
+  adjustPrestige: boolean;
 }
 
 interface NotifFlipEmpireCardArgs extends NotifWithPlayerArgs {
@@ -70,6 +72,10 @@ interface NotifMoveEmpireSquareArgs extends NotifWithPlayerArgs {
 
 interface NotifMoveTokenArgs extends NotifWithPlayerArgs {
   token: Token;
+}
+
+interface NotifOldMaidArgs extends NotifWithPlayerArgs {
+  card: QueenCard;
 }
 
 interface NotifPlaceTokenArgs extends NotifWithPlayerArgs {
@@ -112,9 +118,20 @@ interface NotifRepressTokenArgs extends NotifWithPlayerArgs {
   cost: number;
 }
 
+interface NotifReturnToThroneArgs extends NotifWithPlayerArgs {
+  king: EmpireCard;
+  queen: QueenCard | null;
+}
+
 interface NotifSellCardArgs extends NotifWithPlayerArgs {
   card: TableauCard;
   tkn_cardName: string;
+  value: number;
+}
+
+interface NotifSellRoyalCoupleArgs extends NotifWithPlayerArgs {
+  king: EmpireCard;
+  queen: QueenCard;
   value: number;
 }
 

@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN151X_CatherineOfNavarre extends \PaxRenaissance\Models\TableauCard
+class PREN151X_CatherineOfNavarre extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -23,5 +23,12 @@ class PREN151X_CatherineOfNavarre extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = WEST;
+    // Queen specific props
+    $this->height = 104;
+    $this->suitors = [
+      PORTUGAL,
+      FRANCE,
+      ARAGON,
+    ];
   }
 }

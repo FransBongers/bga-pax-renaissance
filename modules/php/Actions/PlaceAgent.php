@@ -130,10 +130,10 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
       $locationType = $type === BISHOP ? $stateArgs['locations'][$locationId]->getType() : $stateArgs['locations'][$locationId]['type'];
 
       $player = self::getPlayer();
-      
+
       $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['separator']);
 
-      Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, $info['empireId'], $repressCost), $this->ctx);
+      Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, isset($args['empireId']) ? $args['empireId'] : $info['empireId'], $repressCost), $this->ctx);
     }
 
     $agents = $stateArgs['agents'];
@@ -174,7 +174,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     switch ($type) {
       case PIRATE:
       case PAWN:
-        return $this->getBorders($playerFlorins, $empires, $type, $exludedLocationIds, $repressCost);
+        return $this->getBorders($playerFlorins, $empireId, $type, $exludedLocationIds, $repressCost);
         break;
       case KNIGHT:
       case ROOK:
@@ -195,8 +195,9 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
   }
 
-  private function getBorders($playerFlorins, $empires, $type, $exludedLocationIds, $repressCost)
+  private function getBorders($playerFlorins, $empireId, $type, $exludedLocationIds, $repressCost)
   {
+    $empires = $this->getEmpires($empireId);
     $borders = array_merge(...array_map(function ($empire) {
       return $empire->getBorders();
     }, $empires));
@@ -228,7 +229,10 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
             'type' => BORDER,
             'cost' => $repressCost,
             'name' => $border->getName(),
-            'repressed' => $tokenInLocation,
+            'repressed' => [
+              'token' => $tokenInLocation,
+              'empires' => in_array($empireId, REGIONS) ? $border->getAdjacentEmpires() : null,
+            ],
           ];
           continue;
         }
@@ -268,7 +272,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
     $locations = [];
     foreach ($cards as $card) {
-      if (in_array($card->getEmpire(), $validEmpireIds)) {
+      if (in_array($card->getEmpireId(), $validEmpireIds)) {
         $locations[$card->getId()] = $card;
       }
     }
@@ -307,7 +311,10 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
           'type' => CITY,
           'cost' => $repressCost,
           'name' => $city->getName(),
-          'repressed' => $token,
+          'repressed' => [
+            'token' => $token,
+            'empires' => null
+          ],
         ];
       }
     }

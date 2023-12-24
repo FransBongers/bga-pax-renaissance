@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN138X_Reichskrone extends \PaxRenaissance\Models\TableauCard
+class PREN138X_Reichskrone extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -24,5 +24,28 @@ class PREN138X_Reichskrone extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_SELL_FOR_4,
+        'title' => clienttranslate('RANSOM:'),
+        'text' => [
+          'log' => clienttranslate('Sell this card for 4 instead of 2 Florins.'),
+          'args' => [],
+        ],
+      ]
+    ];
+    // Queen specific props
+    $this->height = 121;
+    $this->suitors = [
+      HOLY_ROMAN_EMIRE,
+    ];
+  }
+
+  public function getSellValue()
+  {
+    if ($this->isInTableau() && !$this->isSilenced()) {
+      return 4;
+    }
+    return 2;
   }
 }
