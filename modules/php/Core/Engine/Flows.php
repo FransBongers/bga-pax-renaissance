@@ -46,11 +46,11 @@ abstract class Flows
           'playerId' => $playerId,
         ],
         [
-          'action' => BATTLE_CASUALTIES,
+          'action' => BATTLE_MAP_CHANGE_RELIGIOUS_WAR,
           'playerId' => $playerId,
         ],
         [
-          'action' => BATTLE_MAP_CHANGE_RELIGIOUS_WAR,
+          'action' => BATTLE_CASUALTIES,
           'playerId' => $playerId,
         ],
         [

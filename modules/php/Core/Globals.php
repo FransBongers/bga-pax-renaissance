@@ -23,7 +23,7 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
 
     // 'changeActivePlayer' => 'obj', // Used for the generic "changeActivePlayer" state
     'logState' => 'int', // Used to store state id when enabling the log
-    'players' => 'obj',
+    'players' => 'obj', // Can be removed
     // 'activePlayerId' => 'int',
     'remainingActions' => 'int',
     'marketFlorins' => 'obj',

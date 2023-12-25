@@ -23,7 +23,7 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
 
   public static function setupNewGame($players, $options)
   {
-    Globals::setPlayers($players);
+    // Globals::setPlayers($players);
     // Create players
     $gameInfos = Game::get()->getGameinfos();
     $colors = $gameInfos['player_colors'];

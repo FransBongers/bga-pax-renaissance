@@ -4,6 +4,7 @@ namespace PaxRenaissance;
 
 use Locale;
 use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Locations;
@@ -27,10 +28,12 @@ trait DebugTrait
 {
   function test()
   {
+    // Notifications::log('custom turn orders', Globals::getCustomTurnOrders());
+    // Game::get()->gamestate->jumpToState(ST_END_GAME);
     // $this->debugChangeQueen('PREN151X_CatherineOfNavarre');
     // $this->debugChangeQueen('PREN162X_CatherineDeMedici');
 
-    $this->debugPlaceCardInMarket('PREN078_SittIHatunOfDulkadir');
+    $this->debugPlaceCardInMarket('PREN071_TheHandsome');
     // Cards::get('PREN044_IsabellaOfCastille')->discard();
     // Cards::get('EmpireSquare_England')->flip();
     // Notifications::log('king', Cards::get('PREN044_IsabellaOfCastille')->getKing());
@@ -118,4 +121,47 @@ trait DebugTrait
   {
     return $playerId = $playerId === null ? Players::get()->getId() : intval($playerId);
   }
+
+  public function LoadDebug()
+	{
+		// These are the id's from the BGAtable I need to debug.
+		// you can get them by running this query : SELECT JSON_ARRAYAGG(`player_id`) FROM `player`
+		$ids = [
+      85521161,
+      86301894,
+      91053159,
+		];
+                // You can also get the ids automatically with $ids = array_map(fn($dbPlayer) => intval($dbPlayer['player_id']), array_values($this->getCollectionFromDb('select player_id from player order by player_no')));
+
+		// Id of the first player in BGA Studio
+		$sid = 2371052;
+		
+		foreach ($ids as $id) {
+			// basic tables
+			self::DbQuery("UPDATE player SET player_id=$sid WHERE player_id = $id" );
+			self::DbQuery("UPDATE global SET global_value=$sid WHERE global_value = $id" );
+			self::DbQuery("UPDATE stats SET stats_player_id=$sid WHERE stats_player_id = $id" );
+      self::DbQuery("UPDATE player_extra SET player_id=$sid WHERE player_id = $id" );
+
+			// 'other' game specific tables. example:
+			// tables specific to your schema that use player_ids
+
+    
+
+      // Cards
+      self::DbQuery("UPDATE `cards` SET `card_location` = 'tableau_west_$sid' WHERE `cards`.`card_location` = 'tableau_west_$id';");
+      self::DbQuery("UPDATE `cards` SET `card_location` = 'tableau_east_$sid' WHERE `cards`.`card_location` = 'tableau_east_$id';");
+
+
+      /**
+       * TODO:
+       * - engine
+       * - turn order
+       * - first playuer
+       */
+      
+
+			++$sid;
+		}
+	}
 }
