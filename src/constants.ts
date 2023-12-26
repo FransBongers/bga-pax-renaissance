@@ -4,7 +4,7 @@ const MIN_PLAY_AREA_WIDTH = 1516;
  * Client states
  */
 const CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
-const CLIENT_SELL_CARD_STATE = 'clientSellCardState';
+const CLIENT_SELL_CARD_STATE = "clientSellCardState";
 const CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 
 /**
@@ -52,7 +52,7 @@ const MARCHIONNI = "marchionni";
 const WEST = "west";
 const EAST = "east";
 
-const REGIONS: ('east' | 'west')[] = [WEST, EAST];
+const REGIONS: ("east" | "west")[] = [WEST, EAST];
 
 // Card types
 const EMPIRE_CARD = "empireCard";
@@ -64,8 +64,8 @@ const KING = "king";
 const REPUBLIC = "republic";
 
 // State victory card
-const ACTIVE = 'active';
-const INACTIVE = 'inactive';
+const ACTIVE = "active";
+const INACTIVE = "inactive";
 
 /**
  * Chess pieces
@@ -109,17 +109,32 @@ const OTTOMAN = "ottoman";
 const MAMLUK = "mamluk";
 
 const EMPIRES = [
+  ARAGON,
+  BYZANTIUM,
   ENGLAND,
   FRANCE,
   HOLY_ROMAN_EMIRE,
   HUNGARY,
-  BYZANTIUM,
-  PORTUGAL,
-  ARAGON,
-  PAPAL_STATES,
-  OTTOMAN,
   MAMLUK,
+  OTTOMAN,
+  PAPAL_STATES,
+  PORTUGAL,
 ];
+
+const EMPIRE_NAME_MAP = {
+  [EAST]: "The East", // TODO: Check if this is marked for translation somewhere
+  [WEST]: "The West", // TODO: Check if this is marked for translation somewhere
+  [ARAGON]: "Aragon",
+  [BYZANTIUM]: "Byzantium",
+  [ENGLAND]: "England",
+  [FRANCE]: "France",
+  [HOLY_ROMAN_EMIRE]: "Holy Roman Empire",
+  [HUNGARY]: "Hungary",
+  [MAMLUK]: "Mamluk",
+  [OTTOMAN]: "Ottoman",
+  [PAPAL_STATES]: "Papal States",
+  [PORTUGAL]: "Portugal",
+};
 
 /**
  * Borders
@@ -235,3 +250,35 @@ const CITIES = [
   CAIRO,
   RED_SEA,
 ];
+
+/**
+ * Tableau ops
+ */
+// Types
+const RELIGIOUS = "religious";
+const ECONOMIC = "economic";
+const POLITICAL = "political";
+const MILITARY = "military";
+
+// Ids
+const BEHEAD_OP = "BEHEAD_OP";
+const CAMPAIGN_OP = "CAMPAIGN_OP";
+const COMMERCE_OP_EAST = "COMMERCE_OP_EAST";
+const COMMERCE_OP_WEST = "COMMERCE_OP_WEST";
+const CORSAIR_OP_CATHOLIC = "CORSAIR_OP_CATHOLIC";
+const CORSAIR_OP_ISLAMIC = "CORSAIR_OP_ISLAMIC";
+const CORSAIR_OP_REFORMIST = "CORSAIR_OP_REFORMIST";
+const INQUISITOR_OP_CATHOLIC = "INQUISITOR_OP_CATHOLIC";
+const INQUISITOR_OP_ISLAMIC = "INQUISITOR_OP_ISLAMIC";
+const INQUISITOR_OP_REFORMIST = "INQUISITOR_OP_REFORMIST";
+const REPRESS_OP_KNIGHT = "REPRESS_OP_KNIGHT";
+const REPRESS_OP_PAWN = "REPRESS_OP_PAWN";
+const REPRESS_OP_PAWN_KNIGHT = "REPRESS_OP_PAWN_KNIGHT";
+const REPRESS_OP_PAWN_ROOK = "REPRESS_OP_PAWN_ROOK";
+const REPRESS_OP_PAWN_ROOK_KNIGHT = "REPRESS_OP_PAWN_ROOK_KNIGHT";
+const REPRESS_OP_ROOK = "REPRESS_OP_ROOK";
+const REPRESS_OP_ROOK_KNIGHT = "REPRESS_OP_ROOK_KNIGHT";
+const SIEGE_OP = "SIEGE_OP";
+const TAX_OP = "TAX_OP";
+const VOTE_OP_EAST = "VOTE_OP_EAST";
+const VOTE_OP_WEST = "VOTE_OP_WEST";

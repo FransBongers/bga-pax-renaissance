@@ -28,7 +28,7 @@ $one-shots: (
   13: "TRADE_SHIFT_TIMBUKTU_ONE_SHOT",
 );
 
-@for $i from 1 through 40 {
+@for $i from 1 through 13 {
   .pr_one_shot[data-one-shot-id="#{map.get($one-shots,$i)}"] {
     background-position-x: math.div((($i - 1) % 6 * 100%), 5);
     background-position-y: math.div(math.floor(calc(($i - 1) / 6)) * 100%, 2);

@@ -1,0 +1,35 @@
+@use "sass:math";
+@use "sass:map";
+
+.pr_empire_icon {
+  background-image: url("img/empires.webp");
+  background-size: 600% 200%;
+  background-repeat: no-repeat;
+  // width: 302px;
+  // height: 175px;
+  width: calc(var(--paxRenIconScale) * 100px);
+  height: calc(var(--paxRenIconScale) * 130px);
+  // filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
+}
+
+$empire-icons: (
+  1: "aragon",
+  2: "byzantium",
+  3: "england",
+  4: "france",
+  5: "holyRomanEmpire",
+  6: "hungary",
+  7: "mamluk",
+  8: "ottoman",
+  9: "papalStates",
+  10: "portugal",
+  11: "east",
+  12: "west",
+);
+
+@for $i from 1 through 12 {
+  .pr_empire_icon[data-empire-id="#{map.get($empire-icons,$i)}"] {
+    background-position-x: math.div((($i - 1) % 6 * 100%), 5);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 6)) * 100%, 1);
+  }
+}

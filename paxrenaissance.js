@@ -1,6 +1,7 @@
+var _a;
 var MIN_PLAY_AREA_WIDTH = 1516;
 var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
-var CLIENT_SELL_CARD_STATE = 'clientSellCardState';
+var CLIENT_SELL_CARD_STATE = "clientSellCardState";
 var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 var BLUE = "blue";
 var GREEN = "green";
@@ -30,8 +31,8 @@ var TABLEAU_CARD = "tableauCard";
 var VICTORY_CARD = "victoryCard";
 var KING = "king";
 var REPUBLIC = "republic";
-var ACTIVE = 'active';
-var INACTIVE = 'inactive';
+var ACTIVE = "active";
+var INACTIVE = "inactive";
 var BISHOP = "bishop";
 var DISK = "disk";
 var KNIGHT = "knight";
@@ -57,17 +58,31 @@ var PAPAL_STATES = "papalStates";
 var OTTOMAN = "ottoman";
 var MAMLUK = "mamluk";
 var EMPIRES = [
+    ARAGON,
+    BYZANTIUM,
     ENGLAND,
     FRANCE,
     HOLY_ROMAN_EMIRE,
     HUNGARY,
-    BYZANTIUM,
-    PORTUGAL,
-    ARAGON,
-    PAPAL_STATES,
-    OTTOMAN,
     MAMLUK,
+    OTTOMAN,
+    PAPAL_STATES,
+    PORTUGAL,
 ];
+var EMPIRE_NAME_MAP = (_a = {},
+    _a[EAST] = "The East",
+    _a[WEST] = "The West",
+    _a[ARAGON] = "Aragon",
+    _a[BYZANTIUM] = "Byzantium",
+    _a[ENGLAND] = "England",
+    _a[FRANCE] = "France",
+    _a[HOLY_ROMAN_EMIRE] = "Holy Roman Empire",
+    _a[HUNGARY] = "Hungary",
+    _a[MAMLUK] = "Mamluk",
+    _a[OTTOMAN] = "Ottoman",
+    _a[PAPAL_STATES] = "Papal States",
+    _a[PORTUGAL] = "Portugal",
+    _a);
 var BORDER_ARAGON_FRANCE = "border_aragon_france";
 var BORDER_ARAGON_PAPAL_STATES = "border_aragon_papalStates";
 var BORDER_ARAGON_PORTUGAL = "border_aragon_portugal";
@@ -166,6 +181,31 @@ var CITIES = [
     CAIRO,
     RED_SEA,
 ];
+var RELIGIOUS = "religious";
+var ECONOMIC = "economic";
+var POLITICAL = "political";
+var MILITARY = "military";
+var BEHEAD_OP = "BEHEAD_OP";
+var CAMPAIGN_OP = "CAMPAIGN_OP";
+var COMMERCE_OP_EAST = "COMMERCE_OP_EAST";
+var COMMERCE_OP_WEST = "COMMERCE_OP_WEST";
+var CORSAIR_OP_CATHOLIC = "CORSAIR_OP_CATHOLIC";
+var CORSAIR_OP_ISLAMIC = "CORSAIR_OP_ISLAMIC";
+var CORSAIR_OP_REFORMIST = "CORSAIR_OP_REFORMIST";
+var INQUISITOR_OP_CATHOLIC = "INQUISITOR_OP_CATHOLIC";
+var INQUISITOR_OP_ISLAMIC = "INQUISITOR_OP_ISLAMIC";
+var INQUISITOR_OP_REFORMIST = "INQUISITOR_OP_REFORMIST";
+var REPRESS_OP_KNIGHT = "REPRESS_OP_KNIGHT";
+var REPRESS_OP_PAWN = "REPRESS_OP_PAWN";
+var REPRESS_OP_PAWN_KNIGHT = "REPRESS_OP_PAWN_KNIGHT";
+var REPRESS_OP_PAWN_ROOK = "REPRESS_OP_PAWN_ROOK";
+var REPRESS_OP_PAWN_ROOK_KNIGHT = "REPRESS_OP_PAWN_ROOK_KNIGHT";
+var REPRESS_OP_ROOK = "REPRESS_OP_ROOK";
+var REPRESS_OP_ROOK_KNIGHT = "REPRESS_OP_ROOK_KNIGHT";
+var SIEGE_OP = "SIEGE_OP";
+var TAX_OP = "TAX_OP";
+var VOTE_OP_EAST = "VOTE_OP_EAST";
+var VOTE_OP_WEST = "VOTE_OP_WEST";
 var Modal = (function () {
     function Modal(id, config) {
         var _this = this;
@@ -7177,11 +7217,96 @@ var tplCardTooltipContainer = function (_a) {
     var card = _a.card, content = _a.content;
     return "<div class=\"pr_card_tooltip\">\n  <div class=\"pr_card_tooltip_inner_container\">\n    ".concat(content, "\n  </div>\n  ").concat(card, "\n</div>");
 };
+var tplOneShotSection = function (_a) {
+    var oneShot = _a.oneShot, suitors = _a.suitors;
+    return "\n  <div style=\"margin-right: 20%;\">\n  <span class=\"pr_section_title\">".concat(_("One-shot"), "</span>\n  ").concat(tplOneShotRow({ oneShot: oneShot }), "\n  </div>\n  ").concat(suitors ? "<div style=\"display: flex; flex-direction: column;\">\n    <span class=\"pr_section_title\">".concat(_("Suitors"), "</span>\n    ").concat(suitors.map(function (suitor) { return "<span>".concat(EMPIRE_NAME_MAP[suitor], "</span>"); }).join(''), "\n    </div>") : '');
+};
+var tplAgentsSection = function (_a) {
+    var agents = _a.agents;
+    var agentIcons = {};
+    agents.forEach(function (agent) {
+        var identifier = agent.type === PAWN ? PAWN : "".concat(agent.separator, "_").concat(agent.type);
+        if (agentIcons[identifier]) {
+            agentIcons[identifier] = agentIcons[identifier] + 1;
+        }
+        else {
+            agentIcons[identifier] = 1;
+        }
+    });
+    return "\n  <div>\n  <span class=\"pr_section_title\">".concat(_("Agent(s)"), "</span>\n  ").concat(Object.entries(agentIcons).map(function (_a) {
+        var id = _a[0], count = _a[1];
+        return tplAgentsRow({ agentIcon: "".concat(id, "_").concat(count) });
+    }).join(''), "\n  </div>\n");
+};
+var tplAgentsRow = function (_a) {
+    var agentIcon = _a.agentIcon;
+    return "<div class=\"pr_card_tooltip_row\">\n  <div class=\"pr_card_tooltip_row_icon\">\n    <div class=\"pr_agent_icon\" data-agent-icon=\"".concat(agentIcon, "\"></div>\n  </div>\n</div>");
+};
+var tplCardLocation = function (_a) {
+    var location = _a.location;
+    return "<div class=\"pr_card_tooltip_row\" style=\"align-items: center; font-weight: bold;\">\n  <div class=\"pr_card_tooltip_row_icon\">\n  <div class=\"pr_empire_icon\" data-empire-id=\"".concat(location, "\"></div>\n  </div>\n  <span>").concat(EMPIRE_NAME_MAP[location], "</span>\n</div>");
+};
+var tplPrestigeRow = function (_a) {
+    var _b;
+    var prestige = _a.prestige;
+    var prestigeTextMap = (_b = {},
+        _b[CATHOLIC] = _("Catholic: Religion that recognizes the pope as the centralized authority. Counts for Holy Victory."),
+        _b[ISLAMIC] = _("Islam: Religion that uses the koran as its authority. Counts for Holy Victory."),
+        _b[REFORMIST] = _("Reformist: Religion that uses the bible/tanakh rather than the pope as its authority. Counts for Holy Victory."),
+        _b[DISCOVERY] = _("Discovery: The doctrine of maritime exploration and imperialism. Counts for Globalization Victory."),
+        _b[LAW] = _("Law - A constitution that recognizes rules of nature rather than humans as its authority. Counts for Renaissance Victory."),
+        _b[PATRON] = _("Patron. A financial sponsor of the artistic Renaissance. Counts for Patron Victory."),
+        _b);
+    return "<div class=\"pr_card_tooltip_row\">\n  <div class=\"pr_card_tooltip_row_icon\">\n    <div class=\"pr_icon pr_prestige_icon\" data-icon=\"prestige_".concat(prestige, "\"></div>\n  </div>\n  <span>").concat(prestigeTextMap[prestige], "</span>\n</div>");
+};
+var tplOneShotRow = function (_a) {
+    var oneShot = _a.oneShot;
+    return "<div class=\"pr_card_tooltip_row\">\n  <div class=\"pr_card_tooltip_row_icon\">\n    <div class=\"pr_one_shot\" data-one-shot-id=\"".concat(oneShot, "\"></div>\n  </div>\n</div>");
+};
+var tplOpsRow = function (_a) {
+    var _b;
+    var op = _a.op;
+    var corsairText = _("Use this Op to move ${religion} Pirate in a Sea Border this card's Location to another Sea Border either in this card's Location or an Adjacent Location sharing a Sea Border.");
+    var repressText = _("Use this Op to remove one ${token} of any color in this card's Location and place it as a Repressed Token on its corresponding Empire Square");
+    var voteOpText = _("Use this Op to cause a Regime Change in ${region} Empire. Its Empire Square can be in any Tableau, but it cannot be a Vassal.");
+    var opTextMap = (_b = {},
+        _b[BEHEAD_OP] = _("Use this Op to Discard one card in any Tableau. The Location of the beheaded card must share that of the acting card."),
+        _b[CAMPAIGN_OP] = _("Use this Op to create a Battle in a defending Empire Adjacent to this King's Location"),
+        _b[COMMERCE_OP_EAST] = _("Use this Op to take one Florin from any card (including trade fair cards) in the East."),
+        _b[COMMERCE_OP_WEST] = _("Use this Op to take one Florin from any card (including trade fair cards) in the West."),
+        _b[CORSAIR_OP_CATHOLIC] = corsairText.replace("${religion}", _("a Catholic")),
+        _b[CORSAIR_OP_ISLAMIC] = corsairText.replace("${religion}", _("an Islamic")),
+        _b[CORSAIR_OP_REFORMIST] = corsairText.replace("${religion}", _("a Reformist")),
+        _b[INQUISITOR_OP_CATHOLIC] = _("Use this Op to move a Catholic Bishop Token."),
+        _b[INQUISITOR_OP_ISLAMIC] = _("Use this Op to move an Islamic Bishop Token."),
+        _b[INQUISITOR_OP_REFORMIST] = _("Use this Op to move a Reformist Bishop Token."),
+        _b[REPRESS_OP_KNIGHT] = repressText.replace("${token}", _("Knight")),
+        _b[REPRESS_OP_PAWN] = repressText.replace("${token}", _("Pawn")),
+        _b[REPRESS_OP_PAWN_KNIGHT] = repressText.replace("${token}", _("Pawn or Knight")),
+        _b[REPRESS_OP_PAWN_ROOK] = repressText.replace("${token}", _("Pawn or Rook")),
+        _b[REPRESS_OP_PAWN_ROOK_KNIGHT] = repressText.replace("${token}", _("Pawn, Rook or Knight")),
+        _b[REPRESS_OP_ROOK] = repressText.replace("${token}", _("Rook")),
+        _b[REPRESS_OP_ROOK_KNIGHT] = repressText.replace("${token}", _("Rook or Knight")),
+        _b[SIEGE_OP] = _("Use this Op to Kill one Rook, Knight, or Pirate of any color in this card's Location."),
+        _b[TAX_OP] = _("Use this Op to tax one Concession bordering the Location this card."),
+        _b[VOTE_OP_EAST] = voteOpText.replace("${region}", _("an East")),
+        _b[VOTE_OP_WEST] = voteOpText.replace("${region}", _("a West")),
+        _b);
+    return "<div class=\"pr_card_tooltip_row\">\n  <div class=\"pr_card_tooltip_row_icon\">\n    <div class=\"pr_tableau_op\" data-tableau-op-id=\"".concat(op.id, "\"></div>\n    \n  </div>\n  <div class=\"pr_tooltip_row_text\">\n    ").concat(op.flavorText
+        ? "<span class=\"pr_flavor_text\">".concat(_(op.flavorText), "</span>")
+        : "", "\n    <span>").concat((opTextMap === null || opTextMap === void 0 ? void 0 : opTextMap[op.id]) || "", "</span>\n  </div>\n</div>");
+};
 var tplTableauCardTooltip = function (_a) {
     var card = _a.card;
     return tplCardTooltipContainer({
-        card: "<div class=\"pr_card\" data-card-id=\"".concat(card.id.split('_')[0], "\"></div>"),
-        content: "\n      <span class=\"pr_title\">".concat(_(card.name), "</span>\n      ").concat(card.flavorText.map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); }).join(''), "\n    ")
+        card: "<div class=\"pr_card\" data-card-id=\"".concat(card.id.split("_")[0], "\"></div>"),
+        content: "\n    <span class=\"pr_title\">".concat(_(card.name), "</span>\n      ").concat(card.flavorText
+            .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
+            .join(""), "\n      ").concat((card === null || card === void 0 ? void 0 : card.empire) ? tplCardLocation({ location: card.empire }) : "", "\n      ").concat(card.prestige.length > 0
+            ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
+            : "", "\n      ").concat(card.prestige.map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.ops.length > 0
+            ? "<span class=\"pr_section_title\">".concat(_("Op(s)"), "</span>")
+            : "", "\n      ").concat(card.ops.map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n    "),
     });
 };
 var TooltipManager = (function () {

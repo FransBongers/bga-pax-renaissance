@@ -2181,6 +2181,272 @@
   height: 100%;
 }
 
+.pr_agent_icon {
+  background-repeat: no-repeat;
+}
+
+.pr_agent_icon[data-agent-icon=catholic_bishop_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_agent_icon[data-agent-icon=catholic_bishop_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 20%;
+  background-position-y: 0%;
+}
+
+.pr_agent_icon[data-agent-icon=islamic_bishop_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 40%;
+  background-position-y: 0%;
+}
+
+.pr_agent_icon[data-agent-icon=islamic_bishop_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 60%;
+  background-position-y: 0%;
+}
+
+.pr_agent_icon[data-agent-icon=reformist_bishop_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 80%;
+  background-position-y: 0%;
+}
+
+.pr_agent_icon[data-agent-icon=reformist_bishop_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_agent_icon[data-agent-icon=catholic_knight_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 0%;
+  background-position-y: 50%;
+}
+
+.pr_agent_icon[data-agent-icon=catholic_knight_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 20%;
+  background-position-y: 50%;
+}
+
+.pr_agent_icon[data-agent-icon=islamic_knight_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 40%;
+  background-position-y: 50%;
+}
+
+.pr_agent_icon[data-agent-icon=islamic_knight_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 60%;
+  background-position-y: 50%;
+}
+
+.pr_agent_icon[data-agent-icon=reformist_knight_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 80%;
+  background-position-y: 50%;
+}
+
+.pr_agent_icon[data-agent-icon=reformist_knight_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 100%;
+  background-position-y: 50%;
+}
+
+.pr_agent_icon[data-agent-icon=catholic_rook_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_agent_icon[data-agent-icon=catholic_rook_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 20%;
+  background-position-y: 100%;
+}
+
+.pr_agent_icon[data-agent-icon=islamic_rook_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 40%;
+  background-position-y: 100%;
+}
+
+.pr_agent_icon[data-agent-icon=islamic_rook_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 60%;
+  background-position-y: 100%;
+}
+
+.pr_agent_icon[data-agent-icon=reformist_rook_1] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 80%;
+  background-position-y: 100%;
+}
+
+.pr_agent_icon[data-agent-icon=reformist_rook_2] {
+  background-image: url("img/agents.webp");
+  background-size: 600% 300%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 36px);
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
+.pr_agent_icon[data-agent-icon=pawn_1] {
+  background-image: url("img/agents_square.webp");
+  background-size: 400% 100%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 40px);
+  background-position-x: 0%;
+}
+
+.pr_agent_icon[data-agent-icon=catholic_pirate_1] {
+  background-image: url("img/agents_square.webp");
+  background-size: 400% 100%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 40px);
+  background-position-x: 33.3333333333%;
+}
+
+.pr_agent_icon[data-agent-icon=islamic_pirate_1] {
+  background-image: url("img/agents_square.webp");
+  background-size: 400% 100%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 40px);
+  background-position-x: 66.6666666667%;
+}
+
+.pr_agent_icon[data-agent-icon=reformist_pirate_1] {
+  background-image: url("img/agents_square.webp");
+  background-size: 400% 100%;
+  width: calc(var(--paxRenIconScale) * 40px);
+  height: calc(var(--paxRenIconScale) * 40px);
+  background-position-x: 100%;
+}
+
+.pr_empire_icon {
+  background-image: url("img/empires.webp");
+  background-size: 600% 200%;
+  background-repeat: no-repeat;
+  width: calc(var(--paxRenIconScale) * 100px);
+  height: calc(var(--paxRenIconScale) * 130px);
+}
+
+.pr_empire_icon[data-empire-id=aragon] {
+  background-position-x: 0%;
+  background-position-y: 0%;
+}
+
+.pr_empire_icon[data-empire-id=byzantium] {
+  background-position-x: 20%;
+  background-position-y: 0%;
+}
+
+.pr_empire_icon[data-empire-id=england] {
+  background-position-x: 40%;
+  background-position-y: 0%;
+}
+
+.pr_empire_icon[data-empire-id=france] {
+  background-position-x: 60%;
+  background-position-y: 0%;
+}
+
+.pr_empire_icon[data-empire-id=holyRomanEmpire] {
+  background-position-x: 80%;
+  background-position-y: 0%;
+}
+
+.pr_empire_icon[data-empire-id=hungary] {
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_empire_icon[data-empire-id=mamluk] {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_empire_icon[data-empire-id=ottoman] {
+  background-position-x: 20%;
+  background-position-y: 100%;
+}
+
+.pr_empire_icon[data-empire-id=papalStates] {
+  background-position-x: 40%;
+  background-position-y: 100%;
+}
+
+.pr_empire_icon[data-empire-id=portugal] {
+  background-position-x: 60%;
+  background-position-y: 100%;
+}
+
+.pr_empire_icon[data-empire-id=east] {
+  background-position-x: 80%;
+  background-position-y: 100%;
+}
+
+.pr_empire_icon[data-empire-id=west] {
+  background-position-x: 100%;
+  background-position-y: 100%;
+}
+
 .pr_one_shot {
   background-image: url("img/one_shots.webp");
   background-size: 600% 300%;
@@ -2253,141 +2519,6 @@
 .pr_one_shot[data-one-shot-id=TRADE_SHIFT_TIMBUKTU_ONE_SHOT] {
   background-position-x: 0%;
   background-position-y: 100%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 20%;
-  background-position-y: 100%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 40%;
-  background-position-y: 100%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 60%;
-  background-position-y: 100%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 80%;
-  background-position-y: 100%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 100%;
-  background-position-y: 100%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 0%;
-  background-position-y: 150%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 20%;
-  background-position-y: 150%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 40%;
-  background-position-y: 150%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 60%;
-  background-position-y: 150%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 80%;
-  background-position-y: 150%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 100%;
-  background-position-y: 150%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 0%;
-  background-position-y: 200%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 20%;
-  background-position-y: 200%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 40%;
-  background-position-y: 200%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 60%;
-  background-position-y: 200%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 80%;
-  background-position-y: 200%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 100%;
-  background-position-y: 200%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 0%;
-  background-position-y: 250%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 20%;
-  background-position-y: 250%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 40%;
-  background-position-y: 250%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 60%;
-  background-position-y: 250%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 80%;
-  background-position-y: 250%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 100%;
-  background-position-y: 250%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 0%;
-  background-position-y: 300%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 20%;
-  background-position-y: 300%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 40%;
-  background-position-y: 300%;
-}
-
-.pr_one_shot[data-one-shot-id=""] {
-  background-position-x: 60%;
-  background-position-y: 300%;
 }
 
 .pr_token {
@@ -2897,16 +3028,35 @@
   margin-bottom: 4px;
   margin-top: 4px;
 }
-.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_section_container {
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row {
   display: flex;
   flex-direction: row;
   margin-bottom: 8px;
 }
-.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_section_container .pr_card_tooltip_section_inner_container {
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon {
   min-width: 40px;
   margin-right: 8px;
   display: flex;
   justify-content: center;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon .pr_agent_icon {
+  --paxRenIconScale: 1.25;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon .pr_empire_icon {
+  --paxRenIconScale: 0.3;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon .pr_one_shot {
+  --paxRenIconScale: 0.7;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon .pr_tableau_op {
+  --paxRenIconScale: 0.4;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_tooltip_row_text {
+  display: flex;
+  flex-direction: column;
+}
+.pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_tooltip_row_text .pr_flavor_text {
+  margin-bottom: 0px;
 }
 .pr_card_tooltip .pr_card_tooltip_inner_container .pr_tooltip_text {
   text-align: left;

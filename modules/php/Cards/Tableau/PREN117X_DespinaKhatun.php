@@ -28,6 +28,7 @@ class PREN117X_DespinaKhatun extends \PaxRenaissance\Models\QueenCard
         'left' => 0,
       ],
     ];
+    $this->prestige = [REFORMIST];
     $this->region = EAST;
     // Queen specific props
     $this->height = 110;

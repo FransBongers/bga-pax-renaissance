@@ -1,0 +1,60 @@
+@use "sass:math";
+@use "sass:map";
+
+.pr_agent_icon {
+  background-repeat: no-repeat;
+  // width: 302px;
+  // height: 175px;
+  // width: calc(var(--paxRenIconScale) * 100px);
+  // height: calc(var(--paxRenIconScale) * 130px);
+  // filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
+}
+
+$empire-icons: (
+  1: "catholic_bishop_1",
+  2: "catholic_bishop_2",
+  3: "islamic_bishop_1",
+  4: "islamic_bishop_2",
+  5: "reformist_bishop_1",
+  6: "reformist_bishop_2",
+  7: "catholic_knight_1",
+  8: "catholic_knight_2",
+  9: "islamic_knight_1",
+  10: "islamic_knight_2",
+  11: "reformist_knight_1",
+  12: "reformist_knight_2",
+  13: "catholic_rook_1",
+  14: "catholic_rook_2",
+  15: "islamic_rook_1",
+  16: "islamic_rook_2",
+  17: "reformist_rook_1",
+  18: "reformist_rook_2",
+);
+
+@for $i from 1 through 18 {
+  .pr_agent_icon[data-agent-icon="#{map.get($empire-icons,$i)}"] {
+    background-image: url("img/agents.webp");
+    background-size: 600% 300%;
+    width: calc(var(--paxRenIconScale) * 40px);
+    height: calc(var(--paxRenIconScale) * 36px);
+    background-position-x: math.div((($i - 1) % 6 * 100%), 5);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 6)) * 100%, 2);
+  }
+}
+
+$empire-icons-square: (
+  1: "pawn_1",
+  2: "catholic_pirate_1",
+  3: "islamic_pirate_1",
+  4: "reformist_pirate_1",
+);
+
+@for $i from 1 through 4 {
+  .pr_agent_icon[data-agent-icon="#{map.get($empire-icons-square,$i)}"] {
+    background-image: url("img/agents_square.webp");
+    background-size: 400% 100%;
+    width: calc(var(--paxRenIconScale) * 40px);
+    height: calc(var(--paxRenIconScale) * 40px);
+    background-position-x: math.div((($i - 1) % 4 * 100%), 3);
+  }
+}

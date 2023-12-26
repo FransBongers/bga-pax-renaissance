@@ -103,7 +103,7 @@ interface PaxRenCard {
 // TODO: check interface compared to below one
 interface TableauOp {
   id: string;
-  flavorText: string[];
+  flavorText?: string;
   name: string;
   type: string;
   top: number;
@@ -139,12 +139,15 @@ interface EmpireCard extends PaxRenCard {
 }
 
 interface TableauCard extends PaxRenCard {
+  type: "tableauCard";
+  agents: Agent[] | null;
   empire: string;
   flavorText: string[];
   name: string;
+  oneShot: string;
+  ops: TableauOp[];
   prestige: string[];
   region: "east" | "west";
-  type: "tableauCard";
   sellValue: number;
   
 }
@@ -153,6 +156,7 @@ interface QueenCard extends TableauCard {
   height: number;
   suitors: string[];
   hasKing: boolean;
+  isQueen: true;
 }
 
 interface VictoryCard extends PaxRenCard {
