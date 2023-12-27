@@ -2044,6 +2044,12 @@
   display: inline-block;
   margin-bottom: -14px;
 }
+#pagemaintitletext .pr_card, #gameaction_status .pr_card {
+  display: none;
+}
+#pagemaintitletext .pr_square_card, #gameaction_status .pr_square_card {
+  display: none;
+}
 
 .log > .roundedbox .pr_icon {
   display: inline-block;
@@ -2063,6 +2069,12 @@
 }
 .log > .roundedbox .pr_tableau_op {
   --paxRenIconScale: 0.8;
+}
+.log > .roundedbox .pr_card {
+  --paxRenCardScale: 0.5;
+}
+.log > .roundedbox .pr_square_card {
+  --paxRenCardScale: 0.5;
 }
 
 #pr_market_west_deck,

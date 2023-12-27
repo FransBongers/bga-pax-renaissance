@@ -194,17 +194,17 @@ const tplTableauCardTooltip = ({ card }: { card: TableauCard | QueenCard }) => {
         .join("")}
       ${card?.empire ? tplCardLocation({location: card.empire}) : ""}
       ${
-        card.prestige.length > 0
+        card.prestige && card.prestige.length > 0
           ? `<span class="pr_section_title">${_("Prestige")}</span>`
           : ""
       }
-      ${card.prestige.map((prestige) => tplPrestigeRow({ prestige })).join("")}
+      ${(card.prestige || []).map((prestige) => tplPrestigeRow({ prestige })).join("")}
       ${
-        card.ops.length > 0
+        card.ops && card.ops.length > 0
           ? `<span class="pr_section_title">${_("Op(s)")}</span>`
           : ""
       }
-      ${card.ops.map((op) => tplOpsRow({ op })).join("")}
+      ${(card.ops || []).map((op) => tplOpsRow({ op })).join("")}
       <div style="display: flex; flex-direction: row;">
         ${card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: (card as QueenCard)?.suitors as string[] | undefined }) : ""}
         ${

@@ -3229,6 +3229,7 @@ var LOG_TOKEN_BOLD_TEXT = "boldText";
 var LOG_TOKEN_CARD_NAME = "cardName";
 var LOG_TOKEN_NEW_LINE = "newLine";
 var LOG_TOKEN_PLAYER_NAME = "playerName";
+var LOG_TOKEN_CARD = "card";
 var LOG_TOKEN_FLORIN = "florin";
 var LOG_TOKEN_MAP_TOKEN = "mapToken";
 var LOG_TOKEN_ONE_SHOT = "oneShot";
@@ -3240,6 +3241,8 @@ var getTokenDiv = function (_a) {
     var splitKey = key.split("_");
     var type = splitKey[1];
     switch (type) {
+        case LOG_TOKEN_CARD:
+            return tplLogTokenCard(value);
         case LOG_TOKEN_BOLD_TEXT:
         case LOG_TOKEN_CARD_NAME:
             return tlpLogTokenBoldText({ text: value });
@@ -3278,6 +3281,10 @@ var tknFlorin = function () {
 var tknMapToken = function (tokenId) {
     var split = tokenId.split("_");
     return "".concat(split[1], "_").concat(split[0]);
+};
+var tplLogTokenCard = function (id) {
+    var className = id.startsWith('EmpireSquare') ? 'pr_square_card' : 'pr_card';
+    return "<div class=\"".concat(className, "\" data-card-id=\"").concat(id, "\"></div>");
 };
 var tlpLogTokenBoldText = function (_a) {
     var text = _a.text;
@@ -7302,11 +7309,11 @@ var tplTableauCardTooltip = function (_a) {
         card: "<div class=\"pr_card\" data-card-id=\"".concat(card.id.split("_")[0], "\"></div>"),
         content: "\n    <span class=\"pr_title\">".concat(_(card.name), "</span>\n      ").concat(card.flavorText
             .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
-            .join(""), "\n      ").concat((card === null || card === void 0 ? void 0 : card.empire) ? tplCardLocation({ location: card.empire }) : "", "\n      ").concat(card.prestige.length > 0
+            .join(""), "\n      ").concat((card === null || card === void 0 ? void 0 : card.empire) ? tplCardLocation({ location: card.empire }) : "", "\n      ").concat(card.prestige && card.prestige.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
-            : "", "\n      ").concat(card.prestige.map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.ops.length > 0
+            : "", "\n      ").concat((card.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.ops && card.ops.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Op(s)"), "</span>")
-            : "", "\n      ").concat(card.ops.map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n    "),
+            : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n    "),
     });
 };
 var TooltipManager = (function () {

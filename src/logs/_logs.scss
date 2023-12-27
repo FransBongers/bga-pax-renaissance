@@ -48,6 +48,16 @@
     display: inline-block;
     margin-bottom: -14px;;
   }
+
+  .pr_card {
+    display: none;
+    // --paxRenCardScale: 0.2
+  }
+
+  .pr_square_card {
+    display: none;
+    // --paxRenCardScale: 0.2;
+  }
 }
 
 .log > .roundedbox {
@@ -73,6 +83,14 @@
 
   .pr_tableau_op {
     --paxRenIconScale: 0.8;
+  }
+
+  .pr_card {
+    --paxRenCardScale: 0.5;
+  }
+
+  .pr_square_card {
+    --paxRenCardScale: 0.5;
   }
 }
 

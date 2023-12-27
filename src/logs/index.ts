@@ -4,6 +4,7 @@ const LOG_TOKEN_CARD_NAME = "cardName";
 const LOG_TOKEN_NEW_LINE = "newLine";
 const LOG_TOKEN_PLAYER_NAME = "playerName";
 // Game specific
+const LOG_TOKEN_CARD = "card";
 const LOG_TOKEN_FLORIN = "florin";
 const LOG_TOKEN_MAP_TOKEN = "mapToken";
 const LOG_TOKEN_ONE_SHOT = "oneShot";
@@ -25,6 +26,8 @@ const getTokenDiv = ({
   const splitKey = key.split("_");
   const type = splitKey[1];
   switch (type) {
+    case LOG_TOKEN_CARD:
+      return tplLogTokenCard(value);
     case LOG_TOKEN_BOLD_TEXT:
     case LOG_TOKEN_CARD_NAME:
       return tlpLogTokenBoldText({ text: value });
@@ -68,3 +71,8 @@ const tknMapToken = (tokenId: string) => {
   const split = tokenId.split("_");
   return `${split[1]}_${split[0]}`;
 };
+
+const tplLogTokenCard = (id: string) => {
+  const className = id.startsWith('EmpireSquare') ? 'pr_square_card' : 'pr_card';
+  return `<div class="${className}" data-card-id="${id}"></div>`
+}
