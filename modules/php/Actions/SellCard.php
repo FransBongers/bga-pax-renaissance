@@ -44,9 +44,35 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
     if ($royalCouple === null) {
       throw new \feException("Not allowed to sell card");
     }
+    $king = $royalCouple['king'];
+    $queens = $royalCouple['queens'];
+    $value = $this->getTotalValueRoyalCouple($king, $queens);
 
-    $royalCouple['king']->sellRoyalCouple($player, $royalCouple['queen']);
+    Players::incFlorins($player->getId(), $value);
+
+    
+
+    Notifications::sellRoyalCouple($player, $king, $queens, $value);
+    $king->returnToThrone();
+    // $royalCouple['king']->sellRoyalCouple($player, $royalCouple['queen']);
   }
+
+
+  // public function sellRoyalCouple($player, $queen)
+  // {
+  //   $playerId = $player->getId();
+
+  //   $kingValue = $this->getSellValue();
+  //   $queenValue = $queen->getSellValue();
+  //   $value = $kingValue + $queenValue;
+  //   Players::incFlorins($playerId, $value);
+
+  //   Cards::move($queen->getId(), $this->startLocation);
+  //   Cards::move($this->getId(), $this->startLocation);
+  //   $queen = $this->getQueen();
+  //   Notifications::sellRoyalCouple($player, $this, $queen, $value);
+  //   $this->discard(DISCARD, $player);
+  // }
 
   private function sellCard($player, $cardsPlayerCanSell, $cardId)
   {
@@ -58,5 +84,13 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("Not allowed to sell card");
     }
     $card->sell($player);
+  }
+
+  private function getTotalValueRoyalCouple($king, $queens) {
+    $totalValue = $king->getSellValue();
+    foreach($queens as $queen) {
+      $totalValue += $queen->getSellValue();
+    }
+    return $totalValue;
   }
 }

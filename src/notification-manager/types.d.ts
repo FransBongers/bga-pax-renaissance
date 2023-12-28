@@ -8,7 +8,10 @@ interface Log {
   args: Record<string, unknown>;
 }
 
-type NotifSmallRefreshInterfaceArgs = Omit<PaxRenaissanceGamedatas, 'staticData'>;
+type NotifSmallRefreshInterfaceArgs = Omit<
+  PaxRenaissanceGamedatas,
+  "staticData"
+>;
 
 interface NotifWithPlayerArgs {
   playerId: number;
@@ -33,7 +36,6 @@ interface NotifDeclareVictoryArgs extends NotifWithPlayerArgs {
   victoryCard: VictoryCard;
 }
 
-
 interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   card: TableauCard | EmpireCard;
   tkn_cardName: string;
@@ -42,6 +44,12 @@ interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   wasQueenTo: EmpireCard | null;
   wasOldMaid: boolean;
   adjustPrestige: boolean;
+}
+
+interface NotifDiscardQueenArgs extends NotifWithPlayerArgs {
+  queen: QueenCard;
+  tkn_cardName: string;
+  king: EmpireCard | null;
 }
 
 interface NotifFlipEmpireCardArgs extends NotifWithPlayerArgs {
@@ -59,15 +67,45 @@ interface NotifReturnToSupplyArgs extends NotifWithPlayerArgs {
   token: Token;
 }
 
-interface EmpireCardOriginData {
-  suzerain: EmpireCard | null;
-  wasRepublic: boolean;
-  previousOwnerId: number | null;
+type EmpireSquareDestination =
+  | EmpireSquareDestinationTableau
+  | EmpireSquareDestinationVassal;
+
+interface EmpireSquareDestinationTableau {
+  type: "king";
+  suzerain: null;
+  ownerId: number;
 }
+
+interface EmpireSquareDestinationVassal {
+  type: "vassal";
+  suzerain: EmpireCard;
+  ownerId: number;
+}
+
+type EmpireSquareOrigin = EmpireSquareOriginThrone | EmpireSquareOriginTableau;
+
+interface EmpireSquareOriginThrone {
+  type: "throne";
+}
+
+interface EmpireSquareOriginTableau {
+  type: "tableau";
+  ownerId: number;
+  side: "republic" | "king";
+  suzerain: EmpireCard | null;
+}
+
+// interface EmpireCardOriginData {
+//   suzerain: EmpireCard | null;
+//   wasRepublic: boolean;
+//   previousOwnerId: number | null;
+// }
 
 interface NotifMoveEmpireSquareArgs extends NotifWithPlayerArgs {
   card: EmpireCard;
-  from: EmpireCardOriginData;
+  origin: EmpireSquareOrigin;
+  destination: EmpireSquareDestination;
 }
 
 interface NotifMoveTokenArgs extends NotifWithPlayerArgs {
@@ -120,7 +158,8 @@ interface NotifRepressTokenArgs extends NotifWithPlayerArgs {
 
 interface NotifReturnToThroneArgs extends NotifWithPlayerArgs {
   king: EmpireCard;
-  queen: QueenCard | null;
+  fromSide: "king" | "republic";
+  suzerain: EmpireCard;
 }
 
 interface NotifSellCardArgs extends NotifWithPlayerArgs {
@@ -139,8 +178,7 @@ interface NotifTableauOpCommerceArgs extends NotifWithPlayerArgs {
   card: TableauCard;
 }
 
-interface NotifTableauOpTaxPayArgs extends NotifWithPlayerArgs {
-}
+interface NotifTableauOpTaxPayArgs extends NotifWithPlayerArgs {}
 
 interface NotifPayFlorinsToChinaArgs extends NotifWithPlayerArgs {
   amount: number;
@@ -170,8 +208,8 @@ interface NotifTradeFairProfitDispersalPlayerArgs extends NotifWithPlayerArgs {
   region: string;
 }
 
-interface NotifVassalageArgs extends NotifWithPlayerArgs {
-  vassal: EmpireCard;
-  suzerain: EmpireCard;
-  from: EmpireCardOriginData;
-}
+// interface NotifVassalageArgs extends NotifWithPlayerArgs {
+//   vassal: EmpireCard;
+//   suzerain: EmpireCard;
+//   from: EmpireCardOriginData;
+// }

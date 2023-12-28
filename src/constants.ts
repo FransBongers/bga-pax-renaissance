@@ -62,6 +62,7 @@ const VICTORY_CARD = "victoryCard";
 // Sides for empire cards
 const KING = "king";
 const REPUBLIC = "republic";
+const VASSAL = 'vassal';
 
 // State victory card
 const ACTIVE = "active";
@@ -135,6 +136,14 @@ const EMPIRE_NAME_MAP = {
   [PAPAL_STATES]: "Papal States",
   [PORTUGAL]: "Portugal",
 };
+
+/**
+ * Origin and destination types used in regime changes
+ */
+const EMPIRE_SQUARE_DESTINATION_KING = 'king';
+const EMPIRE_SQUARE_DESTINATION_VASSAL = 'vassal';
+const EMPIRE_SQUARE_ORIGIN_TABLEAU = 'tableau';
+const EMPIRE_SQUARE_ORIGIN_THRONE = 'throne';
 
 /**
  * Borders

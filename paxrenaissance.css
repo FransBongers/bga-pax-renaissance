@@ -533,7 +533,7 @@
   width: calc(var(--paxRenCardScale) * 151px);
 }
 
-.pr_queen_container {
+.pr_queens_container {
   position: relative;
   width: calc(var(--paxRenCardScale) * 151px);
 }

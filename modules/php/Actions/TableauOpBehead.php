@@ -113,8 +113,7 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
 
     Notifications::tableauOpBehead($player, $selectedCard);    
 
-    $owner = $selectedCard->getOwner();
-    $selectedCard->behead($owner);
+    $selectedCard->behead();
 
     // Assassin
     if ($selectedCard->getType() === EMPIRE_CARD) {

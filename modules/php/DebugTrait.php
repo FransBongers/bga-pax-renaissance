@@ -28,12 +28,18 @@ trait DebugTrait
 {
   function test()
   {
-    // Notifications::log('custom turn orders', Globals::getCustomTurnOrders());
+    // Notifications::log('tableau',Cards::getAllCardsInTableaux());
+    // Cards::move('PREN046_JoannaTheMad', Locations::queens(ARAGON));
+    // $card = Cards::get('EmpireSquare_Aragon');
+    // $card->setLocation(Locations::tableau(2371053, WEST));
+
+    // Notifications::log('tableauCards east', Players::get()->getTableauCardsForRegion(EAST));
+    // Notifications::log('tableauCards west', Players::get()->getTableauCardsForRegion(WEST));
     // Game::get()->gamestate->jumpToState(ST_END_GAME);
     // $this->debugChangeQueen('PREN151X_CatherineOfNavarre');
     // $this->debugChangeQueen('PREN162X_CatherineDeMedici');
 
-    $this->debugPlaceCardInMarket('PREN071_TheHandsome');
+    $this->debugPlaceCardInMarket('PREN003_GrandInquisitor');
     // Cards::get('PREN044_IsabellaOfCastille')->discard();
     // Cards::get('EmpireSquare_England')->flip();
     // Notifications::log('king', Cards::get('PREN044_IsabellaOfCastille')->getKing());
@@ -49,7 +55,7 @@ trait DebugTrait
 
     // Cards::get('EmpireSquare_England')->setExtraData('suzerainId','EmpireSquare_PapalStates');
     // Notifications::log('options', TableauOps::get(BEHEAD_OP)->getOptions(Cards::get('PREN088_CemAntiHostage')));
-    // Notifications::log('options', TableauOps::get(INQUISITOR_OP_ISLAMIC)->getOptions());
+    Notifications::log('options', TableauOps::get(INQUISITOR_OP_CATHOLIC)->getOptions());
     // Cards::get('EmpireSquare_Portugal')->setExtraData('suzerain', null);
     // Notifications::log('isNull', Cards::get('EmpireSquare_Aragon')->getExtraData('suzerainId') === null);
     // Notifications::log('owner', Cards::get('EmpireSquare_Aragon')->getSuzerain());

@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Models;
 
 use PaxRenaissance\Core\Engine\LeafNode;
@@ -36,7 +37,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     // Notifications::log('getUiData card model', []);
     return $this->jsonSerialize(); // Static datas are already in js file
   }
-  
+
   public function getOps()
   {
     // TODO: find out why this is null if not set on card level
@@ -51,22 +52,34 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   // Returns player if in tableau, or null if not in tableau
   public function getOwner()
   {
-    if (!Utils::startsWith($this->location, 'tableau_')) {
-      return null;
+    if (Utils::startsWith($this->location, 'tableau_')) {
+      return Players::get(intval(explode('_', $this->location)[2]));
     }
-    return Players::get(intval(explode('_', $this->location)[2]));
+    return null;
   }
 
-  public function isInPlayerTableau($player)
+  public function insertAtBottom($location)
   {
-    $playerId = $player->getId();
+    Cards::insertAtBottom($this->getId(), $location);
+    $this->location = $location;
+  }
+
+  public function isInPlayerTableau($playerId)
+  {
     // TODO: empire squares that are vassels
-    return in_array($this->location, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
+    if (in_array($this->location, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)])) {
+      return true;
+    }
+    if (($this->isVassal() || $this->isQueen()) && $this->getOwner()->getId() === $playerId) {
+      return true;
+    }
+
+    return false;
   }
 
   public function isInTableau()
   {
-    return Utils::startsWith($this->getLocation(), 'tableau_');
+    return Utils::startsWith($this->getLocation(), 'tableau_') || Utils::startsWith($this->getLocation(), 'vassals_') || Utils::startsWith($this->getLocation(), 'queens_');
   }
 
   public function getVassals()
@@ -115,7 +128,6 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
 
   public function discard($messageType = DISCARD, $player)
   {
-
   }
 
   public function placeToken($token, $ctx)
@@ -135,7 +147,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     }
     $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId(), false);
-    Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
+    Notifications::placeToken(Players::get(), $token, $fromLocationId, $this);
   }
 
   public function sell($player)
@@ -158,7 +170,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   {
     $player = $player === null ? Players::get() : $player;
     $available = [];
-    foreach($this->getOps() as $cardOp) {
+    foreach ($this->getOps() as $cardOp) {
       $tableauOp = TableauOps::get($cardOp['id'], $cardOp);
       if ($tableauOp->canBePerformed($player, $this)) {
         $available[] = $tableauOp;

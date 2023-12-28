@@ -86,7 +86,7 @@ interface OnEnteringPlaceAgentsArgs extends CommonArgs {
 
 interface RoyalCouple {
   king: EmpireCard;
-  queen: QueenCard;
+  queens: QueenCard[];
 }
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {

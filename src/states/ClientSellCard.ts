@@ -83,17 +83,21 @@ class ClientSellCardState implements State {
     this.game.addCancelButton();
   }
 
-  private updateInterfaceConfirmRoyalCouple({ king, queen }: RoyalCouple) {
+  private updateInterfaceConfirmRoyalCouple({ king, queens }: RoyalCouple) {
     this.game.clearPossible();
     this.game.setCardSelected({ id: king.id });
-    this.game.setCardSelected({ id: queen.id });
+    queens.forEach((queen) => {
+      this.game.setCardSelected({ id: queen.id });
+    });
 
     this.game.clientUpdatePageTitle({
-      text: _("Sell ${kingName} and ${queenName} for ${amount} ${tkn_florin} ?"),
+      text: _(
+        "Sell ${queenNames} and ${kingName} for ${amount} ${tkn_florin} ?"
+      ),
       args: {
         kingName: king[king.side].name,
-        queenName: queen.name,
-        amount: king.sellValue + queen.sellValue,
+        queenNames: this.getQueenNamesLog({ queens }),
+        amount: this.getTotalAmount({ king, queens }),
         tkn_florin: tknFlorin(),
       },
     });
@@ -119,39 +123,62 @@ class ClientSellCardState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
+  private getQueenNamesLog({ queens }: { queens: QueenCard[] }) {
+    let log = "";
+    let args = {};
+
+    queens.forEach((queen, index) => {
+      const separator = index === 0 ? "" : ", ";
+      const key = "${queenName_" + index + "}";
+      log = log + separator + key;
+      args[`queenName_${index}`] = _(queen.name);
+    });
+
+    return {
+      log,
+      args,
+    };
+  }
+
+  private getTotalAmount({ king, queens }: RoyalCouple) {
+    let total = king.sellValue;
+    queens.forEach((queen) => {
+      total = total + queen.sellValue;
+    });
+    return total;
+  }
+
   private setCardsSelectable() {
-    this.args.cards.forEach(
-      (card: EmpireCard | TableauCard) => {
-        this.game.setCardSelectable({
-          id: card.id,
-          callback: () => this.updateInterfaceConfirm({ card }),
-        });
-      }
-    );
+    this.args.cards.forEach((card: EmpireCard | TableauCard) => {
+      this.game.setCardSelectable({
+        id: card.id,
+        callback: () => this.updateInterfaceConfirm({ card }),
+      });
+    });
   }
 
   private setRoyalCouplesSelectable() {
-    this.args.royalCouples.forEach(
-      (couple: RoyalCouple) => {
-        const {king, queen} = couple;
-        // const node = document.getElementById(king.id);
-        // if (!node) {
-        //   return;
-        // }
-        // node.classList.add(PR_SELECTABLE);
-        // this.game._connections.push(
-        //   dojo.connect(node, "onclick", this, () => this.updateInterfaceConfirmRoyalCouple(couple))
-        // );
-        this.game.setCardSelectable({
-          id: king.id,
-          callback: () => this.updateInterfaceConfirmRoyalCouple(couple),
-        });
+    this.args.royalCouples.forEach((couple: RoyalCouple) => {
+      const { king, queens } = couple;
+      // const node = document.getElementById(king.id);
+      // if (!node) {
+      //   return;
+      // }
+      // node.classList.add(PR_SELECTABLE);
+      // this.game._connections.push(
+      //   dojo.connect(node, "onclick", this, () => this.updateInterfaceConfirmRoyalCouple(couple))
+      // );
+      this.game.setCardSelectable({
+        id: king.id,
+        callback: () => this.updateInterfaceConfirmRoyalCouple(couple),
+      });
+      queens.forEach((queen) =>
         this.game.setCardSelectable({
           id: queen.id,
           callback: () => this.updateInterfaceConfirmRoyalCouple(couple),
-        });
-      }
-    );
+        })
+      );
+    });
   }
 
   //  ..######..##.......####..######..##....##

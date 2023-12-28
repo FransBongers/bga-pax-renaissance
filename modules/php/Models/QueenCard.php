@@ -27,21 +27,19 @@ class QueenCard extends TableauCard
 
   public function discard($messageType = DISCARD, $player = null)
   {
-    $player = $player === null ? Players::get() : $player;
-    $wasOldMaid = $this->isOldMaid();
+    $player = $this->getOwner();
 
-    $adjustPrestige = $this->isOldMaid() || $this->isInTableau();
+    $king = $this->getKing();
+
+    $tokens = $this->getTokens();
+    foreach ($tokens as $token) {
+      $token->returnToSupply(RETURN_TO_SUPPLY, $player, true);
+    }
 
     Cards::insertOnTop($this->getId(), DISCARD);
     $this->location = DISCARD;
 
-    $king = $this->getKing();
-    $this->setKing(null);
-    if ($king !== null) {
-      $king->setQueen(null);
-    }
-
-    Notifications::discardCard($adjustPrestige, $player, $this, DISCARD, $messageType, null, $king, $wasOldMaid);
+    Notifications::discardQueen($player, $this, $king);
   }
 
   public function oldMaid($player)
@@ -97,23 +95,36 @@ class QueenCard extends TableauCard
     }, $this->suitors);
   }
 
-  public function getKing()
+  // Returns player if in tableau, or null if not in tableau
+  public function getOwner()
   {
-    $kingCardId = $this->getExtraData('kingId');
-    if ($kingCardId === null) {
-      return null;
+    if (Utils::startsWith($this->location, 'tableau_') || Utils::startsWith($this->location, 'oldMaids_')) {
+      return Players::get(intval(explode('_', $this->location)[2]));
     }
-    return Cards::get($kingCardId);
+    if (Utils::startsWith($this->location, 'queens_')) {
+      return $this->getKing()->getOwner();
+    }
+    return null;
   }
 
-  public function setKing($kingCard)
+
+  public function getKing()
   {
-    if ($kingCard === null) {
-      $this->setExtraData('kingId', null);
-    } else {
-      $this->setExtraData('kingId', $kingCard->getId());
+    if (!Utils::startsWith($this->location, 'queens_')) {
+      return null;
     }
+    $empireId = explode('_', $this->location)[1];
+    return Empires::get($empireId)->getEmpireCard();
   }
+
+  // public function setKing($kingCard)
+  // {
+  //   if ($kingCard === null) {
+  //     $this->setExtraData('kingId', null);
+  //   } else {
+  //     $this->setExtraData('kingId', $kingCard->getId());
+  //   }
+  // }
 
   public function jsonSerialize()
   {

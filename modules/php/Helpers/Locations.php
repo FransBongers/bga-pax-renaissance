@@ -29,6 +29,11 @@ abstract class Locations extends \APP_DbObject
     return 'oldMaids_' . $playerId;
   }
 
+  public static function queens($empireId)
+  {
+    return 'queens_' . $empireId;
+  }
+
   public static function supply($type, $separator)
   {
     return 'supply_' . $type . '_' . $separator;
@@ -44,8 +49,8 @@ abstract class Locations extends \APP_DbObject
     return 'throne_' . $empireId;
   }
 
-  public static function vassal($cardId)
+  public static function vassals($empireId)
   {
-    return 'vassals_' . $cardId;
+    return 'vassals_' . $empireId;
   }
 }

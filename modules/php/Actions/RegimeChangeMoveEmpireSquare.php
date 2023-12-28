@@ -43,14 +43,24 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
+  /**
+   * Move the Empire square to it's new tableau.
+   */
   public function stRegimeChangeMoveEmpireSquare()
   {
+    /**
+     * If the Empire square comes from it's throne it comes with bishop and queen.
+     * If it comes from en enemy tableau or if it is flipped in your own tableau, bishops and queens are discarded, and any vassals are returned to their thrones
+     * Repressed tokens are retained / emancipated
+     */
+
+
     $parentInfo = $this->ctx->getParent()->getInfo();
     $source = $parentInfo['source'];
     // Notifications::log('stRegimeChangeMoveEmpireSquare', $parentInfo['data']);
 
     $player = self::getPlayer();
-    // $playerId = $player->getId();
+    $playerId = $player->getId();
 
     $empireId = $parentInfo['empireId'];
 
@@ -59,49 +69,43 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     // $empireCardLocation = $empireCard->getLocation();
 
     $isCampaign = $source === CAMPAIGN_OP;
+    $isCoronation = $source === CORONATION_ONE_SHOT;
 
-    // $isInThrone = $empireCardLocation === Locations::throne($empireId);
-    // $isInOwnTableau = in_array($empireCardLocation, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
-    // $isInEnemeyTableau = !$isInOwnTableau && Utils::startsWith($empireCardLocation, 'tableau_');
+    $isInOwnTableau = $empireCard->isInPlayerTableau($playerId);
+    $isInEnemeyTableau = !$isInOwnTableau && $empireCard->isInTableau();
+    $isInThrone = $empireCard->isInThrone();
 
+    if ($isInEnemeyTableau || $isInOwnTableau) {
+      $this->returnVassals($empireCard);
+      $this->discardQueens($empireCard);
+    }
+
+    /**
+     * Cases
+     * - enemy tableau and vassal
+     * - enemy tableau and republic
+     * - own tableau and vassal
+     * - own tableau and republic
+     */
+
+    if ($isCampaign) {
+      $suzerain = Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard();
+      $this->moveEmpireCardToTableau($empireCard, $player, $suzerain);
+    } else if ($isInEnemeyTableau || $isInThrone) {
+      $this->moveEmpireCardToTableau($empireCard, $player);
+    } else if ($isInOwnTableau) {
+      $empireCard->flip($player);
+    }
     if ($source === CORONATION_ONE_SHOT) {
       $king = Cards::get($parentInfo['data']['kingId']);
       $queen = Cards::get($parentInfo['data']['queenId']);
-      $king->marry($player, $queen);
+      Cards::move($queen->getId(), Locations::queens($king->getEmpireId()));
+      // $king->marry($player, $queen);
       Notifications::coronation($player, $queen, $king);
-    } else {
-      // TODO: handle cards that are a Vassal right now
-      $empireCard->resolveRegimeChange($player, $isCampaign, $isCampaign ?
-        Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard() :
-        null);
     }
-
-    // if ($isInThrone) {
-    //   // Comes with bishop and queen
-    //   if ($isCampaign) {
-    //     $empireCard->vassalage($player, Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard());
-    //   } else {
-    //     $empireCard->moveToTableau($player); 
-    //   }
-    // } else if ($isInEnemeyTableau) {
-    //   // Discard bishop, queen, vassals
-    //   $empireCard->discardBishopQueenVassals($player);
-    //   if ($isCampaign) {
-    //     $empireCard->vassalage($player, Empires::get($parentInfo['data']['attackingEmpireId']));
-    //   } else {
-    //     $empireCard->moveToTableau($player);
-    //   }
-    // } else if ($isInOwnTableau) {
-    //   // Flip card to republic, discard bishop, queen vassals
-    //   $empireCard->discardBishopQueenVassals($player, $empireCard);
-    //   $empireCard->flip($player);
-    // }
 
     $this->resolveAction([]);
   }
-
-
-
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -111,5 +115,67 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
+  /**
+   * Make sure to call this after changing data so it captures 'old' situation
+   */
+  private function argsDestination($empireCard)
+  {
+    $isVassal = $empireCard->isVassal();
+    return [
+      'type' => $isVassal ? EMPIRE_SQUARE_DESTINATION_VASSAL : EMPIRE_SQUARE_DESTINATION_KING,
+      'suzerain' => $isVassal ? $empireCard->getSuzerain() : null,
+      'ownerId' => $empireCard->getOwner()->getId(),
+    ];
+  }
 
+  /**
+   * Make sure to call this before changing data so it captures 'old' situation
+   */
+  private function argsOrigin($empireCard)
+  {
+    return [
+      'type' => EMPIRE_SQUARE_ORIGIN_TABLEAU,
+      'ownerId' => $empireCard->getOwner()->getId(),
+      'side' => $empireCard->getSide(),
+      'suzerain' => $empireCard->getSuzerain(),
+    ];
+  }
+
+  private function moveEmpireCardToTableau($empireCard, $player, $suzerain = null)
+  {
+    $argsOrigin = $empireCard->isInThrone() ? ['type' => EMPIRE_SQUARE_ORIGIN_THRONE]  : $this->argsOrigin($empireCard);
+
+    $region = Empires::get($empireCard->getEmpireId())->getRegion();
+    if ($empireCard->getSide() === REPUBLIC) {
+      $empireCard->setSide(KING);
+    }
+    if ($suzerain === null) {
+      $empireCard->insertInTableau($player, $region);
+    } else {
+      $location = Locations::vassals($suzerain->getEmpireId());
+      // Cards::insertAtBottom($empireCard->getId(), $location);
+      $empireCard->insertAtBottom($location);
+      // Notifications::vassalage($player, $this, $suzerain, $from);
+    }
+    
+
+    Notifications::moveEmpireSquare($player, $empireCard, $argsOrigin, $this->argsDestination($empireCard));
+  }
+
+
+  private function discardQueens($empireCard)
+  {
+    $queens = $empireCard->getQueens();
+    foreach ($queens as $queen) {
+      $queen->discard();
+    }
+  }
+
+  private function returnVassals($empireCard)
+  {
+    $vassals = $empireCard->getVassals();
+    foreach ($vassals as $vassal) {
+      $vassal->returnToThrone();
+    }
+  }
 }

@@ -348,6 +348,14 @@ const EMPIRE_SQUARE_IDS = [
 ];
 
 /**
+ * Origin and destination types used in regime changes
+ */
+const EMPIRE_SQUARE_DESTINATION_KING = 'king';
+const EMPIRE_SQUARE_DESTINATION_VASSAL = 'vassal';
+const EMPIRE_SQUARE_ORIGIN_TABLEAU = 'tableau';
+const EMPIRE_SQUARE_ORIGIN_THRONE = 'throne';
+
+/**
  * Map location types
  */
 const CITY = 'city';

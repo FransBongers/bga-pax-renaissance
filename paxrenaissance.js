@@ -31,6 +31,7 @@ var TABLEAU_CARD = "tableauCard";
 var VICTORY_CARD = "victoryCard";
 var KING = "king";
 var REPUBLIC = "republic";
+var VASSAL = 'vassal';
 var ACTIVE = "active";
 var INACTIVE = "inactive";
 var BISHOP = "bishop";
@@ -83,6 +84,10 @@ var EMPIRE_NAME_MAP = (_a = {},
     _a[PAPAL_STATES] = "Papal States",
     _a[PORTUGAL] = "Portugal",
     _a);
+var EMPIRE_SQUARE_DESTINATION_KING = 'king';
+var EMPIRE_SQUARE_DESTINATION_VASSAL = 'vassal';
+var EMPIRE_SQUARE_ORIGIN_TABLEAU = 'tableau';
+var EMPIRE_SQUARE_ORIGIN_THRONE = 'throne';
 var BORDER_ARAGON_FRANCE = "border_aragon_france";
 var BORDER_ARAGON_PAPAL_STATES = "border_aragon_papalStates";
 var BORDER_ARAGON_PORTUGAL = "border_aragon_portugal";
@@ -2300,6 +2305,7 @@ var TableauCardManager = (function (_super) {
         });
     };
     TableauCardManager.prototype.setupDiv = function (card, div) {
+        var _this = this;
         if (card.type === TABLEAU_CARD) {
             div.style.width = "calc(var(--paxRenCardScale) * 151px)";
             div.style.height = "calc(var(--paxRenCardScale) * 230px)";
@@ -2310,12 +2316,13 @@ var TableauCardManager = (function (_super) {
         }
         div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
         if (card.type === EMPIRE_CARD) {
-            if (card.queen) {
-                console.log('queen', card.queen);
-                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id, queen: card.queen }));
-                this.game.tooltipManager.addCardTooltip({
-                    nodeId: "PREN048_MaryTheRich-front",
-                    card: card.queen,
+            if (card.queens.length > 0) {
+                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id, queens: card.queens }));
+                card.queens.forEach(function (queen) {
+                    _this.game.tooltipManager.addCardTooltip({
+                        nodeId: queen.id + "-front",
+                        card: queen,
+                    });
                 });
             }
             div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
@@ -2381,23 +2388,23 @@ var TableauCardManager = (function (_super) {
         });
     };
     TableauCardManager.prototype.removeVassal = function (_a) {
-        var suzerain = _a.suzerain;
-        this.updateEmpireCardHeight({ card: suzerain, vassalChange: -1 });
+        var suzerain = _a.suzerain, _b = _a.beforeMove, beforeMove = _b === void 0 ? false : _b;
+        this.updateEmpireCardHeight({ card: suzerain, vassalChange: beforeMove ? -1 : 0 });
     };
     TableauCardManager.prototype.addQueen = function (_a) {
-        var king = _a.king;
+        var king = _a.king, queen = _a.queen;
         return __awaiter(this, void 0, void 0, function () {
-            var id, queen, div;
+            var id, queens, div;
             return __generator(this, function (_b) {
-                id = king.id, queen = king.queen;
+                id = king.id, queens = king.queens;
                 div = document.getElementById(id);
                 if (!div) {
                     return [2];
                 }
-                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: id, queen: queen, }));
+                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: id, queens: queens, }));
                 this.game.tooltipManager.addCardTooltip({
-                    nodeId: king.queen.id + "-front",
-                    card: king.queen,
+                    nodeId: queen.id + "-front",
+                    card: queen,
                 });
                 this.updateEmpireCardHeight({
                     card: king,
@@ -2407,13 +2414,19 @@ var TableauCardManager = (function (_super) {
         });
     };
     TableauCardManager.prototype.removeQueen = function (_a) {
-        var king = _a.king;
+        var king = _a.king, queen = _a.queen;
         return __awaiter(this, void 0, void 0, function () {
-            var node;
+            var node, containerNode;
             return __generator(this, function (_b) {
-                node = document.getElementById("queen_".concat(king.id));
+                node = document.getElementById("".concat(queen.id, "-front"));
                 if (node) {
                     node.remove();
+                }
+                if (king.queens.length === 0) {
+                    containerNode = document.getElementById("queens_".concat(king.id));
+                    if (containerNode) {
+                        containerNode.remove();
+                    }
                 }
                 this.updateEmpireCardHeight({ card: king });
                 return [2];
@@ -2421,16 +2434,24 @@ var TableauCardManager = (function (_super) {
         });
     };
     TableauCardManager.prototype.updateEmpireCardHeight = function (_a) {
-        var _b;
-        var card = _a.card, _c = _a.vassalChange, vassalChange = _c === void 0 ? 0 : _c;
+        var card = _a.card, _b = _a.vassalChange, vassalChange = _b === void 0 ? 0 : _b;
         var empire = card.empire;
+        console.log('vassals', this.vassalStocks[empire].getCards());
         var numberOfVassals = this.vassalStocks[empire].getCards().length + vassalChange;
-        var queenHeight = ((_b = card.queen) === null || _b === void 0 ? void 0 : _b.height) || 0;
+        var queenHeight = getTotalHeightQueens({ queens: card.queens });
         var node = document.getElementById(card.id);
         node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat((numberOfVassals + 1) * 151 + numberOfVassals * 12 + queenHeight, "px)");
     };
     return TableauCardManager;
 }(CardManager));
+var getTotalHeightQueens = function (_a) {
+    var queens = _a.queens;
+    var totalHeight = 0;
+    queens.forEach(function (queen) {
+        totalHeight = totalHeight + queen.height;
+    });
+    return totalHeight;
+};
 var tplTokensContainer = function (_a) {
     var id = _a.id;
     return "\n  <div id=\"".concat(id, "_tokens\" class=\"pr_card_tokens_container\"></div>");
@@ -2440,8 +2461,13 @@ var tplVassalsContainer = function (_a) {
     return "\n  <div id=\"vassals_".concat(id, "\" class=\"pr_vassals_container\"></div>");
 };
 var tplQueenContainer = function (_a) {
-    var id = _a.id, queen = _a.queen;
-    return "\n  <div id=\"queen_".concat(id, "\" class=\"pr_queen_container\" style=\"height: calc(var(--paxRenCardScale) * ").concat((queen === null || queen === void 0 ? void 0 : queen.height) || 0, "px);\">\n    ").concat(queen === null ? '' : "<div id=\"".concat(queen.id, "-front\" class=\"pr_card\" data-card-id=\"").concat(queen.id.split("_")[0], "\"></div>"), "\n  </div>");
+    var id = _a.id, queens = _a.queens;
+    var containerHeight = getTotalHeightQueens({ queens: queens });
+    return "\n  <div id=\"queens_".concat(id, "\" class=\"pr_queens_container\" style=\"height: calc(var(--paxRenCardScale) * ").concat(containerHeight, "px);\">\n    ").concat(queens
+        .map(function (queen) {
+        return "<div id=\"".concat(queen.id, "-front\" class=\"pr_card\" data-card-id=\"").concat(queen.id.split("_")[0], "\">\n            <div id=\"").concat(queen.id, "_tokens\" class=\"pr_card_tokens_container\"></div>\n          </div>");
+    })
+        .join(""), "\n  </div>");
 };
 var VictoryCardManager = (function (_super) {
     __extends(VictoryCardManager, _super);
@@ -3651,6 +3677,7 @@ var NotificationManager = (function () {
             ["coronation", undefined],
             ["declareVictory", undefined],
             ["discardCard", undefined],
+            ["discardQueen", undefined],
             ["flipEmpireCard", undefined],
             ["flipVictoryCard", undefined],
             ["moveEmpireSquare", undefined],
@@ -3665,6 +3692,7 @@ var NotificationManager = (function () {
             ["refreshUI", undefined],
             ["repressToken", undefined],
             ["returnToSupply", undefined],
+            ["returnToThrone", undefined],
             ["sellCard", undefined],
             ["sellRoyalCouple", undefined],
             ["tableauOpCommerce", undefined],
@@ -3735,7 +3763,7 @@ var NotificationManager = (function () {
                         return [4, this.game.tableauCardManager.updateCardInformations(king)];
                     case 2:
                         _b.sent();
-                        return [4, this.game.tableauCardManager.addQueen({ king: king })];
+                        return [4, this.game.tableauCardManager.addQueen({ king: king, queen: queen })];
                     case 3:
                         _b.sent();
                         return [2];
@@ -3778,12 +3806,6 @@ var NotificationManager = (function () {
                         if (wasVassalTo) {
                             this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
                         }
-                        if (king) {
-                            this.game.tableauCardManager.updateCardInformations(king);
-                            this.game.tableauCardManager.removeQueen({
-                                king: king,
-                            });
-                        }
                         if (wasOldMaid) {
                             player.tableau.checkOldMaidContainerHeight();
                         }
@@ -3793,6 +3815,29 @@ var NotificationManager = (function () {
                         }
                         return [2];
                 }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_discardQueen = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, playerId, queen, king, player;
+            return __generator(this, function (_b) {
+                _a = notif.args, playerId = _a.playerId, queen = _a.queen, king = _a.king;
+                player = this.getPlayer({ playerId: playerId });
+                if (king) {
+                    this.game.tableauCardManager.updateCardInformations(king);
+                    this.game.tableauCardManager.removeQueen({
+                        king: king,
+                        queen: queen,
+                    });
+                }
+                if (king === null) {
+                    player.tableau.checkOldMaidContainerHeight();
+                }
+                queen.prestige.forEach(function (item) {
+                    return player.counters.prestige[item].incValue(-1);
+                });
+                return [2];
             });
         });
     };
@@ -3807,7 +3852,10 @@ var NotificationManager = (function () {
                         player = this.getPlayer({ playerId: playerId });
                         this.removePrestige({ prestige: card[oldSide].prestige, player: player });
                         if (!(formerSuzerain !== null)) return [3, 2];
-                        this.game.tableauCardManager.removeVassal({ suzerain: formerSuzerain });
+                        this.game.tableauCardManager.removeVassal({
+                            suzerain: formerSuzerain,
+                            beforeMove: true,
+                        });
                         return [4, player.tableau.addCard(card)];
                     case 1:
                         _b.sent();
@@ -3834,17 +3882,39 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_moveEmpireSquare = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card, from, player;
+            var _a, playerId, card, origin, destination, newOwner;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, playerId = _a.playerId, card = _a.card, from = _a.from;
-                        this.handleEmpireSquareOririnData({ card: card, from: from });
-                        player = this.getPlayer({ playerId: playerId });
-                        return [4, player.tableau.addCard(card)];
+                        _a = notif.args, playerId = _a.playerId, card = _a.card, origin = _a.origin, destination = _a.destination;
+                        if (origin.type === EMPIRE_SQUARE_ORIGIN_TABLEAU) {
+                            this.removeEmpireSquarePrestige({
+                                empireSquare: card,
+                                side: origin.side,
+                                playerId: origin.ownerId,
+                            });
+                        }
+                        if (!(destination.type === KING)) return [3, 2];
+                        newOwner = this.getPlayer({ playerId: destination.ownerId });
+                        return [4, newOwner.tableau.addCard(card)];
                     case 1:
                         _b.sent();
-                        this.addPrestige({ prestige: card[card.side].prestige, player: player });
+                        return [3, 4];
+                    case 2:
+                        if (!(destination.type === VASSAL)) return [3, 4];
+                        return [4, this.game.tableauCardManager.addVassal({
+                                vassal: card,
+                                suzerain: destination.suzerain,
+                            })];
+                    case 3:
+                        _b.sent();
+                        _b.label = 4;
+                    case 4:
+                        this.addEmpireSquarePrestige({
+                            empireSquare: card,
+                            side: KING,
+                            playerId: destination.ownerId,
+                        });
                         return [2];
                 }
             });
@@ -4107,6 +4177,33 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_returnToThrone = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, king, fromSide, playerId, suzerain, player, prestige;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, king = _a.king, fromSide = _a.fromSide, playerId = _a.playerId, suzerain = _a.suzerain;
+                        return [4, this.game.gameMap
+                                .getEmpireSquareStock({ empireId: king.empire })
+                                .addCard(king)];
+                    case 1:
+                        _b.sent();
+                        if (suzerain) {
+                            this.game.tableauCardManager.removeVassal({ suzerain: suzerain });
+                        }
+                        this.game.tableauCardManager.updateCardInformations(king);
+                        player = this.getPlayer({ playerId: playerId });
+                        prestige = king[fromSide].prestige;
+                        king.queens.forEach(function (queen) {
+                            prestige.push.apply(prestige, queen.prestige);
+                        });
+                        prestige.forEach(function (item) { return player.counters.prestige[item].incValue(-1); });
+                        return [2];
+                }
+            });
+        });
+    };
     NotificationManager.prototype.notif_sellCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, card, value, player;
@@ -4243,38 +4340,31 @@ var NotificationManager = (function () {
             });
         });
     };
-    NotificationManager.prototype.notif_vassalage = function (notif) {
-        return __awaiter(this, void 0, void 0, function () {
-            var _a, from, vassal, suzerain, playerId, player;
-            return __generator(this, function (_b) {
-                _a = notif.args, from = _a.from, vassal = _a.vassal, suzerain = _a.suzerain, playerId = _a.playerId;
-                this.handleEmpireSquareOririnData({ from: from, card: vassal });
-                this.game.tableauCardManager.addVassal({ vassal: vassal, suzerain: suzerain });
-                player = this.getPlayer({ playerId: playerId });
-                this.addPrestige({ player: player, prestige: vassal[vassal.side].prestige });
-                return [2];
-            });
-        });
-    };
     NotificationManager.prototype.notif_smallRefreshInterface = function (notif) {
         var updatedGamedatas = __assign(__assign({}, this.game.gamedatas), notif.args);
         this.game.clearInterface();
         this.game.gamedatas = updatedGamedatas;
         this.game.playerManager.updatePlayers({ gamedatas: updatedGamedatas });
     };
-    NotificationManager.prototype.handleEmpireSquareOririnData = function (_a) {
-        var card = _a.card, from = _a.from;
-        var suzerain = from.suzerain, previousOwnerId = from.previousOwnerId, wasRepublic = from.wasRepublic;
-        if (suzerain && previousOwnerId) {
-            this.game.tableauCardManager.removeVassal({ suzerain: suzerain });
-        }
-        if (previousOwnerId) {
-            var previousOwner = this.getPlayer({ playerId: previousOwnerId });
-            this.removePrestige({
-                player: previousOwner,
-                prestige: card[wasRepublic ? REPUBLIC : KING].prestige,
-            });
-        }
+    NotificationManager.prototype.addEmpireSquarePrestige = function (_a) {
+        var empireSquare = _a.empireSquare, side = _a.side, playerId = _a.playerId;
+        var owner = this.getPlayer({ playerId: playerId });
+        var prestige = empireSquare[side].prestige.concat(this.getQueensPrestige({ queens: empireSquare.queens }));
+        this.addPrestige({ player: owner, prestige: prestige });
+    };
+    NotificationManager.prototype.removeEmpireSquarePrestige = function (_a) {
+        var empireSquare = _a.empireSquare, side = _a.side, playerId = _a.playerId;
+        var owner = this.getPlayer({ playerId: playerId });
+        var prestige = empireSquare[side].prestige.concat(this.getQueensPrestige({ queens: empireSquare.queens }));
+        this.removePrestige({ player: owner, prestige: prestige });
+    };
+    NotificationManager.prototype.getQueensPrestige = function (_a) {
+        var queens = _a.queens;
+        var prestige = [];
+        queens.forEach(function (queen) {
+            prestige.push.apply(prestige, queen.prestige);
+        });
+        return prestige;
     };
     NotificationManager.prototype.addPrestige = function (_a) {
         var player = _a.player, prestige = _a.prestige;
@@ -5322,16 +5412,18 @@ var ClientSellCardState = (function () {
     };
     ClientSellCardState.prototype.updateInterfaceConfirmRoyalCouple = function (_a) {
         var _this = this;
-        var king = _a.king, queen = _a.queen;
+        var king = _a.king, queens = _a.queens;
         this.game.clearPossible();
         this.game.setCardSelected({ id: king.id });
-        this.game.setCardSelected({ id: queen.id });
+        queens.forEach(function (queen) {
+            _this.game.setCardSelected({ id: queen.id });
+        });
         this.game.clientUpdatePageTitle({
-            text: _("Sell ${kingName} and ${queenName} for ${amount} ${tkn_florin} ?"),
+            text: _("Sell ${queenNames} and ${kingName} for ${amount} ${tkn_florin} ?"),
             args: {
                 kingName: king[king.side].name,
-                queenName: queen.name,
-                amount: king.sellValue + queen.sellValue,
+                queenNames: this.getQueenNamesLog({ queens: queens }),
+                amount: this.getTotalAmount({ king: king, queens: queens }),
                 tkn_florin: tknFlorin(),
             },
         });
@@ -5349,6 +5441,29 @@ var ClientSellCardState = (function () {
         });
         this.game.addCancelButton();
     };
+    ClientSellCardState.prototype.getQueenNamesLog = function (_a) {
+        var queens = _a.queens;
+        var log = "";
+        var args = {};
+        queens.forEach(function (queen, index) {
+            var separator = index === 0 ? "" : ", ";
+            var key = "${queenName_" + index + "}";
+            log = log + separator + key;
+            args["queenName_".concat(index)] = _(queen.name);
+        });
+        return {
+            log: log,
+            args: args,
+        };
+    };
+    ClientSellCardState.prototype.getTotalAmount = function (_a) {
+        var king = _a.king, queens = _a.queens;
+        var total = king.sellValue;
+        queens.forEach(function (queen) {
+            total = total + queen.sellValue;
+        });
+        return total;
+    };
     ClientSellCardState.prototype.setCardsSelectable = function () {
         var _this = this;
         this.args.cards.forEach(function (card) {
@@ -5361,14 +5476,16 @@ var ClientSellCardState = (function () {
     ClientSellCardState.prototype.setRoyalCouplesSelectable = function () {
         var _this = this;
         this.args.royalCouples.forEach(function (couple) {
-            var king = couple.king, queen = couple.queen;
+            var king = couple.king, queens = couple.queens;
             _this.game.setCardSelectable({
                 id: king.id,
                 callback: function () { return _this.updateInterfaceConfirmRoyalCouple(couple); },
             });
-            _this.game.setCardSelectable({
-                id: queen.id,
-                callback: function () { return _this.updateInterfaceConfirmRoyalCouple(couple); },
+            queens.forEach(function (queen) {
+                return _this.game.setCardSelectable({
+                    id: queen.id,
+                    callback: function () { return _this.updateInterfaceConfirmRoyalCouple(couple); },
+                });
             });
         });
     };

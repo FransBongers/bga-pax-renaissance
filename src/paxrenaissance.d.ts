@@ -130,7 +130,7 @@ interface EmpireCard extends PaxRenCard {
   sellValue: number;
   isVassal: boolean;
   suzerainId: string | null;
-  queen: QueenCard | null;
+  queens: QueenCard[];
   king: EmpireCardSide;
   republic: EmpireCardSide;
   side: "king" | "republic";

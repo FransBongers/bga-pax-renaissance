@@ -64,7 +64,7 @@ class CampaignOp extends \PaxRenaissance\Models\TableauOp
       $adjacentEmpires = $empire->getAdjacentEmpires();
       foreach ($adjacentEmpires as $adjacentEmpire) {
         $empireCard = Cards::get($adjacentEmpire->getEmpireSquareId());
-        if ($empireCard->isInPlayerTableau($player)) {
+        if ($empireCard->isInPlayerTableau($player->getId())) {
           continue;
         }
         if (isset($options[$adjacentEmpire->getId()])) {

@@ -14,7 +14,7 @@ class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
         'type' => BISHOP,
       ]
     ];
-    $this->empire = PORTUGAL;
+    $this->empire = WEST;
     $this->flavorText = [
       clienttranslate('As cardinal, grand inquisitor, and regent, Ximénes de Cisneros was the most powerful person in Spain other than Isabella and Ferdinand. He forced the conversion of the Spanish Moors and sponsored the North African Crusades.'),
       clienttranslate('The Consejo Real, appointed by Isabella starting in 1480, had full judicial powers over the nobles, keeping them subordinate to the crown.'),

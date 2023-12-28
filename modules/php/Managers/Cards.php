@@ -52,9 +52,16 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
 
   public static function getAllCardsInTableaux()
   {
-    return self::getSelectQuery()
+    $baseCards = self::getSelectQuery()
       ->where(static::$prefix . 'location', 'LIKE', 'tableau' . '%')
-      ->get();
+      ->get()->toArray();
+    $vassals = self::getSelectQuery()
+      ->where(static::$prefix . 'location', 'LIKE', 'vassals_' . '%')
+      ->get()->toArray();
+    $queens = self::getSelectQuery()
+      ->where(static::$prefix . 'location', 'LIKE', 'queens_' . '%')
+      ->get()->toArray();
+    return array_merge($vassals, $queens, $baseCards);
   }
 
   public static function getAllCardsInThrones()

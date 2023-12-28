@@ -66,9 +66,9 @@ class TableauCard extends Card
   // .##.....##.##....##....##.....##..##.....##.##...###.##....##
   // .##.....##..######.....##....####..#######..##....##..######.
 
-  public function behead($player)
+  public function behead()
   {
-      $this->discard(DISCARD, $player);
+      $this->discard(DISCARD, $this->getOwner());
   }
 
   public function discard($messageType = DISCARD, $player = null)

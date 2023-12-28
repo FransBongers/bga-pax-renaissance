@@ -50,7 +50,10 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     $isCurrentPlayer = intval($currentPlayerId) == $this->getId();
     $extra = PlayersExtra::get($this->getId());
     $hand = $this->getHand();
-    $tableauCards = $this->getTableauCardsPerRegion();
+    $tableauCards = [
+      EAST => $this->getTableauCardsForRegion(EAST),
+      WEST => $this->getTableauCardsForRegion(WEST),
+    ];
     // return $data;
     return array_merge($data, [
       'bank' => $extra['bank'],
@@ -85,7 +88,10 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       EAST => [],
       WEST => [],
     ];
-    $tableauCards = $this->getTableauCardsPerRegion();
+    $tableauCards = [
+      EAST => $this->getTableauCardsForRegion(EAST),
+      WEST => $this->getTableauCardsForRegion(WEST),
+    ];
     foreach (REGIONS as $region) {
       $regionHasAlreadyBeenResolved = $region === EAST ?
         count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST])) > 0 :
@@ -119,11 +125,11 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       if ($card->isQueen()) {
         continue;
       }
-      if ($card->getType() === EMPIRE_CARD && $card->getQueen() !== null) {
-        $queen = $card->getQueen();
+      if ($card->getType() === EMPIRE_CARD && count($card->getQueens()) > 0) {
+        $queens = $card->getQueens();
         $royalCouples[] = [
           'king' => $card,
-          'queen' => $queen,
+          'queens' => $queens,
         ];
         continue;
       }
@@ -161,16 +167,20 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
 
   public function getTableauCards()
   {
-    $tableauCards = $this->getTableauCardsPerRegion();
-    return array_merge($tableauCards[EAST], $tableauCards[WEST]);
+    return array_merge($this->getTableauCardsForRegion(EAST), $this->getTableauCardsForRegion(WEST));
   }
 
-  public function getTableauCardsPerRegion()
+  public function getTableauCardsForRegion($region)
   {
-    return [
-      EAST => Cards::getInLocationOrdered(Locations::tableau($this->getId(), EAST))->toArray(),
-      WEST => Cards::getInLocationOrdered(Locations::tableau($this->getId(), WEST))->toArray(),
-    ];
+    $tableauCards = Cards::getInLocationOrdered(Locations::tableau($this->getId(), $region))->toArray();
+    $queensAndVassals = [];
+    foreach($tableauCards as $card) {
+      if ($card->getType() !== EMPIRE_CARD) {
+        continue;
+      }
+      $queensAndVassals = array_merge($queensAndVassals,$card->getQueens(), $card->getVassals());
+    }
+    return array_merge($tableauCards, $queensAndVassals);
   }
 
   public function getPrestige($victoryCalculation = false)

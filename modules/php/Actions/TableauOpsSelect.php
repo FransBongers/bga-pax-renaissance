@@ -70,7 +70,7 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
 
     $data = [
       'availableOps' => $availableOps,
-      'tableauCards' => $player->getTableauCardsPerRegion()[$region],
+      'tableauCards' => $player->getTableauCardsForRegion($region),
       'optional' => $this->hasAtLeastOneOpBeenResolved(),
     ];
 

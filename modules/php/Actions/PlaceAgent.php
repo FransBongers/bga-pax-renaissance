@@ -259,7 +259,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
   private function getCards($empireId, $type)
   {
 
-    $cards = array_merge(Cards::getAllCardsInTableaux()->toArray(), Cards::getAllCardsInThrones()->toArray());
+    $cards = array_merge(Cards::getAllCardsInTableaux(), Cards::getAllCardsInThrones()->toArray());
     $validEmpireIds = [$empireId];
     if (in_array($empireId, [WEST, EAST])) {
       $regionEmpireIds = array_map(function ($empire) {

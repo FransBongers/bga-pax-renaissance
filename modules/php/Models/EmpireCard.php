@@ -52,15 +52,14 @@ class EmpireCard extends Card
   public function jsonSerialize()
   {
     $data = parent::jsonSerialize();
-    $suzerainId = $this->getExtraData('suzerainId');
     return array_merge($data, [
       'empire' => $this->empire,
       'side' => $this->side,
       'type' => $this->type,
-      'isVassal' => $suzerainId !== null,
+      'isVassal' => $this->isVassal(),
       'sellValue' => $this->getSellValue(),
-      'suzerainId' => $suzerainId,
-      'queen' => $this->getQueen(),
+      'suzerainId' => $this->isVassal() ? $this->getSuzerain()->getId() : null,
+      'queens' => $this->getQueens(),
       'isQueen' => false,
       KING => [
         'agents' => $this->agents[KING],
@@ -109,9 +108,26 @@ class EmpireCard extends Card
     return $this->ops[$this->side];
   }
 
+  // Returns player if in tableau, or null if not in tableau
+  public function getOwner()
+  {
+    if (Utils::startsWith($this->location, 'tableau_')) {
+      return Players::get(intval(explode('_', $this->location)[2]));
+    }
+    if (Utils::startsWith($this->location, 'vassals_')) {
+      return $this->getSuzerain()->getOwner();
+    }
+    return null;
+  }
+
   public function getPrestige()
   {
     return $this->prestige[$this->side];
+  }
+
+  public function getRegion()
+  {
+    return Empires::get($this->getEmpireId())->getRegion();
   }
 
   public function getSide()
@@ -119,18 +135,34 @@ class EmpireCard extends Card
     return $this->side;
   }
 
+  public function setSide($side)
+  {
+    $this->side = $side;
+    $this->setExtraData('side', $this->side);
+  }
+
+  public function getSuzerain()
+  {
+    if (!Utils::startsWith($this->location, 'vassals_')) {
+      return null;
+    }
+    $empireId = explode('_', $this->location)[1];
+    return Empires::get($empireId)->getEmpireCard();
+  }
+
+  public function getThrone()
+  {
+    return $this->startLocation;
+  }
+
   public function getVassals()
   {
-    $empireSquares = Cards::getAllEmpireSquares();
-    $vassals = Utils::filter($empireSquares, function ($empireSquare) {
-      return $empireSquare->getExtraData('suzerainId') === $this->id;
-    });
-    return $vassals;
+    return Cards::getInLocationOrdered(Locations::vassals($this->getEmpireId()))->toArray();
   }
 
   public function isVassal()
   {
-    return $this->getExtraData('suzerainId') !== null;
+    return Utils::startsWith($this->location, 'vassals_');
   }
 
   public function isSuzerain()
@@ -146,14 +178,19 @@ class EmpireCard extends Card
   // .##.....##.##....##....##.....##..##.....##.##...###.##....##
   // .##.....##..######.....##....####..#######..##....##..######.
 
-  public function behead($player)
+  public function behead()
   {
-    $queen = $this->getQueen();
-    if ($queen !== null) {
-      $queen->discard(KILL, $player);
+    $this->discardQueens();
+
+    $this->returnToThrone();
+  }
+
+  public function discardQueens()
+  {
+    $queens = $this->getQueens();
+    foreach ($queens as $queen) {
+      $queen->discard();
     }
-    $this->setQueen(null);
-    $this->discard(DISCARD, $player);
   }
 
   public function discard($messageType = DISCARD, $player = null)
@@ -184,42 +221,34 @@ class EmpireCard extends Card
     Notifications::discardCard($adjustPrestige, $player, $this, $this->startLocation, $messageType, $wasVassalTo);
   }
 
-  // public function returnToThrone($player)
-  // {
-  //   $vassals = $this->getVassals();
-
-  //   foreach ($vassals as $vassal) {
-  //     $vassal->discard(DISCARD, $player);
-  //   }
-  //   // returnToThrone
-  //   Notifications::returnToThrone($player, $king, $queen);
-  // }
-
-  public function sellRoyalCouple($player, $queen)
+  public function isInThrone()
   {
-    $playerId = $player->getId();
-
-    $kingValue = $this->getSellValue();
-    $queenValue = $queen->getSellValue();
-    $value = $kingValue + $queenValue;
-    Players::incFlorins($playerId, $value);
-
-    Cards::move($queen->getId(), $this->startLocation);
-    Cards::move($this->getId(), $this->startLocation);
-    $queen = $this->getQueen();
-    Notifications::sellRoyalCouple($player, $this, $queen, $value);
-    $this->discard(DISCARD, $player);
+    return $this->location === $this->startLocation;
   }
-  // public function sell($player)
-  // {
-  //   $playerId = $player->getId();
 
-  //   $value = $this->getSellValue();
-  //   Players::incFlorins($playerId, $value);
+  public function returnToThrone()
+  {
+    $suzerain = null;
+    if ($this->isVassal()) {
+      $suzerain = $this->getSuzerain();
+    }
 
-  //   Notifications::sellCard($player, $this, $value);
-  //   $this->discard(DISCARD, $player);
-  // }
+    $vassals = $this->getVassals();
+    foreach ($vassals as $vassal) {
+      $vassal->returnToThrone();
+    }
+
+    $owner = $this->getOwner();
+    $fromSide = $this->getSide();
+    if ($fromSide === REPUBLIC) {
+      $this->setSide(KING);
+    }
+    Cards::move($this->getId(), $this->startLocation);
+    $this->location = $this->startLocation;
+
+    Notifications::returnToThrone($owner, $this, $fromSide, $suzerain);
+  }
+
 
   public function discardBishopQueenVassals($player)
   {
@@ -256,23 +285,14 @@ class EmpireCard extends Card
     if ($this->side === REPUBLIC && $this->isVassal()) {
       $formerSuzerain = $this->getSuzerain();
       $insertInTableauWithRegion = Empires::get($this->empire)->getRegion();
+
       $this->insertInTableau($player, $insertInTableauWithRegion);
     }
 
     Notifications::flipEmpireCard($player, $this, $formerSuzerain);
   }
 
-  public function getSuzerain()
-  {
-    $suzerainId = $this->getExtraData('suzerainId');
 
-    if ($suzerainId === null) {
-      return null;
-    }
-    $suzerain = Cards::get($suzerainId);
-    // Notifications::log('suzerain', $suzerain);
-    return $suzerain;
-  }
 
   public function setQueen($queenCard)
   {
@@ -283,87 +303,12 @@ class EmpireCard extends Card
     }
   }
 
-  public function getQueen()
+  public function getQueens()
   {
-    $queenCardId = $this->getExtraData('queenId');
-    if ($queenCardId === null) {
-      return null;
-    }
-    return Cards::get($queenCardId);
+    return Cards::getInLocationOrdered(Locations::queens($this->getEmpireId()))->toArray();
   }
 
-  /**
-   * suzerain is the empire square, not the empire
-   */
-  public function resolveRegimeChange($player, $isCampaign, $attackingEmpire = null)
-  {
-    // $isInThrone = $this->location === $this->startLocation;
-    $playerId = $player->getId();
-
-    $isInOwnTableau = in_array($this->location, [Locations::tableau($playerId, EAST), Locations::tableau($playerId, WEST)]);
-    $isInEnemeyTableau = !$isInOwnTableau && Utils::startsWith($this->location, 'tableau_');
-
-    // TODO: handle cards that are a Vassal right now
-    if ($isInEnemeyTableau || $isInOwnTableau) {
-      $this->discardBishopQueenVassals($player);
-    }
-
-    $wasRepublic = $this->side === REPUBLIC;
-    $fromSuzerain = $this->getSuzerain();
-    $previousOwner = $this->getOwner();
-    if ($wasRepublic) {
-      $this->side = KING;
-      $this->setExtraData('side', KING);
-    }
-
-    $from = [
-      'suzerain' => $fromSuzerain,
-      'wasRepublic' => $wasRepublic,
-      'previousOwnerId' => $previousOwner !== null ? $previousOwner->getId() : null,
-    ];
-
-    if ($isInOwnTableau) {
-      $this->flip($player);
-    } else if ($isCampaign) {
-      $this->vassalage($player, $attackingEmpire, $from);
-    } else {
-      $this->moveToTableau($player, $from);
-    }
-  }
-
-  public function marry($player, $queen)
-  {
-    if ($this->location === $this->startLocation) {
-      $this->moveToTableau($player, []);
-    }
-    $this->setQueen($queen);
-    $queen->setKing($this);
-    Cards::move($queen->getId(), $this->location);
-  }
-
-  public function moveToTableau($player, $from)
-  {
-    $region = Empires::get($this->empire)->getRegion();
-    $this->insertInTableau($player, $region);
-
-    Notifications::moveEmpireSquare($player, $this, $from);
-  }
-
-  public function vassalage($player, $attackingEmpire, $from)
-  {
-    $suzerain = $attackingEmpire->isVassal() ? $attackingEmpire->getSuzerain() : $attackingEmpire;
-
-    $suzerainLocation = $suzerain->getLocation();
-
-    $region = explode('_', $suzerainLocation)[1];
-
-    $this->insertInTableau($player, $region);
-    $this->setExtraData('suzerainId', $suzerain->getId());
-
-    Notifications::vassalage($player, $this, $suzerain, $from);
-  }
-
-  private function insertInTableau($player, $region)
+  public function insertInTableau($player, $region)
   {
     if ($region === EAST) {
       $this->location = Locations::tableau($player->getId(), EAST);
@@ -376,9 +321,9 @@ class EmpireCard extends Card
 
   public function isSilenced()
   {
-    $queen = $this->getQueen();
+    $queens = $this->getQueens();
     $tokens = $this->getTokens();
-    if ($queen !== null) {
+    foreach ($queens as $queen) {
       $tokens = array_merge($tokens, $queen->getTokens());
     }
     $hasBishop = Utils::array_some($tokens, function ($token) {
