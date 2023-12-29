@@ -44,20 +44,20 @@ class action_paxrenaissance extends APP_GameAction
    **** GENERIC METHODS ****
    *************************/
 
+
+  public function actPassOptionalAction()
+  {
+    self::setAjaxMode();
+    $result = $this->game->actPassOptionalAction();
+    self::ajaxResponse();
+  }
+
   public function actRestart()
   {
     self::setAjaxMode();
     $this->game->actRestart();
     self::ajaxResponse();
   }
-
-  // public function actUndoToStep()
-  // {
-  //   self::setAjaxMode();
-  //   $stepId = self::getArg('stepId', AT_posint, false);
-  //   $this->game->actUndoToStep($stepId);
-  //   self::ajaxResponse();
-  // }
 
   public function actUndoToStep()
   {
@@ -118,7 +118,7 @@ class action_paxrenaissance extends APP_GameAction
     $this->game->actConfirmPartialTurn();
     self::ajaxResponse();
   }
-  
+
   public function actCoronationOneShot()
   {
     self::setAjaxMode();

@@ -346,6 +346,16 @@ class PaxRenaissance implements PaxRenaissanceGame {
     });
   }
 
+  addPassButton({optionalAction}: {optionalAction: boolean;}) {
+    if (optionalAction) {
+      this.addSecondaryActionButton({
+        id: "pass_btn",
+        text: _("Pass"),
+        callback: () => this.takeAction({action: 'actPassOptionalAction'}),
+      });
+    }
+  }  
+
   addSkipButton({ callback }: { callback: Function | string }) {
     this.addSecondaryActionButton({
       id: "skip_btn",

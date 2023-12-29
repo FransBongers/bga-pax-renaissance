@@ -5,6 +5,7 @@ interface State {
 }
 
 interface CommonArgs {
+  optionalAction: boolean;
   previousEngineChoices: number;
   previousSteps: number[];
 }

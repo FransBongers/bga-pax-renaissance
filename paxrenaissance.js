@@ -1978,6 +1978,17 @@ var PaxRenaissance = (function () {
             callback: callback,
         });
     };
+    PaxRenaissance.prototype.addPassButton = function (_a) {
+        var _this = this;
+        var optionalAction = _a.optionalAction;
+        if (optionalAction) {
+            this.addSecondaryActionButton({
+                id: "pass_btn",
+                text: _("Pass"),
+                callback: function () { return _this.takeAction({ action: 'actPassOptionalAction' }); },
+            });
+        }
+    };
     PaxRenaissance.prototype.addSkipButton = function (_a) {
         var callback = _a.callback;
         this.addSecondaryActionButton({
@@ -2928,6 +2939,14 @@ var GameMap = (function () {
         this.setupTokensBorders({ gamedatas: gamedatas });
         this.setupTokensCities({ gamedatas: gamedatas });
         this.updateEmpireCards({ gamedatas: gamedatas });
+        this.setupMapCards({ gamedatas: gamedatas });
+    };
+    GameMap.prototype.setupMapCards = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        gamedatas.gameMap.empires.forEach(function (empire) {
+            return _this.setEmpireReligion({ empireId: empire.id, religion: empire.religion });
+        });
     };
     GameMap.prototype.setupTokensBorders = function (_a) {
         var gamedatas = _a.gamedatas;
@@ -3008,9 +3027,7 @@ var GameMap = (function () {
         this.setupEmpireCards({ gamedatas: gamedatas });
         this.setupTokensCities({ gamedatas: gamedatas });
         this.setupTokensBorders({ gamedatas: gamedatas });
-        gamedatas.gameMap.empires.forEach(function (empire) {
-            return _this.setEmpireReligion({ empireId: empire.id, religion: empire.religion });
-        });
+        this.setupMapCards({ gamedatas: gamedatas });
     };
     GameMap.prototype.setupZoomButtons = function () {
         var _this = this;
@@ -5903,6 +5920,7 @@ var PlayerActionState = (function () {
         this.setTradeFairSelectable();
         this.setVictoryCardsSelectable();
         this.addActionButtons();
+        this.game.addPassButton({ optionalAction: this.args.optionalAction });
         this.game.addUndoButtons(this.args);
     };
     PlayerActionState.prototype.updateInterfaceConfirmPurchase = function (_a) {

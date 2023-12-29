@@ -428,6 +428,13 @@ class Notifications
     ]);
   }
 
+  public static function passPlayerAction($player)
+  {
+    self::message(clienttranslate('${tkn_playerName} passes on their action'),[
+      'player' => $player
+    ]);
+  }
+
   public static function patronVictory()
   {
     self::message(clienttranslate('The market cannot be refreshed. Winner is decided by Patron Victory'));

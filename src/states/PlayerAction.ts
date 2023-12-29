@@ -53,6 +53,7 @@ class PlayerActionState implements State {
     this.setVictoryCardsSelectable();
     this.addActionButtons();
     // this.addTest();
+    this.game.addPassButton({ optionalAction: this.args.optionalAction });
     this.game.addUndoButtons(this.args);
   }
 

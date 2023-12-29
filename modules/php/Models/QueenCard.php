@@ -101,7 +101,7 @@ class QueenCard extends TableauCard
     if (Utils::startsWith($this->location, 'tableau_')) {
       return Players::get(intval(explode('_', $this->location)[2]));
     }
-    if (Utils::startsWith($this->location, 'oldMaids_')) {
+    if (Utils::startsWith($this->location, 'oldMaids_') || Utils::startsWith($this->location, 'hand_')) {
       return Players::get(intval(explode('_', $this->location)[1]));
     }
     if (Utils::startsWith($this->location, 'queens_')) {

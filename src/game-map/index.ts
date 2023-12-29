@@ -68,6 +68,7 @@ class GameMap {
     this.setupTokensBorders({ gamedatas });
     this.setupTokensCities({ gamedatas });
     this.updateEmpireCards({ gamedatas });
+    this.setupMapCards({ gamedatas });
   }
 
   // ..######..########.########.##.....##.########.
@@ -77,6 +78,12 @@ class GameMap {
   // .......##.##..........##....##.....##.##.......
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
+
+  setupMapCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
+    gamedatas.gameMap.empires.forEach((empire) =>
+      this.setEmpireReligion({ empireId: empire.id, religion: empire.religion })
+    );
+  }
 
   setupTokensBorders({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     BORDERS.forEach((border) => {
@@ -134,7 +141,7 @@ class GameMap {
       [FRANCE]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${FRANCE}_throne`),
-        { direction: "column", center: false },
+        { direction: "column", center: false }
       ),
       [HOLY_ROMAN_EMIRE]: new LineStock<EmpireCard | TableauCard>(
         this.game.tableauCardManager,
@@ -211,9 +218,7 @@ class GameMap {
     this.setupEmpireCards({ gamedatas });
     this.setupTokensCities({ gamedatas });
     this.setupTokensBorders({ gamedatas });
-    gamedatas.gameMap.empires.forEach((empire) =>
-      this.setEmpireReligion({ empireId: empire.id, religion: empire.religion })
-    );
+    this.setupMapCards({ gamedatas });
   }
 
   setupZoomButtons() {

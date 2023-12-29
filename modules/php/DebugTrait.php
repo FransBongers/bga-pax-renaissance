@@ -56,7 +56,8 @@ trait DebugTrait
 
   function test()
   {
-    Notifications::log('queen', Cards::get('PREN076_SophiaPalaiologina'));
+    Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
+    // Notifications::log('queen', Cards::get('PREN076_SophiaPalaiologina'));
     // $this->fixDb();
     // $this->setExtraData('kingId', $kingCard->getId());
     // Cards::move('PREN048_MaryTheRich', Locations::tableau(2371053, WEST));

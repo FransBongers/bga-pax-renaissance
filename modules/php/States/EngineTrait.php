@@ -1,5 +1,7 @@
 <?php
+
 namespace PaxRenaissance\States;
+
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Game;
@@ -55,6 +57,21 @@ trait EngineTrait
     AtomicActions::takeAction($action, $actionName, $args, Engine::getNextUnresolved());
   }
 
+  /**
+   * To pass if the action is an optional one
+   */
+  function actPassOptionalAction($auto = false)
+  {
+    if ($auto) {
+      $this->gamestate->checkPossibleAction('actPassOptionalAction');
+    } else {
+      self::checkAction('actPassOptionalAction');
+    }
+
+    $action = $this->getCurrentAtomicAction();
+    AtomicActions::pass($action, Engine::getNextUnresolved());
+  }
+
 
   /**
    * Execute the state action of atomic action
@@ -65,7 +82,7 @@ trait EngineTrait
     AtomicActions::stAction($action, Engine::getNextUnresolved());
   }
 
-  
+
   public function stResolveStack()
   {
   }
