@@ -26,8 +26,42 @@ use PaxRenaissance\Models\Player;
 
 trait DebugTrait
 {
+  // function fixDb()
+  // {
+  //   $cards = Cards::getAllCardsInTableaux();
+  //   foreach ($cards as $card) {
+  //     $suzerainId = $card->getExtraData('suzerainId');
+  //     if ($suzerainId !== null) {
+  //       $suzerain = Cards::get($suzerainId);
+  //       $card->setExtraData('suzerainId', null);
+  //       if ($suzerain->getLocation() === $card->getLocation()) {
+  //         Cards::move($card->getId(), Locations::vassals($suzerain->getEmpireId()));
+  //       } else {
+  //         Cards::move($card->getId(), DISCARD);
+  //       }
+  //     };
+  //     $kingId = $card->getExtraData('kingId');
+  //     if ($kingId !== null) {
+  //       $king = Cards::get($kingId);
+  //       $card->setExtraData('kingId', null);
+  //       if ($king->getLocation() === $card->getLocation()) {
+  //         Cards::move($card->getId(), Locations::queens($king->getEmpireId()));
+  //       } else {
+  //         Cards::move($card->getId(), DISCARD);
+  //       }
+  //     };
+  //   }
+  // }
+
+
   function test()
   {
+    Notifications::log('queen', Cards::get('PREN076_SophiaPalaiologina'));
+    // $this->fixDb();
+    // $this->setExtraData('kingId', $kingCard->getId());
+    // Cards::move('PREN048_MaryTheRich', Locations::tableau(2371053, WEST));
+    // Cards::get('PREN048_MaryTheRich')->setExtraData('kingId', 'EmpireSquare_Portugal');
+
     // Notifications::log('tableau',Cards::getAllCardsInTableaux());
     // Cards::move('PREN046_JoannaTheMad', Locations::queens(ARAGON));
     // $card = Cards::get('EmpireSquare_Aragon');
@@ -39,7 +73,7 @@ trait DebugTrait
     // $this->debugChangeQueen('PREN151X_CatherineOfNavarre');
     // $this->debugChangeQueen('PREN162X_CatherineDeMedici');
 
-    $this->debugPlaceCardInMarket('PREN003_GrandInquisitor');
+    // $this->debugPlaceCardInMarket('PREN062_BarbarossaBrothers');
     // Cards::get('PREN044_IsabellaOfCastille')->discard();
     // Cards::get('EmpireSquare_England')->flip();
     // Notifications::log('king', Cards::get('PREN044_IsabellaOfCastille')->getKing());
@@ -55,7 +89,7 @@ trait DebugTrait
 
     // Cards::get('EmpireSquare_England')->setExtraData('suzerainId','EmpireSquare_PapalStates');
     // Notifications::log('options', TableauOps::get(BEHEAD_OP)->getOptions(Cards::get('PREN088_CemAntiHostage')));
-    Notifications::log('options', TableauOps::get(INQUISITOR_OP_CATHOLIC)->getOptions());
+    // Notifications::log('options', TableauOps::get(INQUISITOR_OP_CATHOLIC)->getOptions());
     // Cards::get('EmpireSquare_Portugal')->setExtraData('suzerain', null);
     // Notifications::log('isNull', Cards::get('EmpireSquare_Aragon')->getExtraData('suzerainId') === null);
     // Notifications::log('owner', Cards::get('EmpireSquare_Aragon')->getSuzerain());
@@ -129,30 +163,30 @@ trait DebugTrait
   }
 
   public function LoadDebug()
-	{
-		// These are the id's from the BGAtable I need to debug.
-		// you can get them by running this query : SELECT JSON_ARRAYAGG(`player_id`) FROM `player`
-		$ids = [
+  {
+    // These are the id's from the BGAtable I need to debug.
+    // you can get them by running this query : SELECT JSON_ARRAYAGG(`player_id`) FROM `player`
+    $ids = [
       85521161,
       86301894,
       91053159,
-		];
-                // You can also get the ids automatically with $ids = array_map(fn($dbPlayer) => intval($dbPlayer['player_id']), array_values($this->getCollectionFromDb('select player_id from player order by player_no')));
+    ];
+    // You can also get the ids automatically with $ids = array_map(fn($dbPlayer) => intval($dbPlayer['player_id']), array_values($this->getCollectionFromDb('select player_id from player order by player_no')));
 
-		// Id of the first player in BGA Studio
-		$sid = 2371052;
-		
-		foreach ($ids as $id) {
-			// basic tables
-			self::DbQuery("UPDATE player SET player_id=$sid WHERE player_id = $id" );
-			self::DbQuery("UPDATE global SET global_value=$sid WHERE global_value = $id" );
-			self::DbQuery("UPDATE stats SET stats_player_id=$sid WHERE stats_player_id = $id" );
-      self::DbQuery("UPDATE player_extra SET player_id=$sid WHERE player_id = $id" );
+    // Id of the first player in BGA Studio
+    $sid = 2371052;
 
-			// 'other' game specific tables. example:
-			// tables specific to your schema that use player_ids
+    foreach ($ids as $id) {
+      // basic tables
+      self::DbQuery("UPDATE player SET player_id=$sid WHERE player_id = $id");
+      self::DbQuery("UPDATE global SET global_value=$sid WHERE global_value = $id");
+      self::DbQuery("UPDATE stats SET stats_player_id=$sid WHERE stats_player_id = $id");
+      self::DbQuery("UPDATE player_extra SET player_id=$sid WHERE player_id = $id");
 
-    
+      // 'other' game specific tables. example:
+      // tables specific to your schema that use player_ids
+
+
 
       // Cards
       self::DbQuery("UPDATE `cards` SET `card_location` = 'tableau_west_$sid' WHERE `cards`.`card_location` = 'tableau_west_$id';");
@@ -165,9 +199,9 @@ trait DebugTrait
        * - turn order
        * - first playuer
        */
-      
 
-			++$sid;
-		}
-	}
+
+      ++$sid;
+    }
+  }
 }

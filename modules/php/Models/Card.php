@@ -126,7 +126,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     Cards::setUsed($this->getId(), $value);
   }
 
-  public function discard($messageType = DISCARD, $player)
+  public function discard($messageType = DISCARD, $player = null)
   {
   }
 
@@ -150,15 +150,9 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     Notifications::placeToken(Players::get(), $token, $fromLocationId, $this);
   }
 
-  public function sell($player)
+  public function sell()
   {
-    $playerId = $player->getId();
-
-    $value = $this->getSellValue();
-    Players::incFlorins($playerId, $value);
-
-    Notifications::sellCard($player, $this, $value);
-    $this->discard(DISCARD, $player);
+    $this->discard();
   }
 
   public function getTokens()

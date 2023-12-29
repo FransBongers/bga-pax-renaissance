@@ -2436,7 +2436,6 @@ var TableauCardManager = (function (_super) {
     TableauCardManager.prototype.updateEmpireCardHeight = function (_a) {
         var card = _a.card, _b = _a.vassalChange, vassalChange = _b === void 0 ? 0 : _b;
         var empire = card.empire;
-        console.log('vassals', this.vassalStocks[empire].getCards());
         var numberOfVassals = this.vassalStocks[empire].getCards().length + vassalChange;
         var queenHeight = getTotalHeightQueens({ queens: card.queens });
         var node = document.getElementById(card.id);
@@ -3832,6 +3831,7 @@ var NotificationManager = (function () {
                     });
                 }
                 if (king === null) {
+                    this.game.tableauCardManager.removeCard(queen);
                     player.tableau.checkOldMaidContainerHeight();
                 }
                 queen.prestige.forEach(function (item) {

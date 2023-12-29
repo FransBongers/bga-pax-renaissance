@@ -39,6 +39,7 @@ use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Preferences;
 use PaxRenaissance\Core\Stats;
+use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Empires;
@@ -128,7 +129,7 @@ class PaxRenaissance extends Table
             'gameMap' => MapBoard::getUiData(),
             'market' => Market::getUiData(),
             'players' => Players::getUiData($playerId),
-            'tokens' => Tokens::getUiData(),            
+            'tokens' => Tokens::getUiData(),
             'victoryCards' => Cards::getVictoryCards(),
         ];
 
@@ -318,8 +319,32 @@ class PaxRenaissance extends Table
         // $from_version is the current version of this game database, in numerical form.
         // For example, if the game was running with a release of your game named "140430-1345",
         // $from_version is equal to 1404301345
-
+        // Notifications::log('upgradeDb', []);
         // Example:
+         // if ($from_version <= 2312262027) {
+            // $cards = Cards::getAllCardsInTableaux();
+            // foreach ($cards as $card) {
+            //     $suzerainId = $card->getExtraData('suzerainId');
+            //     if ($suzerainId !== null) {
+            //         $suzerain = Cards::get($suzerainId);
+            //         if ($suzerain->getLocation() === $card->getLocation()) {
+            //             Cards::move($card->getId(), Locations::vassals($suzerain->getEmpireId()));
+            //         } else {
+            //             Cards::move($card->getId(), DISCARD);
+            //         }
+            //     };
+            //     $kingId = $card->getExtraData('kingId');
+            //     if ($kingId !== null) {
+            //         $king = Cards::get($kingId);
+            //         if ($king->getLocation() === $card->getLocation()) {
+            //             Cards::move($card->getId(), Locations::queens($king->getEmpireId()));
+            //         } else {
+            //             Cards::move($card->getId(), DISCARD);
+            //         }
+            //     };
+            // }
+        // }
+
         //        if( $from_version <= 1404301345 )
         //        {
         //            // ! important ! Use DBPREFIX_<table_name> for all tables

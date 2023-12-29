@@ -20,7 +20,7 @@ class RedSea extends \PaxRenaissance\Models\City
       ],
       ISLAMIC => [
         'levyIcon' => ROOK,
-        'separator' => CATHOLIC,
+        'separator' => ISLAMIC,
       ],
       REFORMIST => [
         'levyIcon' => KNIGHT,

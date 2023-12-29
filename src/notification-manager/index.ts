@@ -199,6 +199,8 @@ class NotificationManager {
       });
     }
     if (king === null) {
+      this.game.tableauCardManager.removeCard(queen);
+
       player.tableau.checkOldMaidContainerHeight();
     }
 

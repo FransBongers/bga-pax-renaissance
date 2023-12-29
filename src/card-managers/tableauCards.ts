@@ -204,7 +204,6 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     vassalChange?: number;
   }) {
     const empire = card.empire;
-    console.log('vassals', this.vassalStocks[empire].getCards());
     const numberOfVassals =
       this.vassalStocks[empire].getCards().length + vassalChange;
     const queenHeight = getTotalHeightQueens({queens: card.queens});

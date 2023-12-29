@@ -114,18 +114,6 @@ class TableauCard extends Card
     Notifications::playCard($player, $this);
   }
 
-  // public function sell($player)
-  // {
-  //   $playerId = $player->getId();
-
-  //   $value = $this->getSellValue();
-  //   Players::incFlorins($playerId, $value);
-
-  //   Notifications::sellCard($player, $this, $value);
-  //   // Cards::move($this->getId(), DISCARD);
-  //   $this->discard(DISCARD, $player);
-  // }
-
   // .##.....##.########.####.##.......####.########.##....##
   // .##.....##....##.....##..##........##.....##.....##..##.
   // .##.....##....##.....##..##........##.....##......####..

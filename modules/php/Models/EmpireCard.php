@@ -250,6 +250,11 @@ class EmpireCard extends Card
   }
 
 
+  public function sell()
+  {
+    $this->returnToThrone();
+  }
+
   public function discardBishopQueenVassals($player)
   {
     $tokens = $this->getTokens();

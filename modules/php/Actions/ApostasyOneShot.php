@@ -65,16 +65,16 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
       foreach ($cardsToDiscard as $cardToDiscard) {
 
         if ($cardToDiscard->isQueen() && Utils::array_find($cardsToDiscard, function ($card) use ($cardToDiscard) {
-          return $card->getType() === EMPIRE_CARD && $card->getQueen()->getId() === $cardToDiscard->getId();
+          return $card->getId() === $cardToDiscard->getKing()->getId();
         }) !== null) {
           continue;
         }
         // TODO: check if this can lead to players becoming active -> discard empire cards?
-        // if ($cardsToDiscard->getType() === EMPIRE_CARD && $cardsToDiscard->getSide() === KING) {
-        //   $cardsToDiscard->returnT
-        // } else {
-        $cardToDiscard->discard(DISCARD, $player);
-        // }
+        if ($cardToDiscard->getType() === EMPIRE_CARD) {
+          $cardToDiscard->returnToThrone();
+        } else {
+          $cardToDiscard->discard(DISCARD, $player);
+        }
       }
     }
 
