@@ -52,6 +52,14 @@ interface OnEnteringBattleLocationArgs extends CommonArgs {
   data: unknown;
 }
 
+type ConstantinopleCityId = 'constantinople1' | 'constantinople2' | 'constantinople3';
+
+interface OnEnteringBattleReconfigureConstantinopleArgs extends CommonArgs {
+  constantinople1: Token | null;
+  constantinople2: Token | null;
+  constantinople3: Token | null;
+}
+
 interface OnEnteringBishopPacificationArgs extends CommonArgs {
   tokens: Token[];
 }

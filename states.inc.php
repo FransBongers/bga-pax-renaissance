@@ -364,6 +364,16 @@ $machinestates = [
         'transitions' => [],
     ],
 
+    ST_BATTLE_RECONFIGURE_CONSTANTINOPLE => [
+        'name' => 'battleReconfigureContantinople',
+        'description' => clienttranslate('${actplayer} may move Tokens within Constantinople'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actBattleReconfigureContantinople', 'actPassOptionalAction', 'actRestart'],
+    ],
+
     ST_REGIME_CHANGE_MOVE_EMPIRE_SQUARE => [
         'name' => 'regimeChangeMoveEmpireSquare',
         'description' => '',

@@ -56,7 +56,7 @@ class BattleMapChangeReligiousWar extends \PaxRenaissance\Models\AtomicAction
     $source = $parentInfo['source'];
     
     if (!($parentInfo['battleVictorious'] && isset($this->religiousWarOneShots[$source]))) {
-      $this->resolveAction([]);
+      $this->resolveAction(['automatic' => true]);
       return;  
     }
 
@@ -67,7 +67,7 @@ class BattleMapChangeReligiousWar extends \PaxRenaissance\Models\AtomicAction
 
     $empire->changeToTheocracy($religion);
 
-    $this->resolveAction([]);
+    $this->resolveAction(['automatic' => true]);
   }
 
   //  .##.....##.########.####.##.......####.########.##....##
@@ -77,5 +77,4 @@ class BattleMapChangeReligiousWar extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
-
 }

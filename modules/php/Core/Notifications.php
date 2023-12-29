@@ -396,6 +396,15 @@ class Notifications
     ]);
   }
 
+  public static function moveTokensWithinConstantinople($player, $tokens)
+  {
+    self::notifyAll("moveTokensWithinConstantinople", clienttranslate('${tkn_playerName} moves tokens within ${tkn_boldText}'), [
+      'player' => $player,
+      'tkn_boldText' => 'Constantinople',
+      'tokens' => $tokens,
+    ]);
+  }
+
   public static function oldMaid($player, $queenCard)
   {
     self::notifyAll("oldMaid", clienttranslate('${tkn_playerName} plays ${tkn_cardName} as an Old Maid'), [

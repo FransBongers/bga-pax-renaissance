@@ -66,6 +66,7 @@
     "src/states/AnnounceOneShot.ts",
     "src/states/BattleCasualties.ts",
     "src/states/BattleLocation.ts",
+    "src/states/BattleReconfigureConstantinople.ts",
     "src/states/BishopPacification.ts",
     "src/states/Coronation.ts",
     "src/states/ClientDeclareVictory.ts",

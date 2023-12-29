@@ -21,6 +21,7 @@ class AtomicActions
     BATTLE_CHECK_REGIME_CHANGE => 'BattleCheckRegimeChange',
     BATTLE_LOCATION => 'BattleLocation',
     BATTLE_MAP_CHANGE_RELIGIOUS_WAR => 'BattleMapChangeReligiousWar',
+    BATTLE_RECONFIGURE_CONSTANTINOPLE => 'BattleReconfigureContantinople',
     BATTLE_RESULT => 'BattleResult',
     BISHOP_DIET_OF_WORMS => 'BishopDietOfWorms',
     BISHOP_PACIFICATION => 'BishopPacification',

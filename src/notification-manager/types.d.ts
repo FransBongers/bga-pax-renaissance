@@ -112,6 +112,10 @@ interface NotifMoveTokenArgs extends NotifWithPlayerArgs {
   token: Token;
 }
 
+interface NotifMoveTokensWithinContantinopleArgs extends NotifWithPlayerArgs {
+  tokens: Token[];
+}
+
 interface NotifOldMaidArgs extends NotifWithPlayerArgs {
   card: QueenCard;
 }

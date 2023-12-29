@@ -87,6 +87,15 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actBattleReconfigureContantinople()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actBattleReconfigureContantinople', $args);
+    self::ajaxResponse();
+  }
+
   public function actBattleLocation()
   {
     self::setAjaxMode();

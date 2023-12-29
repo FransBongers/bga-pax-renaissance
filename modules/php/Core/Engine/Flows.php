@@ -67,6 +67,11 @@ abstract class Flows
           'playerId' => $playerId,
         ],
         [
+          'action' => BATTLE_RECONFIGURE_CONSTANTINOPLE,
+          'playerId' => $playerId,
+          'optional' => true,
+        ],
+        [
           'action' => BATTLE_CHECK_REGIME_CHANGE,
           'playerId' => $playerId,
         ],

@@ -1810,6 +1810,7 @@ var PaxRenaissance = (function () {
             _a.announceOneShot = new AnnounceOneShotState(this),
             _a.battleCasualties = new BattleCasualtiesState(this),
             _a.battleLocation = new BattleLocationState(this),
+            _a.battleReconfigureContantinople = new BattleReconfigureConstantinopleState(this),
             _a.bishopPacification = new BishopPacificationState(this),
             _a.confirmPartialTurn = new ConfirmPartialTurnState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
@@ -3699,6 +3700,7 @@ var NotificationManager = (function () {
             ["flipVictoryCard", undefined],
             ["moveEmpireSquare", undefined],
             ["moveToken", undefined],
+            ["moveTokensWithinConstantinople", undefined],
             ["oldMaid", undefined],
             ["payFlorinsToChina", undefined],
             ["placeToken", undefined],
@@ -3955,6 +3957,31 @@ var NotificationManager = (function () {
                         _b.sent();
                         _b.label = 2;
                     case 2: return [2, Promise.resolve()];
+                }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_moveTokensWithinConstantinople = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var tokens, animations;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        tokens = notif.args.tokens;
+                        animations = [];
+                        tokens.forEach(function (token) {
+                            var tokenNode = document.getElementById(token.id);
+                            var cityNode = document.getElementById("pr_".concat(token.location));
+                            if (!(tokenNode && cityNode)) {
+                                return;
+                            }
+                            animations.push(_this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), cityNode));
+                        });
+                        return [4, Promise.all(animations)];
+                    case 1:
+                        _a.sent();
+                        return [2];
                 }
             });
         });
@@ -5195,6 +5222,206 @@ var BattleLocationState = (function () {
         });
     };
     return BattleLocationState;
+}());
+var BattleReconfigureConstantinopleState = (function () {
+    function BattleReconfigureConstantinopleState(game) {
+        var _a;
+        this.constantinopleCities = [
+            CONSTANTINOPLE_1,
+            CONSTANTINOPLE_2,
+            CONSTANTINOPLE_3,
+        ];
+        this.cityConfiguration = (_a = {},
+            _a[CONSTANTINOPLE_1] = null,
+            _a[CONSTANTINOPLE_2] = null,
+            _a[CONSTANTINOPLE_3] = null,
+            _a);
+        this.game = game;
+    }
+    BattleReconfigureConstantinopleState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.copyCityConfig();
+        this.updateInterfaceInitialStep();
+    };
+    BattleReconfigureConstantinopleState.prototype.onLeavingState = function () {
+        debug("Leaving BattleReconfigureConstantinopleState");
+    };
+    BattleReconfigureConstantinopleState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may move Tokens within Constantinople"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    BattleReconfigureConstantinopleState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Token to move within Constantinople"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setTokensSelectable();
+        this.checkConfirmAndResetButton();
+        this.game.addPassButton({ optionalAction: this.args.optionalAction });
+        this.game.addUndoButtons(this.args);
+    };
+    BattleReconfigureConstantinopleState.prototype.updateInterfaceSelectPosition = function (_a) {
+        var cityId = _a.cityId, token = _a.token;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: token.id });
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a spot to move to or Token to switch with"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setDestinationsSelectable({ cityId: cityId });
+        this.addResetButton();
+    };
+    BattleReconfigureConstantinopleState.prototype.copyCityConfig = function () {
+        var _this = this;
+        this.constantinopleCities.forEach(function (cityId) {
+            _this.cityConfiguration[cityId] = _this.args[cityId];
+        });
+    };
+    BattleReconfigureConstantinopleState.prototype.checkConfirmAndResetButton = function () {
+        var _this = this;
+        var changes = this.constantinopleCities.some(function (cityId) {
+            var _a, _b;
+            return ((_a = _this.cityConfiguration[cityId]) === null || _a === void 0 ? void 0 : _a.id) !== ((_b = _this.args[cityId]) === null || _b === void 0 ? void 0 : _b.id);
+        });
+        if (!changes) {
+            return;
+        }
+        this.game.addConfirmButton({
+            callback: function () {
+                var _a;
+                var _b, _c, _d;
+                _this.game.clearPossible();
+                _this.game.takeAction({
+                    action: "actBattleReconfigureContantinople",
+                    args: (_a = {},
+                        _a[CONSTANTINOPLE_1] = ((_b = _this.cityConfiguration[CONSTANTINOPLE_1]) === null || _b === void 0 ? void 0 : _b.id) || null,
+                        _a[CONSTANTINOPLE_2] = ((_c = _this.cityConfiguration[CONSTANTINOPLE_2]) === null || _c === void 0 ? void 0 : _c.id) || null,
+                        _a[CONSTANTINOPLE_3] = ((_d = _this.cityConfiguration[CONSTANTINOPLE_3]) === null || _d === void 0 ? void 0 : _d.id) || null,
+                        _a),
+                });
+            },
+        });
+        this.addResetButton();
+    };
+    BattleReconfigureConstantinopleState.prototype.addResetButton = function () {
+        var _this = this;
+        this.game.addDangerActionButton({
+            id: "reset_btn",
+            text: _("Reset"),
+            callback: function () { return _this.onReset(); },
+        });
+    };
+    BattleReconfigureConstantinopleState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        this.constantinopleCities.forEach(function (cityId) {
+            if (_this.cityConfiguration[cityId] === null) {
+                return;
+            }
+            var token = _this.cityConfiguration[cityId];
+            _this.game.setTokenSelectable({
+                id: token.id,
+                callback: function () { return _this.updateInterfaceSelectPosition({ cityId: cityId, token: token }); },
+            });
+        });
+    };
+    BattleReconfigureConstantinopleState.prototype.setDestinationsSelectable = function (_a) {
+        var _this = this;
+        var activeCityId = _a.cityId;
+        this.constantinopleCities.forEach(function (cityId) {
+            if (cityId === activeCityId) {
+                return;
+            }
+            if (_this.cityConfiguration[cityId] === null) {
+                _this.game.setLocationSelectable({
+                    id: cityId,
+                    callback: function () {
+                        _this.onMove({ fromCityId: activeCityId, toCityId: cityId });
+                    },
+                });
+            }
+            else {
+                _this.game.setTokenSelectable({
+                    id: _this.cityConfiguration[cityId].id,
+                    callback: function () {
+                        _this.onMove({ fromCityId: activeCityId, toCityId: cityId });
+                    },
+                });
+            }
+        });
+    };
+    BattleReconfigureConstantinopleState.prototype.onMove = function (_a) {
+        var fromCityId = _a.fromCityId, toCityId = _a.toCityId;
+        return __awaiter(this, void 0, void 0, function () {
+            var fromCityNode, toCityNode, selectedToken, targetToken, switchTokenNode, animations, tokenNode;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        fromCityNode = document.getElementById("pr_".concat(fromCityId));
+                        toCityNode = document.getElementById("pr_".concat(toCityId));
+                        selectedToken = this.cityConfiguration[fromCityId];
+                        targetToken = this.cityConfiguration[toCityId];
+                        if (!(fromCityNode && toCityNode)) {
+                            return [2];
+                        }
+                        switchTokenNode = targetToken === null ? null : document.getElementById(targetToken.id);
+                        animations = [];
+                        if (switchTokenNode) {
+                            animations.push(this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: switchTokenNode }), fromCityNode));
+                        }
+                        tokenNode = document.getElementById(selectedToken.id);
+                        animations.push(this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), toCityNode));
+                        return [4, Promise.all(animations)];
+                    case 1:
+                        _b.sent();
+                        this.cityConfiguration[fromCityId] = targetToken;
+                        this.cityConfiguration[toCityId] = selectedToken;
+                        this.updateInterfaceInitialStep();
+                        return [2];
+                }
+            });
+        });
+    };
+    BattleReconfigureConstantinopleState.prototype.onReset = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var animations;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        console.log("reset");
+                        this.copyCityConfig();
+                        animations = [];
+                        this.constantinopleCities.forEach(function (cityId) {
+                            var token = _this.cityConfiguration[cityId];
+                            if (token === null) {
+                                return;
+                            }
+                            var tokenNode = document.getElementById(token.id);
+                            var cityNode = document.getElementById("pr_".concat(cityId));
+                            animations.push(_this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), cityNode));
+                        });
+                        return [4, Promise.all(animations)];
+                    case 1:
+                        _a.sent();
+                        this.updateInterfaceInitialStep();
+                        return [2];
+                }
+            });
+        });
+    };
+    return BattleReconfigureConstantinopleState;
 }());
 var BishopPacificationState = (function () {
     function BishopPacificationState(game) {

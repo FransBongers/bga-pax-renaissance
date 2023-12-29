@@ -46,6 +46,7 @@ class NotificationManager {
       ["flipVictoryCard", undefined],
       ["moveEmpireSquare", undefined],
       ["moveToken", undefined],
+      ["moveTokensWithinConstantinople", undefined],
       ["oldMaid", undefined],
       ["payFlorinsToChina", undefined],
       ["placeToken", undefined],
@@ -307,6 +308,25 @@ class NotificationManager {
     // }
 
     return Promise.resolve();
+  }
+
+  async notif_moveTokensWithinConstantinople(notif: Notif<NotifMoveTokensWithinContantinopleArgs>) {
+    const {tokens} = notif.args;
+    const animations = [];
+    tokens.forEach((token) => {
+      const tokenNode = document.getElementById(token.id);
+      const cityNode = document.getElementById(`pr_${token.location}`);
+      if (!(tokenNode && cityNode)) {
+        return;
+      }
+      animations.push(
+        this.game.animationManager.attachWithAnimation(
+          new BgaSlideAnimation({ element: tokenNode }),
+          cityNode
+        )
+      );
+    })
+    await Promise.all(animations);
   }
 
   async notif_oldMaid(notif: Notif<NotifOldMaidArgs>) {

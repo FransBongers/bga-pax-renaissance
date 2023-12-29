@@ -34,6 +34,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     announceOneShot: AnnounceOneShotState;
     battleCasualties: BattleCasualtiesState;
     battleLocation: BattleLocationState;
+    battleReconfigureContantinople: BattleReconfigureConstantinopleState;
     bishopPacification: BishopPacificationState;
     confirmPartialTurn: ConfirmPartialTurnState;
     confirmTurn: ConfirmTurnState;
@@ -95,6 +96,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       announceOneShot: new AnnounceOneShotState(this),
       battleCasualties: new BattleCasualtiesState(this),
       battleLocation: new BattleLocationState(this),
+      battleReconfigureContantinople: new BattleReconfigureConstantinopleState(this),
       bishopPacification: new BishopPacificationState(this),
       confirmPartialTurn: new ConfirmPartialTurnState(this),
       confirmTurn: new ConfirmTurnState(this),
