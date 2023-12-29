@@ -40,6 +40,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     coronationOneShot: CoronationState,
     flipVictoryCard: FlipVictoryCardState;
     placeAgent: PlaceAgentState;
+    placeLevySelectCity: PlaceLevySelectCityState;
     playerAction: PlayerActionState;
     regimeChangeEmancipation: RegimeChangeEmancipationState;
     regimeChangeGoldenLiberty: RegimeChangeGoldenLibertyState;
@@ -100,6 +101,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       coronationOneShot: new CoronationState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
       placeAgent: new PlaceAgentState(this),
+      placeLevySelectCity: new PlaceLevySelectCityState(this),
       playerAction: new PlayerActionState(this),
       regimeChangeEmancipation: new RegimeChangeEmancipationState(this),
       regimeChangeGoldenLiberty: new RegimeChangeGoldenLibertyState(this),

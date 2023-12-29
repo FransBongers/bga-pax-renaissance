@@ -48,7 +48,7 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
     $availableOps = $this->getAvailableOps($player);
 
     if (count($availableOps) === 0) {
-      $this->resolveAction([]);
+      $this->resolveAction(['automatic' => true]);
     }
   }
 

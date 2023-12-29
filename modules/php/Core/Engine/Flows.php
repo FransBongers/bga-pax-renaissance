@@ -11,6 +11,19 @@ use PaxRenaissance\Core\Globals;
  */
 abstract class Flows
 {
+  public static function placeLevy($empireId, $playerId)
+  {
+    return [
+      'empireId' => $empireId,
+      'children' => [
+        [
+          'action' => PLACE_LEVY_AUTO_CHECK,
+          'playerId' => $playerId,
+        ],
+      ]
+    ];
+  }
+
 
   public static function placeToken($playerId, $fromSupply, $toLocationId, $toLocationType, $empireId = null, $repressCost = 0)
   {

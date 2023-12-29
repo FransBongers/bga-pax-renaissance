@@ -1,19 +1,18 @@
-// TODO: remove
-class TradeFairLevyState implements State {
+class PlaceLevySelectCityState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringTradeFairLevyArgs;
+  private args: OnEnteringPlaceLevySelectCityArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringTradeFairLevyArgs) {
+  onEnteringState(args: OnEnteringPlaceLevySelectCityArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving TradeFairLevyState");
+    debug("Leaving PlaceLevySelectCityState");
   }
 
   setDescription(activePlayerId: number) {
@@ -76,7 +75,7 @@ class TradeFairLevyState implements State {
     this.game.addConfirmButton({
       callback: () =>
         this.game.takeAction({
-          action: "actTradeFairLevy",
+          action: "actPlaceLevySelectCity",
           args: {
             cityId,
           },

@@ -2051,29 +2051,29 @@
   display: none;
 }
 
-.log > .roundedbox .pr_icon {
+.log > .roundedbox .pr_icon, .log > .roundedboxinner .pr_icon {
   display: inline-block;
 }
-.log > .roundedbox .pr_icon[data-icon=florin] {
+.log > .roundedbox .pr_icon[data-icon=florin], .log > .roundedboxinner .pr_icon[data-icon=florin] {
   --paxRenIconScale: 0.5;
   margin-bottom: -6px;
 }
-.log > .roundedbox .pr_token {
+.log > .roundedbox .pr_token, .log > .roundedboxinner .pr_token {
   display: inline-block;
   --paxRenTokenScale: 0.7;
   margin-bottom: -5px;
 }
-.log > .roundedbox .pr_prestige_icon {
+.log > .roundedbox .pr_prestige_icon, .log > .roundedboxinner .pr_prestige_icon {
   margin-bottom: -6px;
   --paxRenIconScale: 0.8;
 }
-.log > .roundedbox .pr_tableau_op {
+.log > .roundedbox .pr_tableau_op, .log > .roundedboxinner .pr_tableau_op {
   --paxRenIconScale: 0.8;
 }
-.log > .roundedbox .pr_card {
+.log > .roundedbox .pr_card, .log > .roundedboxinner .pr_card {
   --paxRenCardScale: 0.5;
 }
-.log > .roundedbox .pr_square_card {
+.log > .roundedbox .pr_square_card, .log > .roundedboxinner .pr_square_card {
   --paxRenCardScale: 0.5;
 }
 

@@ -3,6 +3,7 @@
 namespace PaxRenaissance\Actions;
 
 use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\Flows;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
@@ -54,7 +55,7 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
     }
 
 
-    $this->resolveAction(['region' => $region]);
+    $this->resolveAction(['region' => $region, 'automatic' => true]);
   }
 
   // TODO: Bankruptcy variant
@@ -82,12 +83,13 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
         'playerId' => $this->ctx->getPlayerId(),
         'borderId' => $location,
         'tradeFair' => $region,
-      ]) : new LeafNode([
-        'action' => TRADE_FAIR_LEVY,
-        'playerId' => $this->ctx->getPlayerId(),
-        'empireId' => $location,
+      ]) : Engine::buildTree(Flows::placeLevy($location, $this->ctx->getPlayerId()));
+      // new LeafNode([
+      //   'action' => TRADE_FAIR_LEVY,
+      //   'playerId' => $this->ctx->getPlayerId(),
+      //   'empireId' => $location,
 
-      ]);
+      // ]);
       $parent->pushChild($action);
     };
   }

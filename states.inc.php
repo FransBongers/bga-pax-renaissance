@@ -492,6 +492,15 @@ $machinestates = [
         'possibleactions' => ['actTableauOpTax', 'pass', 'actRestart'],
     ],
 
+    ST_TABLEAU_OP_TAX_FLORINS_CHECK => [
+        'name' => 'tableauOpTaxFlorinsCheck',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+
     ST_TABLEAU_OP_TAX_PAY_OR_REPRESS => [
         'name' => 'tableauOpTaxPayOrRepress',
         'description' => clienttranslate('${actplayer} must choose to pay or Repress'),
@@ -510,6 +519,25 @@ $machinestates = [
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
         'possibleactions' => ['actTableauOpVote', 'pass', 'actRestart'],
+    ],
+
+    ST_PLACE_LEVY_AUTO_CHECK => [
+        'name' => 'placeLevyAutoCheck',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_PLACE_LEVY_SELECT => [
+        'name' => 'placeLevySelectCity',
+        'description' => clienttranslate('${actplayer} must choose a City to place a Levy'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        // 'transitions' => [],
+        'possibleactions' => ['actPlaceLevySelectCity', 'actRestart'],
     ],
 
     ST_CLEANUP => [

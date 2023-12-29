@@ -64,12 +64,12 @@ class Token extends \PaxRenaissance\Helpers\DB_Model
     return $this->type;
   }
 
-  public function repress($empireId, $cost = 1)
+  public function repress($empireId, $cost = 1, $player = null)
   {
     $oldLocation = $this->getLocationInstance();
 
     $this->move(Empires::get($empireId)->getEmpireSquareId(), false);
-    $player = Players::get();
+    $player = $player === null ? Players::get() : $player;
     if ($cost !== 0) {
       $player->incFlorins(-$cost); // TODO depends on why token is repressed
     }

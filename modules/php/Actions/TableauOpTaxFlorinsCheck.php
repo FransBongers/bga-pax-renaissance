@@ -4,6 +4,7 @@ namespace PaxRenaissance\Actions;
 
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\Flows;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
@@ -15,14 +16,15 @@ use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
+use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
+class TableauOpTaxFlorinsCheck extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_RESOLVE_PLACE_TOKEN;
+    return ST_TABLEAU_OP_TAX_FLORINS_CHECK;
   }
 
   // ..######..########....###....########.########
@@ -41,59 +43,25 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stResolvePlaceToken()
+  public function stTableauOpTaxFlorinsCheck()
   {
-
-    $info = $this->ctx->getParent()->getInfo();
-    // Notifications::log('stResolvePlaceToken',$info);
-    $locationId = $info['toLocationId'];
-    $locationType = $info['toLocationType'];
-    $repressCost = $info['repressCost'];
-    $supply = $info['fromSupply'];
-    $empireId = isset($info['empireId']) ? $info['empireId'] : null;
-
-    // $locationType = $stateArgs['locations'][$locationId]['type'];
-
-    // $player = self::getPlayer();
-
-    // $type = $agent['type'];
-    // $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['separator']);
-
-    $token = isset($info['tokenId']) ? Tokens::get($info['tokenId']) : Tokens::getTopOf($supply);
-
-
-    // Supply is empty and no token has been selected yet
-    if ($token === null) {
-      // Push child in front to select token
-      $this->ctx->getParent()->unshiftChild(
-        new LeafNode([
-          'action' => SELECT_TOKEN,
-          'playerId' => $this->ctx->getPlayerId(),
-          'fromSupply' => $supply
-        ])
-      );
-
-      Engine::save();
-      Engine::proceed();
-      return;
-    }
-
-    // Notifications::log('token', $token);
-    if ($locationType === BORDER) {
-      Borders::get($locationId)->placeToken($token, $empireId, $repressCost);
-    } else if ($locationType === CITY) {
-      Cities::get($locationId)->placeToken($token, $repressCost);
-    } else if ($locationType === TABLEAU_CARD) {
-      Cards::get($locationId)->placeToken($token, $this->ctx);
-    } else if ($locationType === EMPIRE_CARD) {
-      Cards::get($locationId)->placeToken($token, $this->ctx);
+    $info = $this->ctx->getInfo();
+    $owner = Players::get($info['playerId']);
+    if ($owner->getFlorins() > 0) {
+      $this->ctx->insertAsBrother(new LeafNode([
+        'action' => TABLEAU_OP_TAX_PAY_OR_REPRESS,
+        'playerId' => $owner->getId(),
+        'empireId' => $info['empireId'],
+        'tokenId' => $info['tokenId'],
+      ]));
+     
+    } else {
+      Notifications::tableauOpTaxNoFlorins($owner);
+      $this->resolveRepress($owner);
     }
 
     $this->resolveAction(['automatic' => true]);
   }
-
-
-
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -102,4 +70,12 @@ class ResolvePlaceToken extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private function resolveRepress($owner)
+  {
+    $info = $this->ctx->getInfo();
+    $tokenId = $info['tokenId'];
+    $empireId = $info['empireId'];
+    Tokens::get($tokenId)->repress($empireId, 0, $owner);
+  }
 }

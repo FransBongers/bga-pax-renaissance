@@ -1816,6 +1816,7 @@ var PaxRenaissance = (function () {
             _a.coronationOneShot = new CoronationState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
             _a.placeAgent = new PlaceAgentState(this),
+            _a.placeLevySelectCity = new PlaceLevySelectCityState(this),
             _a.playerAction = new PlayerActionState(this),
             _a.regimeChangeEmancipation = new RegimeChangeEmancipationState(this),
             _a.regimeChangeGoldenLiberty = new RegimeChangeGoldenLibertyState(this),
@@ -5888,6 +5889,73 @@ var PlaceAgentState = (function () {
         }
     };
     return PlaceAgentState;
+}());
+var PlaceLevySelectCityState = (function () {
+    function PlaceLevySelectCityState(game) {
+        this.game = game;
+    }
+    PlaceLevySelectCityState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    PlaceLevySelectCityState.prototype.onLeavingState = function () {
+        debug("Leaving PlaceLevySelectCityState");
+    };
+    PlaceLevySelectCityState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a City to place a Levy"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    PlaceLevySelectCityState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a City in ${empireName} to place a Levy"),
+            args: {
+                tkn_playerName: "${you}",
+                empireName: _(this.args.empire.name)
+            },
+        });
+        Object.keys(this.args.possibleLevies).forEach(function (cityId) {
+            _this.game.setLocationSelectable({
+                id: cityId,
+                callback: function () { return _this.updateInterfaceConfirmPlaceLevy({ cityId: cityId }); },
+            });
+        });
+        this.game.addUndoButtons(this.args);
+    };
+    PlaceLevySelectCityState.prototype.updateInterfaceConfirmPlaceLevy = function (_a) {
+        var _this = this;
+        var cityId = _a.cityId;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: cityId });
+        var _b = this.args.possibleLevies[cityId].levy, separator = _b.separator, levyIcon = _b.levyIcon;
+        this.game.clientUpdatePageTitle({
+            text: _("Place ${tkn_mapToken} in ${cityName}?"),
+            args: {
+                tkn_mapToken: [separator, levyIcon].join('_'),
+                cityName: _(this.args.possibleLevies[cityId].cityName)
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlaceLevySelectCity",
+                    args: {
+                        cityId: cityId,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    return PlaceLevySelectCityState;
 }());
 var PlayerActionState = (function () {
     function PlayerActionState(game) {

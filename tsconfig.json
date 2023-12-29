@@ -75,6 +75,7 @@
     "src/states/ConfirmTurn.ts",
     "src/states/FlipVictoryCard.ts",
     "src/states/PlaceAgent.ts",
+    "src/states/PlaceLevySelectCity.ts",
     "src/states/PlayerAction.ts",
     "src/states/RegimeChangeEmancipation.ts",
     "src/states/RegimeChangeGoldenLiberty.ts",

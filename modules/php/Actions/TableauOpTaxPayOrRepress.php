@@ -45,13 +45,13 @@ class TableauOpTaxPayOrRepress extends \PaxRenaissance\Models\AtomicAction
 
   public function stTableauOpTaxPayOrRepress()
   {
-    $player = self::getPlayer();
-    if ($player->getFlorins() > 0) {
-      return;
-    }
-    Notifications::tableauOpTaxNoFlorins($player);
-    $this->resolveRepress();
-    // $this->resolveAction([]);
+    // $player = self::getPlayer();
+    // if ($player->getFlorins() > 0) {
+    //   return;
+    // }
+    // Notifications::tableauOpTaxNoFlorins($player);
+    // $this->resolveRepress();
+    // // $this->resolveAction([]);
   }
 
   // ....###....########...######....######.

@@ -17,6 +17,7 @@ use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 
+// TODO remove
 class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()

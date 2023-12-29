@@ -85,6 +85,19 @@ interface OnEnteringPlaceAgentsArgs extends CommonArgs {
   repressCost: number;
 }
 
+interface OnEnteringPlaceLevySelectCityArgs extends CommonArgs {
+  empire: Empire;
+  possibleLevies: {
+    [cityId: string]: {
+      cityName: string;
+      levy: {
+        levyIcon: string;
+        separator: string;
+      };
+    };
+  };
+}
+
 interface RoyalCouple {
   king: EmpireCard;
   queens: QueenCard[];
@@ -197,6 +210,7 @@ interface OnEnteringTableauOpsSelectArgs extends CommonArgs {
   optional: boolean;
 }
 
+// TODO: remove
 interface OnEnteringTradeFairLevyArgs extends CommonArgs {
   empire: Empire;
   possibleLevies: {
