@@ -56,8 +56,12 @@ class QueenCard extends TableauCard
   // .##.....##....##.....##..##........##.....##.......##...
   // ..#######.....##....####.########.####....##.......##...
 
-  public function isSilenced()
+  public function isSilenced($player)
   {
+    if ($player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
+      return false;
+    }
+
     $king = $this->getKing();
     $tokens = $this->getTokens();
     if ($king !== null) {

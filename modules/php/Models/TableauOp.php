@@ -80,7 +80,7 @@ class TableauOp implements \JsonSerializable
     if ($card->getUsed() === 1) {
       return false;
     }
-    if ($this->type !== RELIGIOUS && $card->isSilenced()) {
+    if ($this->type !== RELIGIOUS && $card->isSilenced($player)) {
       return false;
     }
     return true;

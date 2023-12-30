@@ -214,7 +214,7 @@ const tplTableauCardTooltip = ({ card, game }: { card: TableauCard | QueenCard; 
       ${(card.specialAbilities || []).map((specialAbility) => `
         <span class="pr_section_title">${specialAbility.title ? _(specialAbility.title) : _('Ability')}</span>
         <span>${game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args)}</span>
-      `)}
+      `).join('')}
     `,
   });
 };

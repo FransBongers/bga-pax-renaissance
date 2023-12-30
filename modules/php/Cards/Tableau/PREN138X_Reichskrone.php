@@ -2,6 +2,8 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Managers\Players;
+
 class PREN138X_Reichskrone extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
@@ -41,9 +43,11 @@ class PREN138X_Reichskrone extends \PaxRenaissance\Models\QueenCard
     ];
   }
 
-  public function getSellValue()
+  public function getSellValue($player = null)
   {
-    if ($this->isInTableau() && !$this->isSilenced()) {
+    $player = $player === null ? Players::get() : $player;
+
+    if ($this->isInTableau() && !$this->isSilenced($player)) {
       return 4;
     }
     return 2;

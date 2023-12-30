@@ -248,14 +248,12 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   {
     $tableauCards = $this->getTableauCards();
     return Utils::array_some($tableauCards, function ($card) use ($specialAbilityId) {
-      $hasSpecialAbility = Utils::array_some($card->getSpecialAbilities(), function ($specialAbility) use ($specialAbilityId) {
-        return $specialAbility['id'] === $specialAbilityId;
-      });
+      $hasSpecialAbility = $card->hasSpecialAbility($specialAbilityId);
       if (!$hasSpecialAbility) {
         return false;
       }
 
-      return !$card->isSilenced();
+      return !$card->isSilenced($this);
     });
   }
 

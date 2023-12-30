@@ -22,11 +22,15 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
   }
 
   public function canBeDeclaredByPlayer($activePlayer)
-  {
-
+  { 
     if (!$this->isActive()) {
       return false;
     }
+
+    if (!$this->playerHasRequiredActions(SA_DECLARE_HOLY_COSTS_TWO_ACTIONS)) {
+      return false;
+    }
+
     $supremeReligion = $this->getSupremeReligion();
     if ($supremeReligion === null) {
       return false;

@@ -2,6 +2,8 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Managers\Players;
+
 class PREN021_Conquistadors extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -53,9 +55,11 @@ class PREN021_Conquistadors extends \PaxRenaissance\Models\TableauCard
     ];
   }
 
-  public function getSellValue()
+  public function getSellValue($player = null)
   {
-    if ($this->isInTableau() && !$this->isSilenced()) {
+    $player = $player === null ? Players::get() : $player;
+
+    if ($this->isInTableau() && !$this->isSilenced($player)) {
       return 4;
     }
     return 2;

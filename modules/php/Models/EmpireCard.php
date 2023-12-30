@@ -324,8 +324,12 @@ class EmpireCard extends Card
     }
   }
 
-  public function isSilenced()
+  public function isSilenced($player)
   {
+    if ($player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
+      return false;
+    }
+
     $queens = $this->getQueens();
     $tokens = $this->getTokens();
     foreach ($queens as $queen) {

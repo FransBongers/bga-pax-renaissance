@@ -42,7 +42,6 @@ class FreeAction extends \PaxRenaissance\Models\AtomicAction
 
   public function stFreeAction()
   {
-    Notifications::log('checking free actions', []);
     $player = self::getPlayer();
     $freeActions = $player->getAbilityActions();
     if (count($freeActions) > 0) {

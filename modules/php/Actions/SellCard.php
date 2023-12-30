@@ -46,7 +46,7 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
     }
     $king = $royalCouple['king'];
     $queens = $royalCouple['queens'];
-    $value = $this->getTotalValueRoyalCouple($king, $queens);
+    $value = $this->getTotalValueRoyalCouple($player, $king, $queens);
 
     Players::incFlorins($player->getId(), $value);
 
@@ -69,7 +69,7 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
 
     $playerId = $player->getId();
 
-    $value = $card->getSellValue();
+    $value = $card->getSellValue($player);
     Players::incFlorins($playerId, $value);
 
     Notifications::sellCard($player, $card, $value);
@@ -77,7 +77,7 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
     $card->sell();
   }
 
-  private function getTotalValueRoyalCouple($king, $queens) {
+  private function getTotalValueRoyalCouple($player, $king, $queens) {
     $totalValue = $king->getSellValue();
     foreach($queens as $queen) {
       $totalValue += $queen->getSellValue();

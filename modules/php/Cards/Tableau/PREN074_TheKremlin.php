@@ -30,5 +30,15 @@ class PREN074_TheKremlin extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_IMMUNE_TO_SILENCING,
+        'title' => clienttranslate('SYNCRETISM:'),
+        'text' => [
+          'log' => clienttranslate('Your cards are immune to silencing by Bishops.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

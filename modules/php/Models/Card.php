@@ -44,7 +44,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return $this->ops === null ? [] : $this->ops;
   }
 
-  public function getSellValue()
+  public function getSellValue($player = null)
   {
     return 2;
   }
@@ -102,8 +102,28 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return false;
   }
 
-  public function isSilenced()
+  /**
+   * Note, does not check if card is silenced
+   */
+  public function hasSpecialAbility($specialAbilityId)
   {
+    return Utils::array_some($this->getSpecialAbilities(), function ($specialAbility) use ($specialAbilityId) {
+      return $specialAbility['id'] === $specialAbilityId;
+    });
+  }
+
+  public function isSilenced($player)
+  {
+    // Need for the card itself to prevent infininte loop
+    if ($this->hasSpecialAbility(SA_IMMUNE_TO_SILENCING))
+    {
+      return false;
+    }
+
+    if ($player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
+      return false;
+    }
+
     $tokens = $this->getTokens();
     $hasBishop = Utils::array_some($tokens, function ($token) {
       return $token->getType() === BISHOP;
