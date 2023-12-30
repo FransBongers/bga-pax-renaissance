@@ -2,6 +2,9 @@
 
 namespace PaxRenaissance\Models;
 
+use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Managers\Players;
+
 class VictoryCard extends Card
 {
   protected $type = VICTORY_CARD;
@@ -55,5 +58,23 @@ class VictoryCard extends Card
       ],
       'type' => $this->type,
     ]);
+  }
+
+  /**
+   * Use to check all abilities that increase number of actions needed
+   * to declare victory to 2
+   */
+  public function playerHasRequiredActions($specialAbilityId)
+  {
+    $abilityIsInPlay = Players::anyPlayerHasSpecialAbility($specialAbilityId);
+    if (!$abilityIsInPlay) {
+      return true;
+    }
+    // We need to add DECLARE_VICTORY because when taking the action the PLAYER_ACTION will be marked as resolved.
+    if ($abilityIsInPlay && count(Engine::getUnresolvedActions([PLAYER_ACTION, DECLARE_VICTORY])) < 2) {
+      return false;
+    }
+
+    return true;
   }
 }

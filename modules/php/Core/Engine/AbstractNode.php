@@ -1,5 +1,7 @@
 <?php
+
 namespace PaxRenaissance\Core\Engine;
+
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Managers\Players;
@@ -7,6 +9,7 @@ use PaxRenaissance\Managers\Players;
 /*
  * AbstractNode: a class that represent an abstract Node
  */
+
 class AbstractNode
 {
   protected $children = [];
@@ -20,7 +23,7 @@ class AbstractNode
    */
   public function __construct($info = [], $children = [])
   {
-    $this->info =$info;
+    $this->info = $info;
     $this->children = $children;
 
     foreach ($this->children as $child) {
@@ -97,6 +100,25 @@ class AbstractNode
     }
 
     return $this->parent->insertChildAtPos($newNode, $index);
+  }
+
+  /**
+   * Insert node right after current node in children list
+   */
+  public function insertBefore($newNode)
+  {
+    $index = $this->getIndex();
+    if (is_null($index)) {
+      throw new \BgaVisibleSystemException('Trying to insert a brother of the root');
+    }
+    // Ensure parent is a seq node
+    if (!$this->parent instanceof \PaxRenaissance\Core\Engine\SeqNode) {
+      $newParent = new \PaxRenaissance\Core\Engine\SeqNode([], []);
+      $newParent = $this->parent->replaceAtPos($newParent, $index);
+      $newParent->pushChild($this);
+    }
+
+    return $this->parent->insertChildAtPos($newNode, $index - 1);
   }
 
   public function insertChildAtPos($node, $index)
@@ -193,7 +215,7 @@ class AbstractNode
     return $this->info;
   }
 
-  public function updateInfo($key,$value)
+  public function updateInfo($key, $value)
   {
     $this->info[$key] = $value;
   }
@@ -297,6 +319,18 @@ class AbstractNode
     }
     foreach ($this->children as $child) {
       $actions = array_merge($actions, $child->getResolvedActions($types));
+    }
+    return $actions;
+  }
+
+  public function getUnresolvedActions($types)
+  {
+    $actions = [];
+    if (in_array($this->getAction(), $types) && !$this->isActionResolved()) {
+      $actions[] = $this;
+    }
+    foreach ($this->children as $child) {
+      $actions = array_merge($actions, $child->getUnresolvedActions($types));
     }
     return $actions;
   }

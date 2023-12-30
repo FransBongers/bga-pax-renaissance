@@ -1,18 +1,24 @@
-class ClientStartTradeFairState implements State {
+class ClientUseAbilityActionState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringClientStartTradeFairArgs;
+  private args: OnEnteringClientUseAbiltyActionArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringClientStartTradeFairArgs) {
+  onEnteringState(args: OnEnteringClientUseAbiltyActionArgs) {
     this.args = args;
-    this.updateInterfaceInitialStep();
+    console.log("args", this.args);
+    if (Object.entries(this.args).length === 1) {
+      const [cardId, ability] = Object.entries(this.args)[0];
+      this.updateInterfaceConfirm({ cardId, ability });
+    } else {
+      this.updateInterfaceInitialStep();
+    }
   }
 
   onLeavingState() {
-    debug("Leaving ClientStartTradeFairState");
+    debug("Leaving ClientUseAbilityActionState");
   }
 
   setDescription(activePlayerId: number) {}
@@ -35,24 +41,44 @@ class ClientStartTradeFairState implements State {
 
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
-    this.game.setCardSelected({ id: this.args.card.id, back: true });
-    this.game.setLocationSelected({ id: this.args.city.id });
 
     this.game.clientUpdatePageTitle({
-      text: _("Convene ${region} trade fair from ${cityName}?"),
+      text: _("${tkn_playerName} must select an action"),
       args: {
-        cityName: _(this.args.city.name),
-        region: this.args.city.emporium === EAST ? _("East") : _("West"),
+        tkn_playerName: "${you}",
+      },
+    });
+
+    this.addActionButtons();
+
+    this.game.addCancelButton();
+  }
+
+  private updateInterfaceConfirm({
+    cardId,
+    ability,
+  }: {
+    cardId: string;
+    ability: Ability;
+  }) {
+    this.game.clearPossible();
+
+    this.game.clientUpdatePageTitle({
+      text: _("Perform ${actionTitle} action?"),
+      args: {
+        actionTitle: _(ability.title).replace(":", ""),
       },
     });
     this.game.addConfirmButton({
-      callback: () =>         this.game.takeAction({
-        action: this.args.action,
-        args: {
-          action: "tradeFair",
-          region: this.args.city.emporium,
-        },
-      }),
+      callback: () =>
+        this.game.takeAction({
+          action: "actPlayerAction",
+          args: {
+            action: "abilityAction",
+            cardId,
+            abilityId: ability.id,
+          },
+        }),
     });
     this.game.addCancelButton();
   }
@@ -64,6 +90,16 @@ class ClientStartTradeFairState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private addActionButtons() {
+    Object.entries(this.args).forEach(([cardId, ability], index) => {
+      this.game.addPrimaryActionButton({
+        id: `abiliy_action_${index}_btn`,
+        text: _(ability.title).replace(":", ""),
+        callback: () => this.updateInterfaceConfirm({ cardId, ability }),
+      });
+    });
+  }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.

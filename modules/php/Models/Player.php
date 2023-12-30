@@ -9,6 +9,7 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Preferences;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\AbilityActions;
 use PaxRenaissance\Managers\AtomicActions;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Events;
@@ -80,6 +81,28 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   public function getId()
   {
     return (int) parent::getId();
+  }
+
+  public function getAbilityActions()
+  {
+    $abilityActions = [];
+    $tableauCards = $this->getTableauCards();
+
+    foreach ($tableauCards as $card) {
+      $specialAbilities = $card->getSpecialAbilities();
+
+      foreach($specialAbilities as $ability) {
+        if (!isset($ability['abilityAction']) || !$ability['abilityAction']) {
+          continue;
+        }
+        $abilityAction = AbilityActions::get($ability['id'], $ability);
+        if ($abilityAction->canBePerformed($this, $card)) {
+          $abilityActions[$card->getId()] = $abilityAction;
+        }
+      }
+    }
+
+    return $abilityActions;
   }
 
   public function getAvailableOps()
@@ -174,11 +197,11 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   {
     $tableauCards = Cards::getInLocationOrdered(Locations::tableau($this->getId(), $region))->toArray();
     $queensAndVassals = [];
-    foreach($tableauCards as $card) {
+    foreach ($tableauCards as $card) {
       if ($card->getType() !== EMPIRE_CARD) {
         continue;
       }
-      $queensAndVassals = array_merge($queensAndVassals,$card->getQueens(), $card->getVassals());
+      $queensAndVassals = array_merge($queensAndVassals, $card->getQueens(), $card->getVassals());
     }
     return array_merge($tableauCards, $queensAndVassals);
   }
@@ -202,7 +225,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
         $result[$prestige] = $result[$prestige] + 1;
       }
     }
-    
+
     return $result;
   }
 
@@ -215,6 +238,25 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       $tokens = array_merge($tokens, $tokensOnCard);
     }
     return $tokens;
+  }
+
+  /**
+   * Player has special ability if there is a card in his tableau with ability
+   * and the card is not silenced
+   */
+  public function hasSpecialAbility($specialAbilityId)
+  {
+    $tableauCards = $this->getTableauCards();
+    return Utils::array_some($tableauCards, function ($card) use ($specialAbilityId) {
+      $hasSpecialAbility = Utils::array_some($card->getSpecialAbilities(), function ($specialAbility) use ($specialAbilityId) {
+        return $specialAbility['id'] === $specialAbilityId;
+      });
+      if (!$hasSpecialAbility) {
+        return false;
+      }
+
+      return !$card->isSilenced();
+    });
   }
 
   public function canTakeAction($action, $ctx)

@@ -29,5 +29,16 @@ class PREN145X_KappelerMilchsuppe extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_DECLARE_IMPERIAL_COSTS_TWO_ACTIONS,
+        'title' => '',
+        'text' => [
+          'log' => clienttranslate('Declaring Imperial Victory costs 2 actions (all players).'),
+          'args' => [],
+        ],
+        'allPlayers' => true,
+      ]
+    ];
   }
 }

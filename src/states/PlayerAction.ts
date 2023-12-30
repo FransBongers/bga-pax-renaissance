@@ -203,6 +203,21 @@ class PlayerActionState implements State {
             ),
       });
     }
+    if (Object.entries(this.args.abilityActions).length > 0) {
+      this.game.addPrimaryActionButton({
+        id: "abiliy_action_btn",
+        text: _("Use action from ability"),
+        callback: () =>
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientUseAbiltyActionArgs>(
+              CLIENT_USE_ABILITY_ACTION_STATE,
+              {
+                args: this.args.abilityActions,
+              }
+            ),
+      });
+    }
   }
 
   private addTest() {
@@ -336,7 +351,12 @@ class PlayerActionState implements State {
             .framework()
             .setClientState<OnEnteringClientStartTradeFairArgs>(
               CLIENT_START_TRADE_FAIR_STATE,
-              { args: this.args.tradeFair[region] }
+              {
+                args: {
+                  ...this.args.tradeFair[region],
+                  action: "actPlayerAction",
+                },
+              }
             ),
       });
     });

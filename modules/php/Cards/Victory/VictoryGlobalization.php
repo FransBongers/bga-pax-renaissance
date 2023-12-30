@@ -25,6 +25,11 @@ class VictoryGlobalization extends \PaxRenaissance\Models\VictoryCard
     if (!$this->isActive()) {
       return false;
     }
+
+    if (!$this->playerHasRequiredActions(SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS)) {
+      return false;
+    }
+
     $players = Players::getAll()->toArray();
     $concessions = Tokens::getConcessions();
 

@@ -42,5 +42,16 @@ class PREN127X_RedSeaFleet extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS,
+        'title' => '',
+        'text' => [
+          'log' => clienttranslate('Declaring globalization victory costs 2 actions (all players).'),
+          'args' => [],
+        ],
+        'allPlayers' => true,
+      ]
+    ];
   }
 }

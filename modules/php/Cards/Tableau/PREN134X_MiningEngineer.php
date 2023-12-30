@@ -17,5 +17,20 @@ class PREN134X_MiningEngineer extends \PaxRenaissance\Models\TableauCard
     $this->name = clienttranslate('Mining Engineer');
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_FREE_WESTERN_OPS,
+        'title' => clienttranslate('FORTIFICATIONS:'),
+        'text' => [
+          'log' => clienttranslate('You may do "activate western ops" without expending an action.'),
+          'args' => [],
+        ],
+        'abilityAction' => true,
+        'top' => 0,
+        'left' => 0,
+        'height' => 0,
+        'width' => 0,
+      ]
+    ];
   }
 }

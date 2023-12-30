@@ -167,6 +167,17 @@ $machinestates = [
         'possibleactions' => ['actFlipVictoryCard', 'actRestart'],
     ],
 
+    ST_FREE_ACTION => [
+        'name' => 'freeAction',
+        'description' => clienttranslate('${actplayer} may use free actions'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        // 'transitions' => [],
+        'possibleactions' => ['actFreeAction', 'actPassOptionalAction', 'actRestart'],
+    ],
+
     ST_PLAYER_ACTION => [
         'name' => 'playerAction',
         'description' => clienttranslate('${actplayer} may perform actions'),
@@ -572,6 +583,25 @@ $machinestates = [
         'action' => 'stAtomicAction',
         "type" => "game",
     ),
+
+    ST_ABILITY_ACTION_USE => [
+        'name' => 'abilityActionUse',
+        'description' => '',
+        'descriptionmyturn' => '',
+        'action' => 'stAtomicAction',
+        'type' => 'game',
+    ],
+
+    ST_ABILITY_ACTION_SELECT_TRADE_FAIR => [
+        'name' => 'abilityActionSelectTradeFair',
+        'description' => clienttranslate('${actplayer} must select trade fair to perform'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        // 'transitions' => [],
+        'possibleactions' => ['actAbilityActionSelectTradeFair', 'actRestart'],
+    ],
 
     // // Generic state to change player
     // ST_CHANGE_ACTIVE_PLAYER => [

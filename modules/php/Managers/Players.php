@@ -5,6 +5,7 @@ namespace PaxRenaissance\Managers;
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\PlayersExtra;
 
 /*
@@ -49,6 +50,13 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     // Game::get()->reattributeColorsBasedOnPreferences($players, $gameInfos['player_colors']);
     Game::get()->reloadPlayersBasicInfos();
     PlayersExtra::setupNewGame();
+  }
+
+  public static function anyPlayerHasSpecialAbility($specialAbilityId)
+  {
+    return Utils::array_some(self::getAll()->toArray(), function ($player) use ($specialAbilityId) {
+      return $player->hasSpecialAbility($specialAbilityId);
+    });
   }
 
   public static function incFlorins($playerId, $increment)

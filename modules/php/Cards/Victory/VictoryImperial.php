@@ -23,6 +23,11 @@ class VictoryImperial extends \PaxRenaissance\Models\VictoryCard
     if (!$this->isActive()) {
       return false;
     }
+
+    if (!$this->playerHasRequiredActions(SA_DECLARE_IMPERIAL_COSTS_TWO_ACTIONS)) {
+      return false;
+    }
+
     $players = Players::getAll()->toArray();
     $numberOfPlayers = count($players);
     $requiredDifference = $numberOfPlayers === 2 ? 3 : 2;

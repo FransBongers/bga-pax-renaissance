@@ -6,6 +6,7 @@ const MIN_PLAY_AREA_WIDTH = 1516;
 const CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 const CLIENT_SELL_CARD_STATE = "clientSellCardState";
 const CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
+const CLIENT_USE_ABILITY_ACTION_STATE = "clientUseAbilityActionState";
 
 /**
  * Player colors

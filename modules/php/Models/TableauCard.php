@@ -171,6 +171,10 @@ class TableauCard extends Card
     return $column;
   }
 
+  public function getSpecialAbilities()
+  {
+    return $this->specialAbilities;
+  }
 
 
   // public function getIcons()

@@ -69,6 +69,15 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actAbilityActionSelectTradeFair()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actAbilityActionSelectTradeFair', $args);
+    self::ajaxResponse();
+  }
+
   public function actAnnounceOneShot()
   {
     self::setAjaxMode();
@@ -144,6 +153,16 @@ class action_paxrenaissance extends APP_GameAction
     $args = self::getArg('args', AT_json, true);
     Utils::validateJSonAlphaNum($args, 'args');
     $this->game->actTakeAtomicAction('actFlipVictoryCard', $args);
+    self::ajaxResponse();
+  }
+
+  public function actFreeAction()
+  {
+    self::setAjaxMode();
+    //  $action = self::getArg('action', AT_alphanum, true);
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actFreeAction', $args);
     self::ajaxResponse();
   }
 

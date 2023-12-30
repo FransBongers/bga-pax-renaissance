@@ -21,5 +21,20 @@ class PREN097X_PodestaOfVenice extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Podestà of Venice');
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_FREE_TRADE_FAIR,
+        'title' => clienttranslate('COMMANDER OF THE VENICE GALLEYS:'),
+        'text' => [
+          'log' => clienttranslate('You may perform one trade fair in a turn without expending an action.'),
+          'args' => [],
+        ],
+        'abilityAction' => true,
+        'top' => 0,
+        'left' => 0,
+        'height' => 0,
+        'width' => 0,
+      ]
+    ];
   }
 }

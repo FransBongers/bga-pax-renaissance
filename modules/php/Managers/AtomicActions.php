@@ -12,6 +12,8 @@ class AtomicActions
 {
   // Mapping of actionId and corresponding class
   static $classes = [
+    ABILITY_ACTION_USE => 'AbilityActionUse',
+    ABILITY_ACTION_SELECT_TRADE_FAIR => 'AbilityActionSelectTradeFair',
     ANNOUNCE_ONE_SHOT => 'AnnounceOneShot',
     APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT => 'ApostasyOneShot',
     APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT => 'ApostasyOneShot',
@@ -28,6 +30,7 @@ class AtomicActions
     CORONATION_ONE_SHOT => 'CoronationOneShot',
     DECLARE_VICTORY => 'DeclareVictory',
     FLIP_VICTORY_CARD => 'FlipVictoryCard',
+    FREE_ACTION => 'FreeAction',
     PATRON_VICTORY => 'PatronVictory',
     PLACE_AGENT => 'PlaceAgent',
     PLACE_LEVY_AUTO_CHECK => 'PlaceLevyAutoCheck',

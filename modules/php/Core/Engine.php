@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance\Core;
 
+use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\AtomicActions;
 // use PaxRenaissance\Managers\Scores;
@@ -310,16 +311,35 @@ class Engine
   }
 
   /**
-   * Get all resolved actions of given type
+   * Get all resolved actions of given types
    */
   public function getResolvedActions($types)
   {
     return self::$tree->getResolvedActions($types);
   }
 
+  /**
+   * Get all unresolved actions of given types
+   */
+  public function getUnresolvedActions($types)
+  {
+    return self::$tree->getUnresolvedActions($types);
+  }
+
   public function getLastResolvedAction($types)
   {
     $actions = self::getResolvedActions($types);
     return empty($actions) ? null : $actions[count($actions) - 1];
+  }
+
+  public static function insertExtraPlayerAction($player)
+  {
+    $freeActions = Engine::getUnresolvedActions([FREE_ACTION]);
+    $node = $freeActions[count($freeActions) - 1];
+    $node->insertBefore(new LeafNode([
+      'action' => PLAYER_ACTION,
+      'optional' => true,
+      'playerId' => $player->getId(),
+    ]));
   }
 }

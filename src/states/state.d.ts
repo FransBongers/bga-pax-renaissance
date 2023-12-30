@@ -34,10 +34,26 @@ interface OnEnteringClientSellCardArgs {
 interface OnEnteringClientStartTradeFairArgs {
   card: TableauCard;
   city: City;
+  action: 'actPlayerAction' | 'actAbilityActionSelectTradeFair';
 }
+
+type OnEnteringClientUseAbiltyActionArgs = Record<string, Ability>;
 
 interface OnEnteringAnnounceOneShotArgs extends CommonArgs {
   oneShot: string;
+}
+
+interface OnEnteringAbilityActionSelectTradeFairArgs extends CommonArgs {
+  tradeFairs: {
+    east?: {
+      card: TableauCard;
+      city: City;
+    };
+    west?: {
+      card: TableauCard;
+      city: City;
+    };
+  };
 }
 
 interface OnEnteringBattleCasualtiesArgs extends CommonArgs {
@@ -73,6 +89,10 @@ interface OnEnteringCoronationArgs extends CommonArgs {
 
 interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
   victoryCards: VictoryCard[];
+}
+
+interface OnEnteringFreeActionArgs extends CommonArgs { 
+  freeActions: Record<string, Ability>
 }
 
 interface PlaceAgentLocation {
@@ -112,6 +132,7 @@ interface RoyalCouple {
 }
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {
+  abilityActions: Record<string, Ability>;
   availableOps: {
     east: Record<string, { id: string; text: string }>;
     west: Record<string, { id: string; text: string }>;

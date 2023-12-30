@@ -51,6 +51,11 @@ trait TurnTrait
           'optional' => true,
           'playerId' => $player->getId(),
         ],
+        [
+          'action' => FREE_ACTION,
+          'optional' => true,
+          'playerId' => $player->getId(),
+        ],
       ],
     ];
 

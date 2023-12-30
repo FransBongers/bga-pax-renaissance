@@ -16,5 +16,20 @@ class PREN101X_CivilEngineer extends \PaxRenaissance\Models\TableauCard
     $this->name = clienttranslate('Civil Engineer');
     $this->prestige = [PATRON];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_FREE_EASTERN_OPS,
+        'title' => clienttranslate('FORTIFICATIONS:'),
+        'text' => [
+          'log' => clienttranslate('You may do "activate eastern ops" without expending an action.'),
+          'args' => [],
+        ],
+        'abilityAction' => true,
+        'top' => 0,
+        'left' => 0,
+        'height' => 0,
+        'width' => 0,
+      ]
+    ];
   }
 }

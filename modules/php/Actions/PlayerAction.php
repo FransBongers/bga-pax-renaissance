@@ -34,7 +34,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
     $player = self::getPlayer();
     $playerId = $player->getId();
     $availableOps = $player->getAvailableOps();
-    $remainingActions = 2 - count(Engine::getResolvedActions([PLAYER_ACTION]));
+    $remainingActions = count(Engine::getUnresolvedActions([PLAYER_ACTION]));
     // Return possible actions
     $data = [
       'remainingActions' => $remainingActions,
@@ -43,6 +43,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
       'availableOps' => $availableOps,
       'declarableVictories' => $this->getDeclarableVictrories($player),
       'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
+      'abilityActions' => $player->getAbilityActions(),
       // '_private' => [
       //   $playerId => [
       //     'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
@@ -82,9 +83,23 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   public function actPlayerAction($args)
   {
     self::checkAction('actPlayerAction');
+    $player = self::getPlayer();
     $parent = $this->ctx->getParent();
     // Notifications::log('actPlayerAction', $args);
     switch ($args['action']) {
+      case 'abilityAction':
+        $this->ctx->insertAsBrother(Engine::buildTree([
+          'children' => [
+            [
+              'action' => ABILITY_ACTION_USE,
+              'playerId' => $this->ctx->getPlayerId(),
+              'cardId' => $args['cardId'],
+              'abilityId' => $args['abilityId'],
+              'source' => PLAYER_ACTION,
+            ]
+          ]
+        ]));
+        break;
       case 'declareVictory':
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
@@ -131,15 +146,21 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         ]));
         break;
       case 'tableauOps':
+        $action = $args['region'] === EAST ? TABLEAU_OPS_SELECT_EAST : TABLEAU_OPS_SELECT_WEST;
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
-              'action' => $args['region'] === EAST ? TABLEAU_OPS_SELECT_EAST : TABLEAU_OPS_SELECT_WEST,
+              'action' => $action,
               'playerId' => $this->ctx->getPlayerId(),
               'region' => $args['region'],
             ]
           ]
         ]));
+        if ($action === TABLEAU_OPS_SELECT_EAST && $player->hasSpecialAbility(SA_FREE_EASTERN_OPS)) {
+          Engine::insertExtraPlayerAction($player);
+        } else if ($action === TABLEAU_OPS_SELECT_WEST && $player->hasSpecialAbility(SA_FREE_WESTERN_OPS)) {
+          Engine::insertExtraPlayerAction($player);
+        }
         break;
       case 'tradeFair':
         $this->ctx->insertAsBrother(Engine::buildTree([
@@ -151,6 +172,9 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
             ]
           ]
         ]));
+        if ($player->hasSpecialAbility(SA_FREE_TRADE_FAIR) && count(Engine::getResolvedActions([TRADE_FAIR])) === 0) {
+          Engine::insertExtraPlayerAction($player);
+        }
         break;
     }
 

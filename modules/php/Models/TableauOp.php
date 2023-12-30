@@ -28,7 +28,7 @@ class TableauOp implements \JsonSerializable
     }
     $this->flavorText = $cardOp['flavorText'];
     $this->top = $cardOp['top'];
-    $this->top = $cardOp['left'];
+    $this->left = $cardOp['left'];
   }
 
   protected $attributes = [

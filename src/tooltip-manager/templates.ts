@@ -39,7 +39,7 @@ const tplAgentsSection = ({agents}: {agents: Agent[]}) => {
 
   return `
   <div>
-  <span class="pr_section_title">${_("Agent(s)")}</span>
+  <span class="pr_section_title">${_("Agents")}</span>
   ${Object.entries(agentIcons).map(([id, count]) => tplAgentsRow({agentIcon: `${id}_${count}`})).join('')}
   </div>
 `
@@ -182,7 +182,7 @@ const tplOpsRow = ({ op }: { op: TableauOp }) => {
 
 // </div>
 
-const tplTableauCardTooltip = ({ card }: { card: TableauCard | QueenCard }) => {
+const tplTableauCardTooltip = ({ card, game }: { card: TableauCard | QueenCard; game: PaxRenaissanceGame; }) => {
   // const dataCardId = card.id.split('_')[0];
   // console.log('dataCardId',dataCardId);
   return tplCardTooltipContainer({
@@ -201,7 +201,7 @@ const tplTableauCardTooltip = ({ card }: { card: TableauCard | QueenCard }) => {
       ${(card.prestige || []).map((prestige) => tplPrestigeRow({ prestige })).join("")}
       ${
         card.ops && card.ops.length > 0
-          ? `<span class="pr_section_title">${_("Op(s)")}</span>`
+          ? `<span class="pr_section_title">${_("Ops")}</span>`
           : ""
       }
       ${(card.ops || []).map((op) => tplOpsRow({ op })).join("")}
@@ -211,6 +211,10 @@ const tplTableauCardTooltip = ({ card }: { card: TableauCard | QueenCard }) => {
           card.agents ? tplAgentsSection({agents: card.agents}) : ''
         }
       </div>
+      ${(card.specialAbilities || []).map((specialAbility) => `
+        <span class="pr_section_title">${specialAbility.title ? _(specialAbility.title) : _('Ability')}</span>
+        <span>${game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args)}</span>
+      `)}
     `,
   });
 };

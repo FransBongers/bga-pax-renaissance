@@ -14,7 +14,7 @@ interface PaxRenaissanceGame extends Game {
   addConfirmButton: (props: { callback: Function | string }) => void;
   addDangerActionButton: (props: AddButtonProps) => void;
   addPrimaryActionButton: (props: AddButtonProps) => void;
-  addPassButton: (props: {optionalAction: boolean;}) => void;
+  addPassButton: (props: { optionalAction: boolean }) => void;
   addSecondaryActionButton: (props: AddButtonProps) => void;
   addSkipButton: (props: { callback: Function | string }) => void;
   addUndoButtons: (props: CommonArgs) => void;
@@ -139,6 +139,21 @@ interface EmpireCard extends PaxRenCard {
   // region: "east" | "west";
 }
 
+interface Ability {
+  id: string;
+  text: {
+    args: Record<string, unknown>;
+    log: string;
+  };
+  title: string;
+  allPlayers?: boolean;
+  abilityAction?: boolean;
+  top?: number;
+  left?: number;
+  height?: number;
+  width?: number;
+}
+
 interface TableauCard extends PaxRenCard {
   type: "tableauCard";
   agents: Agent[] | null;
@@ -150,7 +165,7 @@ interface TableauCard extends PaxRenCard {
   prestige: string[];
   region: "east" | "west";
   sellValue: number;
-  
+  specialAbilities: Ability[];
 }
 
 interface QueenCard extends TableauCard {
@@ -161,7 +176,7 @@ interface QueenCard extends TableauCard {
 }
 
 interface VictoryCard extends PaxRenCard {
-  side: 'active' | 'inactive';
+  side: "active" | "inactive";
   active: {
     title: string;
   };

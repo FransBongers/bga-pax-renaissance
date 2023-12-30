@@ -26,37 +26,14 @@ use PaxRenaissance\Models\Player;
 
 trait DebugTrait
 {
-  // function fixDb()
-  // {
-  //   $cards = Cards::getAllCardsInTableaux();
-  //   foreach ($cards as $card) {
-  //     $suzerainId = $card->getExtraData('suzerainId');
-  //     if ($suzerainId !== null) {
-  //       $suzerain = Cards::get($suzerainId);
-  //       $card->setExtraData('suzerainId', null);
-  //       if ($suzerain->getLocation() === $card->getLocation()) {
-  //         Cards::move($card->getId(), Locations::vassals($suzerain->getEmpireId()));
-  //       } else {
-  //         Cards::move($card->getId(), DISCARD);
-  //       }
-  //     };
-  //     $kingId = $card->getExtraData('kingId');
-  //     if ($kingId !== null) {
-  //       $king = Cards::get($kingId);
-  //       $card->setExtraData('kingId', null);
-  //       if ($king->getLocation() === $card->getLocation()) {
-  //         Cards::move($card->getId(), Locations::queens($king->getEmpireId()));
-  //       } else {
-  //         Cards::move($card->getId(), DISCARD);
-  //       }
-  //     };
-  //   }
-  // }
 
 
   function test()
   {
-    Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
+    Engine::insertExtraPlayerAction(Players::get());
+    // Notifications::log('index', Engine::getUnresolvedActions([FREE_ACTION])[0]->getIndex());
+    // Notifications::log('active', Players::anyPlayerHasSpecialAbility(SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS));
+    // Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
     // Notifications::log('queen', Cards::get('PREN076_SophiaPalaiologina'));
     // $this->fixDb();
     // $this->setExtraData('kingId', $kingCard->getId());

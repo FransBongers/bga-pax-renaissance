@@ -3,6 +3,7 @@ var MIN_PLAY_AREA_WIDTH = 1516;
 var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 var CLIENT_SELL_CARD_STATE = "clientSellCardState";
 var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
+var CLIENT_USE_ABILITY_ACTION_STATE = "clientUseAbilityActionState";
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -1807,6 +1808,8 @@ var PaxRenaissance = (function () {
             _a[CLIENT_DECLARE_VICTORY_STATE] = new ClientDeclareVictoryState(this),
             _a[CLIENT_SELL_CARD_STATE] = new ClientSellCardState(this),
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
+            _a[CLIENT_USE_ABILITY_ACTION_STATE] = new ClientUseAbilityActionState(this),
+            _a.abilityActionSelectTradeFair = new AbilityActionSelectTradeFairState(this),
             _a.announceOneShot = new AnnounceOneShotState(this),
             _a.battleCasualties = new BattleCasualtiesState(this),
             _a.battleLocation = new BattleLocationState(this),
@@ -1816,6 +1819,7 @@ var PaxRenaissance = (function () {
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.coronationOneShot = new CoronationState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
+            _a.freeAction = new FreeActionState(this),
             _a.placeAgent = new PlaceAgentState(this),
             _a.placeLevySelectCity = new PlaceLevySelectCityState(this),
             _a.playerAction = new PlayerActionState(this),
@@ -4976,6 +4980,60 @@ var tplTokenCounter = function (_a) {
 var tplGameMapSupply = function () {
     return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
 };
+var AbilityActionSelectTradeFairState = (function () {
+    function AbilityActionSelectTradeFairState(game) {
+        this.game = game;
+    }
+    AbilityActionSelectTradeFairState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    AbilityActionSelectTradeFairState.prototype.onLeavingState = function () {
+        debug("Leaving AbilityActionSelectTradeFairState");
+    };
+    AbilityActionSelectTradeFairState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a trade fair to perform"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    AbilityActionSelectTradeFairState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a trade fair to perform"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setTradeFairSelectable();
+        this.game.addUndoButtons(this.args);
+    };
+    AbilityActionSelectTradeFairState.prototype.setTradeFairSelectable = function () {
+        var _this = this;
+        REGIONS.forEach(function (region) {
+            if (!_this.args.tradeFairs[region]) {
+                return;
+            }
+            _this.game.setCardSelectable({
+                id: _this.args.tradeFairs[region].card.id,
+                back: true,
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, {
+                        args: __assign(__assign({}, _this.args.tradeFairs[region]), { action: "actAbilityActionSelectTradeFair" }),
+                    });
+                },
+            });
+        });
+    };
+    return AbilityActionSelectTradeFairState;
+}());
 var AnnounceOneShotState = (function () {
     function AnnounceOneShotState(game) {
         this.game = game;
@@ -5762,7 +5820,7 @@ var ClientStartTradeFairState = (function () {
         });
         this.game.addConfirmButton({
             callback: function () { return _this.game.takeAction({
-                action: "actPlayerAction",
+                action: _this.args.action,
                 args: {
                     action: "tradeFair",
                     region: _this.args.city.emporium,
@@ -5772,6 +5830,73 @@ var ClientStartTradeFairState = (function () {
         this.game.addCancelButton();
     };
     return ClientStartTradeFairState;
+}());
+var ClientUseAbilityActionState = (function () {
+    function ClientUseAbilityActionState(game) {
+        this.game = game;
+    }
+    ClientUseAbilityActionState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        console.log("args", this.args);
+        if (Object.entries(this.args).length === 1) {
+            var _a = Object.entries(this.args)[0], cardId = _a[0], ability = _a[1];
+            this.updateInterfaceConfirm({ cardId: cardId, ability: ability });
+        }
+        else {
+            this.updateInterfaceInitialStep();
+        }
+    };
+    ClientUseAbilityActionState.prototype.onLeavingState = function () {
+        debug("Leaving ClientUseAbilityActionState");
+    };
+    ClientUseAbilityActionState.prototype.setDescription = function (activePlayerId) { };
+    ClientUseAbilityActionState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an action"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.addActionButtons();
+        this.game.addCancelButton();
+    };
+    ClientUseAbilityActionState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var cardId = _a.cardId, ability = _a.ability;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("Perform ${actionTitle} action?"),
+            args: {
+                actionTitle: _(ability.title).replace(":", ""),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "abilityAction",
+                        cardId: cardId,
+                        abilityId: ability.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    ClientUseAbilityActionState.prototype.addActionButtons = function () {
+        var _this = this;
+        Object.entries(this.args).forEach(function (_a, index) {
+            var cardId = _a[0], ability = _a[1];
+            _this.game.addPrimaryActionButton({
+                id: "abiliy_action_".concat(index, "_btn"),
+                text: _(ability.title).replace(":", ""),
+                callback: function () { return _this.updateInterfaceConfirm({ cardId: cardId, ability: ability }); },
+            });
+        });
+    };
+    return ClientUseAbilityActionState;
 }());
 var ConfirmPartialTurnState = (function () {
     function ConfirmPartialTurnState(game) {
@@ -5917,6 +6042,97 @@ var FlipVictoryCardState = (function () {
         });
     };
     return FlipVictoryCardState;
+}());
+var FreeActionState = (function () {
+    function FreeActionState(game) {
+        this.game = game;
+    }
+    FreeActionState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        if (Object.entries(this.args.freeActions).length === 1) {
+            this.updateInterfaceSingleOption();
+        }
+        else {
+            this.updateInterfaceInitialStep();
+        }
+    };
+    FreeActionState.prototype.onLeavingState = function () {
+        debug("Leaving FreeActionState");
+    };
+    FreeActionState.prototype.setDescription = function (activePlayerId) { };
+    FreeActionState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may perform an action from an ability"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.addActionButtons();
+        this.game.addPassButton({ optionalAction: this.args.optionalAction });
+        this.game.addUndoButtons(this.args);
+    };
+    FreeActionState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var cardId = _a.cardId, ability = _a.ability;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("Perform ${actionTitle} action?"),
+            args: {
+                actionTitle: _(ability.title).replace(':', ''),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actFreeAction",
+                    args: {
+                        action: "abilityAction",
+                        cardId: cardId,
+                        abilityId: ability.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    FreeActionState.prototype.updateInterfaceSingleOption = function () {
+        var _this = this;
+        this.game.clearPossible();
+        var _a = Object.entries(this.args.freeActions)[0], cardId = _a[0], ability = _a[1];
+        this.game.clientUpdatePageTitle({
+            text: _("Perform ${actionTitle} action?"),
+            args: {
+                actionTitle: _(ability.title).replace(':', ''),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actFreeAction",
+                    args: {
+                        action: "abilityAction",
+                        cardId: cardId,
+                        abilityId: ability.id,
+                    },
+                });
+            },
+        });
+        this.game.addPassButton({ optionalAction: this.args.optionalAction });
+        this.game.addUndoButtons(this.args);
+    };
+    FreeActionState.prototype.addActionButtons = function () {
+        var _this = this;
+        Object.entries(this.args.freeActions).forEach(function (_a, index) {
+            var cardId = _a[0], ability = _a[1];
+            _this.game.addPrimaryActionButton({
+                id: "abiliy_action_".concat(index, "_btn"),
+                text: _(ability.title).replace(':', ''),
+                callback: function () { return _this.updateInterfaceConfirm({ cardId: cardId, ability: ability }); },
+            });
+        });
+    };
+    return FreeActionState;
 }());
 var PlaceAgentState = (function () {
     function PlaceAgentState(game) {
@@ -6302,6 +6518,19 @@ var PlayerActionState = (function () {
                 },
             });
         }
+        if (Object.entries(this.args.abilityActions).length > 0) {
+            this.game.addPrimaryActionButton({
+                id: "abiliy_action_btn",
+                text: _("Use action from ability"),
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_USE_ABILITY_ACTION_STATE, {
+                        args: _this.args.abilityActions,
+                    });
+                },
+            });
+        }
     };
     PlayerActionState.prototype.addTest = function () {
         var _this = this;
@@ -6414,7 +6643,9 @@ var PlayerActionState = (function () {
                 callback: function () {
                     return _this.game
                         .framework()
-                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, { args: _this.args.tradeFair[region] });
+                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, {
+                        args: __assign(__assign({}, _this.args.tradeFair[region]), { action: "actPlayerAction" }),
+                    });
                 },
             });
         });
@@ -7670,7 +7901,7 @@ var tplAgentsSection = function (_a) {
             agentIcons[identifier] = 1;
         }
     });
-    return "\n  <div>\n  <span class=\"pr_section_title\">".concat(_("Agent(s)"), "</span>\n  ").concat(Object.entries(agentIcons).map(function (_a) {
+    return "\n  <div>\n  <span class=\"pr_section_title\">".concat(_("Agents"), "</span>\n  ").concat(Object.entries(agentIcons).map(function (_a) {
         var id = _a[0], count = _a[1];
         return tplAgentsRow({ agentIcon: "".concat(id, "_").concat(count) });
     }).join(''), "\n  </div>\n");
@@ -7734,7 +7965,7 @@ var tplOpsRow = function (_a) {
         : "", "\n    <span>").concat((opTextMap === null || opTextMap === void 0 ? void 0 : opTextMap[op.id]) || "", "</span>\n  </div>\n</div>");
 };
 var tplTableauCardTooltip = function (_a) {
-    var card = _a.card;
+    var card = _a.card, game = _a.game;
     return tplCardTooltipContainer({
         card: "<div class=\"pr_card\" data-card-id=\"".concat(card.id.split("_")[0], "\"></div>"),
         content: "\n    <span class=\"pr_title\">".concat(_(card.name), "</span>\n      ").concat(card.flavorText
@@ -7742,8 +7973,8 @@ var tplTableauCardTooltip = function (_a) {
             .join(""), "\n      ").concat((card === null || card === void 0 ? void 0 : card.empire) ? tplCardLocation({ location: card.empire }) : "", "\n      ").concat(card.prestige && card.prestige.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
             : "", "\n      ").concat((card.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.ops && card.ops.length > 0
-            ? "<span class=\"pr_section_title\">".concat(_("Op(s)"), "</span>")
-            : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n    "),
+            ? "<span class=\"pr_section_title\">".concat(_("Ops"), "</span>")
+            : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n      ").concat((card.specialAbilities || []).map(function (specialAbility) { return "\n        <span class=\"pr_section_title\">".concat(specialAbility.title ? _(specialAbility.title) : _('Ability'), "</span>\n        <span>").concat(game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args), "</span>\n      "); }), "\n    "),
     });
 };
 var TooltipManager = (function () {
@@ -7762,7 +7993,7 @@ var TooltipManager = (function () {
     };
     TooltipManager.prototype.addCardTooltip = function (_a) {
         var nodeId = _a.nodeId, card = _a.card;
-        var html = tplTableauCardTooltip({ card: card });
+        var html = tplTableauCardTooltip({ card: card, game: this.game });
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     return TooltipManager;

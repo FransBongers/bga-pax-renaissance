@@ -155,6 +155,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     $this->discard();
   }
 
+  public function getSpecialAbilities()
+  {
+    return [];
+  }
+
   public function getTokens()
   {
     return Tokens::getInLocation($this->id)->toArray();

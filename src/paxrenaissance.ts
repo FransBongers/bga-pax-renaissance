@@ -31,6 +31,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     [CLIENT_DECLARE_VICTORY_STATE]: ClientDeclareVictoryState;
     [CLIENT_SELL_CARD_STATE]: ClientSellCardState;
     [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
+    [CLIENT_USE_ABILITY_ACTION_STATE]: ClientUseAbilityActionState;
+    abilityActionSelectTradeFair: AbilityActionSelectTradeFairState;
     announceOneShot: AnnounceOneShotState;
     battleCasualties: BattleCasualtiesState;
     battleLocation: BattleLocationState;
@@ -40,6 +42,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     confirmTurn: ConfirmTurnState;
     coronationOneShot: CoronationState,
     flipVictoryCard: FlipVictoryCardState;
+    freeAction: FreeActionState;
     placeAgent: PlaceAgentState;
     placeLevySelectCity: PlaceLevySelectCityState;
     playerAction: PlayerActionState;
@@ -93,6 +96,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
       [CLIENT_DECLARE_VICTORY_STATE]: new ClientDeclareVictoryState(this),
       [CLIENT_SELL_CARD_STATE]: new ClientSellCardState(this),
       [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),
+      [CLIENT_USE_ABILITY_ACTION_STATE]: new ClientUseAbilityActionState(this),
+      abilityActionSelectTradeFair: new AbilityActionSelectTradeFairState(this),
       announceOneShot: new AnnounceOneShotState(this),
       battleCasualties: new BattleCasualtiesState(this),
       battleLocation: new BattleLocationState(this),
@@ -102,6 +107,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       confirmTurn: new ConfirmTurnState(this),
       coronationOneShot: new CoronationState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
+      freeAction: new FreeActionState(this),
       placeAgent: new PlaceAgentState(this),
       placeLevySelectCity: new PlaceLevySelectCityState(this),
       playerAction: new PlayerActionState(this),
