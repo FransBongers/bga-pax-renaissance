@@ -96,7 +96,6 @@ $machinestates = [
         'description' => '',
         'type' => 'game',
         'action' => 'stBeforeStartOfTurn',
-        'updateGameProgression' => true,
     ],
 
     ST_TURNACTION => [

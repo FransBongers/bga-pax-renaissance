@@ -148,9 +148,18 @@ class PaxRenaissance extends Table
     */
     function getGameProgression()
     {
-        // TODO: compute and return the game progression
+        /**
+         * Progression is calculated as the number of cards that has left the decks since game start
+         */
 
-        return 0;
+        $playerCount = Players::count();
+
+        $cardsInDecksStartGame = 28 + 8 * $playerCount - 12;
+        $deckCount = Cards::countInLocation(Locations::deck(EAST)) + Cards::countInLocation(Locations::deck(WEST));
+
+        $progression = round((1 - ($deckCount / $cardsInDecksStartGame)) * 100);
+
+        return $progression;
     }
 
     public static function get()
@@ -321,28 +330,28 @@ class PaxRenaissance extends Table
         // $from_version is equal to 1404301345
         // Notifications::log('upgradeDb', []);
         // Example:
-         // if ($from_version <= 2312262027) {
-            // $cards = Cards::getAllCardsInTableaux();
-            // foreach ($cards as $card) {
-            //     $suzerainId = $card->getExtraData('suzerainId');
-            //     if ($suzerainId !== null) {
-            //         $suzerain = Cards::get($suzerainId);
-            //         if ($suzerain->getLocation() === $card->getLocation()) {
-            //             Cards::move($card->getId(), Locations::vassals($suzerain->getEmpireId()));
-            //         } else {
-            //             Cards::move($card->getId(), DISCARD);
-            //         }
-            //     };
-            //     $kingId = $card->getExtraData('kingId');
-            //     if ($kingId !== null) {
-            //         $king = Cards::get($kingId);
-            //         if ($king->getLocation() === $card->getLocation()) {
-            //             Cards::move($card->getId(), Locations::queens($king->getEmpireId()));
-            //         } else {
-            //             Cards::move($card->getId(), DISCARD);
-            //         }
-            //     };
-            // }
+        // if ($from_version <= 2312262027) {
+        // $cards = Cards::getAllCardsInTableaux();
+        // foreach ($cards as $card) {
+        //     $suzerainId = $card->getExtraData('suzerainId');
+        //     if ($suzerainId !== null) {
+        //         $suzerain = Cards::get($suzerainId);
+        //         if ($suzerain->getLocation() === $card->getLocation()) {
+        //             Cards::move($card->getId(), Locations::vassals($suzerain->getEmpireId()));
+        //         } else {
+        //             Cards::move($card->getId(), DISCARD);
+        //         }
+        //     };
+        //     $kingId = $card->getExtraData('kingId');
+        //     if ($kingId !== null) {
+        //         $king = Cards::get($kingId);
+        //         if ($king->getLocation() === $card->getLocation()) {
+        //             Cards::move($card->getId(), Locations::queens($king->getEmpireId()));
+        //         } else {
+        //             Cards::move($card->getId(), DISCARD);
+        //         }
+        //     };
+        // }
         // }
 
         //        if( $from_version <= 1404301345 )

@@ -130,8 +130,14 @@ class SelectToken extends \PaxRenaissance\Models\AtomicAction
     $type = $exploded[1] . '_' . $exploded[2];
     $availableTokens = Tokens::getOfType($type);
 
-    // TODO: filter for repressed tokens, then all available tokens
+    $repressedTokens = Utils::filter($availableTokens, function ($token) {
+      return Utils::startsWith($token->getLocation(), 'EmpireSquare_');
+    });
 
-    return $availableTokens;
+    if (count($repressedTokens) > 0) {
+      return $repressedTokens;
+    } else {
+      return $availableTokens;
+    }
   }
 }
