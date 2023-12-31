@@ -42,13 +42,13 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
       'tradeFair' => Market::getTradeFairs(),
       'availableOps' => $availableOps,
       'declarableVictories' => $this->getDeclarableVictrories($player),
-      'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
+      // 'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
       'abilityActions' => $player->getAbilityActions(),
-      // '_private' => [
-      //   $playerId => [
-      //     'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
-      //   ]
-      // ]
+      '_private' => [
+        $playerId => [
+          'cardsPlayerCanSell' => $player->getCardsPlayerCanSell(),
+        ]
+      ]
     ];
 
     // args['_private'][specificPid]=

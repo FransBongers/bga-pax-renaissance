@@ -264,6 +264,9 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
 
   public function isAtHandLimit()
   {
-    return count($this->getHand()) === 2;
+    if (count($this->getHand()) < 2) {
+      return false;
+    }
+    return !$this->hasSpecialAbility(SA_UNLIMITED_HAND_SIZE);
   }
 }

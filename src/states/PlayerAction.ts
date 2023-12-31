@@ -185,8 +185,8 @@ class PlayerActionState implements State {
       }
     });
     if (
-      this.args.cardsPlayerCanSell.cards.length +
-        this.args.cardsPlayerCanSell.royalCouples.length >
+      this.args._private.cardsPlayerCanSell.cards.length +
+        this.args._private.cardsPlayerCanSell.royalCouples.length >
       0
     ) {
       this.game.addPrimaryActionButton({
@@ -198,7 +198,7 @@ class PlayerActionState implements State {
             .setClientState<OnEnteringClientSellCardArgs>(
               CLIENT_SELL_CARD_STATE,
               {
-                args: this.args.cardsPlayerCanSell,
+                args: this.args._private.cardsPlayerCanSell,
               }
             ),
       });

@@ -87,6 +87,12 @@ interface OnEnteringCoronationArgs extends CommonArgs {
   queen: TableauCard;
 }
 
+interface OnEnteringDiscardDownToHandLimitArgs extends CommonArgs {
+  _private: {
+    hand: TableauCard[];
+  }
+}
+
 interface OnEnteringFlipVictoryCardArgs extends CommonArgs {
   victoryCards: VictoryCard[];
 }
@@ -132,6 +138,12 @@ interface RoyalCouple {
 }
 
 interface OnEnteringPlayerActionArgs extends CommonArgs {
+  _private: {
+    cardsPlayerCanSell: {
+      cards: (EmpireCard | TableauCard)[];
+      royalCouples: RoyalCouple[];
+    };
+  };
   abilityActions: Record<string, Ability>;
   availableOps: {
     east: Record<string, { id: string; text: string }>;
@@ -140,10 +152,6 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
   declarableVictories: VictoryCard[];
   remainingActions: number;
   cardsPlayerCanPurchase: TableauCard[];
-  cardsPlayerCanSell: {
-    cards: (EmpireCard | TableauCard)[];
-    royalCouples: RoyalCouple[];
-  };
   tradeFair: {
     east?: {
       card: TableauCard;

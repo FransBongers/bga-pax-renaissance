@@ -136,6 +136,15 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return false;
   }
 
+  public function hasBishop()
+  {
+    $tokens = $this->getTokens();
+    $hasBishop = Utils::array_some($tokens, function ($token) {
+      return $token->getType() === BISHOP;
+    });
+    return $hasBishop;
+  }
+
   public function setState($state = 1)
   {
     Cards::setState($this->getId(), $state);
@@ -152,18 +161,13 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
 
   public function placeToken($token, $ctx)
   {
-    $currentTokens = $this->getTokens();
-    if (count($currentTokens) > 0 && $token->getType() === BISHOP) {
-      // Apply Diet of worms or pacification rule
+    if ($token->getType() === BISHOP) {
+      // Apply Diet of worms, diet of worms will trigger pacification / silencing
       $ctx->insertAsBrother(new LeafNode([
         'action' => BISHOP_DIET_OF_WORMS,
         'playerId' => $ctx->getPlayerId(),
         'tokenId' => $token->getId(),
       ]));
-      // $ctx->insertAsBrother(new LeafNode([
-      //   'action' => BISHOP_PACIFICATION,
-      //   'playerId' => $ctx->getPlayerId(),
-      // ]));
     }
     $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId(), false);
@@ -173,6 +177,15 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function sell()
   {
     $this->discard();
+  }
+
+  /**
+   * Function called when bishop is placed on the card / 
+   * is moved on the card
+   */
+  public function silence()
+  {
+
   }
 
   public function getSpecialAbilities()

@@ -288,6 +288,24 @@ $machinestates = [
         'possibleactions' => ['actBishopPacification', 'pass', 'actRestart'],
     ],
 
+    ST_BISHOP_SILENCE_CARD => [
+        'name' => 'bishopSilenceCard',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
+    ST_DISCARD_DOWN_TO_HAND_LIMT => [
+        'name' => 'discardDownToHandLimit',
+        'description' => clienttranslate('${actplayer} must discard cards from hand'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actDiscardDownToHandLimit', 'pass', 'actRestart'],
+    ],
+
     ST_ANNOUNCE_ONE_SHOT => [
         'name' => 'announceOneShot',
         'description' => clienttranslate('${actplayer} must decide if One-shot occurs'),

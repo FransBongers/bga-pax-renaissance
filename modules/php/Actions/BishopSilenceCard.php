@@ -19,11 +19,14 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
+/**
+ * Check if any actions trigger off of silencing of the card
+ */
+class BishopSilenceCard extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_BISHOP_DIET_OF_WORMS;
+    return ST_BISHOP_SILENCE_CARD;
   }
 
   // ..######..########....###....########.########
@@ -42,56 +45,13 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stBishopDietOfWorms()
+  public function stBishopSilenceCard()
   {
     $info = $this->ctx->getInfo();
-    $player = self::getPlayer();
 
-    $tokenId = $info['tokenId'];
+    $cardId = $info['cardId'];
 
-    $token = Tokens::get($tokenId);
-    $locationId = $token->getLocation();
-
-    $card = Cards::get($locationId);
-    $tokensOnCard = $card->getTokens();
-
-    $bishopsOnCard = [];
-    $otherTokensOnCard = [];
-
-    foreach ($tokensOnCard as $tokenOnCard) {
-      if ($tokenOnCard->getType() === BISHOP) {
-        $bishopsOnCard[] = $tokenOnCard;
-      } else {
-        $otherTokensOnCard[] = $tokenOnCard;
-      }
-    }
-
-    // This should never be more than 2
-    if (count($bishopsOnCard) >= 2) {
-      foreach ($bishopsOnCard as $bishop) {
-        $bishop->returnToSupply(KILL, $player);
-      }
-      $this->resolveAction(['automatic' => true]);
-      return;
-    }
-
-    // If Diet of worms doesn't trigger there are bishops left on the card
-    // Check for other tokens and actions that trigger on silence
-    $parent = $this->ctx->getParent();
-
-    if (count($otherTokensOnCard) > 0) {
-      $parent->pushChild(new LeafNode([
-        'action' => BISHOP_PACIFICATION,
-        'playerId' => $this->ctx->getPlayerId(),
-        'tokenId' => $tokenId,
-      ]));
-    }
-
-    $parent->pushChild(new LeafNode([
-      'action' => BISHOP_SILENCE_CARD,
-      'playerId' => $this->ctx->getPlayerId(),
-      'cardId' => $card->getId(),
-    ]));
+    Cards::get($cardId)->silence();
 
     $this->resolveAction(['automatic' => true]);
   }

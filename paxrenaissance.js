@@ -1818,6 +1818,7 @@ var PaxRenaissance = (function () {
             _a.confirmPartialTurn = new ConfirmPartialTurnState(this),
             _a.confirmTurn = new ConfirmTurnState(this),
             _a.coronationOneShot = new CoronationState(this),
+            _a.discardDownToHandLimit = new DiscardDownToHandLimitState(this),
             _a.flipVictoryCard = new FlipVictoryCardState(this),
             _a.freeAction = new FreeActionState(this),
             _a.placeAgent = new PlaceAgentState(this),
@@ -5970,6 +5971,68 @@ var ConfirmTurnState = (function () {
     };
     return ConfirmTurnState;
 }());
+var DiscardDownToHandLimitState = (function () {
+    function DiscardDownToHandLimitState(game) {
+        this.game = game;
+    }
+    DiscardDownToHandLimitState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    DiscardDownToHandLimitState.prototype.onLeavingState = function () {
+        debug("Leaving DiscardDownToHandLimitState");
+    };
+    DiscardDownToHandLimitState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must discard a card form hand"),
+            args: {
+                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+            },
+            nonActivePlayers: true,
+        });
+    };
+    DiscardDownToHandLimitState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a card to discard"),
+            args: {
+                tkn_playerName: '${you}'
+            },
+        });
+        this.setCardsSelectable();
+        this.game.addUndoButtons(this.args);
+    };
+    DiscardDownToHandLimitState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var card = _a.card;
+        this.game.clearPossible();
+        this.game.setCardSelected({ id: card.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Discard ${tkn_cardName}?"),
+            args: {
+                tkn_cardName: card.name,
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actDiscardDownToHandLimit",
+                    args: {
+                        cardId: card.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    DiscardDownToHandLimitState.prototype.setCardsSelectable = function () {
+        var _this = this;
+        this.args._private.hand.forEach(function (card) {
+            _this.game.setCardSelectable({ id: card.id, callback: function () { return _this.updateInterfaceConfirm({ card: card }); } });
+        });
+    };
+    return DiscardDownToHandLimitState;
+}());
 var FlipVictoryCardState = (function () {
     function FlipVictoryCardState(game) {
         this.game = game;
@@ -6503,8 +6566,8 @@ var PlayerActionState = (function () {
                 });
             }
         });
-        if (this.args.cardsPlayerCanSell.cards.length +
-            this.args.cardsPlayerCanSell.royalCouples.length >
+        if (this.args._private.cardsPlayerCanSell.cards.length +
+            this.args._private.cardsPlayerCanSell.royalCouples.length >
             0) {
             this.game.addPrimaryActionButton({
                 id: "sell_card_btn",
@@ -6513,7 +6576,7 @@ var PlayerActionState = (function () {
                     return _this.game
                         .framework()
                         .setClientState(CLIENT_SELL_CARD_STATE, {
-                        args: _this.args.cardsPlayerCanSell,
+                        args: _this.args._private.cardsPlayerCanSell,
                     });
                 },
             });

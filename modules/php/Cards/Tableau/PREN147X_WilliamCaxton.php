@@ -2,6 +2,9 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\LeafNode;
+
 class PREN147X_WilliamCaxton extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -30,5 +33,32 @@ class PREN147X_WilliamCaxton extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [LAW];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_UNLIMITED_HAND_SIZE,
+        'title' => clienttranslate('PRINTING PRESS:'),
+        'text' => [
+          'log' => clienttranslate('Your Hand size is unlimited'),
+          'args' => [],
+        ],
+      ]
+    ];
+  }
+
+  public function silence()
+  {
+    $owner = $this->getOwner();
+    // If player is not over default hand limit no need to trigger discard state and possibly change active player
+    if (count($owner->getHand()) <= 2) {
+      return;
+    }
+    // Check if owner has unlimited hand size abilities that are not silenced
+    if ($owner->hasSpecialAbility(SA_UNLIMITED_HAND_SIZE)) {
+      return;
+    }
+    Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
+      'action' => DISCARD_DOWN_TO_HAND_LIMT,
+      'playerId' => $owner->getId(),
+    ]));
   }
 }

@@ -40,7 +40,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     bishopPacification: BishopPacificationState;
     confirmPartialTurn: ConfirmPartialTurnState;
     confirmTurn: ConfirmTurnState;
-    coronationOneShot: CoronationState,
+    coronationOneShot: CoronationState;
+    discardDownToHandLimit: DiscardDownToHandLimitState;
     flipVictoryCard: FlipVictoryCardState;
     freeAction: FreeActionState;
     placeAgent: PlaceAgentState;
@@ -106,6 +107,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       confirmPartialTurn: new ConfirmPartialTurnState(this),
       confirmTurn: new ConfirmTurnState(this),
       coronationOneShot: new CoronationState(this),
+      discardDownToHandLimit: new DiscardDownToHandLimitState(this),
       flipVictoryCard: new FlipVictoryCardState(this),
       freeAction: new FreeActionState(this),
       placeAgent: new PlaceAgentState(this),

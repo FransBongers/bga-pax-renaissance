@@ -76,6 +76,7 @@
     "src/states/ClientUseAbilityAction.ts",
     "src/states/ConfirmPartialTurn.ts",
     "src/states/ConfirmTurn.ts",
+    "src/states/DiscardDownToHandLimit.ts",
     "src/states/FlipVictoryCard.ts",
     "src/states/FreeAction.ts",
     "src/states/PlaceAgent.ts",
