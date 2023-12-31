@@ -751,14 +751,15 @@ class Notifications
     ]);
   }
 
-  public static function tradeFairProfitDispersalPlayer($player, $region)
+  public static function tradeFairProfitDispersalPlayer($player, $region, $amount)
   {
-    $message = clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} out of profits');
+    $message = clienttranslate('${tkn_playerName} takes ${amount} ${tkn_florin} out of profits');
 
     self::notifyAll("tradeFairProfitDispersalPlayer", $message, [
       'player' => $player,
       'tkn_florin' => clienttranslate("Florin(s)"),
       'region' => $region,
+      'amount' => $amount,
     ]);
   }
 

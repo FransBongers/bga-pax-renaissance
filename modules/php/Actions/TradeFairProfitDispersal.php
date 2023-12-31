@@ -34,19 +34,36 @@ class TradeFairProfitDispersal extends \PaxRenaissance\Models\AtomicAction
     }
     $tokenId = $token->getId();
 
-    Market::incMarketFlorins($region, 0, -1);
+    
 
     if ($token->getType() === PIRATE) {
+      Market::incMarketFlorins($region, 0, -1);
       Notifications::tradeFairProfitDispersalPirates($region);
     } else if ($token->getType() === PAWN) {
+
       $player = $token->getOwner();
-      $player->incFlorins(1);
-      Notifications::tradeFairProfitDispersalPlayer($player, $region);
+      $amount = $this->getAmount($player, $region);
+      Market::incMarketFlorins($region, 0, -$amount);
+      $player->incFlorins($amount);
+      Notifications::tradeFairProfitDispersalPlayer($player, $region, $amount);
     }
 
     if (Market::getMarketFlorins($region, 0) === 0) {
       $this->ctx->getParent()->resolve(['borderId' => $borderId]);
     }
     $this->resolveAction(['borderId' => $borderId]);
+  }
+
+  private function getAmount($player, $region) {
+    $availableFlorins = Market::getMarketFlorins($region, 0);
+    $cityId = $this->ctx->getInfo()['cityId'];
+
+    $concessionCount = 1;
+    if ($player->hasSpecialAbility(SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES)) {
+      $concessionCount = 2;
+    } else if ($cityId === SPICE_ISLANDS && $player->hasSpecialAbility(SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS)) {
+      $concessionCount = 2;
+    }
+    return min ($availableFlorins, $concessionCount);
   }
 }

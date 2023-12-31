@@ -81,12 +81,14 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
         if ($token === null || $token->getType() !== PAWN) {
           continue;
         }
+        $owner = $token->getOwner();
+        $concessionCount = $owner->hasSpecialAbility(SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES) ? 2 : 1;
         $bank = $token->getSeparator();
         if (isset($concessions[$bank])) {
-          $concessions[$bank]['count'] = $concessions[$bank]['count'] + 1;
+          $concessions[$bank]['count'] = $concessions[$bank]['count'] + $concessionCount;
         } else {
           $concessions[$bank] = [
-            'count' => 1,
+            'count' => $concessionCount,
             'bank' => $bank,
           ];
         }
@@ -95,6 +97,7 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
       usort($concessions, function ($a, $b) {
         return $b['count'] - $a['count'];
       });
+
       if (!($player->getBank() === $concessions[0]['bank'] && (count($concessions) === 1 || $concessions[0]['count'] > $concessions[1]['count']))) {
         continue;
       }

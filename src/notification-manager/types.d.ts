@@ -209,6 +209,7 @@ interface NotifTradeFairProfitDispersalPiratesArgs {
 }
 
 interface NotifTradeFairProfitDispersalPlayerArgs extends NotifWithPlayerArgs {
+  amount: number;
   region: string;
 }
 

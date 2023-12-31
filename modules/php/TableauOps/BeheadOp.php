@@ -61,6 +61,44 @@ class BeheadOp extends \PaxRenaissance\Models\TableauOp
         }
       }
     }
+
+    // Extra filters due to special abilities
+    if ($card->hasSpecialAbility(SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY)) {
+      $options = Utils::filter($options, function ($tableauCard) {
+        if ($tableauCard->getRegion() !== WEST) {
+          return false;
+        }
+        $tokens = $tableauCard->getTokens();
+        $hasRequiresBishop = Utils::array_some($tokens, function ($token) {
+          $seperator = $token->getSeparator();
+          return $token->getType() === BISHOP && ($seperator === CATHOLIC || $seperator === REFORMIST);
+        });
+        if (!$hasRequiresBishop) {
+          return false;
+        }
+
+        return true;
+      });
+    }
+
+    if ($card->hasSpecialAbility(SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY)) {
+      $options = Utils::filter($options, function ($tableauCard) {
+        if ($tableauCard->getRegion() !== EAST) {
+          return false;
+        }
+        $tokens = $tableauCard->getTokens();
+        $hasRequiresBishop = Utils::array_some($tokens, function ($token) {
+          $seperator = $token->getSeparator();
+          return $token->getType() === BISHOP && ($seperator === ISLAMIC || $seperator === REFORMIST);
+        });
+        if (!$hasRequiresBishop) {
+          return false;
+        }
+
+        return true;
+      });
+    }
+
     return $options;
   }
 }

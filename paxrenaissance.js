@@ -4377,15 +4377,15 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_tradeFairProfitDispersalPlayer = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, region, playerId;
+            var _a, region, playerId, amount;
             return __generator(this, function (_b) {
-                _a = notif.args, region = _a.region, playerId = _a.playerId;
+                _a = notif.args, region = _a.region, playerId = _a.playerId, amount = _a.amount;
                 this.game.market.incFlorinValue({
                     region: region,
                     column: 0,
-                    value: -1,
+                    value: -amount,
                 });
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(1);
+                this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
                 return [2, Promise.resolve()];
             });
         });

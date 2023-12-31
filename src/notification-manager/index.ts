@@ -613,13 +613,13 @@ class NotificationManager {
   async notif_tradeFairProfitDispersalPlayer(
     notif: Notif<NotifTradeFairProfitDispersalPlayerArgs>
   ) {
-    const { region, playerId } = notif.args;
+    const { region, playerId, amount } = notif.args;
     this.game.market.incFlorinValue({
       region: region as "east" | "west",
       column: 0,
-      value: -1,
+      value: -amount,
     });
-    this.getPlayer({ playerId }).counters.florins.incValue(1);
+    this.getPlayer({ playerId }).counters.florins.incValue(amount);
     return Promise.resolve();
   }
 

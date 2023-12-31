@@ -51,7 +51,7 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
     if ($profits === 0) {
       Notifications::tradeFairNoVoyage();
     } else {
-      self::addSiblings($tradeRoute, $region);
+      self::addSiblings($tradeRoute, $region, $city->getId());
     }
 
 
@@ -74,22 +74,17 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
     return $added;
   }
 
-  private function addSiblings($tradeRoute, $region)
+  private function addSiblings($tradeRoute, $region, $cityId)
   {
     $parent = $this->ctx->getParent();
     foreach ($tradeRoute as $location) {
       $action = Utils::startsWith($location, 'border') ? new LeafNode([
         'action' => TRADE_FAIR_PROFIT_DISPERSAL,
+        'cityId' => $cityId,
         'playerId' => $this->ctx->getPlayerId(),
         'borderId' => $location,
         'tradeFair' => $region,
       ]) : Engine::buildTree(Flows::placeLevy($location, $this->ctx->getPlayerId()));
-      // new LeafNode([
-      //   'action' => TRADE_FAIR_LEVY,
-      //   'playerId' => $this->ctx->getPlayerId(),
-      //   'empireId' => $location,
-
-      // ]);
       $parent->pushChild($action);
     };
   }

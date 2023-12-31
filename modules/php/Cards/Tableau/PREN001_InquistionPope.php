@@ -38,5 +38,15 @@ class PREN001_InquistionPope extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY,
+        'title' => clienttranslate('Holocaust:'),
+        'text' => [
+          'log' => clienttranslate("This cards's behead Op can only be used on any west card with a red or gold Bishop token."),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }
