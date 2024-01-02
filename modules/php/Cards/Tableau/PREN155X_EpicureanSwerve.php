@@ -18,10 +18,10 @@ class PREN155X_EpicureanSwerve extends \PaxRenaissance\Models\TableauCard
     $this->region = WEST;
     $this->specialAbilities = [
       [
-        'id' => SA_CARD_COUNTS_AS_REPUBLIC_FOR_YOUR_RENAISSANCE_VICTORY_1,
+        'id' => SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2,
         'title' => clienttranslate('On the Nature of Things:'),
         'text' => [
-          'log' => clienttranslate('This counts as a Republic for your Renaissance Victory.'),
+          'log' => clienttranslate('This card counts as a Republic for a Renaissance Victory.'),
           'args' => [],
         ],
       ]

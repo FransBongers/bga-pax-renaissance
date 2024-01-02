@@ -37,7 +37,7 @@ class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
       if ($player->hasSpecialAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1)) {
         $numberOfRepublics += 1;
       }
-      if ($player->getId() === $activePlayer->getId() && $player->hasSpecialAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_YOUR_RENAISSANCE_VICTORY_1)) {
+      if ($player->hasSpecialAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2)) {
         $numberOfRepublics += 1;
       }
       
