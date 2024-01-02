@@ -123,6 +123,14 @@ class Notifications
    **** GAME METHODS ****
    *************************/
 
+  public static function activateAbility($ability)
+  {
+    self::notifyAll("activateAbility", '', [
+      'player' => Players::get(),
+      'ability' => $ability,
+    ]);
+  }
+
   public static function apostasy($player, $prestigeMap)
   {
     self::message(clienttranslate('${tkn_playerName} must Discard all cards with ${tkn_prestige_1} or ${tkn_prestige_2}'), [
@@ -315,6 +323,14 @@ class Notifications
     ]);
   }
 
+  public static function deactivateAbility($ability)
+  {
+    self::notifyAll("deactivateAbility", '', [
+      'player' => Players::get(),
+      'ability' => $ability,
+    ]);
+  }
+
   public static function declareVictory($player, $victoryCard)
   {
     self::notifyAll("declareVictory", clienttranslate('${tkn_playerName} declares ${tkn_boldText}'), [
@@ -439,7 +455,7 @@ class Notifications
 
   public static function passPlayerAction($player)
   {
-    self::message(clienttranslate('${tkn_playerName} passes on their action'),[
+    self::message(clienttranslate('${tkn_playerName} passes on their action'), [
       'player' => $player
     ]);
   }
@@ -587,7 +603,7 @@ class Notifications
       $separator = $index === 0 ? "" : ", ";
       $key = '${tkn_cardName_queen_' . $index . "}";
       $queenNamesLog = $queenNamesLog . $separator . $key;
-      $queenNamesArgs['tkn_cardName_queen_'.$index] = $queen->getName();
+      $queenNamesArgs['tkn_cardName_queen_' . $index] = $queen->getName();
     };
 
     self::notifyAll("sellRoyalCouple",  clienttranslate('${tkn_playerName} sells ${queenNamesLog} and ${tkn_cardName_king} for ${value} ${tkn_florin}'), [

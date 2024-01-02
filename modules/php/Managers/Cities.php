@@ -41,6 +41,7 @@ class Cities
     VALENCIA => 'Valencia',
     VARNA => 'Varna',
     VENICE => 'Venice',
+    VENICE_2 => 'Venice2',
     VIENNA => 'Vienna',
   ];
 

@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN055_DuchyOfFerrara extends \PaxRenaissance\Models\TableauCard
+class PREN055_DuchyOfFerrara extends \PaxRenaissance\Models\CondottiereCard
 {
   public function __construct($row)
   {
@@ -37,5 +37,15 @@ class PREN055_DuchyOfFerrara extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [PATRON];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS,
+        'title' => clienttranslate('Condottiere:'),
+        'text' => [
+          'log' => clienttranslate('Venice can hold 2 gold Tokens instead of 1.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

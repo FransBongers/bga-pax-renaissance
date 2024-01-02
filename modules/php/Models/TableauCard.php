@@ -83,6 +83,7 @@ class TableauCard extends Card
     Cards::insertOnTop($this->getId(), DISCARD);
     $this->location = DISCARD;
     Notifications::discardCard($adjustPrestige,$player, $this, DISCARD, $messageType);
+    $this->deactivateAbility();
   }
 
   public function purchase($player, $ctx = null)
@@ -112,6 +113,7 @@ class TableauCard extends Card
     }
 
     Notifications::playCard($player, $this);
+    $this->activateAbility();
   }
 
   // .##.....##.########.####.##.......####.########.##....##

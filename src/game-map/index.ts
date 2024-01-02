@@ -83,6 +83,7 @@ class GameMap {
     gamedatas.gameMap.empires.forEach((empire) =>
       this.setEmpireReligion({ empireId: empire.id, religion: empire.religion })
     );
+    this.setVenice2Visibility(gamedatas.gameMap.condottiereActive);
   }
 
   setupTokensBorders({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
@@ -281,6 +282,18 @@ class GameMap {
     // } else {
     node.setAttribute("data-card-id", `${religion}_${empireId}`);
     // }
+  }
+
+  public setVenice2Visibility(visible = true) {
+    const venice2Node = document.getElementById('venice2_overlay');
+    if (!venice2Node) {
+      return;
+    }
+    if (visible) {
+      venice2Node.style.opacity = '1';
+    } else {
+      venice2Node.style.opacity = '0';
+    }
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

@@ -112,8 +112,12 @@ class TableauOpInquisitor extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("Not allowed to move Bishop to selected card");
     }
 
-    $options[$tokenId]['token']->move($destination->getId());
+    $token = $options[$tokenId]['token'];
+    $fromLocation = $token->getLocation();
+    
+    $token->move($destination->getId());
 
+    Cards::get($fromLocation)->activateAbility();
   
     $this->ctx->insertAsBrother(new LeafNode([
       'action' => BISHOP_DIET_OF_WORMS,

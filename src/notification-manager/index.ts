@@ -36,9 +36,11 @@ class NotificationManager {
     const notifs: [id: string, wait: number][] = [
       // checked
       ["log", undefined],
+      ["activateAbility", undefined],
       ["changeEmpireToMedievalState", undefined],
       ["changeEmpireToTheocracy", undefined],
       ["coronation", undefined],
+      ["deactivateAbility", undefined],
       ["declareVictory", undefined],
       ["discardCard", undefined],
       ["discardQueen", undefined],
@@ -117,6 +119,18 @@ class NotificationManager {
     return Promise.resolve();
   }
 
+  async notif_activateAbility(notif: Notif<NotifActivateAbilityArgs>) {
+    const {ability} = notif.args;
+
+    switch (ability) {
+      case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
+        this.game.gameMap.setVenice2Visibility(true);
+        break;
+      default:
+        debug('Unhandled ability: ', ability)
+    }
+  }
+
   async notif_changeEmpireToMedievalState(
     notif: Notif<NotifChangeEmpireToMedievalStateArgs>
   ) {
@@ -141,6 +155,18 @@ class NotificationManager {
     await this.game.tableauCardManager.removeCard(queen);
     await this.game.tableauCardManager.updateCardInformations(king);
     await this.game.tableauCardManager.addQueen({ king, queen });
+  }
+
+  async notif_deactivateAbility(notif: Notif<NotifDeactivateAbilityArgs>) {
+    const {ability} = notif.args;
+    
+    switch (ability) {
+      case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
+        this.game.gameMap.setVenice2Visibility(false);
+        break;
+      default:
+        debug('Unhandled ability: ', ability)
+    }
   }
 
   async notif_declareVictory(notif: Notif<NotifDeclareVictoryArgs>) {

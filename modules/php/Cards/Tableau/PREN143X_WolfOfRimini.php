@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN143X_WolfOfRimini extends \PaxRenaissance\Models\TableauCard
+class PREN143X_WolfOfRimini extends \PaxRenaissance\Models\CondottiereCard
 {
   public function __construct($row)
   {
@@ -40,5 +40,15 @@ class PREN143X_WolfOfRimini extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS,
+        'title' => clienttranslate('Condottiere:'),
+        'text' => [
+          'log' => clienttranslate('Venice can hold 2 gold Tokens instead of 1.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

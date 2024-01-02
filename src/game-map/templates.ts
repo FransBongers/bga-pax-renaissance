@@ -94,7 +94,7 @@ const tplGameMapMapCards = () => {
     ${Object.entries(data.cities)
       .map(([city, coords]) => {
         if (city === VENICE_2) {
-          return `<div id="${city}_overlay" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);">
+          return `<div id="${city}_overlay" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px); opacity: 0;">
                     <div id="pr_${city}" class="pr_city"></div>
                   </div>`;
         } else {

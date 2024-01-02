@@ -17,7 +17,8 @@ class MapBoard
         'cards' => $cards,
         'tokens' => self::getTokensOnCards($cards),
       ],
-      'empires' => Empires::getAll()
+      'empires' => Empires::getAll(),
+      'condottiereActive' => count(Empires::get(PAPAL_STATES)->getCities()) === 2,
     ];
   }
 

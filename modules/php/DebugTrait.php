@@ -51,10 +51,13 @@ trait DebugTrait
 
   function test()
   {
-    $this->testRenaissanceVictory();
-    // $this->debugPlaceCardInMarket('PREN132X_ArtisticGeometry', WEST, 1);
-    // $this->debugPlaceCardInMarket('PREN133X_RomanticRealism', WEST, 2);
-    // $this->debugPlaceCardInMarket('PREN159X_ConsentOfTheGoverned', WEST, 3);
+    Empires::get(PAPAL_STATES)->changeToMedievalState(Players::get());
+    // Empires::get(PAPAL_STATES)->changeToTheocracy(CATHOLIC);
+    // $this->testRenaissanceVictory();
+    // $this->debugPlaceCardInMarket('PREN024_Gonfalonier', WEST, 1);
+    // $this->debugPlaceCardInMarket('PREN055_DuchyOfFerrara', WEST, 2);
+    // $this->debugPlaceCardInMarket('PREN143X_WolfOfRimini', WEST, 3);
+    // Notifications::log('venice2', Empires::get(PAPAL_STATES)->getCities());
 
     // Notifications::log('hasAbility',Players::get(2371053)->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY));
     

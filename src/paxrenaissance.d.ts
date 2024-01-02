@@ -209,6 +209,7 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
       cards: EmpireCard[];
       tokens: Token[];
     };
+    condottiereActive: boolean;
   };
   market: {
     cards: TableauCard[];

@@ -40,12 +40,14 @@ class QueenCard extends TableauCard
     $this->location = DISCARD;
 
     Notifications::discardQueen($player, $this, $king);
+    $this->deactivateAbility();
   }
 
   public function oldMaid($player)
   {
     Cards::insertOnTop($this->getId(), Locations::oldMaids($player->getId()));
     Notifications::oldMaid($player, $this);
+    $this->deactivateAbility();
   }
 
   // .##.....##.########.####.##.......####.########.##....##

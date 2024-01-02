@@ -179,6 +179,7 @@ var CITIES = [
     ALGIERS,
     TIMBUKTU,
     VENICE,
+    VENICE_2,
     CONSTANTINOPLE_1,
     CONSTANTINOPLE_2,
     CONSTANTINOPLE_3,
@@ -213,6 +214,24 @@ var SIEGE_OP = "SIEGE_OP";
 var TAX_OP = "TAX_OP";
 var VOTE_OP_EAST = "VOTE_OP_EAST";
 var VOTE_OP_WEST = "VOTE_OP_WEST";
+var SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY';
+var SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY';
+var SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1 = 'SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1';
+var SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2 = 'SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2';
+var SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS = 'SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS';
+var SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES = 'SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES';
+var SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS = 'SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS';
+var SA_DECLARE_HOLY_COSTS_TWO_ACTIONS = 'SA_DECLARE_HOLY_COSTS_TWO_ACTIONS';
+var SA_DECLARE_IMPERIAL_COSTS_TWO_ACTIONS = 'SA_DECLARE_IMPERIAL_COSTS_TWO_ACTIONS';
+var SA_FREE_EASTERN_OPS = 'SA_FREE_EASTERN_OPS';
+var SA_FREE_WESTERN_OPS = 'SA_FREE_WESTERN_OPS';
+var SA_FREE_TRADE_FAIR = 'SA_FREE_TRADE_FAIR';
+var SA_IMMUNE_TO_SILENCING = 'SA_IMMUNE_TO_SILENCING';
+var SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY = 'SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY';
+var SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY = 'SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY';
+var SA_SELL_FOR_4 = 'SA_SELL_FOR_4';
+var SA_UNLIMITED_HAND_SIZE = 'SA_UNLIMITED_HAND_SIZE';
+var SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS = 'SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS';
 var Modal = (function () {
     function Modal(id, config) {
         var _this = this;
@@ -2811,6 +2830,10 @@ var MAP_CONFIG = (_c = {},
                 top: 20.5,
                 left: 40,
             },
+            _l[VENICE_2] = {
+                top: 39,
+                left: 58,
+            },
             _l),
     },
     _c[OTTOMAN] = {
@@ -2955,6 +2978,7 @@ var GameMap = (function () {
         gamedatas.gameMap.empires.forEach(function (empire) {
             return _this.setEmpireReligion({ empireId: empire.id, religion: empire.religion });
         });
+        this.setVenice2Visibility(gamedatas.gameMap.condottiereActive);
     };
     GameMap.prototype.setupTokensBorders = function (_a) {
         var gamedatas = _a.gamedatas;
@@ -3063,6 +3087,19 @@ var GameMap = (function () {
         }
         node.setAttribute("data-card-id", "".concat(religion, "_").concat(empireId));
     };
+    GameMap.prototype.setVenice2Visibility = function (visible) {
+        if (visible === void 0) { visible = true; }
+        var venice2Node = document.getElementById('venice2_overlay');
+        if (!venice2Node) {
+            return;
+        }
+        if (visible) {
+            venice2Node.style.opacity = '1';
+        }
+        else {
+            venice2Node.style.opacity = '0';
+        }
+    };
     GameMap.prototype.checkZoomButtonClasses = function () {
         var zoomInButton = $("pr_game_map_zoom_in_button");
         var zoomOutButton = $("pr_game_map_zoom_out_button");
@@ -3142,7 +3179,7 @@ var tplGameMapMapCards = function () {
             .map(function (_a) {
             var city = _a[0], coords = _a[1];
             if (city === VENICE_2) {
-                return "<div id=\"".concat(city, "_overlay\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\">\n                    <div id=\"pr_").concat(city, "\" class=\"pr_city\"></div>\n                  </div>");
+                return "<div id=\"".concat(city, "_overlay\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px); opacity: 0;\">\n                    <div id=\"pr_").concat(city, "\" class=\"pr_city\"></div>\n                  </div>");
             }
             else {
                 return "<div id=\"pr_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
@@ -3703,9 +3740,11 @@ var NotificationManager = (function () {
         console.log("notifications subscriptions setup");
         var notifs = [
             ["log", undefined],
+            ["activateAbility", undefined],
             ["changeEmpireToMedievalState", undefined],
             ["changeEmpireToTheocracy", undefined],
             ["coronation", undefined],
+            ["deactivateAbility", undefined],
             ["declareVictory", undefined],
             ["discardCard", undefined],
             ["discardQueen", undefined],
@@ -3759,6 +3798,22 @@ var NotificationManager = (function () {
             });
         });
     };
+    NotificationManager.prototype.notif_activateAbility = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ability;
+            return __generator(this, function (_a) {
+                ability = notif.args.ability;
+                switch (ability) {
+                    case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
+                        this.game.gameMap.setVenice2Visibility(true);
+                        break;
+                    default:
+                        debug('Unhandled ability: ', ability);
+                }
+                return [2];
+            });
+        });
+    };
     NotificationManager.prototype.notif_changeEmpireToMedievalState = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var empire;
@@ -3800,6 +3855,22 @@ var NotificationManager = (function () {
                         _b.sent();
                         return [2];
                 }
+            });
+        });
+    };
+    NotificationManager.prototype.notif_deactivateAbility = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var ability;
+            return __generator(this, function (_a) {
+                ability = notif.args.ability;
+                switch (ability) {
+                    case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
+                        this.game.gameMap.setVenice2Visibility(false);
+                        break;
+                    default:
+                        debug('Unhandled ability: ', ability);
+                }
+                return [2];
             });
         });
     };

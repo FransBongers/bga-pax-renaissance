@@ -115,8 +115,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function isSilenced($player)
   {
     // Need for the card itself to prevent infininte loop
-    if ($this->hasSpecialAbility(SA_IMMUNE_TO_SILENCING))
-    {
+    if ($this->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
       return false;
     }
 
@@ -157,6 +156,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
 
   public function discard($messageType = DISCARD, $player = null)
   {
+    $this->deactivateAbility();
   }
 
   public function placeToken($token, $ctx)
@@ -177,15 +177,32 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function sell()
   {
     $this->discard();
+    $this->deactivateAbility();
   }
 
   /**
    * Function called when bishop is placed on the card / 
-   * is moved on the card
+   * is moved on the card. Replace with deactivate ability?
    */
   public function silence()
   {
+    $this->deactivateAbility();
+  }
 
+  /**
+   * Called when card is silenced, discarded, sold
+   * other moments when ability is deactivated
+   */
+  public function deactivateAbility()
+  {
+  }
+
+  /**
+   * Called when card is put in tableau, a bishop is moved from
+   * the card
+   */
+  public function activateAbility()
+  {
   }
 
   public function getSpecialAbilities()

@@ -18,6 +18,10 @@ interface NotifWithPlayerArgs {
   tkn_playerName: string;
 }
 
+interface NotifActivateAbilityArgs extends NotifWithPlayerArgs {
+  ability: string;
+}
+
 interface NotifChangeEmpireToMedievalStateArgs {
   empire: Empire;
 }
@@ -34,6 +38,10 @@ interface NotifCoronationArgs extends NotifWithPlayerArgs {
 
 interface NotifDeclareVictoryArgs extends NotifWithPlayerArgs {
   victoryCard: VictoryCard;
+}
+
+interface NotifDeactivateAbilityArgs extends NotifWithPlayerArgs {
+  ability: string;
 }
 
 interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
