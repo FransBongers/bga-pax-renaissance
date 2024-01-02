@@ -58,6 +58,13 @@
       margin-top: 4px;
     }
 
+    .pr_section_text {
+      .pr_prestige_icon {
+        display: inline-block;
+        margin-bottom: -8px;
+      }
+    }
+
     .pr_card_tooltip_row {
       display: flex;
       flex-direction: row;

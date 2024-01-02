@@ -16,5 +16,16 @@ class PREN155X_EpicureanSwerve extends \PaxRenaissance\Models\TableauCard
     $this->name = clienttranslate('Epicurean Swerve');
     $this->prestige = [PATRON];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_CARD_COUNTS_AS_REPUBLIC_FOR_YOUR_RENAISSANCE_VICTORY_1,
+        'title' => clienttranslate('On the Nature of Things:'),
+        'text' => [
+          'log' => clienttranslate('This counts as a Republic for your Renaissance Victory.'),
+          'args' => [],
+        ],
+      ]
+      // TODO: add other abilities
+    ];
   }
 }

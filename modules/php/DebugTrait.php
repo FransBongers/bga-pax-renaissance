@@ -26,11 +26,36 @@ use PaxRenaissance\Models\Player;
 
 trait DebugTrait
 {
+  function testGlobalizationVictory()
+  {
+    $this->debugPlaceCardInTableau('PREN102X_SahnISemanMadrese', EAST, 2371052); // Ability / Discovery
+    $this->debugPlaceCardInTableau('PREN009_HouseOfBorgia', WEST, 2371052); // PATRON
+    // $this->debugPlaceCardInTableau('PREN100X_UnifiedChristendom', WEST, 2371053); // PATRON
+    $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371053); // DISCOVERY
+    $this->debugPlaceCardInTableau('PREN105X_FrancoOttomanNavy', EAST, 2371053); // DISCOVERY
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_PORTUGAL);
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_OTTOMAN_PAPAL_STATES);
+    
+    Cards::get('VictoryGlobalization')->setActive();
+  }
 
+  function testRenaissanceVictory()
+  {
+    $this->debugPlaceCardInTableau('PREN103X_Academia', EAST, 2371053); // Republic
+    $this->debugPlaceCardInTableau('PREN037_TheHidden', WEST, 2371052); // LAW
+    $this->debugPlaceCardInTableau('PREN010_BonfireOfTheVanities', WEST, 2371052); // LAW
+    $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371052);
+    Cards::get('EmpireSquare_France')->setSide(REPUBLIC);
+    Cards::get('VictoryRenaissance')->setActive();
+  }
 
   function test()
   {
-    Engine::insertExtraPlayerAction(Players::get());
+    $this->testRenaissanceVictory();
+    // Notifications::log('hasAbility',Players::get(2371053)->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION));
+    
+
+
     // Notifications::log('index', Engine::getUnresolvedActions([FREE_ACTION])[0]->getIndex());
     // Notifications::log('active', Players::anyPlayerHasSpecialAbility(SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS));
     // Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
@@ -103,7 +128,7 @@ trait DebugTrait
     $king->setQueen(Cards::get($newQueen));
   }
 
-  function debugMoveCardToTableau($cardId, $region = WEST, $playerId = null)
+  function debugPlaceCardInTableau($cardId, $region = WEST, $playerId = null)
   {
     $playerId = $playerId === null ? Players::get()->getId() : $playerId;
     Cards::move($cardId, Locations::tableau($playerId, $region));

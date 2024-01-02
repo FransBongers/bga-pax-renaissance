@@ -1,7 +1,16 @@
-const tplToken = ({ id, type, separator }: { id?: string; type: string; separator: string; }) => {
-  return `<div ${id ? `id="${id}"` : ''} class="pr_token pr_${type}" data-separator="${separator}"></div>`;
+const tplToken = ({
+  id,
+  type,
+  separator,
+}: {
+  id?: string;
+  type: string;
+  separator: string;
+}) => {
+  return `<div ${
+    id ? `id="${id}"` : ""
+  } class="pr_token pr_${type}" data-separator="${separator}"></div>`;
 };
-
 
 // <div id="pr_market_west_${index}_florins" class="pr_icon pr_none" data-icon="florin" data-region="west">
 // <span id="pr_market_west_${index}_counter" class="pr_counter">5</span>
@@ -61,16 +70,20 @@ const tplGameMapEmpireCards = () => `
   ${Object.entries(THRONES_CONFIG)
     .map(
       ([empire, { top, left, location }]) =>
-      `<div id="pr_${empire}_throne" class="pr_empire_throne pr_empire_throne_${location}" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
-      
+        `<div id="pr_${empire}_throne" class="pr_empire_throne pr_empire_throne_${location}" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
     )
     .join("")}
 `;
 // `<div id="pr_empire_${empire}" class="pr_square_card" data-card-id="null" style="position: absolute; top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
 
 const tplGameMapMapBorders = () => {
-  return Object.entries(BORDER_CONFIG).map(([border, coords]) => `<div id="pr_${border}" class="pr_border" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`).join('');
-}
+  return Object.entries(BORDER_CONFIG)
+    .map(
+      ([border, coords]) =>
+        `<div id="pr_${border}" class="pr_border" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`
+    )
+    .join("");
+};
 
 const tplGameMapMapCards = () => {
   const htmlArray = Object.entries(MAP_CONFIG).map(
@@ -79,10 +92,15 @@ const tplGameMapMapCards = () => {
       data.top
     }px); left: calc(var(--paxRenMapScale) * ${data.left}px);">
     ${Object.entries(data.cities)
-      .map(
-        ([city, coords]) =>
-          `<div id="pr_${city}" class="pr_city" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`
-      )
+      .map(([city, coords]) => {
+        if (city === VENICE_2) {
+          return `<div id="${city}_overlay" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);">
+                    <div id="pr_${city}" class="pr_city"></div>
+                  </div>`;
+        } else {
+          return `<div id="pr_${city}" class="pr_city" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`;
+        }        
+      })
       .join("")}
   </div>
 `
@@ -115,4 +133,3 @@ const tplGameMap = () => `
     ${tplGameMapMarket()}
   </div>
 </div>`;
-

@@ -94,6 +94,11 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
         }
       }
       $concessions = array_values($concessions);
+
+      if (count($concessions) === 0) {
+        continue;
+      }
+
       usort($concessions, function ($a, $b) {
         return $b['count'] - $a['count'];
       });

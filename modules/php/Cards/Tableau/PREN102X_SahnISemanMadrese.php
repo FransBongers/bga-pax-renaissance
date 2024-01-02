@@ -16,5 +16,17 @@ class PREN102X_SahnISemanMadrese extends \PaxRenaissance\Models\TableauCard
     $this->name = clienttranslate('Sahn-i Seman Madrese');
     $this->prestige = [DISCOVERY];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION,
+        'title' => clienttranslate('ASTRONOMICAL NAVIGATION:'),
+        'text' => [
+          'log' => clienttranslate('Your ${tkn_prestige} count as Concessions in a Globalization Victory.'),
+          'args' => [
+            'tkn_prestige' => PATRON,
+          ],
+        ],
+      ]
+    ];
   }
 }

@@ -255,6 +255,10 @@ const MAP_CONFIG = {
         top: 20.5,
         left: 40,
       },
+      // [VENICE_2]: {
+      //   top: 39,
+      //   left: 58,
+      // },
     },
   },
   [OTTOMAN]: {

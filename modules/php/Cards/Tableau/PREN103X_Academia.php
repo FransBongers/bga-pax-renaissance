@@ -24,5 +24,15 @@ class PREN103X_Academia extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [DISCOVERY];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1,
+        'title' => clienttranslate('SECULAR UNIVERSITY:'),
+        'text' => [
+          'log' => clienttranslate('This card counts as a Republic for a Renaissance Victory.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

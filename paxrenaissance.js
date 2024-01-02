@@ -148,6 +148,7 @@ var VALENCIA = "valencia";
 var ALGIERS = "algiers";
 var TIMBUKTU = "timbuktu";
 var VENICE = "venice";
+var VENICE_2 = "venice2";
 var CONSTANTINOPLE_1 = "constantinople1";
 var CONSTANTINOPLE_2 = "constantinople2";
 var CONSTANTINOPLE_3 = "constantinople3";
@@ -3099,7 +3100,7 @@ var GameMap = (function () {
 }());
 var tplToken = function (_a) {
     var id = _a.id, type = _a.type, separator = _a.separator;
-    return "<div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_token pr_").concat(type, "\" data-separator=\"").concat(separator, "\"></div>");
+    return "<div ".concat(id ? "id=\"".concat(id, "\"") : "", " class=\"pr_token pr_").concat(type, "\" data-separator=\"").concat(separator, "\"></div>");
 };
 var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map(function (_a, index) {
     var top = _a.top, left = _a.left;
@@ -3127,10 +3128,12 @@ var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(TH
 })
     .join(""), "\n"); };
 var tplGameMapMapBorders = function () {
-    return Object.entries(BORDER_CONFIG).map(function (_a) {
+    return Object.entries(BORDER_CONFIG)
+        .map(function (_a) {
         var border = _a[0], coords = _a[1];
         return "<div id=\"pr_".concat(border, "\" class=\"pr_border\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
-    }).join('');
+    })
+        .join("");
 };
 var tplGameMapMapCards = function () {
     var htmlArray = Object.entries(MAP_CONFIG).map(function (_a) {
@@ -3138,7 +3141,12 @@ var tplGameMapMapCards = function () {
         return "\n  <div id=\"pr_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(data.top, "px); left: calc(var(--paxRenMapScale) * ").concat(data.left, "px);\">\n    ").concat(Object.entries(data.cities)
             .map(function (_a) {
             var city = _a[0], coords = _a[1];
-            return "<div id=\"pr_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
+            if (city === VENICE_2) {
+                return "<div id=\"".concat(city, "_overlay\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\">\n                    <div id=\"pr_").concat(city, "\" class=\"pr_city\"></div>\n                  </div>");
+            }
+            else {
+                return "<div id=\"pr_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
+            }
         })
             .join(""), "\n  </div>\n");
     });
@@ -5774,6 +5782,7 @@ var ClientSellCardState = (function () {
             _this.game.setCardSelectable({
                 id: card.id,
                 callback: function () { return _this.updateInterfaceConfirm({ card: card }); },
+                back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
             });
         });
     };
@@ -7386,6 +7395,7 @@ var TableauOpInquisitorState = (function () {
         option.destinations.forEach(function (destination) {
             _this.game.setCardSelectable({
                 id: destination.id,
+                back: destination.type === EMPIRE_CARD && destination.side === REPUBLIC ? true : false,
                 callback: function () {
                     return _this.updateInterfaceConfirm({
                         token: option.token,
@@ -8037,7 +8047,7 @@ var tplTableauCardTooltip = function (_a) {
             ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
             : "", "\n      ").concat((card.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.ops && card.ops.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Ops"), "</span>")
-            : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n      ").concat((card.specialAbilities || []).map(function (specialAbility) { return "\n        <span class=\"pr_section_title\">".concat(specialAbility.title ? _(specialAbility.title) : _('Ability'), "</span>\n        <span>").concat(game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args), "</span>\n      "); }).join(''), "\n    "),
+            : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n      ").concat((card.specialAbilities || []).map(function (specialAbility) { return "\n        <span class=\"pr_section_title\">".concat(specialAbility.title ? _(specialAbility.title) : _('Ability'), "</span>\n        <span class=\"pr_section_text\">").concat(game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args), "</span>\n      "); }).join(''), "\n    "),
     });
 };
 var TooltipManager = (function () {

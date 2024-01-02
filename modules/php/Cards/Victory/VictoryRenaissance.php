@@ -34,6 +34,13 @@ class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
         return $cardInTableau->getType() === EMPIRE_CARD && $cardInTableau->getSide() === REPUBLIC;
       }));
 
+      if ($player->hasSpecialAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1)) {
+        $numberOfRepublics += 1;
+      }
+      if ($player->getId() === $activePlayer->getId() && $player->hasSpecialAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_YOUR_RENAISSANCE_VICTORY_1)) {
+        $numberOfRepublics += 1;
+      }
+      
       $lawPrestige = $player->getPrestige(true)[LAW];
 
       $republicRanking[] = [

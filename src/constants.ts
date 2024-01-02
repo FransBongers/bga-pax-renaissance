@@ -220,6 +220,7 @@ const VALENCIA = "valencia";
 const ALGIERS = "algiers";
 const TIMBUKTU = "timbuktu";
 const VENICE = "venice";
+const VENICE_2 = "venice2";
 const CONSTANTINOPLE_1 = "constantinople1";
 const CONSTANTINOPLE_2 = "constantinople2";
 const CONSTANTINOPLE_3 = "constantinople3";

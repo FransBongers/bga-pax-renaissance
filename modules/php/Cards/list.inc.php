@@ -17,10 +17,10 @@ $cardIds = [
   'VictoryImperial',
   'VictoryRenaissance',
   // Tableau
-  'COMET1_Copernicus',
-  'COMET2_Nostradamus',
-  'COMET3_Halley',
-  'COMET4_Regiomontanus',
+  'COMET1_Copernicus', // EAST
+  'COMET2_Nostradamus', // EAST
+  'COMET3_Halley', // WEST
+  'COMET4_Regiomontanus', // WEST
   'PREN001_InquistionPope',
   'PREN002_PapalElephant',
   'PREN003_GrandInquisitor',
@@ -118,8 +118,8 @@ $cardIds = [
   'PREN099X_PapalLegateToPersia',
   'PREN100X_UnifiedChristendom',
   'PREN101X_CivilEngineer',
-  // 'PREN102X_SahnISemanMadrese',
-  // 'PREN103X_Academia',
+  'PREN102X_SahnISemanMadrese',
+  'PREN103X_Academia',
   // 'PREN104X_TheftOfTheHolyCrown',
   'PREN105X_FrancoOttomanNavy',
   'PREN106X_PrussianLeagueNavy',

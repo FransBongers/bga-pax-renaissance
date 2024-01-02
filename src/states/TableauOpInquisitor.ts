@@ -125,6 +125,7 @@ class TableauOpInquisitorState implements State {
     option.destinations.forEach((destination) => {
       this.game.setCardSelectable({
         id: destination.id,
+        back: destination.type === EMPIRE_CARD && destination.side === REPUBLIC ? true : false,
         callback: () =>
           this.updateInterfaceConfirm({
             token: option.token,
