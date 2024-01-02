@@ -16,5 +16,18 @@ class PREN132X_ArtisticGeometry extends \PaxRenaissance\Models\TableauCard
     $this->name = clienttranslate('Artistic Geometry');
     $this->prestige = [PATRON];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY,
+        'title' => clienttranslate('GERMAN RENAISSANCE:'),
+        'text' => [
+          'log' => clienttranslate('Your ${tkn_prestige_patron} counts as ${tkn_prestige_law} for Renaissance Victory.'),
+          'args' => [
+            'tkn_prestige_patron' => PATRON,
+            'tkn_prestige_law' => LAW,
+          ],
+        ],
+      ]
+    ];
   }
 }

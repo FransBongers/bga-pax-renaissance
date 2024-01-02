@@ -52,7 +52,11 @@ trait DebugTrait
   function test()
   {
     $this->testRenaissanceVictory();
-    // Notifications::log('hasAbility',Players::get(2371053)->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION));
+    // $this->debugPlaceCardInMarket('PREN132X_ArtisticGeometry', WEST, 1);
+    // $this->debugPlaceCardInMarket('PREN133X_RomanticRealism', WEST, 2);
+    // $this->debugPlaceCardInMarket('PREN159X_ConsentOfTheGoverned', WEST, 3);
+
+    // Notifications::log('hasAbility',Players::get(2371053)->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY));
     
 
 

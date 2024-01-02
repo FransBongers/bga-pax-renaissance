@@ -42,7 +42,7 @@ class VictoryGlobalization extends \PaxRenaissance\Models\VictoryCard
         return $concession->getOwner()->getId() === $player->getId();
       }));
 
-      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION)) {
+      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY)) {
         $patronPrestige = $player->getPrestige()[PATRON];
         $numberOfConcessions += $patronPrestige;
       }

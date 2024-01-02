@@ -15,5 +15,18 @@ class PREN133X_RomanticRealism extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Romantic Realism');
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY,
+        'title' => clienttranslate('REPUBLICAN IDEALS:'),
+        'text' => [
+          'log' => clienttranslate('Your ${tkn_prestige_patron} counts as ${tkn_prestige_law} for Renaissance Victory.'),
+          'args' => [
+            'tkn_prestige_patron' => PATRON,
+            'tkn_prestige_law' => LAW,
+          ],
+        ],
+      ]
+    ];
   }
 }

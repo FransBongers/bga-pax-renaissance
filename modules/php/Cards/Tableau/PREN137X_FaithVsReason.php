@@ -15,5 +15,26 @@ class PREN137X_FaithVsReason extends \PaxRenaissance\Models\TableauCard
     ];
     $this->name = clienttranslate('Faith vs. Reason');
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_DECLARE_HOLY_COSTS_TWO_ACTIONS,
+        'title' => '',
+        'text' => [
+          'log' => clienttranslate('Declaring Holy Victory costs 2 actions (all players).'),
+          'args' => [],
+        ],
+        'allPlayers' => true,
+      ],
+      [
+        'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY,
+        'title' => clienttranslate('Cartography:'),
+        'text' => [
+          'log' => clienttranslate('Your ${tkn_prestige} count as Concessions in a Globalization Victory.'),
+          'args' => [
+            'tkn_prestige' => PATRON,
+          ],
+        ],
+      ]
+    ];
   }
 }

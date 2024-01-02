@@ -43,6 +43,11 @@ class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
       
       $lawPrestige = $player->getPrestige(true)[LAW];
 
+      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY)) {
+        $patronPrestige = $player->getPrestige()[PATRON];
+        $lawPrestige += $patronPrestige;
+      }
+
       $republicRanking[] = [
         'playerId' => $player->getId(),
         'numberOfRepublics' => $numberOfRepublics,

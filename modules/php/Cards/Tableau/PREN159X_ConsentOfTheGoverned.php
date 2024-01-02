@@ -17,5 +17,18 @@ class PREN159X_ConsentOfTheGoverned extends \PaxRenaissance\Models\TableauCard
     $this->oneShot = PEASANT_REVOLT_ONE_SHOT;
     $this->prestige = [LAW];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY,
+        'title' => clienttranslate('GERMAN HUMANISM:'),
+        'text' => [
+          'log' => clienttranslate('Your ${tkn_prestige_patron} counts as ${tkn_prestige_law} for Renaissance Victory.'),
+          'args' => [
+            'tkn_prestige_patron' => PATRON,
+            'tkn_prestige_law' => LAW,
+          ],
+        ],
+      ]
+    ];
   }
 }
