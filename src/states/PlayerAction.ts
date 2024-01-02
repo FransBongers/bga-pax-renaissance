@@ -174,13 +174,17 @@ class PlayerActionState implements State {
           id: `${region}_ops_btn`,
           text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
           callback: () =>
-            this.game.takeAction({
-              action: "actPlayerAction",
-              args: {
-                action: `tableauOps`,
-                region,
-              },
-            }),
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientConfirmTableauOpsArgs>(
+              CLIENT_CONFIRM_TABLEAU_OPS,
+              {
+                args: {
+                  availableOps: this.args.availableOps,
+                  region
+                }
+              }
+            ),
         });
       }
     });

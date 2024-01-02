@@ -52,7 +52,7 @@ class AbilityActionUse extends \PaxRenaissance\Models\AtomicAction
     $player = self::getPlayer();
 
 
-    $actions = $player->getAbilityActions();
+    $actions = $player->getAbilityActions($source === FREE_ACTION);
 
     if (!isset($actions[$cardId]) || !$actions[$cardId]->getId() === $abilityId) {
       throw new \feException("Not allowed to perform action from ability");

@@ -43,7 +43,7 @@ class FreeAction extends \PaxRenaissance\Models\AtomicAction
   public function stFreeAction()
   {
     $player = self::getPlayer();
-    $freeActions = $player->getAbilityActions();
+    $freeActions = $player->getAbilityActions(true);
     if (count($freeActions) > 0) {
       return;
     }
@@ -64,7 +64,7 @@ class FreeAction extends \PaxRenaissance\Models\AtomicAction
     $player = self::getPlayer();
 
     return [
-      'freeActions' => $player->getAbilityActions()
+      'freeActions' => $player->getAbilityActions(true)
     ];
   }
 

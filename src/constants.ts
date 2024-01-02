@@ -3,6 +3,7 @@ const MIN_PLAY_AREA_WIDTH = 1516;
 /**
  * Client states
  */
+const CLIENT_CONFIRM_TABLEAU_OPS = "clientConfirmTableauOpsState";
 const CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 const CLIENT_SELL_CARD_STATE = "clientSellCardState";
 const CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
@@ -52,6 +53,7 @@ const MARCHIONNI = "marchionni";
  */
 const WEST = "west";
 const EAST = "east";
+const EAST_AND_WEST = 'eastAndWest';
 
 const REGIONS: ("east" | "west")[] = [WEST, EAST];
 

@@ -22,6 +22,11 @@ interface PlayAction {
 
 type PaxRenAction = PurchaseAction | PlayAction;
 
+interface OnEnteringClientConfirmTableauOpsArgs {
+  availableOps: OnEnteringPlayerActionArgs['availableOps'];
+  region: 'east' | 'west';
+}
+
 interface OnEnteringClientDeclareVictoryArgs {
   victoryCard: VictoryCard;
 }
@@ -148,6 +153,7 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
   availableOps: {
     east: Record<string, { id: string; text: string }>;
     west: Record<string, { id: string; text: string }>;
+    eastAndWest: boolean;
   };
   declarableVictories: VictoryCard[];
   remainingActions: number;

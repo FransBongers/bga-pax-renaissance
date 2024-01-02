@@ -16,6 +16,12 @@ use PaxRenaissance\Managers\Players;
 
 class PlayerAction extends \PaxRenaissance\Models\AtomicAction
 {
+  private $tableauOpsActionMap = [
+    EAST => TABLEAU_OPS_SELECT_EAST,
+    WEST => TABLEAU_OPS_SELECT_WEST,
+    EAST_AND_WEST => TABLEAU_OPS_SELECT_EAST_AND_WEST,
+  ];
+
   public function getState()
   {
     return ST_PLAYER_ACTION;
@@ -146,7 +152,10 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         ]));
         break;
       case 'tableauOps':
-        $action = $args['region'] === EAST ? TABLEAU_OPS_SELECT_EAST : TABLEAU_OPS_SELECT_WEST;
+        $action = $this->tableauOpsActionMap[$args['region']];
+        if ($action === TABLEAU_OPS_SELECT_EAST_AND_WEST && !$player->hasSpecialAbility(SA_EAST_AND_WEST_OPS_IN_ONE_ACTION)) {
+          throw new \feException("Not allowed to perform east and west ops in one action");
+        }
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [

@@ -28,6 +28,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public _connections: unknown[];
 
   public activeStates: {
+    [CLIENT_CONFIRM_TABLEAU_OPS]: ClientConfirmTableauOpsState;
     [CLIENT_DECLARE_VICTORY_STATE]: ClientDeclareVictoryState;
     [CLIENT_SELL_CARD_STATE]: ClientSellCardState;
     [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
@@ -94,6 +95,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this._connections = [];
     // Will store all data for active player and gets refreshed with entering player actions state
     this.activeStates = {
+      [CLIENT_CONFIRM_TABLEAU_OPS]: new ClientConfirmTableauOpsState(this),
       [CLIENT_DECLARE_VICTORY_STATE]: new ClientDeclareVictoryState(this),
       [CLIENT_SELL_CARD_STATE]: new ClientSellCardState(this),
       [CLIENT_START_TRADE_FAIR_STATE]: new ClientStartTradeFairState(this),

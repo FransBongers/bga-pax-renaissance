@@ -55,6 +55,7 @@ class AtomicActions
     TABLEAU_OP_REPRESS => 'TableauOpRepress',
     TABLEAU_OPS_SELECT_EAST => 'TableauOpsSelect',
     TABLEAU_OPS_SELECT_WEST => 'TableauOpsSelect',
+    TABLEAU_OPS_SELECT_EAST_AND_WEST => 'TableauOpsSelect',
     TABLEAU_OP_SIEGE => 'TableauOpSiege',
     TABLEAU_OP_TAX => 'TableauOpTax',
     TABLEAU_OP_TAX_FLORINS_CHECK => 'TableauOpTaxFlorinsCheck',

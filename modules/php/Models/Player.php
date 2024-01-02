@@ -83,7 +83,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     return (int) parent::getId();
   }
 
-  public function getAbilityActions()
+  public function getAbilityActions($freeActionsOnly = false)
   {
     $abilityActions = [];
     $tableauCards = $this->getTableauCards();
@@ -96,6 +96,9 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
           continue;
         }
         $abilityAction = AbilityActions::get($ability['id'], $ability);
+        if ($freeActionsOnly && !$abilityAction->isFreeAction()) {
+          continue;
+        }
         if ($abilityAction->canBePerformed($this, $card)) {
           $abilityActions[$card->getId()] = $abilityAction;
         }
@@ -117,8 +120,8 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     ];
     foreach (REGIONS as $region) {
       $regionHasAlreadyBeenResolved = $region === EAST ?
-        count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST])) > 0 :
-        count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_WEST])) > 0;
+        count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST, TABLEAU_OPS_SELECT_EAST_AND_WEST])) > 0 :
+        count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_WEST, TABLEAU_OPS_SELECT_EAST_AND_WEST])) > 0;
       if ($regionHasAlreadyBeenResolved) {
         continue;
       }
@@ -130,6 +133,12 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
         }
       }
     }
+    if ($this->hasSpecialAbility(SA_EAST_AND_WEST_OPS_IN_ONE_ACTION) && count($result[EAST]) > 0 && count($result[WEST]) > 0) {
+      $result[EAST_AND_WEST] = true;
+    } else {
+      $result[EAST_AND_WEST] = false;
+    }
+
     return $result;
   }
 

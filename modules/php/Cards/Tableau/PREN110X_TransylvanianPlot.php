@@ -25,6 +25,7 @@ class PREN110X_TransylvanianPlot extends \PaxRenaissance\Models\TableauCard
       clienttranslate("In 1534, imperial troops killed Gritti in his attempted conquest of Transylvania.")
     ];
     $this->name = clienttranslate('Transylvanian Plot');
+    $this->oneShot = CONSPIRACY_ONE_SHOT;
     $this->ops = [
       [
         'id' => SIEGE_OP,
@@ -40,5 +41,20 @@ class PREN110X_TransylvanianPlot extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_EAST_AND_WEST_OPS_IN_ONE_ACTION,
+        'title' => clienttranslate('GRITTI SPIES:'),
+        'text' => [
+          'log' => clienttranslate('May do east & west ops in one action.'),
+          'args' => [],
+        ],
+        'abilityAction' => true,
+        'top' => 0,
+        'left' => 0,
+        'height' => 0,
+        'width' => 0,
+      ]
+    ];
   }
 }

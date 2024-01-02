@@ -63,14 +63,14 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
   public function argsTableauOpsSelect()
   {
     $info = $this->ctx->getInfo();
-    $region = $info['region'];
-    
+    $region = isset($info['region']) ? $info['region'] : null;
+
     $player = self::getPlayer();
     $availableOps = $this->getAvailableOps($player);
 
     $data = [
       'availableOps' => $availableOps,
-      'tableauCards' => $player->getTableauCardsForRegion($region),
+      'tableauCards' => $info['action'] === TABLEAU_OPS_SELECT_EAST_AND_WEST ? $player->getTableauCards() : $player->getTableauCardsForRegion($region),
       'optional' => $this->hasAtLeastOneOpBeenResolved(),
     ];
 
@@ -97,19 +97,20 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actTableauOpsSelect');
     $player = self::getPlayer();
-    
+
     $available = $this->getAvailableOps($player);
 
     $cardId = isset($args['cardId']) ? $args['cardId'] : null;
+    // TODO: implement pass function / set optional after performing first op
     if ($cardId === null && $this->hasAtLeastOneOpBeenResolved()) {
       Notifications::tableauOpSkip($player);
       $this->resolveAction($args);
-      return;  
+      return;
     } else if ($cardId === null) {
       throw new \feException("At least one Op has to be performed");
     }
     $tableauOpId = $args['tableauOpId'];
-    
+
     if (!isset($available[$cardId])) {
       throw new \feException("Not allowed to perform Ops from selected card");
     }
@@ -144,7 +145,12 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
   private function getAvailableOps($player)
   {
     $info = $this->ctx->getInfo();
-    return $player->getAvailableOps()[$info['region']];
+    $availableOps = $player->getAvailableOps();
+    if ($info['action'] === TABLEAU_OPS_SELECT_EAST_AND_WEST) {
+      return array_merge($availableOps[EAST], $availableOps[WEST]);
+    } else {
+      return $availableOps[$info['region']];
+    }
   }
 
   private function hasAtLeastOneOpBeenResolved()

@@ -108,6 +108,11 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
     $result = [];
     $prestige = $this->apostasyPrestigeMap[$oneShot];
     foreach (Players::getAll() as $player) {
+      if ($player->hasSpecialAbility(SA_IMMUNE_TO_APOSTASY)) {
+        continue;
+      }
+
+
       $playerPrestige = $player->getPrestige();
 
       if (!($playerPrestige[$prestige[0]] > 0 && $playerPrestige[$prestige[1]] > 0)) {
@@ -127,11 +132,6 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
         }
         $result[$playerId][] = $card;
       }
-      // $result[$player->getId()] = Utils::filter($tableauCards, function ($card) use ($prestige) {
-      //   return Utils::array_some($card->getPrestige(), function ($cardPrestige) use ($prestige) {
-      //     return in_array($cardPrestige, $prestige);
-      //   });
-      // });
     }
     return $result;
   }

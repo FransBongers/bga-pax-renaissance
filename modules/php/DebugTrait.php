@@ -51,11 +51,11 @@ trait DebugTrait
 
   function test()
   {
-    Empires::get(PAPAL_STATES)->changeToMedievalState(Players::get());
+    // Empires::get(PAPAL_STATES)->changeToMedievalState(Players::get());
     // Empires::get(PAPAL_STATES)->changeToTheocracy(CATHOLIC);
     // $this->testRenaissanceVictory();
-    // $this->debugPlaceCardInMarket('PREN024_Gonfalonier', WEST, 1);
-    // $this->debugPlaceCardInMarket('PREN055_DuchyOfFerrara', WEST, 2);
+    $this->debugPlaceCardInMarket('PREN110X_TransylvanianPlot', EAST, 1);
+    $this->debugPlaceCardInMarket('PREN122X_TheLastSigh', EAST, 2);
     // $this->debugPlaceCardInMarket('PREN143X_WolfOfRimini', WEST, 3);
     // Notifications::log('venice2', Empires::get(PAPAL_STATES)->getCities());
 

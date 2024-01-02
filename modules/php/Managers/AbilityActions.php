@@ -13,6 +13,7 @@ class AbilityActions
 {
   // Mapping of opId and corresponding class
   static $abilityActions = [
+    SA_EAST_AND_WEST_OPS_IN_ONE_ACTION => 'EastWestOps',
     SA_FREE_EASTERN_OPS => 'FreeEasternOps',
     SA_FREE_WESTERN_OPS => 'FreeWesternOps',
     SA_FREE_TRADE_FAIR => 'FreeTradeFair',

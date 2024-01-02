@@ -1,18 +1,29 @@
-class ClientDeclareVictoryState implements State {
+class ClientConfirmTableauOpsState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringClientDeclareVictoryArgs;
+  private args: OnEnteringClientConfirmTableauOpsArgs;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringClientDeclareVictoryArgs) {
+  onEnteringState(args: OnEnteringClientConfirmTableauOpsArgs) {
     this.args = args;
-    this.updateInterfaceInitialStep();
+    if (!this.args.availableOps.eastAndWest) {
+      this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: `tableauOps`,
+          region: this.args.region,
+        },
+      });
+    } else {
+      this.updateInterfaceInitialStep();
+    }
+    
   }
 
   onLeavingState() {
-    debug("Leaving ClientDeclareVictoryState");
+    debug("Leaving ClientConfirmTableauOpsState");
   }
 
   setDescription(activePlayerId: number) {}
@@ -35,23 +46,33 @@ class ClientDeclareVictoryState implements State {
 
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
-    this.game.setCardSelected({ id: this.args.victoryCard.id });
+    // this.game.setCardSelected({ id: this.args.victoryCard.id });
 
     this.game.clientUpdatePageTitle({
-      text: _("Declare ${victoryTitle}?"),
+      text: _("Perform East and West ops in one action?"),
       args: {
-        victoryTitle: _(this.args.victoryCard.active.title),
       },
     });
     this.game.addConfirmButton({
-      callback: () =>         this.game.takeAction({
+      callback: () => this.game.takeAction({
         action: "actPlayerAction",
         args: {
-          action: "declareVictory",
-          cardId: this.args.victoryCard.id,
+          action: `tableauOps`,
+          region: EAST_AND_WEST,
         },
       }),
     });
+    this.game.addSecondaryActionButton({
+      id: 'region_ops_btn',
+      text: this.args.region === EAST ? _('East ops only') : _('West ops only'),
+      callback: () => this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: `tableauOps`,
+          region: this.args.region,
+        },
+      }),
+    })
     this.game.addCancelButton();
   }
 

@@ -1,5 +1,6 @@
 var _a;
 var MIN_PLAY_AREA_WIDTH = 1516;
+var CLIENT_CONFIRM_TABLEAU_OPS = "clientConfirmTableauOpsState";
 var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 var CLIENT_SELL_CARD_STATE = "clientSellCardState";
 var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
@@ -26,6 +27,7 @@ var COEUR = "coeur";
 var MARCHIONNI = "marchionni";
 var WEST = "west";
 var EAST = "east";
+var EAST_AND_WEST = 'eastAndWest';
 var REGIONS = [WEST, EAST];
 var EMPIRE_CARD = "empireCard";
 var TABLEAU_CARD = "tableauCard";
@@ -1825,6 +1827,7 @@ var PaxRenaissance = (function () {
         this.setupPlayerOrder({ customPlayerOrder: gamedatas.customPlayerOrder });
         this._connections = [];
         this.activeStates = (_a = {},
+            _a[CLIENT_CONFIRM_TABLEAU_OPS] = new ClientConfirmTableauOpsState(this),
             _a[CLIENT_DECLARE_VICTORY_STATE] = new ClientDeclareVictoryState(this),
             _a[CLIENT_SELL_CARD_STATE] = new ClientSellCardState(this),
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
@@ -5707,6 +5710,60 @@ var CoronationState = (function () {
     };
     return CoronationState;
 }());
+var ClientConfirmTableauOpsState = (function () {
+    function ClientConfirmTableauOpsState(game) {
+        this.game = game;
+    }
+    ClientConfirmTableauOpsState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        if (!this.args.availableOps.eastAndWest) {
+            this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "tableauOps",
+                    region: this.args.region,
+                },
+            });
+        }
+        else {
+            this.updateInterfaceInitialStep();
+        }
+    };
+    ClientConfirmTableauOpsState.prototype.onLeavingState = function () {
+        debug("Leaving ClientConfirmTableauOpsState");
+    };
+    ClientConfirmTableauOpsState.prototype.setDescription = function (activePlayerId) { };
+    ClientConfirmTableauOpsState.prototype.updateInterfaceInitialStep = function () {
+        var _this = this;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("Perform East and West ops in one action?"),
+            args: {},
+        });
+        this.game.addConfirmButton({
+            callback: function () { return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "tableauOps",
+                    region: EAST_AND_WEST,
+                },
+            }); },
+        });
+        this.game.addSecondaryActionButton({
+            id: 'region_ops_btn',
+            text: this.args.region === EAST ? _('East ops only') : _('West ops only'),
+            callback: function () { return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "tableauOps",
+                    region: _this.args.region,
+                },
+            }); },
+        });
+        this.game.addCancelButton();
+    };
+    return ClientConfirmTableauOpsState;
+}());
 var ClientDeclareVictoryState = (function () {
     function ClientDeclareVictoryState(game) {
         this.game = game;
@@ -5716,7 +5773,7 @@ var ClientDeclareVictoryState = (function () {
         this.updateInterfaceInitialStep();
     };
     ClientDeclareVictoryState.prototype.onLeavingState = function () {
-        debug("Leaving ClientStartTradeFairState");
+        debug("Leaving ClientDeclareVictoryState");
     };
     ClientDeclareVictoryState.prototype.setDescription = function (activePlayerId) { };
     ClientDeclareVictoryState.prototype.updateInterfaceInitialStep = function () {
@@ -6635,12 +6692,13 @@ var PlayerActionState = (function () {
                     id: "".concat(region, "_ops_btn"),
                     text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
                     callback: function () {
-                        return _this.game.takeAction({
-                            action: "actPlayerAction",
+                        return _this.game
+                            .framework()
+                            .setClientState(CLIENT_CONFIRM_TABLEAU_OPS, {
                             args: {
-                                action: "tableauOps",
-                                region: region,
-                            },
+                                availableOps: _this.args.availableOps,
+                                region: region
+                            }
                         });
                     },
                 });

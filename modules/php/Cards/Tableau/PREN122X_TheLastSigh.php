@@ -36,5 +36,20 @@ class PREN122X_TheLastSigh extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_EAST_AND_WEST_OPS_IN_ONE_ACTION,
+        'title' => clienttranslate('LEO AFRICANUS:'),
+        'text' => [
+          'log' => clienttranslate('May do east & west ops in one action.'),
+          'args' => [],
+        ],
+        'abilityAction' => true,
+        'top' => 0,
+        'left' => 0,
+        'height' => 0,
+        'width' => 0,
+      ]
+    ];
   }
 }
