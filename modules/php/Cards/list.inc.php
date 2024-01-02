@@ -182,7 +182,7 @@ $cardIds = [
   'PREN163X_JizyaTaxRevolt',
   // 'PREN164X_CircassianMamluks',
   'PREN165X_TransylvanianSaxons',
-  // 'PREN166X_BankOfStGeorge',
+  'PREN166X_BankOfStGeorge',
   'PREN167X_TwelverGhulat',
   // 'PREN168X_ZionistState',
 ];

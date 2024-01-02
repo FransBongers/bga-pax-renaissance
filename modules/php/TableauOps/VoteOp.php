@@ -69,6 +69,14 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
       $cost = count(Utils::filter($empireCard->getTokens(), function ($token) {
         return in_array($token->getType(), [PAWN, ROOK, KNIGHT]);
       }));
+      if ($player->hasSpecialAbility(SA_PATRON_REDUCES_VOTE_OPS_COST)) {
+        $patronPrestige = $player->getPrestige(true)[PATRON];
+        $cost = $cost - $patronPrestige;
+        if ($cost < 0) {
+          $cost = 0;
+        }
+      }
+
       if ($player->getFlorins() < $cost) {
         continue;
       }
