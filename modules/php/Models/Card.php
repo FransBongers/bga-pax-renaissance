@@ -177,7 +177,6 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function sell()
   {
     $this->discard();
-    $this->deactivateAbility();
   }
 
   /**
