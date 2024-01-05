@@ -786,15 +786,12 @@ class Notifications
   }
 
 
-  public static function vassalage($player, $empireCard, $suzerain, $from)
+  public static function vassalage($player, $empireCard, $suzerain)
   {
-    self::notifyAll("vassalage", clienttranslate('${tkn_boldText_vassal} becomes a Vassal to ${tkn_boldText_vassal_suzerain}'), [
+    self::message(clienttranslate('${tkn_boldText_vassal} becomes a Vassal to ${tkn_boldText_vassal_suzerain}'), [
       'player' => $player,
       'tkn_boldText_vassal' => $empireCard->getName(),
       'tkn_boldText_vassal_suzerain' => $suzerain->getName(),
-      'vassal' => $empireCard,
-      'suzerain' => $suzerain,
-      'from' => $from,
     ]);
   }
 

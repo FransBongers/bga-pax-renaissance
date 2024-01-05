@@ -38,6 +38,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return $this->jsonSerialize(); // Static datas are already in js file
   }
 
+  public function getAgents()
+  {
+    return [];
+  }
+
   public function getOps()
   {
     // TODO: find out why this is null if not set on card level
@@ -61,6 +66,12 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function insertAtBottom($location)
   {
     Cards::insertAtBottom($this->getId(), $location);
+    $this->location = $location;
+  }
+
+  public function insertOnTop($location)
+  {
+    Cards::insertOnTop($this->getId(), $location);
     $this->location = $location;
   }
 

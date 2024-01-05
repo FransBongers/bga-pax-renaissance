@@ -65,8 +65,10 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
    * Count only unrepressed Tokens whose color matches the Theocracy they live in.
    *  
    */
-  private function getSupremeReligion()
+  public function getSupremeReligion()
   {
+
+    $greenPiratesReformist = Players::anyPlayerHasSpecialAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS);
 
     /**
      * Bishops in play
@@ -77,11 +79,16 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
       REFORMIST => 0,
     ];
     $bishopsInPlay = Tokens::getBishopsInPlay();
-    // Notifications::log('bishopsInPlay', $bishopsInPlay);
 
     foreach($bishopsInPlay as $bishop) {
       $religion = $bishop->getSeparator();
       $numberOfBishopsInPlay[$religion] = $numberOfBishopsInPlay[$religion] + 1;
+    }
+
+    if ($greenPiratesReformist) {
+      $greenPirates = Tokens::getOfTypeInLocation('pirate_islamic_', 'border_');
+      $numberOfBishopsInPlay[REFORMIST] = $numberOfBishopsInPlay[REFORMIST] + count($greenPirates);
+      
     }
 
     $numberOfBishopsInPlayRanking = [];
@@ -94,13 +101,11 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
     usort($numberOfBishopsInPlayRanking, function ($a, $b) {
       return $b['numberOfBishops'] - $a['numberOfBishops'];
     });
-    // Notifications::log('numberOfBishopsInPlayRanking', $numberOfBishopsInPlayRanking);
 
     $supremeReligionBishopsInPlay = null;
     if ($numberOfBishopsInPlayRanking[0]['numberOfBishops'] > $numberOfBishopsInPlayRanking[1]['numberOfBishops'] + $numberOfBishopsInPlayRanking[2]['numberOfBishops']) {
       $supremeReligionBishopsInPlay = $numberOfBishopsInPlayRanking[0]['religion'];
     }
-    // Notifications::log('supremeReligionBishopsInPlay', $supremeReligionBishopsInPlay);
 
     if ($supremeReligionBishopsInPlay === null) {
       return null;
@@ -136,6 +141,9 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
         if ($token !== null && $token->getSeparator() === $empireReligion) {
           $numberOfTokensInTheocracies[$empireReligion] = $numberOfTokensInTheocracies[$empireReligion] + 1;
         }
+        if ($greenPiratesReformist && $token !== null && $empireReligion === REFORMIST && $token->getSeparator() === ISLAMIC) {
+          $numberOfTokensInTheocracies[$empireReligion] = $numberOfTokensInTheocracies[$empireReligion] + 1;
+        }
       }
     }
 
@@ -149,7 +157,7 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
     usort($tokensInTheocraciesRanking, function ($a, $b) {
       return $b['numberOfTokens'] - $a['numberOfTokens'];
     });
-    // Notifications::log('tokensInTheocraciesRanking', $tokensInTheocraciesRanking);
+
     $supremeReligionsTokensInTheocracies = null;
     if ($tokensInTheocraciesRanking[0]['numberOfTokens'] > $tokensInTheocraciesRanking[1]['numberOfTokens'] + $tokensInTheocraciesRanking[2]['numberOfTokens']) {
       $supremeReligionsTokensInTheocracies = $tokensInTheocraciesRanking[0]['religion'];

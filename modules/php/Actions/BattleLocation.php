@@ -138,14 +138,28 @@ class BattleLocation extends \PaxRenaissance\Models\AtomicAction
     switch ($source) {
       case CONSPIRACY_ONE_SHOT:
       case PEASANT_REVOLT_ONE_SHOT:
-      case JIHAD_ONE_SHOT:
-      case REFORMATION_ONE_SHOT:
-      case CRUSADE_ONE_SHOT:
         return Cards::get($data['cardId'])->getAllEmpireIds(false);
+      case JIHAD_ONE_SHOT:
+        return $this->getReligiousWarLocations(Cards::get($data['cardId']), [CATHOLIC, REFORMIST]);
+      case REFORMATION_ONE_SHOT:
+        return $this->getReligiousWarLocations(Cards::get($data['cardId']), [ISLAMIC, CATHOLIC]);
+      case CRUSADE_ONE_SHOT:
+        return $this->getReligiousWarLocations(Cards::get($data['cardId']), [ISLAMIC, REFORMIST]);
       case CAMPAIGN_OP:
         return [$data['defendingEmpireId']];
       default:
         return [];
     }
+  }
+
+  private function getReligiousWarLocations($card, $opposingReligions)
+  {
+    $empiresIds = $card->getAllEmpireIds(false);
+
+    return Utils::filter($empiresIds, function ($empireId) use ($opposingReligions) {
+      $empire = Empires::get($empireId);
+
+      return count($empire->getTokensInCities([KNIGHT, ROOK], $opposingReligions)) + count($empire->getTokensOnBorders([PIRATE], $opposingReligions)) > 0;
+    });
   }
 }

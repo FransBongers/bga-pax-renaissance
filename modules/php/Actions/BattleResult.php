@@ -19,6 +19,7 @@ use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
+use PaxRenaissance\Models\Player;
 
 class BattleResult extends \PaxRenaissance\Models\AtomicAction
 {
@@ -184,12 +185,16 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
           ),
         ];
       case CRUSADE_ONE_SHOT:
+        $typeInAdjacentEmpires = [KNIGHT];
+        if ($player->hasSpecialAbility(SA_IN_CRUSADE_COUNT_ROOKS_AS_KNIGHTS)) {
+          $typeInAdjacentEmpires[] = ROOK;
+        }
         return [
           'agents' => $this->getAgents($data['cardId'], [ROOK, KNIGHT, PIRATE]),
           'tokens' => array_merge(
             $empire->getTokensOnBorders([PIRATE], [CATHOLIC]),
             $empire->getTokensInCities([KNIGHT, ROOK], [CATHOLIC]),
-            $empire->getTokensInAdjacentEmpires([KNIGHT], [CATHOLIC]),
+            $empire->getTokensInAdjacentEmpires($typeInAdjacentEmpires, [CATHOLIC]),
           ),
         ];
       case JIHAD_ONE_SHOT:

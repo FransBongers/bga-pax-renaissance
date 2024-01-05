@@ -220,7 +220,8 @@ var SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_EAST_CAR
 var SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY';
 var SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1 = 'SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1';
 var SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2 = 'SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2';
-var SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS = 'SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS';
+var SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_1 = 'SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_1';
+var SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_2 = 'SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_2';
 var SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES = 'SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES';
 var SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS = 'SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS';
 var SA_DECLARE_HOLY_COSTS_TWO_ACTIONS = 'SA_DECLARE_HOLY_COSTS_TWO_ACTIONS';
@@ -3775,7 +3776,6 @@ var NotificationManager = (function () {
             ["tradeFairEmporiumSubsidy", undefined],
             ["tradeFairProfitDispersalPirates", undefined],
             ["tradeFairProfitDispersalPlayer", undefined],
-            ["vassalage", undefined],
         ];
         notifs.forEach(function (notif) {
             _this.subscriptions.push(dojo.subscribe(notif[0], _this, function (notifDetails) {
@@ -6473,6 +6473,7 @@ var PlaceAgentState = (function () {
                     callback: function () {
                         return _this.updateInterfaceConfirmCard({ id: id, card: location });
                     },
+                    back: location.type === EMPIRE_CARD && location.side === REPUBLIC,
                 });
             }
             else {

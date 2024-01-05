@@ -39,7 +39,7 @@ class PREN018_AlmeidaArmada extends \PaxRenaissance\Models\TableauCard
     $this->region = WEST;
     $this->specialAbilities = [
       [
-        'id' => SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS,
+        'id' => SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_2,
         'title' => clienttranslate("CAPE OF GOOD HOPE:"),
         'text' => [
           'log' => clienttranslate("Your Concessions count 2x is Spice Island trade fairs."),

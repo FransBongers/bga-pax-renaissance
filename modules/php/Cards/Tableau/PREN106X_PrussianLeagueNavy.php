@@ -40,7 +40,7 @@ class PREN106X_PrussianLeagueNavy extends \PaxRenaissance\Models\TableauCard
         'left' => 0,
       ]
     ];
-    $this->prestige = [DISCOVERY];
+    $this->prestige = [];
     $this->region = EAST;
   }
 }

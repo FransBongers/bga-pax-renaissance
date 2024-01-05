@@ -89,7 +89,8 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
      */
 
     if ($isCampaign) {
-      $suzerain = Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard();
+      $attacker = Empires::get($parentInfo['data']['attackingEmpireId'])->getEmpireCard();
+      $suzerain = $attacker->isVassal() ? $attacker->getSuzerain() : $attacker;
       $this->moveEmpireCardToTableau($empireCard, $player, $suzerain);
     } else if ($isInEnemeyTableau || $isInThrone) {
       $this->moveEmpireCardToTableau($empireCard, $player);
@@ -152,10 +153,11 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     if ($suzerain === null) {
       $empireCard->insertInTableau($player, $region);
     } else {
+      Notifications::log('empireCard',$empireCard);
       $location = Locations::vassals($suzerain->getEmpireId());
-      // Cards::insertAtBottom($empireCard->getId(), $location);
-      $empireCard->insertAtBottom($location);
-      // Notifications::vassalage($player, $this, $suzerain, $from);
+      // Cards::insertOnTop($empireCard->getId(), $location);
+      $empireCard->insertOnTop($location);
+      Notifications::vassalage($player, $empireCard, $suzerain);
     }
     
 

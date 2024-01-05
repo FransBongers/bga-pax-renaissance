@@ -2,6 +2,10 @@
 
 namespace PaxRenaissance\Empires;
 
+use PaxRenaissance\Helpers\Utils;
+use PaxRenaissance\Managers\Empires;
+use PaxRenaissance\Managers\Players;
+
 class France extends \PaxRenaissance\Models\Empire
 {
   public function __construct()
@@ -31,5 +35,18 @@ class France extends \PaxRenaissance\Models\Empire
       PARIS,
     ];
     $this->region = WEST;
+  }
+
+  public function getAdjacentEmpires()
+  {
+    $data = $this->adjacentEmpires;
+    if (Players::anyPlayerHasSpecialAbility(SA_PORTUGAL_FRANCE_NOT_ADJACENT)) {
+      $data = Utils::filter($data, function ($empireId) {
+        return $empireId !== PORTUGAL;
+      });
+    }
+    return array_map(function ($empireId) {
+      return Empires::get($empireId);
+    }, $data);
   }
 }

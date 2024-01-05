@@ -621,6 +621,14 @@ $machinestates = [
         'possibleactions' => ['actAbilityActionSelectTradeFair', 'actRestart'],
     ],
 
+    ST_ABILITY_ACTION_LAUNCH_PEASANT_REVOLT => [
+        'name' => 'abilityActionLaunchPeasantRevolt',
+        'description' => '',
+        'descriptionmyturn' => '',
+        'action' => 'stAtomicAction',
+        'type' => 'game',
+    ],
+
     // // Generic state to change player
     // ST_CHANGE_ACTIVE_PLAYER => [
     //     'name' => ST_CHANGE_ACTIVE_PLAYER_NAME,

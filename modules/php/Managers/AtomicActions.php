@@ -13,6 +13,7 @@ class AtomicActions
   // Mapping of actionId and corresponding class
   static $classes = [
     ABILITY_ACTION_USE => 'AbilityActionUse',
+    ABILITY_ACTION_LAUNCH_PEASANT_REVOLT => 'AbilityActionLaunchPeasantRevolt',
     ABILITY_ACTION_SELECT_TRADE_FAIR => 'AbilityActionSelectTradeFair',
     ANNOUNCE_ONE_SHOT => 'AnnounceOneShot',
     APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT => 'ApostasyOneShot',

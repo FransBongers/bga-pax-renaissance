@@ -60,9 +60,13 @@ class TradeFairProfitDispersal extends \PaxRenaissance\Models\AtomicAction
 
     $concessionCount = 1;
     if ($player->hasSpecialAbility(SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES)) {
-      $concessionCount = 2;
-    } else if ($cityId === SPICE_ISLANDS && $player->hasSpecialAbility(SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS)) {
-      $concessionCount = 2;
+      $concessionCount = $concessionCount * 2;
+    } 
+    if ($cityId === SPICE_ISLANDS && $player->hasSpecialAbility(SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_1)) {
+      $concessionCount = $concessionCount * 2;
+    }
+    if ($cityId === SPICE_ISLANDS && $player->hasSpecialAbility(SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_2)) {
+      $concessionCount = $concessionCount * 2;
     }
     return min ($availableFlorins, $concessionCount);
   }

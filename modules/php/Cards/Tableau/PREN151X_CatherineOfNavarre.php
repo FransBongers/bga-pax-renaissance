@@ -30,5 +30,15 @@ class PREN151X_CatherineOfNavarre extends \PaxRenaissance\Models\QueenCard
       FRANCE,
       ARAGON,
     ];
+    $this->specialAbilities = [
+      [
+        'id' => SA_PORTUGAL_FRANCE_NOT_ADJACENT,
+        'title' => clienttranslate('BUFFER STATE:'),
+        'text' => [
+          'log' => clienttranslate('Portugal and France are not adjacent for all players.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

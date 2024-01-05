@@ -49,10 +49,25 @@ trait DebugTrait
     Cards::get('VictoryRenaissance')->setActive();
   }
 
+  function testHolyVictory()
+  {
+    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_HUNGARY_OTTOMAN);
+    // Cards::get('VictoryHoly')->setActive();
+  }
+
   function test()
   {
-    $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371052);
-    $this->debugPlaceToken(PAWN, MEDICI, 'EmpireSquare_France');
+    // Notifications::log('card', Cards::get('EmpireSquare_PapalStates'));
+    // $this->debugPlaceCardInTableau('PREN131X_Michelangelo',WEST,2371052);
+    $this->debugPlaceCardInTableau('PREN018_AlmeidaArmada',WEST,2371052);
+
+    // $this->debugPlaceToken(BISHOP, CATHOLIC,'PREN039_FlorentineWool');
+    // $this->debugPlaceCardInTableau('EmpireSquare_PapalStates',WEST,2371053);
+    // Cards::get('EmpireSquare_PapalStates')->setSide(REPUBLIC);
+    // Notifications::log('greenPirates',Cards::get('VictoryHoly')->getSupremeReligion());
+    // $this->testHolyVictory();
+    // $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371052);
+    // $this->debugPlaceToken(PAWN, MEDICI, 'EmpireSquare_France');
     // Empires::get(PAPAL_STATES)->changeToMedievalState(Players::get());
     // Empires::get(PAPAL_STATES)->changeToTheocracy(CATHOLIC);
     // $this->testRenaissanceVictory();

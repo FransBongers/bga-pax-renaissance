@@ -28,8 +28,6 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
         'top' => 0,
         'left' => 0,
       ],
-    ];
-    $this->ops = [
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Black Pepper Trade"),
@@ -39,5 +37,16 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [REFORMIST];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS,
+        // Check: do they also still count as green units?
+        'title' => clienttranslate('SÜLEYMAN PATRONAGE:'),
+        'text' => [
+          'log' => clienttranslate('Green Pirates count both as red Bishops and red units when calculating religious supremacy.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

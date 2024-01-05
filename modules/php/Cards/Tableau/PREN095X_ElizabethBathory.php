@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN095X_ElizabethBathory extends \PaxRenaissance\Models\TableauCard
+class PREN095X_ElizabethBathory extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -23,5 +23,27 @@ class PREN095X_ElizabethBathory extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = EAST;
+    // Queen specific props
+    $this->height = 118;
+    $this->suitors = [
+      BYZANTIUM,
+      HUNGARY,
+      HOLY_ROMAN_EMIRE,
+    ];
+    $this->specialAbilities = [
+      [
+        'id' => SA_DISCARD_TO_LAUNCH_PEASANT_REVOLT,
+        'title' => clienttranslate('POPULAR REPRISALS:'),
+        'text' => [
+          'log' => clienttranslate('As an action, Discard this card to launch a peasant revolt in her Empire.'),
+          'args' => [],
+        ],
+        'abilityAction' => true,
+        'top' => 0,
+        'left' => 0,
+        'height' => 0,
+        'width' => 0,
+      ]
+    ];
   }
 }

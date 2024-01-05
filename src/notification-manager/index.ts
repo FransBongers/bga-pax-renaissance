@@ -69,7 +69,6 @@ class NotificationManager {
       // ["tradeFairPlaceLevy", undefined],
       ["tradeFairProfitDispersalPirates", undefined],
       ["tradeFairProfitDispersalPlayer", undefined],
-      ["vassalage", undefined],
     ];
 
     // example: https://github.com/thoun/knarr/blob/main/src/knarr.ts
@@ -648,22 +647,6 @@ class NotificationManager {
     this.getPlayer({ playerId }).counters.florins.incValue(amount);
     return Promise.resolve();
   }
-
-  // async notif_vassalage(notif: Notif<NotifVassalageArgs>) {
-  //   const { from, vassal, suzerain, playerId } = notif.args;
-  //   this.handleEmpireSquareOririnData({ from, card: vassal });
-  //   // vassalage
-  //   this.game.tableauCardManager.addVassal({ vassal, suzerain });
-  //   const player = this.getPlayer({ playerId });
-  //   this.addPrestige({ player, prestige: vassal[vassal.side].prestige });
-  // }
-
-  // notif_smallRefreshHand(notif: Notif<NotifSmallRefreshHandArgs>) {
-  //   const { hand, playerId } = notif.args;
-  //   const player = this.getPlayer({ playerId });
-  //   player.clearHand();
-  //   player.setupHand({ hand });
-  // }
 
   notif_smallRefreshInterface(notif: Notif<NotifSmallRefreshInterfaceArgs>) {
     const updatedGamedatas = {
