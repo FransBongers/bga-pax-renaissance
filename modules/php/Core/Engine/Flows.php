@@ -123,6 +123,7 @@ abstract class Flows
         ],
         [
           'action' => REGIME_CHANGE_EMANCIPATION,
+          'optional' => true,
           'playerId' => $playerId,
         ],
         [

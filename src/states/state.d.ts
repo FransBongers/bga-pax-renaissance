@@ -170,9 +170,13 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
   };
 }
 
+interface EmancipationOption {
+  token: Token;
+  locations: (City | Border)[];
+}
+
 interface OnEnteringRegimeChangeEmancipationArgs extends CommonArgs {
-  tokens: Token[];
-  options: Record<string, (City | Border)[]>;
+  options: Record<string, EmancipationOption>;
 }
 
 interface OnEnteringRegimeChangeGoldenLibertyArgs extends CommonArgs {

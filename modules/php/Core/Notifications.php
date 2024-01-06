@@ -512,7 +512,7 @@ class Notifications
 
   public static function regimeChangeSkipEmancipation($player)
   {
-    self::message(clienttranslate('${tkn_playerName} skips moving Repressed Tokens'), [
+    self::message(clienttranslate('${tkn_playerName} is done emancipating Repressed Tokens'), [
       'player' => $player,
     ]);
   }

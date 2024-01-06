@@ -2,6 +2,9 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\LeafNode;
+
 class PREN161X_Enclosure extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -31,5 +34,27 @@ class PREN161X_Enclosure extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [LAW];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_SELL_AND_EMANCIPATE_ALL_REPRESSED_TOKENS_IN_THE_WEST,
+        'title' => clienttranslate('ENDING_SUBSISTENCE_FARMING:'),
+        'text' => [
+          'log' => clienttranslate('If you sell this card, may emancipate any or all repressed Tokens in The West.'),
+          'args' => [],
+        ],
+      ]
+    ];
+  }
+
+  public function sell()
+  {
+    $owner = $this->getOwner();
+    parent::sell();
+    Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
+      'action' => REGIME_CHANGE_EMANCIPATION,
+      'empireIds' => WEST_EMPIRES,
+      'optional' => true,
+      'playerId' => $owner->getId(),
+    ]));
   }
 }

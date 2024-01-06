@@ -46,9 +46,9 @@ class AbilityActionLaunchPeasantRevolt extends \PaxRenaissance\Models\AtomicActi
   public function stAbilityActionLaunchPeasantRevolt()
   {
     $cardId = $this->ctx->getInfo()['cardId'];
-    Notifications::log('cardId', $cardId);
+
     $card = Cards::get($cardId);
-    Notifications::log('card', $card);
+
     $kingId = $card->getKing()->getId();
     $card->discard();
     $player = self::getPlayer();

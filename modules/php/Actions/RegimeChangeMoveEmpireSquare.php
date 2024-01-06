@@ -153,7 +153,6 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     if ($suzerain === null) {
       $empireCard->insertInTableau($player, $region);
     } else {
-      Notifications::log('empireCard',$empireCard);
       $location = Locations::vassals($suzerain->getEmpireId());
       // Cards::insertOnTop($empireCard->getId(), $location);
       $empireCard->insertOnTop($location);

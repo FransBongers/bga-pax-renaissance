@@ -2011,12 +2011,12 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.addPassButton = function (_a) {
         var _this = this;
-        var optionalAction = _a.optionalAction;
+        var optionalAction = _a.optionalAction, text = _a.text;
         if (optionalAction) {
             this.addSecondaryActionButton({
                 id: "pass_btn",
-                text: _("Pass"),
-                callback: function () { return _this.takeAction({ action: 'actPassOptionalAction' }); },
+                text: text ? _(text) : _("Pass"),
+                callback: function () { return _this.takeAction({ action: "actPassOptionalAction" }); },
             });
         }
     };
@@ -6894,7 +6894,6 @@ var RegimeChangeEmancipationState = (function () {
         });
     };
     RegimeChangeEmancipationState.prototype.updateInterfaceInitialStep = function () {
-        var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} may select a Repressed Token to move onto the Map"),
@@ -6902,47 +6901,40 @@ var RegimeChangeEmancipationState = (function () {
                 tkn_playerName: "${you}",
             },
         });
-        this.game.addSkipButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actRegimeChangeEmancipation",
-                    args: {
-                        tokenId: null,
-                        locationId: null,
-                    },
-                });
-            },
+        this.game.addPassButton({
+            optionalAction: this.args.optionalAction,
+            text: _('Done')
         });
         this.setTokensSelectable();
         this.game.addUndoButtons(this.args);
     };
     RegimeChangeEmancipationState.prototype.updateInterfaceSelectLocation = function (_a) {
-        var locations = _a.locations, tokenId = _a.tokenId;
+        var locations = _a.locations, token = _a.token;
         this.game.clearPossible();
-        this.game.setTokenSelected({ id: tokenId });
+        this.game.setTokenSelected({ id: token.id });
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} must select a ${borderOrCity} to move ${tkn_mapToken} onto"),
             args: {
                 tkn_playerName: "${you}",
-                borderOrCity: this.args.tokens.find(function (token) { return token.id === tokenId; }).type === PAWN
+                borderOrCity: token.type === PAWN
                     ? _("Border")
                     : _("City"),
-                tkn_mapToken: tknMapToken(tokenId),
+                tkn_mapToken: tknMapToken(token.id),
             },
         });
         this.game.addCancelButton();
-        this.setLocationsSelectable({ locations: locations, tokenId: tokenId });
+        this.setLocationsSelectable({ locations: locations, token: token });
     };
     RegimeChangeEmancipationState.prototype.updateInterfaceConfirmLocation = function (_a) {
         var _this = this;
-        var location = _a.location, tokenId = _a.tokenId;
+        var location = _a.location, token = _a.token;
         this.game.clearPossible();
         this.game.setLocationSelected({ id: location.id });
-        this.game.setTokenSelected({ id: tokenId });
+        this.game.setTokenSelected({ id: token.id });
         this.game.clientUpdatePageTitle({
             text: _("Move ${tkn_mapToken} onto ${locationName}?"),
             args: {
-                tkn_mapToken: tknMapToken(tokenId),
+                tkn_mapToken: tknMapToken(token.id),
                 locationName: _(location.name),
             },
         });
@@ -6952,7 +6944,7 @@ var RegimeChangeEmancipationState = (function () {
                 _this.game.takeAction({
                     action: "actRegimeChangeEmancipation",
                     args: {
-                        tokenId: tokenId,
+                        tokenId: token.id,
                         locationId: location.id,
                     },
                 });
@@ -6962,12 +6954,12 @@ var RegimeChangeEmancipationState = (function () {
     };
     RegimeChangeEmancipationState.prototype.setLocationsSelectable = function (_a) {
         var _this = this;
-        var locations = _a.locations, tokenId = _a.tokenId;
+        var locations = _a.locations, token = _a.token;
         locations.forEach(function (location) {
             _this.game.setLocationSelectable({
                 id: location.id,
                 callback: function () {
-                    return _this.updateInterfaceConfirmLocation({ location: location, tokenId: tokenId });
+                    return _this.updateInterfaceConfirmLocation({ location: location, token: token });
                 },
             });
         });
@@ -6975,11 +6967,11 @@ var RegimeChangeEmancipationState = (function () {
     RegimeChangeEmancipationState.prototype.setTokensSelectable = function () {
         var _this = this;
         Object.entries(this.args.options).forEach(function (_a) {
-            var tokenId = _a[0], locations = _a[1];
+            var tokenId = _a[0], _b = _a[1], locations = _b.locations, token = _b.token;
             _this.game.setTokenSelectable({
                 id: tokenId,
                 callback: function () {
-                    return _this.updateInterfaceSelectLocation({ locations: locations, tokenId: tokenId });
+                    return _this.updateInterfaceSelectLocation({ locations: locations, token: token });
                 },
             });
         });

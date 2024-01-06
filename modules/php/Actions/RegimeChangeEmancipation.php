@@ -44,13 +44,12 @@ class RegimeChangeEmancipation extends \PaxRenaissance\Models\AtomicAction
 
   public function stRegimeChangeEmancipation()
   {
-    $parentInfo = $this->ctx->getParent()->getInfo();
-    $empireId = $parentInfo['empireId'];
 
-    $data = $this->getTokensToEmancipate($empireId);
 
-    if (count($data['options']) === 0) {
-      $this->resolveAction([]);
+    $options = $this->getTokensToEmancipate();
+
+    if (count($options) === 0) {
+      $this->resolveAction(['automatic' => true]);
     }
   }
 
@@ -64,15 +63,11 @@ class RegimeChangeEmancipation extends \PaxRenaissance\Models\AtomicAction
 
   public function argsRegimeChangeEmancipation()
   {
-    $parentInfo = $this->ctx->getParent()->getInfo();
-    $player = self::getPlayer();
+    $options = $this->getTokensToEmancipate();
 
-    $empireId = $parentInfo['empireId'];
-
-    $data = $this->getTokensToEmancipate($empireId);
-
-
-    return $data;
+    return [
+      'options' => $options
+    ];
   }
 
   //  .########..##..........###....##....##.########.########.
@@ -91,31 +86,27 @@ class RegimeChangeEmancipation extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
+  public function actPassRegimeChangeEmancipation()
+  {
+    $player = self::getPlayer();
+    Notifications::regimeChangeSkipEmancipation($player);
+    Engine::resolve(PASS);
+  }
+
   public function actRegimeChangeEmancipation($args)
   {
     self::checkAction('actRegimeChangeEmancipation');
     $tokenId = $args['tokenId'];
     $locationId = $args['locationId'];
-    $player = self::getPlayer();
 
-    if ($tokenId === null) {
-      Notifications::regimeChangeSkipEmancipation($player);
-      $this->resolveAction($args);
-      return;
-    }
+    $options = $this->getTokensToEmancipate();
 
-    $parentInfo = $this->ctx->getParent()->getInfo();
-    
-    $empireId = $parentInfo['empireId'];
-
-    $data = $this->getTokensToEmancipate($empireId);
-
-    if (!isset($data['options'][$tokenId])) {
+    if (!isset($options[$tokenId])) {
       throw new \feException("Not allowed to move selected Token");
     }
 
-    $options = $data['options'][$tokenId];
-    $location = Utils::array_find($options, function ($option) use ($locationId) {
+    $locations = $options[$tokenId]['locations'];
+    $location = Utils::array_find($locations, function ($option) use ($locationId) {
       return $option->getId() === $locationId;
     });
     if ($location === null) {
@@ -135,31 +126,40 @@ class RegimeChangeEmancipation extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getTokensToEmancipate($empireId)
+  private function getTokensToEmancipate()
   {
-    $empire = Empires::get($empireId);
-    $empireCard = Cards::get($empire->getEmpireSquareId());
+    $info = $this->ctx->getInfo();
 
-    $borders = $empire->getBorders(true);
-    $cities = $empire->getCities(true);
-    $numberOfEmptyBorders = count($borders);
-    $numberOfEmptyCities = count($cities);
-
-    $tokensOnCard = $empireCard->getTokens();
+    $empireIds = isset($info['empireIds']) ? $info['empireIds'] : [$this->ctx->getParent()->getInfo()['empireId']];
 
     $options = [];
 
-    foreach($tokensOnCard as $token) {
-      if (in_array($token->getType(), [KNIGHT, ROOK]) && $numberOfEmptyCities > 0) {
-        $options[$token->getId()] = $cities;
-      } else if ($token->getType() === PAWN && $numberOfEmptyBorders > 0) {
-        $options[$token->getId()] = $borders;
+    foreach ($empireIds as $empireId) {
+      $empire = Empires::get($empireId);
+      $empireCard = Cards::get($empire->getEmpireSquareId());
+
+      $borders = $empire->getBorders(true);
+      $cities = $empire->getCities(true);
+      $numberOfEmptyBorders = count($borders);
+      $numberOfEmptyCities = count($cities);
+
+      $tokensOnCard = $empireCard->getTokens();
+
+      foreach ($tokensOnCard as $token) {
+        if (in_array($token->getType(), [KNIGHT, ROOK]) && $numberOfEmptyCities > 0) {
+          $options[$token->getId()] = [
+            'token' => $token,
+            'locations' => $cities
+          ];
+        } else if ($token->getType() === PAWN && $numberOfEmptyBorders > 0) {
+          $options[$token->getId()] = [
+            'token' => $token,
+            'locations' => $borders,
+          ];
+        }
       }
     }
 
-    return [
-      'tokens' => $tokensOnCard,
-      'options' => $options,
-    ];
+    return $options;
   }
 }

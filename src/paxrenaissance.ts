@@ -104,7 +104,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
       announceOneShot: new AnnounceOneShotState(this),
       battleCasualties: new BattleCasualtiesState(this),
       battleLocation: new BattleLocationState(this),
-      battleReconfigureContantinople: new BattleReconfigureConstantinopleState(this),
+      battleReconfigureContantinople: new BattleReconfigureConstantinopleState(
+        this
+      ),
       bishopPacification: new BishopPacificationState(this),
       confirmPartialTurn: new ConfirmPartialTurnState(this),
       confirmTurn: new ConfirmTurnState(this),
@@ -360,15 +362,21 @@ class PaxRenaissance implements PaxRenaissanceGame {
     });
   }
 
-  addPassButton({optionalAction}: {optionalAction: boolean;}) {
+  addPassButton({
+    optionalAction,
+    text,
+  }: {
+    optionalAction: boolean;
+    text?: string;
+  }) {
     if (optionalAction) {
       this.addSecondaryActionButton({
         id: "pass_btn",
-        text: _("Pass"),
-        callback: () => this.takeAction({action: 'actPassOptionalAction'}),
+        text: text ? _(text) : _("Pass"),
+        callback: () => this.takeAction({ action: "actPassOptionalAction" }),
       });
     }
-  }  
+  }
 
   addSkipButton({ callback }: { callback: Function | string }) {
     this.addSecondaryActionButton({

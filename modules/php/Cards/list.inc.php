@@ -177,7 +177,7 @@ $cardIds = [
   'PREN158X_OrderOfPreachers',
   'PREN159X_ConsentOfTheGoverned',
   'PREN160X_JacquesLefevreDEtaples',
-  // 'PREN161X_Enclosure',
+  'PREN161X_Enclosure',
   'PREN162X_CatherineDeMedici',
   'PREN163X_JizyaTaxRevolt',
   // 'PREN164X_CircassianMamluks',

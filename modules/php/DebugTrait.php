@@ -57,9 +57,24 @@ trait DebugTrait
 
   function test()
   {
+    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Ottoman');
+    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Hungary');
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Mamluk');
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Byzantium');
+    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_France');
+    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Portugal');
+    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_HolyRomanEmpire');
+    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Aragon');
+    // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_France');
+    // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Portugal');
+    // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_HolyRomanEmpire');
+    // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Aragon');
+    // $this->debugPlaceToken(KNIGHT, CATHOLIC, 'EmpireSquare_PapalStates');
+    // $this->debugPlaceToken(KNIGHT, CATHOLIC, 'EmpireSquare_England');
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, 'EmpireSquare_England');
     // Notifications::log('card', Cards::get('EmpireSquare_PapalStates'));
     // $this->debugPlaceCardInTableau('PREN131X_Michelangelo',WEST,2371052);
-    $this->debugPlaceCardInTableau('PREN018_AlmeidaArmada',WEST,2371052);
+    // $this->debugPlaceCardInTableau('PREN018_AlmeidaArmada',WEST,2371052);
 
     // $this->debugPlaceToken(BISHOP, CATHOLIC,'PREN039_FlorentineWool');
     // $this->debugPlaceCardInTableau('EmpireSquare_PapalStates',WEST,2371053);

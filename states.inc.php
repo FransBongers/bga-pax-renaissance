@@ -248,7 +248,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actPlaceAgent', 'pass', 'actRestart'],
+        'possibleactions' => ['actPlaceAgent', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_RESOLVE_PLACE_TOKEN => [
@@ -266,7 +266,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actSelectToken', 'pass', 'actRestart'],
+        'possibleactions' => ['actSelectToken', 'actPassOptionalAction', 'actRestart'],
     ],
 
 
@@ -285,7 +285,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actBishopPacification', 'pass', 'actRestart'],
+        'possibleactions' => ['actBishopPacification', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_BISHOP_SILENCE_CARD => [
@@ -303,7 +303,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actDiscardDownToHandLimit', 'pass', 'actRestart'],
+        'possibleactions' => ['actDiscardDownToHandLimit', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_ANNOUNCE_ONE_SHOT => [
@@ -313,7 +313,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actAnnounceOneShot', 'pass', 'actRestart'],
+        'possibleactions' => ['actAnnounceOneShot', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TRADE_SHIFT_ONE_SHOT => [
@@ -347,7 +347,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actBattleLocation', 'pass', 'actRestart'],
+        'possibleactions' => ['actBattleLocation', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_BATTLE_RESULT => [
@@ -365,7 +365,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actBattleCasualties', 'pass', 'actRestart'],
+        'possibleactions' => ['actBattleCasualties', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_BATTLE_CHECK_BISHOP_AGENT => [
@@ -417,7 +417,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actRegimeChangeEmancipation', 'pass', 'actRestart'],
+        'possibleactions' => ['actRegimeChangeEmancipation', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_CORONATION_ONE_SHOT => [
@@ -427,7 +427,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actCoronationOneShot', 'pass', 'actRestart'],
+        'possibleactions' => ['actCoronationOneShot', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_REGIME_CHANGE_GOLDEN_LIBERTY => [
@@ -437,7 +437,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actRegimeChangeGoldenLiberty', 'pass', 'actRestart'],
+        'possibleactions' => ['actRegimeChangeGoldenLiberty', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OPS_SELECT => [
@@ -447,7 +447,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpsSelect', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpsSelect', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_BEHEAD => [
@@ -457,7 +457,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpBehead', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpBehead', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_CAMPAIGN => [
@@ -467,7 +467,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpCampaign', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpCampaign', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_COMMERCE => [
@@ -477,7 +477,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpCommerce', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpCommerce', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_CORSAIR => [
@@ -487,7 +487,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpCorsair', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpCorsair', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_INQUISITOR => [
@@ -497,7 +497,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpInquisitor', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpInquisitor', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_REPRESS => [
@@ -507,7 +507,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpRepress', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpRepress', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_SIEGE => [
@@ -517,7 +517,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpSiege', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpSiege', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_TAX => [
@@ -527,7 +527,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpTax', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpTax', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_TAX_FLORINS_CHECK => [
@@ -546,7 +546,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpTaxPayOrRepress', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpTaxPayOrRepress', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_TABLEAU_OP_VOTE => [
@@ -556,7 +556,7 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        'possibleactions' => ['actTableauOpVote', 'pass', 'actRestart'],
+        'possibleactions' => ['actTableauOpVote', 'actPassOptionalAction', 'actRestart'],
     ],
 
     ST_PLACE_LEVY_AUTO_CHECK => [

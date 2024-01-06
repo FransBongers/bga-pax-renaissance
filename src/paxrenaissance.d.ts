@@ -14,7 +14,7 @@ interface PaxRenaissanceGame extends Game {
   addConfirmButton: (props: { callback: Function | string }) => void;
   addDangerActionButton: (props: AddButtonProps) => void;
   addPrimaryActionButton: (props: AddButtonProps) => void;
-  addPassButton: (props: { optionalAction: boolean }) => void;
+  addPassButton: (props: { optionalAction: boolean; text?: string; }) => void;
   addSecondaryActionButton: (props: AddButtonProps) => void;
   addSkipButton: (props: { callback: Function | string }) => void;
   addUndoButtons: (props: CommonArgs) => void;
