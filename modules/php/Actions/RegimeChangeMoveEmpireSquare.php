@@ -75,9 +75,11 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     $isInEnemeyTableau = !$isInOwnTableau && $empireCard->isInTableau();
     $isInThrone = $empireCard->isInThrone();
 
-    if ($isInEnemeyTableau || $isInOwnTableau) {
+    if ($isInEnemeyTableau || ($isInOwnTableau && !$isCoronation)) {
       $this->returnVassals($empireCard);
+      $this->discardBishops($empireCard);
       $this->discardQueens($empireCard);
+
     }
 
     /**
@@ -94,7 +96,7 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
       $this->moveEmpireCardToTableau($empireCard, $player, $suzerain);
     } else if ($isInEnemeyTableau || $isInThrone) {
       $this->moveEmpireCardToTableau($empireCard, $player);
-    } else if ($isInOwnTableau) {
+    } else if ($isInOwnTableau && !$isCoronation) {
       $empireCard->flip($player);
     }
     if ($source === CORONATION_ONE_SHOT) {
@@ -162,6 +164,16 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     Notifications::moveEmpireSquare($player, $empireCard, $argsOrigin, $this->argsDestination($empireCard));
   }
 
+  private function discardBishops($empireCard)
+  {
+    $tokens = $empireCard->getTokens();
+    foreach($tokens as $token) {
+      if ($token->getType() !== BISHOP) {
+        continue;
+      }
+      $token->returnToSupply();
+    }
+  }
 
   private function discardQueens($empireCard)
   {

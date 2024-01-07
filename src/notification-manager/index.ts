@@ -173,11 +173,13 @@ class NotificationManager {
     this.game.framework().scoreCtrl[playerId].toValue(1);
   }
 
+  // TODO: refactor and check what is still needed
   async notif_discardCard(notif: Notif<NotifDiscardCardArgs>) {
     const {
       adjustPrestige,
       playerId,
       card,
+      fromLocationId,
       toLocationId,
       wasVassalTo,
       wasQueenTo: king,
@@ -191,6 +193,10 @@ class NotificationManager {
         .addCard(card);
     }
     const player = this.getPlayer({ playerId });
+    if (fromLocationId.startsWith('hand_')) {
+      player.counters.cards[(card as TableauCard).region].incValue(-1);
+    }
+
     if (wasVassalTo) {
       this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
     }

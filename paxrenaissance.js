@@ -3890,11 +3890,11 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_discardCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, adjustPrestige, playerId, card, toLocationId, wasVassalTo, king, wasOldMaid, player, prestige;
+            var _a, adjustPrestige, playerId, card, fromLocationId, toLocationId, wasVassalTo, king, wasOldMaid, player, prestige;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, adjustPrestige = _a.adjustPrestige, playerId = _a.playerId, card = _a.card, toLocationId = _a.toLocationId, wasVassalTo = _a.wasVassalTo, king = _a.wasQueenTo, wasOldMaid = _a.wasOldMaid;
+                        _a = notif.args, adjustPrestige = _a.adjustPrestige, playerId = _a.playerId, card = _a.card, fromLocationId = _a.fromLocationId, toLocationId = _a.toLocationId, wasVassalTo = _a.wasVassalTo, king = _a.wasQueenTo, wasOldMaid = _a.wasOldMaid;
                         if (!(card.type === TABLEAU_CARD && toLocationId === DISCARD)) return [3, 2];
                         return [4, this.game.tableauCardManager.removeCard(card)];
                     case 1:
@@ -3910,6 +3910,9 @@ var NotificationManager = (function () {
                         _b.label = 4;
                     case 4:
                         player = this.getPlayer({ playerId: playerId });
+                        if (fromLocationId.startsWith('hand_')) {
+                            player.counters.cards[card.region].incValue(-1);
+                        }
                         if (wasVassalTo) {
                             this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
                         }

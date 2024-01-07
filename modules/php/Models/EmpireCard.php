@@ -214,11 +214,11 @@ class EmpireCard extends Card
     if ($queen !== null) {
       Cards::move($queen->getId(), $this->startLocation);
     }
-
+    $fromLocationId = $this->location;
     Cards::insertOnTop($this->getId(), $this->startLocation);
     $this->location = $this->startLocation;
 
-    Notifications::discardCard($adjustPrestige, $player, $this, $this->startLocation, $messageType, $wasVassalTo);
+    Notifications::discardCard($fromLocationId, $adjustPrestige, $player, $this, $this->startLocation, $messageType, $wasVassalTo);
   }
 
   public function isInThrone()

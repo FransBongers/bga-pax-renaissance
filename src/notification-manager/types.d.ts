@@ -47,6 +47,7 @@ interface NotifDeactivateAbilityArgs extends NotifWithPlayerArgs {
 interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
   card: TableauCard | EmpireCard;
   tkn_cardName: string;
+  fromLocationId: string;
   toLocationId: string;
   wasVassalTo: EmpireCard | null;
   wasQueenTo: EmpireCard | null;
