@@ -89,7 +89,6 @@ class BattlePlaceAttackers extends \PaxRenaissance\Models\AtomicAction
   public function actBattlePlaceAttackers($args)
   {
     self::checkAction('actBattlePlaceAttackers');
-    Notifications::log('args', $args);
 
     if (isset($args['agent'])) {
       $this->handlePlaceAgent($args);
@@ -165,7 +164,7 @@ class BattlePlaceAttackers extends \PaxRenaissance\Models\AtomicAction
           }
           break;
         default:
-          Notifications::log('No match for agent type', []);
+          // Notifications::log('No match for agent type', []);
       }
     }
 
@@ -192,7 +191,7 @@ class BattlePlaceAttackers extends \PaxRenaissance\Models\AtomicAction
           }
           break;
         default:
-          Notifications::log('No match for token type', []);
+          // Notifications::log('No match for token type', []);
       }
     }
 

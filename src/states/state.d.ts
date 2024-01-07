@@ -48,6 +48,10 @@ interface OnEnteringAnnounceOneShotArgs extends CommonArgs {
   oneShot: string;
 }
 
+interface OnEnteringAbilityActionSelectApostastStateArgs extends CommonArgs {
+  options: string[];
+}
+
 interface OnEnteringAbilityActionSelectTradeFairArgs extends CommonArgs {
   tradeFairs: {
     east?: {

@@ -308,7 +308,7 @@ $machinestates = [
 
     ST_ANNOUNCE_ONE_SHOT => [
         'name' => 'announceOneShot',
-        'description' => clienttranslate('${actplayer} must decide if One-shot occurs'),
+        'description' => clienttranslate('${actplayer} must choose to perform One-shot'),
         'descriptionmyturn' => clienttranslate('${you}'),
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
@@ -620,6 +620,17 @@ $machinestates = [
         'type' => 'game',
     ],
 
+    ST_ABILITY_ACTION_SELECT_APOSTASY => [
+        'name' => 'abilityActionSelectApostasy',
+        'description' => clienttranslate('${actplayer} must choose an apostasy to perform'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actAbilityActionSelectApostasy', 'actRestart'],
+    ],
+
+
     ST_ABILITY_ACTION_SELECT_TRADE_FAIR => [
         'name' => 'abilityActionSelectTradeFair',
         'description' => clienttranslate('${actplayer} must select trade fair to perform'),
@@ -627,7 +638,6 @@ $machinestates = [
         'type' => 'activeplayer',
         'args' => 'argsAtomicAction',
         'action' => 'stAtomicAction',
-        // 'transitions' => [],
         'possibleactions' => ['actAbilityActionSelectTradeFair', 'actRestart'],
     ],
 

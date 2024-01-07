@@ -433,14 +433,14 @@ class Notifications
 
   public static function oneShotNotPossible($oneShot)
   {
-    self::message(clienttranslate('Not possible to resolve One-shot ${tkn_oneShot}'), [
+    self::message(clienttranslate('Not possible to perform One-shot ${tkn_oneShot}'), [
       'tkn_oneShot' => $oneShot,
     ]);
   }
 
   public static function oneShotDoesNotOccur($player, $oneShot)
   {
-    self::message(clienttranslate('${tkn_playerName} decides One-shot not to occur ${tkn_oneShot}'), [
+    self::message(clienttranslate('${tkn_playerName} chooses not to perform One-shot ${tkn_oneShot}'), [
       'player' => $player,
       'tkn_oneShot' => $oneShot,
     ]);
@@ -448,7 +448,7 @@ class Notifications
 
   public static function oneShotOccurs($player, $oneShot)
   {
-    self::message(clienttranslate('${tkn_playerName} decides One-shot to occur ${tkn_oneShot}'), [
+    self::message(clienttranslate('${tkn_playerName} performs One-shot ${tkn_oneShot}'), [
       'player' => $player,
       'tkn_oneShot' => $oneShot,
     ]);
@@ -794,6 +794,17 @@ class Notifications
   }
 
 
+  public static function useApostasyAbilityAction($player, $apostasy, $card)
+  {
+    
+
+    self::message(clienttranslate('${tkn_playerName} uses ${tkn_cardName} to perform an apostasy ${tkn_oneShot}'), [
+      'player' => $player,
+      'tkn_cardName' => $card->getName(),
+      'tkn_oneShot' => $apostasy,
+    ]);
+  }
+
   public static function vassalage($player, $empireCard, $suzerain)
   {
     self::message(clienttranslate('${tkn_boldText_vassal} becomes a Vassal to ${tkn_boldText_vassal_suzerain}'), [
@@ -802,6 +813,7 @@ class Notifications
       'tkn_boldText_vassal_suzerain' => $suzerain->getName(),
     ]);
   }
+  
 
   /*********************
    **** UPDATE ARGS ****

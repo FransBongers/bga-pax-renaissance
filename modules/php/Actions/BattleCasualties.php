@@ -52,7 +52,7 @@ class BattleCasualties extends \PaxRenaissance\Models\AtomicAction
 
     $survivingAgents = $this->ctx->getParent()->getInfo()['agentsToEliminate'];
     $repressedTokens = [];
-    Notifications::log('tokensToEliminate', $parentInfo['tokensToEliminate']);
+
     if (isset($parentInfo['tokensToEliminate'])) {
       foreach ($parentInfo['tokensToEliminate'] as $tokenId) {
         if (Tokens::get($tokenId)->getLocation() === Empires::get($parentInfo['empireId'])->getEmpireSquareId()) {

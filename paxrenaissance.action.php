@@ -69,6 +69,15 @@ class action_paxrenaissance extends APP_GameAction
     self::ajaxResponse();
   }
 
+  public function actAbilityActionSelectApostasy()
+  {
+    self::setAjaxMode();
+    $args = self::getArg('args', AT_json, true);
+    Utils::validateJSonAlphaNum($args, 'args');
+    $this->game->actTakeAtomicAction('actAbilityActionSelectApostasy', $args);
+    self::ajaxResponse();
+  }
+
   public function actAbilityActionSelectTradeFair()
   {
     self::setAjaxMode();

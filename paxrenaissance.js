@@ -216,6 +216,9 @@ var SIEGE_OP = "SIEGE_OP";
 var TAX_OP = "TAX_OP";
 var VOTE_OP_EAST = "VOTE_OP_EAST";
 var VOTE_OP_WEST = "VOTE_OP_WEST";
+var APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT = 'APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT';
+var APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT = 'APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT';
+var APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT = 'APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT';
 var SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY';
 var SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY';
 var SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1 = 'SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1';
@@ -1833,6 +1836,7 @@ var PaxRenaissance = (function () {
             _a[CLIENT_SELL_CARD_STATE] = new ClientSellCardState(this),
             _a[CLIENT_START_TRADE_FAIR_STATE] = new ClientStartTradeFairState(this),
             _a[CLIENT_USE_ABILITY_ACTION_STATE] = new ClientUseAbilityActionState(this),
+            _a.abilityActionSelectApostasy = new AbilityActionSelectApostasyState(this),
             _a.abilityActionSelectTradeFair = new AbilityActionSelectTradeFairState(this),
             _a.announceOneShot = new AnnounceOneShotState(this),
             _a.battleCasualties = new BattleCasualtiesState(this),
@@ -5067,6 +5071,79 @@ var tplTokenCounter = function (_a) {
 var tplGameMapSupply = function () {
     return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
 };
+var AbilityActionSelectApostasyState = (function () {
+    function AbilityActionSelectApostasyState(game) {
+        var _a;
+        this.apostasyTextMap = (_a = {},
+            _a[APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT] = _('Islamic-Catholic'),
+            _a[APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT] = _('Reformist-Catholic'),
+            _a[APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT] = _('Reformist-Islamic'),
+            _a);
+        this.game = game;
+    }
+    AbilityActionSelectApostasyState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    AbilityActionSelectApostasyState.prototype.onLeavingState = function () {
+        debug("Leaving AbilityActionSelectApostastStateState");
+    };
+    AbilityActionSelectApostasyState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must choose an apostasy to perform"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    AbilityActionSelectApostasyState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must choose an apostasy to perform"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.addButtons();
+        this.game.addUndoButtons(this.args);
+    };
+    AbilityActionSelectApostasyState.prototype.updateInterfaceConfirm = function (_a) {
+        var _this = this;
+        var apostasy = _a.apostasy;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("Perform ${tkn_oneShot} apostasy?"),
+            args: {
+                tkn_oneShot: apostasy,
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actAbilityActionSelectApostasy",
+                    args: {
+                        apostasy: apostasy,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    AbilityActionSelectApostasyState.prototype.addButtons = function () {
+        var _this = this;
+        this.args.options.forEach(function (apostasy, index) {
+            _this.game.addPrimaryActionButton({
+                id: "apostasy_btn_".concat(index),
+                text: _this.apostasyTextMap[apostasy],
+                callback: function () { return _this.updateInterfaceConfirm({ apostasy: apostasy }); }
+            });
+        });
+    };
+    return AbilityActionSelectApostasyState;
+}());
 var AbilityActionSelectTradeFairState = (function () {
     function AbilityActionSelectTradeFairState(game) {
         this.game = game;
@@ -5147,7 +5224,7 @@ var AnnounceOneShotState = (function () {
         var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} must decide if ${tkn_oneShot} One-shot occurs"),
+            text: _("Perform ${tkn_oneShot} One-shot?"),
             args: {
                 tkn_playerName: "${you}",
                 tkn_oneShot: this.args.oneShot,
@@ -5155,7 +5232,7 @@ var AnnounceOneShotState = (function () {
         });
         this.game.addPrimaryActionButton({
             id: "occurs_button",
-            text: _("Yes, occurs"),
+            text: _("Yes"),
             callback: function () {
                 return _this.game.takeAction({
                     action: "actAnnounceOneShot",
@@ -5167,7 +5244,7 @@ var AnnounceOneShotState = (function () {
         });
         this.game.addSecondaryActionButton({
             id: "does_not_occur_button",
-            text: _("No, does not occur"),
+            text: _("No"),
             callback: function () {
                 return _this.game.takeAction({
                     action: "actAnnounceOneShot",

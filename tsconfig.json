@@ -63,6 +63,7 @@
     "src/supply/tokenCounter.ts",
     "src/supply/index.ts",
     "src/supply/templates.ts",
+    "src/states/AbilityActionSelectApostasy.ts",
     "src/states/AbilityActionSelectTradeFair.ts",
     "src/states/AnnounceOneShot.ts",
     "src/states/BattleCasualties.ts",

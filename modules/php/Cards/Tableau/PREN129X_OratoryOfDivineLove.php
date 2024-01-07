@@ -35,5 +35,20 @@ class PREN129X_OratoryOfDivineLove extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [CATHOLIC];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_PERFORM_APOSTASY_AS_AN_ACTION,
+        'title' => clienttranslate('COUNTER-REFORMATION:'),
+        'text' => [
+          'log' => clienttranslate('As an action, may perform an apostasy between any 2 religions.'),
+          'args' => [],
+        ],
+        'abilityAction' => true,
+        'top' => 0,
+        'left' => 0,
+        'height' => 0,
+        'width' => 0,
+      ]
+    ];
   }
 }

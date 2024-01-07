@@ -18,6 +18,7 @@ class AbilityActions
     SA_FREE_EASTERN_OPS => 'FreeEasternOps',
     SA_FREE_WESTERN_OPS => 'FreeWesternOps',
     SA_FREE_TRADE_FAIR => 'FreeTradeFair',
+    SA_PERFORM_APOSTASY_AS_AN_ACTION => 'ApostasyAction',
   ];
 
   public static function get($abilityActionId, $cardAbility = null)

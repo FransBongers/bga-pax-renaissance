@@ -1,23 +1,29 @@
-class AnnounceOneShotState implements State {
+class AbilityActionSelectApostasyState implements State {
   private game: PaxRenaissanceGame;
-  private args: OnEnteringAnnounceOneShotArgs;
+  private args: OnEnteringAbilityActionSelectApostastStateArgs;
+
+  private apostasyTextMap = {
+    [APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT]: _('Islamic-Catholic'),
+    [APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT]: _('Reformist-Catholic'),
+    [APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT]: _('Reformist-Islamic'),
+  }
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
   }
 
-  onEnteringState(args: OnEnteringAnnounceOneShotArgs) {
+  onEnteringState(args: OnEnteringAbilityActionSelectApostastStateArgs) {
     this.args = args;
     this.updateInterfaceInitialStep();
   }
 
   onLeavingState() {
-    debug("Leaving AnnounceOneShotState");
+    debug("Leaving AbilityActionSelectApostastStateState");
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must decide if One-shot occurs"),
+      text: _("${tkn_playerName} must choose an apostasy to perform"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -46,39 +52,37 @@ class AnnounceOneShotState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _(
-        "Perform ${tkn_oneShot} One-shot?"
-      ),
+      text: _("${tkn_playerName} must choose an apostasy to perform"),
       args: {
         tkn_playerName: "${you}",
-        tkn_oneShot: this.args.oneShot,
       },
     });
-    this.game.addPrimaryActionButton({
-      id: "occurs_button",
-      text: _("Yes"),
-      callback: () =>
-        this.game.takeAction({
-          action: "actAnnounceOneShot",
-          args: {
-            occurs: true,
-          },
-        }),
-    });
-    this.game.addSecondaryActionButton({
-      id: "does_not_occur_button",
-      text: _("No"),
-      callback: () =>
-        this.game.takeAction({
-          action: "actAnnounceOneShot",
-          args: {
-            occurs: false,
-          },
-        }),
-    });
+
+    this.addButtons();
     this.game.addUndoButtons(this.args);
-    // this.setTokensSelectable();
   }
+
+  private updateInterfaceConfirm({apostasy}: {apostasy: string;}) {
+    this.game.clearPossible();
+    this.game.clientUpdatePageTitle({
+      text: _("Perform ${tkn_oneShot} apostasy?"),
+      args: {
+        tkn_oneShot: apostasy,
+      },
+    });
+
+    this.game.addConfirmButton({
+      callback: () =>
+        this.game.takeAction({
+          action: "actAbilityActionSelectApostasy",
+          args: {
+            apostasy,
+          },
+        }),
+    });
+    this.game.addCancelButton();
+  }
+
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -88,7 +92,15 @@ class AnnounceOneShotState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-
+  private addButtons() {
+    this.args.options.forEach((apostasy, index) => {
+      this.game.addPrimaryActionButton({
+        id: `apostasy_btn_${index}`,
+        text: this.apostasyTextMap[apostasy],
+        callback: () => this.updateInterfaceConfirm({apostasy})
+      })
+    })
+  }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.
