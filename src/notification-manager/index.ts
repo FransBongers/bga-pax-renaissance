@@ -387,7 +387,7 @@ class NotificationManager {
     }
 
     const node = document.getElementById(
-      isBishop ? `${token.location}_tokens` : `pr_${token.location}`
+      isBishop || token.location.startsWith('EmpireSquare_') ? `${token.location}_tokens` : `pr_${token.location}`
     );
     if (!node) {
       return;

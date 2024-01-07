@@ -51,15 +51,28 @@ class BattleCasualties extends \PaxRenaissance\Models\AtomicAction
     }
 
     $survivingAgents = $this->ctx->getParent()->getInfo()['agentsToEliminate'];
-    if (count($survivingAgents) > 0) {
-      $this->ctx->insertAsBrother(new LeafNode([
-        'action' => PLACE_AGENT,
-        'playerId' => $this->ctx->getPlayerId(),
-        'agents' => $survivingAgents,
-        'empireId' => $parentInfo['empireId'],
-        'optional' => false,
-        'emptyCitiesFirst' => true,
-        'repressCost' => 0,
+    $repressedTokens = [];
+    Notifications::log('tokensToEliminate', $parentInfo['tokensToEliminate']);
+    if (isset($parentInfo['tokensToEliminate'])) {
+      foreach ($parentInfo['tokensToEliminate'] as $tokenId) {
+        if (Tokens::get($tokenId)->getLocation() === Empires::get($parentInfo['empireId'])->getEmpireSquareId()) {
+          $repressedTokens[] = $tokenId;
+        }
+      }
+    }
+
+    if (count($survivingAgents) + count($repressedTokens) > 0) {
+      $this->ctx->insertAsBrother(Engine::buildtree([
+        'children' => [
+          [
+            'action' => BATTLE_PLACE_ATTACKERS,
+            'playerId' => $this->ctx->getPlayerId(),
+            'agents' => $survivingAgents,
+            'empireId' => $parentInfo['empireId'],
+            'optional' => false,
+            'repressedTokens' => $repressedTokens,
+          ]
+        ]
       ]));
     }
 

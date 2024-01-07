@@ -158,7 +158,6 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
       $empireCard->insertOnTop($location);
       Notifications::vassalage($player, $empireCard, $suzerain);
     }
-    
 
     Notifications::moveEmpireSquare($player, $empireCard, $argsOrigin, $this->argsDestination($empireCard));
   }

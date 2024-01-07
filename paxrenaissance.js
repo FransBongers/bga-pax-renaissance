@@ -1837,6 +1837,7 @@ var PaxRenaissance = (function () {
             _a.announceOneShot = new AnnounceOneShotState(this),
             _a.battleCasualties = new BattleCasualtiesState(this),
             _a.battleLocation = new BattleLocationState(this),
+            _a.battlePlaceAttackers = new BattlePlaceAttackersState(this),
             _a.battleReconfigureContantinople = new BattleReconfigureConstantinopleState(this),
             _a.bishopPacification = new BishopPacificationState(this),
             _a.confirmPartialTurn = new ConfirmPartialTurnState(this),
@@ -4124,7 +4125,7 @@ var NotificationManager = (function () {
                                 value: -1,
                             });
                         }
-                        node = document.getElementById(isBishop ? "".concat(token.location, "_tokens") : "pr_".concat(token.location));
+                        node = document.getElementById(isBishop || token.location.startsWith('EmpireSquare_') ? "".concat(token.location, "_tokens") : "pr_".concat(token.location));
                         if (!node) {
                             return [2];
                         }
@@ -5363,6 +5364,178 @@ var BattleLocationState = (function () {
         });
     };
     return BattleLocationState;
+}());
+var BattlePlaceAttackersState = (function () {
+    function BattlePlaceAttackersState(game) {
+        this.game = game;
+    }
+    BattlePlaceAttackersState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    BattlePlaceAttackersState.prototype.onLeavingState = function () {
+        debug("Leaving BattleLocationState");
+    };
+    BattlePlaceAttackersState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must place surviving attackers"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    BattlePlaceAttackersState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a surviving attacker to place"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setTokensSelectable();
+        this.addAgentButtons();
+        this.game.addUndoButtons(this.args);
+    };
+    BattlePlaceAttackersState.prototype.updateInterfaceAgentSelected = function (_a) {
+        var _this = this;
+        var option = _a.option;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a ${borderOrCity} to place ${tkn_mapToken} onto"),
+            args: {
+                tkn_playerName: "${you}",
+                borderOrCity: option.agent.type === PAWN || option.agent.type === PIRATE ? _("Border") : _("City"),
+                tkn_mapToken: this.createMapTokenId({ agent: option.agent }),
+            },
+        });
+        option.locations.forEach(function (location) {
+            _this.game.setLocationSelectable({
+                id: location.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirmAgentLocation({
+                        agent: option.agent,
+                        location: location,
+                    });
+                },
+            });
+        });
+        this.game.addCancelButton();
+    };
+    BattlePlaceAttackersState.prototype.updateInterfaceConfirmAgentLocation = function (_a) {
+        var _this = this;
+        var agent = _a.agent, location = _a.location;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: location.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Place ${tkn_mapToken} onto ${locationName}?"),
+            args: {
+                tkn_mapToken: this.createMapTokenId({ agent: agent }),
+                locationName: _(location.name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                _this.game.clearPossible();
+                _this.game.takeAction({
+                    action: "actBattlePlaceAttackers",
+                    args: {
+                        agent: agent,
+                        locationId: location.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    BattlePlaceAttackersState.prototype.updateInterfaceTokenSelected = function (_a) {
+        var _this = this;
+        var option = _a.option;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a ${borderOrCity} to place ${tkn_mapToken} onto"),
+            args: {
+                tkn_playerName: "${you}",
+                borderOrCity: option.token.type === PAWN ? _("Border") : _("City"),
+                tkn_mapToken: tknMapToken(option.token.id),
+            },
+        });
+        option.locations.forEach(function (location) {
+            _this.game.setLocationSelectable({
+                id: location.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirmTokenLocation({
+                        token: option.token,
+                        location: location,
+                    });
+                },
+            });
+        });
+        this.game.addCancelButton();
+    };
+    BattlePlaceAttackersState.prototype.updateInterfaceConfirmTokenLocation = function (_a) {
+        var _this = this;
+        var token = _a.token, location = _a.location;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: location.id });
+        this.game.setTokenSelected({ id: token.id });
+        this.game.clientUpdatePageTitle({
+            text: _("Place ${tkn_mapToken} onto ${locationName}?"),
+            args: {
+                tkn_mapToken: tknMapToken(token.id),
+                locationName: _(location.name),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                _this.game.clearPossible();
+                _this.game.takeAction({
+                    action: "actBattlePlaceAttackers",
+                    args: {
+                        tokenId: token.id,
+                        locationId: location.id,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    BattlePlaceAttackersState.prototype.createMapTokenId = function (_a) {
+        var agent = _a.agent;
+        var id = "";
+        if (agent.type === PAWN) {
+            var bank = this.game.playerManager
+                .getPlayer({ playerId: this.game.getPlayerId() })
+                .getBank();
+            id = "".concat(bank, "_pawn");
+        }
+        else {
+            id = "".concat(agent.separator, "_").concat(agent.type);
+        }
+        return id;
+    };
+    BattlePlaceAttackersState.prototype.addAgentButtons = function () {
+        var _this = this;
+        this.args.options.agents.forEach(function (option, index) {
+            _this.game.addPrimaryActionButton({
+                id: "agent_button_".concat(index),
+                text: "".concat(option.agent.type, " agent"),
+                callback: function () { return _this.updateInterfaceAgentSelected({ option: option }); },
+            });
+        });
+    };
+    BattlePlaceAttackersState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        this.args.options.repressedTokens.forEach(function (option) {
+            _this.game.setTokenSelectable({
+                id: option.token.id,
+                callback: function () { return _this.updateInterfaceTokenSelected({ option: option }); },
+            });
+        });
+    };
+    return BattlePlaceAttackersState;
 }());
 var BattleReconfigureConstantinopleState = (function () {
     function BattleReconfigureConstantinopleState(game) {

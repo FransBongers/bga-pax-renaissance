@@ -392,6 +392,16 @@ $machinestates = [
         'transitions' => [],
     ],
 
+    ST_BATTLE_PLACE_ATTACKERS => [
+        'name' => 'battlePlaceAttackers',
+        'description' => clienttranslate('${actplayer} must place attackers'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actBattlePlaceAttackers', 'actPassOptionalAction', 'actRestart'],
+    ],
+
     ST_BATTLE_RECONFIGURE_CONSTANTINOPLE => [
         'name' => 'battleReconfigureContantinople',
         'description' => clienttranslate('${actplayer} may move Tokens within Constantinople'),

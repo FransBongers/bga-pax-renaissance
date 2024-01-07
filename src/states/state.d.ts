@@ -73,6 +73,23 @@ interface OnEnteringBattleLocationArgs extends CommonArgs {
   data: unknown;
 }
 
+interface PlaceAttackingAgentOption {
+  agent: Agent;
+  locations: (City | Border)[];
+}
+
+interface PlaceAttackingRepressedTokenOption {
+  token: Token;
+  locations: (City | Border)[];
+}
+
+interface OnEnteringBattlePlaceAttackersArgs extends CommonArgs {
+  options: {
+    agents: PlaceAttackingAgentOption[];
+    repressedTokens: PlaceAttackingRepressedTokenOption[];
+  }
+}
+
 type ConstantinopleCityId = 'constantinople1' | 'constantinople2' | 'constantinople3';
 
 interface OnEnteringBattleReconfigureConstantinopleArgs extends CommonArgs {

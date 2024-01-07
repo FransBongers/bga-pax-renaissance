@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN055_DuchyOfFerrara extends \PaxRenaissance\Models\CondottiereCard
+class PREN055_DuchyOfFerrara extends \PaxRenaissance\Models\Cards\CondottiereCard
 {
   public function __construct($row)
   {

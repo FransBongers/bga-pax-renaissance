@@ -1,6 +1,6 @@
 <?php
 
-namespace PaxRenaissance\Models;
+namespace PaxRenaissance\Models\Cards;
 
 use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Engine\LeafNode;
@@ -10,7 +10,7 @@ use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 
-class CondottiereCard extends TableauCard
+class CondottiereCard extends \PaxRenaissance\Models\TableauCard
 {
 
   public function activateAbility()

@@ -525,6 +525,13 @@ class Notifications
     ]);
   }
 
+  public static function repressRemainingAttackers($player)
+  {
+    self::message(clienttranslate('${tkn_playerName} represses remaining Agents'), [
+      'player' => $player,
+    ]);
+  }
+
   public static function repressToken($player, $token, $fromLocation, $cost)
   {
     $isPawn = $token->getType() === PAWN;

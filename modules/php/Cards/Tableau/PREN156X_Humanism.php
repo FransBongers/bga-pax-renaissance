@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN156X_Humanism extends \PaxRenaissance\Models\TableauCard
+class PREN156X_Humanism extends \PaxRenaissance\Models\Cards\ImmuneToSilencingCard
 {
   public function __construct($row)
   {
@@ -41,22 +41,5 @@ class PREN156X_Humanism extends \PaxRenaissance\Models\TableauCard
         ],
       ]
     ];
-  }
-
-  public function discard($messageType = DISCARD, $player = null) {
-    $owner = $this->getOwner();
-    parent::discard($messageType, $player);
-
-    // Check if owner has other cards with the ability
-    if ($owner->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
-      return;
-    }
-    // Trigger silence for all other owners cards with bishops
-    $tableauCards = $owner->getTableauCards();
-    foreach($tableauCards as $card) {
-      if ($card->hasBishop()) {
-        $card->silence();
-      }
-    }
   }
 }

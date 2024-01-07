@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN024_Gonfalonier extends \PaxRenaissance\Models\CondottiereCard
+class PREN024_Gonfalonier extends \PaxRenaissance\Models\Cards\CondottiereCard
 {
   public function __construct($row)
   {

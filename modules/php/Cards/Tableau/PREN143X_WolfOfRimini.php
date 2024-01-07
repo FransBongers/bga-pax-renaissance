@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN143X_WolfOfRimini extends \PaxRenaissance\Models\CondottiereCard
+class PREN143X_WolfOfRimini extends \PaxRenaissance\Models\Cards\CondottiereCard
 {
   public function __construct($row)
   {

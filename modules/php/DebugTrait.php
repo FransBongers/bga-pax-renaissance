@@ -57,10 +57,12 @@ trait DebugTrait
 
   function test()
   {
-    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Ottoman');
-    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Hungary');
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Mamluk');
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Byzantium');
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_FRANCE);
+    $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ARAGON_PAPAL_STATES);
+    $this->debugPlaceToken(ROOK, CATHOLIC, 'EmpireSquare_Aragon');
+    $this->debugPlaceToken(KNIGHT, CATHOLIC, 'EmpireSquare_Aragon');
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, 'EmpireSquare_Byzantium');
+    // $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_Byzantium');
     // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_France');
     // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Portugal');
     // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_HolyRomanEmpire');
