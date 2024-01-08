@@ -361,11 +361,13 @@ class Notifications
 
   public static function discardQueen($player, $queen, $king)
   {
+    $kingCard = $king->jsonSerialize();
+
     self::notifyAll("discardQueen", clienttranslate('${tkn_playerName} discards ${tkn_boldText}'), [
       'player' => $player,
       'tkn_boldText' => $queen->getName(),
       'queen' => $queen,
-      'king' => $king,
+      'king' => $kingCard,
     ]);
   }
 
@@ -393,10 +395,13 @@ class Notifications
 
   public static function moveEmpireSquare($player, $empireCard, $origin, $destination)
   {
+    $name = $empireCard->getName();
+    $card = $empireCard->jsonSerialize();
+
     self::notifyAll("moveEmpireSquare", clienttranslate('${tkn_playerName} moves ${tkn_boldText} to their tableau'), [
       'player' => $player,
-      'tkn_boldText' => $empireCard->getName(),
-      'card' => $empireCard,
+      'tkn_boldText' => $name,
+      'card' => $card,
       'origin' => $origin,
       'destination' => $destination,
     ]);

@@ -187,6 +187,12 @@ class GameMap {
         if (this.empireSquareStocks[empire]) {
           this.empireSquareStocks[empire].addCard(card);
         }
+        card.queens.forEach((queen) => {
+          const queenTokensNode = document.getElementById(`${queen.id}_tokens`);
+          gamedatas.tokens.inPlay.filter((token) => token.location === queen.id).forEach((token) => {
+            queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
+          })
+        });
         // const { id, location } = card;
         // const node = document.getElementById(`pr_${location}`);
         // if (!node) {

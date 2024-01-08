@@ -9,6 +9,7 @@ use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
+use PaxRenaissance\Helpers\OneShots;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cards;
@@ -69,7 +70,7 @@ class CoronationOneShot extends \PaxRenaissance\Models\AtomicAction
     $card = Cards::get($cardId);
 
     $data = [
-      'suitors' => $this->getSuitors($card),
+      'suitors' => OneShots::getSuitorsCoronation(self::getPlayer(), $card),
       'queen' => $card,
     ];
 
@@ -100,8 +101,8 @@ class CoronationOneShot extends \PaxRenaissance\Models\AtomicAction
     $queen = Cards::get($this->ctx->getInfo()['cardId']);
 
     $cardId = $args['cardId'];
-
-    $suitors = $this->getSuitors($queen);
+    $player = self::getPlayer();
+    $suitors = OneShots::getSuitorsCoronation($player, $queen);
 
     $king = Utils::array_find($suitors, function ($suitor) use ($cardId) {
       return $suitor->getId() === $cardId;
@@ -111,7 +112,7 @@ class CoronationOneShot extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("Not allowed to marry to selected King");
     }
 
-    $player = self::getPlayer();
+    
 
     // $king->marry($player, $queen);
     // Notifications::coronation($player, $queen, $king);
@@ -130,24 +131,24 @@ class CoronationOneShot extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private function getSuitors($queen)
-  {
+  // private function getSuitors($queen)
+  // {
 
 
-    $suitors = $queen->getSuitors();
-    $playerId = self::getPlayer()->getId();
+  //   $suitors = $queen->getSuitors();
+  //   $playerId = self::getPlayer()->getId();
 
-    $options = [];
-    foreach ($suitors as $suitor) {
-      $location = $suitor->getLocation();
-      if ($suitor->getSide() === REPUBLIC) {
-        continue;
-      }
+  //   $options = [];
+  //   foreach ($suitors as $suitor) {
+  //     $location = $suitor->getLocation();
+  //     if ($suitor->getSide() === REPUBLIC) {
+  //       continue;
+  //     }
 
-      if (Utils::startsWith($location, 'throne') || $location === Locations::tableau($playerId, WEST) || $location === Locations::tableau($playerId, EAST)) {
-        $options[] = $suitor;
-      }
-    }
-    return $options;
-  }
+  //     if (Utils::startsWith($location, 'throne') || $location === Locations::tableau($playerId, WEST) || $location === Locations::tableau($playerId, EAST)) {
+  //       $options[] = $suitor;
+  //     }
+  //   }
+  //   return $options;
+  // }
 }

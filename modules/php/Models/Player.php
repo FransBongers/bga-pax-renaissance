@@ -205,12 +205,20 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
   public function getTableauCardsForRegion($region)
   {
     $tableauCards = Cards::getInLocationOrdered(Locations::tableau($this->getId(), $region))->toArray();
+
     $queensAndVassals = [];
     foreach ($tableauCards as $card) {
       if ($card->getType() !== EMPIRE_CARD) {
         continue;
       }
-      $queensAndVassals = array_merge($queensAndVassals, $card->getQueens(), $card->getVassals());
+      $vassals = $card->getVassals();
+      $queensAndVassals = array_merge($queensAndVassals, $card->getQueens(), $vassals);
+      foreach($vassals as $vassal) {
+        $vassalQueens = $vassal->getQueens();
+        if (count($vassalQueens) > 0) {
+          $queensAndVassals = array_merge($queensAndVassals, $vassalQueens);
+        }
+      }
     }
     return array_merge($tableauCards, $queensAndVassals);
   }

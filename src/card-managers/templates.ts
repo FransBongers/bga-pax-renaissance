@@ -12,27 +12,22 @@ const tplTokensContainer = ({ id }: { id: string }) => `
 const tplVassalsContainer = ({ id }: { id: string }) => `
   <div id="vassals_${id}" class="pr_vassals_container"></div>`;
 
-const tplQueenContainer = ({
-  id,
-  queens,
-}: {
-  id: string;
-  queens: QueenCard[];
-}) => {
-  let containerHeight = getTotalHeightQueens({ queens });
-  return `
-  <div id="queens_${id}" class="pr_queens_container" style="height: calc(var(--paxRenCardScale) * ${containerHeight}px);">
-    ${queens
-      .map(
-        (queen) =>
-          `<div id="${queen.id}-front" class="pr_card" data-card-id="${
-            queen.id.split("_")[0]
-          }">
-            <div id="${queen.id}_tokens" class="pr_card_tokens_container"></div>
-          </div>`
-      )
-      .join("")}
+const tplQueen = ({ queen }: { queen: QueenCard; }) => {
+  return `<div id="${queen.id}-front" class="pr_card" data-card-id="${
+    queen.id.split("_")[0]
+  }">
+    <div id="${queen.id}_tokens" class="pr_card_tokens_container"></div>
   </div>`;
 };
 
-// style="height: calc(var(--paxRenCardScale) * ${queen.height}px);"
+const tplQueenContainer = ({
+  id,
+}: {
+  id: string;
+}) => {
+  return `
+  <div id="queens_${id}" class="pr_queens_container">
+    
+  </div>`;
+};
+

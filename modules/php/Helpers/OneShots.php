@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance\Helpers;
 
+use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Managers\Players;
 
 abstract class OneShots extends \APP_DbObject
@@ -32,19 +33,71 @@ abstract class OneShots extends \APP_DbObject
       }
 
       $playerId = $player->getId();
-      $result[$playerId] = [];
+      // $result[$playerId] = [];
+      $royalCouples = [];
+      $otherCards = [];
 
-      $tableauCards = $player->getTableauCards();
-      foreach ($tableauCards as $card) {
+      $affectedCards = Utils::filter($player->getTableauCards(), function ($card) use ($prestige) {
         $cardIsAffected = Utils::array_some($card->getPrestige(), function ($cardPrestige) use ($prestige) {
           return in_array($cardPrestige, $prestige);
         });
-        if (!$cardIsAffected) {
-          continue;
+        return $cardIsAffected;
+      });
+
+      foreach ($affectedCards as $card) {
+        if ($card->isQueen()) {
+          $king = $card->getKing();
+          $kingInList = Utils::array_find($affectedCards, function ($crd) use ($king) {
+            return $crd->getId() === $king->getId();
+          });
+
+          if ($kingInList !== null) {
+            // King is also in the list, we can continue
+            continue;
+          }
+          if ($king->isVassal()) {
+            array_unshift($royalCouples, $king);
+          } else {
+            $royalCouples[] = $king;
+          }
+        } else {
+          $otherCards[] = $card;
         }
-        $result[$playerId][] = $card;
       }
+
+      $result[$playerId] = [
+        'royalCouples' => $royalCouples,
+        'tableauCards' => $otherCards,
+      ];
     }
     return $result;
+  }
+
+  public static function getSuitorsCoronation($player, $queen)
+  {
+
+
+    $suitors = $queen->getSuitors();
+    $playerId = $player->getId();
+
+    $options = [];
+    foreach ($suitors as $suitor) {
+      $location = $suitor->getLocation();
+      if ($suitor->getSide() === REPUBLIC) {
+        continue;
+      }
+
+      if (
+        count($suitor->getQueens()) === 0 &&
+        (Utils::startsWith($location, 'throne') ||
+          $location === Locations::tableau($playerId, WEST) ||
+          $location === Locations::tableau($playerId, EAST))
+      ) {
+        $options[] = $suitor;
+      } else if ($player->hasSpecialAbility(SA_CORONATION_CAN_CLAIM_MARRIED_KINGS)) {
+        $options[] = $suitor;
+      }
+    }
+    return $options;
   }
 }

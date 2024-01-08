@@ -86,7 +86,6 @@ class AbilityActionSelectApostasy extends \PaxRenaissance\Models\AtomicAction
   public function actAbilityActionSelectApostasy($args)
   {
     self::checkAction('actAbilityActionSelectApostasy');
-    Notifications::log('args',$args);
 
     $apostasy = $args['apostasy'];
 

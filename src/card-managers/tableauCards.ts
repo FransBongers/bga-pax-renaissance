@@ -40,37 +40,33 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
       div.style.minHeight = "calc(var(--paxRenCardScale) * 151px)";
     }
     div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
-    // div.style.position = 'relative';
 
-    // div.insertAdjacentHTML('beforebegin', `<div id="constainer_${card.id}">`);
-    // div.insertAdjacentHTML('afterend', '</div>');
     if (card.type === EMPIRE_CARD) {
-      if (card.queens.length > 0) {
-        div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id, queens: card.queens }));
-        card.queens.forEach((queen) => {
-          this.game.tooltipManager.addCardTooltip({
-            nodeId: queen.id + "-front",
-            // nodeId: "PREN048_MaryTheRich-front",
-            card: queen,
-          });
-        })
-      }
+      // setup container for queens
+      div.insertAdjacentHTML(
+        "afterbegin",
+        tplQueenContainer({ id: card.id })
+      );
+      const queenContainerNode = document.getElementById(`queens_${card.id}`);
+      card.queens.forEach((queen) => {
+        // add queens
+        queenContainerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
+        // add tooltip to queen
+        this.game.tooltipManager.addCardTooltip({
+          nodeId: queen.id + "-front",
+          card: queen,
+        });
+      });
+
       div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
-      // const wrapper =
-      // div.insertAdjacentHTML('beforeend',`<div id="${card.id}_wrapper"></div>`)
-      // div.parentElement.insertBefore()
-      // this.queenStocks[card.empire] = new LineStock<EmpireCard | TableauCard>(
-      //   this,
-      //   document.getElementById(`queen_${card.id}`),
-      //   {}
-      // );
 
       this.vassalStocks[card.empire] = new LineStock<EmpireCard | TableauCard>(
         this,
         document.getElementById(`vassals_${card.id}`),
         { gap: "12px", sort: sortFunction("state") }
       );
-      this.updateEmpireCardHeight({card});
+      this.updateQueenContainerHeightAndPositions({ card });
+      this.updateEmpireCardHeight({ card });
     }
   }
 
@@ -146,8 +142,17 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
   }
 
   // Card move has alreasy been done, need to update height
-  public removeVassal({ suzerain, beforeMove = false }: { suzerain: EmpireCard; beforeMove?: boolean }) {
-    this.updateEmpireCardHeight({ card: suzerain, vassalChange: beforeMove ? -1 : 0 });
+  public removeVassal({
+    suzerain,
+    beforeMove = false,
+  }: {
+    suzerain: EmpireCard;
+    beforeMove?: boolean;
+  }) {
+    this.updateEmpireCardHeight({
+      card: suzerain,
+      vassalChange: beforeMove ? -1 : 0,
+    });
   }
 
   public async addQueen({
@@ -157,20 +162,25 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     king: EmpireCard;
     queen: QueenCard;
   }) {
-    const {id, queens} = king;
+    const { id, queens } = king;
     const div = document.getElementById(id);
     if (!div) {
       return;
     }
-    // TODO: handle case where it already exists because multiple queens with Star Chamber
-    div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id, queens, }));
-    this.game.tooltipManager.addCardTooltip({
-      nodeId: queen.id + "-front",
-      card: queen,
-    });
+
+    const containerNode = document.getElementById(`queens_${king.id}`);
+    if (containerNode) {
+      containerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
+      this.game.tooltipManager.addCardTooltip({
+        nodeId: queen.id + "-front",
+        card: queen,
+      });
+    }
+
     this.updateEmpireCardHeight({
       card: king,
     });
+    this.updateQueenContainerHeightAndPositions({ card: king });
   }
 
   public async removeQueen({
@@ -182,18 +192,12 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
   }) {
     // TODO: discard animation
     const node = document.getElementById(`${queen.id}-front`);
-    
+
     if (node) {
       node.remove();
     }
-    if (king.queens.length === 0) {
-      // Remove queens container
-      const containerNode = document.getElementById(`queens_${king.id}`);
-      if (containerNode) {
-        containerNode.remove();
-      }
-    }
     this.updateEmpireCardHeight({ card: king });
+    this.updateQueenContainerHeightAndPositions({ card: king });
   }
 
   private updateEmpireCardHeight({
@@ -206,11 +210,42 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     const empire = card.empire;
     const numberOfVassals =
       this.vassalStocks[empire].getCards().length + vassalChange;
-    const queenHeight = getTotalHeightQueens({queens: card.queens});
+    const queenHeight = getTotalHeightQueens({ queens: card.queens });
 
     const node = document.getElementById(card.id);
     node.style.minHeight = `calc(var(--paxRenCardScale) * ${
       (numberOfVassals + 1) * 151 + numberOfVassals * 12 + queenHeight
     }px)`;
+
+    // const queensContainer = document.getElementById(`queens_${card.id}`);
+    // console.log('queensContainer', queensContainer);
+    // console.log('queenHeight', queenHeight);
+    // console.log('queensContainer', queensContainer?.style);
+    // if (queensContainer) {
+    //   queensContainer.style.height = `calc(var(--paxRenCardScale) * ${queenHeight}px);`
+    // }
+  }
+
+  private updateQueenContainerHeightAndPositions({
+    card,
+  }: {
+    card: EmpireCard;
+  }) {
+    let offSetTop = 0;
+    card.queens.forEach((queen) => {
+      const queenNode = document.getElementById(`${queen.id}-front`);
+      if (!queenNode) {
+        return;
+      }
+      queenNode.style.position = "absolute";
+      queenNode.style.top = `calc(var(--paxRenCardScale) * ${offSetTop}px)`;
+      offSetTop = offSetTop + queen.height;
+    });
+    const queensContainer = document.getElementById(`queens_${card.id}`);
+    if (!queensContainer) {
+      return;
+    }
+    const style = `calc(var(--paxRenCardScale) * ${offSetTop}px)`;
+    queensContainer.style.height = style;
   }
 }

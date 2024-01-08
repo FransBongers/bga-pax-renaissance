@@ -10,6 +10,7 @@ use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
+use PaxRenaissance\Helpers\OneShots;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\AtomicActions;
 use PaxRenaissance\Managers\Borders;
@@ -218,15 +219,10 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
 
   private function coronationCanOccur($card)
   {
-    $suitors = $card->getSuitors();
-    $playerId = self::getPlayer()->getId();
-    return Utils::array_some($suitors, function ($empireCard) use ($playerId) {
-      if ($empireCard->getSide() === REPUBLIC) {
-        return false;
-      }
-      $location = $empireCard->getLocation();
-      return Utils::startsWith($location, 'throne') || $location === Locations::tableau($playerId, WEST) || $location === Locations::tableau($playerId, EAST);
-    });
+    $player = self::getPlayer();
+    $suitors = OneShots::getSuitorsCoronation($player, $card);
+
+    return count($suitors) > 0;
   }
 
   private function tradeShiftCanOccur($oneShot)

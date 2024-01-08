@@ -2363,17 +2363,18 @@ var TableauCardManager = (function (_super) {
         }
         div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
         if (card.type === EMPIRE_CARD) {
-            if (card.queens.length > 0) {
-                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id, queens: card.queens }));
-                card.queens.forEach(function (queen) {
-                    _this.game.tooltipManager.addCardTooltip({
-                        nodeId: queen.id + "-front",
-                        card: queen,
-                    });
+            div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
+            var queenContainerNode_1 = document.getElementById("queens_".concat(card.id));
+            card.queens.forEach(function (queen) {
+                queenContainerNode_1.insertAdjacentHTML("beforeend", tplQueen({ queen: queen }));
+                _this.game.tooltipManager.addCardTooltip({
+                    nodeId: queen.id + "-front",
+                    card: queen,
                 });
-            }
+            });
             div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
             this.vassalStocks[card.empire] = new LineStock(this, document.getElementById("vassals_".concat(card.id)), { gap: "12px", sort: sortFunction("state") });
+            this.updateQueenContainerHeightAndPositions({ card: card });
             this.updateEmpireCardHeight({ card: card });
         }
     };
@@ -2436,26 +2437,33 @@ var TableauCardManager = (function (_super) {
     };
     TableauCardManager.prototype.removeVassal = function (_a) {
         var suzerain = _a.suzerain, _b = _a.beforeMove, beforeMove = _b === void 0 ? false : _b;
-        this.updateEmpireCardHeight({ card: suzerain, vassalChange: beforeMove ? -1 : 0 });
+        this.updateEmpireCardHeight({
+            card: suzerain,
+            vassalChange: beforeMove ? -1 : 0,
+        });
     };
     TableauCardManager.prototype.addQueen = function (_a) {
         var king = _a.king, queen = _a.queen;
         return __awaiter(this, void 0, void 0, function () {
-            var id, queens, div;
+            var id, queens, div, containerNode;
             return __generator(this, function (_b) {
                 id = king.id, queens = king.queens;
                 div = document.getElementById(id);
                 if (!div) {
                     return [2];
                 }
-                div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: id, queens: queens, }));
-                this.game.tooltipManager.addCardTooltip({
-                    nodeId: queen.id + "-front",
-                    card: queen,
-                });
+                containerNode = document.getElementById("queens_".concat(king.id));
+                if (containerNode) {
+                    containerNode.insertAdjacentHTML("beforeend", tplQueen({ queen: queen }));
+                    this.game.tooltipManager.addCardTooltip({
+                        nodeId: queen.id + "-front",
+                        card: queen,
+                    });
+                }
                 this.updateEmpireCardHeight({
                     card: king,
                 });
+                this.updateQueenContainerHeightAndPositions({ card: king });
                 return [2];
             });
         });
@@ -2463,19 +2471,14 @@ var TableauCardManager = (function (_super) {
     TableauCardManager.prototype.removeQueen = function (_a) {
         var king = _a.king, queen = _a.queen;
         return __awaiter(this, void 0, void 0, function () {
-            var node, containerNode;
+            var node;
             return __generator(this, function (_b) {
                 node = document.getElementById("".concat(queen.id, "-front"));
                 if (node) {
                     node.remove();
                 }
-                if (king.queens.length === 0) {
-                    containerNode = document.getElementById("queens_".concat(king.id));
-                    if (containerNode) {
-                        containerNode.remove();
-                    }
-                }
                 this.updateEmpireCardHeight({ card: king });
+                this.updateQueenContainerHeightAndPositions({ card: king });
                 return [2];
             });
         });
@@ -2487,6 +2490,25 @@ var TableauCardManager = (function (_super) {
         var queenHeight = getTotalHeightQueens({ queens: card.queens });
         var node = document.getElementById(card.id);
         node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat((numberOfVassals + 1) * 151 + numberOfVassals * 12 + queenHeight, "px)");
+    };
+    TableauCardManager.prototype.updateQueenContainerHeightAndPositions = function (_a) {
+        var card = _a.card;
+        var offSetTop = 0;
+        card.queens.forEach(function (queen) {
+            var queenNode = document.getElementById("".concat(queen.id, "-front"));
+            if (!queenNode) {
+                return;
+            }
+            queenNode.style.position = "absolute";
+            queenNode.style.top = "calc(var(--paxRenCardScale) * ".concat(offSetTop, "px)");
+            offSetTop = offSetTop + queen.height;
+        });
+        var queensContainer = document.getElementById("queens_".concat(card.id));
+        if (!queensContainer) {
+            return;
+        }
+        var style = "calc(var(--paxRenCardScale) * ".concat(offSetTop, "px)");
+        queensContainer.style.height = style;
     };
     return TableauCardManager;
 }(CardManager));
@@ -2506,14 +2528,13 @@ var tplVassalsContainer = function (_a) {
     var id = _a.id;
     return "\n  <div id=\"vassals_".concat(id, "\" class=\"pr_vassals_container\"></div>");
 };
+var tplQueen = function (_a) {
+    var queen = _a.queen;
+    return "<div id=\"".concat(queen.id, "-front\" class=\"pr_card\" data-card-id=\"").concat(queen.id.split("_")[0], "\">\n    <div id=\"").concat(queen.id, "_tokens\" class=\"pr_card_tokens_container\"></div>\n  </div>");
+};
 var tplQueenContainer = function (_a) {
-    var id = _a.id, queens = _a.queens;
-    var containerHeight = getTotalHeightQueens({ queens: queens });
-    return "\n  <div id=\"queens_".concat(id, "\" class=\"pr_queens_container\" style=\"height: calc(var(--paxRenCardScale) * ").concat(containerHeight, "px);\">\n    ").concat(queens
-        .map(function (queen) {
-        return "<div id=\"".concat(queen.id, "-front\" class=\"pr_card\" data-card-id=\"").concat(queen.id.split("_")[0], "\">\n            <div id=\"").concat(queen.id, "_tokens\" class=\"pr_card_tokens_container\"></div>\n          </div>");
-    })
-        .join(""), "\n  </div>");
+    var id = _a.id;
+    return "\n  <div id=\"queens_".concat(id, "\" class=\"pr_queens_container\">\n    \n  </div>");
 };
 var VictoryCardManager = (function (_super) {
     __extends(VictoryCardManager, _super);
@@ -3044,6 +3065,12 @@ var GameMap = (function () {
             if (_this.empireSquareStocks[empire]) {
                 _this.empireSquareStocks[empire].addCard(card);
             }
+            card.queens.forEach(function (queen) {
+                var queenTokensNode = document.getElementById("".concat(queen.id, "_tokens"));
+                gamedatas.tokens.inPlay.filter(function (token) { return token.location === queen.id; }).forEach(function (token) {
+                    queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
+                });
+            });
         });
         gamedatas.gameMap.thrones.tokens.forEach(function (token) {
             var location = token.location;

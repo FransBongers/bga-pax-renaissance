@@ -49,17 +49,15 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
 
     $affectedPlayers = OneShots::getPlayersAffectedByApostasy($oneShot);
 
-    foreach ($affectedPlayers as $playerId => $cardsToDiscard) {
+    foreach ($affectedPlayers as $playerId => $affectedCards) {
       $player = Players::get($playerId);
       Notifications::apostasy($player, APOSTASY_PRESTIGE_MAP[$oneShot]);
-      foreach ($cardsToDiscard as $cardToDiscard) {
 
-        if ($cardToDiscard->isQueen() && Utils::array_find($cardsToDiscard, function ($card) use ($cardToDiscard) {
-          return $card->getId() === $cardToDiscard->getKing()->getId();
-        }) !== null) {
-          continue;
-        }
-        // TODO: check if this can lead to players becoming active -> discard empire cards?
+      foreach($affectedCards['royalCouples'] as $empireCard) {
+        $empireCard->returnToThrone();
+      }
+      // First discard all queens with prestige fir
+      foreach ($affectedCards['tableauCards'] as $cardToDiscard) {
         if ($cardToDiscard->getType() === EMPIRE_CARD) {
           $cardToDiscard->returnToThrone();
         } else {

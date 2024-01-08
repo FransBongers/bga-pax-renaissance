@@ -37,5 +37,15 @@ class PREN006_StarChamber extends \PaxRenaissance\Models\TableauCard
     ];
     $this->prestige = [REFORMIST];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_CORONATION_CAN_CLAIM_MARRIED_KINGS,
+        'title' => clienttranslate('HENRY VIII:'),
+        'text' => [
+          'log' => clienttranslate("Your coronation One-shot can claim Kings who are married or in an opponent's Tableau."),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

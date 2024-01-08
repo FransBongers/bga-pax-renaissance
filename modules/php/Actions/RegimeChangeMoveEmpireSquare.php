@@ -102,7 +102,7 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
     if ($source === CORONATION_ONE_SHOT) {
       $king = Cards::get($parentInfo['data']['kingId']);
       $queen = Cards::get($parentInfo['data']['queenId']);
-      Cards::move($queen->getId(), Locations::queens($king->getEmpireId()));
+      Cards::insertOnTop($queen->getId(), Locations::queens($king->getEmpireId()));
       // $king->marry($player, $queen);
       Notifications::coronation($player, $queen, $king);
     }

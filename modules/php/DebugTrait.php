@@ -57,7 +57,10 @@ trait DebugTrait
 
   function test()
   {
-    $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371053); // DISCOVERY
+    // Notifications::log('tableauCards',Players::get()->getTableauCardsForRegion(WEST));
+    // Notifications::log('tableauCards',Cards::get('EmpireSquare_HolyRomanEmpire')->getQueens());
+    $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371052); // DISCOVERY
+    Cards::move('EmpireSquare_HolyRomanEmpire', Locations::vassals(PAPAL_STATES));
     // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_FRANCE);
     // $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ARAGON_PAPAL_STATES);
     // $this->debugPlaceToken(BISHOP, CATHOLIC, 'EmpireSquare_Aragon');

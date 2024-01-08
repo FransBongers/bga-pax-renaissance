@@ -32,6 +32,7 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
     }
     $options = $this->getOptions($card);
     return count($options) > 0;
+    // return false;
   }
 
   public function getFlow($player, $cardId)
@@ -112,7 +113,12 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
     $cardToUseForIndex = $cardBishopIsOn;
     // Use location / index from suzerain / king in case of vassals and queens
     if ($cardBishopIsOn->isQueen()) {
-      $cardToUseForIndex = $cardBishopIsOn->getKing();
+      $king = $cardBishopIsOn->getKing();
+      if ($king->isVassal()) {
+        $cardToUseForIndex = $king->getSuzerain();
+      } else {
+        $cardToUseForIndex = $king;
+      }
       $location = $cardToUseForIndex->getLocation();
     } else if ($cardBishopIsOn->isVassal()) {
       $cardToUseForIndex = $cardBishopIsOn->getSuzerain();
@@ -156,6 +162,9 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
       $king = $cardBishopIsOn->getKing();
       $vassals = $king->getVassals();
       $queens = $king->getQueens();
+      if ($king->isVassal()) {
+        $tableauDestinations[] = $king->getSuzerain();  
+      }
       $tableauDestinations[] = $king;
       $tableauDestinations = array_merge($tableauDestinations, $vassals, $queens);
     } else if ($cardBishopIsOn->isVassal()) {
