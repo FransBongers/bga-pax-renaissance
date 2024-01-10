@@ -16,6 +16,7 @@ class AtomicActions
     ABILITY_ACTION_LAUNCH_PEASANT_REVOLT => 'AbilityActionLaunchPeasantRevolt',
     ABILITY_ACTION_SELECT_APOSTASY => 'AbilityActionSelectApostasy',
     ABILITY_ACTION_SELECT_TRADE_FAIR => 'AbilityActionSelectTradeFair',
+    ABILITY_OPPONENTS_PUPRLE_OP => 'AbilityOpponentsPurpleOp',
     ANNOUNCE_ONE_SHOT => 'AnnounceOneShot',
     APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT => 'ApostasyOneShot',
     APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT => 'ApostasyOneShot',

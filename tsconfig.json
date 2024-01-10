@@ -65,6 +65,7 @@
     "src/supply/templates.ts",
     "src/states/AbilityActionSelectApostasy.ts",
     "src/states/AbilityActionSelectTradeFair.ts",
+    "src/states/AbilityOpponentsPurpleOp.ts",
     "src/states/AnnounceOneShot.ts",
     "src/states/BattleCasualties.ts",
     "src/states/BattleLocation.ts",

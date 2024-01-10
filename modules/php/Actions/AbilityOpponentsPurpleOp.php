@@ -20,11 +20,11 @@ use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
+class AbilityOpponentsPurpleOp extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_TABLEAU_OP_BEHEAD;
+    return ST_ABILITY_OPPONENTS_PURPLE_OP;
   }
 
   // ..######..########....###....########.########
@@ -43,9 +43,8 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function stTableauOpBehead()
+  public function stAbilityOpponentsPurpleOp()
   {
-
   }
 
   // ....###....########...######....######.
@@ -56,16 +55,10 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##..##....##..##....##
   // .##.....##.##.....##..######....######.
 
-  public function argsTableauOpBehead()
+  public function argsAbilityOpponentsPurpleOp()
   {
-    $info = $this->ctx->getInfo();
-    $tableauOpId = $info['tableauOpId'];
-
-    $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
-
     $data = [
-      'cards' => $tableauOp->getOptions(Cards::get($cardId)),
+      'options' => $this->getOptions(),
     ];
 
     return $data;
@@ -87,41 +80,38 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
-  public function actTableauOpBehead($args)
+  public function actAbilityOpponentsPurpleOp($args)
   {
-    self::checkAction('actTableauOpBehead');
+    self::checkAction('actAbilityOpponentsPurpleOp');
 
-    $selectedCardId = $args['cardId'];
-    $info = $this->ctx->getInfo();
-    $tableauOpId = $info['tableauOpId'];
-
-    $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId'];
-    $card = Cards::get($cardId);
-
-    $options = $tableauOp->getOptions($card);
-
-    $selectedCard = Utils::array_find($options, function ($option) use ($selectedCardId) {
-      return $selectedCardId === $option->getId();
-    });
-
-    if ($selectedCard === null) {
-      throw new \feException("Not allowed to behead selected card");
-    }
+    Notifications::log('args', $args);
 
     $player = self::getPlayer();
 
-    Notifications::tableauOpBehead($player, $selectedCard);    
+    $available = $this->getOptions();
 
-    $selectedCard->behead();
+    $cardId = $args['cardId'];
 
-    // Assassin
-    // Get latest card data because there are cases where a queen with behead op can cause herself to be 
-    // discarded before triggering this check
-    if ($selectedCard->getType() === EMPIRE_CARD && Cards::get($cardId)->getLocation() !== DISCARD) {
-      $card->discard(KILL, $player);
+    $tableauOpId = $args['tableauOpId'];
+
+    if (!isset($available[$cardId])) {
+      throw new \feException("Not allowed to perform Ops from selected card");
     }
-    
+
+    $tableauOp = Utils::array_find($available[$cardId], function ($op) use ($tableauOpId) {
+      return $op->getId() === $tableauOpId;
+    });
+
+    if ($tableauOp === null) {
+      throw new \feException("Not allowed to perform selected Op");
+    }
+    // Notifications::log('tableauOp', $tableauOp);
+    $this->ctx->getParent()->pushChild($tableauOp->getFlow($player, $cardId));
+    $card = Cards::get($cardId);
+    $card->setUsed();
+
+    Notifications::tableauOpSelected($player, $tableauOp, $card);
+
     $this->resolveAction($args);
   }
 
@@ -132,5 +122,33 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private function getOptions()
+  {
+    $activePlayer = self::getPlayer();
+    $players = Players::getAll();
+    $options = [];
+
+    foreach ($players as $player) {
+      if ($player->getId() === $activePlayer->getId()) {
+        continue;
+      }
+      // $availableOpsPlayer = $player->getAvailableOps();
+      // Notifications::log('availableOps',$availableOpsPlayer);
+      // $availableOps = array_merge($availableOps, $availableOpsPlayer);
+      $tableauCards = $player->getTableauCards();
+      foreach ($tableauCards as $card) {
+        $availableOps = $card->getAvailableOps($player);
+        $availableOps = Utils::filter($availableOps, function ($op) {
+          return $op->getType() === POLITICAL;
+        });
+        if (count($availableOps) > 0) {
+          $options[$card->getId()] = $availableOps;
+        }
+      }
+    }
+
+    return $options;
+  }
 
 }

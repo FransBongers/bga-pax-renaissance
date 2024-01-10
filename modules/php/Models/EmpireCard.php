@@ -187,9 +187,11 @@ class EmpireCard extends Card
 
   public function discardQueens()
   {
+    $player = $this->getOwner();
+
     $queens = $this->getQueens();
     foreach ($queens as $queen) {
-      $queen->discard();
+      $queen->discard(DISCARD, $player);
     }
   }
 

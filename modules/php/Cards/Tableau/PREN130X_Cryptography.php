@@ -2,6 +2,9 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Engine;
+use PaxRenaissance\Core\Engine\LeafNode;
+
 class PREN130X_Cryptography extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -16,5 +19,26 @@ class PREN130X_Cryptography extends \PaxRenaissance\Models\TableauCard
     $this->name = clienttranslate('Cryptography');
     $this->prestige = [PATRON];
     $this->region = WEST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_SELL_AND_PERFORM_PURPLE_OP_FROM_OPPONENT,
+        'title' => clienttranslate('MEDICI CIPHERS BROKEN:'),
+        'text' => [
+          'log' => clienttranslate("If you sell this card, may do an additional purple Op from an opponent's Tableau, exactly as if his card was in your Tableau."),
+          'args' => [],
+        ],
+      ]
+    ];
+  }
+
+  public function sell()
+  {
+    $owner = $this->getOwner();
+    parent::sell();
+    Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
+      'action' => ABILITY_OPPONENTS_PUPRLE_OP,
+      'optional' => true,
+      'playerId' => $owner->getId(),
+    ]));
   }
 }

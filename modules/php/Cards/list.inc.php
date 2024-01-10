@@ -146,7 +146,7 @@ $cardIds = [
   'PREN127X_RedSeaFleet',
   'PREN128X_ManForAllSeasons',
   'PREN129X_OratoryOfDivineLove',
-  // 'PREN130X_Cryptography',
+  'PREN130X_Cryptography',
   'PREN131X_Michelangelo',
   'PREN132X_ArtisticGeometry',
   'PREN133X_RomanticRealism',

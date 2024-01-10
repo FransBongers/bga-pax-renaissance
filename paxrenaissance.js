@@ -1838,6 +1838,7 @@ var PaxRenaissance = (function () {
             _a[CLIENT_USE_ABILITY_ACTION_STATE] = new ClientUseAbilityActionState(this),
             _a.abilityActionSelectApostasy = new AbilityActionSelectApostasyState(this),
             _a.abilityActionSelectTradeFair = new AbilityActionSelectTradeFairState(this),
+            _a.abilityOpponentsPurpleOp = new AbilityOpponentsPurpleOpState(this),
             _a.announceOneShot = new AnnounceOneShotState(this),
             _a.battleCasualties = new BattleCasualtiesState(this),
             _a.battleLocation = new BattleLocationState(this),
@@ -5224,6 +5225,82 @@ var AbilityActionSelectTradeFairState = (function () {
         });
     };
     return AbilityActionSelectTradeFairState;
+}());
+var AbilityOpponentsPurpleOpState = (function () {
+    function AbilityOpponentsPurpleOpState(game) {
+        this.game = game;
+    }
+    AbilityOpponentsPurpleOpState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    AbilityOpponentsPurpleOpState.prototype.onLeavingState = function () {
+        debug("Leaving AbilityActionSelectApostastStateState");
+    };
+    AbilityOpponentsPurpleOpState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may choose a purple Op to perform"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    AbilityOpponentsPurpleOpState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may select a card to perform a purple Op"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setCardsSelectable();
+        this.game.addUndoButtons(this.args);
+    };
+    AbilityOpponentsPurpleOpState.prototype.updateInterfaceSelectOp = function (_a) {
+        var cardId = _a.cardId, ops = _a.ops;
+        this.game.clearPossible();
+        this.game.setCardSelected({ id: cardId });
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} may select an Op to perform"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.addButtons({ cardId: cardId, ops: ops });
+        this.game.addCancelButton();
+    };
+    AbilityOpponentsPurpleOpState.prototype.setCardsSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.options).forEach(function (_a) {
+            var cardId = _a[0], ops = _a[1];
+            _this.game.setCardSelectable({ id: cardId, callback: function () {
+                    _this.updateInterfaceSelectOp({ cardId: cardId, ops: ops });
+                } });
+        });
+    };
+    AbilityOpponentsPurpleOpState.prototype.addButtons = function (_a) {
+        var _this = this;
+        var cardId = _a.cardId, ops = _a.ops;
+        ops.forEach(function (op, index) {
+            _this.game.addPrimaryActionButton({
+                id: "op_btn_".concat(index),
+                text: _(op.name),
+                callback: function () {
+                    return _this.game.takeAction({
+                        action: "actAbilityOpponentsPurpleOp",
+                        args: {
+                            cardId: cardId,
+                            tableauOpId: op.id,
+                        },
+                    });
+                },
+            });
+        });
+    };
+    return AbilityOpponentsPurpleOpState;
 }());
 var AnnounceOneShotState = (function () {
     function AnnounceOneShotState(game) {

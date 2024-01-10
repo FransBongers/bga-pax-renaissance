@@ -649,6 +649,16 @@ $machinestates = [
         'type' => 'game',
     ],
 
+    ST_ABILITY_OPPONENTS_PURPLE_OP => [
+        'name' => 'abilityOpponentsPurpleOp',
+        'description' => clienttranslate('${actplayer} may select a purple Op to perform'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actAbilityOpponentsPurpleOp', 'actRestart'],
+    ],
+
     // // Generic state to change player
     // ST_CHANGE_ACTIVE_PLAYER => [
     //     'name' => ST_CHANGE_ACTIVE_PLAYER_NAME,

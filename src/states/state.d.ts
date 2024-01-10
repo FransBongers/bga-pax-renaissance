@@ -65,6 +65,10 @@ interface OnEnteringAbilityActionSelectTradeFairArgs extends CommonArgs {
   };
 }
 
+interface OnEnteringAbilityOpponentsPurpleOpStateArgs extends CommonArgs {
+  options: Record<string, TableauOp[]>;
+}
+
 interface OnEnteringBattleCasualtiesArgs extends CommonArgs {
   agents: Agent[];
   tokens: (Token & { locationName: string })[];

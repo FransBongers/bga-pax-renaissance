@@ -35,6 +35,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     [CLIENT_USE_ABILITY_ACTION_STATE]: ClientUseAbilityActionState;
     abilityActionSelectApostasy: AbilityActionSelectApostasyState;
     abilityActionSelectTradeFair: AbilityActionSelectTradeFairState;
+    abilityOpponentsPurpleOp: AbilityOpponentsPurpleOpState;
     announceOneShot: AnnounceOneShotState;
     battleCasualties: BattleCasualtiesState;
     battleLocation: BattleLocationState;
@@ -104,6 +105,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       [CLIENT_USE_ABILITY_ACTION_STATE]: new ClientUseAbilityActionState(this),
       abilityActionSelectApostasy: new AbilityActionSelectApostasyState(this),
       abilityActionSelectTradeFair: new AbilityActionSelectTradeFairState(this),
+      abilityOpponentsPurpleOp: new AbilityOpponentsPurpleOpState(this),
       announceOneShot: new AnnounceOneShotState(this),
       battleCasualties: new BattleCasualtiesState(this),
       battleLocation: new BattleLocationState(this),
