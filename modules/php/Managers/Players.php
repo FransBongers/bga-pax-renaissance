@@ -59,6 +59,13 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     });
   }
 
+  public static function getPlayerWithSpecialAbility($specialAbilityId)
+  {
+    return Utils::array_find(self::getAll()->toArray(), function ($player) use ($specialAbilityId) {
+      return $player->hasSpecialAbility($specialAbilityId);
+    });
+  }
+
   public static function incFlorins($playerId, $increment)
   {
     $value = intval(PlayersExtra::get($playerId)['florins']) + $increment;

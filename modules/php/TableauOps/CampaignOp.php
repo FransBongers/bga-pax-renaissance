@@ -47,34 +47,44 @@ class CampaignOp extends \PaxRenaissance\Models\TableauOp
 
   public function getOptions($player, $card)
   {
-    $empireIds = $card->getAllEmpireIds(false);
+    $empireId = $card->getEmpireId();
     $options = [];
 
-    foreach ($empireIds as $empireId) {
-      $empire = Empires::get($empireId);
-      $cities = $empire->getCities();
-      $cost = count(Utils::filter($cities, function ($city) {
-        $token = $city->getToken();
-        return $token !== null && $token->getType() === KNIGHT;
-      }));
-      if ($cost > $player->getFlorins()) {
+
+    $empire = Empires::get($empireId);
+    $cities = $empire->getCities();
+    $baseCost = count(Utils::filter($cities, function ($city) {
+      $token = $city->getToken();
+      return $token !== null && $token->getType() === KNIGHT;
+    }));
+    $playerFlorins = $player->getFlorins();
+    if ($baseCost > $playerFlorins) {
+      return array_values($options);
+    }
+
+    $hasMamlukSpecialAbility = $player->hasSpecialAbility(SA_REPRESSED_TOKENS_COUNTS_AS_KNIGHT_IN_EAST_CAMPAIGN);
+    $extraCost = 0;
+    if ($hasMamlukSpecialAbility) {
+      $extraCost = count(Empires::get(MAMLUK)->getRepressedTokens([KNIGHT, PAWN, ROOK]));
+    }
+
+    $adjacentEmpires = $empire->getAdjacentEmpires();
+    foreach ($adjacentEmpires as $adjacentEmpire) {
+      $empireCard = Cards::get($adjacentEmpire->getEmpireSquareId());
+      if ($empireCard->isInPlayerTableau($player->getId())) {
         continue;
       }
 
-      $adjacentEmpires = $empire->getAdjacentEmpires();
-      foreach ($adjacentEmpires as $adjacentEmpire) {
-        $empireCard = Cards::get($adjacentEmpire->getEmpireSquareId());
-        if ($empireCard->isInPlayerTableau($player->getId())) {
-          continue;
-        }
-        if (isset($options[$adjacentEmpire->getId()])) {
-          continue;
-        }
-        $options[$adjacentEmpire->getId()] = [
-          'empire' => $adjacentEmpire,
-          'cost' => $cost,
-        ];
+      $isAffectedByMamlukAbility = $hasMamlukSpecialAbility && in_array($adjacentEmpire->getId(), EAST_EMPIRES);
+
+      if ($isAffectedByMamlukAbility && $baseCost + $extraCost > $playerFlorins) {
+        continue;
       }
+
+      $options[$adjacentEmpire->getId()] = [
+        'empire' => $adjacentEmpire,
+        'cost' => $isAffectedByMamlukAbility ? $baseCost + $extraCost : $baseCost,
+      ];
     }
 
     return array_values($options);

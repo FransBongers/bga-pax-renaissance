@@ -57,13 +57,17 @@ trait DebugTrait
 
   function test()
   {
-    // Notifications::log('tableauCards',Players::get()->getTableauCardsForRegion(WEST));
+    // Notifications::log('player',Players::getPlayerWithSpecialAbility(SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY));
     // Notifications::log('tableauCards',Cards::get('EmpireSquare_HolyRomanEmpire')->getQueens());
-    $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371052); // DISCOVERY
-    Cards::move('EmpireSquare_HolyRomanEmpire', Locations::vassals(PAPAL_STATES));
+    // $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371052); // DISCOVERY
+    // Cards::move('EmpireSquare_HolyRomanEmpire', Locations::vassals(PAPAL_STATES));
     // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_FRANCE);
     // $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ARAGON_PAPAL_STATES);
-    // $this->debugPlaceToken(BISHOP, CATHOLIC, 'EmpireSquare_Aragon');
+    $this->debugPlaceToken(ROOK, CATHOLIC, 'EmpireSquare_Mamluk');
+    $this->debugPlaceToken(PAWN, MARCHIONNI, 'EmpireSquare_Mamluk');
+    $this->debugPlaceToken(KNIGHT, REFORMIST, 'EmpireSquare_Mamluk');
+    $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_Mamluk');
+    $this->debugPlaceToken(ROOK, ISLAMIC, 'EmpireSquare_Mamluk');
     // Cards::move('EmpireSquare_France', Locations::vassals(ARAGON));
     // $this->debugPlaceToken(KNIGHT, CATHOLIC, 'EmpireSquare_Aragon');
     // $this->debugPlaceToken(KNIGHT, REFORMIST, 'EmpireSquare_Byzantium');

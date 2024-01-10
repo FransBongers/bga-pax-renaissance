@@ -180,7 +180,7 @@ $cardIds = [
   'PREN161X_Enclosure',
   'PREN162X_CatherineDeMedici',
   'PREN163X_JizyaTaxRevolt',
-  // 'PREN164X_CircassianMamluks',
+  'PREN164X_CircassianMamluks',
   'PREN165X_TransylvanianSaxons',
   'PREN166X_BankOfStGeorge',
   'PREN167X_TwelverGhulat',

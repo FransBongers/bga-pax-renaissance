@@ -84,7 +84,7 @@ class AbilityOpponentsPurpleOp extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actAbilityOpponentsPurpleOp');
 
-    Notifications::log('args', $args);
+    // Notifications::log('args', $args);
 
     $player = self::getPlayer();
 

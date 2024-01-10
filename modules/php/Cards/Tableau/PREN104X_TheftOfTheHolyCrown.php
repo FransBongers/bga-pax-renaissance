@@ -4,7 +4,7 @@ namespace PaxRenaissance\Cards\Tableau;
 
 use PaxRenaissance\Managers\Players;
 
-class PREN104X_TheftOfTheHolyCrown extends \PaxRenaissance\Models\TableauCard
+class PREN104X_TheftOfTheHolyCrown extends \PaxRenaissance\Models\QueenCard
 {
   public function __construct($row)
   {
@@ -28,6 +28,11 @@ class PREN104X_TheftOfTheHolyCrown extends \PaxRenaissance\Models\TableauCard
           'args' => [],
         ],
       ]
+    ];
+    // Queen specific props
+    $this->height = 95;
+    $this->suitors = [
+      HUNGARY,
     ];
   }
 

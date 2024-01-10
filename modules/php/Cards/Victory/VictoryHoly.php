@@ -88,7 +88,12 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
     if ($greenPiratesReformist) {
       $greenPirates = Tokens::getOfTypeInLocation('pirate_islamic_', 'border_');
       $numberOfBishopsInPlay[REFORMIST] = $numberOfBishopsInPlay[REFORMIST] + count($greenPirates);
-      
+    }
+
+    $playerCountsPatronAsGreenBishops = Players::getPlayerWithSpecialAbility(SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY);
+    if ($playerCountsPatronAsGreenBishops !== null) {
+      $patronPrestige = $playerCountsPatronAsGreenBishops->getPrestige()[PATRON];
+      $numberOfBishopsInPlay[ISLAMIC] = $numberOfBishopsInPlay[ISLAMIC] + $patronPrestige;
     }
 
     $numberOfBishopsInPlayRanking = [];

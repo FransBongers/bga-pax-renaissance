@@ -170,9 +170,13 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
 
     switch ($source) {
       case CAMPAIGN_OP:
+        $extraAttackers = [];
+        if (in_array($empireId, EAST_EMPIRES) && $player->hasSpecialAbility(SA_REPRESSED_TOKENS_COUNTS_AS_KNIGHT_IN_EAST_CAMPAIGN)) {
+          $extraAttackers = Empires::get(MAMLUK)->getRepressedTokens([KNIGHT, PAWN, ROOK]);
+        };
         return [
           'agents' => [],
-          'tokens' => array_merge(
+          'tokens' => array_merge($extraAttackers,
             Empires::get($data['attackingEmpireId'])->getTokensInCities([KNIGHT]),
           ),
         ];
