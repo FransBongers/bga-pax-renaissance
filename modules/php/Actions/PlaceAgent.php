@@ -213,17 +213,19 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
       }
 
       if ($type === PAWN) {
-        $tokenInLocation = $border->getToken();
-        if ($tokenInLocation !== null && ($tokenInLocation->getType() === PIRATE || $repressCost > $playerFlorins)) {
+        $tokensInLocation = $border->getTokens();
+        if (count($tokensInLocation) > 0 && (Utils::array_some($tokensInLocation, function ($tokenInLocation) {
+          return $tokenInLocation->getType() === PIRATE;
+        }) || $repressCost > $playerFlorins)) {
           continue;
-        } else if ($tokenInLocation !== null) {
+        } else if (count($tokensInLocation) > 0) {
           $locations[$borderId] = [
             'id' => $borderId,
             'type' => BORDER,
             'cost' => $repressCost,
             'name' => $border->getName(),
             'repressed' => [
-              'token' => $tokenInLocation,
+              'token' => $tokensInLocation[0], // There is no pirate so there can only be one pawn
               'empires' => in_array($empireId, REGIONS) ? $border->getAdjacentEmpires() : null,
             ],
           ];

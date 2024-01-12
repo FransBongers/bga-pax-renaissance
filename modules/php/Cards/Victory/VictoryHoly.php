@@ -22,7 +22,7 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
   }
 
   public function canBeDeclaredByPlayer($activePlayer)
-  { 
+  {
     if (!$this->isActive()) {
       return false;
     }
@@ -53,7 +53,7 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
       return $b['supremeReligionPrestige'] - $a['supremeReligionPrestige'];
     });
 
-    
+
     $hasMorePrestigeThanEachOpponent = $supremeReligionRanking[0]['playerId'] === $activePlayer->getId() && $supremeReligionRanking[0]['supremeReligionPrestige'] > $supremeReligionRanking[1]['supremeReligionPrestige'];
     return $hasMorePrestigeThanEachOpponent;
   }
@@ -80,7 +80,7 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
     ];
     $bishopsInPlay = Tokens::getBishopsInPlay();
 
-    foreach($bishopsInPlay as $bishop) {
+    foreach ($bishopsInPlay as $bishop) {
       $religion = $bishop->getSeparator();
       $numberOfBishopsInPlay[$religion] = $numberOfBishopsInPlay[$religion] + 1;
     }
@@ -142,12 +142,15 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
 
       $borders = $empire->getBorders();
       foreach ($borders as $border) {
-        $token = $border->getToken();
-        if ($token !== null && $token->getSeparator() === $empireReligion) {
-          $numberOfTokensInTheocracies[$empireReligion] = $numberOfTokensInTheocracies[$empireReligion] + 1;
-        }
-        if ($greenPiratesReformist && $token !== null && $empireReligion === REFORMIST && $token->getSeparator() === ISLAMIC) {
-          $numberOfTokensInTheocracies[$empireReligion] = $numberOfTokensInTheocracies[$empireReligion] + 1;
+        $tokens = $border->getTokens();
+
+        foreach ($tokens as $token) {
+          if ($token->getSeparator() === $empireReligion) {
+            $numberOfTokensInTheocracies[$empireReligion] = $numberOfTokensInTheocracies[$empireReligion] + 1;
+          }
+          if ($greenPiratesReformist && $empireReligion === REFORMIST && $token->getSeparator() === ISLAMIC) {
+            $numberOfTokensInTheocracies[$empireReligion] = $numberOfTokensInTheocracies[$empireReligion] + 1;
+          }
         }
       }
     }
@@ -172,6 +175,5 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
       return $supremeReligionsTokensInTheocracies;
     }
     return null;
-
   }
 }

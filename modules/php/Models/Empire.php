@@ -77,7 +77,7 @@ class Empire implements \JsonSerializable
     }, $this->borders);
     if ($emptyOnly) {
       return Utils::filter($borders, function ($border) {
-        return $border->getToken() === null;
+        return count($border->getTokens()) === 0;
       });
     }
     return $borders;
@@ -165,17 +165,20 @@ class Empire implements \JsonSerializable
     $borders = $this->getBorders();
     $tokens = [];
     foreach ($borders as $border) {
-      $token = $border->getToken();
-      if ($token === null) {
+      $tokensOnBorder = $border->getTokens();
+      if (count($tokensOnBorder) === 0) {
         continue;
       }
-      if ($typeFilter !== null && !in_array($token->getType(), $typeFilter)) {
-        continue;
+
+      foreach($tokensOnBorder as $tokenOnBorder) {
+        if ($typeFilter !== null && !in_array($tokenOnBorder->getType(), $typeFilter)) {
+          continue;
+        }
+        if ($separatorFilter !== null && !in_array($tokenOnBorder->getSeparator(), $separatorFilter)) {
+          continue;
+        }
+        $tokens[] = $tokenOnBorder;
       }
-      if ($separatorFilter !== null && !in_array($token->getSeparator(), $separatorFilter)) {
-        continue;
-      }
-      $tokens[] = $token;
     }
     return $tokens;
   }

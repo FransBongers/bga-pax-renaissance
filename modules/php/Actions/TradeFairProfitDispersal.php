@@ -9,6 +9,7 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Cards;
+use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
@@ -26,26 +27,32 @@ class TradeFairProfitDispersal extends \PaxRenaissance\Models\AtomicAction
     $borderId = $this->ctx->getInfo()['borderId'];
     $region = $this->ctx->getInfo()['tradeFair'];
 
-    $token = Tokens::getTopOf($borderId);
+    $border = Borders::get($borderId);
+    $tokens = $border->getTokens();
 
-    if ($token === null) {
+    if (count($tokens) === 0) {
       $this->resolveAction(['borderId' => $borderId]);
       return;
     }
-    $tokenId = $token->getId();
-
+    // $tokenId = $token->getId();
+    $pawn = Utils::array_find($tokens, function ($token) {
+      return $token->getType() === PAWN;
+    });
     
-
-    if ($token->getType() === PIRATE) {
-      Market::incMarketFlorins($region, 0, -1);
-      Notifications::tradeFairProfitDispersalPirates($region);
-    } else if ($token->getType() === PAWN) {
-
-      $player = $token->getOwner();
+    if ($pawn !== null) {
+      $player = $pawn->getOwner();
       $amount = $this->getAmount($player, $region);
       Market::incMarketFlorins($region, 0, -$amount);
       $player->incFlorins($amount);
       Notifications::tradeFairProfitDispersalPlayer($player, $region, $amount);
+    } else {
+      $pirate = Utils::array_find($tokens, function ($token) {
+        return $token->getType() === PIRATE;
+      });
+      if ($pirate !== null) {
+        Market::incMarketFlorins($region, 0, -1);
+        Notifications::tradeFairProfitDispersalPirates($region);
+      }
     }
 
     if (Market::getMarketFlorins($region, 0) === 0) {

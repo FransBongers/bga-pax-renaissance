@@ -324,6 +324,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 .pr_border .pr_pawn {
   margin-bottom: 11px;
@@ -331,6 +332,10 @@
 .pr_border .pr_pirate {
   margin-bottom: 8px;
   margin-left: 2px;
+}
+
+#pr_border_england_portugal, #pr_border_hungary_ottoman {
+  flex-direction: row;
 }
 
 #venice2_overlay {
@@ -2583,8 +2588,10 @@
 .pr_pawn {
   background-image: url("img/pawns.webp");
   background-size: 400% 100%;
-  width: calc(var(--paxRenTokenScale) * 26px);
-  height: calc(var(--paxRenTokenScale) * 43px);
+  min-width: calc(var(--paxRenTokenScale) * 26px);
+  min-height: calc(var(--paxRenTokenScale) * 43px);
+  max-width: calc(var(--paxRenTokenScale) * 26px);
+  max-height: calc(var(--paxRenTokenScale) * 43px);
 }
 
 .pr_pawn[data-separator=fugger] {
@@ -2636,6 +2643,8 @@
   background-size: 300% 100%;
   min-width: calc(var(--paxRenTokenScale) * 45px);
   min-height: calc(var(--paxRenTokenScale) * 47px);
+  max-width: calc(var(--paxRenTokenScale) * 45px);
+  max-height: calc(var(--paxRenTokenScale) * 47px);
 }
 
 .pr_rook {

@@ -52,26 +52,26 @@ class CorsairOp extends \PaxRenaissance\Models\TableauOp
       $borders = $empire->getBorders();
       foreach ($borders as $border) {
         // Get pirate in location
-        $token = $border->getToken();
-        if ($token === null || $token->getType() !== PIRATE || $token->getSeparator() !== $this->religion) {
-          continue;
-        }
+        $tokens = $border->getTokens();
+        foreach($tokens as $token) {
+          if ($token->getType() !== PIRATE || $token->getSeparator() !== $this->religion) {
+            continue;
+          }
 
-        $destinations = $this->getDestinationBorders($token, $empire);
-
-        if (!isset($options[$token->getId()])) {
-          $options[$token->getId()] = [
-            'token' => $token,
-            'destinations' => $destinations
-          ];
-        } else {
-          foreach ($destinations as $destinationId => $destination) {
-            if (!isset($options[$token->getId()]['destinations'][$destinationId])) {
-              $options[$token->getId()]['destinations'][$destinationId] = $destination;
+          $destinations = $this->getDestinationBorders($token, $empire);
+          if (!isset($options[$token->getId()])) {
+            $options[$token->getId()] = [
+              'token' => $token,
+              'destinations' => $destinations
+            ];
+          } else {
+            foreach ($destinations as $destinationId => $destination) {
+              if (!isset($options[$token->getId()]['destinations'][$destinationId])) {
+                $options[$token->getId()]['destinations'][$destinationId] = $destination;
+              }
             }
           }
         }
-   
         // $options[$token->getId()] = $token;
       }
     }
@@ -91,15 +91,9 @@ class CorsairOp extends \PaxRenaissance\Models\TableauOp
     // 1. get all borders.
 
     $empires = array_merge([$empire], $empire->getAdjacentBySeaBorderEmpires());
-    // Notifications::log('empires', $empires);
     $borders = [];
     foreach ($empires as $destinationEmpire) {
       $empireBorders = $destinationEmpire->getBorders();
-      // foreach($empireBorders as $destinationBorder) {
-      //   if (!isset($borders[$destinationBorder->getId()])) {
-
-      //   }
-      // }
 
       foreach ($empireBorders as $destinationBorder) {
         if (
@@ -109,16 +103,33 @@ class CorsairOp extends \PaxRenaissance\Models\TableauOp
         ) {
           continue;
         }
-        $tokenOnDestination = $destinationBorder->getToken();
-        if ($tokenOnDestination !== null && $tokenOnDestination->getSeparator() === $tokenReligion) {
+        $tokensOnDestination = $destinationBorder->getTokens();
+
+        // Not a valid destination if there is a pirate of the same religion.
+        if (Utils::array_some($tokensOnDestination, function ($tokenOnDestination) use ($tokenReligion) {
+          return $tokenOnDestination->getSeparator() === $tokenReligion;
+        })) {
           continue;
         }
+
         $borders[$destinationBorder->getId()] = [
           'border' => $destinationBorder,
-          'token' => $tokenOnDestination,
+          'token' => $this->getTokenThatCanBeKilled($tokensOnDestination),
         ];
       }
     }
     return $borders;
+  }
+
+  function getTokenThatCanBeKilled($tokensOnDestination)
+  {
+    $token = null;
+    foreach($tokensOnDestination as $tokenOnDestination) {
+      if ($tokenOnDestination->getType() === PAWN && $tokenOnDestination->getOwner()->hasSpecialAbility(SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES)) {
+        continue;
+      }
+      $token = $tokenOnDestination;
+    }
+    return $token;
   }
 }

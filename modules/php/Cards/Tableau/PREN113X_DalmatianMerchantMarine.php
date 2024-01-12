@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN113X_DalmatianMerchantMarine extends \PaxRenaissance\Models\TableauCard
+class PREN113X_DalmatianMerchantMarine extends \PaxRenaissance\Models\Cards\ConcessionsCannotBeKilledByPiratesCard
 {
   public function __construct($row)
   {
@@ -29,5 +29,15 @@ class PREN113X_DalmatianMerchantMarine extends \PaxRenaissance\Models\TableauCar
       ],
     ];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES,
+        'title' => clienttranslate('RAGUSAN MARITIME IMMUNITY:'),
+        'text' => [
+          'log' => clienttranslate('Your Concessions cannot be killed by Pirates.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

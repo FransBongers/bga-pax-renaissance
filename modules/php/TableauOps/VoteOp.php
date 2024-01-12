@@ -85,20 +85,22 @@ class VoteOp extends \PaxRenaissance\Models\TableauOp
       $borders = $empire->getBorders();
       $concessions = [];
       foreach ($borders as $border) {
-        $token = $border->getToken();
-        if ($token === null || $token->getType() !== PAWN) {
-          continue;
-        }
-        $owner = $token->getOwner();
-        $concessionCount = $owner->hasSpecialAbility(SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES) ? 2 : 1;
-        $bank = $token->getSeparator();
-        if (isset($concessions[$bank])) {
-          $concessions[$bank]['count'] = $concessions[$bank]['count'] + $concessionCount;
-        } else {
-          $concessions[$bank] = [
-            'count' => $concessionCount,
-            'bank' => $bank,
-          ];
+        $tokens = $border->getTokens();
+        foreach($tokens as $token) {
+          if ($token->getType() !== PAWN) {
+            continue;
+          }
+          $owner = $token->getOwner();
+          $concessionCount = $owner->hasSpecialAbility(SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES) ? 2 : 1;
+          $bank = $token->getSeparator();
+          if (isset($concessions[$bank])) {
+            $concessions[$bank]['count'] = $concessions[$bank]['count'] + $concessionCount;
+          } else {
+            $concessions[$bank] = [
+              'count' => $concessionCount,
+              'bank' => $bank,
+            ];
+          }
         }
       }
       $concessions = array_values($concessions);

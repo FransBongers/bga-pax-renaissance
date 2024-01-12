@@ -20,7 +20,7 @@ class Border implements \JsonSerializable
   protected $seaBorder = false;
   protected $type = BORDER;
   protected $adjacentEmpires = [];
-  
+
   protected $attributes = [
     'id' => ['id', 'str'],
     'name' => ['name', 'str'],
@@ -39,23 +39,29 @@ class Border implements \JsonSerializable
     foreach ($this->attributes as $attribute => $field) {
       $data[$attribute] = $this->$attribute;
     }
-    
+
     return $data;
   }
 
   public function placeToken($token, $empireId, $repressCost)
   {
-    $currentToken = $this->getToken();
-    // Notifications::log('currentToken',$currentToken);
-    if ($currentToken !== null && $token->getType() === PIRATE) {
-      $currentToken->returnToSupply(KILL);
-    } else if ($currentToken !== null && $token->getType() === PAWN) {
-      $currentToken->repress($empireId, $repressCost);
+    $currentTokens = $this->getTokens();
+    if (count($currentTokens) > 0 && $token->getType() === PIRATE) {
+      foreach ($currentTokens as $currentToken) {
+        if ($currentToken->getType() === PAWN && $currentToken->getOwner()->hasSpecialAbility(SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES)) {
+          continue;
+        }
+        $currentToken->returnToSupply(KILL);
+      }
+    } else if (count($currentTokens) > 0 && $token->getType() === PAWN) {
+      foreach ($currentTokens as $currentToken) {
+        $currentToken->repress($empireId, $repressCost);
+      }
     }
 
     $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId(), false);
-    Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
+    Notifications::placeToken(Players::get(), $token, $fromLocationId, $this);
   }
 
   public function isSeaBorder()
@@ -80,9 +86,9 @@ class Border implements \JsonSerializable
     return $this->name;
   }
 
-  public function getToken()
+  public function getTokens()
   {
-    return Tokens::getTopOf($this->id);
+    return Tokens::getInLocationOrdered($this->id)->toArray();
   }
 
   public function getType()

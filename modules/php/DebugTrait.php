@@ -55,28 +55,50 @@ trait DebugTrait
     // Cards::get('VictoryHoly')->setActive();
   }
 
+  function fillSeaBorders()
+  {
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ENGLAND_FRANCE);
+    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ENGLAND_PORTUGAL);
+    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_PORTUGAL);
+    // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_ARAGON_PAPAL_STATES);
+    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_OTTOMAN_PAPAL_STATES);
+    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_MAMLUK_OTTOMAN);
+    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_HUNGARY_OTTOMAN);
+    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_BYZANTIUM_HUNGARY);
+
+    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ENGLAND_FRANCE);
+    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
+    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ENGLAND_PORTUGAL);
+    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ARAGON_PORTUGAL);
+    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_ARAGON_PAPAL_STATES);
+    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_OTTOMAN_PAPAL_STATES);
+    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_MAMLUK_OTTOMAN);
+    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_HUNGARY_OTTOMAN);
+    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_BYZANTIUM_HUNGARY);
+  }
+
   function test()
   {
-    // Notifications::log('player',Players::getPlayerWithSpecialAbility(SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY));
+    Tokens::get('pirate_islamic_2')->returnToSupply(KILL);
+    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
+    // TableauOps::get(CORSAIR_OP_REFORMIST)->getOptions(Cards::get('PREN142X_KalmarUnion'));
+    // Notifications::log('player',Market::getTradeFairs());
     // Notifications::log('tableauCards',Cards::get('EmpireSquare_HolyRomanEmpire')->getQueens());
     // $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371052); // DISCOVERY
     // Cards::move('EmpireSquare_HolyRomanEmpire', Locations::vassals(PAPAL_STATES));
     // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_FRANCE);
     // $this->debugPlaceToken(PIRATE, REFORMIST, BORDER_ARAGON_PAPAL_STATES);
-    $this->debugPlaceToken(ROOK, CATHOLIC, 'EmpireSquare_Mamluk');
-    $this->debugPlaceToken(PAWN, MARCHIONNI, 'EmpireSquare_Mamluk');
-    $this->debugPlaceToken(KNIGHT, REFORMIST, 'EmpireSquare_Mamluk');
-    $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_Mamluk');
-    $this->debugPlaceToken(ROOK, ISLAMIC, 'EmpireSquare_Mamluk');
+    // $this->debugPlaceToken(ROOK, CATHOLIC, 'EmpireSquare_Mamluk');
+    // $this->debugPlaceToken(PAWN, MARCHIONNI, 'EmpireSquare_Mamluk');
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, 'EmpireSquare_Mamluk');
+    // $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_Mamluk');
+    // $this->debugPlaceToken(ROOK, ISLAMIC, 'EmpireSquare_Mamluk');
     // Cards::move('EmpireSquare_France', Locations::vassals(ARAGON));
     // $this->debugPlaceToken(KNIGHT, CATHOLIC, 'EmpireSquare_Aragon');
     // $this->debugPlaceToken(KNIGHT, REFORMIST, 'EmpireSquare_Byzantium');
     // $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_Byzantium');
-    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_France');
-    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Portugal');
-    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_HolyRomanEmpire');
-    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), 'EmpireSquare_Aragon');
-    // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_France');
+
     // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Portugal');
     // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_HolyRomanEmpire');
     // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), 'EmpireSquare_Aragon');
@@ -219,9 +241,8 @@ trait DebugTrait
     // These are the id's from the BGAtable I need to debug.
     // you can get them by running this query : SELECT JSON_ARRAYAGG(`player_id`) FROM `player`
     $ids = [
+      89403527,
       85521161,
-      86301894,
-      91053159,
     ];
     // You can also get the ids automatically with $ids = array_map(fn($dbPlayer) => intval($dbPlayer['player_id']), array_values($this->getCollectionFromDb('select player_id from player order by player_no')));
 

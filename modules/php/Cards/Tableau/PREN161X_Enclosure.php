@@ -4,6 +4,7 @@ namespace PaxRenaissance\Cards\Tableau;
 
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\LeafNode;
+use PaxRenaissance\Managers\Players;
 
 class PREN161X_Enclosure extends \PaxRenaissance\Models\TableauCard
 {
@@ -48,13 +49,15 @@ class PREN161X_Enclosure extends \PaxRenaissance\Models\TableauCard
 
   public function sell()
   {
-    $owner = $this->getOwner();
+    if ($this->isInTableau()) {
+      $owner = $this->getOwner();
+      Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
+        'action' => REGIME_CHANGE_EMANCIPATION,
+        'empireIds' => WEST_EMPIRES,
+        'optional' => true,
+        'playerId' => $owner->getId(),
+      ]));
+    }
     parent::sell();
-    Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
-      'action' => REGIME_CHANGE_EMANCIPATION,
-      'empireIds' => WEST_EMPIRES,
-      'optional' => true,
-      'playerId' => $owner->getId(),
-    ]));
   }
 }

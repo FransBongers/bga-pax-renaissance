@@ -361,7 +361,7 @@ class Notifications
 
   public static function discardQueen($player, $queen, $king)
   {
-    $kingCard = $king->jsonSerialize();
+    $kingCard = $king !== null ? $king->jsonSerialize() : null;
 
     self::notifyAll("discardQueen", clienttranslate('${tkn_playerName} discards ${tkn_boldText}'), [
       'player' => $player,

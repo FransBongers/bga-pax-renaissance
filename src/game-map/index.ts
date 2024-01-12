@@ -47,16 +47,12 @@ class GameMap {
   // ..#######..##....##.########...#######.
 
   clearInterface() {
-    [...BORDERS, ...CITIES].forEach((border) => {
-      const node = document.getElementById(`pr_${border}`);
+    [...BORDERS, ...CITIES].forEach((location) => {
+      const node = document.getElementById(`pr_${location}`);
       if (!node) {
         return;
       }
-      const children = node.children;
-      for (let i = 0; i < children.length; i++) {
-        const child = children[i];
-        child.remove();
-      }
+      node.replaceChildren();
     });
 
     Object.keys(this.empireSquareStocks).forEach((stockId) => {
@@ -88,20 +84,18 @@ class GameMap {
 
   setupTokensBorders({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     BORDERS.forEach((border) => {
-      const token = gamedatas.tokens.inPlay.find(
+      const tokens = gamedatas.tokens.inPlay.filter(
         (piece) => piece.location === border
       );
-
-      if (!token) {
-        return;
-      }
 
       const node = document.getElementById(`pr_${border}`);
       if (!node) {
         return;
       }
 
-      node.insertAdjacentHTML("beforeend", tplToken(token));
+      tokens.forEach((token) => {
+        node.insertAdjacentHTML("beforeend", tplToken(token));
+      });
     });
   }
 
@@ -189,9 +183,11 @@ class GameMap {
         }
         card.queens.forEach((queen) => {
           const queenTokensNode = document.getElementById(`${queen.id}_tokens`);
-          gamedatas.tokens.inPlay.filter((token) => token.location === queen.id).forEach((token) => {
-            queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
-          })
+          gamedatas.tokens.inPlay
+            .filter((token) => token.location === queen.id)
+            .forEach((token) => {
+              queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
+            });
         });
         // const { id, location } = card;
         // const node = document.getElementById(`pr_${location}`);
@@ -291,14 +287,14 @@ class GameMap {
   }
 
   public setVenice2Visibility(visible = true) {
-    const venice2Node = document.getElementById('venice2_overlay');
+    const venice2Node = document.getElementById("venice2_overlay");
     if (!venice2Node) {
       return;
     }
     if (visible) {
-      venice2Node.style.opacity = '1';
+      venice2Node.style.opacity = "1";
     } else {
-      venice2Node.style.opacity = '0';
+      venice2Node.style.opacity = "0";
     }
   }
 

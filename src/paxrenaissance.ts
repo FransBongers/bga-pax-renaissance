@@ -285,23 +285,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
     if (this.framework().isCurrentPlayerActive()) {
       this.addPrimaryActionButton({
         id: "draw_button",
-        text: _("Draw Card"),
-        callback: async () => {
-          // async drawCard(card: TableauCard): Promise<void> {
-          //   await this.decks[card.region].addCard(card);
-          //   // await this.getDeck({region: card.region}).
-          //   const [_, region, column] = card.location.split('_');
-          //   await this.getStock({region, column: Number(column)}).addCard(card);
-          // }
-          const card = this.gamedatas.testCard;
-          card.location = "market_west_5";
-          await this.market.drawCard(card);
-          // const card = this.market.getStock({region: WEST, column: 1}).getCards()[0];
-          // const element = this.market.getStock({region: WEST, column: 1}).getCardElement(card);
-          // await moveToAnimation({game: this, element, toId: 'overall_player_board_2371053', remove: true});
-          // element.remove();
-          // this.cardManager.removeCard(card);
-          // console.log("after move");
+        text: _("Test"),
+        callback: () => {
+          this.clearInterface();
         },
       });
     }
@@ -520,7 +506,6 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }
 
   public clearInterface() {
-    console.log("clear interface");
     this.tableauCardManager.clearInterface();
     this.victoryCardManager.clearInterface();
     this.gameMap.clearInterface();

@@ -2,7 +2,7 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
-class PREN107X_TersaneIAmire extends \PaxRenaissance\Models\TableauCard
+class PREN107X_TersaneIAmire extends \PaxRenaissance\Models\Cards\ConcessionsCannotBeKilledByPiratesCard
 {
   public function __construct($row)
   {
@@ -36,5 +36,15 @@ class PREN107X_TersaneIAmire extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->region = EAST;
+    $this->specialAbilities = [
+      [
+        'id' => SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES,
+        'title' => clienttranslate('IMPERIAL ARSENAL:'),
+        'text' => [
+          'log' => clienttranslate('Your Concessions cannot be killed by Pirates.'),
+          'args' => [],
+        ],
+      ]
+    ];
   }
 }

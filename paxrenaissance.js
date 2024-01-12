@@ -1971,21 +1971,10 @@ var PaxRenaissance = (function () {
         if (this.framework().isCurrentPlayerActive()) {
             this.addPrimaryActionButton({
                 id: "draw_button",
-                text: _("Draw Card"),
-                callback: function () { return __awaiter(_this, void 0, void 0, function () {
-                    var card;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                card = this.gamedatas.testCard;
-                                card.location = "market_west_5";
-                                return [4, this.market.drawCard(card)];
-                            case 1:
-                                _a.sent();
-                                return [2];
-                        }
-                    });
-                }); },
+                text: _("Test"),
+                callback: function () {
+                    _this.clearInterface();
+                },
             });
         }
     };
@@ -2104,7 +2093,6 @@ var PaxRenaissance = (function () {
         }
     };
     PaxRenaissance.prototype.clearInterface = function () {
-        console.log("clear interface");
         this.tableauCardManager.clearInterface();
         this.victoryCardManager.clearInterface();
         this.gameMap.clearInterface();
@@ -2981,16 +2969,12 @@ var GameMap = (function () {
     }
     GameMap.prototype.clearInterface = function () {
         var _this = this;
-        __spreadArray(__spreadArray([], BORDERS, true), CITIES, true).forEach(function (border) {
-            var node = document.getElementById("pr_".concat(border));
+        __spreadArray(__spreadArray([], BORDERS, true), CITIES, true).forEach(function (location) {
+            var node = document.getElementById("pr_".concat(location));
             if (!node) {
                 return;
             }
-            var children = node.children;
-            for (var i = 0; i < children.length; i++) {
-                var child = children[i];
-                child.remove();
-            }
+            node.replaceChildren();
         });
         Object.keys(this.empireSquareStocks).forEach(function (stockId) {
             _this.empireSquareStocks[stockId].removeAll();
@@ -3014,15 +2998,14 @@ var GameMap = (function () {
     GameMap.prototype.setupTokensBorders = function (_a) {
         var gamedatas = _a.gamedatas;
         BORDERS.forEach(function (border) {
-            var token = gamedatas.tokens.inPlay.find(function (piece) { return piece.location === border; });
-            if (!token) {
-                return;
-            }
+            var tokens = gamedatas.tokens.inPlay.filter(function (piece) { return piece.location === border; });
             var node = document.getElementById("pr_".concat(border));
             if (!node) {
                 return;
             }
-            node.insertAdjacentHTML("beforeend", tplToken(token));
+            tokens.forEach(function (token) {
+                node.insertAdjacentHTML("beforeend", tplToken(token));
+            });
         });
     };
     GameMap.prototype.setupTokensCities = function (_a) {
@@ -3068,7 +3051,9 @@ var GameMap = (function () {
             }
             card.queens.forEach(function (queen) {
                 var queenTokensNode = document.getElementById("".concat(queen.id, "_tokens"));
-                gamedatas.tokens.inPlay.filter(function (token) { return token.location === queen.id; }).forEach(function (token) {
+                gamedatas.tokens.inPlay
+                    .filter(function (token) { return token.location === queen.id; })
+                    .forEach(function (token) {
                     queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
                 });
             });
@@ -3126,15 +3111,15 @@ var GameMap = (function () {
     };
     GameMap.prototype.setVenice2Visibility = function (visible) {
         if (visible === void 0) { visible = true; }
-        var venice2Node = document.getElementById('venice2_overlay');
+        var venice2Node = document.getElementById("venice2_overlay");
         if (!venice2Node) {
             return;
         }
         if (visible) {
-            venice2Node.style.opacity = '1';
+            venice2Node.style.opacity = "1";
         }
         else {
-            venice2Node.style.opacity = '0';
+            venice2Node.style.opacity = "0";
         }
     };
     GameMap.prototype.checkZoomButtonClasses = function () {

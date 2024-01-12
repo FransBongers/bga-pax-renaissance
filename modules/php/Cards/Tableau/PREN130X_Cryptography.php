@@ -33,12 +33,14 @@ class PREN130X_Cryptography extends \PaxRenaissance\Models\TableauCard
 
   public function sell()
   {
-    $owner = $this->getOwner();
+    if ($this->isInTableau()) {
+      $owner = $this->getOwner();
+      Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
+        'action' => ABILITY_OPPONENTS_PUPRLE_OP,
+        'optional' => true,
+        'playerId' => $owner->getId(),
+      ]));
+    }
     parent::sell();
-    Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
-      'action' => ABILITY_OPPONENTS_PUPRLE_OP,
-      'optional' => true,
-      'playerId' => $owner->getId(),
-    ]));
   }
 }

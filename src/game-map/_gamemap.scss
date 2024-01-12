@@ -427,6 +427,7 @@ $map-cards: (
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   .pr_pawn {
     margin-bottom: 11px;
@@ -436,6 +437,10 @@ $map-cards: (
     margin-bottom: 8px;
     margin-left: 2px;
   }
+}
+
+#pr_border_england_portugal, #pr_border_hungary_ottoman {
+  flex-direction: row;
 }
 
 #venice2_overlay {

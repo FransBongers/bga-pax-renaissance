@@ -63,15 +63,17 @@ class TaxOp extends \PaxRenaissance\Models\TableauOp
 
       $borders = $empire->getBorders();
       foreach ($borders as $border) {
-        $token = $border->getToken();
-        if ($token === null || $token->getType() !== PAWN) {
-          continue;
-        }
+        $tokens = $border->getTokens();
+        foreach($tokens as $token) {
+          if ($token->getType() !== PAWN) {
+            continue;
+          }
 
-        if (!isset($options[$token->getId()])) {
-          $options[$token->getId()] = ['token' => $token, 'empires' => [$empire]];
-        } else {
-          $options[$token->getId()]['empires'][] = $empire;
+          if (!isset($options[$token->getId()])) {
+            $options[$token->getId()] = ['token' => $token, 'empires' => [$empire]];
+          } else {
+            $options[$token->getId()]['empires'][] = $empire;
+          }
         }
       }
     }

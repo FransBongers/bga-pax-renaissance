@@ -59,10 +59,13 @@ class SiegeOp extends \PaxRenaissance\Models\TableauOp
 
       $borders = $empire->getBorders();
       foreach ($borders as $border) {
-        $token = $border->getToken();
-        if ($token !== null && !isset($options[$token->getId()]) && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
-          $options[$token->getId()] = $token;
+        $tokens = $border->getTokens();
+        foreach($tokens as $token) {
+          if (!isset($options[$token->getId()]) && in_array($token->getType(), [ROOK, KNIGHT, PIRATE])) {
+            $options[$token->getId()] = $token;
+          }
         }
+
       }
     }
 
