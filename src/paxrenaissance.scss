@@ -19,6 +19,7 @@
 @use 'hand/hand';
 @use 'card-managers/cards';
 @use 'icons/icons';
+@use 'info-panel/infoPanel';
 @use 'logs/logs';
 @use 'market/market';
 @use 'agentIcons';
@@ -26,8 +27,10 @@
 @use 'oneShots';
 @use 'pieces';
 @use 'tableauOps';
+@use 'open-hands-modal/openHandsModal';
 @use 'player-manager/playerPanel';
 @use 'player-manager/tableau/playerTableaux';
+@use 'settings/settingsModal';
 @use 'supply/supply';
 @use 'tooltip-manager/tooltip';
 @use 'icon-counter/icon-counter';
@@ -45,6 +48,34 @@ html {
   background-attachment: fixed; // no scroll
   background-position: center; // where to fix picture from
   background-size: cover; // will cover screen but parts of image might be outside screen
+}
+
+html[data-background-pref=none] {
+  background: url("") rgb(192, 192, 192);
+}
+
+html[data-background-pref=balcony] {
+  background-image: url("img/background_balcony.webp");
+}
+
+html[data-background-pref=cathedral] {
+  background-image: url("img/background_cathedral.webp");
+}
+
+html[data-background-pref=lucrezia] {
+  background-image: url("img/background_lucrezia.webp");
+}
+
+html[data-background-pref=goldsmith] {
+  background-image: url("img/background_goldsmith.webp");
+}
+
+html[data-background-pref=poison] {
+  background-image: url("img/background_poison.webp");
+}
+
+html[data-background-pref=war] {
+  background-image: url("img/background_war.webp");
 }
 
 #pr_play_area {  

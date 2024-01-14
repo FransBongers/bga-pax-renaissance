@@ -10,7 +10,7 @@ class PREN159X_ConsentOfTheGoverned extends \PaxRenaissance\Models\TableauCard
     $this->id = 'PREN159X_ConsentOfTheGoverned';
     $this->empire = WEST;
     $this->flavorText = [
-      clienttranslate("A government's legitimacy and moral right to use state power is only justiffied when consented to by the people over which that political power is exercised."),
+      clienttranslate("A government's legitimacy and moral right to use state power is only justified when consented to by the people over which that political power is exercised."),
       clienttranslate("This Enlightenment principle contradicted the divine right of kings, and was first promoted by Nicholas of Cusa, a German humanist."),
     ];
     $this->name = clienttranslate('Consent of the Governed');

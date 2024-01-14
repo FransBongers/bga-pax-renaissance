@@ -137,8 +137,8 @@ class Modal {
     });
 
     dojo.style('popin_' + this.id + '_wrapper', {
-      // position: 'absolute',
-      position: 'fixed',
+      position: 'absolute',
+      // position: 'fixed',
       left: '0px',
       top: '0px',
       width: 'min(100%,100vw)',

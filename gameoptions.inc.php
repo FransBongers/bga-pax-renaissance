@@ -24,10 +24,42 @@
  *
  */
 
- namespace PaxRenaissance;
+namespace PaxRenaissance;
 
- require_once 'modules/php/gameoptions.inc.php';
- 
- $game_options = [];
- 
- $game_preferences = [];
+require_once 'modules/php/gameoptions.inc.php';
+
+$game_options = [
+  OPTION_OPEN_HANDS => [
+    'name' => totranslate('Open hands'),
+    'values' => [
+      OPTION_OPEN_HANDS_DISABLED => [
+        'name' => totranslate('Disabled'),
+      ],
+      OPTION_OPEN_HANDS_ENABLED => [
+        'name' => totranslate('Enabled'),
+        'tmdisplay' => totranslate('Open hands'),
+      ]
+    ]
+  ],
+  OPTION_FIRST_PLAYER_VARIANT => [
+    'name' => totranslate('First Player Variant'),
+    'values' => [
+      OPTION_FIRST_PLAYER_VARIANT_ENABLED => [
+        'name' => totranslate('Enabled'),
+        'description' => totranslate('The player farthest along the West Trade Route becomes the first player'),
+        'tmdisplay' => totranslate('First Player Variant'),
+      ],
+      OPTION_FIRST_PLAYER_VARIANT_DISABLED => [
+        'name' => totranslate('Disabled'),
+      ],
+    ],
+    'displaycondition' => [
+      [
+          'type' => 'maxplayers',
+          'value' => [2]
+      ],
+  ]
+  ]
+];
+
+$game_preferences = [];

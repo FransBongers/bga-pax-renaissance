@@ -25,9 +25,13 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
     'logState' => 'int', // Used to store state id when enabling the log
     'players' => 'obj', // Can be removed
     // 'activePlayerId' => 'int',
-    'remainingActions' => 'int',
+    'remainingActions' => 'int', // TODO: can be removed?
     'marketFlorins' => 'obj',
-    'empireReligions' => 'obj' // TODO: check if we need to use table for empires?
+    'empireReligions' => 'obj', // TODO: check if we need to use table for empires?
+
+    // Game options
+    "firstPlayerVariant" => 'bool',
+    "openHands" => 'bool',
   ];
 
   protected static $table = 'global_variables';
@@ -151,6 +155,8 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
    */
   public static function setupNewGame($players, $options)
   {
-    // Globals::setRemainingActions(2);
+    // Game options
+    self::setOpenHands(($options[\PaxRenaissance\OPTION_OPEN_HANDS] ?? null) == \PaxRenaissance\OPTION_OPEN_HANDS_ENABLED);
+    self::setFirstPlayerVariant(count($players) === 2 && ($options[\PaxRenaissance\OPTION_FIRST_PLAYER_VARIANT] ?? null) == \PaxRenaissance\OPTION_FIRST_PLAYER_VARIANT_ENABLED);
   }
 }

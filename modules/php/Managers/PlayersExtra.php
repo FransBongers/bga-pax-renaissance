@@ -21,16 +21,10 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
 
   public static function setupNewGame()
   {
-
-
     // Globals::setFirstPlayer($this->getNextPlayerTable()[0]);
     $players = Players::getAll();
 
-    $fuggerPlayer = Utils::array_find($players->toArray(), function ($player) {
-      return COLOR_BANK_MAP[$player->getColor()]=== FUGGER;
-    });
-
-    $firstPlayer = $fuggerPlayer !== null ? $fuggerPlayer->getId() : Game::get()->getNextPlayerTable()[0];
+    $firstPlayer = self::getFirstPlayer();
     Globals::setFirstPlayer($firstPlayer);
 
     $turnOrder = Players::getTurnOrder($firstPlayer);
@@ -49,6 +43,34 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
     // if (!$dbUpgrade) {
     //   self::setupTokens($playerId);
     // }
+  }
+
+  private static function getFirstPlayer() {
+    $players = Players::getAll();
+
+    // $fuggerPlayer = Utils::array_find($players->toArray(), function ($player) {
+    //   return COLOR_BANK_MAP[$player->getColor()]=== FUGGER;
+    // });
+    $fuggerPlayer = self::getPlayerForBank($players, FUGGER);
+    if ($fuggerPlayer !== null) {
+      return $fuggerPlayer->getId();
+    }
+    $firstPlayerVariant = Globals::getFirstPlayerVariant();
+    if (!$firstPlayerVariant) {
+      return Game::get()->getNextPlayerTable()[0];
+    }
+    $marchionniPlayer = self::getPlayerForBank($players, MARCHIONNI);
+    if ($marchionniPlayer !== null) {
+      return $marchionniPlayer->getId();
+    } else {
+      return self::getPlayerForBank($players, MEDICI)->getId();
+    }
+  }
+
+  private static function getPlayerForBank($players, $bank) {
+    return Utils::array_find($players->toArray(), function ($player) use ($bank) {
+      return COLOR_BANK_MAP[$player->getColor()] === $bank;
+    });
   }
 
   /*

@@ -1,0 +1,125 @@
+#pr_show_settings {
+  height: 40px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+      color: grey;
+  }
+  cursor: pointer;
+
+  svg {
+      width: auto;
+      height: 40px;
+  }
+}
+
+#pr_show_settings {
+  .fa-primary {
+      transform-origin: 216px 255px;
+      transition: transform 1s;
+  }
+
+  &:hover .fa-primary {
+      transform: rotate(180deg);
+  }
+}
+
+#popin_settings_modal_underlay {
+  background-color: #000!important;
+}
+
+.pr_settings_modal {
+  background-image: url("img/background_paper.webp");
+  // background-color: #ebd5bd;
+  // background-color: white;
+  border-radius: 8px;
+  box-shadow: rgb(0, 0, 0) 1px 1px 5px;
+  border: 1px solid black;
+  // position: relative;
+  position: fixed;
+  top: 15vh;
+  min-width: 500px;
+
+  .pr_settings_modal_closeicon {
+    background-color: #a47a77;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -18px;
+    right: -18px;
+    font-size: 90%;
+    color: white !important;
+    border: 1px solid #dfbda8;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: none;
+      color: #ccc !important;
+      transform: scale(1.1);
+    }
+
+    i {
+      margin-top: -2px;
+    }
+  }
+
+  h2 {
+    // font-family: "Oranienbaum";
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    margin: 0px;
+    // background: #b79570;
+    // border-radius: 8px 8px 0px 0px;
+    padding: 7px 0px;
+    border-bottom: 1px solid black;
+  }
+
+  #setting_modal_content {
+    // width: 400px;
+    height: 200px;
+    // display: flex;
+    // flex-shrink: 1;
+    // flex-wrap: wrap;
+    // justify-content: space-between;
+    // max-width: 90vw;
+    // max-width: 1000px;
+    // gap: 32px;
+    .player_preference_row {
+      display: flex;
+      flex-direction: row;
+
+
+      .player_preference_row_label {
+        flex-grow: 1;
+        text-align: center;
+        align-self: center;
+        font-weight: 400;
+
+      }
+
+      .player_preference_row_value {
+        flex-grow: 1;
+        padding: 8px;
+
+        select {
+          width: 100%;
+        }
+      }
+    }
+
+  }
+
+  .reserve {
+    padding: 8px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}

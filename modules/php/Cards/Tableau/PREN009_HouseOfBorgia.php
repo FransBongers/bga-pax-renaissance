@@ -16,7 +16,7 @@ class PREN009_HouseOfBorgia extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = WEST;
     $this->flavorText = [
-      clienttranslate('A powerful and ambitious Italian family of diplomats condottieri, politicians, and two popes. One was Alexander VI (above), a corrupt and libertine pop whose reign contributed to the development of the Protestant Reformation.'),
+      clienttranslate('A powerful and ambitious Italian family of diplomats condottieri, politicians, and two popes. One was Alexander VI (above), a corrupt and libertine pope whose reign contributed to the development of the Protestant Reformation.'),
       clienttranslate('The Borgias made enemies of the Medici, the Sforza, Savonarola, and many others. They were also patrons of the arts.')
     ];
     $this->name = clienttranslate("House of Borgia");

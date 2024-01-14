@@ -325,7 +325,7 @@ var Modal = (function () {
             backgroundColor: 'white',
         });
         dojo.style('popin_' + this.id + '_wrapper', {
-            position: 'fixed',
+            position: 'absolute',
             left: '0px',
             top: '0px',
             width: 'min(100%,100vw)',
@@ -1827,6 +1827,7 @@ var PaxRenaissance = (function () {
         var _this = this;
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
         this.gamedatas = gamedatas;
+        this.gameOptions = gamedatas.gameOptions;
         debug("gamedatas", gamedatas);
         this.setupPlayerOrder({ customPlayerOrder: gamedatas.customPlayerOrder });
         this._connections = [];
@@ -1870,6 +1871,7 @@ var PaxRenaissance = (function () {
             _a.tableauOpVote = new TableauOpVoteState(this),
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
+        this.infoPanel = new InfoPanel(this);
         this.animationManager = new AnimationManager(this, { duration: 500 });
         this.tableauCardManager = new TableauCardManager(this);
         this.tooltipManager = new TooltipManager(this);
@@ -1881,7 +1883,9 @@ var PaxRenaissance = (function () {
         this.supply = new Supply(this);
         this.market = new Market(this);
         this.victoryCardManager = new VictoryCardManager(this);
-        this.updatePlayAreaSize();
+        this.openHandsModal = new OpenHandsModal(this);
+        this.settings = new Settings(this),
+            this.updatePlayAreaSize();
         window.addEventListener("resize", function () {
             _this.updatePlayAreaSize();
         });
@@ -2263,6 +2267,15 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.onLoadingComplete = function () {
         this.cancelLogs(this.gamedatas.canceledNotifIds);
+    };
+    PaxRenaissance.prototype.updatePlayerOrdering = function () {
+        this.framework().inherited(arguments);
+        var container = document.getElementById('player_boards');
+        var infoPanel = document.getElementById('pr_info_panel');
+        if (!container) {
+            return;
+        }
+        container.insertAdjacentElement('afterbegin', infoPanel);
     };
     PaxRenaissance.prototype.actionError = function (actionName) {
         this.framework().showMessage("cannot take ".concat(actionName, " action"), "error");
@@ -3341,6 +3354,27 @@ var tplTableauOp = function (_a) {
     var id = _a.id, tableauOpId = _a.tableauOpId;
     return "\n  <div ".concat(id ? "id=\"".concat(id, "\"") : '', " class=\"pr_tableau_op\" data-tableau-op-id=\"").concat(tableauOpId, "\"></div>");
 };
+var InfoPanel = (function () {
+    function InfoPanel(game) {
+        this.game = game;
+        var gamedatas = game.gamedatas;
+        this.setup({ gamedatas: gamedatas });
+    }
+    InfoPanel.prototype.clearInterface = function () { };
+    InfoPanel.prototype.updateInterface = function (_a) {
+        var gamedatas = _a.gamedatas;
+    };
+    InfoPanel.prototype.setup = function (_a) {
+        var gamedatas = _a.gamedatas;
+        var node = document.getElementById("player_boards");
+        if (!node) {
+            return;
+        }
+        node.insertAdjacentHTML("afterbegin", tplInfoPanel());
+    };
+    return InfoPanel;
+}());
+var tplInfoPanel = function () { return "<div class='player-board' id=\"pr_info_panel\"></div>"; };
 var LOG_TOKEN_BOLD_TEXT = "boldText";
 var LOG_TOKEN_CARD_NAME = "cardName";
 var LOG_TOKEN_NEW_LINE = "newLine";
@@ -3829,7 +3863,7 @@ var NotificationManager = (function () {
                         this.game.gameMap.setVenice2Visibility(true);
                         break;
                     default:
-                        debug('Unhandled ability: ', ability);
+                        debug("Unhandled ability: ", ability);
                 }
                 return [2];
             });
@@ -3889,7 +3923,7 @@ var NotificationManager = (function () {
                         this.game.gameMap.setVenice2Visibility(false);
                         break;
                     default:
-                        debug('Unhandled ability: ', ability);
+                        debug("Unhandled ability: ", ability);
                 }
                 return [2];
             });
@@ -3927,8 +3961,12 @@ var NotificationManager = (function () {
                         _b.label = 4;
                     case 4:
                         player = this.getPlayer({ playerId: playerId });
-                        if (fromLocationId.startsWith('hand_')) {
+                        if (fromLocationId.startsWith("hand_")) {
                             player.counters.cards[card.region].incValue(-1);
+                            this.game.openHandsModal.removeCard({
+                                playerId: playerId,
+                                card: card,
+                            });
                         }
                         if (wasVassalTo) {
                             this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
@@ -4145,7 +4183,9 @@ var NotificationManager = (function () {
                                 value: -1,
                             });
                         }
-                        node = document.getElementById(isBishop || token.location.startsWith('EmpireSquare_') ? "".concat(token.location, "_tokens") : "pr_".concat(token.location));
+                        node = document.getElementById(isBishop || token.location.startsWith("EmpireSquare_")
+                            ? "".concat(token.location, "_tokens")
+                            : "pr_".concat(token.location));
                         if (!node) {
                             return [2];
                         }
@@ -4173,6 +4213,7 @@ var NotificationManager = (function () {
                         _a = notif.args, playerId = _a.playerId, card = _a.card;
                         player = this.getPlayer({ playerId: playerId });
                         player.counters.cards[card.region].incValue(-1);
+                        this.game.openHandsModal.removeCard({ playerId: playerId, card: card });
                         return [4, player.tableau.addCard(card)];
                     case 1:
                         _b.sent();
@@ -4206,6 +4247,7 @@ var NotificationManager = (function () {
                         return [4, player.addCardToHand({ card: card })];
                     case 3:
                         _b.sent();
+                        this.game.openHandsModal.addCard({ playerId: playerId, card: card });
                         return [3, 6];
                     case 4: return [4, this.getStockMarketLocation({ location: card.location }).removeCard(card)];
                     case 5:
@@ -4304,6 +4346,7 @@ var NotificationManager = (function () {
                 this.game.market.updateMarket({ gamedatas: gamedatas });
                 this.game.supply.updateInterdace({ gamedatas: gamedatas });
                 this.game.playerManager.updatePlayers({ gamedatas: gamedatas });
+                this.game.openHandsModal.updateInterface({ gamedatas: gamedatas });
                 return [2];
             });
         });
@@ -4555,6 +4598,133 @@ var NotificationManager = (function () {
     };
     return NotificationManager;
 }());
+var OpenHandsModal = (function () {
+    function OpenHandsModal(game) {
+        this.game = game;
+        var gamedatas = game.gamedatas;
+        this.enabled = gamedatas.gameOptions.openHands;
+        this.handCardData = {};
+        this.setup({ gamedatas: gamedatas });
+    }
+    OpenHandsModal.prototype.clearInterface = function () { };
+    OpenHandsModal.prototype.updateInterface = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        if (!this.enabled) {
+            return;
+        }
+        Object.entries(gamedatas.players).forEach(function (_a) {
+            var playerId = _a[0], playerData = _a[1];
+            _this.handCardData[playerId] = {
+                playerName: playerData.name,
+                cards: playerData.hand.cards,
+            };
+        });
+        if (this.modal.isDisplayed()) {
+            this.updateModalContent();
+        }
+    };
+    OpenHandsModal.prototype.addButton = function (_a) {
+        var gamedatas = _a.gamedatas;
+        var configPanel = document.getElementById("pr_info_panel");
+        if (configPanel) {
+            configPanel.insertAdjacentHTML("beforeend", tplOpenHandsButton());
+        }
+    };
+    OpenHandsModal.prototype.setupModal = function (_a) {
+        var gamedatas = _a.gamedatas;
+        this.modal = new Modal("open_hand_modal", {
+            class: "pr_open_hands_modal",
+            closeIcon: "fa-times",
+            openAnimation: true,
+            openAnimationTarget: "pr_open_hands_button",
+            contents: tplOpenHandsModal({
+                data: Object.values(this.handCardData),
+                game: this.game,
+            }),
+            closeAction: "hide",
+            verticalAlign: "flex-start",
+            breakpoint: 510,
+        });
+    };
+    OpenHandsModal.prototype.setup = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        if (!this.enabled) {
+            return;
+        }
+        Object.entries(gamedatas.players).forEach(function (_a) {
+            var playerId = _a[0], playerData = _a[1];
+            _this.handCardData[playerId] = {
+                playerName: playerData.name,
+                cards: playerData.hand.cards,
+            };
+        });
+        this.addButton({ gamedatas: gamedatas });
+        this.setupModal({ gamedatas: gamedatas });
+        dojo.connect($("pr_open_hands_button"), "onclick", function () { return _this.open(); });
+    };
+    OpenHandsModal.prototype.addCard = function (_a) {
+        var card = _a.card, playerId = _a.playerId;
+        if (!this.enabled) {
+            return;
+        }
+        this.handCardData[playerId].cards.push(card);
+        if (this.modal.isDisplayed()) {
+            this.updateModalContent();
+        }
+    };
+    OpenHandsModal.prototype.removeCard = function (_a) {
+        var cardToRemove = _a.card, playerId = _a.playerId;
+        if (!this.enabled) {
+            return;
+        }
+        this.handCardData[playerId].cards = this.handCardData[playerId].cards.filter(function (card) { return card.id !== cardToRemove.id; });
+        if (this.modal.isDisplayed()) {
+            this.updateModalContent();
+        }
+    };
+    OpenHandsModal.prototype.open = function () {
+        this.updateModalContent();
+        this.modal.show();
+    };
+    OpenHandsModal.prototype.updateModalContent = function () {
+        var _this = this;
+        this.modal.updateContent(tplOpenHandsModal({
+            data: Object.values(this.handCardData),
+            game: this.game,
+        }));
+        Object.entries(this.handCardData).forEach(function (_a) {
+            var playerId = _a[0], cards = _a[1].cards;
+            cards.forEach(function (card) {
+                return _this.game.tooltipManager.addCardTooltip({
+                    nodeId: "".concat(card.id, "-modal"),
+                    card: card,
+                });
+            });
+        });
+    };
+    return OpenHandsModal;
+}());
+var tplOpenHandsButton = function () { return "<button id=\"pr_open_hands_button\" type=\"button\" class=\"pr_button\">\n<div class=\"pr_icon\"></div>\n</button>"; };
+var tplOpenHandCard = function (_a) {
+    var card = _a.card;
+    return "<div id=\"".concat(card.id, "-modal\" class=\"pr_card\" data-card-id=\"").concat(card.id.split("_")[0], "\"></div>");
+};
+var tplOpenHandPlayerData = function (_a) {
+    var playerName = _a.playerName, cards = _a.cards, game = _a.game;
+    var titleText = _("${tkn_playerName}");
+    var title = game.format_string_recursive(titleText, {
+        tkn_playerName: playerName,
+    });
+    return "\n  <div class=\"pr_open_hands_modal_player_container\">\n    <h2>".concat(title, "</h2>\n    <div class=\"pr_open_hands_modal_cards_container\">\n      ").concat(cards.map(function (card) { return tplOpenHandCard({ card: card }); }).join(""), "\n    </div>\n  </div>\n");
+};
+var tplOpenHandsModal = function (_a) {
+    var data = _a.data, game = _a.game;
+    return data
+        .map(function (playerData) { return tplOpenHandPlayerData(__assign({ game: game }, playerData)); })
+        .join("");
+};
 var PlayerManager = (function () {
     function PlayerManager(game) {
         console.log("Constructor PlayerManager");
@@ -4933,6 +5103,167 @@ var tplPlayerTableauxContainer = function (_a) {
         return "<div id=\"pr_player_tableau_".concat(playerId, "\" class=\"pr_player_tableau\"></div>");
     })
         .join(""), "\n    </div>\n  ");
+};
+var getSettingsConfig = function () { return ({
+    backgroundImage: {
+        id: 'backgroundImage',
+        defaultValue: 'goldsmith',
+        label: _('Background image'),
+        options: [
+            {
+                label: _('No image'),
+                value: 'none',
+            },
+            {
+                label: _('Balcony'),
+                value: 'balcony',
+            },
+            {
+                label: _('Cathedral'),
+                value: 'cathedral',
+            },
+            {
+                label: _('Goldsmith'),
+                value: 'goldsmith',
+            },
+            {
+                label: _('Lucrezia'),
+                value: 'lucrezia',
+            },
+            {
+                label: _('Poison'),
+                value: 'poison',
+            },
+            {
+                label: _('War'),
+                value: 'war',
+            },
+        ],
+    }
+}); };
+var Settings = (function () {
+    function Settings(game) {
+        this.game = game;
+        var gamedatas = game.gamedatas;
+        this.setup({ gamedatas: gamedatas });
+    }
+    Settings.prototype.clearInterface = function () { };
+    Settings.prototype.updateInterface = function (_a) {
+        var gamedatas = _a.gamedatas;
+    };
+    Settings.prototype.addButton = function (_a) {
+        var gamedatas = _a.gamedatas;
+        var configPanel = document.getElementById("pr_info_panel");
+        if (configPanel) {
+            configPanel.insertAdjacentHTML("beforeend", tplSettingsButton());
+        }
+    };
+    Settings.prototype.setupValues = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        var config = getSettingsConfig();
+        this.settings = {};
+        Object.values(config).forEach(function (_a) {
+            var id = _a.id, defaultValue = _a.defaultValue;
+            var localValue = localStorage.getItem(_this.getLocalStorageKey({ id: id }));
+            _this.settings[id] = localValue || defaultValue;
+            if (localValue && _this.getMethodName({ id: id })) {
+                _this[_this.getMethodName({ id: id })](localValue);
+            }
+        });
+    };
+    Settings.prototype.setupModal = function (_a) {
+        var gamedatas = _a.gamedatas;
+        this.modal = new Modal("settings_modal", {
+            class: "pr_settings_modal",
+            closeIcon: "fa-times",
+            openAnimation: true,
+            openAnimationTarget: "pr_show_settings",
+            titleTpl: '<h2 id="popin_${id}_title" class="${class}_title">${title}</h2>',
+            title: _("Settings"),
+            contents: tplSettingsModalContent(),
+            closeAction: "hide",
+            verticalAlign: "flex-start",
+            breakpoint: 510,
+        });
+    };
+    Settings.prototype.setupModalContent = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        var config = getSettingsConfig();
+        var node = document.getElementById("setting_modal_content");
+        if (!node) {
+            return;
+        }
+        Object.values(config).forEach(function (setting) {
+            node.insertAdjacentHTML("beforeend", tplPlayerPrefenceRow({
+                setting: setting,
+                currentValue: _this.settings[setting.id],
+            }));
+            var controlId = "preference_control_".concat(setting.id);
+            $(controlId).addEventListener("change", function () {
+                var value = $(controlId).value;
+                _this.changeSetting({ id: setting.id, value: value });
+            });
+        });
+    };
+    Settings.prototype.setup = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        this.setupValues({ gamedatas: gamedatas });
+        this.addButton({ gamedatas: gamedatas });
+        this.setupModal({ gamedatas: gamedatas });
+        this.setupModalContent({ gamedatas: gamedatas });
+        dojo.connect($("pr_show_settings"), "onclick", function () { return _this.open(); });
+    };
+    Settings.prototype.changeSetting = function (_a) {
+        var id = _a.id, value = _a.value;
+        var suffix = this.getSuffix({ id: id });
+        this.settings[id] = value;
+        localStorage.setItem(this.getLocalStorageKey({ id: id }), value);
+        var methodName = this.getMethodName({ id: id });
+        if (this[methodName]) {
+            this[methodName](value);
+        }
+    };
+    Settings.prototype.onChangeBackgroundImageSetting = function (value) {
+        document.documentElement.setAttribute("data-background-pref", value);
+    };
+    Settings.prototype.getMethodName = function (_a) {
+        var id = _a.id;
+        return "onChange".concat(this.getSuffix({ id: id }), "Setting");
+    };
+    Settings.prototype.getSetting = function (_a) {
+        var id = _a.id;
+        return this.settings[id] || null;
+    };
+    Settings.prototype.getSuffix = function (_a) {
+        var id = _a.id;
+        return id.charAt(0).toUpperCase() + id.slice(1);
+    };
+    Settings.prototype.getLocalStorageKey = function (_a) {
+        var id = _a.id;
+        return "".concat(this.game.framework().game_name, "-").concat(this.getSuffix({ id: id }));
+    };
+    Settings.prototype.open = function () {
+        this.modal.show();
+    };
+    return Settings;
+}());
+var tplSettingsButton = function () {
+    return "<div id=\"pr_show_settings\">\n  <svg  xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 512\">\n    <g>\n      <path class=\"fa-secondary\" fill=\"currentColor\" d=\"M638.41 387a12.34 12.34 0 0 0-12.2-10.3h-16.5a86.33 86.33 0 0 0-15.9-27.4L602 335a12.42 12.42 0 0 0-2.8-15.7 110.5 110.5 0 0 0-32.1-18.6 12.36 12.36 0 0 0-15.1 5.4l-8.2 14.3a88.86 88.86 0 0 0-31.7 0l-8.2-14.3a12.36 12.36 0 0 0-15.1-5.4 111.83 111.83 0 0 0-32.1 18.6 12.3 12.3 0 0 0-2.8 15.7l8.2 14.3a86.33 86.33 0 0 0-15.9 27.4h-16.5a12.43 12.43 0 0 0-12.2 10.4 112.66 112.66 0 0 0 0 37.1 12.34 12.34 0 0 0 12.2 10.3h16.5a86.33 86.33 0 0 0 15.9 27.4l-8.2 14.3a12.42 12.42 0 0 0 2.8 15.7 110.5 110.5 0 0 0 32.1 18.6 12.36 12.36 0 0 0 15.1-5.4l8.2-14.3a88.86 88.86 0 0 0 31.7 0l8.2 14.3a12.36 12.36 0 0 0 15.1 5.4 111.83 111.83 0 0 0 32.1-18.6 12.3 12.3 0 0 0 2.8-15.7l-8.2-14.3a86.33 86.33 0 0 0 15.9-27.4h16.5a12.43 12.43 0 0 0 12.2-10.4 112.66 112.66 0 0 0 .01-37.1zm-136.8 44.9c-29.6-38.5 14.3-82.4 52.8-52.8 29.59 38.49-14.3 82.39-52.8 52.79zm136.8-343.8a12.34 12.34 0 0 0-12.2-10.3h-16.5a86.33 86.33 0 0 0-15.9-27.4l8.2-14.3a12.42 12.42 0 0 0-2.8-15.7 110.5 110.5 0 0 0-32.1-18.6A12.36 12.36 0 0 0 552 7.19l-8.2 14.3a88.86 88.86 0 0 0-31.7 0l-8.2-14.3a12.36 12.36 0 0 0-15.1-5.4 111.83 111.83 0 0 0-32.1 18.6 12.3 12.3 0 0 0-2.8 15.7l8.2 14.3a86.33 86.33 0 0 0-15.9 27.4h-16.5a12.43 12.43 0 0 0-12.2 10.4 112.66 112.66 0 0 0 0 37.1 12.34 12.34 0 0 0 12.2 10.3h16.5a86.33 86.33 0 0 0 15.9 27.4l-8.2 14.3a12.42 12.42 0 0 0 2.8 15.7 110.5 110.5 0 0 0 32.1 18.6 12.36 12.36 0 0 0 15.1-5.4l8.2-14.3a88.86 88.86 0 0 0 31.7 0l8.2 14.3a12.36 12.36 0 0 0 15.1 5.4 111.83 111.83 0 0 0 32.1-18.6 12.3 12.3 0 0 0 2.8-15.7l-8.2-14.3a86.33 86.33 0 0 0 15.9-27.4h16.5a12.43 12.43 0 0 0 12.2-10.4 112.66 112.66 0 0 0 .01-37.1zm-136.8 45c-29.6-38.5 14.3-82.5 52.8-52.8 29.59 38.49-14.3 82.39-52.8 52.79z\" opacity=\"0.4\"></path>\n      <path class=\"fa-primary\" fill=\"currentColor\" d=\"M420 303.79L386.31 287a173.78 173.78 0 0 0 0-63.5l33.7-16.8c10.1-5.9 14-18.2 10-29.1-8.9-24.2-25.9-46.4-42.1-65.8a23.93 23.93 0 0 0-30.3-5.3l-29.1 16.8a173.66 173.66 0 0 0-54.9-31.7V58a24 24 0 0 0-20-23.6 228.06 228.06 0 0 0-76 .1A23.82 23.82 0 0 0 158 58v33.7a171.78 171.78 0 0 0-54.9 31.7L74 106.59a23.91 23.91 0 0 0-30.3 5.3c-16.2 19.4-33.3 41.6-42.2 65.8a23.84 23.84 0 0 0 10.5 29l33.3 16.9a173.24 173.24 0 0 0 0 63.4L12 303.79a24.13 24.13 0 0 0-10.5 29.1c8.9 24.1 26 46.3 42.2 65.7a23.93 23.93 0 0 0 30.3 5.3l29.1-16.7a173.66 173.66 0 0 0 54.9 31.7v33.6a24 24 0 0 0 20 23.6 224.88 224.88 0 0 0 75.9 0 23.93 23.93 0 0 0 19.7-23.6v-33.6a171.78 171.78 0 0 0 54.9-31.7l29.1 16.8a23.91 23.91 0 0 0 30.3-5.3c16.2-19.4 33.7-41.6 42.6-65.8a24 24 0 0 0-10.5-29.1zm-151.3 4.3c-77 59.2-164.9-28.7-105.7-105.7 77-59.2 164.91 28.7 105.71 105.7z\"></path>\n    </g>\n  </svg>\n</div>";
+};
+var tplPlayerPrefenceRow = function (_a) {
+    var setting = _a.setting, currentValue = _a.currentValue;
+    var values = setting.options
+        .map(function (option) {
+        return "<option value='".concat(option.value, "' ").concat(option.value === currentValue ? 'selected="selected"' : "", ">").concat(_(option.label), "</option>");
+    })
+        .join("");
+    return "\n    <div class=\"player_preference_row\">\n      <div class=\"player_preference_row_label\">".concat(_(setting.label), "</div>\n      <div class=\"player_preference_row_value\">\n        <select id=\"preference_control_").concat(setting.id, "\" class=\"preference_control game_local_preference_control\" style=\"display: block;\">\n        ").concat(values, "\n        </select>\n      </div>\n    </div>\n  ");
+};
+var tplSettingsModalContent = function () {
+    return "<div id=\"setting_modal_content\"></div>";
 };
 var TokenCounter = (function () {
     function TokenCounter() {

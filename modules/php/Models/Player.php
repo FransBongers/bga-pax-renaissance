@@ -60,7 +60,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       'bank' => $extra['bank'],
       'florins' => intval($extra['florins']),
       'hand' => [
-        'cards' => $isCurrentPlayer ? $hand : [],
+        'cards' => $isCurrentPlayer || Globals::getOpenHands() ? $hand : [],
         'counts' => [
           EAST => count(Utils::filter($hand, function ($card) {
             return $card->getRegion() === EAST;

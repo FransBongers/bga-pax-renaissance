@@ -127,6 +127,9 @@ class PaxRenaissance extends Table
             'customPlayerOrder' => Players::getPlayerOrder(),
             'empireSquares' => Cards::getAllEmpireSquares(),
             'gameMap' => MapBoard::getUiData(),
+            'gameOptions' => [
+                'openHands' => Globals::getOpenHands(),
+            ],
             'market' => Market::getUiData(),
             'players' => Players::getUiData($playerId),
             'tokens' => Tokens::getUiData(),

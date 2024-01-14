@@ -119,14 +119,14 @@ class NotificationManager {
   }
 
   async notif_activateAbility(notif: Notif<NotifActivateAbilityArgs>) {
-    const {ability} = notif.args;
+    const { ability } = notif.args;
 
     switch (ability) {
       case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
         this.game.gameMap.setVenice2Visibility(true);
         break;
       default:
-        debug('Unhandled ability: ', ability)
+        debug("Unhandled ability: ", ability);
     }
   }
 
@@ -157,14 +157,14 @@ class NotificationManager {
   }
 
   async notif_deactivateAbility(notif: Notif<NotifDeactivateAbilityArgs>) {
-    const {ability} = notif.args;
-    
+    const { ability } = notif.args;
+
     switch (ability) {
       case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
         this.game.gameMap.setVenice2Visibility(false);
         break;
       default:
-        debug('Unhandled ability: ', ability)
+        debug("Unhandled ability: ", ability);
     }
   }
 
@@ -193,8 +193,12 @@ class NotificationManager {
         .addCard(card);
     }
     const player = this.getPlayer({ playerId });
-    if (fromLocationId.startsWith('hand_')) {
+    if (fromLocationId.startsWith("hand_")) {
       player.counters.cards[(card as TableauCard).region].incValue(-1);
+      this.game.openHandsModal.removeCard({
+        playerId,
+        card: card as TableauCard,
+      });
     }
 
     if (wasVassalTo) {
@@ -341,8 +345,10 @@ class NotificationManager {
     return Promise.resolve();
   }
 
-  async notif_moveTokensWithinConstantinople(notif: Notif<NotifMoveTokensWithinContantinopleArgs>) {
-    const {tokens} = notif.args;
+  async notif_moveTokensWithinConstantinople(
+    notif: Notif<NotifMoveTokensWithinContantinopleArgs>
+  ) {
+    const { tokens } = notif.args;
     const animations = [];
     tokens.forEach((token) => {
       const tokenNode = document.getElementById(token.id);
@@ -356,7 +362,7 @@ class NotificationManager {
           cityNode
         )
       );
-    })
+    });
     await Promise.all(animations);
   }
 
@@ -393,7 +399,9 @@ class NotificationManager {
     }
 
     const node = document.getElementById(
-      isBishop || token.location.startsWith('EmpireSquare_') ? `${token.location}_tokens` : `pr_${token.location}`
+      isBishop || token.location.startsWith("EmpireSquare_")
+        ? `${token.location}_tokens`
+        : `pr_${token.location}`
     );
     if (!node) {
       return;
@@ -419,6 +427,7 @@ class NotificationManager {
     const player = this.getPlayer({ playerId });
 
     player.counters.cards[card.region].incValue(-1);
+    this.game.openHandsModal.removeCard({ playerId, card });
     await player.tableau.addCard(card);
     card.prestige.forEach((prestige) =>
       player.counters.prestige[prestige].incValue(1)
@@ -439,6 +448,7 @@ class NotificationManager {
 
     if (!discard) {
       await player.addCardToHand({ card });
+      this.game.openHandsModal.addCard({ playerId, card });
     } else {
       await this.getStockMarketLocation({ location: card.location }).removeCard(
         card
@@ -507,6 +517,7 @@ class NotificationManager {
     this.game.market.updateMarket({ gamedatas });
     this.game.supply.updateInterdace({ gamedatas });
     this.game.playerManager.updatePlayers({ gamedatas });
+    this.game.openHandsModal.updateInterface({ gamedatas });
   }
 
   async notif_repressToken(notif: Notif<NotifRepressTokenArgs>) {

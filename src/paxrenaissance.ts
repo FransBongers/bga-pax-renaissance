@@ -11,14 +11,18 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public animationManager: AnimationManager;
   // public cardManager: CardManager<TableauCard>;
   public gameMap: GameMap;
+  public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
   public hand: Hand;
   // public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
+  public infoPanel: InfoPanel;
   public market: Market;
   public notificationManager: NotificationManager;
+  public openHandsModal: OpenHandsModal;
   public playerManager: PlayerManager;
   public playerOrder: number[];
   public tooltipManager: TooltipManager;
   public playAreaScale: number;
+  public settings: Settings;
   public supply: Supply;
   public tableauCardManager: TableauCardManager;
   public victoryCardManager: VictoryCardManager;
@@ -91,7 +95,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // const playAreaWidth = document.getElementById('pp_play_area').offsetWidth;
     // console.log('playAreaWidth',playAreaWidth);
     this.gamedatas = gamedatas;
-    // this.gameOptions = gamedatas.gameOptions;
+    this.gameOptions = gamedatas.gameOptions;
     debug("gamedatas", gamedatas);
     this.setupPlayerOrder({ customPlayerOrder: gamedatas.customPlayerOrder });
 
@@ -140,6 +144,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       tradeFairLevy: new TradeFairLevyState(this),
     };
 
+    this.infoPanel = new InfoPanel(this);
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
 
@@ -153,7 +158,11 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.market = new Market(this);
     this.victoryCardManager = new VictoryCardManager(this);
 
+    this.openHandsModal = new OpenHandsModal(this);
+    this.settings = new Settings(this),
+
     this.updatePlayAreaSize();
+    // TODO: use framework function that's called for this
     window.addEventListener("resize", () => {
       this.updatePlayAreaSize();
       // this.gameMap.updateGameMapSize();
@@ -773,6 +782,18 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // debug('Loading complete');
     this.cancelLogs(this.gamedatas.canceledNotifIds);
   }
+
+  /* @Override */
+	updatePlayerOrdering() {
+		this.framework().inherited(arguments);
+    
+    const container = document.getElementById('player_boards');
+    const infoPanel = document.getElementById('pr_info_panel')
+    if (!container) {
+      return;
+    }
+    container.insertAdjacentElement('afterbegin', infoPanel);
+	}
 
   //....###..........##....###....##.....##
   //...##.##.........##...##.##....##...##.

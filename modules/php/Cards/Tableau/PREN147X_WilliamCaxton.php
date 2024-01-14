@@ -26,7 +26,7 @@ class PREN147X_WilliamCaxton extends \PaxRenaissance\Models\TableauCard
     $this->ops = [
       [
         'id' => COMMERCE_OP_WEST,
-        'flavorText' => clienttranslate('Whorshipful Company of Mercers'),
+        'flavorText' => clienttranslate('Worshipful Company of Mercers'),
         'top' => 0,
         'left' => 0,
       ],

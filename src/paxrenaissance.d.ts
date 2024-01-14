@@ -55,9 +55,11 @@ interface PaxRenaissanceGame extends Game {
   animationManager: AnimationManager;
   // cardManager: CardManager<TableauCard>;
   gameMap: GameMap;
+  gameOptions: PaxRenaissanceGamedatas['gameOptions'];
   hand: Hand;
   market: Market;
   notificationManager: NotificationManager;
+  openHandsModal: OpenHandsModal;
   playAreaScale: number;
   playerManager: PlayerManager;
   playerOrder: number[];
@@ -210,6 +212,9 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
       tokens: Token[];
     };
     condottiereActive: boolean;
+  };
+  gameOptions: {
+    openHands: boolean;
   };
   market: {
     cards: TableauCard[];

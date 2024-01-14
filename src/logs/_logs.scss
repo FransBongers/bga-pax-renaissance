@@ -17,10 +17,23 @@
   background-color: #ef9a9a;
 }
 
-.playername[data-shadow=true], .player-name[data-shadow=true] > a {
-  // text-shadow: 1px 0 1px rgba(0, 0, 0, 0.6), 0 -1px 1px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(0, 0, 0, 0.6), -1px 0 1px rgba(0, 0, 0, 0.6);
-  text-shadow: 1px 0 1px rgba(0, 0, 0, 1), 0 -1px 1px rgba(0, 0, 0, 1), 0 1px 1px rgba(0, 0, 0, 1), -1px 0 1px rgba(0, 0, 0, 1);
+// .playername[data-shadow=true], .player-name[data-shadow=true] > a {
+//   // text-shadow: 1px 0 1px rgba(0, 0, 0, 0.6), 0 -1px 1px rgba(0, 0, 0, 0.6), 0 1px 1px rgba(0, 0, 0, 0.6), -1px 0 1px rgba(0, 0, 0, 0.6);
+//   // text-shadow: 1px 0 1px rgba(0, 0, 0, 1), 0 -1px 1px rgba(0, 0, 0, 1), 0 1px 1px rgba(0, 0, 0, 1), -1px 0 1px rgba(0, 0, 0, 1);
+// }
+
+// [style*="color:#fbc5e5"],[style*="color: #fbc5e5"],
+// [style*="color:#fff2e6"],[style*="color: #fff2e6"] {
+//   text-shadow: 1px 0 0 black, 0 1px 0 black, -1px 0 0 black, 0 -1px 0 black, 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black !important;
+//   background-color: transparent !important;
+// }
+
+[style*="color: #ffce00"],[style*="color:#ffce00"],
+[style*="color: #bddcc6"],[style*="color:#bddcc6"] {
+  text-shadow: 1px 0 0 black, 0 1px 0 black, -1px 0 0 black, 0 -1px 0 black, 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black !important;
+  // background-color: transparent !important;
 }
+
 
 /* ------- LOG TOKENS ------- */
 

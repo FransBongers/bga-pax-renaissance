@@ -16,8 +16,7 @@ class PREN164X_CircassianMamluks extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = MAMLUK;
     $this->flavorText = [
-      clienttranslate('Under the turbulent mamluk (warrios class) system, the army was the holder of the political and economic power and a new Circassian aristocracy formed as mamluk recruitment diversified.'),
-      clienttranslate('The illustration shows Vlad making a surprise night raid on the Turkish camp in an unsuccessful bid to assassinate the Sultan.'),
+      clienttranslate('Under the turbulent mamluk (warrior class) system, the army was the holder of political and economic power and a new Circassian aristocracy formed as mamluk recruitment diversified.'),
     ];
     $this->name = clienttranslate("Circassian Mamluks");
     $this->oneShot = JIHAD_ONE_SHOT;
