@@ -86,11 +86,11 @@
   }
 
   .pr_open_hands_modal_contents {
-    @media (max-width: 501px) {
+    @media (max-width: 557px) {
       --paxRenCardScale: 1;
       max-width: 350px;
     }
-    @media (min-width: 501px) {
+    @media (min-width: 557px) {
       max-width: 501px;
       --paxRenCardScale: 1.5;
     }
@@ -118,8 +118,16 @@
     background-image: url("img/background_paper.webp");
     box-shadow: rgb(0, 0, 0) 1px 1px 5px;
     border-radius: 8px;
-    min-width: 501px;
-    min-height: 404px;
+    @media (max-width: 557px) {
+      // min-width: 334px;
+      width: 100%;
+      min-height: 290px;
+    }
+    @media (min-width: 557px) {
+      min-width: 501px;
+      min-height: 404px;
+    }
+
 
     h2 {
       border: none;

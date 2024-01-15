@@ -2971,13 +2971,13 @@
   justify-content: space-between;
   gap: 32px;
 }
-@media (max-width: 501px) {
+@media (max-width: 557px) {
   .pr_open_hands_modal .pr_open_hands_modal_contents {
     --paxRenCardScale: 1;
     max-width: 350px;
   }
 }
-@media (min-width: 501px) {
+@media (min-width: 557px) {
   .pr_open_hands_modal .pr_open_hands_modal_contents {
     max-width: 501px;
     --paxRenCardScale: 1.5;
@@ -2999,8 +2999,18 @@
   background-image: url("img/background_paper.webp");
   box-shadow: rgb(0, 0, 0) 1px 1px 5px;
   border-radius: 8px;
-  min-width: 501px;
-  min-height: 404px;
+}
+@media (max-width: 557px) {
+  .pr_open_hands_modal .pr_open_hands_modal_player_container {
+    width: 100%;
+    min-height: 290px;
+  }
+}
+@media (min-width: 557px) {
+  .pr_open_hands_modal .pr_open_hands_modal_player_container {
+    min-width: 501px;
+    min-height: 404px;
+  }
 }
 .pr_open_hands_modal .pr_open_hands_modal_player_container h2 {
   border: none;
