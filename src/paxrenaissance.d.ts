@@ -112,18 +112,18 @@ interface TableauOp {
   left: number;
 }
 
-interface TableauOpCardData {
-  id: string;
-  flavorText: string;
-  left: number;
-  top: number;
-}
+// interface TableauOpCardData {
+//   id: string;
+//   flavorText: string;
+//   left: number;
+//   top: number;
+// }
 
 interface EmpireCardSide {
   name: string;
-  // flavorText: string[];
+  flavorText: string[];
   prestige: string[];
-  ops: TableauOpCardData[];
+  ops: TableauOp[];
   agents: Agent[];
 }
 

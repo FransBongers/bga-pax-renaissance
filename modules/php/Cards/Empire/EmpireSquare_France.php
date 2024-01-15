@@ -9,6 +9,14 @@ class EmpireSquare_France extends \PaxRenaissance\Models\EmpireCard
     parent::__construct($row);
     $this->id = 'EmpireSquare_France';
     $this->empire = FRANCE;
+    $this->flavorText = [
+      KING => [
+        clienttranslate('Louis, a master of intrigue, waylaid the ship bearing the Yorkish princess to stop the marriage of his arch-rival Charles the Bold, and sabotaged his coronation. He bribed Warwick to turncoat, installing a Lancastrian to the throne of England.')
+      ],
+      REPUBLIC => [
+        clienttranslate('Townsmen irregulars defeated the French Army in the Battle of the Golden Spurs and established an independent council rule for Flemish cities, with representation for the guild of weavers, the lesser guilds, and the poorters (citizens).')
+      ],
+    ];
     $this->name = [
       KING => clienttranslate('Louis XI the Spider House of Valois'),
       REPUBLIC => clienttranslate('States-General of Burgundy'),

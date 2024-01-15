@@ -9,6 +9,14 @@ class EmpireSquare_PapalStates extends \PaxRenaissance\Models\EmpireCard
     parent::__construct($row);
     $this->id = 'EmpireSquare_PapalStates';
     $this->empire = PAPAL_STATES;
+    $this->flavorText = [
+      KING => [
+        clienttranslate('Julius II "The Warrior Pope" aggressively expanded the Papal States, and commissioned the rebuilding of the Saint Peter\'s Basilica and Michelangelo\'s Sistine Chapel decorations.')
+      ],
+      REPUBLIC => [
+        clienttranslate('The Signoria, or ruling council of Florence, was composed of 8 leaders of the major guilds. They chose the gonfaloniere, or executor of the law. Lesser guilds and guild members made up advisory councils.')
+      ],
+    ];
     $this->name = [
       KING => clienttranslate('Pope Julius II'),
       REPUBLIC => clienttranslate('Florentine Signoria'),

@@ -3303,6 +3303,12 @@
   width: 223px;
   height: 340px;
 }
+.pr_card_tooltip .pr_square_card_tooltip_card_container {
+  margin-right: -100px;
+  margin-left: 8px;
+  align-self: center;
+  --paxRenCardScale: 1.47;
+}
 .pr_card_tooltip .pr_card_tooltip_inner_container {
   flex-grow: 1;
   min-height: 100%;

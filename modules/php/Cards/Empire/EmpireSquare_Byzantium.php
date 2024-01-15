@@ -9,6 +9,14 @@ class EmpireSquare_Byzantium extends \PaxRenaissance\Models\EmpireCard
     parent::__construct($row);
     $this->id = 'EmpireSquare_Byzantium';
     $this->empire = BYZANTIUM;
+    $this->flavorText = [
+      KING => [
+        clienttranslate('Trebizond, the last redoubt of the ancient Greeks, lay on the western shore of the Great Silk Road. Her last Emperor was the effeminate David of the Comnenus dynasty, who surrendered to the Turk in 1461.')
+      ],
+      REPUBLIC => [
+        clienttranslate('Uzun Hasan of the White Sheep Turkomans conquered the Persian empire and married a Byzantine princess. Venice, Egypt, Cyprus, and Karamania sought his alliance against the Ottoman threat.')
+      ],
+    ];
     $this->name = [
       KING => clienttranslate('David Comnenus Basileus of Trebizond'),
       REPUBLIC => clienttranslate('Confederation of White Sheep Turkomen')
@@ -25,7 +33,7 @@ class EmpireSquare_Byzantium extends \PaxRenaissance\Models\EmpireCard
       REPUBLIC => [
         [
           'id' => COMMERCE_OP_EAST,
-          'flavorText' => clienttranslate('TEnvoy of Venice, Caterino Zeno'),
+          'flavorText' => clienttranslate('Envoy of Venice, Caterino Zeno'),
           'top' => 0,
           'left' => 0,
         ],

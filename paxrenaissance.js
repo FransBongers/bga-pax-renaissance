@@ -2399,6 +2399,12 @@ var TableauCardManager = (function (_super) {
                 card: card,
             });
         }
+        else if (card.type === EMPIRE_CARD) {
+            this.game.tooltipManager.addEmpireCardTooltip({
+                nodeId: card.id,
+                card: card,
+            });
+        }
     };
     TableauCardManager.prototype.setupBackDiv = function (card, div) {
         if (card.type === TABLEAU_CARD) {
@@ -2546,6 +2552,7 @@ var VictoryCardManager = (function (_super) {
             setupDiv: function (card, div) {
                 div.style.width = "calc(var(--paxRenCardScale) * 151px)";
                 div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+                _this.game.tooltipManager.addVictoryCardTooltip({ nodeId: card.id, card: card });
             },
             setupFrontDiv: function (card, div) { return _this.setupFrontDiv(card, div); },
             setupBackDiv: function (card, div) { return _this.setupBackDiv(card, div); },
@@ -7024,7 +7031,7 @@ var PlaceAgentState = (function () {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
                     .getName(),
-                tkn_mapToken: this.createMapTokenId(),
+                tkn_mapToken: this.createMapTokenId(activePlayerId),
             },
             nonActivePlayers: true,
         });
@@ -7120,12 +7127,12 @@ var PlaceAgentState = (function () {
         });
         this.game.addCancelButton();
     };
-    PlaceAgentState.prototype.createMapTokenId = function () {
+    PlaceAgentState.prototype.createMapTokenId = function (activePlayerId) {
         var agent = this.args.agents[0];
         var id = "";
         if (agent.type === PAWN) {
             var bank = this.game.playerManager
-                .getPlayer({ playerId: this.game.getPlayerId() })
+                .getPlayer({ playerId: activePlayerId || this.game.getPlayerId() })
                 .getBank();
             id = "".concat(bank, "_pawn");
         }
@@ -8775,8 +8782,8 @@ var TradeFairLevyState = (function () {
     return TradeFairLevyState;
 }());
 var tplCardTooltipContainer = function (_a) {
-    var card = _a.card, content = _a.content;
-    return "<div class=\"pr_card_tooltip\">\n  <div class=\"pr_card_tooltip_inner_container\">\n    ".concat(content, "\n  </div>\n  ").concat(card, "\n</div>");
+    var card = _a.card, content = _a.content, style = _a.style;
+    return "<div class=\"pr_card_tooltip\"".concat(style ? " style=\"".concat(style, "\"") : '', ">\n  <div class=\"pr_card_tooltip_inner_container\">\n    ").concat(content, "\n  </div>\n  ").concat(card, "\n</div>");
 };
 var tplOneShotSection = function (_a) {
     var oneShot = _a.oneShot, suitors = _a.suitors;
@@ -8870,6 +8877,33 @@ var tplTableauCardTooltip = function (_a) {
             : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n      ").concat((card.specialAbilities || []).map(function (specialAbility) { return "\n        <span class=\"pr_section_title\">".concat(specialAbility.title ? _(specialAbility.title) : _('Ability'), "</span>\n        <span class=\"pr_section_text\">").concat(game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args), "</span>\n      "); }).join(''), "\n    "),
     });
 };
+var tplEmireCardTooltip = function (_a) {
+    var card = _a.card;
+    return tplCardTooltipContainer({
+        card: "<div class=\"pr_square_card_tooltip_card_container\">\n      <div class=\"pr_square_card\" data-card-id=\"".concat(card.id, "_king\" style=\"margin-bottom: 16px;\"></div>\n      <div class=\"pr_square_card\" data-card-id=\"").concat(card.id, "_republic\"></div>\n    </div>"),
+        content: "\n    <span class=\"pr_title\">".concat(_(card.king.name), "</span>\n    ").concat(card.king.flavorText
+            .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
+            .join(""), "\n      ").concat(card.king.prestige && card.king.prestige.length > 0
+            ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
+            : "", "\n      ").concat((card.king.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.king.ops && card.king.ops.length > 0
+            ? "<span class=\"pr_section_title\">".concat(_("Ops"), "</span>")
+            : "", "\n      ").concat((card.king.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n    <span class=\"pr_title\" style=\"margin-top: 32px;\">").concat(_(card.republic.name), "</span>\n    ").concat(card.republic.flavorText
+            .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
+            .join(""), "\n      ").concat(card.republic.prestige && card.republic.prestige.length > 0
+            ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
+            : "", "\n      ").concat((card.republic.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.republic.ops && card.republic.ops.length > 0
+            ? "<span class=\"pr_section_title\">".concat(_("Ops"), "</span>")
+            : "", "\n      ").concat((card.republic.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n    ")
+    });
+};
+var tplVictoryCardTooltip = function (_a) {
+    var card = _a.card, game = _a.game;
+    return tplCardTooltipContainer({
+        style: 'min-height: 250px; width: 350px;',
+        card: "<div class=\"pr_square_card_tooltip_card_container\">\n      <div class=\"pr_square_card\" data-card-id=\"".concat(card.location, "_active\"></div>\n    </div>"),
+        content: "\n      <span class=\"pr_title\">".concat(_(card.active.title), "</span>\n      ").concat((card.text).map(function (text) { return "\n      <span class=\"pr_section_text\">".concat(game.format_string_recursive(_(text.log), text.args), "</span>\n    "); }).join(''), "\n    ")
+    });
+};
 var TooltipManager = (function () {
     function TooltipManager(game) {
         this.idRegex = /id="[a-z]*_[0-9]*_[0-9]*"/;
@@ -8887,6 +8921,16 @@ var TooltipManager = (function () {
     TooltipManager.prototype.addCardTooltip = function (_a) {
         var nodeId = _a.nodeId, card = _a.card;
         var html = tplTableauCardTooltip({ card: card, game: this.game });
+        this.game.framework().addTooltipHtml(nodeId, html, 500);
+    };
+    TooltipManager.prototype.addEmpireCardTooltip = function (_a) {
+        var nodeId = _a.nodeId, card = _a.card;
+        var html = tplEmireCardTooltip({ card: card, });
+        this.game.framework().addTooltipHtml(nodeId, html, 500);
+    };
+    TooltipManager.prototype.addVictoryCardTooltip = function (_a) {
+        var nodeId = _a.nodeId, card = _a.card;
+        var html = tplVictoryCardTooltip({ card: card, game: this.game });
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     return TooltipManager;

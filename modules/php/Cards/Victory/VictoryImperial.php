@@ -1,4 +1,5 @@
 <?php
+
 namespace PaxRenaissance\Cards\Victory;
 
 use PaxRenaissance\Core\Notifications;
@@ -12,10 +13,34 @@ class VictoryImperial extends \PaxRenaissance\Models\VictoryCard
     parent::__construct($row);
     $this->id = 'VictoryImperial';
     $this->title = [
-      ACTIVE =>clienttranslate('Imperial Victory'),
+      ACTIVE => clienttranslate('Imperial Victory'),
       INACTIVE => clienttranslate('Age of Feudalism'),
     ];
     $this->startLocation = 'victory_imperial';
+    $this->text = [
+      [
+        'log' => clienttranslate('To win, you must have:'),
+        'args' => [],
+      ],
+      [
+        'log' => clienttranslate('At least two more Empire Squares on their King side (whether Suzerains or Vassals) in your Tableau than each opponent.'),
+        'args' => [],
+      ],
+      [
+        'log' => clienttranslate('In a 2-player game, you must have at least three more.'),
+        'args' => [],
+      ],
+    ];
+    // $this->text = [
+    //   [
+    //     'log' => clienttranslate('To win, have:'),
+    //     'args' => [],
+    //   ],
+    //   [
+    //     'log' => clienttranslate('- 2 or More King Cards (not Republics) than each opponent. In a 2-player game you must have 3+.'),
+    //     'args' => []
+    //   ],
+    // ];
   }
 
   public function canBeDeclaredByPlayer($activePlayer)
@@ -41,7 +66,7 @@ class VictoryImperial extends \PaxRenaissance\Models\VictoryCard
         'numberOfKings' => $numberOfKings,
       ];
     }, $players);
-    usort($ranking, function ($a,$b) {
+    usort($ranking, function ($a, $b) {
       return $b['numberOfKings'] - $a['numberOfKings'];
     });
     // Notifications::log('ranking',$ranking);

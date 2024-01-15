@@ -11,11 +11,13 @@ class VictoryCard extends Card
   protected $id;
   protected $startLocation;
   protected $title;
+  protected $text;
 
   protected $staticAttributes = [
     'startLocation',
     'title',
     'type',
+    'text',
   ];
 
   public function canBeDeclaredByPlayer($player)
@@ -57,6 +59,7 @@ class VictoryCard extends Card
         'title' => $this->title[INACTIVE],
       ],
       'type' => $this->type,
+      'text' => $this->text,
     ]);
   }
 

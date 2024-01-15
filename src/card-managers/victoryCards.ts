@@ -12,6 +12,7 @@ class VictoryCardManager extends CardManager<VictoryCard> {
       setupDiv: (card, div: HTMLElement) => {
         div.style.width = "calc(var(--paxRenCardScale) * 151px)";
         div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+        this.game.tooltipManager.addVictoryCardTooltip({nodeId: card.id, card});
       },
       setupFrontDiv: (card, div: HTMLElement) => this.setupFrontDiv(card, div),
       setupBackDiv: (card, div: HTMLElement) => this.setupBackDiv(card, div),

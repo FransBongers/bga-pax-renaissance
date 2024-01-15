@@ -19,6 +19,80 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
       INACTIVE => clienttranslate('East-West Schism'),
     ];
     $this->startLocation = 'victory_holy';
+    $this->text = [
+      [
+        'log' => clienttranslate('To win, you must have:'),
+        'args' => [],
+      ],
+      [
+        'log' => clienttranslate('More Prestige of the Supreme religion in your Tableau than each opponent.'),
+        'args' => [
+          'tkn_prestige' => DISCOVERY,
+        ],
+      ],
+      [
+        'log' => clienttranslate('${tkn_newLine}'),
+        'args' => [
+          'tkn_newLine' => '<br>'
+        ]
+      ],
+      [
+        'log' => clienttranslate('A Religion achieves supremacy if it has both:'),
+        'args' => []
+      ],
+      [
+        'log' => clienttranslate('(1) More Bishop Tokens of its color in Tableaux or Thrones than both other religions combined.'),
+        'args' => [
+          'tkn_prestige' => LAW,
+        ]
+      ],
+      [
+        'log' => clienttranslate('${tkn_newLine}'),
+        'args' => [
+          'tkn_newLine' => '<br>'
+        ]
+      ],
+      [
+        'log' => clienttranslate('<b>and</b>'),
+        'args' => []
+      ],
+      [
+        'log' => clienttranslate('${tkn_newLine}'),
+        'args' => [
+          'tkn_newLine' => '<br>'
+        ]
+      ],
+      [
+        'log' => clienttranslate('(2) More Tokens of its color in play in its Theocracies then the combined number of Tokens both other religions have of their color in their respective Theocracies.'),
+        'args' => []
+      ],
+    ];
+    // $this->text = [
+    //   [
+    //     'log' => clienttranslate('To win, have:'),
+    //     'args' => [],
+    //   ],
+    //   [
+    //     'log' => clienttranslate('more Prestige in the supreme religion than each opponent.'),
+    //     'args' => [],
+    //   ],
+    //   [
+    //     'log' => clienttranslate('Supreme Religion ='),
+    //     'args' => [],
+    //   ],
+    //   [
+    //     'log' => clienttranslate('- more Bishops of its color, AND'),
+    //     'args' => []
+    //   ],
+    //   [
+    //     'log' => clienttranslate('- more Tokens of its color on Theocracies,'),
+    //     'args' => []
+    //   ],
+    //   [
+    //     'log' => clienttranslate('than both other religions combined.'),
+    //     'args' => []
+    //   ],
+    // ];
   }
 
   public function canBeDeclaredByPlayer($activePlayer)

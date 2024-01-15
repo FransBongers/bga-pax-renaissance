@@ -23,7 +23,7 @@ class PlaceAgentState implements State {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
           .getName(),
-        tkn_mapToken: this.createMapTokenId(),
+        tkn_mapToken: this.createMapTokenId(activePlayerId),
       },
       nonActivePlayers: true,
     });
@@ -172,12 +172,12 @@ class PlaceAgentState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private createMapTokenId() {
+  private createMapTokenId(activePlayerId?: number) {
     const agent = this.args.agents[0];
     let id = "";
     if (agent.type === PAWN) {
       const bank = this.game.playerManager
-        .getPlayer({ playerId: this.game.getPlayerId() })
+        .getPlayer({ playerId: activePlayerId || this.game.getPlayerId() })
         .getBank();
       id = `${bank}_pawn`;
     } else {

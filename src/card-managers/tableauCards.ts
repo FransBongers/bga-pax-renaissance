@@ -97,6 +97,11 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
         nodeId: card.id,
         card,
       });
+    } else if (card.type === EMPIRE_CARD) {
+      this.game.tooltipManager.addEmpireCardTooltip({
+        nodeId: card.id,
+        card,
+      });
     }
   }
 

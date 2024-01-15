@@ -9,6 +9,14 @@ class EmpireSquare_Mamluk extends \PaxRenaissance\Models\EmpireCard
     parent::__construct($row);
     $this->id = 'EmpireSquare_Mamluk';
     $this->empire = MAMLUK;
+    $this->flavorText = [
+      KING => [
+        clienttranslate('This ruler of Mamluk Egypt stabilized the economy, consolidated his northern boundaries with the Ottomans, promoted trade, and emerged as a patron of architecture and art in Egypt.')
+      ],
+      REPUBLIC => [
+        clienttranslate('Kasim, former bey of Karaman in the Ottoman Empire, made secret alliances with Hungary and Venice. Supported by the Venetian navy he twice regained Karaman beylik, but was finally crushed by the Ottomans.')
+      ],
+    ];
     $this->name = [
       KING => clienttranslate("Qa'it Bay of the Burji Dynasty"),
       REPUBLIC => clienttranslate('Karaman Beylik')

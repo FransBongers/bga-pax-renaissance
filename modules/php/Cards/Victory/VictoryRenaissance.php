@@ -16,6 +16,56 @@ class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
       INACTIVE => clienttranslate('The Medieval Age'),
     ];
     $this->startLocation = 'victory_renaissance';
+    $this->text = [
+      [
+        'log' => clienttranslate('To win, you must have:'),
+        'args' => [],
+      ],
+      [
+        'log' => clienttranslate('(1) More Republics than each opponent.'),
+        'args' => [
+          'tkn_prestige' => DISCOVERY,
+        ],
+      ],
+      [
+        'log' => clienttranslate('${tkn_newLine}'),
+        'args' => [
+          'tkn_newLine' => '<br>'
+        ]
+      ],
+      [
+        'log' => clienttranslate('<b>and</b>'),
+        'args' => []
+      ],
+      [
+        'log' => clienttranslate('${tkn_newLine}'),
+        'args' => [
+          'tkn_newLine' => '<br>'
+        ]
+      ],
+      [
+        'log' => clienttranslate('(2) At least two more ${tkn_prestige} than each opponent.'),
+        'args' => [
+          'tkn_prestige' => LAW,
+        ]
+      ],
+    ];
+    // $this->text = [
+    //   [
+    //     'log' => clienttranslate('To win, have:'),
+    //     'args' => [],
+    //   ],
+    //   [
+    //     'log' => clienttranslate('- More Republics, AND.'),
+    //     'args' => []
+    //   ],
+    //   [
+    //     'log' => clienttranslate('- 2+ More ${tkn_prestige} than each opponent.'),
+    //     'args' => [
+    //       'tkn_prestige' => LAW,
+    //     ],
+    //   ],
+    // ];
   }
 
   public function canBeDeclaredByPlayer($activePlayer)

@@ -39,5 +39,13 @@ class TooltipManager {
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
 
+  public addEmpireCardTooltip({ nodeId, card }: { nodeId: string; card: EmpireCard }): void {
+    const html = tplEmireCardTooltip({ card, });
+    this.game.framework().addTooltipHtml(nodeId, html, 500);
+  }
 
+  public addVictoryCardTooltip({ nodeId, card }: { nodeId: string; card: VictoryCard }): void {
+    const html = tplVictoryCardTooltip({ card, game: this.game });
+    this.game.framework().addTooltipHtml(nodeId, html, 500);
+  }
 }

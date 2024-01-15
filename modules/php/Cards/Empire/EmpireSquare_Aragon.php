@@ -9,6 +9,14 @@ class EmpireSquare_Aragon extends \PaxRenaissance\Models\EmpireCard
     parent::__construct($row);
     $this->id = 'EmpireSquare_Aragon';
     $this->empire = ARAGON;
+    $this->flavorText = [
+      KING => [
+        clienttranslate('John II fought a long nasty civil was against his son, the prince of Viana. Eventually the royalists prevailed against the Catalan constitutionalists.')
+      ],
+      REPUBLIC => [
+        clienttranslate('Founded by the University of Pavia, the Milanese Republic used mercenaries under Francesco Sforza to repel the forces of Venice. However, Sforza betrayed the Republic and seized Milan for himself.')
+      ],
+    ];
     $this->name = [
       KING => clienttranslate('John the Faithless King of Aragon'),
       REPUBLIC => clienttranslate('Golden Ambrosian Republic'),

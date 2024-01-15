@@ -1,11 +1,13 @@
 const tplCardTooltipContainer = ({
   card,
   content,
+  style
 }: {
   card: string;
   content: string;
+  style?: string;
 }): string => {
-  return `<div class="pr_card_tooltip">
+  return `<div class="pr_card_tooltip"${style ? ` style="${style}"` : ''}>
   <div class="pr_card_tooltip_inner_container">
     ${content}
   </div>
@@ -218,3 +220,61 @@ const tplTableauCardTooltip = ({ card, game }: { card: TableauCard | QueenCard; 
     `,
   });
 };
+
+const tplEmireCardTooltip = ({ card }: { card: EmpireCard; }) => {
+  return tplCardTooltipContainer({
+    card: `<div class="pr_square_card_tooltip_card_container">
+      <div class="pr_square_card" data-card-id="${card.id}_king" style="margin-bottom: 16px;"></div>
+      <div class="pr_square_card" data-card-id="${card.id}_republic"></div>
+    </div>`,
+    content: `
+    <span class="pr_title">${_(card.king.name)}</span>
+    ${card.king.flavorText
+      .map((text) => `<span class="pr_flavor_text">${_(text)}</span>`)
+      .join("")}
+      ${
+        card.king.prestige && card.king.prestige.length > 0
+          ? `<span class="pr_section_title">${_("Prestige")}</span>`
+          : ""
+      }
+      ${(card.king.prestige || []).map((prestige) => tplPrestigeRow({ prestige })).join("")}
+      ${
+        card.king.ops && card.king.ops.length > 0
+          ? `<span class="pr_section_title">${_("Ops")}</span>`
+          : ""
+      }
+      ${(card.king.ops || []).map((op) => tplOpsRow({ op })).join("")}
+    <span class="pr_title" style="margin-top: 32px;">${_(card.republic.name)}</span>
+    ${card.republic.flavorText
+      .map((text) => `<span class="pr_flavor_text">${_(text)}</span>`)
+      .join("")}
+      ${
+        card.republic.prestige && card.republic.prestige.length > 0
+          ? `<span class="pr_section_title">${_("Prestige")}</span>`
+          : ""
+      }
+      ${(card.republic.prestige || []).map((prestige) => tplPrestigeRow({ prestige })).join("")}
+      ${
+        card.republic.ops && card.republic.ops.length > 0
+          ? `<span class="pr_section_title">${_("Ops")}</span>`
+          : ""
+      }
+      ${(card.republic.ops || []).map((op) => tplOpsRow({ op })).join("")}
+    `
+  })
+}
+
+const tplVictoryCardTooltip = ({ card, game}: { card: VictoryCard; game: PaxRenaissanceGame; }) => {
+  return tplCardTooltipContainer({
+    style: 'min-height: 250px; width: 350px;',
+    card: `<div class="pr_square_card_tooltip_card_container">
+      <div class="pr_square_card" data-card-id="${card.location}_active"></div>
+    </div>`,
+    content: `
+      <span class="pr_title">${_(card.active.title)}</span>
+      ${(card.text).map((text: Log) => `
+      <span class="pr_section_text">${game.format_string_recursive(_(text.log), text.args)}</span>
+    `).join('')}
+    `
+  })
+}

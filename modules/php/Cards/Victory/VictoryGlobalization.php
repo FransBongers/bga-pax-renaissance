@@ -18,6 +18,38 @@ class VictoryGlobalization extends \PaxRenaissance\Models\VictoryCard
       INACTIVE => clienttranslate('The Galley Age'),
     ];
     $this->startLocation = 'victory_globalization';
+    $this->text = [
+      [
+        'log' => clienttranslate('To win, you must have:'),
+        'args' => [],
+      ],
+      [
+        'log' => clienttranslate('(1) More ${tkn_prestige} in your Tableau than each opponent.'),
+        'args' => [
+          'tkn_prestige' => DISCOVERY,
+        ],
+      ],
+      [
+        'log' => clienttranslate('${tkn_newLine}'),
+        'args' => [
+          'tkn_newLine' => '<br>'
+        ]
+      ],
+      [
+        'log' => clienttranslate('<b>and</b>'),
+        'args' => []
+      ],
+      [
+        'log' => clienttranslate('${tkn_newLine}'),
+        'args' => [
+          'tkn_newLine' => '<br>'
+        ]
+      ],
+      [
+        'log' => clienttranslate('(2) At least two more Concessions than each opponent.'),
+        'args' => []
+      ],
+    ];
   }
 
   public function canBeDeclaredByPlayer($activePlayer)

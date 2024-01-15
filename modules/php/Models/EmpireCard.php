@@ -64,12 +64,14 @@ class EmpireCard extends Card
       KING => [
         'agents' => $this->agents[KING],
         'name' => $this->name[KING],
+        'flavorText' => $this->flavorText[KING],
         'ops' => $this->ops[KING],
         'prestige' => $this->prestige[KING],
       ],
       REPUBLIC => [
         'agents' => $this->agents[REPUBLIC],
         'name' => $this->name[REPUBLIC],
+        'flavorText' => $this->flavorText[REPUBLIC],
         'ops' => $this->ops[REPUBLIC],
         'prestige' => $this->prestige[REPUBLIC],
       ]
