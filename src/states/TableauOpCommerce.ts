@@ -56,6 +56,7 @@ class TableauOpCommerceState implements State {
     });
 
     this.setCardsSelectable();
+    this.setSpacesSelectable();
     this.game.addUndoButtons(this.args);
   }
 
@@ -82,6 +83,28 @@ class TableauOpCommerceState implements State {
     this.game.addCancelButton();
   }
 
+  private updateInterfaceConfirmSpace({ space }: { space: string }) {
+    this.game.clearPossible();
+    this.game.setLocationSelected({ id: space, });
+    this.game.clientUpdatePageTitle({
+      text: _("Take ${tkn_florin} from ${cardName}?"),
+      args: {
+        tkn_florin: tknFlorin(),
+        cardName: _("trade fair space"),
+      },
+    });
+    this.game.addConfirmButton({
+      callback: () =>
+        this.game.takeAction({
+          action: "actTableauOpCommerce",
+          args: {
+            space,
+          },
+        }),
+    });
+    this.game.addCancelButton();
+  }
+
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
   //  .##.....##....##.....##..##........##.....##......####..
@@ -91,12 +114,24 @@ class TableauOpCommerceState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private setCardsSelectable() {
-    this.args.cards.forEach((card: TableauCard) => {
+    this.args.options.cards.forEach((card: TableauCard) => {
       this.game.setCardSelectable({
         id: card.id,
         callback: () =>
           this.updateInterfaceConfirm({
             card,
+          }),
+      });
+    });
+  }
+
+  private setSpacesSelectable() {
+    this.args.options.spaces.forEach((space: string) => {
+      this.game.setLocationSelectable({
+        id: space,
+        callback: () =>
+          this.updateInterfaceConfirmSpace({
+            space,
           }),
       });
     });

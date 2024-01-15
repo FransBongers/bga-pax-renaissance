@@ -4454,10 +4454,10 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_tableauOpCommerce = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card, _b, _, region, column;
+            var _a, playerId, location, _b, _, region, column;
             return __generator(this, function (_c) {
-                _a = notif.args, playerId = _a.playerId, card = _a.card;
-                _b = card.location.split("_"), _ = _b[0], region = _b[1], column = _b[2];
+                _a = notif.args, playerId = _a.playerId, location = _a.location;
+                _b = location.split("_"), _ = _b[0], region = _b[1], column = _b[2];
                 this.game.market.incFlorinValue({
                     region: region,
                     column: Number(column),
@@ -7943,6 +7943,7 @@ var TableauOpCommerceState = (function () {
             },
         });
         this.setCardsSelectable();
+        this.setSpacesSelectable();
         this.game.addUndoButtons(this.args);
     };
     TableauOpCommerceState.prototype.updateInterfaceConfirm = function (_a) {
@@ -7970,14 +7971,51 @@ var TableauOpCommerceState = (function () {
         });
         this.game.addCancelButton();
     };
+    TableauOpCommerceState.prototype.updateInterfaceConfirmSpace = function (_a) {
+        var _this = this;
+        var space = _a.space;
+        this.game.clearPossible();
+        this.game.setLocationSelected({ id: space, });
+        this.game.clientUpdatePageTitle({
+            text: _("Take ${tkn_florin} from ${cardName}?"),
+            args: {
+                tkn_florin: tknFlorin(),
+                cardName: _("trade fair space"),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actTableauOpCommerce",
+                    args: {
+                        space: space,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
     TableauOpCommerceState.prototype.setCardsSelectable = function () {
         var _this = this;
-        this.args.cards.forEach(function (card) {
+        this.args.options.cards.forEach(function (card) {
             _this.game.setCardSelectable({
                 id: card.id,
                 callback: function () {
                     return _this.updateInterfaceConfirm({
                         card: card,
+                    });
+                },
+            });
+        });
+    };
+    TableauOpCommerceState.prototype.setSpacesSelectable = function () {
+        var _this = this;
+        this.args.options.spaces.forEach(function (space) {
+            _this.game.setLocationSelectable({
+                id: space,
+                callback: function () {
+                    return _this.updateInterfaceConfirmSpace({
+                        space: space,
                     });
                 },
             });

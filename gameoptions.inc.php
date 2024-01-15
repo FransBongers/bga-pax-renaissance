@@ -32,13 +32,13 @@ $game_options = [
   OPTION_OPEN_HANDS => [
     'name' => totranslate('Open hands'),
     'values' => [
-      OPTION_OPEN_HANDS_DISABLED => [
-        'name' => totranslate('Disabled'),
-      ],
       OPTION_OPEN_HANDS_ENABLED => [
         'name' => totranslate('Enabled'),
         'tmdisplay' => totranslate('Open hands'),
-      ]
+      ],
+      OPTION_OPEN_HANDS_DISABLED => [
+        'name' => totranslate('Disabled'),
+      ],
     ]
   ],
   OPTION_FIRST_PLAYER_VARIANT => [

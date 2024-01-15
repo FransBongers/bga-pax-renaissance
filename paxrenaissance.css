@@ -479,6 +479,7 @@
 .pr_card.pr_selectable,
 .pr_city.pr_selectable,
 .pr_map_card.pr_selectable,
+.pr_market.pr_selectable,
 .pr_square_card.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
@@ -499,6 +500,8 @@
 .pr_city.pr_selectable:hover,
 .pr_map_card.pr_selected,
 .pr_map_card.pr_selectable:hover,
+.pr_market.pr_selected,
+.pr_market.pr_selectable:hover,
 .pr_square_card.pr_selected,
 .pr_square_card.pr_selectable:hover {
   /* border: 2px blue solid; */
@@ -2217,6 +2220,7 @@
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
+  border-radius: 5px;
 }
 .pr_market .pr_icon {
   position: absolute;

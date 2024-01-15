@@ -656,15 +656,18 @@ class Notifications
   }
 
 
-  public static function tableauOpCommerce($player, $card)
+  public static function tableauOpCommerce($player, $card, $space)
   {
-    $cardName = in_array($card->getLocation(), [Locations::market(WEST, 0), Locations::market(EAST, 0)]) ? clienttranslate('trade fair card') : $card->getName();
+    $cardName = $card === null || in_array($card->getLocation(), [Locations::market(WEST, 0), Locations::market(EAST, 0)]) ? clienttranslate('trade fair card') : $card->getName();
+    if ($space !== null) {
+      $cardName = clienttranslate('trade fair space');
+    }
 
     self::notifyAll("tableauOpCommerce", clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} from ${tkn_cardName}'), [
       'player' => $player,
       'tkn_florin' => clienttranslate("Florin(s)"),
       'tkn_cardName' => $cardName,
-      'card' => $card,
+      'location' => $card !== null ? $card->getLocation() : $space,
     ]);
   }
 

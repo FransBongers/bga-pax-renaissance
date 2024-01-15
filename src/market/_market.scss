@@ -86,6 +86,7 @@
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
   position: absolute;
+  border-radius: 5px;
 
   .pr_icon {
     position: absolute;

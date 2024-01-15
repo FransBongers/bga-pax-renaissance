@@ -602,8 +602,8 @@ class NotificationManager {
   }
 
   async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {
-    const { playerId, card } = notif.args;
-    const [_, region, column] = card.location.split("_");
+    const { playerId, location } = notif.args;
+    const [_, region, column] = location.split("_");
     this.game.market.incFlorinValue({
       region: region as "east" | "west",
       column: Number(column),

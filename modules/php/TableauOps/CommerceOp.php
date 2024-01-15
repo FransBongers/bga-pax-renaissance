@@ -26,7 +26,7 @@ class CommerceOp extends \PaxRenaissance\Models\TableauOp
     }
 
     $options = $this->getOptions();
-    return count($options) > 0;
+    return count($options['cards']) + count($options['spaces']) > 0;
   }
 
   public function getFlow($player, $cardId)
@@ -43,8 +43,36 @@ class CommerceOp extends \PaxRenaissance\Models\TableauOp
   {
     $marketCards = Market::getCards();
     $florins = Market::getFlorins();
-    return Utils::filter($marketCards, function ($card) use ($florins) {
-      return explode('_',$card->getLocation())[1] === $this->region && $florins[$card->getLocation().'_florins'] > 0;
-    });
+    $cards = [];
+    $spaces = [];
+
+    foreach ($florins as $location => $amount) {
+      if ($amount === 0) {
+        continue;
+      }
+      $exploded = explode('_', $location);
+
+      if ($exploded[1] !== $this->region) {
+        continue;
+      }
+
+      unset($exploded[3]);
+      $cardLocation = implode('_', $exploded);
+
+      // Florin can either be on a card or on empty trade fair space
+      $card = Utils::array_find($marketCards, function ($card) use ($cardLocation) {
+        return $card->getLocation() === $cardLocation;
+      });
+      if ($card !== null) {
+        $cards[] = $card;
+      } else {
+        $spaces[] = $cardLocation;
+      }
+    }
+
+    return [
+      'cards' => $cards,
+      'spaces' => $spaces,
+    ];
   }
 }

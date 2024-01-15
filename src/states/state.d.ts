@@ -226,7 +226,11 @@ interface OnEnteringTableauOpCampaignArgs extends CommonArgs {
 }
 
 interface OnEnteringTableauOpCommerceArgs extends CommonArgs {
-  cards: TableauCard[];
+  options: {
+    cards: TableauCard[];
+    spaces: string[];
+  }
+
 }
 
 interface CorsairOpDestination {

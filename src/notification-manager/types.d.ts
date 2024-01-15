@@ -188,7 +188,7 @@ interface NotifSellRoyalCoupleArgs extends NotifWithPlayerArgs {
 }
 
 interface NotifTableauOpCommerceArgs extends NotifWithPlayerArgs {
-  card: TableauCard;
+  location: string;
 }
 
 interface NotifTableauOpTaxPayArgs extends NotifWithPlayerArgs {}
