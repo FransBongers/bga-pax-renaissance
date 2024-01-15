@@ -153,7 +153,6 @@ class ClientSellCardState implements State {
       this.game.setCardSelectable({
         id: card.id,
         callback: () => this.updateInterfaceConfirm({ card }),
-        back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
       });
     });
   }

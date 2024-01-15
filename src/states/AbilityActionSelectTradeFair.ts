@@ -80,7 +80,6 @@ class AbilityActionSelectTradeFairState implements State {
       }
       this.game.setCardSelectable({
         id: this.args.tradeFairs[region].card.id,
-        back: true,
         callback: () =>
           this.game
             .framework()

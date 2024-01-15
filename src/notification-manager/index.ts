@@ -496,6 +496,9 @@ class NotificationManager {
             column: Number(toCol),
           }),
       });
+      if (Number(toCol) === 0) {
+        this.game.tooltipManager.removeTooltip(card.id);
+      }
     }
 
     // Draw cards

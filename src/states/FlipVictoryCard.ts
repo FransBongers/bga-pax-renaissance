@@ -19,7 +19,9 @@ class FlipVictoryCardState implements State {
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} must flip an inactive Victory Card"),
       args: {
-        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
+        tkn_playerName: this.game.playerManager
+          .getPlayer({ playerId: activePlayerId })
+          .getName(),
       },
       nonActivePlayers: true,
     });
@@ -46,14 +48,14 @@ class FlipVictoryCardState implements State {
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} must flip an inactive Victory Card"),
       args: {
-        tkn_playerName: '${you}'
+        tkn_playerName: "${you}",
       },
     });
     this.setVictoryCardsSelectable();
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceConfirmSelectCard({card}: {card: VictoryCard}) {
+  private updateInterfaceConfirmSelectCard({ card }: { card: VictoryCard }) {
     this.game.clearPossible();
     const node = document.getElementById(`${card.id}-back`);
     if (!node) {
@@ -88,16 +90,10 @@ class FlipVictoryCardState implements State {
 
   private setVictoryCardsSelectable() {
     this.args.victoryCards.forEach((card) => {
-      const node = document.getElementById(`${card.id}-back`);
-      if (!node) {
-        return;
-      }
-      node.classList.add(PR_SELECTABLE);
-      this.game._connections.push(
-        dojo.connect(node, "onclick", this, () =>
-          this.updateInterfaceConfirmSelectCard({ card })
-        )
-      );
+      this.game.setCardSelectable({
+        id: card.id,
+        callback: () => this.updateInterfaceConfirmSelectCard({ card }),
+      });
     });
   }
 

@@ -35,7 +35,7 @@ class ClientStartTradeFairState implements State {
 
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
-    this.game.setCardSelected({ id: this.args.card.id, back: true });
+    this.game.setCardSelected({ id: this.args.card.id, });
     this.game.setLocationSelected({ id: this.args.city.id });
 
     this.game.clientUpdatePageTitle({

@@ -96,8 +96,6 @@ class TableauOpBeheadState implements State {
           this.updateInterfaceConfirm({
             card,
           }),
-        // back: card.location.split("_")[2] === "0",
-        back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
       });
     });
   }

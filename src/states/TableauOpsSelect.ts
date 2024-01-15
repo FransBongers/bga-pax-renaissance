@@ -114,7 +114,6 @@ class TableauOpsSelectState implements State {
 
       this.game.setCardSelectable({
         id,
-        back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
         callback: () =>
           this.updateInterfaceConfirm({
             cardId: id,

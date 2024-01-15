@@ -16,7 +16,6 @@ class PlayerActionState implements State {
   }
 
   setDescription(activePlayerId: number) {
-    console.log("setDescription playerAction", activePlayerId);
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} may perform actions"),
       args: {
@@ -65,10 +64,7 @@ class PlayerActionState implements State {
     column: number;
   }) {
     this.game.clearPossible();
-    // const node = document.getElementById(`${card.idit("_")[0]}-front`);
-    // if (node) {
-    //   node.classList.add(PR_SELECTED);
-    // }
+
     this.game.setCardSelected({ id: card.id });
     this.game.clientUpdatePageTitle({
       text: _("Purchase ${cardName} for ${amount} ${tkn_florin} ?"),
@@ -94,10 +90,7 @@ class PlayerActionState implements State {
   private updateInterfaceOnClickHandCard({ card }: { card: TableauCard }) {
     this.game.clearPossible();
     this.game.setCardSelected({ id: card.id });
-    // const node = document.getElementById(`${card.id.split("_")[0]}-front`);
-    // if (node) {
-    //   node.classList.add(PR_SELECTED);
-    // }
+
     this.game.clientUpdatePageTitle({
       text: _("Play ${cardName} to tableau?"),
       args: {
@@ -174,17 +167,17 @@ class PlayerActionState implements State {
           id: `${region}_ops_btn`,
           text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
           callback: () =>
-          this.game
-            .framework()
-            .setClientState<OnEnteringClientConfirmTableauOpsArgs>(
-              CLIENT_CONFIRM_TABLEAU_OPS,
-              {
-                args: {
-                  availableOps: this.args.availableOps,
-                  region
+            this.game
+              .framework()
+              .setClientState<OnEnteringClientConfirmTableauOpsArgs>(
+                CLIENT_CONFIRM_TABLEAU_OPS,
+                {
+                  args: {
+                    availableOps: this.args.availableOps,
+                    region,
+                  },
                 }
-              }
-            ),
+              ),
         });
       }
     });
@@ -305,40 +298,24 @@ class PlayerActionState implements State {
   private setHandCardsSelectable() {
     const cards = this.game.hand.getCards();
     cards.forEach((card) => {
-      const { id } = card;
-      const nodeId = `${id}-front`;
-      const node = $(nodeId);
-      if (node === null) {
-        return;
-      }
-      node.classList.add(PR_SELECTABLE);
-      this.game._connections.push(
-        dojo.connect(node, "onclick", this, () =>
-          this.updateInterfaceOnClickHandCard({ card })
-        )
-      );
+      this.game.setCardSelectable({
+        id: card.id,
+        callback: () => this.updateInterfaceOnClickHandCard({ card }),
+      });
     });
   }
 
   private setMarketCardsSelectable() {
     this.args.cardsPlayerCanPurchase.forEach((card) => {
+      console.log("card", card);
       const { id, location } = card;
       const [market, region, column] = location.split("_");
-      const nodeId = `${id}-front`;
-      const node = $(nodeId);
-      if (node === null) {
-        return;
-      }
-      node.classList.add(PR_SELECTABLE);
-      this.game._connections.push(
-        dojo.connect(node, "onclick", this, () =>
-          this.updateInterfaceConfirmPurchase({ card, column: Number(column) })
-        )
-      );
-      // this.game._connections.push(dojo.connect(node, 'onClick', () => {
-      //   console.log('click');
-      //   this.updateInterfaceConfirmPurchase({card, column: Number(column)});
-      // }));
+
+      this.game.setCardSelectable({
+        id: card.id,
+        callback: () =>
+          this.updateInterfaceConfirmPurchase({ card, column: Number(column) }),
+      });
     });
   }
 
@@ -349,7 +326,6 @@ class PlayerActionState implements State {
       }
       this.game.setCardSelectable({
         id: this.args.tradeFair[region].card.id,
-        back: true,
         callback: () =>
           this.game
             .framework()

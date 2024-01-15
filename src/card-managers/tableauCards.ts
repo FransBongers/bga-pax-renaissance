@@ -42,6 +42,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
 
     if (card.type === EMPIRE_CARD) {
+      div.classList.add('pr_empire_square');
       // setup container for queens
       div.insertAdjacentHTML(
         "afterbegin",
@@ -53,7 +54,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
         queenContainerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
         // add tooltip to queen
         this.game.tooltipManager.addCardTooltip({
-          nodeId: queen.id + "-front",
+          nodeId: queen.id,
           card: queen,
         });
       });
@@ -91,9 +92,9 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     // div.classList.add('mygame-card-front');
     // div.id = `card-${card.id}-front`;
     // this.addTooltipHtml(div.id, `tooltip de ${card.type}`);
-    if (card.type === TABLEAU_CARD) {
+    if (card.type === TABLEAU_CARD && card.location !== 'market_west_0' && card.location !== 'market_east_0') {
       this.game.tooltipManager.addCardTooltip({
-        nodeId: card.id + "-front",
+        nodeId: card.id,
         card,
       });
     }
@@ -172,7 +173,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     if (containerNode) {
       containerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
       this.game.tooltipManager.addCardTooltip({
-        nodeId: queen.id + "-front",
+        nodeId: queen.id,
         card: queen,
       });
     }
@@ -191,7 +192,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     queen: QueenCard;
   }) {
     // TODO: discard animation
-    const node = document.getElementById(`${queen.id}-front`);
+    const node = document.getElementById(`${queen.id}`);
 
     if (node) {
       node.remove();
@@ -233,7 +234,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
   }) {
     let offSetTop = 0;
     card.queens.forEach((queen) => {
-      const queenNode = document.getElementById(`${queen.id}-front`);
+      const queenNode = document.getElementById(`${queen.id}`);
       if (!queenNode) {
         return;
       }

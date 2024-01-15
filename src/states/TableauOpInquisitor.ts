@@ -125,7 +125,6 @@ class TableauOpInquisitorState implements State {
     option.destinations.forEach((destination) => {
       this.game.setCardSelectable({
         id: destination.id,
-        back: destination.type === EMPIRE_CARD && destination.side === REPUBLIC ? true : false,
         callback: () =>
           this.updateInterfaceConfirm({
             token: option.token,
@@ -139,7 +138,11 @@ class TableauOpInquisitorState implements State {
     Object.values(this.args.tokens).forEach((option: InquisitorOpOption) => {
       this.game.setTokenSelectable({
         id: option.token.id,
-        callback: () => this.updateInterfaceSelectDestination(option),
+        callback: (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          this.updateInterfaceSelectDestination(option)
+        },
       });
     });
   }

@@ -46,7 +46,7 @@ $game_options = [
     'values' => [
       OPTION_FIRST_PLAYER_VARIANT_ENABLED => [
         'name' => totranslate('Enabled'),
-        'description' => totranslate('The player farthest along the West Trade Route becomes the first player'),
+        'description' => totranslate('The player farthest along the West Trade Route will be the first player'),
         'tmdisplay' => totranslate('First Player Variant'),
       ],
       OPTION_FIRST_PLAYER_VARIANT_DISABLED => [

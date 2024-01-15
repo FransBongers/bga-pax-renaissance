@@ -32,18 +32,17 @@ interface PaxRenaissanceGame extends Game {
   getPlayerId: () => number;
   setCardSelectable: (props: {
     id: string;
-    callback: (props: { id: string }) => void;
-    back?: boolean;
+    callback: (event: PointerEvent) => void;
   }) => void;
-  setCardSelected: (props: { id: string; back?: boolean }) => void;
+  setCardSelected: (props: { id: string; }) => void;
   setLocationSelectable: (props: {
     id: string;
-    callback: (props: { id: string }) => void;
+    callback: (event: PointerEvent) => void;
   }) => void;
   setLocationSelected: (props: { id: string }) => void;
   setTokenSelectable: (props: {
     id: string;
-    callback: (props: { id: string }) => void;
+    callback: (event: PointerEvent) => void;
   }) => void;
   setTokenSelected: (props: { id: string }) => void;
   takeAction: (props: {

@@ -13,7 +13,7 @@ const tplVassalsContainer = ({ id }: { id: string }) => `
   <div id="vassals_${id}" class="pr_vassals_container"></div>`;
 
 const tplQueen = ({ queen }: { queen: QueenCard; }) => {
-  return `<div id="${queen.id}-front" class="pr_card" data-card-id="${
+  return `<div id="${queen.id}" class="pr_card" data-card-id="${
     queen.id.split("_")[0]
   }">
     <div id="${queen.id}_tokens" class="pr_card_tokens_container"></div>

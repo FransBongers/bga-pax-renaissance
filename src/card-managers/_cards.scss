@@ -3,6 +3,9 @@
 @use "../base";
 
 .pr_border.pr_selectable,
+.card.pr_selectable,
+// .card-side.pr_selectable,
+// .card-sides.pr_selectable,
 .pr_card.pr_selectable,
 .pr_city.pr_selectable,
 .pr_map_card.pr_selectable,
@@ -10,6 +13,10 @@
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px base.$selectable-color !important;
+}
+
+.card.pr_selectable.pr_empire_square {
+  box-shadow: none !important;
 }
 
 // .pr_card.pr_selectable:hover, .pr_square_card.pr_selectable:hover {
@@ -21,6 +28,12 @@
 
 .pr_border.pr_selected,
 .pr_border.pr_selectable:hover,
+.card.pr_selected,
+.card.pr_selectable:hover,
+// .card-side.pr_selected,
+// .card-side.pr_selectable:hover,
+// .card-sides.pr_selected,
+// .card-sides.pr_selectable:hover,
 .pr_card.pr_selected,
 .pr_card.pr_selectable:hover,
 .pr_city.pr_selected,
@@ -32,6 +45,49 @@
   /* border: 2px blue solid; */
   cursor: pointer !important;
   box-shadow: 0px 0px 0px 4px base.$selected-color !important;
+  // z-index: 1;
+}
+
+.card.pr_selected.pr_empire_square,
+.card.pr_selectable:hover.pr_empire_square {
+  box-shadow: none !important;
+}
+
+.card {
+//   box-shadow: 2px 2px 5px -1px #000;
+  border-radius: 5px;
+}
+
+.card.pr_selectable {
+  .card-sides {
+    .card-side {
+      box-shadow: none !important;
+    }
+  }
+}
+
+.card.pr_selectable {
+  .card-sides {
+    .pr_square_card {
+      box-shadow: 0px 0px 0px 4px base.$selectable-color !important;
+    }
+  }
+}
+
+.card.pr_selectable:hover, .card.pr_selected {
+  .card-sides {
+    .card-side {
+      box-shadow: none !important;
+    }
+  }
+}
+
+.card.pr_selectable:hover, .card.pr_selected {
+  .card-sides {
+    .pr_square_card {
+      box-shadow: 0px 0px 0px 4px base.$selected-color !important;
+    }
+  }
 }
 
 .pr_card {
@@ -42,7 +98,7 @@
   // position: absolute;
   background-repeat: no-repeat;
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
+  // box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
 }
 

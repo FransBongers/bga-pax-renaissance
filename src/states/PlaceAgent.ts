@@ -193,7 +193,6 @@ class PlaceAgentState implements State {
           id: location.id,
           callback: () =>
             this.updateInterfaceConfirmCard({ id, card: location }),
-          back: location.type === EMPIRE_CARD && location.side === REPUBLIC,
         });
       } else {
         this.game.setLocationSelectable({

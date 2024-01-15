@@ -575,27 +575,22 @@ class PaxRenaissance implements PaxRenaissanceGame {
   setCardSelectable({
     id,
     callback,
-    back = false,
   }: {
     id: string;
-    callback: (props: { id: string }) => void;
-    back?: boolean;
+    callback: (event: PointerEvent) => void;
   }) {
-    const nodeId = `${id}-${back ? "back" : "front"}`;
-    // const nodeId = `${card.id}`;
-    const node = $(nodeId);
+    const node = $(id);
     if (node === null) {
       return;
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, () => callback({ id }))
+      dojo.connect(node, "onclick", this, (event: PointerEvent) => callback(event))
     );
   }
 
-  setCardSelected({ id, back = false }: { id: string; back?: boolean }) {
-    const nodeId = `${id}-${back ? "back" : "front"}`;
-    const node = $(nodeId);
+  setCardSelected({ id }: { id: string; }) {
+    const node = $(id);
     if (node === null) {
       return;
     }
@@ -607,7 +602,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     callback,
   }: {
     id: string;
-    callback: (props: { id: string }) => void;
+    callback: (event: PointerEvent) => void;
   }) {
     const nodeId = `pr_${id}`;
     const node = $(nodeId);
@@ -617,7 +612,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, () => callback({ id }))
+      dojo.connect(node, "onclick", this, (event: PointerEvent) => callback(event))
     );
   }
 
@@ -635,7 +630,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     callback,
   }: {
     id: string;
-    callback: (props: { id: string }) => void;
+    callback: (event: PointerEvent) => void;
   }) {
     const nodeId = `${id}`;
     const node = $(nodeId);
@@ -645,7 +640,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, () => callback({ id }))
+      dojo.connect(node, "onclick", this, (event: PointerEvent) => callback(event))
     );
   }
 

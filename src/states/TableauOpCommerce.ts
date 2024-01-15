@@ -62,7 +62,7 @@ class TableauOpCommerceState implements State {
   private updateInterfaceConfirm({ card }: { card: TableauCard }) {
     this.game.clearPossible();
     const isTradeFairCard = Number(card.location.split("_")[2]) === 0;
-    this.game.setCardSelected({ id: card.id, back: isTradeFairCard });
+    this.game.setCardSelected({ id: card.id, });
     this.game.clientUpdatePageTitle({
       text: _("Take ${tkn_florin} from ${cardName}?"),
       args: {
@@ -98,7 +98,6 @@ class TableauOpCommerceState implements State {
           this.updateInterfaceConfirm({
             card,
           }),
-        back: card.location.split("_")[2] === "0",
       });
     });
   }

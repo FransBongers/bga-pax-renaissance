@@ -1247,6 +1247,7 @@ var CardStock = (function () {
     CardStock.prototype.setSelectableCards = function (selectableCards) {
         var _this = this;
         if (this.selectionMode === 'none') {
+            console.log('selectenMode none');
             return;
         }
         var selectableCardsIds = (selectableCards !== null && selectableCards !== void 0 ? selectableCards : this.getCards()).map(function (card) { return _this.manager.getId(card); });
@@ -2133,19 +2134,17 @@ var PaxRenaissance = (function () {
         this.framework().updatePageTitle();
     };
     PaxRenaissance.prototype.setCardSelectable = function (_a) {
-        var id = _a.id, callback = _a.callback, _b = _a.back, back = _b === void 0 ? false : _b;
-        var nodeId = "".concat(id, "-").concat(back ? "back" : "front");
-        var node = $(nodeId);
+        var id = _a.id, callback = _a.callback;
+        var node = $(id);
         if (node === null) {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ id: id }); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function (event) { return callback(event); }));
     };
     PaxRenaissance.prototype.setCardSelected = function (_a) {
-        var id = _a.id, _b = _a.back, back = _b === void 0 ? false : _b;
-        var nodeId = "".concat(id, "-").concat(back ? "back" : "front");
-        var node = $(nodeId);
+        var id = _a.id;
+        var node = $(id);
         if (node === null) {
             return;
         }
@@ -2159,7 +2158,7 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ id: id }); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function (event) { return callback(event); }));
     };
     PaxRenaissance.prototype.setLocationSelected = function (_a) {
         var id = _a.id;
@@ -2178,7 +2177,7 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function () { return callback({ id: id }); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function (event) { return callback(event); }));
     };
     PaxRenaissance.prototype.setTokenSelected = function (_a) {
         var id = _a.id;
@@ -2365,12 +2364,13 @@ var TableauCardManager = (function (_super) {
         }
         div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
         if (card.type === EMPIRE_CARD) {
+            div.classList.add('pr_empire_square');
             div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
             var queenContainerNode_1 = document.getElementById("queens_".concat(card.id));
             card.queens.forEach(function (queen) {
                 queenContainerNode_1.insertAdjacentHTML("beforeend", tplQueen({ queen: queen }));
                 _this.game.tooltipManager.addCardTooltip({
-                    nodeId: queen.id + "-front",
+                    nodeId: queen.id,
                     card: queen,
                 });
             });
@@ -2393,9 +2393,9 @@ var TableauCardManager = (function (_super) {
             div.style.width = "calc(var(--paxRenCardScale) * 151px)";
             div.style.height = "calc(var(--paxRenCardScale) * 151px)";
         }
-        if (card.type === TABLEAU_CARD) {
+        if (card.type === TABLEAU_CARD && card.location !== 'market_west_0' && card.location !== 'market_east_0') {
             this.game.tooltipManager.addCardTooltip({
-                nodeId: card.id + "-front",
+                nodeId: card.id,
                 card: card,
             });
         }
@@ -2458,7 +2458,7 @@ var TableauCardManager = (function (_super) {
                 if (containerNode) {
                     containerNode.insertAdjacentHTML("beforeend", tplQueen({ queen: queen }));
                     this.game.tooltipManager.addCardTooltip({
-                        nodeId: queen.id + "-front",
+                        nodeId: queen.id,
                         card: queen,
                     });
                 }
@@ -2475,7 +2475,7 @@ var TableauCardManager = (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             var node;
             return __generator(this, function (_b) {
-                node = document.getElementById("".concat(queen.id, "-front"));
+                node = document.getElementById("".concat(queen.id));
                 if (node) {
                     node.remove();
                 }
@@ -2497,7 +2497,7 @@ var TableauCardManager = (function (_super) {
         var card = _a.card;
         var offSetTop = 0;
         card.queens.forEach(function (queen) {
-            var queenNode = document.getElementById("".concat(queen.id, "-front"));
+            var queenNode = document.getElementById("".concat(queen.id));
             if (!queenNode) {
                 return;
             }
@@ -2532,7 +2532,7 @@ var tplVassalsContainer = function (_a) {
 };
 var tplQueen = function (_a) {
     var queen = _a.queen;
-    return "<div id=\"".concat(queen.id, "-front\" class=\"pr_card\" data-card-id=\"").concat(queen.id.split("_")[0], "\">\n    <div id=\"").concat(queen.id, "_tokens\" class=\"pr_card_tokens_container\"></div>\n  </div>");
+    return "<div id=\"".concat(queen.id, "\" class=\"pr_card\" data-card-id=\"").concat(queen.id.split("_")[0], "\">\n    <div id=\"").concat(queen.id, "_tokens\" class=\"pr_card_tokens_container\"></div>\n  </div>");
 };
 var tplQueenContainer = function (_a) {
     var id = _a.id;
@@ -4311,6 +4311,9 @@ var NotificationManager = (function () {
                                     column: Number(toCol),
                                 }),
                         });
+                        if (Number(toCol) === 0) {
+                            this.game.tooltipManager.removeTooltip(card.id);
+                        }
                         _e.label = 3;
                     case 3:
                         _i++;
@@ -5334,7 +5337,6 @@ var Supply = (function () {
     Supply.prototype.setupTokenCounters = function (_a) {
         var _this = this;
         var gamedatas = _a.gamedatas;
-        console.log("setupTokenCounters");
         [BISHOP, KNIGHT, ROOK, PIRATE].forEach(function (type) {
             RELIGIONS.forEach(function (religion) {
                 var counter = _this.tokenCounters[religion][type];
@@ -5529,7 +5531,6 @@ var AbilityActionSelectTradeFairState = (function () {
             }
             _this.game.setCardSelectable({
                 id: _this.args.tradeFairs[region].card.id,
-                back: true,
                 callback: function () {
                     return _this.game
                         .framework()
@@ -6583,7 +6584,6 @@ var ClientSellCardState = (function () {
             _this.game.setCardSelectable({
                 id: card.id,
                 callback: function () { return _this.updateInterfaceConfirm({ card: card }); },
-                back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
             });
         });
     };
@@ -6620,7 +6620,7 @@ var ClientStartTradeFairState = (function () {
     ClientStartTradeFairState.prototype.updateInterfaceInitialStep = function () {
         var _this = this;
         this.game.clearPossible();
-        this.game.setCardSelected({ id: this.args.card.id, back: true });
+        this.game.setCardSelected({ id: this.args.card.id, });
         this.game.setLocationSelected({ id: this.args.city.id });
         this.game.clientUpdatePageTitle({
             text: _("Convene ${region} trade fair from ${cityName}?"),
@@ -6858,7 +6858,9 @@ var FlipVictoryCardState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} must flip an inactive Victory Card"),
             args: {
-                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
             },
             nonActivePlayers: true,
         });
@@ -6868,7 +6870,7 @@ var FlipVictoryCardState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} must flip an inactive Victory Card"),
             args: {
-                tkn_playerName: '${you}'
+                tkn_playerName: "${you}",
             },
         });
         this.setVictoryCardsSelectable();
@@ -6904,14 +6906,10 @@ var FlipVictoryCardState = (function () {
     FlipVictoryCardState.prototype.setVictoryCardsSelectable = function () {
         var _this = this;
         this.args.victoryCards.forEach(function (card) {
-            var node = document.getElementById("".concat(card.id, "-back"));
-            if (!node) {
-                return;
-            }
-            node.classList.add(PR_SELECTABLE);
-            _this.game._connections.push(dojo.connect(node, "onclick", _this, function () {
-                return _this.updateInterfaceConfirmSelectCard({ card: card });
-            }));
+            _this.game.setCardSelectable({
+                id: card.id,
+                callback: function () { return _this.updateInterfaceConfirmSelectCard({ card: card }); },
+            });
         });
     };
     return FlipVictoryCardState;
@@ -7146,7 +7144,6 @@ var PlaceAgentState = (function () {
                     callback: function () {
                         return _this.updateInterfaceConfirmCard({ id: id, card: location });
                     },
-                    back: location.type === EMPIRE_CARD && location.side === REPUBLIC,
                 });
             }
             else {
@@ -7286,7 +7283,6 @@ var PlayerActionState = (function () {
         debug("Leaving PlayerActionsState");
     };
     PlayerActionState.prototype.setDescription = function (activePlayerId) {
-        console.log("setDescription playerAction", activePlayerId);
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} may perform actions"),
             args: {
@@ -7371,8 +7367,8 @@ var PlayerActionState = (function () {
                             .setClientState(CLIENT_CONFIRM_TABLEAU_OPS, {
                             args: {
                                 availableOps: _this.args.availableOps,
-                                region: region
-                            }
+                                region: region,
+                            },
                         });
                     },
                 });
@@ -7478,32 +7474,24 @@ var PlayerActionState = (function () {
         var _this = this;
         var cards = this.game.hand.getCards();
         cards.forEach(function (card) {
-            var id = card.id;
-            var nodeId = "".concat(id, "-front");
-            var node = $(nodeId);
-            if (node === null) {
-                return;
-            }
-            node.classList.add(PR_SELECTABLE);
-            _this.game._connections.push(dojo.connect(node, "onclick", _this, function () {
-                return _this.updateInterfaceOnClickHandCard({ card: card });
-            }));
+            _this.game.setCardSelectable({
+                id: card.id,
+                callback: function () { return _this.updateInterfaceOnClickHandCard({ card: card }); },
+            });
         });
     };
     PlayerActionState.prototype.setMarketCardsSelectable = function () {
         var _this = this;
         this.args.cardsPlayerCanPurchase.forEach(function (card) {
+            console.log("card", card);
             var id = card.id, location = card.location;
             var _a = location.split("_"), market = _a[0], region = _a[1], column = _a[2];
-            var nodeId = "".concat(id, "-front");
-            var node = $(nodeId);
-            if (node === null) {
-                return;
-            }
-            node.classList.add(PR_SELECTABLE);
-            _this.game._connections.push(dojo.connect(node, "onclick", _this, function () {
-                return _this.updateInterfaceConfirmPurchase({ card: card, column: Number(column) });
-            }));
+            _this.game.setCardSelectable({
+                id: card.id,
+                callback: function () {
+                    return _this.updateInterfaceConfirmPurchase({ card: card, column: Number(column) });
+                },
+            });
         });
     };
     PlayerActionState.prototype.setTradeFairSelectable = function () {
@@ -7514,7 +7502,6 @@ var PlayerActionState = (function () {
             }
             _this.game.setCardSelectable({
                 id: _this.args.tradeFair[region].card.id,
-                back: true,
                 callback: function () {
                     return _this.game
                         .framework()
@@ -7850,7 +7837,6 @@ var TableauOpBeheadState = (function () {
                         card: card,
                     });
                 },
-                back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
             });
         });
     };
@@ -7964,7 +7950,7 @@ var TableauOpCommerceState = (function () {
         var card = _a.card;
         this.game.clearPossible();
         var isTradeFairCard = Number(card.location.split("_")[2]) === 0;
-        this.game.setCardSelected({ id: card.id, back: isTradeFairCard });
+        this.game.setCardSelected({ id: card.id, });
         this.game.clientUpdatePageTitle({
             text: _("Take ${tkn_florin} from ${cardName}?"),
             args: {
@@ -7994,7 +7980,6 @@ var TableauOpCommerceState = (function () {
                         card: card,
                     });
                 },
-                back: card.location.split("_")[2] === "0",
             });
         });
     };
@@ -8190,7 +8175,6 @@ var TableauOpInquisitorState = (function () {
         option.destinations.forEach(function (destination) {
             _this.game.setCardSelectable({
                 id: destination.id,
-                back: destination.type === EMPIRE_CARD && destination.side === REPUBLIC ? true : false,
                 callback: function () {
                     return _this.updateInterfaceConfirm({
                         token: option.token,
@@ -8205,7 +8189,11 @@ var TableauOpInquisitorState = (function () {
         Object.values(this.args.tokens).forEach(function (option) {
             _this.game.setTokenSelectable({
                 id: option.token.id,
-                callback: function () { return _this.updateInterfaceSelectDestination(option); },
+                callback: function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    _this.updateInterfaceSelectDestination(option);
+                },
             });
         });
     };
@@ -8436,7 +8424,6 @@ var TableauOpsSelectState = (function () {
             var card = _this.args.tableauCards.find(function (card) { return card.id === id; });
             _this.game.setCardSelectable({
                 id: id,
-                back: card.type === EMPIRE_CARD && card.side === REPUBLIC ? true : false,
                 callback: function () {
                     return _this.updateInterfaceConfirm({
                         cardId: id,

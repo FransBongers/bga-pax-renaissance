@@ -80,10 +80,12 @@ trait DebugTrait
 
   function test()
   {
+    $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371052);
+    Cards::get('EmpireSquare_France')->setSide(REPUBLIC);
     // Tokens::get('pirate_islamic_2')->returnToSupply(KILL);
     // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
     // TableauOps::get(CORSAIR_OP_REFORMIST)->getOptions(Cards::get('PREN142X_KalmarUnion'));
-    Notifications::log('variant',Globals::getFirstPlayerVariant());
+    // Notifications::log('variant',Globals::getFirstPlayerVariant());
     // Notifications::log('tableauCards',Cards::get('EmpireSquare_HolyRomanEmpire')->getQueens());
     // $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371052); // DISCOVERY
     // Cards::move('EmpireSquare_HolyRomanEmpire', Locations::vassals(PAPAL_STATES));

@@ -78,7 +78,6 @@ class Supply {
   }: {
     gamedatas: PaxRenaissanceGamedatas;
   }) {
-    console.log("setupTokenCounters");
     [BISHOP, KNIGHT, ROOK, PIRATE].forEach((type) => {
       RELIGIONS.forEach((religion) => {
         const counter: TokenCounter = this.tokenCounters[religion][type];

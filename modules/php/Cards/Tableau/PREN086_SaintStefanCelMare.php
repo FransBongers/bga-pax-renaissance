@@ -21,7 +21,7 @@ class PREN086_SaintStefanCelMare extends \PaxRenaissance\Models\TableauCard
     $this->empire = HUNGARY;
     $this->flavorText = [
       clienttranslate('Stefan cel Mare, king of Moldavia, is a saint in the Orthodox Church.'),
-      clienttranslate('Attending a wedding, he survived an assassination by his brother-in-law that killed his father the king. As king, he stopped Mehmed the Conqueror from overrunning the Ukraine at Vaslui, and also skillfully defended Moldavia agains Poland and Hungary.'),
+      clienttranslate('Attending a wedding, he survived an assassination by his brother-in-law that killed his father the king. As king, he stopped Mehmed the Conqueror from overrunning the Ukraine at Vaslui, and also skillfully defended Moldavia against Poland and Hungary.'),
       clienttranslate('In 1503 he became an Ottoman vassal.')
     ];
     $this->name = clienttranslate('Saint Stefan cel Mare');

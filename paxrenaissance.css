@@ -475,6 +475,7 @@
  *
  */
 .pr_border.pr_selectable,
+.card.pr_selectable,
 .pr_card.pr_selectable,
 .pr_city.pr_selectable,
 .pr_map_card.pr_selectable,
@@ -484,8 +485,14 @@
   box-shadow: 0px 0px 0px 4px yellow !important;
 }
 
+.card.pr_selectable.pr_empire_square {
+  box-shadow: none !important;
+}
+
 .pr_border.pr_selected,
 .pr_border.pr_selectable:hover,
+.card.pr_selected,
+.card.pr_selectable:hover,
 .pr_card.pr_selected,
 .pr_card.pr_selectable:hover,
 .pr_city.pr_selected,
@@ -499,13 +506,37 @@
   box-shadow: 0px 0px 0px 4px blue !important;
 }
 
+.card.pr_selected.pr_empire_square,
+.card.pr_selectable:hover.pr_empire_square {
+  box-shadow: none !important;
+}
+
+.card {
+  border-radius: 5px;
+}
+
+.card.pr_selectable .card-sides .card-side {
+  box-shadow: none !important;
+}
+
+.card.pr_selectable .card-sides .pr_square_card {
+  box-shadow: 0px 0px 0px 4px yellow !important;
+}
+
+.card.pr_selectable:hover .card-sides .card-side, .card.pr_selected .card-sides .card-side {
+  box-shadow: none !important;
+}
+
+.card.pr_selectable:hover .card-sides .pr_square_card, .card.pr_selected .card-sides .pr_square_card {
+  box-shadow: 0px 0px 0px 4px blue !important;
+}
+
 .pr_card {
   box-sizing: border-box;
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
   background-repeat: no-repeat;
   border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
 }
 
@@ -2981,6 +3012,9 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 16px;
+}
+.pr_open_hands_modal .pr_open_hands_modal_player_container .pr_open_hands_modal_cards_container .pr_card {
+  box-shadow: 2px 2px 5px -1px #000;
 }
 
 /* ------- PLAYER BOARD ------- */
