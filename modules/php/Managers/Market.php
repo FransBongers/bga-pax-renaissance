@@ -250,7 +250,9 @@ class Market
     $emptySpaces = $shiftResult['emptySpaces'];
     $drawResult = self::refreshDrawCards($emptySpaces);
     $cardDraws = $drawResult['cardDraws'];
-    Notifications::refreshMarket($player, $shiftResult['cardMoves'], $cardDraws);
+    if (count($shiftResult['cardMoves']) + count($drawResult['cardDraws']) > 0) {
+      Notifications::refreshMarket($player, $shiftResult['cardMoves'], $cardDraws);
+    }
     return $drawResult['unableToRefresh'];
   }
 

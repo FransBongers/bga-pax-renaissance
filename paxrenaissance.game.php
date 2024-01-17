@@ -269,46 +269,42 @@ class PaxRenaissance extends Table
     }
 
 
-
-    //////////////////////////////////////////////////////////////////////////////
-    //////////// Zombie
-    ////////////
-
+    // .########..#######..##.....##.########..####.########
+    // ......##..##.....##.###...###.##.....##..##..##......
+    // .....##...##.....##.####.####.##.....##..##..##......
+    // ....##....##.....##.##.###.##.########...##..######..
+    // ...##.....##.....##.##.....##.##.....##..##..##......
+    // ..##......##.....##.##.....##.##.....##..##..##......
+    // .########..#######..##.....##.########..####.########
     /*
-        zombieTurn:
-        
-        This method is called each time it is the turn of a player who has quit the game (= "zombie" player).
-        You can do whatever you want in order to make sure the turn of this player ends appropriately
-        (ex: pass).
-        
-        Important: your zombie code will be called when the player leaves the game. This action is triggered
-        from the main site and propagated to the gameserver from a server, not from a browser.
-        As a consequence, there is no current player associated to this action. In your zombieTurn function,
-        you must _never_ use getCurrentPlayerId() or getCurrentPlayerName(), otherwise it will fail with a "Not logged" error message. 
-    */
-
-    function zombieTurn($state, $active_player)
+   * zombieTurn:
+   *   This method is called each time it is the turn of a player who has quit the game (= "zombie" player).
+   *   You can do whatever you want in order to make sure the turn of this player ends appropriately
+   */
+    public function zombieTurn($state, $activePlayer)
     {
-        $statename = $state['name'];
+        // $skipped = Globals::getSkippedPlayers();
+        // if (!in_array((int) $activePlayer, $skipped)) {
+        //   $skipped[] = (int) $activePlayer;
+        //   Globals::setSkippedPlayers($skipped);
+        // }
 
-        if ($state['type'] === "activeplayer") {
-            switch ($statename) {
-                default:
-                    $this->gamestate->nextState("zombiePass");
-                    break;
+        $stateName = $state['name'];
+        if ($state['type'] == 'activeplayer') {
+            if ($stateName == 'confirmTurn') {
+                $this->actConfirmTurn(true);
+            } else if ($stateName == 'confirmPartialTurn') {
+                $this->actConfirmPartialTurn(true);
             }
-
-            return;
+            // Clear all node of player
+            else if (Engine::getNextUnresolved() != null) {
+                Engine::clearZombieNodes($activePlayer);
+                Engine::proceed();
+            } else {
+                // TODO: check if we need this
+                $this->gamestate->nextState('zombiePass');
+            }
         }
-
-        if ($state['type'] === "multipleactiveplayer") {
-            // Make sure player is in a non blocking status for role turn
-            $this->gamestate->setPlayerNonMultiactive($active_player, '');
-
-            return;
-        }
-
-        throw new feException("Zombie mode not supported at this game state: " . $statename);
     }
 
     ///////////////////////////////////////////////////////////////////////////////////:
