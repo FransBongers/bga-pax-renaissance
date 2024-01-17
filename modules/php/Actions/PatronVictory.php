@@ -46,27 +46,63 @@ class PatronVictory extends \PaxRenaissance\Models\AtomicAction
 
   public function stPatronVictory()
   {
-
-
     $players = Players::getAll()->toArray();
-    // $numberOfPlayers = count($players);
-    // $requiredDifference = $numberOfPlayers === 2 ? 3 : 2;
 
-    foreach($players as $player) {
+    $scores = [];
+
+    foreach ($players as $player) {
       $patronPrestige = $player->getPrestige(true)[PATRON];
       $florins = $player->getFlorins();
-
-      Players::setPlayerScoreAux($player->getId(), $patronPrestige * 100 + $florins);
+      $auxScore = $patronPrestige * 100 + $florins;
+      $playerId = $player->getId();
+      Players::setPlayerScoreAux($playerId, $auxScore);
+      $scores[] = [
+        'bank' => $player->getBank(),
+        'playerId' => $playerId,
+        'score' => $auxScore,
+      ];
     }
 
     Notifications::patronVictory();
+    Stats::setVictoryType(STAT_VICTORY_TYPE_PATRON);
 
-    // $parentInfo = $this->ctx->getInfo();
+    usort($scores, function ($a, $b) {
+      return $b['score'] - $a['score'];
+    });
 
-    // $source = $parentInfo['source'];
-    // $data = $parentInfo['data'];
+    $turnOrders = Globals::getCustomTurnOrders();
+    $order = $turnOrders['default']['order'];
 
-    // $this->resolveAction([]);
+    if ($scores[0]['score'] > $scores[1]['score']) {
+      switch ($scores[0]['bank']) {
+        case FUGGER:
+          Stats::setVictoryBanker(STAT_BANKER_FUGGER);
+          break;
+        case MEDICI:
+          Stats::setVictoryBanker(STAT_BANKER_MEDICI);
+          break;
+        case COEUR:
+          Stats::setVictoryBanker(STAT_BANKER_COEUR);
+          break;
+        case MARCHIONNI:
+          Stats::setVictoryBanker(STAT_BANKER_MARCHIONNI);
+          break;
+      }
+      $winnerId = $scores[0];
+      $placeInTurnOrder = 1+ Utils::array_find_index($order, function ($playerId) use ($winnerId) {
+        return $playerId === $winnerId;
+      });
+      Stats::setTurnOrderWinner($placeInTurnOrder);
+    } else {
+      Stats::setVictoryBanker(STAT_BANKER_NO_BANK);
+      Stats::setTurnOrderWinner(0);
+    }
+
+
+
+    $winnerId = $player->getId();
+
+
     Game::get()->gamestate->jumpToState(ST_END_GAME);
   }
 

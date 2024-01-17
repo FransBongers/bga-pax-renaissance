@@ -55,8 +55,62 @@ class DeclareVictory extends \PaxRenaissance\Models\AtomicAction
       throw new \feException("This victory cannot be declared by player");
     }
 
-    Notifications::declareVictory($player,$victoryCard);
+    Notifications::declareVictory($player, $victoryCard);
     Players::setPlayerScore($player->getId(), 1);
+
+    switch ($victoryCard->getId()) {
+      case 'VictoryGlobalization':
+        Stats::setVictoryType(STAT_VICTORY_TYPE_GLOBALIZATION);
+        break;
+      case 'VictoryImperial':
+        Stats::setVictoryType(STAT_VICTORY_TYPE_IMPERIAL);
+        break;
+      case 'VictoryRenaissance':
+        Stats::setVictoryType(STAT_VICTORY_TYPE_RENAISSANCE);
+        break;
+      case 'VictoryHoly':
+        $supremeReligion = $victoryCard->getSupremeReligion();
+        switch ($supremeReligion) {
+          case CATHOLIC:
+            Stats::setVictoryType(STAT_VICTORY_TYPE_HOLY_CATHOLIC);
+            break;
+          case ISLAMIC:
+            Stats::setVictoryType(STAT_VICTORY_TYPE_HOLY_ISLAMIC);
+            break;
+          case REFORMIST:
+            Stats::setVictoryType(STAT_VICTORY_TYPE_HOLY_REFORMIST);
+            break;
+        }
+        break;
+    }
+
+    $bank = $player->getBank();
+    switch ($bank) {
+      case FUGGER:
+        Stats::setVictoryBanker(STAT_BANKER_FUGGER);
+        break;
+      case MEDICI:
+        Stats::setVictoryBanker(STAT_BANKER_MEDICI);
+        break;
+      case COEUR:
+        Stats::setVictoryBanker(STAT_BANKER_COEUR);
+        break;
+      case MARCHIONNI:
+        Stats::setVictoryBanker(STAT_BANKER_MARCHIONNI);
+        break;
+    }
+
+    $turnOrders = Globals::getCustomTurnOrders();
+
+    $order = $turnOrders['default']['order'];
+
+    $winnerId = $player->getId();
+    $placeInTurnOrder = 1+ Utils::array_find_index($order, function ($playerId) use ($winnerId) {
+      return $playerId === $winnerId;
+    });
+    Stats::setTurnOrderWinner($placeInTurnOrder);
+
+
     Game::get()->gamestate->jumpToState(ST_END_GAME);
   }
 

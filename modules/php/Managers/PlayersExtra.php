@@ -4,6 +4,7 @@ namespace PaxRenaissance\Managers;
 
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
+use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Players;
 /*
@@ -24,14 +25,14 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
     // Globals::setFirstPlayer($this->getNextPlayerTable()[0]);
     $players = Players::getAll();
 
-    $firstPlayer = self::getFirstPlayer();
-    Globals::setFirstPlayer($firstPlayer);
+    $firstPlayerId = self::getFirstPlayer();
+    Globals::setFirstPlayer($firstPlayerId);
 
-    $turnOrder = Players::getTurnOrder($firstPlayer);
-    
+    $turnOrder = Players::getTurnOrder($firstPlayerId);
+
     $florins = 3;
-    foreach($turnOrder as $playerId) {
-      
+    foreach ($turnOrder as $playerId) {
+
       self::DB()->insert([
         'player_id' => $playerId,
         'florins' => $florins,
@@ -40,12 +41,53 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
       $florins += 1;
     }
 
-    // if (!$dbUpgrade) {
-    //   self::setupTokens($playerId);
-    // }
+    self::setBankerStats($firstPlayerId);
   }
 
-  private static function getFirstPlayer() {
+  private static function setBankerStats($firstPlayerId)
+  {
+    $players = Players::getAll()->toArray();
+
+    foreach (BANKS as $bank) {
+      $inGame = Utils::array_some($players, function ($player) use ($bank) {
+        return $player->getBank() === $bank;
+      });
+      $value = $inGame ? STAT_IN_GAME_YES : STAT_IN_GAME_NO;
+      switch ($bank) {
+        case FUGGER:
+          Stats::setFuggerInGame($value);
+          break;
+        case MEDICI:
+          Stats::setMediciInGame($value);
+          break;
+        case COEUR:
+          Stats::setCoeurInGame($value);
+          break;
+        case MARCHIONNI:
+          Stats::setMarchionniInGame($value);
+          break;
+      }
+    }
+
+    $startingBank = Players::get($firstPlayerId)->getBank();
+    switch ($startingBank) {
+      case FUGGER:
+        Stats::setStartingBanker(STAT_BANKER_FUGGER);
+        break;
+      case MEDICI:
+        Stats::setStartingBanker(STAT_BANKER_MEDICI);
+        break;
+      case COEUR:
+        Stats::setStartingBanker(STAT_BANKER_COEUR);
+        break;
+      case MARCHIONNI:
+        Stats::setStartingBanker(STAT_BANKER_MARCHIONNI);
+        break;
+    }
+  }
+
+  private static function getFirstPlayer()
+  {
     $players = Players::getAll();
 
     // $fuggerPlayer = Utils::array_find($players->toArray(), function ($player) {
@@ -67,7 +109,8 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
     }
   }
 
-  private static function getPlayerForBank($players, $bank) {
+  private static function getPlayerForBank($players, $bank)
+  {
     return Utils::array_find($players->toArray(), function ($player) use ($bank) {
       return COLOR_BANK_MAP[$player->getColor()] === $bank;
     });

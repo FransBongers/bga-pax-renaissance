@@ -7,6 +7,7 @@ use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Game;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\AtomicActions;
@@ -80,29 +81,10 @@ trait DebugTrait
 
   function test()
   {
+    // $this->debugPlaceToken(ROOK,REFORMIST,PARIS);
+    // $this->debugPlaceCardInMarket('COMET1_Copernicus');
+    
 
-    $marketCards = Market::getCards();
-    $florins = Market::getFlorins();
-    $cards = [];
-    $spaces = [];
-    foreach ($florins as $location => $amount) {
-      if ($amount === 0) {
-        continue;
-      }
-      $exploded = explode('_', $location);
-      unset($exploded[3]);
-      $cardLocation = implode('_', $exploded);
-
-      $card = Utils::array_find($marketCards, function ($card) use ($cardLocation) {
-        return $card->getLocation() === $cardLocation;
-      });
-      if ($card !== null) {
-        $cards[] = $card;
-      } else {
-        $spaces[] = $cardLocation;
-      }
-    }
-    Notifications::log('market florins', ['cards' => $cards, 'spaces' => $spaces]);
     // return Utils::filter($marketCards, function ($card) use ($florins) {
     //   return explode('_',$card->getLocation())[1] === $this->region && $florins[$card->getLocation().'_florins'] > 0;
     // });

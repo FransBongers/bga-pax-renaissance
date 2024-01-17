@@ -39,7 +39,8 @@ trait TurnTrait
     // Globals::setRemainingActions(2);
     Cards::resetUsed();
 
-    Stats::incTurns($player);
+    Stats::incPlayerTurnCount($player);
+    Stats::incTurnCount(1);
     $node = [
       'children' => [
         [

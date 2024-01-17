@@ -82,6 +82,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   {
     $player = self::getPlayer();
     Notifications::passPlayerAction($player);
+    Stats::incPassActionCount($player->getId(), 1);
     Engine::resolve(PASS);
   }
 
@@ -90,6 +91,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actPlayerAction');
     $player = self::getPlayer();
+    $playerId = $player->getId();
     $parent = $this->ctx->getParent();
     // Notifications::log('actPlayerAction', $args);
     switch ($args['action']) {
@@ -118,6 +120,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         ]));
         break;
       case 'playCard':
+        Stats::incPlayCardCount($playerId, 1);
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
@@ -129,6 +132,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         ]));
         break;
       case 'purchaseCard':
+        Stats::incPurchaseCardCount($playerId, 1);
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
@@ -140,6 +144,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         ]));
         break;
       case 'sellCard':
+        Stats::incSellActionCount($playerId, 1);
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
@@ -156,6 +161,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         if ($action === TABLEAU_OPS_SELECT_EAST_AND_WEST && !$player->hasSpecialAbility(SA_EAST_AND_WEST_OPS_IN_ONE_ACTION)) {
           throw new \feException("Not allowed to perform east and west ops in one action");
         }
+        $this->incTableauOpsStat($playerId, $action);
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
@@ -172,6 +178,11 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         }
         break;
       case 'tradeFair':
+        if ($args['region'] === EAST) {
+          Stats::incTradeFairEastActionCount($playerId, 1);
+        } else if ($args['region'] === WEST) {
+          Stats::incTradeFairWestActionCount($playerId, 1);
+        }
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
@@ -212,5 +223,21 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
     return Utils::filter(Cards::getVictoryCards(), function ($victoryCard) use ($player) {
       return $victoryCard->canBeDeclaredByPlayer($player);
     });
+  }
+
+  private function incTableauOpsStat($playerId, $action)
+  {
+    switch ($action) {
+      case TABLEAU_OPS_SELECT_EAST:
+        Stats::incTableauOpsEastActionCount($playerId, 1);
+        break;
+      case TABLEAU_OPS_SELECT_WEST:
+        Stats::incTableauOpsWestActionCount($playerId, 1);
+        break;
+      case TABLEAU_OPS_SELECT_EAST_AND_WEST:
+        Stats::incTableauOpsEastActionCount($playerId, 1);
+        Stats::incTableauOpsWestActionCount($playerId, 1);
+        break;
+    }
   }
 }

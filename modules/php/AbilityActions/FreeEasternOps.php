@@ -5,6 +5,7 @@ namespace PaxRenaissance\AbilityActions;
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Core\Stats;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Market;
@@ -27,6 +28,7 @@ class FreeEasternOps extends \PaxRenaissance\Models\AbilityAction
 
   public function getFlow($player, $cardId)
   {
+    Stats::incTableauOpsEastActionCount($player->getId(), 1);
     return Engine::buildtree([
       'children' => [
         [

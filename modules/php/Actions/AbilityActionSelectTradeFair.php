@@ -86,6 +86,13 @@ class AbilityActionSelectTradeFair extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actAbilityActionSelectTradeFair');
 
+    $player = self::getPlayer();
+
+    if ($args['region'] === EAST) {
+      Stats::incTradeFairEastActionCount($player->getId(), 1);
+    } else if ($args['region'] === WEST) {
+      Stats::incTradeFairWestActionCount($player->getId(), 1);
+    }
     $this->ctx->insertAsBrother(Engine::buildTree([
       'children' => [
         [
