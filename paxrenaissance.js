@@ -1885,8 +1885,8 @@ var PaxRenaissance = (function () {
         this.market = new Market(this);
         this.victoryCardManager = new VictoryCardManager(this);
         this.openHandsModal = new OpenHandsModal(this);
-        this.settings = new Settings(this),
-            this.updatePlayAreaSize();
+        this.settings = new Settings(this);
+        this.updatePlayAreaSize();
         window.addEventListener("resize", function () {
             _this.updatePlayAreaSize();
         });
@@ -1918,7 +1918,6 @@ var PaxRenaissance = (function () {
         var playAreaHeight = playArea.offsetHeight;
         playArea.style.width =
             playAreaContainer.offsetWidth / this.playAreaScale + "px";
-        console.log("playAreaHeight", playAreaHeight);
         playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
     };
     PaxRenaissance.prototype.setupNotifications = function () {
@@ -2140,7 +2139,9 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function (event) { return callback(event); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function (event) {
+            return callback(event);
+        }));
     };
     PaxRenaissance.prototype.setCardSelected = function (_a) {
         var id = _a.id;
@@ -2158,7 +2159,9 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function (event) { return callback(event); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function (event) {
+            return callback(event);
+        }));
     };
     PaxRenaissance.prototype.setLocationSelected = function (_a) {
         var id = _a.id;
@@ -2177,7 +2180,9 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function (event) { return callback(event); }));
+        this._connections.push(dojo.connect(node, "onclick", this, function (event) {
+            return callback(event);
+        }));
     };
     PaxRenaissance.prototype.setTokenSelected = function (_a) {
         var id = _a.id;
@@ -2197,6 +2202,8 @@ var PaxRenaissance = (function () {
                 stepId: stepId,
             },
         });
+    };
+    PaxRenaissance.prototype.onScreenWidthChange = function () {
     };
     PaxRenaissance.prototype.format_string_recursive = function (log, args) {
         var _this = this;
@@ -2269,12 +2276,12 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.updatePlayerOrdering = function () {
         this.framework().inherited(arguments);
-        var container = document.getElementById('player_boards');
-        var infoPanel = document.getElementById('pr_info_panel');
+        var container = document.getElementById("player_boards");
+        var infoPanel = document.getElementById("pr_info_panel");
         if (!container) {
             return;
         }
-        container.insertAdjacentElement('afterbegin', infoPanel);
+        container.insertAdjacentElement("afterbegin", infoPanel);
     };
     PaxRenaissance.prototype.actionError = function (actionName) {
         this.framework().showMessage("cannot take ".concat(actionName, " action"), "error");

@@ -11,7 +11,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public animationManager: AnimationManager;
   // public cardManager: CardManager<TableauCard>;
   public gameMap: GameMap;
-  public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
+  public gameOptions: PaxRenaissanceGamedatas["gameOptions"];
   public hand: Hand;
   // public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
   public infoPanel: InfoPanel;
@@ -159,8 +159,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.victoryCardManager = new VictoryCardManager(this);
 
     this.openHandsModal = new OpenHandsModal(this);
-    this.settings = new Settings(this),
-
+    this.settings = new Settings(this);
     this.updatePlayAreaSize();
     // TODO: use framework function that's called for this
     window.addEventListener("resize", () => {
@@ -209,7 +208,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     const playAreaHeight = playArea.offsetHeight;
     playArea.style.width =
       playAreaContainer.offsetWidth / this.playAreaScale + "px";
-    console.log("playAreaHeight", playAreaHeight);
+    // console.log("playAreaHeight", playAreaHeight);
     playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
   }
 
@@ -585,11 +584,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, (event: PointerEvent) => callback(event))
+      dojo.connect(node, "onclick", this, (event: PointerEvent) =>
+        callback(event)
+      )
     );
   }
 
-  setCardSelected({ id }: { id: string; }) {
+  setCardSelected({ id }: { id: string }) {
     const node = $(id);
     if (node === null) {
       return;
@@ -612,7 +613,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, (event: PointerEvent) => callback(event))
+      dojo.connect(node, "onclick", this, (event: PointerEvent) =>
+        callback(event)
+      )
     );
   }
 
@@ -640,7 +643,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, (event: PointerEvent) => callback(event))
+      dojo.connect(node, "onclick", this, (event: PointerEvent) =>
+        callback(event)
+      )
     );
   }
 
@@ -680,6 +685,16 @@ class PaxRenaissance implements PaxRenaissanceGame {
   // .##.....##..##...##..##.......##...##...##...##....##..##.....##.##.............##
   // .##.....##...##.##...##.......##....##..##....##...##..##.....##.##.......##....##
   // ..#######.....###....########.##.....##.##.....##.####.########..########..######.
+
+  /*
+   * Remove non standard zoom property
+   */
+  onScreenWidthChange() {
+    // console.log('onScreenWidthChange', document.getElementById('page-content')?.style);
+    // dojo.style("page-content", "zoom", "");
+    // dojo.style("page-title", "zoom", "");
+    // dojo.style("right-side-first-part", "zoom", "");
+  }
 
   /* @Override */
   format_string_recursive(log: string, args: Record<string, unknown>): string {
@@ -779,16 +794,16 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }
 
   /* @Override */
-	updatePlayerOrdering() {
-		this.framework().inherited(arguments);
-    
-    const container = document.getElementById('player_boards');
-    const infoPanel = document.getElementById('pr_info_panel')
+  updatePlayerOrdering() {
+    this.framework().inherited(arguments);
+
+    const container = document.getElementById("player_boards");
+    const infoPanel = document.getElementById("pr_info_panel");
     if (!container) {
       return;
     }
-    container.insertAdjacentElement('afterbegin', infoPanel);
-	}
+    container.insertAdjacentElement("afterbegin", infoPanel);
+  }
 
   //....###..........##....###....##.....##
   //...##.##.........##...##.##....##...##.
