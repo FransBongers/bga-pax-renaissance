@@ -16,7 +16,7 @@ class PREN072_BosnianAndSerbianSilver extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = OTTOMAN;
     $this->flavorText = [
-      clienttranslate('When Constantinople fell, the Byzantine despots of Morea fled and the frightened populace elected local archons: the Albanians under Petro Bua (above), Greeks under Manuel Kantakouzenos, and Archeans under Giovanni Asen Zaccaria.'),
+      clienttranslate('When Constantinople fell, the Byzantine despots of Morea fled and the frightened populace elected local archons: the Albanians under Petro Bua (above), Greeks under Manuel Kantakouzenos, and Acheans under Giovanni Asen Zaccaria.'),
       clienttranslate('The despots returned, paid heavy tribute to the Ottomans, and asked them to intervene to put down the "uprising".')
     ];
     $this->name = clienttranslate('Bosnian & Serbian Silver');

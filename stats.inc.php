@@ -36,30 +36,29 @@ $stats_type = [
             'name' => totranslate('The banker that won the game'),
             'type' => 'int'
         ],
-        'startingBanker' => [
-            'id' => STAT_VICTORY_BANKER,
-            'name' => totranslate('The banker that won the game'),
-            'type' => 'int'
-        ],
         'fuggerInGame' => [
             'id' => STAT_FUGGER_IN_GAME,
             'name' => totranslate('Fugger was in the game'),
-            'type' => 'int'
+            'type' => 'int',
+            "display" => 'limited'
         ],
         'mediciInGame' => [
             'id' => STAT_MEDICI_IN_GAME,
             'name' => totranslate('Medici was in the game'),
-            'type' => 'int'
+            'type' => 'int',
+            "display" => 'limited'
         ],
         'coeurInGame' => [
             'id' => STAT_COEUR_IN_GAME,
             'name' => totranslate('Coeur was in the game'),
-            'type' => 'int'
+            'type' => 'int',
+            "display" => 'limited'
         ],
         'marchionniInGame' => [
             'id' => STAT_MARCHIONNI_IN_GAME,
             'name' => totranslate('Marchionni was in the game'),
-            'type' => 'int'
+            'type' => 'int',
+            "display" => 'limited'
         ],
         'startingBanker' => [
             'id' => STAT_STARTING_BANKER,
@@ -82,42 +81,87 @@ $stats_type = [
         ],
         'purchaseCardCount' => [
             'id' => STAT_ACTION_PURCHASE_CARD,
-            'name' => totranslate('Number of cards purchased'),
+            'name' => totranslate('Cards purchased'),
             'type' => 'int'
         ],
         'playCardCount' => [
             'id' => STAT_ACTION_PLAY_CARD,
-            'name' => totranslate('Number of cards played'),
+            'name' => totranslate('Cards played'),
             'type' => 'int'
         ],
         'sellActionCount' => [
             'id' => STAT_ACTION_SELL,
-            'name' => totranslate('Number of sell actions'),
+            'name' => totranslate('Sell actions'),
             'type' => 'int'
         ],
         'tradeFairEastActionCount' => [
             'id' => STAT_ACTION_TRADE_FAIR_EAST,
-            'name' => totranslate('Number of East trade fair actions'),
+            'name' => totranslate('East trade fair actions'),
             'type' => 'int'
         ],
         'tradeFairWestActionCount' => [
             'id' => STAT_ACTION_TRADE_FAIR_WEST,
-            'name' => totranslate('Number of West trade fair actions'),
+            'name' => totranslate('West trade fair actions'),
             'type' => 'int'
         ],
         'tableauOpsEastActionCount' => [
             'id' => STAT_ACTION_TABLEAU_OPS_EAST,
-            'name' => totranslate('Number of East tableau ops actions'),
+            'name' => totranslate('East tableau ops actions'),
             'type' => 'int'
         ],
         'tableauOpsWestActionCount' => [
             'id' => STAT_ACTION_TABLEAU_OPS_WEST,
-            'name' => totranslate('Number of West tableau ops actions'),
+            'name' => totranslate('West tableau ops actions'),
             'type' => 'int'
         ],
         'passActionCount' => [
             'id' => STAT_ACTION_PASS,
-            'name' => totranslate('Number of pass actions'),
+            'name' => totranslate('Pass actions'),
+            'type' => 'int'
+        ],
+        'inquisitorOpCount' => [
+            'id' => STAT_OP_INQUISITOR,
+            'name' => totranslate('Inquisitor ops'),
+            'type' => 'int'
+        ],
+        'commerceOpCount' => [
+            'id' => STAT_OP_COMMERCE,
+            'name' => totranslate('Commerce ops'),
+            'type' => 'int'
+        ],
+        'beheadOpCount' => [
+            'id' => STAT_OP_BEHEAD,
+            'name' => totranslate('Behead ops'),
+            'type' => 'int'
+        ],
+        'taxOpCount' => [
+            'id' => STAT_OP_TAX,
+            'name' => totranslate('Tax ops'),
+            'type' => 'int'
+        ],
+        'repressOpCount' => [
+            'id' => STAT_OP_REPRESS,
+            'name' => totranslate('Repress ops'),
+            'type' => 'int'
+        ],
+        'voteOpCount' => [
+            'id' => STAT_OP_VOTE,
+            'name' => totranslate('Vote ops'),
+            'type' => 'int'
+        ],
+        'corsairOpCount' => [
+            'id' => STAT_OP_CORSAIR,
+            'name' => totranslate('Corsair ops'),
+            'type' => 'int'
+        ],
+        'siegeOpCount' => [
+            'id' => STAT_OP_SIEGE,
+            'name' => totranslate('Siege ops'),
+            'type' => 'int'
+        ],
+        'campaignOpCount' => [
+            'id' => STAT_OP_CAMPAIGN,
+            'name' => totranslate('Campaign ops'),
             'type' => 'int'
         ],
     ],

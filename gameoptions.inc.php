@@ -34,23 +34,23 @@ $game_options = [
     'values' => [
       OPTION_OPEN_HANDS_ENABLED => [
         'name' => totranslate('Enabled'),
-        'tmdisplay' => totranslate('Open hands'),
       ],
       OPTION_OPEN_HANDS_DISABLED => [
         'name' => totranslate('Disabled'),
+        'tmdisplay' => totranslate('Hidden hands'),
       ],
     ]
   ],
   OPTION_FIRST_PLAYER_VARIANT => [
     'name' => totranslate('First Player Variant'),
     'values' => [
+      OPTION_FIRST_PLAYER_VARIANT_DISABLED => [
+        'name' => totranslate('Disabled'),
+      ],
       OPTION_FIRST_PLAYER_VARIANT_ENABLED => [
         'name' => totranslate('Enabled'),
         'description' => totranslate('The player farthest along the West Trade Route will be the first player'),
         'tmdisplay' => totranslate('First Player Variant'),
-      ],
-      OPTION_FIRST_PLAYER_VARIANT_DISABLED => [
-        'name' => totranslate('Disabled'),
       ],
     ],
     'displaycondition' => [

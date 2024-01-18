@@ -18,6 +18,7 @@ use PaxRenaissance\Managers\Market;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
+use PaxRenaissance\Models\TableauOp;
 
 class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
 {
@@ -122,6 +123,9 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
     if ($tableauOp === null) {
       throw new \feException("Not allowed to perform selected Op");
     }
+
+    $this->incStats($player->getId(), $tableauOpId);
+
     // Notifications::log('tableauOp', $tableauOp);
     $this->ctx->getParent()->unshiftChild($tableauOp->getFlow($player, $cardId));
     $card = Cards::get($cardId);
@@ -141,6 +145,51 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private function incStats($playerId, $tableauOpId)
+  {
+    switch ($tableauOpId) {
+      case BEHEAD_OP:
+        Stats::incBeheadOpCount($playerId,1);
+        break;
+      case CAMPAIGN_OP:
+        Stats::incCampaignOpCount($playerId,1);
+        break;
+      case COMMERCE_OP_EAST:
+      case COMMERCE_OP_WEST:
+        Stats::incCommerceOpCount($playerId,1);
+        break;
+      case CORSAIR_OP_CATHOLIC:
+      case CORSAIR_OP_ISLAMIC:
+      case CORSAIR_OP_REFORMIST:
+        Stats::incCorsairOpCount($playerId,1);
+        break;
+      case INQUISITOR_OP_CATHOLIC:
+      case INQUISITOR_OP_ISLAMIC:
+      case INQUISITOR_OP_REFORMIST:
+        Stats::incInquisitorOpCount($playerId,1);
+        break;
+      case REPRESS_OP_KNIGHT:
+      case REPRESS_OP_PAWN:
+      case REPRESS_OP_PAWN_KNIGHT:
+      case REPRESS_OP_PAWN_ROOK:
+      case REPRESS_OP_PAWN_ROOK_KNIGHT:
+      case REPRESS_OP_ROOK:
+      case REPRESS_OP_ROOK_KNIGHT:
+        Stats::incRepressOpCount($playerId,1);
+        break;
+      case SIEGE_OP:
+        Stats::incSiegeOpCount($playerId,1);
+        break;
+      case TAX_OP:
+        Stats::incTaxOpCount($playerId,1);
+        break;
+      case VOTE_OP_EAST:
+      case VOTE_OP_WEST:
+        Stats::incVoteOpCount($playerId,1);
+        break;
+    }
+  }
 
   private function getAvailableOps($player)
   {
