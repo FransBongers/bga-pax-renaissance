@@ -526,11 +526,13 @@
   box-shadow: 0px 0px 0px 4px yellow !important;
 }
 
-.card.pr_selectable:hover .card-sides .card-side, .card.pr_selected .card-sides .card-side {
+.card.pr_selectable:hover .card-sides .card-side,
+.card.pr_selected .card-sides .card-side {
   box-shadow: none !important;
 }
 
-.card.pr_selectable:hover .card-sides .pr_square_card, .card.pr_selected .card-sides .pr_square_card {
+.card.pr_selectable:hover .card-sides .pr_square_card,
+.card.pr_selected .card-sides .pr_square_card {
   box-shadow: 0px 0px 0px 4px blue !important;
 }
 
@@ -541,6 +543,8 @@
   background-repeat: no-repeat;
   border: 1px black solid;
   border-radius: 5px;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
 }
 
 .card-sides {
@@ -559,6 +563,8 @@
   border: 1px black solid;
   box-shadow: 2px 2px 5px -1px #000;
   border-radius: 5px;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
 }
 
 .pr_square_card[data-card-id=null] {
