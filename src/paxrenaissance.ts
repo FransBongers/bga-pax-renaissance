@@ -31,6 +31,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
   private _notif_uid_to_log_id = {};
   private _last_notif = null;
   public _connections: unknown[];
+  private alwaysFixTopActions: boolean;
+  private alwaysFixTopActionsMaximum: number;
 
   public activeStates: {
     [CLIENT_CONFIRM_TABLEAU_OPS]: ClientConfirmTableauOpsState;
@@ -92,6 +94,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       $("generalactions"),
       "after"
     );
+    this.setAlwaysFixTopActions();
 
     // const playAreaWidth = document.getElementById('pp_play_area').offsetWidth;
     // console.log('playAreaWidth',playAreaWidth);
@@ -197,11 +200,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
       return;
     }
 
-    $("pr_play_area_container").setAttribute('data-two-columns',this.settings.get({id: 'twoColumnsLayout'}));
+    $("pr_play_area_container").setAttribute(
+      "data-two-columns",
+      this.settings.get({ id: "twoColumnsLayout" })
+    );
 
     const ROOT = document.documentElement;
     let WIDTH =
-      $("pr_play_area_container").getBoundingClientRect()["width"] -8;
+      $("pr_play_area_container").getBoundingClientRect()["width"] - 8;
     const LEFT_COLUMN = 1500;
     const RIGHT_COLUMN = 1500;
 
@@ -211,23 +217,24 @@ class PaxRenaissance implements PaxRenaissanceGame {
       const proportions = [size, 100 - size];
       const LEFT_SIZE = (proportions[0] * WIDTH) / 100;
       const leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-      ROOT.style.setProperty('--paxRenLeftColumnScale', `${leftColumnScale}`);
+      ROOT.style.setProperty("--paxRenLeftColumnScale", `${leftColumnScale}`);
 
       const RIGHT_SIZE = (proportions[1] * WIDTH) / 100;
       const rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-      ROOT.style.setProperty('--paxRenRightColumnScale', `${rightColumnScale}`);
+      ROOT.style.setProperty("--paxRenRightColumnScale", `${rightColumnScale}`);
 
-      $('pr_play_area_container').style.gridTemplateColumns = `${LEFT_SIZE}px ${RIGHT_SIZE}px`;
+      $(
+        "pr_play_area_container"
+      ).style.gridTemplateColumns = `${LEFT_SIZE}px ${RIGHT_SIZE}px`;
     } else {
       const LEFT_SIZE = WIDTH;
       const leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-      ROOT.style.setProperty('--paxRenLeftColumnScale', `${leftColumnScale}`);
+      ROOT.style.setProperty("--paxRenLeftColumnScale", `${leftColumnScale}`);
       const RIGHT_SIZE = WIDTH;
       const rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-      ROOT.style.setProperty('--paxRenRightColumnScale', `${rightColumnScale}`);
+      ROOT.style.setProperty("--paxRenRightColumnScale", `${rightColumnScale}`);
     }
   }
-
 
   setupNotifications() {
     // Replaced by notification manager
@@ -820,6 +827,41 @@ class PaxRenaissance implements PaxRenaissanceGame {
     container.insertAdjacentElement("afterbegin", infoPanel);
   }
 
+  setAlwaysFixTopActions(alwaysFixed = true, maximum = 30) {
+    this.alwaysFixTopActions = alwaysFixed;
+    this.alwaysFixTopActionsMaximum = maximum;
+    this.adaptStatusBar();
+  }
+
+  adaptStatusBar() {
+    (this as any).inherited(arguments);
+
+    if (this.alwaysFixTopActions) {
+      const afterTitleElem = document.getElementById("after-page-title");
+      const titleElem = document.getElementById("page-title");
+      let zoom = (getComputedStyle(titleElem) as any).zoom;
+      if (!zoom) {
+        zoom = 1;
+      }
+
+      const titleRect = afterTitleElem.getBoundingClientRect();
+      if (
+        titleRect.top < 0 &&
+        titleElem.offsetHeight <
+          (window.innerHeight * this.alwaysFixTopActionsMaximum) / 100
+      ) {
+        const afterTitleRect = afterTitleElem.getBoundingClientRect();
+        titleElem.classList.add("fixed-page-title");
+        titleElem.style.width = (afterTitleRect.width - 10) / zoom + "px";
+        afterTitleElem.style.height = titleRect.height + "px";
+      } else {
+        titleElem.classList.remove("fixed-page-title");
+        titleElem.style.width = "auto";
+        afterTitleElem.style.height = "0px";
+      }
+    }
+  }
+
   //....###..........##....###....##.....##
   //...##.##.........##...##.##....##...##.
   //..##...##........##..##...##....##.##..
@@ -844,7 +886,6 @@ class PaxRenaissance implements PaxRenaissanceGame {
     args?: Record<string, unknown>;
     checkAction?: string;
   }) {
-
     if (!this.framework().checkAction(checkAction ? checkAction : action)) {
       this.actionError(action);
       return;

@@ -38,7 +38,7 @@ class PREN161X_Enclosure extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_SELL_AND_EMANCIPATE_ALL_REPRESSED_TOKENS_IN_THE_WEST,
-        'title' => clienttranslate('ENDING_SUBSISTENCE_FARMING:'),
+        'title' => clienttranslate('ENDING SUBSISTENCE FARMING:'),
         'text' => [
           'log' => clienttranslate('If you sell this card, may emancipate any or all repressed Tokens in The West.'),
           'args' => [],

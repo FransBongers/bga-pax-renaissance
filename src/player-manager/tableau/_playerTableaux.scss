@@ -62,7 +62,7 @@
   // background-color: blue;
   flex-grow: 1;
   align-items: center;
-  
+  gap: calc(var(--paxRenTableauScale) * 12px)
 }
 
 .pr_player_board_tableau_cards[data-region=west] {

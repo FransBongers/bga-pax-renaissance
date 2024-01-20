@@ -1828,6 +1828,7 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.setup = function (gamedatas) {
         var _a;
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
+        this.setAlwaysFixTopActions();
         this.gamedatas = gamedatas;
         this.gameOptions = gamedatas.gameOptions;
         debug("gamedatas", gamedatas);
@@ -1911,7 +1912,7 @@ var PaxRenaissance = (function () {
         if (!this.settings) {
             return;
         }
-        $("pr_play_area_container").setAttribute('data-two-columns', this.settings.get({ id: 'twoColumnsLayout' }));
+        $("pr_play_area_container").setAttribute("data-two-columns", this.settings.get({ id: "twoColumnsLayout" }));
         var ROOT = document.documentElement;
         var WIDTH = $("pr_play_area_container").getBoundingClientRect()["width"] - 8;
         var LEFT_COLUMN = 1500;
@@ -1922,19 +1923,19 @@ var PaxRenaissance = (function () {
             var proportions = [size, 100 - size];
             var LEFT_SIZE = (proportions[0] * WIDTH) / 100;
             var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-            ROOT.style.setProperty('--paxRenLeftColumnScale', "".concat(leftColumnScale));
+            ROOT.style.setProperty("--paxRenLeftColumnScale", "".concat(leftColumnScale));
             var RIGHT_SIZE = (proportions[1] * WIDTH) / 100;
             var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-            ROOT.style.setProperty('--paxRenRightColumnScale', "".concat(rightColumnScale));
-            $('pr_play_area_container').style.gridTemplateColumns = "".concat(LEFT_SIZE, "px ").concat(RIGHT_SIZE, "px");
+            ROOT.style.setProperty("--paxRenRightColumnScale", "".concat(rightColumnScale));
+            $("pr_play_area_container").style.gridTemplateColumns = "".concat(LEFT_SIZE, "px ").concat(RIGHT_SIZE, "px");
         }
         else {
             var LEFT_SIZE = WIDTH;
             var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-            ROOT.style.setProperty('--paxRenLeftColumnScale', "".concat(leftColumnScale));
+            ROOT.style.setProperty("--paxRenLeftColumnScale", "".concat(leftColumnScale));
             var RIGHT_SIZE = WIDTH;
             var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-            ROOT.style.setProperty('--paxRenRightColumnScale', "".concat(rightColumnScale));
+            ROOT.style.setProperty("--paxRenRightColumnScale", "".concat(rightColumnScale));
         }
     };
     PaxRenaissance.prototype.setupNotifications = function () {
@@ -2300,6 +2301,38 @@ var PaxRenaissance = (function () {
             return;
         }
         container.insertAdjacentElement("afterbegin", infoPanel);
+    };
+    PaxRenaissance.prototype.setAlwaysFixTopActions = function (alwaysFixed, maximum) {
+        if (alwaysFixed === void 0) { alwaysFixed = true; }
+        if (maximum === void 0) { maximum = 30; }
+        this.alwaysFixTopActions = alwaysFixed;
+        this.alwaysFixTopActionsMaximum = maximum;
+        this.adaptStatusBar();
+    };
+    PaxRenaissance.prototype.adaptStatusBar = function () {
+        this.inherited(arguments);
+        if (this.alwaysFixTopActions) {
+            var afterTitleElem = document.getElementById("after-page-title");
+            var titleElem = document.getElementById("page-title");
+            var zoom = getComputedStyle(titleElem).zoom;
+            if (!zoom) {
+                zoom = 1;
+            }
+            var titleRect = afterTitleElem.getBoundingClientRect();
+            if (titleRect.top < 0 &&
+                titleElem.offsetHeight <
+                    (window.innerHeight * this.alwaysFixTopActionsMaximum) / 100) {
+                var afterTitleRect = afterTitleElem.getBoundingClientRect();
+                titleElem.classList.add("fixed-page-title");
+                titleElem.style.width = (afterTitleRect.width - 10) / zoom + "px";
+                afterTitleElem.style.height = titleRect.height + "px";
+            }
+            else {
+                titleElem.classList.remove("fixed-page-title");
+                titleElem.style.width = "auto";
+                afterTitleElem.style.height = "0px";
+            }
+        }
     };
     PaxRenaissance.prototype.actionError = function (actionName) {
         this.framework().showMessage("cannot take ".concat(actionName, " action"), "error");
@@ -4970,8 +5003,8 @@ var PlayerTableau = (function () {
                 color: player.color,
             })),
         }));
-        this.tableau[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state"), gap: "12px" });
-        this.tableau[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state"), gap: "12px" });
+        this.tableau[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state") });
+        this.tableau[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state") });
         this.tableau.oldMaids = new LineStock(this.game.tableauCardManager, document.getElementById("old_maids_".concat(player.id)));
         this.updateCards({ player: player });
     };

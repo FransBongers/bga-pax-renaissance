@@ -67,12 +67,12 @@ class PlayerTableau {
     this.tableau[EAST] = new LineStock(
       this.game.tableauCardManager,
       document.getElementById(`tableau_east_${player.id}`),
-      { center: false, sort: sortFunction("state"), gap: "12px" }
+      { center: false, sort: sortFunction("state") }
     );
     this.tableau[WEST] = new LineStock(
       this.game.tableauCardManager,
       document.getElementById(`tableau_west_${player.id}`),
-      { center: false, sort: sortFunction("state"), gap: "12px" }
+      { center: false, sort: sortFunction("state") }
     );
     this.tableau.oldMaids = new LineStock(
       this.game.tableauCardManager,
