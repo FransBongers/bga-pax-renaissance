@@ -60,6 +60,8 @@ abstract class OneShots extends \APP_DbObject
           } else {
             $royalCouples[] = $king;
           }
+        } else if ($card->getType() === EMPIRE_CARD && count($card->getQueens()) > 0) {
+          $royalCouples[] = $card;
         } else {
           $otherCards[] = $card;
         }

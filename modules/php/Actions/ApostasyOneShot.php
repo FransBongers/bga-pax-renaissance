@@ -49,15 +49,51 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
 
     $affectedPlayers = OneShots::getPlayersAffectedByApostasy($oneShot);
 
+    // TODO: refactor. There is probably a cleaner way to resolve this
     foreach ($affectedPlayers as $playerId => $affectedCards) {
       $player = Players::get($playerId);
       Notifications::apostasy($player, APOSTASY_PRESTIGE_MAP[$oneShot]);
 
-      foreach($affectedCards['royalCouples'] as $empireCard) {
+
+      $royalCoupleVassals = [];
+      $royalCoupleSuzerains = [];
+      foreach ($affectedCards['royalCouples'] as $empireCard) {
+        if ($empireCard->isVassal()) {
+          $royalCoupleVassals[] = $empireCard;
+        } else {
+          $royalCoupleSuzerains[] = $empireCard;
+        }
+      }
+
+      $tableauCardVassals = [];
+      $remainingCards = [];
+      foreach ($affectedCards['tableauCards'] as $cardToDiscard) {
+        if ($cardToDiscard->getType() === EMPIRE_CARD && $cardToDiscard->isVassal()) {
+          $tableauCardVassals[] = $cardToDiscard;
+        } else {
+          $remainingCards[] = $cardToDiscard;
+        }
+      }
+
+      // First discard Vassals
+      foreach ($royalCoupleVassals as $empireCard) {
         $empireCard->returnToThrone();
       }
-      // First discard all queens with prestige fir
-      foreach ($affectedCards['tableauCards'] as $cardToDiscard) {
+
+      foreach ($tableauCardVassals as $cardToDiscard) {
+        if ($cardToDiscard->getType() === EMPIRE_CARD) {
+          $cardToDiscard->returnToThrone();
+        } else {
+          $cardToDiscard->discard(DISCARD, $player);
+        }
+      }
+
+      // Then discard remaining cards
+      foreach ($royalCoupleSuzerains as $empireCard) {
+        $empireCard->returnToThrone();
+      }
+
+      foreach ($remainingCards as $cardToDiscard) {
         if ($cardToDiscard->getType() === EMPIRE_CARD) {
           $cardToDiscard->returnToThrone();
         } else {
