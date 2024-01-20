@@ -49,7 +49,7 @@ interface PaxRenaissanceGame extends Game {
     action: string;
     args?: Record<string, unknown>;
   }) => void;
-  updatePlayAreaSize: () => void;
+  updateLayout: () => void;
   _connections: unknown[];
   animationManager: AnimationManager;
   // cardManager: CardManager<TableauCard>;
@@ -185,6 +185,7 @@ interface VictoryCard extends PaxRenCard {
     title: string;
   };
   type: "victoryCard";
+  text: Log[];
 }
 
 interface Agent {

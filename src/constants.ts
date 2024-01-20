@@ -9,6 +9,9 @@ const CLIENT_SELL_CARD_STATE = "clientSellCardState";
 const CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 const CLIENT_USE_ABILITY_ACTION_STATE = "clientUseAbilityActionState";
 
+const SETTING_ENABLED = 'enabled';
+const SETTING_DISABLED = 'disabled';
+
 /**
  * Player colors
  */
@@ -30,6 +33,7 @@ const COLORS_WITH_SHADOW = [GREEN, YELLOW];
 /**
  * Class names
  */
+
 const DISABLED = "disabled";
 const PR_NONE = "pr_none";
 const PR_SELECTABLE = "pr_selectable";

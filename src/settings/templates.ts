@@ -9,7 +9,13 @@ const tplSettingsButton = () => {
 </div>`;
 };
 
-const tplPlayerPrefenceRow = ({ setting, currentValue }: { setting: PlayerPreference; currentValue: string; }) => {
+const tplPlayerPrefenceSelectRow = ({
+  setting,
+  currentValue,
+}: {
+  setting: PlayerPreferenceSelectConfig;
+  currentValue: string;
+}) => {
   let values = setting.options
     .map(
       (option) =>
@@ -23,9 +29,9 @@ const tplPlayerPrefenceRow = ({ setting, currentValue }: { setting: PlayerPrefer
     <div class="player_preference_row">
       <div class="player_preference_row_label">${_(setting.label)}</div>
       <div class="player_preference_row_value">
-        <select id="preference_control_${
+        <select id="setting_${
           setting.id
-        }" class="preference_control game_local_preference_control" style="display: block;">
+        }" class="" style="display: block;">
         ${values}
         </select>
       </div>
@@ -33,15 +39,17 @@ const tplPlayerPrefenceRow = ({ setting, currentValue }: { setting: PlayerPrefer
   `;
 };
 
-
 const tplSettingsModalContent = () => {
-  return `<div id="setting_modal_content"></div>`
+  return `<div id="setting_modal_content"></div>`;
 };
 
-// const tplSettingsModalContent = ({
-//   settings,
-// }: {
-//   settings: PlayerPreference[];
-// }) => {
-//   return settings.map((setting) => tplPlayerPrefenceRow({ setting })).join("");
-// };
+const tplPlayerPrefenceSliderRow = ({label, id, visible = true}: {label: string; id: string; visible?: boolean}) => {
+  return `
+  <div id="setting_row_${id}" class="player_preference_row"${!visible ? ` style="display: none;"` : ''}>
+    <div class="player_preference_row_label">${_(label)}</div>
+    <div class="player_preference_row_value slider">
+      <div id="setting_${id}"></div>
+    </div>
+  </div>
+  `;
+};

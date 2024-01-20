@@ -33,15 +33,13 @@
 
 .pr_settings_modal {
   background-image: url("img/background_paper.webp");
-  // background-color: #ebd5bd;
-  // background-color: white;
+  background-size: cover;
   border-radius: 8px;
   box-shadow: rgb(0, 0, 0) 1px 1px 5px;
   border: 1px solid black;
-  // position: relative;
   position: fixed;
   top: 15vh;
-  min-width: 500px;
+  min-width: 600px;
 
   .pr_settings_modal_closeicon {
     background-color: #a47a77;
@@ -71,27 +69,17 @@
   }
 
   h2 {
-    // font-family: "Oranienbaum";
     text-align: center;
     font-size: large;
     font-weight: bold;
     margin: 0px;
-    // background: #b79570;
-    // border-radius: 8px 8px 0px 0px;
     padding: 7px 0px;
     border-bottom: 1px solid black;
   }
 
   #setting_modal_content {
-    // width: 400px;
-    height: 200px;
-    // display: flex;
-    // flex-shrink: 1;
-    // flex-wrap: wrap;
-    // justify-content: space-between;
-    // max-width: 90vw;
-    // max-width: 1000px;
-    // gap: 32px;
+    height: 300px;
+
     .player_preference_row {
       display: flex;
       flex-direction: row;
@@ -106,8 +94,9 @@
       }
 
       .player_preference_row_value {
-        flex-grow: 1;
-        padding: 8px;
+        box-sizing: border-box;
+        padding: 8px 20px;
+        width: 250px;
 
         select {
           width: 100%;

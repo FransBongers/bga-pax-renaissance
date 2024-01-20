@@ -281,7 +281,6 @@ class BattleReconfigureConstantinopleState implements State {
   }
 
   private async onReset() {
-    console.log("reset");
     this.copyCityConfig();
     const animations = [];
     this.constantinopleCities.forEach((cityId) => {

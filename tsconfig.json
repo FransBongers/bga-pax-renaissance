@@ -6,7 +6,7 @@
     "lib": ["dom", "esnext"],  
     "sourceMap": false,
     "outFile": "paxrenaissance.js",
-    "removeComments": true
+    "removeComments": true,
   },
   "files": [
     "src/constants.ts",

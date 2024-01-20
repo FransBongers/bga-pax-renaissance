@@ -16,7 +16,7 @@ class PREN166X_BankOfStGeorge extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = BYZANTIUM;
     $this->flavorText = [
-      clienttranslate('In 1453, the Republic of Genoa sold its Crimean possessions to the private Bank of St. George. The Jewish Ghisolfi family contined to manage Matrega on behald of the Bank.'),
+      clienttranslate('In 1453, the Republic of Genoa sold its Crimean possessions to the private Bank of St. George. The Jewish Ghisolfi family contined to manage Matrega on behalf of the Bank.'),
       clienttranslate('Through such intermediaries as Khozi Kokos, they maintained relations with the rulers of Muscovy and other Russian principalities.'),
     ];
     $this->name = clienttranslate("Bank of St. George");

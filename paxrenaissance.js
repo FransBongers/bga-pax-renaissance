@@ -5,6 +5,8 @@ var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 var CLIENT_SELL_CARD_STATE = "clientSellCardState";
 var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 var CLIENT_USE_ABILITY_ACTION_STATE = "clientUseAbilityActionState";
+var SETTING_ENABLED = 'enabled';
+var SETTING_DISABLED = 'disabled';
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -1825,7 +1827,6 @@ var PaxRenaissance = (function () {
     }
     PaxRenaissance.prototype.setup = function (gamedatas) {
         var _a;
-        var _this = this;
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
         this.gamedatas = gamedatas;
         this.gameOptions = gamedatas.gameOptions;
@@ -1886,10 +1887,6 @@ var PaxRenaissance = (function () {
         this.victoryCardManager = new VictoryCardManager(this);
         this.openHandsModal = new OpenHandsModal(this);
         this.settings = new Settings(this);
-        this.updatePlayAreaSize();
-        window.addEventListener("resize", function () {
-            _this.updatePlayAreaSize();
-        });
         if (this.notificationManager != undefined) {
             this.notificationManager.destroy();
         }
@@ -1910,15 +1907,35 @@ var PaxRenaissance = (function () {
         }
         this.playerOrder = customPlayerOrder;
     };
-    PaxRenaissance.prototype.updatePlayAreaSize = function () {
-        var playAreaContainer = document.getElementById("pr_play_area_container");
-        this.playAreaScale = Math.min(1, playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH);
-        var playArea = document.getElementById("pr_play_area");
-        playArea.style.transform = "scale(".concat(this.playAreaScale, ")");
-        var playAreaHeight = playArea.offsetHeight;
-        playArea.style.width =
-            playAreaContainer.offsetWidth / this.playAreaScale + "px";
-        playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
+    PaxRenaissance.prototype.updateLayout = function () {
+        if (!this.settings) {
+            return;
+        }
+        $("pr_play_area_container").setAttribute('data-two-columns', this.settings.get({ id: 'twoColumnsLayout' }));
+        var ROOT = document.documentElement;
+        var WIDTH = $("pr_play_area_container").getBoundingClientRect()["width"] - 8;
+        var LEFT_COLUMN = 1500;
+        var RIGHT_COLUMN = 1500;
+        if (this.settings.get({ id: "twoColumnsLayout" }) === SETTING_ENABLED) {
+            WIDTH = WIDTH - 8;
+            var size = Number(this.settings.get({ id: "columnSizes" }));
+            var proportions = [size, 100 - size];
+            var LEFT_SIZE = (proportions[0] * WIDTH) / 100;
+            var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
+            ROOT.style.setProperty('--paxRenLeftColumnScale', "".concat(leftColumnScale));
+            var RIGHT_SIZE = (proportions[1] * WIDTH) / 100;
+            var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
+            ROOT.style.setProperty('--paxRenRightColumnScale', "".concat(rightColumnScale));
+            $('pr_play_area_container').style.gridTemplateColumns = "".concat(LEFT_SIZE, "px ").concat(RIGHT_SIZE, "px");
+        }
+        else {
+            var LEFT_SIZE = WIDTH;
+            var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
+            ROOT.style.setProperty('--paxRenLeftColumnScale', "".concat(leftColumnScale));
+            var RIGHT_SIZE = WIDTH;
+            var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
+            ROOT.style.setProperty('--paxRenRightColumnScale', "".concat(rightColumnScale));
+        }
     };
     PaxRenaissance.prototype.setupNotifications = function () {
     };
@@ -1933,7 +1950,6 @@ var PaxRenaissance = (function () {
         }
     };
     PaxRenaissance.prototype.onLeavingState = function (stateName) {
-        console.log("Leaving state: " + stateName);
         this.clearPossible();
     };
     PaxRenaissance.prototype.moveFlorin = function (_a) {
@@ -2204,6 +2220,7 @@ var PaxRenaissance = (function () {
         });
     };
     PaxRenaissance.prototype.onScreenWidthChange = function () {
+        this.updateLayout();
     };
     PaxRenaissance.prototype.format_string_recursive = function (log, args) {
         var _this = this;
@@ -2273,6 +2290,7 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.onLoadingComplete = function () {
         this.cancelLogs(this.gamedatas.canceledNotifIds);
+        this.updateLayout();
     };
     PaxRenaissance.prototype.updatePlayerOrdering = function () {
         this.framework().inherited(arguments);
@@ -2288,7 +2306,6 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.takeAction = function (_a) {
         var action = _a.action, _b = _a.args, args = _b === void 0 ? {} : _b, checkAction = _a.checkAction;
-        console.log("takeAction ".concat(action), args);
         if (!this.framework().checkAction(checkAction ? checkAction : action)) {
             this.actionError(action);
             return;
@@ -2988,9 +3005,6 @@ var MAX_MAP_WIDTH = 1500;
 var GameMap = (function () {
     function GameMap(game) {
         this.game = game;
-        this.zoomLevel =
-            Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1;
-        console.log("localStorage zoomLevel", this.zoomLevel);
         var gamedatas = game.gamedatas;
         this.setupGameMap({ gamedatas: gamedatas });
     }
@@ -3095,34 +3109,14 @@ var GameMap = (function () {
         });
     };
     GameMap.prototype.setupGameMap = function (_a) {
-        var _this = this;
         var gamedatas = _a.gamedatas;
         document
-            .getElementById("pr_play_area")
+            .getElementById("pr_play_area_container")
             .insertAdjacentHTML("afterbegin", tplGameMap());
-        this.updateGameMapSize();
-        window.addEventListener("resize", function () {
-            _this.updateGameMapSize();
-        });
-        this.setupZoomButtons();
         this.setupEmpireCards({ gamedatas: gamedatas });
         this.setupTokensCities({ gamedatas: gamedatas });
         this.setupTokensBorders({ gamedatas: gamedatas });
         this.setupMapCards({ gamedatas: gamedatas });
-    };
-    GameMap.prototype.setupZoomButtons = function () {
-        var _this = this;
-        dojo.connect($("pr_game_map_zoom_out_button"), "onclick", this, function () {
-            return _this.zoom({ type: "out" });
-        });
-        dojo.connect($("pr_game_map_zoom_in_button"), "onclick", this, function () {
-            return _this.zoom({ type: "in" });
-        });
-        this.checkZoomButtonClasses();
-    };
-    GameMap.prototype.getCurrentZoomIndex = function () {
-        console.log("zoomLevel", this.zoomLevel);
-        return ZOOM_LEVELS.indexOf(Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1);
     };
     GameMap.prototype.getEmpireSquareStock = function (_a) {
         var empireId = _a.empireId;
@@ -3148,39 +3142,6 @@ var GameMap = (function () {
         else {
             venice2Node.style.opacity = "0";
         }
-    };
-    GameMap.prototype.checkZoomButtonClasses = function () {
-        var zoomInButton = $("pr_game_map_zoom_in_button");
-        var zoomOutButton = $("pr_game_map_zoom_out_button");
-        zoomInButton.classList.remove(DISABLED);
-        zoomOutButton.classList.remove(DISABLED);
-        if (this.zoomLevel === ZOOM_LEVELS[0]) {
-            zoomOutButton.classList.add(DISABLED);
-        }
-        else if (this.zoomLevel === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]) {
-            zoomInButton.classList.add(DISABLED);
-        }
-    };
-    GameMap.prototype.updateGameMapSize = function () {
-        var map = document.getElementById("pr_game_map");
-        map.style.transform = "scale(".concat(this.zoomLevel, ")");
-        var mapContainer = document.getElementById("pr_game_map_container");
-        mapContainer.style.width = "".concat(this.zoomLevel * MAX_MAP_WIDTH, "px");
-        mapContainer.style.height = "".concat(this.zoomLevel * MAX_MAP_HEIGHT + 56, "px");
-    };
-    GameMap.prototype.zoom = function (_a) {
-        var type = _a.type;
-        var currentZoomIndex = this.getCurrentZoomIndex();
-        if (type === "in" && currentZoomIndex !== ZOOM_LEVELS.length - 1) {
-            this.zoomLevel = ZOOM_LEVELS[currentZoomIndex + 1];
-        }
-        else if (type === "out" && currentZoomIndex > 0) {
-            this.zoomLevel = ZOOM_LEVELS[currentZoomIndex - 1];
-        }
-        this.updateGameMapSize();
-        this.checkZoomButtonClasses();
-        this.game.updatePlayAreaSize();
-        localStorage.setItem(LOCAL_STORAGE_MAP_ZOOM_KEY, this.zoomLevel + "");
     };
     return GameMap;
 }());
@@ -3244,7 +3205,7 @@ var tplGameMapVictoryCards = function () { return "\n  ".concat(Object.entries(V
     return "<div id=\"pr_".concat(victory, "_slot\" class=\"pr_victory_slot\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
 })
     .join(""), "\n  "); };
-var tplGameMap = function () { return "\n<div id=\"pr_game_map_container\">\n  <div class=\"pr_game_map_zoom_buttons\">\n    <button id=\"pr_game_map_zoom_out_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-out-icon\" style=\"margin-bottom: -5px;\"></button>\n    <button id=\"pr_game_map_zoom_in_button\" type=\"button\" class=\"bga-zoom-button bga-zoom-in-icon\" style=\"margin-bottom: -5px;\"></button>\n  </div>\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupply(), "\n    ").concat(tplGameMapMarket(), "\n  </div>\n</div>"); };
+var tplGameMap = function () { return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupply(), "\n    ").concat(tplGameMapMarket(), "\n  </div>"); };
 var Hand = (function () {
     function Hand(game) {
         this.game = game;
@@ -4744,7 +4705,6 @@ var tplOpenHandsModal = function (_a) {
 };
 var PlayerManager = (function () {
     function PlayerManager(game) {
-        console.log("Constructor PlayerManager");
         this.game = game;
         this.players = {};
         this.setupPlayerTableaux({
@@ -4760,7 +4720,7 @@ var PlayerManager = (function () {
     PlayerManager.prototype.setupPlayerTableaux = function (_a) {
         var playerOrder = _a.playerOrder;
         document
-            .getElementById("pr_play_area")
+            .getElementById("pr_play_area_container")
             .insertAdjacentHTML("beforeend", tplPlayerTableauxContainer({ playerOrder: playerOrder }));
     };
     PlayerManager.prototype.getPlayer = function (_a) {
@@ -5114,7 +5074,6 @@ var tplPlayerPanel = function (_a) {
 };
 var tplPlayerTableauxContainer = function (_a) {
     var playerOrder = _a.playerOrder;
-    console.log("playerOrderInTpl", playerOrder);
     return "\n    <div id=\"pr_player_tableaux\">\n    ".concat(playerOrder
         .map(function (playerId) {
         return "<div id=\"pr_player_tableau_".concat(playerId, "\" class=\"pr_player_tableau\"></div>");
@@ -5123,43 +5082,93 @@ var tplPlayerTableauxContainer = function (_a) {
 };
 var getSettingsConfig = function () { return ({
     backgroundImage: {
-        id: 'backgroundImage',
-        defaultValue: 'goldsmith',
-        label: _('Background image'),
+        id: "backgroundImage",
+        defaultValue: "goldsmith",
+        label: _("Background image"),
+        type: "select",
         options: [
             {
-                label: _('No image'),
-                value: 'none',
+                label: _("No image"),
+                value: "none",
             },
             {
-                label: _('Balcony'),
-                value: 'balcony',
+                label: _("Balcony"),
+                value: "balcony",
             },
             {
-                label: _('Cathedral'),
-                value: 'cathedral',
+                label: _("Cathedral"),
+                value: "cathedral",
             },
             {
-                label: _('Goldsmith'),
-                value: 'goldsmith',
+                label: _("Goldsmith"),
+                value: "goldsmith",
             },
             {
-                label: _('Lucrezia'),
-                value: 'lucrezia',
+                label: _("Lucrezia"),
+                value: "lucrezia",
             },
             {
-                label: _('Poison'),
-                value: 'poison',
+                label: _("Poison"),
+                value: "poison",
             },
             {
-                label: _('War'),
-                value: 'war',
+                label: _("War"),
+                value: "war",
             },
         ],
-    }
+    },
+    twoColumnsLayout: {
+        id: "twoColumnsLayout",
+        defaultValue: "disabled",
+        label: _("Two column layout"),
+        type: "select",
+        options: [
+            {
+                label: _("Enabled"),
+                value: "enabled",
+            },
+            {
+                label: _("Disabled (single column)"),
+                value: "disabled",
+            },
+        ],
+    },
+    columnSizes: {
+        id: "columnSizes",
+        label: _("Column sizes"),
+        defaultValue: 50,
+        visibleCondition: {
+            id: 'twoColumnsLayout',
+            values: [SETTING_ENABLED],
+        },
+        sliderConfig: {
+            step: 5,
+            padding: 0,
+            range: {
+                min: 30,
+                max: 70,
+            },
+        },
+        type: "slider",
+    },
+    cardSizeInTableau: {
+        id: "cardSizeInTableau",
+        label: _("Size of cards in tableau"),
+        defaultValue: 100,
+        sliderConfig: {
+            step: 5,
+            padding: 0,
+            range: {
+                min: 50,
+                max: 200,
+            },
+        },
+        type: "slider",
+    },
 }); };
 var Settings = (function () {
     function Settings(game) {
+        this.settings = {};
         this.game = game;
         var gamedatas = game.gamedatas;
         this.setup({ gamedatas: gamedatas });
@@ -5175,63 +5184,69 @@ var Settings = (function () {
             configPanel.insertAdjacentHTML("beforeend", tplSettingsButton());
         }
     };
-    Settings.prototype.setupValues = function (_a) {
-        var _this = this;
-        var gamedatas = _a.gamedatas;
-        var config = getSettingsConfig();
-        this.settings = {};
-        Object.values(config).forEach(function (_a) {
-            var id = _a.id, defaultValue = _a.defaultValue;
-            var localValue = localStorage.getItem(_this.getLocalStorageKey({ id: id }));
-            _this.settings[id] = localValue || defaultValue;
-            if (localValue && _this.getMethodName({ id: id })) {
-                _this[_this.getMethodName({ id: id })](localValue);
-            }
-        });
-    };
     Settings.prototype.setupModal = function (_a) {
         var gamedatas = _a.gamedatas;
         this.modal = new Modal("settings_modal", {
             class: "pr_settings_modal",
             closeIcon: "fa-times",
-            openAnimation: true,
-            openAnimationTarget: "pr_show_settings",
             titleTpl: '<h2 id="popin_${id}_title" class="${class}_title">${title}</h2>',
             title: _("Settings"),
             contents: tplSettingsModalContent(),
             closeAction: "hide",
             verticalAlign: "flex-start",
-            breakpoint: 510,
+            breakpoint: 740,
         });
     };
-    Settings.prototype.setupModalContent = function (_a) {
+    Settings.prototype.setup = function (_a) {
         var _this = this;
         var gamedatas = _a.gamedatas;
+        this.addButton({ gamedatas: gamedatas });
+        this.setupModal({ gamedatas: gamedatas });
+        this.setupModalContent();
+        dojo.connect($("pr_show_settings"), "onclick", function () { return _this.open(); });
+    };
+    Settings.prototype.setupModalContent = function () {
+        var _this = this;
         var config = getSettingsConfig();
         var node = document.getElementById("setting_modal_content");
         if (!node) {
             return;
         }
         Object.values(config).forEach(function (setting) {
-            node.insertAdjacentHTML("beforeend", tplPlayerPrefenceRow({
-                setting: setting,
-                currentValue: _this.settings[setting.id],
-            }));
-            var controlId = "preference_control_".concat(setting.id);
-            $(controlId).addEventListener("change", function () {
-                var value = $(controlId).value;
-                _this.changeSetting({ id: setting.id, value: value });
-            });
+            var id = setting.id, type = setting.type, defaultValue = setting.defaultValue, visibleCondition = setting.visibleCondition;
+            var localValue = localStorage.getItem(_this.getLocalStorageKey({ id: id }));
+            _this.settings[id] = localValue || defaultValue;
+            var methodName = _this.getMethodName({ id: id });
+            if (localValue && _this[methodName]) {
+                _this[methodName](localValue);
+            }
+            if (setting.type === "select") {
+                node.insertAdjacentHTML("beforeend", tplPlayerPrefenceSelectRow({
+                    setting: setting,
+                    currentValue: _this.settings[setting.id],
+                }));
+                var controlId_1 = "setting_".concat(setting.id);
+                $(controlId_1).addEventListener("change", function () {
+                    var value = $(controlId_1).value;
+                    _this.changeSetting({ id: setting.id, value: value });
+                });
+            }
+            else if (setting.type === "slider") {
+                var visible = !visibleCondition ||
+                    (visibleCondition &&
+                        visibleCondition.values.includes(_this.settings[visibleCondition.id]));
+                node.insertAdjacentHTML("beforeend", tplPlayerPrefenceSliderRow({
+                    id: setting.id,
+                    label: setting.label,
+                    visible: visible,
+                }));
+                var sliderConfig = __assign(__assign({}, setting.sliderConfig), { start: _this.settings[setting.id] });
+                noUiSlider.create($("setting_" + setting.id), sliderConfig);
+                $("setting_" + setting.id).noUiSlider.on("slide", function (arg) {
+                    return _this.changeSetting({ id: setting.id, value: arg[0] });
+                });
+            }
         });
-    };
-    Settings.prototype.setup = function (_a) {
-        var _this = this;
-        var gamedatas = _a.gamedatas;
-        this.setupValues({ gamedatas: gamedatas });
-        this.addButton({ gamedatas: gamedatas });
-        this.setupModal({ gamedatas: gamedatas });
-        this.setupModalContent({ gamedatas: gamedatas });
-        dojo.connect($("pr_show_settings"), "onclick", function () { return _this.open(); });
     };
     Settings.prototype.changeSetting = function (_a) {
         var id = _a.id, value = _a.value;
@@ -5246,11 +5261,40 @@ var Settings = (function () {
     Settings.prototype.onChangeBackgroundImageSetting = function (value) {
         document.documentElement.setAttribute("data-background-pref", value);
     };
+    Settings.prototype.onChangeTwoColumnsLayoutSetting = function (value) {
+        this.checkColumnSizesVisisble();
+        var node = document.getElementById('pr_play_area_container');
+        if (node) {
+            node.setAttribute('data-two-columns', value);
+        }
+        this.game.updateLayout();
+    };
+    Settings.prototype.onChangeColumnSizesSetting = function (value) {
+        this.game.updateLayout();
+    };
+    Settings.prototype.onChangeCardSizeInTableauSetting = function (value) {
+        var node = document.getElementById('pr_player_tableaux');
+        if (node) {
+            node.style.setProperty('--paxRenCardInTableauScale', "".concat(Number(value) / 100));
+        }
+    };
+    Settings.prototype.checkColumnSizesVisisble = function () {
+        var sliderNode = document.getElementById("setting_row_columnSizes");
+        if (!sliderNode) {
+            return;
+        }
+        if (this.settings["twoColumnsLayout"] === SETTING_ENABLED) {
+            sliderNode.style.display = "";
+        }
+        else {
+            sliderNode.style.display = "none";
+        }
+    };
     Settings.prototype.getMethodName = function (_a) {
         var id = _a.id;
         return "onChange".concat(this.getSuffix({ id: id }), "Setting");
     };
-    Settings.prototype.getSetting = function (_a) {
+    Settings.prototype.get = function (_a) {
         var id = _a.id;
         return this.settings[id] || null;
     };
@@ -5270,17 +5314,21 @@ var Settings = (function () {
 var tplSettingsButton = function () {
     return "<div id=\"pr_show_settings\">\n  <svg  xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 512\">\n    <g>\n      <path class=\"fa-secondary\" fill=\"currentColor\" d=\"M638.41 387a12.34 12.34 0 0 0-12.2-10.3h-16.5a86.33 86.33 0 0 0-15.9-27.4L602 335a12.42 12.42 0 0 0-2.8-15.7 110.5 110.5 0 0 0-32.1-18.6 12.36 12.36 0 0 0-15.1 5.4l-8.2 14.3a88.86 88.86 0 0 0-31.7 0l-8.2-14.3a12.36 12.36 0 0 0-15.1-5.4 111.83 111.83 0 0 0-32.1 18.6 12.3 12.3 0 0 0-2.8 15.7l8.2 14.3a86.33 86.33 0 0 0-15.9 27.4h-16.5a12.43 12.43 0 0 0-12.2 10.4 112.66 112.66 0 0 0 0 37.1 12.34 12.34 0 0 0 12.2 10.3h16.5a86.33 86.33 0 0 0 15.9 27.4l-8.2 14.3a12.42 12.42 0 0 0 2.8 15.7 110.5 110.5 0 0 0 32.1 18.6 12.36 12.36 0 0 0 15.1-5.4l8.2-14.3a88.86 88.86 0 0 0 31.7 0l8.2 14.3a12.36 12.36 0 0 0 15.1 5.4 111.83 111.83 0 0 0 32.1-18.6 12.3 12.3 0 0 0 2.8-15.7l-8.2-14.3a86.33 86.33 0 0 0 15.9-27.4h16.5a12.43 12.43 0 0 0 12.2-10.4 112.66 112.66 0 0 0 .01-37.1zm-136.8 44.9c-29.6-38.5 14.3-82.4 52.8-52.8 29.59 38.49-14.3 82.39-52.8 52.79zm136.8-343.8a12.34 12.34 0 0 0-12.2-10.3h-16.5a86.33 86.33 0 0 0-15.9-27.4l8.2-14.3a12.42 12.42 0 0 0-2.8-15.7 110.5 110.5 0 0 0-32.1-18.6A12.36 12.36 0 0 0 552 7.19l-8.2 14.3a88.86 88.86 0 0 0-31.7 0l-8.2-14.3a12.36 12.36 0 0 0-15.1-5.4 111.83 111.83 0 0 0-32.1 18.6 12.3 12.3 0 0 0-2.8 15.7l8.2 14.3a86.33 86.33 0 0 0-15.9 27.4h-16.5a12.43 12.43 0 0 0-12.2 10.4 112.66 112.66 0 0 0 0 37.1 12.34 12.34 0 0 0 12.2 10.3h16.5a86.33 86.33 0 0 0 15.9 27.4l-8.2 14.3a12.42 12.42 0 0 0 2.8 15.7 110.5 110.5 0 0 0 32.1 18.6 12.36 12.36 0 0 0 15.1-5.4l8.2-14.3a88.86 88.86 0 0 0 31.7 0l8.2 14.3a12.36 12.36 0 0 0 15.1 5.4 111.83 111.83 0 0 0 32.1-18.6 12.3 12.3 0 0 0 2.8-15.7l-8.2-14.3a86.33 86.33 0 0 0 15.9-27.4h16.5a12.43 12.43 0 0 0 12.2-10.4 112.66 112.66 0 0 0 .01-37.1zm-136.8 45c-29.6-38.5 14.3-82.5 52.8-52.8 29.59 38.49-14.3 82.39-52.8 52.79z\" opacity=\"0.4\"></path>\n      <path class=\"fa-primary\" fill=\"currentColor\" d=\"M420 303.79L386.31 287a173.78 173.78 0 0 0 0-63.5l33.7-16.8c10.1-5.9 14-18.2 10-29.1-8.9-24.2-25.9-46.4-42.1-65.8a23.93 23.93 0 0 0-30.3-5.3l-29.1 16.8a173.66 173.66 0 0 0-54.9-31.7V58a24 24 0 0 0-20-23.6 228.06 228.06 0 0 0-76 .1A23.82 23.82 0 0 0 158 58v33.7a171.78 171.78 0 0 0-54.9 31.7L74 106.59a23.91 23.91 0 0 0-30.3 5.3c-16.2 19.4-33.3 41.6-42.2 65.8a23.84 23.84 0 0 0 10.5 29l33.3 16.9a173.24 173.24 0 0 0 0 63.4L12 303.79a24.13 24.13 0 0 0-10.5 29.1c8.9 24.1 26 46.3 42.2 65.7a23.93 23.93 0 0 0 30.3 5.3l29.1-16.7a173.66 173.66 0 0 0 54.9 31.7v33.6a24 24 0 0 0 20 23.6 224.88 224.88 0 0 0 75.9 0 23.93 23.93 0 0 0 19.7-23.6v-33.6a171.78 171.78 0 0 0 54.9-31.7l29.1 16.8a23.91 23.91 0 0 0 30.3-5.3c16.2-19.4 33.7-41.6 42.6-65.8a24 24 0 0 0-10.5-29.1zm-151.3 4.3c-77 59.2-164.9-28.7-105.7-105.7 77-59.2 164.91 28.7 105.71 105.7z\"></path>\n    </g>\n  </svg>\n</div>";
 };
-var tplPlayerPrefenceRow = function (_a) {
+var tplPlayerPrefenceSelectRow = function (_a) {
     var setting = _a.setting, currentValue = _a.currentValue;
     var values = setting.options
         .map(function (option) {
         return "<option value='".concat(option.value, "' ").concat(option.value === currentValue ? 'selected="selected"' : "", ">").concat(_(option.label), "</option>");
     })
         .join("");
-    return "\n    <div class=\"player_preference_row\">\n      <div class=\"player_preference_row_label\">".concat(_(setting.label), "</div>\n      <div class=\"player_preference_row_value\">\n        <select id=\"preference_control_").concat(setting.id, "\" class=\"preference_control game_local_preference_control\" style=\"display: block;\">\n        ").concat(values, "\n        </select>\n      </div>\n    </div>\n  ");
+    return "\n    <div class=\"player_preference_row\">\n      <div class=\"player_preference_row_label\">".concat(_(setting.label), "</div>\n      <div class=\"player_preference_row_value\">\n        <select id=\"setting_").concat(setting.id, "\" class=\"\" style=\"display: block;\">\n        ").concat(values, "\n        </select>\n      </div>\n    </div>\n  ");
 };
 var tplSettingsModalContent = function () {
     return "<div id=\"setting_modal_content\"></div>";
+};
+var tplPlayerPrefenceSliderRow = function (_a) {
+    var label = _a.label, id = _a.id, _b = _a.visible, visible = _b === void 0 ? true : _b;
+    return "\n  <div id=\"setting_row_".concat(id, "\" class=\"player_preference_row\"").concat(!visible ? " style=\"display: none;\"" : '', ">\n    <div class=\"player_preference_row_label\">").concat(_(label), "</div>\n    <div class=\"player_preference_row_value slider\">\n      <div id=\"setting_").concat(id, "\"></div>\n    </div>\n  </div>\n  ");
 };
 var TokenCounter = (function () {
     function TokenCounter() {
@@ -6229,7 +6277,6 @@ var BattleReconfigureConstantinopleState = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log("reset");
                         this.copyCityConfig();
                         animations = [];
                         this.constantinopleCities.forEach(function (cityId) {
@@ -6662,7 +6709,6 @@ var ClientUseAbilityActionState = (function () {
     }
     ClientUseAbilityActionState.prototype.onEnteringState = function (args) {
         this.args = args;
-        console.log("args", this.args);
         if (Object.entries(this.args).length === 1) {
             var _a = Object.entries(this.args)[0], cardId = _a[0], ability = _a[1];
             this.updateInterfaceConfirm({ cardId: cardId, ability: ability });
@@ -7497,7 +7543,6 @@ var PlayerActionState = (function () {
     PlayerActionState.prototype.setMarketCardsSelectable = function () {
         var _this = this;
         this.args.cardsPlayerCanPurchase.forEach(function (card) {
-            console.log("card", card);
             var id = card.id, location = card.location;
             var _a = location.split("_"), market = _a[0], region = _a[1], column = _a[2];
             _this.game.setCardSelectable({
@@ -8945,10 +8990,14 @@ var TooltipManager = (function () {
 define([
     'dojo',
     'dojo/_base/declare',
+    g_gamethemeurl + 'modules/js/vendor/nouislider.min.js',
     'dojo/fx',
     'dojox/fx/ext-dojo/complex',
     'ebg/core/gamegui',
     'ebg/counter',
-], function (dojo, declare) {
+], function (dojo, declare, noUiSliderDefined) {
+    if (noUiSliderDefined) {
+        noUiSlider = noUiSliderDefined;
+    }
     return declare('bgagame.paxrenaissance', ebg.core.gamegui, new PaxRenaissance());
 });

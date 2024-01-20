@@ -19,7 +19,6 @@ class PlayerManager {
   private players: Record<number, PRPlayer>;
 
   constructor(game: PaxRenaissanceGame) {
-    console.log("Constructor PlayerManager");
     this.game = game;
     this.players = {};
 
@@ -37,7 +36,7 @@ class PlayerManager {
 
   setupPlayerTableaux({ playerOrder }: { playerOrder: number[] }) {
     document
-      .getElementById("pr_play_area")
+      .getElementById("pr_play_area_container")
       .insertAdjacentHTML("beforeend", tplPlayerTableauxContainer({ playerOrder }));
   }
 

@@ -2,52 +2,47 @@
 @use "sass:map";
 @use "../base";
 
-.pr_border.pr_selectable,
 .card.pr_selectable,
-// .card-side.pr_selectable,
-// .card-sides.pr_selectable,
 .pr_card.pr_selectable,
-.pr_city.pr_selectable,
-.pr_map_card.pr_selectable,
-.pr_market.pr_selectable,
 .pr_square_card.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px 4px base.$selectable-color !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
+}
+
+.pr_border.pr_selectable,
+.pr_city.pr_selectable,
+.pr_map_card.pr_selectable,
+.pr_market.pr_selectable {
+  /* border: 2px blue solid; */
+  cursor: pointer !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenMapScale) * 4px) base.$selectable-color !important;
 }
 
 .card.pr_selectable.pr_empire_square {
   box-shadow: none !important;
 }
 
-// .pr_card.pr_selectable:hover, .pr_square_card.pr_selectable:hover {
-//   /* border: 2px blue solid; */
-//   cursor: pointer !important;
-//   box-shadow: 0px 0px 0px 4px base.$selected-color !important;
-// }
+.card.pr_selected,
+.card.pr_selectable:hover,
+.pr_card.pr_selected,
+.pr_card.pr_selectable:hover,
+.pr_square_card.pr_selected,
+.pr_square_card.pr_selectable:hover {
+  cursor: pointer !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
+}
 
 .pr_border.pr_selected,
 .pr_border.pr_selectable:hover,
-.card.pr_selected,
-.card.pr_selectable:hover,
-// .card-side.pr_selected,
-// .card-side.pr_selectable:hover,
-// .card-sides.pr_selected,
-// .card-sides.pr_selectable:hover,
-.pr_card.pr_selected,
-.pr_card.pr_selectable:hover,
 .pr_city.pr_selected,
 .pr_city.pr_selectable:hover,
 .pr_map_card.pr_selected,
 .pr_map_card.pr_selectable:hover,
 .pr_market.pr_selected,
-.pr_market.pr_selectable:hover,
-.pr_square_card.pr_selected,
-.pr_square_card.pr_selectable:hover {
-  /* border: 2px blue solid; */
+.pr_market.pr_selectable:hover {
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px 4px base.$selected-color !important;
-  // z-index: 1;
+  box-shadow: 0px 0px 0px calc(var(--paxRenMapScale) * 4px) base.$selected-color !important;
 }
 
 .card.pr_selected.pr_empire_square,
@@ -57,7 +52,7 @@
 
 .card {
   //   box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
+  border-radius: calc(var(--paxRenCardScale) * 5px);
 }
 
 .card.pr_selectable {
@@ -71,7 +66,7 @@
 .card.pr_selectable {
   .card-sides {
     .pr_square_card {
-      box-shadow: 0px 0px 0px 4px base.$selectable-color !important;
+      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
     }
   }
 }
@@ -89,7 +84,7 @@
 .card.pr_selected {
   .card-sides {
     .pr_square_card {
-      box-shadow: 0px 0px 0px 4px base.$selected-color !important;
+      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
     }
   }
 }
@@ -101,9 +96,9 @@
   // background-size: 100% 100%;
   // position: absolute;
   background-repeat: no-repeat;
-  border: 1px black solid;
+  border: calc(var(--paxRenCardScale) * 1px) black solid;
   // box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
+  border-radius: calc(var(--paxRenCardScale) * 5px);
   image-rendering: -webkit-optimize-contrast;
   image-rendering: high-quality;
 }
@@ -124,9 +119,9 @@
   // background-size: 100% 100%;
   // position: absolute;
   background-repeat: no-repeat;
-  border: 1px black solid;
-  box-shadow: 2px 2px 5px -1px #000;
-  border-radius: 5px;
+  border: calc(var(--paxRenCardScale) * 1px) black solid;
+  box-shadow: calc(var(--paxRenCardScale) * 2px) calc(var(--paxRenCardScale) * 2px) calc(var(--paxRenCardScale) * 5px) calc(var(--paxRenCardScale) * -1px) #000;
+  border-radius: calc(var(--paxRenCardScale) * 5px);
   image-rendering: -webkit-optimize-contrast;
   image-rendering: high-quality;
 }

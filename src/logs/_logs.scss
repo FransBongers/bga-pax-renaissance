@@ -57,8 +57,13 @@
     --paxRenTokenScale: 0.7;
   }
 
+  .pr_rook {
+    --paxRenTokenScale: 0.65;
+  }
+
   .pr_one_shot {
     display: inline-block;
+    --paxRenIconScale: 0.75;
     margin-bottom: -14px;;
   }
 

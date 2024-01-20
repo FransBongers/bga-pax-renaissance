@@ -119,11 +119,6 @@ const tplGameMapVictoryCards = () => `
   `;
 
 const tplGameMap = () => `
-<div id="pr_game_map_container">
-  <div class="pr_game_map_zoom_buttons">
-    <button id="pr_game_map_zoom_out_button" type="button" class="bga-zoom-button bga-zoom-out-icon" style="margin-bottom: -5px;"></button>
-    <button id="pr_game_map_zoom_in_button" type="button" class="bga-zoom-button bga-zoom-in-icon" style="margin-bottom: -5px;"></button>
-  </div>
   <div id="pr_game_map">
     ${tplGameMapVictoryCards()}
     ${tplGameMapEmpireCards()}
@@ -131,5 +126,4 @@ const tplGameMap = () => `
     ${tplGameMapMapBorders()}
     ${tplGameMapSupply()}
     ${tplGameMapMarket()}
-  </div>
-</div>`;
+  </div>`;

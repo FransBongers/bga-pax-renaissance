@@ -9,7 +9,6 @@ const tplPlayerTableauxContainer = ({
 }: {
   playerOrder: number[];
 }) => {
-  console.log("playerOrderInTpl", playerOrder);
   return `
     <div id="pr_player_tableaux">
     ${playerOrder

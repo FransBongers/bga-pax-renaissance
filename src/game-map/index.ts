@@ -30,9 +30,9 @@ class GameMap {
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
-    this.zoomLevel =
-      Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1;
-    console.log("localStorage zoomLevel", this.zoomLevel);
+    // this.zoomLevel =
+    //   Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1;
+    // console.log("localStorage zoomLevel", this.zoomLevel);
     const gamedatas = game.gamedatas;
 
     this.setupGameMap({ gamedatas });
@@ -210,28 +210,13 @@ class GameMap {
   // Setup functions
   setupGameMap({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     document
-      .getElementById("pr_play_area")
+      .getElementById("pr_play_area_container")
       .insertAdjacentHTML("afterbegin", tplGameMap());
-    this.updateGameMapSize();
     // Add in main file?
-    window.addEventListener("resize", () => {
-      this.updateGameMapSize();
-    });
-    this.setupZoomButtons();
     this.setupEmpireCards({ gamedatas });
     this.setupTokensCities({ gamedatas });
     this.setupTokensBorders({ gamedatas });
     this.setupMapCards({ gamedatas });
-  }
-
-  setupZoomButtons() {
-    dojo.connect($("pr_game_map_zoom_out_button"), "onclick", this, () =>
-      this.zoom({ type: "out" })
-    );
-    dojo.connect($("pr_game_map_zoom_in_button"), "onclick", this, () =>
-      this.zoom({ type: "in" })
-    );
-    this.checkZoomButtonClasses();
   }
 
   // ..######...########.########.########.########.########...######.
@@ -250,12 +235,12 @@ class GameMap {
   // .##....##.##..........##.......##....##.......##....##..##....##
   // ..######..########....##.......##....########.##.....##..######.
 
-  private getCurrentZoomIndex(): number {
-    console.log("zoomLevel", this.zoomLevel);
-    return ZOOM_LEVELS.indexOf(
-      Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1
-    );
-  }
+  // private getCurrentZoomIndex(): number {
+  //   console.log("zoomLevel", this.zoomLevel);
+  //   return ZOOM_LEVELS.indexOf(
+  //     Number(localStorage.getItem(LOCAL_STORAGE_MAP_ZOOM_KEY)) || 1
+  //   );
+  // }
 
   public getEmpireSquareStock({
     empireId,
@@ -306,64 +291,5 @@ class GameMap {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private checkZoomButtonClasses() {
-    const zoomInButton: HTMLElement = $("pr_game_map_zoom_in_button");
-    const zoomOutButton: HTMLElement = $("pr_game_map_zoom_out_button");
 
-    zoomInButton.classList.remove(DISABLED);
-    zoomOutButton.classList.remove(DISABLED);
-
-    if (this.zoomLevel === ZOOM_LEVELS[0]) {
-      zoomOutButton.classList.add(DISABLED);
-    } else if (this.zoomLevel === ZOOM_LEVELS[ZOOM_LEVELS.length - 1]) {
-      zoomInButton.classList.add(DISABLED);
-    }
-  }
-
-  // public updatePlayAreaSize() {
-  //   const playAreaContainer = document.getElementById("pr_play_area_container");
-  //   this.playAreaScale = Math.min(
-  //     1,
-  //     playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH
-  //   );
-  //   const playArea = document.getElementById("pr_play_area");
-  //   playArea.style.transform = `scale(${this.playAreaScale})`;
-  //   const playAreaHeight = playArea.offsetHeight;
-  //   playArea.style.width =
-  //     playAreaContainer.offsetWidth / this.playAreaScale + "px";
-  //   console.log("playAreaHeight", playAreaHeight);
-  //   playAreaContainer.style.height = playAreaHeight * this.playAreaScale + "px";
-  // }
-
-  public updateGameMapSize() {
-    const map = document.getElementById("pr_game_map");
-    // const playAreaContainer = document.getElementById("pr_play_area_container");
-    // const playAreaScale = Math.min(
-    //   1,
-    //   playAreaContainer.offsetWidth / MIN_PLAY_AREA_WIDTH
-    // );
-    // const mapScale = this.zoomLevel * playAreaScale;
-
-    // map.style.setProperty("--paxRenMapScale", `${mapScale}`);
-    // map.style.setProperty("--paxRenCardScale", `${mapScale}`);
-    // map.style.setProperty("--paxRenTokenScale", `${mapScale}`);
-
-    map.style.transform = `scale(${this.zoomLevel})`;
-    const mapContainer = document.getElementById("pr_game_map_container");
-    mapContainer.style.width = `${this.zoomLevel * MAX_MAP_WIDTH}px`;
-    mapContainer.style.height = `${this.zoomLevel * MAX_MAP_HEIGHT + 56}px`;
-  }
-
-  private zoom({ type }: { type: "in" | "out" }) {
-    const currentZoomIndex = this.getCurrentZoomIndex();
-    if (type === "in" && currentZoomIndex !== ZOOM_LEVELS.length - 1) {
-      this.zoomLevel = ZOOM_LEVELS[currentZoomIndex + 1];
-    } else if (type === "out" && currentZoomIndex > 0) {
-      this.zoomLevel = ZOOM_LEVELS[currentZoomIndex - 1];
-    }
-    this.updateGameMapSize();
-    this.checkZoomButtonClasses();
-    this.game.updatePlayAreaSize();
-    localStorage.setItem(LOCAL_STORAGE_MAP_ZOOM_KEY, this.zoomLevel + "");
-  }
 }

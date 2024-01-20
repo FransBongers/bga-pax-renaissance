@@ -8,7 +8,6 @@ class ClientUseAbilityActionState implements State {
 
   onEnteringState(args: OnEnteringClientUseAbiltyActionArgs) {
     this.args = args;
-    console.log("args", this.args);
     if (Object.entries(this.args).length === 1) {
       const [cardId, ability] = Object.entries(this.args)[0];
       this.updateInterfaceConfirm({ cardId, ability });

@@ -307,7 +307,6 @@ class PlayerActionState implements State {
 
   private setMarketCardsSelectable() {
     this.args.cardsPlayerCanPurchase.forEach((card) => {
-      console.log("card", card);
       const { id, location } = card;
       const [market, region, column] = location.split("_");
 

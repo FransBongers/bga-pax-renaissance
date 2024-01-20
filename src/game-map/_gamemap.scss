@@ -15,25 +15,29 @@
   @return $map;
 }
 
-#pr_game_map_container {
-  margin-left: 8px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-}
+// #pr_game_map_container {
+//   margin-left: 8px;
+//   margin-right: 8px;
+//   margin-bottom: 8px;
+// }
 
 #pr_game_map {
   background-image: url("img/board.webp");
-  background-size: calc(var(--paxRenMapScale) * 1500px)
-    calc(var(--paxRenMapScale) * 1500px);
+  background-size: calc(var(--paxRenLeftColumnScale) * 1500px)
+    calc(var(--paxRenLeftColumnScale) * 1500px);
   background-repeat: no-repeat;
   // grid-column: 1 / span 1;
   // grid-row: span 1;
   position: relative;
-  height: calc(var(--paxRenMapScale) * 1500px);
-  width: calc(var(--paxRenMapScale) * 1500px);
+  height: calc(var(--paxRenLeftColumnScale) * 1500px);
+  width: calc(var(--paxRenLeftColumnScale) * 1500px);
   // box-shadow: rgb(0 0 0) 2px 2px 8px;
   box-shadow: 1px 1px 5px #000;
   transform-origin: top left;
+  --paxRenCardScale: var(--paxRenLeftColumnScale);
+  --paxRenMapScale: var(--paxRenLeftColumnScale);
+  --paxRenTokenScale:  var(--paxRenLeftColumnScale);
+  --paxRenIconScale:  var(--paxRenLeftColumnScale);
 }
 
 .pr_game_map_zoom_buttons {

@@ -21,25 +21,25 @@
 
   .pr_deck_counter {
     // box-sizing: border-box;
-    height: 33px;
-    padding: 4px;
-    width: 104px;
+    height: calc(var(--paxRenMapScale) * 33px);
+    padding: calc(var(--paxRenMapScale) * 4px);
+    width: calc(var(--paxRenMapScale) * 104px);
     background-color: #f8f8f8;
-    border: 1px solid black;
-    border-radius: 5px;
-    margin-bottom: -16px;
+    border: calc(var(--paxRenMapScale) * 1px) solid black;
+    border-radius: calc(var(--paxRenMapScale) * 5px);
+    margin-bottom: calc(var(--paxRenMapScale) * -16px);
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 6px;
+    gap: calc(var(--paxRenMapScale) * 6px);
     // justify-content: space-between;
 
     .pr_deck_counter_comet {
       box-sizing: border-box;
-      border-radius: 1px;
-      border: 1px solid;
-      width: 22px;
-      height: 33px;
+      border-radius: calc(var(--paxRenMapScale) * 1px);
+      border: calc(var(--paxRenMapScale) * 1px) solid;
+      width: calc(var(--paxRenMapScale) * 22px);
+      height: calc(var(--paxRenMapScale) * 33px);
     }
 
     .pr_deck_counter_comet.pr_none {
@@ -48,8 +48,8 @@
 
     .pr_deck_counter_text {
       font-weight: bold;
-      font-size: 30px;
-      letter-spacing: -1px;
+      font-size: calc(var(--paxRenMapScale) * 30px);
+      letter-spacing: calc(var(--paxRenMapScale) * -1px);
     }
 
     .pr_deck_counter_comet[data-card-id=COMET1] {
@@ -100,7 +100,7 @@
       margin-top: 4px;
       margin-left: -2px;
       font-weight: bold;
-      font-size: 30px;
+      font-size: calc(var(--paxRenMapScale) * 30px);
       letter-spacing: -2px;
       text-shadow: 2px 0 2px #ffffff99, 0 -2px 2px #ffffff99,
         0 2px 2px #ffffff99, -2px 0 2px #ffffff99;
@@ -108,13 +108,13 @@
   }
 
   .pr_icon[data-region="west"] {
-    left: -9px;
-    top: 94px;
+    left: calc(var(--paxRenMapScale) * -9px);
+    top: calc(var(--paxRenMapScale) * 94px);
   }
 
   .pr_icon[data-region="east"] {
-    right: -9px;
-    top: 94px;
+    right: calc(var(--paxRenMapScale) * -9px);
+    top: calc(var(--paxRenMapScale) * 94px);
   }
 
   .pr_icon.pr_none {
