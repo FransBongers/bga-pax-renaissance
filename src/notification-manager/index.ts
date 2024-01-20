@@ -250,6 +250,8 @@ class NotificationManager {
     const oldSide = card.side === REPUBLIC ? KING : REPUBLIC;
     const player = this.getPlayer({ playerId });
 
+    this.game.gameMap.updateCoatOfArms({ card });
+
     this.removePrestige({ prestige: card[oldSide].prestige, player });
 
     if (formerSuzerain !== null) {
@@ -273,6 +275,8 @@ class NotificationManager {
 
   async notif_moveEmpireSquare(notif: Notif<NotifMoveEmpireSquareArgs>) {
     const { playerId, card, origin, destination } = notif.args;
+
+    this.game.gameMap.updateCoatOfArms({ card });
 
     if (origin.type === EMPIRE_SQUARE_ORIGIN_TABLEAU) {
       this.removeEmpireSquarePrestige({
@@ -543,6 +547,8 @@ class NotificationManager {
 
   async notif_returnToThrone(notif: Notif<NotifReturnToThroneArgs>) {
     const { king, fromSide, playerId, suzerain } = notif.args;
+
+    this.game.gameMap.updateCoatOfArms({ card: king });
 
     await this.game.gameMap
       .getEmpireSquareStock({ empireId: king.empire })

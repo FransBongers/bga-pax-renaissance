@@ -81,6 +81,7 @@ trait DebugTrait
 
   function test()
   {
+    Cards::get('EmpireSquare_Mamluk')->setSide(REPUBLIC);
     // $this->debugPlaceToken(ROOK,REFORMIST,PARIS);
     // $this->debugPlaceCardInMarket('COMET1_Copernicus');
     

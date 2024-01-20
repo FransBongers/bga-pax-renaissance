@@ -3140,6 +3140,9 @@ var GameMap = (function () {
             }
             node.insertAdjacentHTML("beforeend", tplToken(token));
         });
+        gamedatas.empireSquares.forEach(function (card) {
+            _this.updateCoatOfArms({ card: card });
+        });
     };
     GameMap.prototype.setupGameMap = function (_a) {
         var gamedatas = _a.gamedatas;
@@ -3176,6 +3179,15 @@ var GameMap = (function () {
             venice2Node.style.opacity = "0";
         }
     };
+    GameMap.prototype.updateCoatOfArms = function (_a) {
+        var card = _a.card;
+        var coatOfArmsNode = document.getElementById("pr_".concat(card.empire, "_coat_of_arms"));
+        if (!coatOfArmsNode) {
+            return;
+        }
+        coatOfArmsNode.setAttribute('data-side', card.side);
+        coatOfArmsNode.setAttribute('data-owner', card.owningBank === null ? 'none' : card.owningBank);
+    };
     return GameMap;
 }());
 var tplToken = function (_a) {
@@ -3204,7 +3216,7 @@ var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map
 var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(THRONES_CONFIG)
     .map(function (_a) {
     var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left, location = _b.location;
-    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne pr_empire_throne_").concat(location, "\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
+    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne pr_empire_throne_").concat(location, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n          <div id=\"pr_").concat(empire, "_coat_of_arms\" class=\"pr_empire_throne_coat_of_arms\"></div>\n        </div>");
 })
     .join(""), "\n"); };
 var tplGameMapMapBorders = function () {
@@ -4024,6 +4036,7 @@ var NotificationManager = (function () {
                         _a = notif.args, playerId = _a.playerId, card = _a.card, formerSuzerain = _a.formerSuzerain;
                         oldSide = card.side === REPUBLIC ? KING : REPUBLIC;
                         player = this.getPlayer({ playerId: playerId });
+                        this.game.gameMap.updateCoatOfArms({ card: card });
                         this.removePrestige({ prestige: card[oldSide].prestige, player: player });
                         if (!(formerSuzerain !== null)) return [3, 2];
                         this.game.tableauCardManager.removeVassal({
@@ -4061,6 +4074,7 @@ var NotificationManager = (function () {
                 switch (_b.label) {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, card = _a.card, origin = _a.origin, destination = _a.destination;
+                        this.game.gameMap.updateCoatOfArms({ card: card });
                         if (origin.type === EMPIRE_SQUARE_ORIGIN_TABLEAU) {
                             this.removeEmpireSquarePrestige({
                                 empireSquare: card,
@@ -4391,6 +4405,7 @@ var NotificationManager = (function () {
                 switch (_b.label) {
                     case 0:
                         _a = notif.args, king = _a.king, fromSide = _a.fromSide, playerId = _a.playerId, suzerain = _a.suzerain;
+                        this.game.gameMap.updateCoatOfArms({ card: king });
                         return [4, this.game.gameMap
                                 .getEmpireSquareStock({ empireId: king.empire })
                                 .addCard(king)];

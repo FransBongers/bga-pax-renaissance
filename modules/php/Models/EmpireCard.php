@@ -52,6 +52,7 @@ class EmpireCard extends Card
   public function jsonSerialize()
   {
     $data = parent::jsonSerialize();
+    $owner = $this->getOwner();
     return array_merge($data, [
       'empire' => $this->empire,
       'side' => $this->side,
@@ -61,6 +62,7 @@ class EmpireCard extends Card
       'suzerainId' => $this->isVassal() ? $this->getSuzerain()->getId() : null,
       'queens' => $this->getQueens(),
       'isQueen' => false,
+      'owningBank' => $owner !== null ? $owner->getBank() : null,
       KING => [
         'agents' => $this->agents[KING],
         'name' => $this->name[KING],

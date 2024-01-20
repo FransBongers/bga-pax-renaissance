@@ -205,6 +205,10 @@ class GameMap {
 
       node.insertAdjacentHTML("beforeend", tplToken(token));
     });
+
+    gamedatas.empireSquares.forEach((card) => {
+      this.updateCoatOfArms({card});
+    });
   }
 
   // Setup functions
@@ -281,6 +285,16 @@ class GameMap {
     } else {
       venice2Node.style.opacity = "0";
     }
+  }
+
+  public updateCoatOfArms({card}: {card: EmpireCard})
+  {
+    const coatOfArmsNode = document.getElementById(`pr_${card.empire}_coat_of_arms`);
+    if (!coatOfArmsNode) {
+      return;
+    }
+    coatOfArmsNode.setAttribute('data-side', card.side);
+    coatOfArmsNode.setAttribute('data-owner', card.owningBank === null ? 'none' : card.owningBank);
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

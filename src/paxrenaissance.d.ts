@@ -137,6 +137,7 @@ interface EmpireCard extends PaxRenCard {
   republic: EmpireCardSide;
   side: "king" | "republic";
   type: "empireCard";
+  owningBank: string | null;
   // region: "east" | "west";
 }
 
