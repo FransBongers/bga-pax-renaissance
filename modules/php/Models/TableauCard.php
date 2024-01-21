@@ -21,6 +21,7 @@ class TableauCard extends Card
   protected $prestige = [];
   protected $region;
   protected $specialAbilities = [];
+  protected $ageOfReformationPromo = false;
 
   public function __construct($row)
   {
@@ -123,6 +124,12 @@ class TableauCard extends Card
   // .##.....##....##.....##..##........##.....##.......##...
   // .##.....##....##.....##..##........##.....##.......##...
   // ..#######.....##....####.########.####....##.......##...
+
+  public function isAgeOfReformpationPromo()
+  {
+    return $this->ageOfReformationPromo;
+  }
+
 
   public function isCometCard()
   {

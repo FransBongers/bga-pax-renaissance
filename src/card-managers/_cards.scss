@@ -251,9 +251,13 @@ $east-cards2: (
   33: "EAST_BACK",
   34: "COMET1",
   35: "COMET2",
+  36: "PREN208P",
+  37: "PREN209P",
+  38: "PREN210P",
+  39: "PREN211P",
 );
 
-@for $i from 1 through 35 {
+@for $i from 1 through 39 {
   .pr_card[data-card-id="#{map.get($east-cards2,$i)}"] {
     background-image: url("img/east_cards2.webp");
     background-size: 1000% 400%;
@@ -372,9 +376,14 @@ $west-cards2: (
   53: "WEST_BACK",
   54: "COMET3",
   55: "COMET4",
+  56: "PREN212P",
+  57: "PREN213P",
+  58: "PREN214P",
+  59: "PREN215P",
+  60: "PREN216P",
 );
 
-@for $i from 1 through 55 {
+@for $i from 1 through 60 {
   .pr_card[data-card-id="#{map.get($west-cards2,$i)}"] {
     background-image: url("img/west_cards2.webp");
     background-size: 1000% 600%;
@@ -421,8 +430,8 @@ $square-cards: (
 @for $i from 1 through 30 {
   .pr_square_card[data-card-id="#{map.get($square-cards,$i)}"] {
     background-image: url("img/square_cards.webp");
-    background-size: 1000% 300%;
+    background-size: 1000% 400%;
     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
-    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 2);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
   }
 }

@@ -8,6 +8,8 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Helpers\Utils;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
 /**
  * Cards
  */
@@ -129,9 +131,15 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
     // Load list of cards
     include dirname(__FILE__) . '/../Cards/list.inc.php';
 
+    $addAgeOfReformationPromoCards = Globals::getStartingMap() === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
     // $baseProjects = [];
     foreach ($cardIds as $cId) {
       $card = self::getCardInstance($cId);
+
+      if ($card->isAgeOfReformpationPromo() && !$addAgeOfReformationPromoCards) {
+        continue;
+      }
 
       $type = $card->getType();
 

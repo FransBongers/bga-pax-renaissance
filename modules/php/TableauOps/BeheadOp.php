@@ -99,6 +99,20 @@ class BeheadOp extends \PaxRenaissance\Models\TableauOp
       });
     }
 
+    if ($card->hasSpecialAbility(SA_BEHEAD_EAST_CARD_WITH_BISHOP_ONLY)) {
+      $options = Utils::filter($options, function ($tableauCard) {
+        $tokens = $tableauCard->getTokens();
+        $hasBishop = Utils::array_some($tokens, function ($token) {
+          return $token->getType() === BISHOP;
+        });
+        if (!$hasBishop) {
+          return false;
+        }
+
+        return true;
+      });
+    }
+
     return $options;
   }
 }

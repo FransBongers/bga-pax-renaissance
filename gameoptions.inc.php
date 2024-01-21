@@ -29,6 +29,22 @@ namespace PaxRenaissance;
 require_once 'modules/php/gameoptions.inc.php';
 
 $game_options = [
+  OPTION_STARTING_MAP => [
+    'name' => totranslate('Starting map'),
+    'values' => [
+      OPTION_STARTING_MAP_DEFAULT => [
+        'name' => totranslate('Default'),
+      ],
+      OPTION_STARTING_MAP_1550_VARIANT => [
+        'name' => totranslate('1550 Map Variant'),
+        'tmdisplay' => totranslate('1550 Map Variant'),
+      ],
+      OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT => [
+        'name' => totranslate('Age of Reformation Promo Variant'),
+        'tmdisplay' => totranslate('Age of Reformation Promo Variant'),
+      ],
+    ]
+  ],
   OPTION_OPEN_HANDS => [
     'name' => totranslate('Open hands'),
     'values' => [

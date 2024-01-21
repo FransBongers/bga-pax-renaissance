@@ -9,6 +9,9 @@ use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Helpers\Utils;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_1550_VARIANT;
+use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
 /**
  * Tokens
  */
@@ -186,10 +189,15 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
 
   private function setupPlaceTokens($players, $options)
   {
+    $mapOption = Globals::getStartingMap();
+    $mapVariant1550 = $mapOption === OPTION_STARTING_MAP_1550_VARIANT;
+    $mapVariantAgeOfReformationPromo = $mapOption === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
+
     $setup = [
-      LONDON => Locations::supply(ROOK, CATHOLIC),
+      LONDON => $mapVariant1550 || $mapVariantAgeOfReformationPromo ? Locations::supply(KNIGHT, REFORMIST) : Locations::supply(ROOK, CATHOLIC),
       PARIS => Locations::supply(KNIGHT, CATHOLIC),
-      VIENNA => Locations::supply(ROOK, CATHOLIC),
+      VIENNA => $mapVariant1550 || $mapVariantAgeOfReformationPromo ? Locations::supply(KNIGHT, REFORMIST) : Locations::supply(ROOK, CATHOLIC),
       BUDA => Locations::supply(KNIGHT, CATHOLIC),
       TANA => Locations::supply(KNIGHT, ISLAMIC),
       TOLEDO => Locations::supply(KNIGHT, CATHOLIC),

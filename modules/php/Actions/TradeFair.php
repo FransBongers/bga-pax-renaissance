@@ -45,9 +45,10 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
     $florinsFromChina = self::florinsFromChina($region);
     Notifications::tradeFairConvene($player, $region, $florinsFromChina);
 
-    self::emporiumSubsidy($player, $region);
-
     $profits = Market::getMarketFlorins($region, 0);
+    $profits = self::emporiumSubsidy($player, $region, $profits);
+
+    
     if ($profits === 0) {
       Notifications::tradeFairNoVoyage();
     } else {
@@ -59,11 +60,15 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
   }
 
   // TODO: Bankruptcy variant
-  private function emporiumSubsidy($player, $region)
+  private function emporiumSubsidy($player, $region, $profits)
   {
-    $player->incFlorins(1);
-    Market::incMarketFlorins($region, 0, -1);
-    Notifications::tradeFairEmporiumSubsidy($player, $region, 1);
+    $maxSubsidy = $player->hasSpecialAbility(SA_EMPORIUM_SUBSIDY_2_FLORINS) ? 2 : 1;
+    $subsidy = min($profits, $maxSubsidy);
+
+    $player->incFlorins($subsidy);
+    Market::incMarketFlorins($region, 0, -$subsidy);
+    Notifications::tradeFairEmporiumSubsidy($player, $region, $subsidy);
+    return $profits - $subsidy;
   }
 
   private function florinsFromChina($region)

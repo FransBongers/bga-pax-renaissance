@@ -79,12 +79,28 @@ trait DebugTrait
     $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_BYZANTIUM_HUNGARY);
   }
 
+  function debugAgeOfReformationCards()
+  {
+    Notifications::log('adding reformation cards',[]);
+    $this->debugPlaceCardInMarket('PREN208P_Sarmatism',EAST,4);
+    $this->debugPlaceCardInMarket('PREN209P_BureauOfBarbarians',EAST,3);
+    $this->debugPlaceCardInMarket('PREN210P_KaysarIRum',EAST,2);
+    $this->debugPlaceCardInMarket('PREN211P_UskokPirates',EAST,1);
+    $this->debugPlaceCardInMarket('PREN212P_SzapolyaFamily',WEST,5);
+    $this->debugPlaceCardInMarket('PREN213P_NetherlandsInquisition',WEST,4);
+    $this->debugPlaceCardInMarket('PREN214P_Huguenots',WEST,3);
+    $this->debugPlaceCardInMarket('PREN215P_ReformationParliament',WEST,2);
+    $this->debugPlaceCardInMarket('PREN216P_MargaretOfParma',WEST,1);
+  }
+
   function test()
   {
+    // $this->debugAgeOfReformationCards();
+    Notifications::log('card',Cards::get('PREN208P_Sarmatism'));
     // Cards::get('EmpireSquare_Mamluk')->setSide(REPUBLIC);
     // Cards::move('PREN078_SittIHatunOfDulkadir','queens_byzantium');
-    $this->debugPlaceCardInTableau('PREN059_Safavids', EAST, 2371053);
-    $this->debugPlaceCardInTableau('PREN008_Jesuits', WEST, 2371053);
+    // $this->debugPlaceCardInTableau('PREN059_Safavids', EAST, 2371053);
+    // $this->debugPlaceCardInTableau('PREN008_Jesuits', WEST, 2371053);
     
 
     // $this->debugPlaceToken(ROOK,REFORMIST,PARIS);

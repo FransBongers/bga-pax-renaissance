@@ -185,4 +185,13 @@ $cardIds = [
   'PREN166X_BankOfStGeorge',
   'PREN167X_TwelverGhulat',
   'PREN168X_ZionistState',
+  'PREN208P_Sarmatism',
+  'PREN209P_BureauOfBarbarians',
+  'PREN210P_KaysarIRum',
+  'PREN211P_UskokPirates',
+  'PREN212P_SzapolyaFamily',
+  'PREN213P_NetherlandsInquisition',
+  'PREN214P_Huguenots',
+  'PREN215P_ReformationParliament',
+  'PREN216P_MargaretOfParma',
 ];

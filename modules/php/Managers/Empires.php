@@ -10,6 +10,9 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Players;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_1550_VARIANT;
+use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
 class Empires
 {
   // Mapping of empireId and corresponding class
@@ -28,10 +31,14 @@ class Empires
 
   public static function setupNewGame($players = null, $options = null)
   {
+    $mapOption = Globals::getStartingMap();
+    $mapVariant1550 = $mapOption === OPTION_STARTING_MAP_1550_VARIANT;
+    $mapVariantAgeOfReformationPromo = $mapOption === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
     Globals::setEmpireReligions([
-      ENGLAND => MEDIEVAL,
+      ENGLAND => $mapVariant1550 || $mapVariantAgeOfReformationPromo ? REFORMIST : MEDIEVAL,
       FRANCE => MEDIEVAL,
-      HOLY_ROMAN_EMIRE => MEDIEVAL,
+      HOLY_ROMAN_EMIRE => $mapVariant1550 || $mapVariantAgeOfReformationPromo ? REFORMIST : MEDIEVAL,
       HUNGARY => MEDIEVAL,
       BYZANTIUM => MEDIEVAL,
       PORTUGAL => MEDIEVAL,
