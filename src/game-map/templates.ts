@@ -87,12 +87,12 @@ const tplGameMapMapBorders = () => {
     .join("");
 };
 
+// style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"
+
 const tplGameMapMapCards = () => {
   const htmlArray = Object.entries(MAP_CONFIG).map(
     ([empire, data]) => `
-  <div id="pr_${empire}" class="pr_map_card" data-card-id="medieval_${empire}" style="top: calc(var(--paxRenMapScale) * ${
-      data.top
-    }px); left: calc(var(--paxRenMapScale) * ${data.left}px);">
+  <div id="pr_${empire}" class="pr_map_card" data-card-id="medieval_${empire}">
     ${Object.entries(data.cities)
       .map(([city, coords]) => {
         if (city === VENICE_2) {
@@ -100,7 +100,7 @@ const tplGameMapMapCards = () => {
                     <div id="pr_${city}" class="pr_city"></div>
                   </div>`;
         } else {
-          return `<div id="pr_${city}" class="pr_city" style="top: calc(var(--paxRenMapScale) * ${coords.top}px); left: calc(var(--paxRenMapScale) * ${coords.left}px);"></div>`;
+          return `<div id="pr_${city}" data-city-id="${city}" class="pr_city"></div>`;
         }        
       })
       .join("")}

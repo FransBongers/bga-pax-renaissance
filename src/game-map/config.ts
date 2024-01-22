@@ -187,6 +187,10 @@ const MAP_CONFIG = {
         top: 158,
         left: 15.5,
       },
+      [KVIV]: {
+        top: 46,
+        left: 97,
+      },
       [VARNA]: {
         top: 170.5,
         left: 76,

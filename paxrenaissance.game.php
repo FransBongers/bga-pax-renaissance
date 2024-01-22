@@ -49,6 +49,8 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\PlayersExtra;
 use PaxRenaissance\Managers\Tokens;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
 class PaxRenaissance extends Table
 {
     use PaxRenaissance\DebugTrait;
@@ -128,6 +130,7 @@ class PaxRenaissance extends Table
             'empireSquares' => Cards::getAllEmpireSquares(),
             'gameMap' => MapBoard::getUiData(),
             'gameOptions' => [
+                'ageOfReformationPromo' => Globals::getStartingMap() === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT,
                 'openHands' => Globals::getOpenHands(),
             ],
             'market' => Market::getUiData(),

@@ -2,6 +2,7 @@
 
 namespace PaxRenaissance\Managers;
 
+use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Managers\Cards;
 

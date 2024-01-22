@@ -209,6 +209,7 @@ const LONDON = "london";
 const BORDEAUX = "bordeaux";
 const BRUGES = "bruges";
 const PARIS = "paris";
+const KVIV = "kviv";
 const LYON = "lyon";
 const LUBECK = "lubeck";
 const NURNBERG = "nurnberg";

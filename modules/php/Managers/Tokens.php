@@ -56,7 +56,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       throw new \BgaVisibleSystemException('Trying to get a token not defined in Tokens.php : ' . $type);
     }
 
-    $className = "\PaxRenaissance\Tokens\\".self::$classes[$type];
+    $className = "\PaxRenaissance\Tokens\\" . self::$classes[$type];
     return new $className($data);
   }
 
@@ -121,7 +121,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
 
   public static function getConcessions()
   {
-    return self::getOfTypeInLocation('pawn_','border_');
+    return self::getOfTypeInLocation('pawn_', 'border_');
   }
 
   // ..######..########.########.##.....##.########.
@@ -203,19 +203,17 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       TOLEDO => Locations::supply(KNIGHT, CATHOLIC),
       VALENCIA => Locations::supply(KNIGHT, CATHOLIC),
       VENICE => Locations::supply(KNIGHT, CATHOLIC),
-      CONSTANTINOPLE_1 => Locations::supply(ROOK, ISLAMIC),
-      CONSTANTINOPLE_2 => Locations::supply(KNIGHT, ISLAMIC),
-      CONSTANTINOPLE_3 => Locations::supply(KNIGHT, ISLAMIC),
+      CONSTANTINOPLE_1 => $mapVariantAgeOfReformationPromo ? Locations::supply(ROOK, REFORMIST) : Locations::supply(ROOK, ISLAMIC),
+      CONSTANTINOPLE_2 => $mapVariantAgeOfReformationPromo ? Locations::supply(KNIGHT, REFORMIST) : Locations::supply(KNIGHT, ISLAMIC),
       CAIRO => Locations::supply(ROOK, ISLAMIC),
       TIMBUKTU => Locations::supply(DISK, BLACK),
       NOVGOROD => Locations::supply(DISK, BLACK),
       SPICE_ISLANDS => Locations::supply(DISK, WHITE),
       RED_SEA => Locations::supply(DISK, WHITE),
-      // TODO: remove
-      // BORDER_HUNGARY_OTTOMAN => Locations::supply(PIRATE, ISLAMIC),
-      // BORDER_ARAGON_PORTUGAL => Locations::supply(PIRATE, REFORMIST),
-      // BORDER_OTTOMAN_PAPAL_STATES => Locations::supply(PIRATE, CATHOLIC),
     ];
+    if (!$mapVariantAgeOfReformationPromo) {
+      $setup[CONSTANTINOPLE_3] = Locations::supply(KNIGHT, ISLAMIC);
+    }
 
     foreach ($setup as $location => $pool) {
       $token = self::getTopOf($pool);

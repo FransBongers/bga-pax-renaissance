@@ -135,6 +135,7 @@ var LONDON = "london";
 var BORDEAUX = "bordeaux";
 var BRUGES = "bruges";
 var PARIS = "paris";
+var KVIV = "kviv";
 var LYON = "lyon";
 var LUBECK = "lubeck";
 var NURNBERG = "nurnberg";
@@ -2858,6 +2859,10 @@ var MAP_CONFIG = (_c = {},
                 top: 158,
                 left: 15.5,
             },
+            _g[KVIV] = {
+                top: 46,
+                left: 97,
+            },
             _g[VARNA] = {
                 top: 170.5,
                 left: 76,
@@ -3067,6 +3072,7 @@ var GameMap = (function () {
         gamedatas.gameMap.empires.forEach(function (empire) {
             return _this.setEmpireReligion({ empireId: empire.id, religion: empire.religion });
         });
+        this.setAgeOfReformationPromoAttributes(gamedatas.gameOptions.ageOfReformationPromo);
         this.setVenice2Visibility(gamedatas.gameMap.condottiereActive);
     };
     GameMap.prototype.setupTokensBorders = function (_a) {
@@ -3166,6 +3172,18 @@ var GameMap = (function () {
         }
         node.setAttribute("data-card-id", "".concat(religion, "_").concat(empireId));
     };
+    GameMap.prototype.setAgeOfReformationPromoAttributes = function (active) {
+        if (!active) {
+            return;
+        }
+        [HUNGARY, OTTOMAN].forEach(function (empire) {
+            var node = document.getElementById("pr_".concat(empire));
+            if (!node) {
+                return;
+            }
+            node.setAttribute('data-map-type', 'ageOfReformation');
+        });
+    };
     GameMap.prototype.setVenice2Visibility = function (visible) {
         if (visible === void 0) { visible = true; }
         var venice2Node = document.getElementById("venice2_overlay");
@@ -3230,14 +3248,14 @@ var tplGameMapMapBorders = function () {
 var tplGameMapMapCards = function () {
     var htmlArray = Object.entries(MAP_CONFIG).map(function (_a) {
         var empire = _a[0], data = _a[1];
-        return "\n  <div id=\"pr_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(data.top, "px); left: calc(var(--paxRenMapScale) * ").concat(data.left, "px);\">\n    ").concat(Object.entries(data.cities)
+        return "\n  <div id=\"pr_".concat(empire, "\" class=\"pr_map_card\" data-card-id=\"medieval_").concat(empire, "\">\n    ").concat(Object.entries(data.cities)
             .map(function (_a) {
             var city = _a[0], coords = _a[1];
             if (city === VENICE_2) {
                 return "<div id=\"".concat(city, "_overlay\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px); opacity: 0;\">\n                    <div id=\"pr_").concat(city, "\" class=\"pr_city\"></div>\n                  </div>");
             }
             else {
-                return "<div id=\"pr_".concat(city, "\" class=\"pr_city\" style=\"top: calc(var(--paxRenMapScale) * ").concat(coords.top, "px); left: calc(var(--paxRenMapScale) * ").concat(coords.left, "px);\"></div>");
+                return "<div id=\"pr_".concat(city, "\" data-city-id=\"").concat(city, "\" class=\"pr_city\"></div>");
             }
         })
             .join(""), "\n  </div>\n");

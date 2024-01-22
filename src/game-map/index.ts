@@ -79,6 +79,7 @@ class GameMap {
     gamedatas.gameMap.empires.forEach((empire) =>
       this.setEmpireReligion({ empireId: empire.id, religion: empire.religion })
     );
+    this.setAgeOfReformationPromoAttributes(gamedatas.gameOptions.ageOfReformationPromo);
     this.setVenice2Visibility(gamedatas.gameMap.condottiereActive);
   }
 
@@ -273,6 +274,19 @@ class GameMap {
     // } else {
     node.setAttribute("data-card-id", `${religion}_${empireId}`);
     // }
+  }
+
+  private setAgeOfReformationPromoAttributes(active) {
+    if (!active) {
+      return;
+    }
+    [HUNGARY, OTTOMAN].forEach((empire) => {
+      const node = document.getElementById(`pr_${empire}`);
+      if (!node) {
+        return;
+      }
+      node.setAttribute('data-map-type','ageOfReformation');
+    });
   }
 
   public setVenice2Visibility(visible = true) {

@@ -37,8 +37,8 @@
   transform-origin: top left;
   --paxRenCardScale: var(--paxRenLeftColumnScale);
   --paxRenMapScale: var(--paxRenLeftColumnScale);
-  --paxRenTokenScale:  var(--paxRenLeftColumnScale);
-  --paxRenIconScale:  var(--paxRenLeftColumnScale);
+  --paxRenTokenScale: var(--paxRenLeftColumnScale);
+  --paxRenIconScale: var(--paxRenLeftColumnScale);
 }
 
 .pr_game_map_zoom_buttons {
@@ -49,7 +49,8 @@
   // background-color: yellow;
 }
 
-.pr_victory_slot, .pr_empire_throne {
+.pr_victory_slot,
+.pr_empire_throne {
   position: absolute;
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 151px);
@@ -76,12 +77,18 @@
 
 .pr_empire_throne_coat_of_arms[data-side="king"] {
   // filter: drop-shadow(calc(var(--paxRenMapScale) * 2px) 0px 0px yellow) drop-shadow(calc(var(--paxRenMapScale) * -2px) 0px 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * 2px) 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * -2px) 0px yellow);
-  filter: drop-shadow(2px 0px 0px base.$empire-square-king) drop-shadow(-2px 0px 0px base.$empire-square-king) drop-shadow(0px 2px 0px base.$empire-square-king) drop-shadow(0px -2px 0px base.$empire-square-king);
+  filter: drop-shadow(2px 0px 0px base.$empire-square-king)
+    drop-shadow(-2px 0px 0px base.$empire-square-king)
+    drop-shadow(0px 2px 0px base.$empire-square-king)
+    drop-shadow(0px -2px 0px base.$empire-square-king);
 }
 
 .pr_empire_throne_coat_of_arms[data-side="republic"] {
   // filter: drop-shadow(calc(var(--paxRenMapScale) * 2px) 0px 0px yellow) drop-shadow(calc(var(--paxRenMapScale) * -2px) 0px 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * 2px) 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * -2px) 0px yellow);
-  filter: drop-shadow(2px 0px 0px base.$empire-square-republic) drop-shadow(-2px 0px 0px base.$empire-square-republic) drop-shadow(0px 2px 0px base.$empire-square-republic) drop-shadow(0px -2px 0px base.$empire-square-republic);
+  filter: drop-shadow(2px 0px 0px base.$empire-square-republic)
+    drop-shadow(-2px 0px 0px base.$empire-square-republic)
+    drop-shadow(0px 2px 0px base.$empire-square-republic)
+    drop-shadow(0px -2px 0px base.$empire-square-republic);
 }
 
 .pr_empire_throne_coat_of_arms[data-owner="none"] {
@@ -103,7 +110,6 @@
 .pr_empire_throne_coat_of_arms[data-owner="marchionni"] {
   background-position-x: 80%;
 }
-
 
 /* ------- MAP CARDS ------- */
 
@@ -164,293 +170,1028 @@ $map-cards: (
 
 /* ------- MAP CARDS ------- */
 .pr_map_card {
-  box-sizing: border-box;
+  // box-sizing: border-box;
   width: calc(var(--paxRenCardScale) * 151px);
   height: calc(var(--paxRenCardScale) * 230px);
+  border: calc(var(--paxRenMapScale) * 1px) black solid;
   position: absolute;
+  background-image: url("img/map_cards.webp");
   background-size: 1000% 500%;
   background-repeat: no-repeat;
   border-radius: calc(var(--paxRenCardScale) * 5px);
 }
 
-.pr_map_card[data-card-id=catholic_england] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_england"] {
   background-position-x: 0%;
   background-position-y: 0%;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 229px);
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 349px);
+
+  .pr_city[data-city-id="london"] {
+    top: calc(var(--paxRenMapScale) * 76px);
+    left: calc(var(--paxRenMapScale) * 79px);
+  }
+
+  .pr_city[data-city-id="bordeaux"] {
+    top: calc(var(--paxRenMapScale) * 183px);
+    left: calc(var(--paxRenMapScale) * 108px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_france] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_france"] {
   background-position-x: 11.1111111111%;
   background-position-y: 0%;
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 525.5px);
+
+  .pr_city[data-city-id="bruges"] {
+    top: calc(var(--paxRenMapScale) * 65.5px);
+    left: calc(var(--paxRenMapScale) * 52.5px);
+  }
+
+  .pr_city[data-city-id="paris"] {
+    top: calc(var(--paxRenMapScale) * 127.5px);
+    left: calc(var(--paxRenMapScale) * 8.5px);
+  }
+
+  .pr_city[data-city-id="lyon"] {
+    top: calc(var(--paxRenMapScale) * 164px);
+    left: calc(var(--paxRenMapScale) * 93px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_holyRomanEmpire] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_holyRomanEmpire"] {
   background-position-x: 22.2222222222%;
   background-position-y: 0%;
+  width: calc(var(--paxRenCardScale) * 152.5px);
+  height: calc(var(--paxRenCardScale) * 232px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 701px);
+
+  .pr_city[data-city-id="lubeck"] {
+    top: calc(var(--paxRenMapScale) * 41.5px);
+    left: calc(var(--paxRenMapScale) * 28px);
+  }
+
+  .pr_city[data-city-id="novgorod"] {
+    top: calc(var(--paxRenMapScale) * 34px);
+    left: calc(var(--paxRenMapScale) * 91px);
+  }
+
+  .pr_city[data-city-id="nurnberg"] {
+    top: calc(var(--paxRenMapScale) * 130px);
+    left: calc(var(--paxRenMapScale) * 14px);
+  }
+
+  .pr_city[data-city-id="vienna"] {
+    top: calc(var(--paxRenMapScale) * 152px);
+    left: calc(var(--paxRenMapScale) * 91px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_hungary] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_hungary"] {
   background-position-x: 33.3333333333%;
   background-position-y: 0%;
+
+  width: calc(var(--paxRenCardScale) * 150px);
+  height: calc(var(--paxRenCardScale) * 231.5px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 876px);
+
+  .pr_city[data-city-id="buda"] {
+    top: calc(var(--paxRenMapScale) * 159px);
+    left: calc(var(--paxRenMapScale) * 14.5px);
+  }
+
+  .pr_city[data-city-id="kviv"] {
+    top: calc(var(--paxRenMapScale) * 47px);
+    left: calc(var(--paxRenMapScale) * 97px);
+  }
+
+  .pr_city[data-city-id="varna"] {
+    top: calc(var(--paxRenMapScale) * 171.5px);
+    left: calc(var(--paxRenMapScale) * 75px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_byzantium] {
-  border: 1px black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_byzantium"] {
   background-position-x: 44.4444444444%;
   background-position-y: 0%;
+  width: calc(var(--paxRenCardScale) * 152px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 1052px);
+
+  .pr_city[data-city-id="tana"] {
+    top: calc(var(--paxRenMapScale) * 40px);
+    left: calc(var(--paxRenMapScale) * 40.5px);
+  }
+
+  .pr_city[data-city-id="caffa"] {
+    top: calc(var(--paxRenMapScale) * 131.5px);
+    left: calc(var(--paxRenMapScale) * 7px);
+  }
+
+  .pr_city[data-city-id="trebizond"] {
+    top: calc(var(--paxRenMapScale) * 188px);
+    left: calc(var(--paxRenMapScale) * 113px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_portugal] {
-  border: 1px black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_portugal"] {
   background-position-x: 55.5555555556%;
   background-position-y: 0%;
+  height: calc(var(--paxRenCardScale) * 228.5px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 350px);
+
+  .pr_city[data-city-id="toledo"] {
+    top: calc(var(--paxRenMapScale) * 62px);
+    left: calc(var(--paxRenMapScale) * 94.5px);
+  }
+
+  .pr_city[data-city-id="granada"] {
+    top: calc(var(--paxRenMapScale) * 117.5px);
+    left: calc(var(--paxRenMapScale) * 104px);
+  }
+
+  .pr_city[data-city-id="spiceIslands"] {
+    top: calc(var(--paxRenMapScale) * 184px);
+    left: calc(var(--paxRenMapScale) * 36.5px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_aragon] {
-  border: 1px black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_aragon"] {
   background-position-x: 66.6666666667%;
   background-position-y: 0%;
+  top: calc(var(--paxRenMapScale) * 524px);
+  left: calc(var(--paxRenMapScale) * 524.5px);
+
+  .pr_city[data-city-id="valencia"] {
+    top: calc(var(--paxRenMapScale) * 55px);
+    left: calc(var(--paxRenMapScale) * 15px);
+  }
+
+  .pr_city[data-city-id="algiers"] {
+    top: calc(var(--paxRenMapScale) * 143px);
+    left: calc(var(--paxRenMapScale) * 102px);
+  }
+
+  .pr_city[data-city-id="timbuktu"] {
+    top: calc(var(--paxRenMapScale) * 165px);
+    left: calc(var(--paxRenMapScale) * 33px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_papalStates] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 77.7777777778%;
-  // background-position-y: 0%;
+.pr_map_card[data-card-id="catholic_papalStates"] {
+  background-image: none;
+  border: none;
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 701px);
+  .pr_city[data-city-id="venice"] {
+    top: calc(var(--paxRenMapScale) * 20.5px);
+    left: calc(var(--paxRenMapScale) * 40px);
+  }
+
+  .pr_city[data-city-id="venice2"] {
+    top: calc(var(--paxRenMapScale) * 39px);
+    left: calc(var(--paxRenMapScale) * 58px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_ottoman] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_ottoman"] {
   background-position-x: 88.8888888889%;
   background-position-y: 0%;
+  width: calc(var(--paxRenCardScale) * 150.5px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 875.5px);
+
+  .pr_city[data-city-id="constantinople1"] {
+    top: calc(var(--paxRenMapScale) * 23.5px);
+    left: calc(var(--paxRenMapScale) * 10px);
+  }
+
+  .pr_city[data-city-id="constantinople2"] {
+    top: calc(var(--paxRenMapScale) * 23.5px);
+    left: calc(var(--paxRenMapScale) * 44px);
+  }
+
+  .pr_city[data-city-id="constantinople3"] {
+    top: calc(var(--paxRenMapScale) * 23.5px);
+    left: calc(var(--paxRenMapScale) * 78.5px);
+  }
+
+  .pr_city[data-city-id="modon"] {
+    top: calc(var(--paxRenMapScale) * 95px);
+    left: calc(var(--paxRenMapScale) * 19px);
+  }
+
+  .pr_city[data-city-id="rhodes"] {
+    top: calc(var(--paxRenMapScale) * 84.5px);
+    left: calc(var(--paxRenMapScale) * 110.5px);
+  }
 }
 
-.pr_map_card[data-card-id=catholic_mamluk] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="catholic_mamluk"] {
   background-position-x: 100%;
   background-position-y: 0%;
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 1053px);
+
+  .pr_city[data-city-id="cyprus"] {
+    top: calc(var(--paxRenMapScale) * 75px);
+    left: calc(var(--paxRenMapScale) * 54.5px);
+  }
+
+  .pr_city[data-city-id="cairo"] {
+    top: calc(var(--paxRenMapScale) * 161px);
+    left: calc(var(--paxRenMapScale) * 42px);
+  }
+
+  .pr_city[data-city-id="redSea"] {
+    top: calc(var(--paxRenMapScale) * 162px);
+    left: calc(var(--paxRenMapScale) * 104px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_england] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_england"] {
   background-position-x: 0%;
   background-position-y: 25%;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 229px);
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 349px);
+
+  .pr_city[data-city-id="london"] {
+    top: calc(var(--paxRenMapScale) * 75px);
+    left: calc(var(--paxRenMapScale) * 79px);
+  }
+
+  .pr_city[data-city-id="bordeaux"] {
+    top: calc(var(--paxRenMapScale) * 183px);
+    left: calc(var(--paxRenMapScale) * 108px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_france] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_france"] {
   background-position-x: 11.1111111111%;
   background-position-y: 25%;
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 525.5px);
+
+  .pr_city[data-city-id="bruges"] {
+    top: calc(var(--paxRenMapScale) * 65px);
+    left: calc(var(--paxRenMapScale) * 52.5px);
+  }
+
+  .pr_city[data-city-id="paris"] {
+    top: calc(var(--paxRenMapScale) * 127.5px);
+    left: calc(var(--paxRenMapScale) * 8.5px);
+  }
+
+  .pr_city[data-city-id="lyon"] {
+    top: calc(var(--paxRenMapScale) * 163.5px);
+    left: calc(var(--paxRenMapScale) * 93.5px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_holyRomanEmpire] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_holyRomanEmpire"] {
   background-position-x: 22.2222222222%;
   background-position-y: 25%;
+  width: calc(var(--paxRenCardScale) * 152.5px);
+  height: calc(var(--paxRenCardScale) * 232px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 701px);
+
+  .pr_city[data-city-id="lubeck"] {
+    top: calc(var(--paxRenMapScale) * 41.5px);
+    left: calc(var(--paxRenMapScale) * 28px);
+  }
+
+  .pr_city[data-city-id="novgorod"] {
+    top: calc(var(--paxRenMapScale) * 35px);
+    left: calc(var(--paxRenMapScale) * 91px);
+  }
+
+  .pr_city[data-city-id="nurnberg"] {
+    top: calc(var(--paxRenMapScale) * 130.5px);
+    left: calc(var(--paxRenMapScale) * 14px);
+  }
+
+  .pr_city[data-city-id="vienna"] {
+    top: calc(var(--paxRenMapScale) * 152.5px);
+    left: calc(var(--paxRenMapScale) * 91px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_hungary] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_hungary"] {
   background-position-x: 33.3333333333%;
   background-position-y: 25%;
+  width: calc(var(--paxRenCardScale) * 150px);
+  height: calc(var(--paxRenCardScale) * 231.5px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 876px);
+
+  .pr_city[data-city-id="buda"] {
+    top: calc(var(--paxRenMapScale) * 160.5px);
+    left: calc(var(--paxRenMapScale) * 14px);
+  }
+
+  .pr_city[data-city-id="kviv"] {
+    top: calc(var(--paxRenMapScale) * 47px);
+    left: calc(var(--paxRenMapScale) * 97px);
+  }
+
+  .pr_city[data-city-id="varna"] {
+    top: calc(var(--paxRenMapScale) * 172px);
+    left: calc(var(--paxRenMapScale) * 74.5px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_byzantium] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_byzantium"] {
   background-position-x: 44.4444444444%;
   background-position-y: 25%;
+  width: calc(var(--paxRenCardScale) * 152px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 1052px);
+
+  .pr_city[data-city-id="tana"] {
+    top: calc(var(--paxRenMapScale) * 40px);
+    left: calc(var(--paxRenMapScale) * 40px);
+  }
+
+  .pr_city[data-city-id="caffa"] {
+    top: calc(var(--paxRenMapScale) * 131px);
+    left: calc(var(--paxRenMapScale) * 5px);
+  }
+
+  .pr_city[data-city-id="trebizond"] {
+    top: calc(var(--paxRenMapScale) * 188.5px);
+    left: calc(var(--paxRenMapScale) * 113.5px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_portugal] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_portugal"] {
   background-position-x: 55.5555555556%;
   background-position-y: 25%;
+  height: calc(var(--paxRenCardScale) * 228.5px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 350px);
+
+  .pr_city[data-city-id="toledo"] {
+    top: calc(var(--paxRenMapScale) * 61px);
+    left: calc(var(--paxRenMapScale) * 94.5px);
+  }
+
+  .pr_city[data-city-id="granada"] {
+    top: calc(var(--paxRenMapScale) * 116.5px);
+    left: calc(var(--paxRenMapScale) * 104px);
+  }
+
+  .pr_city[data-city-id="spiceIslands"] {
+    top: calc(var(--paxRenMapScale) * 183px);
+    left: calc(var(--paxRenMapScale) * 36.5px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_aragon] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_aragon"] {
   background-position-x: 66.6666666667%;
   background-position-y: 25%;
+  top: calc(var(--paxRenMapScale) * 524px);
+  left: calc(var(--paxRenMapScale) * 524.5px);
+
+  .pr_city[data-city-id="valencia"] {
+    top: calc(var(--paxRenMapScale) * 54.5px);
+    left: calc(var(--paxRenMapScale) * 15px);
+  }
+
+  .pr_city[data-city-id="algiers"] {
+    top: calc(var(--paxRenMapScale) * 143px);
+    left: calc(var(--paxRenMapScale) * 102px);
+  }
+
+  .pr_city[data-city-id="timbuktu"] {
+    top: calc(var(--paxRenMapScale) * 165px);
+    left: calc(var(--paxRenMapScale) * 33px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_papalStates] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_papalStates"] {
   background-position-x: 77.7777777778%;
   background-position-y: 25%;
+  width: calc(var(--paxRenCardScale) * 152.5px);
+  height: calc(var(--paxRenCardScale) * 228.5px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 701px);
+  .pr_city[data-city-id="venice"] {
+    top: calc(var(--paxRenMapScale) * 18.5px);
+    left: calc(var(--paxRenMapScale) * 40px);
+  }
+
+  .pr_city[data-city-id="venice2"] {
+    top: calc(var(--paxRenMapScale) * 39px);
+    left: calc(var(--paxRenMapScale) * 58px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_ottoman] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="islamic_ottoman"] {
   background-position-x: 88.8888888889%;
   background-position-y: 25%;
+  width: calc(var(--paxRenCardScale) * 150.5px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 875.5px);
+
+  .pr_city[data-city-id="constantinople1"] {
+    top: calc(var(--paxRenMapScale) * 22.5px);
+    left: calc(var(--paxRenMapScale) * 11px);
+  }
+
+  .pr_city[data-city-id="constantinople2"] {
+    top: calc(var(--paxRenMapScale) * 22.5px);
+    left: calc(var(--paxRenMapScale) * 44px);
+  }
+
+  .pr_city[data-city-id="constantinople3"] {
+    top: calc(var(--paxRenMapScale) * 22.5px);
+    left: calc(var(--paxRenMapScale) * 78px);
+  }
+
+  .pr_city[data-city-id="modon"] {
+    top: calc(var(--paxRenMapScale) * 94px);
+    left: calc(var(--paxRenMapScale) * 17px);
+  }
+
+  .pr_city[data-city-id="rhodes"] {
+    top: calc(var(--paxRenMapScale) * 84px);
+    left: calc(var(--paxRenMapScale) * 106.5px);
+  }
 }
 
-.pr_map_card[data-card-id=islamic_mamluk] {
-  // border: calc(var(--paxRenMapScale) * 1px) black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 100%;
-  // background-position-y: 25%;
+.pr_map_card[data-card-id="islamic_mamluk"] {
+  background-image: none;
+  border: none;
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 1053px);
+
+  .pr_city[data-city-id="cyprus"] {
+    top: calc(var(--paxRenMapScale) * 76px);
+    left: calc(var(--paxRenMapScale) * 54.5px);
+  }
+
+  .pr_city[data-city-id="cairo"] {
+    top: calc(var(--paxRenMapScale) * 162px);
+    left: calc(var(--paxRenMapScale) * 42px);
+  }
+
+  .pr_city[data-city-id="redSea"] {
+    top: calc(var(--paxRenMapScale) * 163.5px);
+    left: calc(var(--paxRenMapScale) * 106px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_england] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 0%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_england"] {
+  background-image: none;
+  border: none;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 229px);
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 349px);
+
+  .pr_city[data-city-id="london"] {
+    top: calc(var(--paxRenMapScale) * 77px);
+    left: calc(var(--paxRenMapScale) * 80px);
+  }
+
+  .pr_city[data-city-id="bordeaux"] {
+    top: calc(var(--paxRenMapScale) * 184px);
+    left: calc(var(--paxRenMapScale) * 109px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_france] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 11.1111111111%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_france"] {
+  background-image: none;
+  border: none;
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 525.5px);
+
+  .pr_city[data-city-id="bruges"] {
+    top: calc(var(--paxRenMapScale) * 66px);
+    left: calc(var(--paxRenMapScale) * 51.5px);
+  }
+
+  .pr_city[data-city-id="paris"] {
+    top: calc(var(--paxRenMapScale) * 128px);
+    left: calc(var(--paxRenMapScale) * 9px);
+  }
+
+  .pr_city[data-city-id="lyon"] {
+    top: calc(var(--paxRenMapScale) * 164.5px);
+    left: calc(var(--paxRenMapScale) * 91.5px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_holyRomanEmpire] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 22.2222222222%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_holyRomanEmpire"] {
+  background-image: none;
+  border: none;
+  width: calc(var(--paxRenCardScale) * 152.5px);
+  height: calc(var(--paxRenCardScale) * 232px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 701px);
+
+  .pr_city[data-city-id="lubeck"] {
+    top: calc(var(--paxRenMapScale) * 43.5px);
+    left: calc(var(--paxRenMapScale) * 27.5px);
+  }
+
+  .pr_city[data-city-id="novgorod"] {
+    top: calc(var(--paxRenMapScale) * 36.5px);
+    left: calc(var(--paxRenMapScale) * 89.5px);
+  }
+
+  .pr_city[data-city-id="nurnberg"] {
+    top: calc(var(--paxRenMapScale) * 130px);
+    left: calc(var(--paxRenMapScale) * 14px);
+  }
+
+  .pr_city[data-city-id="vienna"] {
+    top: calc(var(--paxRenMapScale) * 151px);
+    left: calc(var(--paxRenMapScale) * 89px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_hungary] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 33.3333333333%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_hungary"]:not(
+    [data-map-type="ageOfReformation"]
+  ) {
+  background-image: none;
+  border: none;
+  width: calc(var(--paxRenCardScale) * 150px);
+  height: calc(var(--paxRenCardScale) * 231.5px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 876px);
+
+  .pr_city[data-city-id="buda"] {
+    top: calc(var(--paxRenMapScale) * 159px);
+    left: calc(var(--paxRenMapScale) * 15.5px);
+  }
+
+  .pr_city[data-city-id="kviv"] {
+    top: calc(var(--paxRenMapScale) * 47px);
+    left: calc(var(--paxRenMapScale) * 97px);
+  }
+
+  .pr_city[data-city-id="varna"] {
+    top: calc(var(--paxRenMapScale) * 171.5px);
+    left: calc(var(--paxRenMapScale) * 76px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_byzantium] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 44.4444444444%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_hungary"][data-map-type="ageOfReformation"] {
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+  width: calc(var(--paxRenCardScale) * 150px);
+  height: calc(var(--paxRenCardScale) * 231.5px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 876px);
+
+  .pr_city[data-city-id="buda"] {
+    top: calc(var(--paxRenMapScale) * 159px);
+    left: calc(var(--paxRenMapScale) * 13.5px);
+  }
+
+  .pr_city[data-city-id="kviv"] {
+    top: calc(var(--paxRenMapScale) * 47px);
+    left: calc(var(--paxRenMapScale) * 97px);
+  }
+
+  .pr_city[data-city-id="varna"] {
+    top: calc(var(--paxRenMapScale) * 171.5px);
+    left: calc(var(--paxRenMapScale) * 74px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_portugal] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 55.5555555556%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_byzantium"] {
+  background-image: none;
+  border: none;
+  width: calc(var(--paxRenCardScale) * 152px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 1052px);
+
+  .pr_city[data-city-id="tana"] {
+    top: calc(var(--paxRenMapScale) * 42.5px);
+    left: calc(var(--paxRenMapScale) * 41px);
+  }
+
+  .pr_city[data-city-id="caffa"] {
+    top: calc(var(--paxRenMapScale) * 132.5px);
+    left: calc(var(--paxRenMapScale) * 7px);
+  }
+
+  .pr_city[data-city-id="trebizond"] {
+    top: calc(var(--paxRenMapScale) * 189px);
+    left: calc(var(--paxRenMapScale) * 112.5px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_aragon] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 66.6666666667%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_portugal"] {
+  background-image: none;
+  border: none;
+  height: calc(var(--paxRenCardScale) * 228.5px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 350px);
+
+  .pr_city[data-city-id="toledo"] {
+    top: calc(var(--paxRenMapScale) * 63px);
+    left: calc(var(--paxRenMapScale) * 94px);
+  }
+
+  .pr_city[data-city-id="granada"] {
+    top: calc(var(--paxRenMapScale) * 118.5px);
+    left: calc(var(--paxRenMapScale) * 103.5px);
+  }
+
+  .pr_city[data-city-id="spiceIslands"] {
+    top: calc(var(--paxRenMapScale) * 184.5px);
+    left: calc(var(--paxRenMapScale) * 36.5px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_papalStates] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="medieval_aragon"] {
+  background-image: none;
+  border: none;
+  top: calc(var(--paxRenMapScale) * 524px);
+  left: calc(var(--paxRenMapScale) * 524.5px);
+
+  .pr_city[data-city-id="valencia"] {
+    top: calc(var(--paxRenMapScale) * 57px);
+    left: calc(var(--paxRenMapScale) * 15.5px);
+  }
+
+  .pr_city[data-city-id="algiers"] {
+    top: calc(var(--paxRenMapScale) * 145px);
+    left: calc(var(--paxRenMapScale) * 102.5px);
+  }
+
+  .pr_city[data-city-id="timbuktu"] {
+    top: calc(var(--paxRenMapScale) * 167px);
+    left: calc(var(--paxRenMapScale) * 34px);
+  }
+}
+
+.pr_map_card[data-card-id="medieval_papalStates"] {
   background-position-x: 77.7777777778%;
   background-position-y: 50%;
+  width: calc(var(--paxRenCardScale) * 152.5px);
+  height: calc(var(--paxRenCardScale) * 228.5px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 701px);
+  .pr_city[data-city-id="venice"] {
+    top: calc(var(--paxRenMapScale) * 19.5px);
+    left: calc(var(--paxRenMapScale) * 40px);
+  }
+
+  .pr_city[data-city-id="venice2"] {
+    top: calc(var(--paxRenMapScale) * 39px);
+    left: calc(var(--paxRenMapScale) * 58px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_ottoman] {
-  // border: 1px black solid;
-  // background-image: url("img/map_cards.webp");
-  // background-position-x: 88.8888888889%;
-  // background-position-y: 50%;
+.pr_map_card[data-card-id="medieval_ottoman"]:not(
+    [data-map-type="ageOfReformation"]
+  ) {
+  background-image: none;
+  border: none;
+  width: calc(var(--paxRenCardScale) * 150.5px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 875.5px);
+
+  .pr_city[data-city-id="constantinople1"] {
+    top: calc(var(--paxRenMapScale) * 24.5px);
+    left: calc(var(--paxRenMapScale) * 11px);
+  }
+
+  .pr_city[data-city-id="constantinople2"] {
+    top: calc(var(--paxRenMapScale) * 24.5px);
+    left: calc(var(--paxRenMapScale) * 45.5px);
+  }
+
+  .pr_city[data-city-id="constantinople3"] {
+    top: calc(var(--paxRenMapScale) * 24.5px);
+    left: calc(var(--paxRenMapScale) * 80px);
+  }
+
+  .pr_city[data-city-id="modon"] {
+    top: calc(var(--paxRenMapScale) * 96px);
+    left: calc(var(--paxRenMapScale) * 19.5px);
+  }
+
+  .pr_city[data-city-id="rhodes"] {
+    top: calc(var(--paxRenMapScale) * 86.5px);
+    left: calc(var(--paxRenMapScale) * 108.5px);
+  }
 }
 
-.pr_map_card[data-card-id=medieval_mamluk] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="medieval_ottoman"][data-map-type="ageOfReformation"] {
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+  width: calc(var(--paxRenCardScale) * 151.5px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 526px);
+  left: calc(var(--paxRenMapScale) * 872px);
+
+  .pr_city[data-city-id="constantinople1"] {
+    top: calc(var(--paxRenMapScale) * 21.5px);
+    left: calc(var(--paxRenMapScale) * 23px);
+  }
+
+  .pr_city[data-city-id="constantinople2"] {
+    top: calc(var(--paxRenMapScale) * 21.5px);
+    left: calc(var(--paxRenMapScale) * 67px);
+  }
+
+  .pr_city[data-city-id="constantinople3"] {
+    top: calc(var(--paxRenMapScale) * 21.5px);
+    left: calc(var(--paxRenMapScale) * 111px);
+  }
+
+  .pr_city[data-city-id="modon"] {
+    top: calc(var(--paxRenMapScale) * 94.5px);
+    left: calc(var(--paxRenMapScale) * 21.5px);
+  }
+
+  .pr_city[data-city-id="rhodes"] {
+    top: calc(var(--paxRenMapScale) * 85px);
+    left: calc(var(--paxRenMapScale) * 111.5px);
+  }
+}
+
+.pr_map_card[data-card-id="medieval_mamluk"] {
   background-position-x: 100%;
   background-position-y: 50%;
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 1053px);
+
+  .pr_city[data-city-id="cyprus"] {
+    top: calc(var(--paxRenMapScale) * 74.5px);
+    left: calc(var(--paxRenMapScale) * 54px);
+  }
+
+  .pr_city[data-city-id="cairo"] {
+    top: calc(var(--paxRenMapScale) * 160.5px);
+    left: calc(var(--paxRenMapScale) * 41.5px);
+  }
+
+  .pr_city[data-city-id="redSea"] {
+    top: calc(var(--paxRenMapScale) * 161.5px);
+    left: calc(var(--paxRenMapScale) * 104.5px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_england] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_england"] {
   background-position-x: 0%;
   background-position-y: 75%;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 229px);
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 349px);
+
+  .pr_city[data-city-id="london"] {
+    top: calc(var(--paxRenMapScale) * 74.5px);
+    left: calc(var(--paxRenMapScale) * 80.5px);
+  }
+
+  .pr_city[data-city-id="bordeaux"] {
+    top: calc(var(--paxRenMapScale) * 183px);
+    left: calc(var(--paxRenMapScale) * 108.5px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_france] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_france"] {
   background-position-x: 11.1111111111%;
   background-position-y: 75%;
+  top: calc(var(--paxRenMapScale) * 269.5px);
+  left: calc(var(--paxRenMapScale) * 525.5px);
+
+  .pr_city[data-city-id="bruges"] {
+    top: calc(var(--paxRenMapScale) * 65px);
+    left: calc(var(--paxRenMapScale) * 52px);
+  }
+
+  .pr_city[data-city-id="paris"] {
+    top: calc(var(--paxRenMapScale) * 127.5px);
+    left: calc(var(--paxRenMapScale) * 9px);
+  }
+
+  .pr_city[data-city-id="lyon"] {
+    top: calc(var(--paxRenMapScale) * 164.5px);
+    left: calc(var(--paxRenMapScale) * 92.5px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_holyRomanEmpire] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_holyRomanEmpire"] {
   background-position-x: 22.2222222222%;
   background-position-y: 75%;
+  width: calc(var(--paxRenCardScale) * 152.5px);
+  height: calc(var(--paxRenCardScale) * 232px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 701px);
+
+  .pr_city[data-city-id="lubeck"] {
+    top: calc(var(--paxRenMapScale) * 42.5px);
+    left: calc(var(--paxRenMapScale) * 28px);
+  }
+
+  .pr_city[data-city-id="novgorod"] {
+    top: calc(var(--paxRenMapScale) * 35px);
+    left: calc(var(--paxRenMapScale) * 91px);
+  }
+
+  .pr_city[data-city-id="nurnberg"] {
+    top: calc(var(--paxRenMapScale) * 130px);
+    left: calc(var(--paxRenMapScale) * 14.5px);
+  }
+
+  .pr_city[data-city-id="vienna"] {
+    top: calc(var(--paxRenMapScale) * 152.5px);
+    left: calc(var(--paxRenMapScale) * 91.5px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_hungary] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_hungary"] {
   background-position-x: 33.3333333333%;
   background-position-y: 75%;
+  width: calc(var(--paxRenCardScale) * 150px);
+  height: calc(var(--paxRenCardScale) * 231.5px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 876px);
+
+  .pr_city[data-city-id="buda"] {
+    top: calc(var(--paxRenMapScale) * 159px);
+    left: calc(var(--paxRenMapScale) * 14.5px);
+  }
+
+  .pr_city[data-city-id="kviv"] {
+    top: calc(var(--paxRenMapScale) * 47px);
+    left: calc(var(--paxRenMapScale) * 97px);
+  }
+
+  .pr_city[data-city-id="varna"] {
+    top: calc(var(--paxRenMapScale) * 174px);
+    left: calc(var(--paxRenMapScale) * 73px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_byzantium] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_byzantium"] {
   background-position-x: 44.4444444444%;
   background-position-y: 75%;
+  width: calc(var(--paxRenCardScale) * 152px);
+  top: calc(var(--paxRenMapScale) * 269px);
+  left: calc(var(--paxRenMapScale) * 1052px);
+
+  .pr_city[data-city-id="tana"] {
+    top: calc(var(--paxRenMapScale) * 41px);
+    left: calc(var(--paxRenMapScale) * 41px);
+  }
+
+  .pr_city[data-city-id="caffa"] {
+    top: calc(var(--paxRenMapScale) * 131.5px);
+    left: calc(var(--paxRenMapScale) * 5px);
+  }
+
+  .pr_city[data-city-id="trebizond"] {
+    top: calc(var(--paxRenMapScale) * 188.5px);
+    left: calc(var(--paxRenMapScale) * 112.5px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_portugal] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_portugal"] {
   background-position-x: 55.5555555556%;
   background-position-y: 75%;
+  height: calc(var(--paxRenCardScale) * 228.5px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 350px);
+
+  .pr_city[data-city-id="toledo"] {
+    top: calc(var(--paxRenMapScale) * 61px);
+    left: calc(var(--paxRenMapScale) * 94.5px);
+  }
+
+  .pr_city[data-city-id="granada"] {
+    top: calc(var(--paxRenMapScale) * 117px);
+    left: calc(var(--paxRenMapScale) * 103.5px);
+  }
+
+  .pr_city[data-city-id="spiceIslands"] {
+    top: calc(var(--paxRenMapScale) * 181px);
+    left: calc(var(--paxRenMapScale) * 36px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_aragon] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_aragon"] {
   background-position-x: 66.6666666667%;
   background-position-y: 75%;
+  top: calc(var(--paxRenMapScale) * 524px);
+  left: calc(var(--paxRenMapScale) * 524.5px);
+
+  .pr_city[data-city-id="valencia"] {
+    top: calc(var(--paxRenMapScale) * 55.5px);
+    left: calc(var(--paxRenMapScale) * 15px);
+  }
+
+  .pr_city[data-city-id="algiers"] {
+    top: calc(var(--paxRenMapScale) * 142.5px);
+    left: calc(var(--paxRenMapScale) * 102px);
+  }
+
+  .pr_city[data-city-id="timbuktu"] {
+    top: calc(var(--paxRenMapScale) * 165px);
+    left: calc(var(--paxRenMapScale) * 32.5px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_papalStates] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_papalStates"] {
   background-position-x: 77.7777777778%;
   background-position-y: 75%;
+  width: calc(var(--paxRenCardScale) * 152.5px);
+  height: calc(var(--paxRenCardScale) * 228.5px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 701px);
+  .pr_city[data-city-id="venice"] {
+    top: calc(var(--paxRenMapScale) * 19px);
+    left: calc(var(--paxRenMapScale) * 41.5px);
+  }
+
+  .pr_city[data-city-id="venice2"] {
+    top: calc(var(--paxRenMapScale) * 39px);
+    left: calc(var(--paxRenMapScale) * 58px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_ottoman] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_ottoman"] {
   background-position-x: 88.8888888889%;
   background-position-y: 75%;
+  width: calc(var(--paxRenCardScale) * 150.5px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 875.5px);
+
+  .pr_city[data-city-id="constantinople1"] {
+    top: calc(var(--paxRenMapScale) * 23.5px);
+    left: calc(var(--paxRenMapScale) * 11px);
+  }
+
+  .pr_city[data-city-id="constantinople2"] {
+    top: calc(var(--paxRenMapScale) * 23.5px);
+    left: calc(var(--paxRenMapScale) * 44px);
+  }
+
+  .pr_city[data-city-id="constantinople3"] {
+    top: calc(var(--paxRenMapScale) * 23.5px);
+    left: calc(var(--paxRenMapScale) * 78.5px);
+  }
+
+  .pr_city[data-city-id="modon"] {
+    top: calc(var(--paxRenMapScale) * 94px);
+    left: calc(var(--paxRenMapScale) * 18px);
+  }
+
+  .pr_city[data-city-id="rhodes"] {
+    top: calc(var(--paxRenMapScale) * 84.5px);
+    left: calc(var(--paxRenMapScale) * 108px);
+  }
 }
 
-.pr_map_card[data-card-id=reformist_mamluk] {
-  border: calc(var(--paxRenMapScale) * 1px) black solid;
-  background-image: url("img/map_cards.webp");
+.pr_map_card[data-card-id="reformist_mamluk"] {
   background-position-x: 100%;
   background-position-y: 75%;
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 525px);
+  left: calc(var(--paxRenMapScale) * 1053px);
+
+  .pr_city[data-city-id="cyprus"] {
+    top: calc(var(--paxRenMapScale) * 74.5px);
+    left: calc(var(--paxRenMapScale) * 54.5px);
+  }
+
+  .pr_city[data-city-id="cairo"] {
+    top: calc(var(--paxRenMapScale) * 160.5px);
+    left: calc(var(--paxRenMapScale) * 41.5px);
+  }
+
+  .pr_city[data-city-id="redSea"] {
+    top: calc(var(--paxRenMapScale) * 161.5px);
+    left: calc(var(--paxRenMapScale) * 105px);
+  }
 }
 
 .pr_border {
@@ -475,7 +1216,8 @@ $map-cards: (
   }
 }
 
-#pr_border_england_portugal, #pr_border_hungary_ottoman {
+#pr_border_england_portugal,
+#pr_border_hungary_ottoman {
   flex-direction: row;
 }
 
@@ -494,13 +1236,13 @@ $map-cards: (
 
 .pr_city {
   position: absolute;
-  // background-color: yellow;
   width: calc(var(--paxRenMapScale) * 37px);
   height: calc(var(--paxRenMapScale) * 37px);
   border-radius: 50%;
   display: flex;
   justify-content: center;
-// opacity: 0.5;
+  // background-color: yellow;
+  // opacity: 0.5;
 
   .pr_token {
     align-self: flex-end;
@@ -510,7 +1252,7 @@ $map-cards: (
     transform: translateY(calc(var(--paxRenMapScale) * -30px));
     transition: transform 500ms;
   }
-  
+
   .pr_disk {
     margin-bottom: calc(var(--paxRenMapScale) * 3px);
   }
@@ -523,5 +1265,4 @@ $map-cards: (
   .pr_rook {
     margin-bottom: calc(var(--paxRenMapScale) * 4px);
   }
-  
 }

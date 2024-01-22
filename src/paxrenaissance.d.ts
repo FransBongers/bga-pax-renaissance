@@ -215,6 +215,7 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
     condottiereActive: boolean;
   };
   gameOptions: {
+    ageOfReformationPromo: boolean;
     openHands: boolean;
   };
   market: {
