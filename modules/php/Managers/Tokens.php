@@ -162,6 +162,8 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       [PAWN, MEDICI, 10],
       [PAWN, COEUR, 10],
       [PAWN, MARCHIONNI, 10],
+      [PAWN, BERENBERG, 10],
+      [PAWN, MENDES, 10],
       [DISK, BLACK, 2],
       [DISK, WHITE, 2],
     ];

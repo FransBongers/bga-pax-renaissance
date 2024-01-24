@@ -68,7 +68,7 @@
 .pr_empire_throne_coat_of_arms {
   position: absolute;
   background-image: url("img/tokens.webp");
-  background-size: 600% 100%;
+  background-size: 800% 100%;
   top: calc(var(--paxRenMapScale) * 6px);
   left: calc(var(--paxRenMapScale) * 6px);
   width: calc(var(--paxRenMapScale) * 40px);
@@ -96,19 +96,27 @@
 }
 
 .pr_empire_throne_coat_of_arms[data-owner="coeur"] {
-  background-position-x: 40%;
+  background-position-x: math.div((2 * 100%), 7);
 }
 
 .pr_empire_throne_coat_of_arms[data-owner="fugger"] {
-  background-position-x: 60%;
+  background-position-x: math.div((3 * 100%), 7);
 }
 
 .pr_empire_throne_coat_of_arms[data-owner="medici"] {
-  background-position-x: 100%;
+  background-position-x: math.div((5 * 100%), 7);
 }
 
 .pr_empire_throne_coat_of_arms[data-owner="marchionni"] {
-  background-position-x: 80%;
+  background-position-x: math.div((4 * 100%), 7);
+}
+
+.pr_empire_throne_coat_of_arms[data-owner="berenberg"] {
+  background-position-x: math.div((6 * 100%), 7);
+}
+
+.pr_empire_throne_coat_of_arms[data-owner="mendes"] {
+  background-position-x: math.div((7 * 100%), 7);
 }
 
 /* ------- VICTORY CARD SLOTS ------- */

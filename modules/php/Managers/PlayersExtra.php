@@ -66,6 +66,12 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
         case MARCHIONNI:
           Stats::setMarchionniInGame($value);
           break;
+        case BERENBERG:
+          Stats::setBerenbergInGame($value);
+          break;
+        case MENDES:
+          Stats::setMendesInGame($value);
+          break;
       }
     }
 
@@ -83,6 +89,12 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
       case MARCHIONNI:
         Stats::setStartingBanker(STAT_BANKER_MARCHIONNI);
         break;
+      case BERENBERG:
+        Stats::setStartingBanker(STAT_BANKER_BERENBERG);
+        break;
+      case MENDES:
+        Stats::setStartingBanker(STAT_BANKER_MENDES);
+        break;
     }
   }
 
@@ -90,9 +102,6 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
   {
     $players = Players::getAll();
 
-    // $fuggerPlayer = Utils::array_find($players->toArray(), function ($player) {
-    //   return COLOR_BANK_MAP[$player->getColor()]=== FUGGER;
-    // });
     $fuggerPlayer = self::getPlayerForBank($players, FUGGER);
     if ($fuggerPlayer !== null) {
       return $fuggerPlayer->getId();
@@ -101,11 +110,13 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
     if (!$firstPlayerVariant) {
       return Game::get()->getNextPlayerTable()[0];
     }
-    $marchionniPlayer = self::getPlayerForBank($players, MARCHIONNI);
-    if ($marchionniPlayer !== null) {
-      return $marchionniPlayer->getId();
-    } else {
-      return self::getPlayerForBank($players, MEDICI)->getId();
+    $orderPriority = [BERENBERG, MARCHIONNI, MEDICI, MENDES];
+
+    foreach ($orderPriority as $bank) {
+      $player = self::getPlayerForBank($players, $bank);
+      if ($player !== null) {
+        return $player->getId();
+      }
     }
   }
 

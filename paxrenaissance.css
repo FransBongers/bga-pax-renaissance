@@ -100,7 +100,7 @@
 .pr_empire_throne_coat_of_arms {
   position: absolute;
   background-image: url("img/tokens.webp");
-  background-size: 600% 100%;
+  background-size: 800% 100%;
   top: calc(var(--paxRenMapScale) * 6px);
   left: calc(var(--paxRenMapScale) * 6px);
   width: calc(var(--paxRenMapScale) * 40px);
@@ -120,19 +120,27 @@
 }
 
 .pr_empire_throne_coat_of_arms[data-owner=coeur] {
-  background-position-x: 40%;
+  background-position-x: 28.5714285714%;
 }
 
 .pr_empire_throne_coat_of_arms[data-owner=fugger] {
-  background-position-x: 60%;
+  background-position-x: 42.8571428571%;
 }
 
 .pr_empire_throne_coat_of_arms[data-owner=medici] {
-  background-position-x: 100%;
+  background-position-x: 71.4285714286%;
 }
 
 .pr_empire_throne_coat_of_arms[data-owner=marchionni] {
-  background-position-x: 80%;
+  background-position-x: 57.1428571429%;
+}
+
+.pr_empire_throne_coat_of_arms[data-owner=berenberg] {
+  background-position-x: 85.7142857143%;
+}
+
+.pr_empire_throne_coat_of_arms[data-owner=mendes] {
+  background-position-x: 100%;
 }
 
 /* ------- VICTORY CARD SLOTS ------- */
@@ -2880,12 +2888,12 @@
 }
 
 .pr_icon[data-icon=florin] {
-  background-position-x: 20%;
+  background-position-x: 14.2857142857%;
   width: calc(var(--paxRenIconScale) * 50px);
   height: calc(var(--paxRenIconScale) * 52px);
   border-radius: 50%;
   background-image: url("img/tokens.webp");
-  background-size: 600% 116%;
+  background-size: 800% 116%;
   filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
 }
 
@@ -2964,6 +2972,7 @@
   background-color: #ef9a9a;
 }
 
+[style*="color: #bfc0c3"], [style*="color:#bfc0c3"],
 [style*="color: #ffce00"], [style*="color:#ffce00"],
 [style*="color: #bddcc6"], [style*="color:#bddcc6"] {
   text-shadow: 1px 0 0 black, 0 1px 0 black, -1px 0 0 black, 0 -1px 0 black, 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black !important;
@@ -3515,7 +3524,7 @@
 /* ------- PAWNS ------- */
 .pr_pawn {
   background-image: url("img/pawns.webp");
-  background-size: 400% 100%;
+  background-size: 600% 100%;
   min-width: calc(var(--paxRenTokenScale) * 26px);
   min-height: calc(var(--paxRenTokenScale) * 43px);
   max-width: calc(var(--paxRenTokenScale) * 26px);
@@ -3527,14 +3536,22 @@
 }
 
 .pr_pawn[data-separator=marchionni] {
-  background-position-x: 33.3333333333%;
+  background-position-x: 20%;
 }
 
 .pr_pawn[data-separator=coeur] {
-  background-position-x: 66.6666666667%;
+  background-position-x: 40%;
 }
 
 .pr_pawn[data-separator=medici] {
+  background-position-x: 60%;
+}
+
+.pr_pawn[data-separator=berenberg] {
+  background-position-x: 80%;
+}
+
+.pr_pawn[data-separator=mendes] {
   background-position-x: 100%;
 }
 
@@ -4022,7 +4039,7 @@
 .pr_player_board {
   position: relative;
   background-image: url("img/player_boards.webp");
-  background-size: 200% 200%;
+  background-size: 200% 300%;
   height: calc(var(--paxRenCardScale) * 400px);
   min-width: calc(var(--paxRenCardScale) * 293px);
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
@@ -4040,10 +4057,20 @@
 
 .pr_player_board[data-color=purple] {
   background-position-x: 0%;
-  background-position-y: 100%;
+  background-position-y: 50%;
 }
 
 .pr_player_board[data-color=yellow] {
+  background-position-x: 100%;
+  background-position-y: 50%;
+}
+
+.pr_player_board[data-color=black] {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_player_board[data-color=white] {
   background-position-x: 100%;
   background-position-y: 100%;
 }

@@ -90,7 +90,7 @@
 .pr_player_board {
   position: relative;
   background-image: url("img/player_boards.webp");
-  background-size: 200% 200%;
+  background-size: 200% 300%;
   height: calc(var(--paxRenCardScale) * 400px);
   min-width: calc(var(--paxRenCardScale) * 293px);
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
@@ -109,10 +109,20 @@
 
 .pr_player_board[data-color=purple] {
   background-position-x: 0%;
-  background-position-y: 100%;
+  background-position-y: 50%;
 }
 
 .pr_player_board[data-color=yellow] {
+  background-position-x: 100%;
+  background-position-y: 50%;
+}
+
+.pr_player_board[data-color=black] {
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_player_board[data-color=white] {
   background-position-x: 100%;
   background-position-y: 100%;
 }

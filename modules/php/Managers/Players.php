@@ -8,6 +8,7 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\PlayersExtra;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
 /*
  * Players manager : allows to easily access players ...
  *  a player is an instance of Player class
@@ -27,7 +28,14 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     // Globals::setPlayers($players);
     // Create players
     $gameInfos = Game::get()->getGameinfos();
-    $colors = $gameInfos['player_colors'];
+    $colors = Utils::filter($gameInfos['player_colors'], function ($color) {
+      if (Globals::getStartingMap() !== OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT) {
+        return in_array($color, ["1084c7", "bddcc6", "732473", "ffce00"]);
+      }
+      return true;
+    });
+    // $colors = ['191716','bfc0c3'];
+    // // $colors = $gameInfos['player_colors'];
     shuffle($colors);
     $query = self::DB()->multipleInsert([
       'player_id',

@@ -42,7 +42,7 @@
 
 .pr_pawn {
   background-image: url("img/pawns.webp");
-  background-size: 400% 100%;
+  background-size: 600% 100%;
   // width: 143px;
   // height: 234px;
   // width: 30px;
@@ -58,14 +58,22 @@
 }
 
 .pr_pawn[data-separator="marchionni"] {
-  background-position-x: math.div(1, 3) * 100%;
+  background-position-x: 20%;
 }
 
 .pr_pawn[data-separator="coeur"] {
-  background-position-x: math.div(2, 3) * 100%;
+  background-position-x: 40%;
 }
 
 .pr_pawn[data-separator="medici"] {
+  background-position-x: 60%;
+}
+
+.pr_pawn[data-separator="berenberg"] {
+  background-position-x: 80%;
+}
+
+.pr_pawn[data-separator="mendes"] {
   background-position-x: 100%;
 }
 

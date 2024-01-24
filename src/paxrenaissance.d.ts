@@ -271,7 +271,7 @@ interface PaxRenaissancePlayerData extends BgaPlayer {
     tableau: TableauCard[];
   };
   florins: number;
-  bank: "coeur" | "fugger" | "marchionni" | "medici";
+  bank: "coeur" | "fugger" | "marchionni" | "medici" | "berenberg" | "mendes";
   hand: {
     cards: TableauCard[];
     counts: {

@@ -7,12 +7,16 @@ const FUGGER = 'fugger';
 const MEDICI = 'medici';
 const COEUR = 'coeur';
 const MARCHIONNI = 'marchionni';
+const BERENBERG = 'berenberg';
+const MENDES = 'mendes';
 
 const COLOR_BANK_MAP = [
   "1084c7" => FUGGER, // blue
   "bddcc6" => MARCHIONNI, // green
   "732473" => COEUR, // purple
-  "ffce00" => MEDICI // yellow
+  "ffce00" => MEDICI, // yellow
+  "191716" => BERENBERG, // black
+  "bfc0c3" => MENDES
 ];
 
 const BANKS = [
@@ -20,6 +24,8 @@ const BANKS = [
   MEDICI,
   COEUR,
   MARCHIONNI,
+  BERENBERG,
+  MENDES,
 ];
 
 /**
@@ -63,14 +69,19 @@ const STAT_BANKER_FUGGER = 1;
 const STAT_BANKER_MEDICI = 2;
 const STAT_BANKER_COEUR = 3;
 const STAT_BANKER_MARCHIONNI = 4;
+const STAT_BANKER_BERENBERG = 5;
+const STAT_BANKER_MENDES = 6;
 const STAT_FUGGER_IN_GAME = 32;
 const STAT_MEDICI_IN_GAME = 33;
 const STAT_COEUR_IN_GAME = 34;
 const STAT_MARCHIONNI_IN_GAME = 35;
+const STAT_BERENBERG_IN_GAME = 38;
+const STAT_MENDES_IN_GAME = 39;
 const STAT_IN_GAME_NO = 0;
 const STAT_IN_GAME_YES = 1;
 const STAT_STARTING_BANKER = 36;
 const STAT_TURN_ORDER_WINNER = 37;
+// NOTE: continue with 40
 
 /**
  * State ids / names
@@ -498,10 +509,12 @@ const TRADE_ROUTES = [
 ];
 
 const BANK_STARTING_CONCESSION_MAP = [
+  BERENBERG => BORDER_ENGLAND_FRANCE,
   COEUR => BORDER_MAMLUK_OTTOMAN,
   FUGGER => BORDER_FRANCE_HOLY_ROMAN_EMPIRE,
   MARCHIONNI => BORDER_ENGLAND_PORTUGAL,
-  MEDICI => BORDER_ARAGON_PAPAL_STATES
+  MEDICI => BORDER_ARAGON_PAPAL_STATES,
+  MENDES => BORDER_HUNGARY_OTTOMAN,
 ];
 
 /**

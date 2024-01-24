@@ -87,9 +87,15 @@ class PatronVictory extends \PaxRenaissance\Models\AtomicAction
         case MARCHIONNI:
           Stats::setVictoryBanker(STAT_BANKER_MARCHIONNI);
           break;
+        case BERENBERG:
+          Stats::setVictoryBanker(STAT_BANKER_BERENBERG);
+          break;
+        case MENDES:
+          Stats::setVictoryBanker(STAT_BANKER_MENDES);
+          break;
       }
       $winnerId = $scores[0];
-      $placeInTurnOrder = 1+ Utils::array_find_index($order, function ($playerId) use ($winnerId) {
+      $placeInTurnOrder = 1 + Utils::array_find_index($order, function ($playerId) use ($winnerId) {
         return $playerId === $winnerId;
       });
       Stats::setTurnOrderWinner($placeInTurnOrder);

@@ -60,6 +60,18 @@ $stats_type = [
             'type' => 'int',
             "display" => 'limited'
         ],
+        'berenbergInGame' => [
+            'id' => STAT_BERENBERG_IN_GAME,
+            'name' => totranslate('Berenberg was in the game'),
+            'type' => 'int',
+            "display" => 'limited'
+        ],
+        'mendesInGame' => [
+            'id' => STAT_MENDES_IN_GAME,
+            'name' => totranslate('Mendes was in the game'),
+            'type' => 'int',
+            "display" => 'limited'
+        ],
         'startingBanker' => [
             'id' => STAT_STARTING_BANKER,
             'name' => totranslate('The banker that started the game'),
@@ -183,6 +195,8 @@ $stats_type = [
             STAT_BANKER_MEDICI => totranslate("Medici"),
             STAT_BANKER_COEUR => totranslate("Coeur"),
             STAT_BANKER_MARCHIONNI => totranslate("Marchionni"),
+            STAT_BANKER_BERENBERG => totranslate("Berenberg"),
+            STAT_BANKER_MENDES => totranslate("Mendes"),
         ],
         STAT_FUGGER_IN_GAME => [
             STAT_IN_GAME_NO => totranslate("No"),
@@ -200,11 +214,21 @@ $stats_type = [
             STAT_IN_GAME_NO => totranslate("No"),
             STAT_IN_GAME_YES => totranslate("Yes"),
         ],
+        STAT_BERENBERG_IN_GAME => [
+            STAT_IN_GAME_NO => totranslate("No"),
+            STAT_IN_GAME_YES => totranslate("Yes"),
+        ],
+        STAT_MENDES_IN_GAME => [
+            STAT_IN_GAME_NO => totranslate("No"),
+            STAT_IN_GAME_YES => totranslate("Yes"),
+        ],
         STAT_STARTING_BANKER => [
             STAT_BANKER_FUGGER => totranslate("Fugger"),
             STAT_BANKER_MEDICI => totranslate("Medici"),
             STAT_BANKER_COEUR => totranslate("Coeur"),
             STAT_BANKER_MARCHIONNI => totranslate("Marchionni"),
+            STAT_BANKER_BERENBERG => totranslate("Berenberg"),
+            STAT_BANKER_MENDES => totranslate("Mendes"),
         ],
     ]
 ];

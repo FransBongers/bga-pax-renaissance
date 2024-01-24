@@ -20,12 +20,16 @@ const BLUE = "blue";
 const GREEN = "green";
 const PURPLE = "purple";
 const YELLOW = "yellow";
+const BLACK = "black";
+const WHITE = "white";
 
 const COLOR_MAP = {
   "1084c7": BLUE,
   bddcc6: GREEN,
   "732473": PURPLE,
   ffce00: YELLOW,
+  "191716": BLACK,
+  bfc0c3: WHITE
 };
 
 const COLORS_WITH_SHADOW = [GREEN, YELLOW];
@@ -51,6 +55,8 @@ const FUGGER = "fugger";
 const MEDICI = "medici";
 const COEUR = "coeur";
 const MARCHIONNI = "marchionni";
+const BERENBERG = 'berenberg';
+const MENDES = 'mendes';
 
 /**
  * Regions

@@ -11,11 +11,15 @@ var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
 var YELLOW = "yellow";
+var BLACK = "black";
+var WHITE = "white";
 var COLOR_MAP = {
     "1084c7": BLUE,
     bddcc6: GREEN,
     "732473": PURPLE,
     ffce00: YELLOW,
+    "191716": BLACK,
+    bfc0c3: WHITE
 };
 var COLORS_WITH_SHADOW = [GREEN, YELLOW];
 var DISABLED = "disabled";
@@ -27,6 +31,8 @@ var FUGGER = "fugger";
 var MEDICI = "medici";
 var COEUR = "coeur";
 var MARCHIONNI = "marchionni";
+var BERENBERG = 'berenberg';
+var MENDES = 'mendes';
 var WEST = "west";
 var EAST = "east";
 var EAST_AND_WEST = 'eastAndWest';
