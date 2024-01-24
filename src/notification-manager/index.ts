@@ -39,6 +39,7 @@ class NotificationManager {
       ["activateAbility", undefined],
       ["changeEmpireToMedievalState", undefined],
       ["changeEmpireToTheocracy", undefined],
+      ["changeEmpireSquare", undefined],
       ["coronation", undefined],
       ["deactivateAbility", undefined],
       ["declareVictory", undefined],
@@ -145,6 +146,38 @@ class NotificationManager {
   ) {
     const { empire, religion } = notif.args;
     this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion });
+  }
+
+  // Used to change king side of Papal States empire square
+  async notif_changeEmpireSquare(notif: Notif<NotifChangeEmpireSquareArgs>) {
+    const { oldEmpireSquare, newEmpireSquare, religion } = notif.args;
+    
+    const papalStatesIndex = this.game.gamedatas.gameMap.empires.findIndex((empire) => empire.id === PAPAL_STATES);
+    this.game.gamedatas.gameMap.empires[papalStatesIndex].religion = religion;
+
+    const node = document.getElementById(`${oldEmpireSquare.id}-front`);
+    if (node) {
+      node.setAttribute("data-religion", religion);
+    }
+    this.game.tooltipManager.removeTooltip(oldEmpireSquare.id);
+    this.game.tooltipManager.addEmpireCardTooltip({
+      nodeId: newEmpireSquare.id,
+      card: newEmpireSquare,
+      religion,
+    });
+    if (
+      // Note old and new card data should always be equal here
+      // except for specific king side data
+      oldEmpireSquare.owningPlayerId &&
+      newEmpireSquare.owningPlayerId &&
+      oldEmpireSquare.side === KING &&
+      newEmpireSquare.side === KING
+    ) {
+      const player = this.getPlayer({playerId: oldEmpireSquare.owningPlayerId});
+       this.removePrestige({player, prestige: oldEmpireSquare.king.prestige});
+       this.addPrestige({player, prestige: newEmpireSquare.king.prestige});
+    }
+    this.game.tableauCardManager.updateCardInformations(newEmpireSquare);
   }
 
   async notif_coronation(notif: Notif<NotifCoronationArgs>) {

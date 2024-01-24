@@ -42,12 +42,9 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
 
     if (card.type === EMPIRE_CARD) {
-      div.classList.add('pr_empire_square');
+      div.classList.add("pr_empire_square");
       // setup container for queens
-      div.insertAdjacentHTML(
-        "afterbegin",
-        tplQueenContainer({ id: card.id })
-      );
+      div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
       const queenContainerNode = document.getElementById(`queens_${card.id}`);
       card.queens.forEach((queen) => {
         // add queens
@@ -88,11 +85,21 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
       div.style.height = "calc(var(--paxRenCardScale) * 151px)";
     }
 
-    // div.style.background = 'blue';
-    // div.classList.add('mygame-card-front');
-    // div.id = `card-${card.id}-front`;
-    // this.addTooltipHtml(div.id, `tooltip de ${card.type}`);
-    if (card.type === TABLEAU_CARD && card.location !== 'market_west_0' && card.location !== 'market_east_0') {
+    if (this.game.gameOptions.ageOfReformationPromo) {
+      div.setAttribute("data-map-type", "ageOfReformation");
+      if (card.id === "EmpireSquare_PapalStates") {
+        const religion = (
+          this.game.gamedatas as PaxRenaissanceGamedatas
+        ).gameMap.empires.find((empire) => empire.id === PAPAL_STATES).religion;
+        div.setAttribute("data-religion", religion);
+      }
+    }
+
+    if (
+      card.type === TABLEAU_CARD &&
+      card.location !== "market_west_0" &&
+      card.location !== "market_east_0"
+    ) {
       this.game.tooltipManager.addCardTooltip({
         nodeId: card.id,
         card,
@@ -101,6 +108,16 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
       this.game.tooltipManager.addEmpireCardTooltip({
         nodeId: card.id,
         card,
+        // With age if reformation promo papal states can have a different king side
+        // depending on religion.
+        religion:
+          this.game.gameOptions.ageOfReformationPromo &&
+          card.id === "EmpireSquare_PapalStates"
+            ? (
+                this.game.gamedatas as PaxRenaissanceGamedatas
+              ).gameMap.empires.find((empire) => empire.id === PAPAL_STATES)
+                .religion
+            : "",
       });
     }
   }

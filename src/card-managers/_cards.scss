@@ -435,3 +435,45 @@ $square-cards: (
     background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
   }
 }
+
+.pr_square_card[data-card-id=EmpireSquare_Hungary_king][data-map-type="ageOfReformation"] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: math.div(((31 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((31 - 1) / 10)) * 100%, 3);
+}
+
+.pr_square_card[data-card-id=EmpireSquare_Hungary_republic][data-map-type="ageOfReformation"] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: math.div(((32 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((32 - 1) / 10)) * 100%, 3);
+}
+
+.pr_square_card[data-card-id=EmpireSquare_Ottoman_king][data-map-type="ageOfReformation"] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: math.div(((33 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((33 - 1) / 10)) * 100%, 3);
+}
+
+.pr_square_card[data-card-id=EmpireSquare_Ottoman_republic][data-map-type="ageOfReformation"] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: math.div(((34 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((34 - 1) / 10)) * 100%, 3);
+}
+
+.pr_square_card[data-card-id=EmpireSquare_PapalStates_king][data-map-type="ageOfReformation"][data-religion="reformist"] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: math.div(((35 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((35 - 1) / 10)) * 100%, 3);
+}
+
+.pr_square_card[data-card-id=EmpireSquare_PapalStates_king][data-map-type="ageOfReformation"][data-religion="islamic"] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: math.div(((36 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((36 - 1) / 10)) * 100%, 3);
+}

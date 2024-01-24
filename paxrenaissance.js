@@ -2424,7 +2424,7 @@ var TableauCardManager = (function (_super) {
         }
         div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
         if (card.type === EMPIRE_CARD) {
-            div.classList.add('pr_empire_square');
+            div.classList.add("pr_empire_square");
             div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
             var queenContainerNode_1 = document.getElementById("queens_".concat(card.id));
             card.queens.forEach(function (queen) {
@@ -2453,7 +2453,16 @@ var TableauCardManager = (function (_super) {
             div.style.width = "calc(var(--paxRenCardScale) * 151px)";
             div.style.height = "calc(var(--paxRenCardScale) * 151px)";
         }
-        if (card.type === TABLEAU_CARD && card.location !== 'market_west_0' && card.location !== 'market_east_0') {
+        if (this.game.gameOptions.ageOfReformationPromo) {
+            div.setAttribute("data-map-type", "ageOfReformation");
+            if (card.id === "EmpireSquare_PapalStates") {
+                var religion = this.game.gamedatas.gameMap.empires.find(function (empire) { return empire.id === PAPAL_STATES; }).religion;
+                div.setAttribute("data-religion", religion);
+            }
+        }
+        if (card.type === TABLEAU_CARD &&
+            card.location !== "market_west_0" &&
+            card.location !== "market_east_0") {
             this.game.tooltipManager.addCardTooltip({
                 nodeId: card.id,
                 card: card,
@@ -2463,6 +2472,11 @@ var TableauCardManager = (function (_super) {
             this.game.tooltipManager.addEmpireCardTooltip({
                 nodeId: card.id,
                 card: card,
+                religion: this.game.gameOptions.ageOfReformationPromo &&
+                    card.id === "EmpireSquare_PapalStates"
+                    ? this.game.gamedatas.gameMap.empires.find(function (empire) { return empire.id === PAPAL_STATES; })
+                        .religion
+                    : "",
             });
         }
     };
@@ -3839,6 +3853,7 @@ var NotificationManager = (function () {
             ["activateAbility", undefined],
             ["changeEmpireToMedievalState", undefined],
             ["changeEmpireToTheocracy", undefined],
+            ["changeEmpireSquare", undefined],
             ["coronation", undefined],
             ["deactivateAbility", undefined],
             ["declareVictory", undefined],
@@ -3928,6 +3943,36 @@ var NotificationManager = (function () {
             return __generator(this, function (_b) {
                 _a = notif.args, empire = _a.empire, religion = _a.religion;
                 this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: religion });
+                return [2];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_changeEmpireSquare = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, oldEmpireSquare, newEmpireSquare, religion, papalStatesIndex, node, player;
+            return __generator(this, function (_b) {
+                _a = notif.args, oldEmpireSquare = _a.oldEmpireSquare, newEmpireSquare = _a.newEmpireSquare, religion = _a.religion;
+                papalStatesIndex = this.game.gamedatas.gameMap.empires.findIndex(function (empire) { return empire.id === PAPAL_STATES; });
+                this.game.gamedatas.gameMap.empires[papalStatesIndex].religion = religion;
+                node = document.getElementById("".concat(oldEmpireSquare.id, "-front"));
+                if (node) {
+                    node.setAttribute("data-religion", religion);
+                }
+                this.game.tooltipManager.removeTooltip(oldEmpireSquare.id);
+                this.game.tooltipManager.addEmpireCardTooltip({
+                    nodeId: newEmpireSquare.id,
+                    card: newEmpireSquare,
+                    religion: religion,
+                });
+                if (oldEmpireSquare.owningPlayerId &&
+                    newEmpireSquare.owningPlayerId &&
+                    oldEmpireSquare.side === KING &&
+                    newEmpireSquare.side === KING) {
+                    player = this.getPlayer({ playerId: oldEmpireSquare.owningPlayerId });
+                    this.removePrestige({ player: player, prestige: oldEmpireSquare.king.prestige });
+                    this.addPrestige({ player: player, prestige: newEmpireSquare.king.prestige });
+                }
+                this.game.tableauCardManager.updateCardInformations(newEmpireSquare);
                 return [2];
             });
         });
@@ -7532,55 +7577,6 @@ var PlayerActionState = (function () {
         }
     };
     PlayerActionState.prototype.addTest = function () {
-        var _this = this;
-        this.game.addPrimaryActionButton({
-            text: "Test",
-            id: "test_button",
-            callback: function () {
-                console.log("Testing");
-                var card = _this.game.gameMap
-                    .getEmpireSquareStock({ empireId: ENGLAND })
-                    .getCards()[0];
-                console.log("card", card);
-                var node = document.getElementById("EmpireSquare_Aragon");
-                console.log("node", node);
-                node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(2 * 151, "px)");
-                console.log(_this.game.tableauCardManager.vassalStocks);
-                _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
-            },
-        });
-        this.game.addPrimaryActionButton({
-            text: "Test2",
-            id: "test2_button",
-            callback: function () {
-                console.log("Testing");
-                var card = _this.game.gameMap
-                    .getEmpireSquareStock({ empireId: HOLY_ROMAN_EMIRE })
-                    .getCards()[0];
-                console.log("card", card);
-                var node = document.getElementById("EmpireSquare_Aragon");
-                console.log("node", node);
-                node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(3 * 151, "px)");
-                console.log(_this.game.tableauCardManager.vassalStocks);
-                _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
-            },
-        });
-        this.game.addPrimaryActionButton({
-            text: "Test3",
-            id: "test3_button",
-            callback: function () {
-                console.log("Testing");
-                var card = _this.game.gameMap
-                    .getEmpireSquareStock({ empireId: HUNGARY })
-                    .getCards()[0];
-                console.log("card", card);
-                var node = document.getElementById("EmpireSquare_Aragon");
-                console.log("node", node);
-                node.style.minHeight = "calc(var(--paxRenCardScale) * ".concat(4 * 151, "px)");
-                console.log(_this.game.tableauCardManager.vassalStocks);
-                _this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
-            },
-        });
     };
     PlayerActionState.prototype.updatePageTitle = function () {
         var remainingActions = this.args.remainingActions;
@@ -8973,11 +8969,15 @@ var TradeFairLevyState = (function () {
 }());
 var tplCardTooltipContainer = function (_a) {
     var card = _a.card, content = _a.content, style = _a.style;
-    return "<div class=\"pr_card_tooltip\"".concat(style ? " style=\"".concat(style, "\"") : '', ">\n  <div class=\"pr_card_tooltip_inner_container\">\n    ").concat(content, "\n  </div>\n  ").concat(card, "\n</div>");
+    return "<div class=\"pr_card_tooltip\"".concat(style ? " style=\"".concat(style, "\"") : "", ">\n  <div class=\"pr_card_tooltip_inner_container\">\n    ").concat(content, "\n  </div>\n  ").concat(card, "\n</div>");
 };
 var tplOneShotSection = function (_a) {
     var oneShot = _a.oneShot, suitors = _a.suitors;
-    return "\n  <div style=\"margin-right: 20%;\">\n  <span class=\"pr_section_title\">".concat(_("One-shot"), "</span>\n  ").concat(tplOneShotRow({ oneShot: oneShot }), "\n  </div>\n  ").concat(suitors ? "<div style=\"display: flex; flex-direction: column;\">\n    <span class=\"pr_section_title\">".concat(_("Suitors"), "</span>\n    ").concat(suitors.map(function (suitor) { return "<span>".concat(EMPIRE_NAME_MAP[suitor], "</span>"); }).join(''), "\n    </div>") : '');
+    return "\n  <div style=\"margin-right: 20%;\">\n  <span class=\"pr_section_title\">".concat(_("One-shot"), "</span>\n  ").concat(tplOneShotRow({ oneShot: oneShot }), "\n  </div>\n  ").concat(suitors
+        ? "<div style=\"display: flex; flex-direction: column;\">\n    <span class=\"pr_section_title\">".concat(_("Suitors"), "</span>\n    ").concat(suitors
+            .map(function (suitor) { return "<span>".concat(EMPIRE_NAME_MAP[suitor], "</span>"); })
+            .join(""), "\n    </div>")
+        : "");
 };
 var tplAgentsSection = function (_a) {
     var agents = _a.agents;
@@ -8991,10 +8991,12 @@ var tplAgentsSection = function (_a) {
             agentIcons[identifier] = 1;
         }
     });
-    return "\n  <div>\n  <span class=\"pr_section_title\">".concat(_("Agents"), "</span>\n  ").concat(Object.entries(agentIcons).map(function (_a) {
+    return "\n  <div>\n  <span class=\"pr_section_title\">".concat(_("Agents"), "</span>\n  ").concat(Object.entries(agentIcons)
+        .map(function (_a) {
         var id = _a[0], count = _a[1];
         return tplAgentsRow({ agentIcon: "".concat(id, "_").concat(count) });
-    }).join(''), "\n  </div>\n");
+    })
+        .join(""), "\n  </div>\n");
 };
 var tplAgentsRow = function (_a) {
     var agentIcon = _a.agentIcon;
@@ -9062,36 +9064,51 @@ var tplTableauCardTooltip = function (_a) {
             .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
             .join(""), "\n      ").concat((card === null || card === void 0 ? void 0 : card.empire) ? tplCardLocation({ location: card.empire }) : "", "\n      ").concat(card.prestige && card.prestige.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
-            : "", "\n      ").concat((card.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.ops && card.ops.length > 0
+            : "", "\n      ").concat((card.prestige || [])
+            .map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); })
+            .join(""), "\n      ").concat(card.ops && card.ops.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Ops"), "</span>")
-            : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot ? tplOneShotSection({ oneShot: card.oneShot, suitors: card === null || card === void 0 ? void 0 : card.suitors }) : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : '', "\n      </div>\n      ").concat((card.specialAbilities || []).map(function (specialAbility) { return "\n        <span class=\"pr_section_title\">".concat(specialAbility.title ? _(specialAbility.title) : _('Ability'), "</span>\n        <span class=\"pr_section_text\">").concat(game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args), "</span>\n      "); }).join(''), "\n    "),
+            : "", "\n      ").concat((card.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n      <div style=\"display: flex; flex-direction: row;\">\n        ").concat(card.oneShot
+            ? tplOneShotSection({
+                oneShot: card.oneShot,
+                suitors: card === null || card === void 0 ? void 0 : card.suitors,
+            })
+            : "", "\n        ").concat(card.agents ? tplAgentsSection({ agents: card.agents }) : "", "\n      </div>\n      ").concat((card.specialAbilities || [])
+            .map(function (specialAbility) { return "\n        <span class=\"pr_section_title\">".concat(specialAbility.title ? _(specialAbility.title) : _("Ability"), "</span>\n        <span class=\"pr_section_text\">").concat(game.format_string_recursive(_(specialAbility.text.log), specialAbility.text.args), "</span>\n      "); })
+            .join(""), "\n    "),
     });
 };
 var tplEmireCardTooltip = function (_a) {
-    var card = _a.card;
+    var card = _a.card, _b = _a.ageOfReformationPromo, ageOfReformationPromo = _b === void 0 ? false : _b, religion = _a.religion;
     return tplCardTooltipContainer({
-        card: "<div class=\"pr_square_card_tooltip_card_container\">\n      <div class=\"pr_square_card\" data-card-id=\"".concat(card.id, "_king\" style=\"margin-bottom: 16px;\"></div>\n      <div class=\"pr_square_card\" data-card-id=\"").concat(card.id, "_republic\"></div>\n    </div>"),
+        card: "<div class=\"pr_square_card_tooltip_card_container\">\n      <div class=\"pr_square_card\" data-card-id=\"".concat(card.id, "_king\"").concat(ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : "").concat(religion ? " data-religion=\"".concat(religion, "\"") : "", " style=\"margin-bottom: 16px;\"></div>\n      <div class=\"pr_square_card\" data-card-id=\"").concat(card.id, "_republic\"").concat(ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : "", "></div>\n    </div>"),
         content: "\n    <span class=\"pr_title\">".concat(_(card.king.name), "</span>\n    ").concat(card.king.flavorText
             .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
             .join(""), "\n      ").concat(card.king.prestige && card.king.prestige.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
-            : "", "\n      ").concat((card.king.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.king.ops && card.king.ops.length > 0
+            : "", "\n      ").concat((card.king.prestige || [])
+            .map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); })
+            .join(""), "\n      ").concat(card.king.ops && card.king.ops.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Ops"), "</span>")
             : "", "\n      ").concat((card.king.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n    <span class=\"pr_title\" style=\"margin-top: 32px;\">").concat(_(card.republic.name), "</span>\n    ").concat(card.republic.flavorText
             .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
             .join(""), "\n      ").concat(card.republic.prestige && card.republic.prestige.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Prestige"), "</span>")
-            : "", "\n      ").concat((card.republic.prestige || []).map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); }).join(""), "\n      ").concat(card.republic.ops && card.republic.ops.length > 0
+            : "", "\n      ").concat((card.republic.prestige || [])
+            .map(function (prestige) { return tplPrestigeRow({ prestige: prestige }); })
+            .join(""), "\n      ").concat(card.republic.ops && card.republic.ops.length > 0
             ? "<span class=\"pr_section_title\">".concat(_("Ops"), "</span>")
-            : "", "\n      ").concat((card.republic.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n    ")
+            : "", "\n      ").concat((card.republic.ops || []).map(function (op) { return tplOpsRow({ op: op }); }).join(""), "\n    "),
     });
 };
 var tplVictoryCardTooltip = function (_a) {
     var card = _a.card, game = _a.game;
     return tplCardTooltipContainer({
-        style: 'min-height: 250px; width: 350px;',
+        style: "min-height: 250px; width: 350px;",
         card: "<div class=\"pr_square_card_tooltip_card_container\">\n      <div class=\"pr_square_card\" data-card-id=\"".concat(card.location, "_active\"></div>\n    </div>"),
-        content: "\n      <span class=\"pr_title\">".concat(_(card.active.title), "</span>\n      ").concat((card.text).map(function (text) { return "\n      <span class=\"pr_section_text\">".concat(game.format_string_recursive(_(text.log), text.args), "</span>\n    "); }).join(''), "\n    ")
+        content: "\n      <span class=\"pr_title\">".concat(_(card.active.title), "</span>\n      ").concat(card.text
+            .map(function (text) { return "\n      <span class=\"pr_section_text\">".concat(game.format_string_recursive(_(text.log), text.args), "</span>\n    "); })
+            .join(""), "\n    "),
     });
 };
 var TooltipManager = (function () {
@@ -9114,8 +9131,8 @@ var TooltipManager = (function () {
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     TooltipManager.prototype.addEmpireCardTooltip = function (_a) {
-        var nodeId = _a.nodeId, card = _a.card;
-        var html = tplEmireCardTooltip({ card: card, });
+        var nodeId = _a.nodeId, card = _a.card, religion = _a.religion;
+        var html = tplEmireCardTooltip({ card: card, ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo, religion: religion });
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     TooltipManager.prototype.addVictoryCardTooltip = function (_a) {

@@ -295,6 +295,20 @@ class Notifications
     ]);
   }
 
+  /**
+   * Only used in age of reformation promo variant to update the king side of the 
+   * Papal States empire square. Input data is already serialized
+   */
+  public static function changeEmpireSquare($oldEmpireSquare,$newEmpireSquare, $religion)
+  {
+    self::notifyAll("changeEmpireSquare", '', [
+      'player' => Players::get(),
+      'oldEmpireSquare' => $oldEmpireSquare,
+      'newEmpireSquare' => $newEmpireSquare,
+      'religion' => $religion,
+    ]);
+  }
+
   public static function changeEmpireToTheocracy($empire, $religion)
   {
     self::notifyAll("changeEmpireToTheocracy",  clienttranslate('${tkn_boldText_empire_name} changes into a ${religion} Theocracy'), [

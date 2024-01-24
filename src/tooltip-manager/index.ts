@@ -39,8 +39,8 @@ class TooltipManager {
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
 
-  public addEmpireCardTooltip({ nodeId, card }: { nodeId: string; card: EmpireCard }): void {
-    const html = tplEmireCardTooltip({ card, });
+  public addEmpireCardTooltip({ nodeId, card, religion }: { nodeId: string; card: EmpireCard; religion?: string; }): void {
+    const html = tplEmireCardTooltip({ card, ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo, religion });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
 

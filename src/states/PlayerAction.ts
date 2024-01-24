@@ -218,62 +218,7 @@ class PlayerActionState implements State {
   }
 
   private addTest() {
-    this.game.addPrimaryActionButton({
-      text: "Test",
-      id: "test_button",
-      callback: () => {
-        console.log("Testing");
-        const card = this.game.gameMap
-          .getEmpireSquareStock({ empireId: ENGLAND })
-          .getCards()[0];
-        console.log("card", card);
 
-        const node = document.getElementById("EmpireSquare_Aragon");
-        console.log("node", node);
-        node.style.minHeight = `calc(var(--paxRenCardScale) * ${2 * 151}px)`;
-
-        console.log(this.game.tableauCardManager.vassalStocks);
-        this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
-      },
-    });
-
-    this.game.addPrimaryActionButton({
-      text: "Test2",
-      id: "test2_button",
-      callback: () => {
-        console.log("Testing");
-        const card = this.game.gameMap
-          .getEmpireSquareStock({ empireId: HOLY_ROMAN_EMIRE })
-          .getCards()[0];
-        console.log("card", card);
-
-        const node = document.getElementById("EmpireSquare_Aragon");
-        console.log("node", node);
-        node.style.minHeight = `calc(var(--paxRenCardScale) * ${3 * 151}px)`;
-
-        console.log(this.game.tableauCardManager.vassalStocks);
-        this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
-      },
-    });
-
-    this.game.addPrimaryActionButton({
-      text: "Test3",
-      id: "test3_button",
-      callback: () => {
-        console.log("Testing");
-        const card = this.game.gameMap
-          .getEmpireSquareStock({ empireId: HUNGARY })
-          .getCards()[0];
-        console.log("card", card);
-
-        const node = document.getElementById("EmpireSquare_Aragon");
-        console.log("node", node);
-        node.style.minHeight = `calc(var(--paxRenCardScale) * ${4 * 151}px)`;
-
-        console.log(this.game.tableauCardManager.vassalStocks);
-        this.game.tableauCardManager.vassalStocks[ARAGON].addCard(card);
-      },
-    });
   }
 
   private updatePageTitle() {

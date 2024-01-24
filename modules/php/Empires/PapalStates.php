@@ -8,6 +8,8 @@ use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Players;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
 class PapalStates extends \PaxRenaissance\Models\Empire
 {
   public function __construct()
@@ -51,8 +53,14 @@ class PapalStates extends \PaxRenaissance\Models\Empire
     }
   }
 
-  public function changeToTheocracy($religion) {
+  public function changeToTheocracy($religion)
+  {
     $oldReligion = Globals::getEmpireReligions()[PAPAL_STATES];
+    $ageOfReformationVariant = Globals::getStartingMap() === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+    $oldEmpireSquare = null;
+    if ($ageOfReformationVariant) {
+      $oldEmpireSquare = $this->getEmpireCard()->jsonSerialize();
+    }
 
     parent::changeToTheocracy($religion);
     if (($religion === CATHOLIC || $religion === MEDIEVAL) && ($oldReligion === ISLAMIC || $oldReligion === REFORMIST)) {
@@ -60,11 +68,34 @@ class PapalStates extends \PaxRenaissance\Models\Empire
     } else if (($religion === ISLAMIC || $religion === REFORMIST) && ($oldReligion === CATHOLIC || $oldReligion === MEDIEVAL)) {
       $this->deactivateCondottiere();
     }
+
+    if ($ageOfReformationVariant) {
+      $newEmpireSquare = $this->getEmpireCard()->jsonSerialize();
+      // Check if we need to update king side on frontend
+      if ($oldEmpireSquare[KING]['name'] !== $newEmpireSquare[KING]['name']) {
+        Notifications::changeEmpireSquare($oldEmpireSquare, $newEmpireSquare, $religion);
+      }
+    }
   }
 
-  public function changeToMedievalState($player) {
+  public function changeToMedievalState($player)
+  {
+    $ageOfReformationVariant = Globals::getStartingMap() === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+    $oldEmpireSquare = null;
+    if ($ageOfReformationVariant) {
+      $oldEmpireSquare = $this->getEmpireCard()->jsonSerialize();
+    }
+
     parent::changeToMedievalState($player);
     $this->activateCondottiere();
+
+    if ($ageOfReformationVariant) {
+      $newEmpireSquare = $this->getEmpireCard()->jsonSerialize();
+      // Check if we need to update king side on frontend
+      if ($oldEmpireSquare[KING]['name'] !== $newEmpireSquare[KING]['name']) {
+        Notifications::changeEmpireSquare($oldEmpireSquare, $newEmpireSquare, MEDIEVAL);
+      }
+    }
   }
 
   public function deactivateCondottiere()

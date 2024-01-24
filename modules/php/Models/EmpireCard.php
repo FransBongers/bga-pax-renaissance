@@ -62,6 +62,7 @@ class EmpireCard extends Card
       'suzerainId' => $this->isVassal() ? $this->getSuzerain()->getId() : null,
       'queens' => $this->getQueens(),
       'isQueen' => false,
+      'owningPlayerId' => $owner !== null ? $owner->getId() : null,
       'owningBank' => $owner !== null ? $owner->getBank() : null,
       KING => [
         'agents' => $this->agents[KING],

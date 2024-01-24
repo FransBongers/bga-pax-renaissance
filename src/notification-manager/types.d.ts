@@ -31,6 +31,12 @@ interface NotifChangeEmpireToTheocracyArgs {
   religion: string;
 }
 
+interface NotifChangeEmpireSquareArgs {
+  oldEmpireSquare: EmpireCard;
+  newEmpireSquare: EmpireCard;
+  religion: string;
+}
+
 interface NotifCoronationArgs extends NotifWithPlayerArgs {
   queen: QueenCard;
   king: EmpireCard;

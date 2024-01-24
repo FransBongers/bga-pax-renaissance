@@ -2782,6 +2782,48 @@
   background-position-y: 66.6666666667%;
 }
 
+.pr_square_card[data-card-id=EmpireSquare_Hungary_king][data-map-type=ageOfReformation] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: 0%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=EmpireSquare_Hungary_republic][data-map-type=ageOfReformation] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: 11.1111111111%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=EmpireSquare_Ottoman_king][data-map-type=ageOfReformation] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=EmpireSquare_Ottoman_republic][data-map-type=ageOfReformation] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=EmpireSquare_PapalStates_king][data-map-type=ageOfReformation][data-religion=reformist] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: 44.4444444444%;
+  background-position-y: 100%;
+}
+
+.pr_square_card[data-card-id=EmpireSquare_PapalStates_king][data-map-type=ageOfReformation][data-religion=islamic] {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  background-position-x: 55.5555555556%;
+  background-position-y: 100%;
+}
+
 .pr_icon {
   background-repeat: no-repeat;
 }
