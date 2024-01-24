@@ -60,6 +60,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     playerAction: PlayerActionState;
     regimeChangeEmancipation: RegimeChangeEmancipationState;
     regimeChangeGoldenLiberty: RegimeChangeGoldenLibertyState;
+    removeTokenFromCity: RemoveTokenFromCityState;
     selectToken: SelectTokenState;
     tableauOpBehead: TableauOpBeheadState;
     tableauOpCampaign: TableauOpCampaignState;
@@ -133,6 +134,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       playerAction: new PlayerActionState(this),
       regimeChangeEmancipation: new RegimeChangeEmancipationState(this),
       regimeChangeGoldenLiberty: new RegimeChangeGoldenLibertyState(this),
+      removeTokenFromCity: new RemoveTokenFromCityState(this),
       selectToken: new SelectTokenState(this),
       tableauOpBehead: new TableauOpBeheadState(this),
       tableauOpCampaign: new TableauOpCampaignState(this),

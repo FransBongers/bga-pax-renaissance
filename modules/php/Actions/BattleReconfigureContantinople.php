@@ -20,6 +20,13 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+
+/**
+ * Reconfigure tokens in Constantinople. There are two ways this gets triggered currently
+ * 1. After a religious war
+ * 2. When using Age of Reformation promo and Golden Liberty changes it to a medieval state
+ */
 class BattleReconfigureContantinople extends \PaxRenaissance\Models\AtomicAction
 {
   private $constantinopleCities = [CONSTANTINOPLE_1, CONSTANTINOPLE_2, CONSTANTINOPLE_3];
@@ -53,19 +60,22 @@ class BattleReconfigureContantinople extends \PaxRenaissance\Models\AtomicAction
 
   public function stBattleReconfigureContantinople()
   {
-    $parentInfo = $this->ctx->getParent()->getInfo();
-    $source = $parentInfo['source'];
+    $info = $this->ctx->getInfo();
+    if (!(isset($info['source']) && $info['source'] == OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT)) {
+      $parentInfo = $this->ctx->getParent()->getInfo();
+      $source = $parentInfo['source'];
 
-    if (!($parentInfo['battleVictorious'] && isset($this->religiousWarOneShots[$source]))) {
-      $this->resolveAction(['automatic' => true]);
-      return;  
-    }
+      if (!($parentInfo['battleVictorious'] && isset($this->religiousWarOneShots[$source]))) {
+        $this->resolveAction(['automatic' => true]);
+        return;
+      }
 
-    $empireId = $parentInfo['empireId'];
-    
-    if ($empireId !== OTTOMAN) {
-      $this->resolveAction(['automatic' => true]);
-      return;
+      $empireId = $parentInfo['empireId'];
+
+      if ($empireId !== OTTOMAN) {
+        $this->resolveAction(['automatic' => true]);
+        return;
+      }
     }
 
     $constantinopleHasTokens = Utils::array_some($this->constantinopleCities, function ($cityId) {
@@ -88,7 +98,9 @@ class BattleReconfigureContantinople extends \PaxRenaissance\Models\AtomicAction
 
   public function argsBattleReconfigureContantinople()
   {
-    return $this->getCurrentConfiguration();
+    $data = $this->getCurrentConfiguration();
+    $data['canPlaceInConstantinople3'] = $this->canPlaceInConstantinople3();
+    return $data;
   }
 
   //  .########..##..........###....##....##.########.########.
@@ -111,14 +123,13 @@ class BattleReconfigureContantinople extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actBattleReconfigureContantinople');
 
-
     $this->validateConfig($args);
 
     $player = self::getPlayer();
 
     $tokens = [];
 
-    foreach($this->constantinopleCities as $cityId) {
+    foreach ($this->constantinopleCities as $cityId) {
       if ($args[$cityId] === null) {
         continue;
       }
@@ -140,10 +151,19 @@ class BattleReconfigureContantinople extends \PaxRenaissance\Models\AtomicAction
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
+  private function canPlaceInConstantinople3()
+  {
+    $info = $this->ctx->getInfo();
+    if (isset($info['source']) && $info['source'] == OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT) {
+      return false;
+    };
+    return true;
+  }
+
   private function getCurrentConfiguration()
   {
     $data = [];
-    foreach($this->constantinopleCities as $cityId) {
+    foreach ($this->constantinopleCities as $cityId) {
       $data[$cityId] = Cities::get($cityId)->getToken();
     };
 
@@ -154,15 +174,19 @@ class BattleReconfigureContantinople extends \PaxRenaissance\Models\AtomicAction
   {
     $current = $this->getCurrentConfiguration();
     $currentTokenIds = [];
-    foreach($current as $cityId => $token) {
+    foreach ($current as $cityId => $token) {
       if ($token === null) {
         continue;
       }
       $currentTokenIds[] = $token->getId();
     }
 
+    if (!$this->canPlaceInConstantinople3() && $args[CONSTANTINOPLE_3] !== null) {
+      throw new \feException("Not a valid placement for Constantinople");
+    }
+
     $argIds = [];
-    foreach($this->constantinopleCities as $cityId) {
+    foreach ($this->constantinopleCities as $cityId) {
       if ($args[$cityId] === null) {
         continue;
       }

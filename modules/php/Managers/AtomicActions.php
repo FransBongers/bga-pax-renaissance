@@ -28,6 +28,7 @@ class AtomicActions
     BATTLE_MAP_CHANGE_RELIGIOUS_WAR => 'BattleMapChangeReligiousWar',
     BATTLE_PLACE_ATTACKERS => 'BattlePlaceAttackers',
     BATTLE_RECONFIGURE_CONSTANTINOPLE => 'BattleReconfigureContantinople',
+    REMOVE_TOKEN_FROM_CITY => 'RemoveTokenFromCity',
     BATTLE_RESULT => 'BattleResult',
     BISHOP_DIET_OF_WORMS => 'BishopDietOfWorms',
     BISHOP_PACIFICATION => 'BishopPacification',

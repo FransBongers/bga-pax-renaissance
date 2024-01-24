@@ -242,6 +242,7 @@ const CITIES = [
   BORDEAUX,
   BRUGES,
   PARIS,
+  KVIV,
   LYON,
   LUBECK,
   NURNBERG,

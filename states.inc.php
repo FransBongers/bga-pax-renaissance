@@ -412,6 +412,17 @@ $machinestates = [
         'possibleactions' => ['actBattleReconfigureContantinople', 'actPassOptionalAction', 'actRestart'],
     ],
 
+    ST_REMOVE_TOKEN_FROM_CITY => [
+        'name' => 'removeTokenFromCity',
+        'description' => clienttranslate('${actplayer} must remove a Token'),
+        'descriptionmyturn' => clienttranslate('${you}'),
+        'type' => 'activeplayer',
+        'args' => 'argsAtomicAction',
+        'action' => 'stAtomicAction',
+        'possibleactions' => ['actRemoveTokenFromCity', 'actPassOptionalAction', 'actRestart'],
+    ],
+
+
     ST_REGIME_CHANGE_MOVE_EMPIRE_SQUARE => [
         'name' => 'regimeChangeMoveEmpireSquare',
         'description' => '',

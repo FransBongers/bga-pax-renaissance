@@ -24,6 +24,7 @@ class Cities
     CONSTANTINOPLE_3 => 'Constantinople3',
     CYPRUS => 'Cyprus',
     GRANADA => 'Granada',
+    KVIV => 'Kviv',
     LONDON => 'London',
     LUBECK => 'Lubeck',
     LYON => 'Lyon',

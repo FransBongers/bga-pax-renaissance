@@ -167,6 +167,7 @@ var CITIES = [
     BORDEAUX,
     BRUGES,
     PARIS,
+    KVIV,
     LYON,
     LUBECK,
     NURNBERG,
@@ -1861,6 +1862,7 @@ var PaxRenaissance = (function () {
             _a.playerAction = new PlayerActionState(this),
             _a.regimeChangeEmancipation = new RegimeChangeEmancipationState(this),
             _a.regimeChangeGoldenLiberty = new RegimeChangeGoldenLibertyState(this),
+            _a.removeTokenFromCity = new RemoveTokenFromCityState(this),
             _a.selectToken = new SelectTokenState(this),
             _a.tableauOpBehead = new TableauOpBeheadState(this),
             _a.tableauOpCampaign = new TableauOpCampaignState(this),
@@ -6203,7 +6205,7 @@ var BattleReconfigureConstantinopleState = (function () {
     BattleReconfigureConstantinopleState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} must select a Token to move within Constantinople"),
+            text: _("${tkn_playerName} may select a Token to move within Constantinople"),
             args: {
                 tkn_playerName: "${you}",
             },
@@ -6283,7 +6285,7 @@ var BattleReconfigureConstantinopleState = (function () {
         var _this = this;
         var activeCityId = _a.cityId;
         this.constantinopleCities.forEach(function (cityId) {
-            if (cityId === activeCityId) {
+            if (cityId === activeCityId || (!_this.args.canPlaceInConstantinople3 && cityId === CONSTANTINOPLE_3)) {
                 return;
             }
             if (_this.cityConfiguration[cityId] === null) {
@@ -7823,6 +7825,76 @@ var RegimeChangeGoldenLibertyState = (function () {
         this.game.addUndoButtons(this.args);
     };
     return RegimeChangeGoldenLibertyState;
+}());
+var RemoveTokenFromCityState = (function () {
+    function RemoveTokenFromCityState(game) {
+        this.game = game;
+    }
+    RemoveTokenFromCityState.prototype.onEnteringState = function (args) {
+        this.args = args;
+        this.updateInterfaceInitialStep();
+    };
+    RemoveTokenFromCityState.prototype.onLeavingState = function () {
+        debug("Leaving RemoveTokenFromCity");
+    };
+    RemoveTokenFromCityState.prototype.setDescription = function (activePlayerId) {
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Token to remove"),
+            args: {
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
+            },
+            nonActivePlayers: true,
+        });
+    };
+    RemoveTokenFromCityState.prototype.updateInterfaceInitialStep = function () {
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select a Token to remove"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.setTokensSelectable();
+        this.game.addPassButton({ optionalAction: this.args.optionalAction });
+        this.game.addUndoButtons(this.args);
+    };
+    RemoveTokenFromCityState.prototype.updateInterfaceConfirmSelectToken = function (_a) {
+        var _this = this;
+        var tokenId = _a.tokenId, cityName = _a.cityName;
+        this.game.clearPossible();
+        this.game.setTokenSelected({ id: tokenId });
+        this.game.clientUpdatePageTitle({
+            text: _("Remove ${tkn_mapToken} on ${locationName}?"),
+            args: {
+                tkn_mapToken: tknMapToken(tokenId),
+                locationName: _(cityName),
+            },
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actRemoveTokenFromCity",
+                    args: {
+                        tokenId: tokenId,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    RemoveTokenFromCityState.prototype.setTokensSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.options).forEach(function (_a) {
+            var tokenId = _a[0], cityName = _a[1];
+            _this.game.setTokenSelectable({
+                id: tokenId,
+                callback: function () { return _this.updateInterfaceConfirmSelectToken({ tokenId: tokenId, cityName: cityName }); },
+            });
+        });
+    };
+    return RemoveTokenFromCityState;
 }());
 var SelectTokenState = (function () {
     function SelectTokenState(game) {

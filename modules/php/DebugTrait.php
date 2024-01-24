@@ -95,8 +95,17 @@ trait DebugTrait
 
   function test()
   {
+    // $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371052);
+    // // Empires::get(OTTOMAN)->changeToTheocracy(ISLAMIC);
+    // Tokens::move('rook_reformist_4',CONSTANTINOPLE_3);
+    // $this->debugPlaceToken(KNIGHT, ISLAMIC, CONSTANTINOPLE_1);
+
+    // Notifications::log('getTokensInConstantinople',Empires::get(OTTOMAN)->getTokensInConstantinople());
+    // $this->debugPlaceToken(KNIGHT, ISLAMIC, KVIV);
+    Tokens::move('knight_catholic_8',Locations::supply(KNIGHT,CATHOLIC));
+    Tokens::move('knight_reformist_2',Locations::supply(KNIGHT,REFORMIST));
     // $this->debugAgeOfReformationCards();
-    Notifications::log('card',Cards::get('PREN208P_Sarmatism'));
+    // Notifications::log('card',Cards::get('PREN208P_Sarmatism'));
     // Cards::get('EmpireSquare_Mamluk')->setSide(REPUBLIC);
     // Cards::move('PREN078_SittIHatunOfDulkadir','queens_byzantium');
     // $this->debugPlaceCardInTableau('PREN059_Safavids', EAST, 2371053);

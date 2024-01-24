@@ -95,6 +95,7 @@
     "src/states/PlayerAction.ts",
     "src/states/RegimeChangeEmancipation.ts",
     "src/states/RegimeChangeGoldenLiberty.ts",
+    "src/states/RemoveTokenFromCity.ts",
     "src/states/SelectToken.ts",
     "src/states/state.d.ts",
     "src/states/TableauOpBehead.ts",

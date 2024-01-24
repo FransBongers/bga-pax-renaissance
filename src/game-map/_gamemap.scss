@@ -755,24 +755,24 @@ $map-cards: (
 .pr_map_card[data-card-id="medieval_hungary"][data-map-type="ageOfReformation"] {
   background-position-x: 22.2222222222%;
   background-position-y: 100%;
-  width: calc(var(--paxRenCardScale) * 150px);
+  width: calc(var(--paxRenCardScale) * 151.5px);
   height: calc(var(--paxRenCardScale) * 231.5px);
   top: calc(var(--paxRenMapScale) * 269px);
   left: calc(var(--paxRenMapScale) * 876px);
 
   .pr_city[data-city-id="buda"] {
     top: calc(var(--paxRenMapScale) * 159px);
-    left: calc(var(--paxRenMapScale) * 13.5px);
+    left: calc(var(--paxRenMapScale) * 14.5px);
   }
 
   .pr_city[data-city-id="kviv"] {
     top: calc(var(--paxRenMapScale) * 47px);
-    left: calc(var(--paxRenMapScale) * 97px);
+    left: calc(var(--paxRenMapScale) * 98.5px);
   }
 
   .pr_city[data-city-id="varna"] {
     top: calc(var(--paxRenMapScale) * 171.5px);
-    left: calc(var(--paxRenMapScale) * 74px);
+    left: calc(var(--paxRenMapScale) * 75px);
   }
 }
 
@@ -901,7 +901,7 @@ $map-cards: (
 .pr_map_card[data-card-id="medieval_ottoman"][data-map-type="ageOfReformation"] {
   background-position-x: 33.3333333333%;
   background-position-y: 100%;
-  width: calc(var(--paxRenCardScale) * 151.5px);
+  width: calc(var(--paxRenCardScale) * 152px);
   height: calc(var(--paxRenCardScale) * 228px);
   top: calc(var(--paxRenMapScale) * 526px);
   left: calc(var(--paxRenMapScale) * 872px);

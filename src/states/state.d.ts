@@ -104,6 +104,7 @@ interface OnEnteringBattleReconfigureConstantinopleArgs extends CommonArgs {
   constantinople1: Token | null;
   constantinople2: Token | null;
   constantinople3: Token | null;
+  canPlaceInConstantinople3: boolean;
 }
 
 interface OnEnteringBishopPacificationArgs extends CommonArgs {
@@ -206,6 +207,10 @@ interface OnEnteringRegimeChangeEmancipationArgs extends CommonArgs {
 
 interface OnEnteringRegimeChangeGoldenLibertyArgs extends CommonArgs {
   empire: Empire;
+}
+
+interface OnEnteringRemoveTokenFromCityArgs extends CommonArgs {
+  options: Record<string, string>
 }
 
 interface OnEnteringSelectTokenArgs extends CommonArgs {

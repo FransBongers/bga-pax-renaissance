@@ -64,7 +64,7 @@ class BattleReconfigureConstantinopleState implements State {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a Token to move within Constantinople"
+        "${tkn_playerName} may select a Token to move within Constantinople"
       ),
       args: {
         tkn_playerName: "${you}",
@@ -199,7 +199,7 @@ class BattleReconfigureConstantinopleState implements State {
     cityId: ConstantinopleCityId;
   }) {
     this.constantinopleCities.forEach((cityId) => {
-      if (cityId === activeCityId) {
+      if (cityId === activeCityId || (!this.args.canPlaceInConstantinople3 && cityId === CONSTANTINOPLE_3)) {
         return;
       }
       if (this.cityConfiguration[cityId] === null) {
