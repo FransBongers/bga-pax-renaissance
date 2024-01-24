@@ -351,12 +351,14 @@
 .pr_map_card[data-card-id=catholic_papalStates] {
   background-image: none;
   border: none;
-  top: calc(var(--paxRenMapScale) * 525px);
-  left: calc(var(--paxRenMapScale) * 701px);
+  top: calc(var(--paxRenMapScale) * 528px);
+  left: calc(var(--paxRenMapScale) * 702px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 226px);
 }
 .pr_map_card[data-card-id=catholic_papalStates] .pr_city[data-city-id=venice] {
-  top: calc(var(--paxRenMapScale) * 20.5px);
-  left: calc(var(--paxRenMapScale) * 40px);
+  top: calc(var(--paxRenMapScale) * 17.5px);
+  left: calc(var(--paxRenMapScale) * 39px);
 }
 .pr_map_card[data-card-id=catholic_papalStates] .pr_city[data-city-id=venice2] {
   top: calc(var(--paxRenMapScale) * 39px);
@@ -604,103 +606,105 @@
   background-image: none;
   border: none;
   width: calc(var(--paxRenCardScale) * 149px);
-  height: calc(var(--paxRenCardScale) * 228px);
-  top: calc(var(--paxRenMapScale) * 525px);
-  left: calc(var(--paxRenMapScale) * 1053px);
+  height: calc(var(--paxRenCardScale) * 226px);
+  top: calc(var(--paxRenMapScale) * 528px);
+  left: calc(var(--paxRenMapScale) * 1054px);
 }
 .pr_map_card[data-card-id=islamic_mamluk] .pr_city[data-city-id=cyprus] {
-  top: calc(var(--paxRenMapScale) * 76px);
-  left: calc(var(--paxRenMapScale) * 54.5px);
+  top: calc(var(--paxRenMapScale) * 73px);
+  left: calc(var(--paxRenMapScale) * 53.5px);
 }
 .pr_map_card[data-card-id=islamic_mamluk] .pr_city[data-city-id=cairo] {
-  top: calc(var(--paxRenMapScale) * 162px);
-  left: calc(var(--paxRenMapScale) * 42px);
+  top: calc(var(--paxRenMapScale) * 159px);
+  left: calc(var(--paxRenMapScale) * 41px);
 }
 .pr_map_card[data-card-id=islamic_mamluk] .pr_city[data-city-id=redSea] {
-  top: calc(var(--paxRenMapScale) * 163.5px);
-  left: calc(var(--paxRenMapScale) * 106px);
+  top: calc(var(--paxRenMapScale) * 160.5px);
+  left: calc(var(--paxRenMapScale) * 105px);
 }
 
 .pr_map_card[data-card-id=medieval_england] {
   background-image: none;
   border: none;
-  width: calc(var(--paxRenCardScale) * 151px);
-  height: calc(var(--paxRenCardScale) * 229px);
-  top: calc(var(--paxRenMapScale) * 269.5px);
-  left: calc(var(--paxRenMapScale) * 349px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 272.5px);
+  left: calc(var(--paxRenMapScale) * 351px);
 }
 .pr_map_card[data-card-id=medieval_england] .pr_city[data-city-id=london] {
-  top: calc(var(--paxRenMapScale) * 77px);
-  left: calc(var(--paxRenMapScale) * 80px);
+  top: calc(var(--paxRenMapScale) * 74.5px);
+  left: calc(var(--paxRenMapScale) * 77.5px);
 }
 .pr_map_card[data-card-id=medieval_england] .pr_city[data-city-id=bordeaux] {
-  top: calc(var(--paxRenMapScale) * 184px);
-  left: calc(var(--paxRenMapScale) * 109px);
+  top: calc(var(--paxRenMapScale) * 182px);
+  left: calc(var(--paxRenMapScale) * 107px);
 }
 
 .pr_map_card[data-card-id=medieval_france] {
   background-image: none;
   border: none;
-  top: calc(var(--paxRenMapScale) * 269.5px);
-  left: calc(var(--paxRenMapScale) * 525.5px);
+  top: calc(var(--paxRenMapScale) * 272.5px);
+  left: calc(var(--paxRenMapScale) * 526.5px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
 }
 .pr_map_card[data-card-id=medieval_france] .pr_city[data-city-id=bruges] {
-  top: calc(var(--paxRenMapScale) * 66px);
-  left: calc(var(--paxRenMapScale) * 51.5px);
+  top: calc(var(--paxRenMapScale) * 63.5px);
+  left: calc(var(--paxRenMapScale) * 50.5px);
 }
 .pr_map_card[data-card-id=medieval_france] .pr_city[data-city-id=paris] {
-  top: calc(var(--paxRenMapScale) * 128px);
-  left: calc(var(--paxRenMapScale) * 9px);
+  top: calc(var(--paxRenMapScale) * 125px);
+  left: calc(var(--paxRenMapScale) * 7.5px);
 }
 .pr_map_card[data-card-id=medieval_france] .pr_city[data-city-id=lyon] {
-  top: calc(var(--paxRenMapScale) * 164.5px);
-  left: calc(var(--paxRenMapScale) * 91.5px);
+  top: calc(var(--paxRenMapScale) * 162px);
+  left: calc(var(--paxRenMapScale) * 91px);
 }
 
 .pr_map_card[data-card-id=medieval_holyRomanEmpire] {
   background-image: none;
   border: none;
-  width: calc(var(--paxRenCardScale) * 152.5px);
-  height: calc(var(--paxRenCardScale) * 232px);
-  top: calc(var(--paxRenMapScale) * 269px);
-  left: calc(var(--paxRenMapScale) * 701px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 272px);
+  left: calc(var(--paxRenMapScale) * 702px);
 }
 .pr_map_card[data-card-id=medieval_holyRomanEmpire] .pr_city[data-city-id=lubeck] {
-  top: calc(var(--paxRenMapScale) * 43.5px);
-  left: calc(var(--paxRenMapScale) * 27.5px);
+  top: calc(var(--paxRenMapScale) * 40.5px);
+  left: calc(var(--paxRenMapScale) * 26.5px);
 }
 .pr_map_card[data-card-id=medieval_holyRomanEmpire] .pr_city[data-city-id=novgorod] {
-  top: calc(var(--paxRenMapScale) * 36.5px);
-  left: calc(var(--paxRenMapScale) * 89.5px);
+  top: calc(var(--paxRenMapScale) * 33.5px);
+  left: calc(var(--paxRenMapScale) * 88.5px);
 }
 .pr_map_card[data-card-id=medieval_holyRomanEmpire] .pr_city[data-city-id=nurnberg] {
-  top: calc(var(--paxRenMapScale) * 130px);
-  left: calc(var(--paxRenMapScale) * 14px);
+  top: calc(var(--paxRenMapScale) * 127px);
+  left: calc(var(--paxRenMapScale) * 13px);
 }
 .pr_map_card[data-card-id=medieval_holyRomanEmpire] .pr_city[data-city-id=vienna] {
-  top: calc(var(--paxRenMapScale) * 151px);
-  left: calc(var(--paxRenMapScale) * 89px);
+  top: calc(var(--paxRenMapScale) * 148px);
+  left: calc(var(--paxRenMapScale) * 88px);
 }
 
 .pr_map_card[data-card-id=medieval_hungary]:not([data-map-type=ageOfReformation]) {
   background-image: none;
   border: none;
-  width: calc(var(--paxRenCardScale) * 150px);
-  height: calc(var(--paxRenCardScale) * 231.5px);
-  top: calc(var(--paxRenMapScale) * 269px);
-  left: calc(var(--paxRenMapScale) * 876px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 227.5px);
+  top: calc(var(--paxRenMapScale) * 272px);
+  left: calc(var(--paxRenMapScale) * 878px);
 }
 .pr_map_card[data-card-id=medieval_hungary]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=buda] {
-  top: calc(var(--paxRenMapScale) * 159px);
-  left: calc(var(--paxRenMapScale) * 15.5px);
+  top: calc(var(--paxRenMapScale) * 156px);
+  left: calc(var(--paxRenMapScale) * 13.5px);
 }
 .pr_map_card[data-card-id=medieval_hungary]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=kviv] {
-  top: calc(var(--paxRenMapScale) * 47px);
-  left: calc(var(--paxRenMapScale) * 97px);
+  top: calc(var(--paxRenMapScale) * 44px);
+  left: calc(var(--paxRenMapScale) * 95px);
 }
 .pr_map_card[data-card-id=medieval_hungary]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=varna] {
-  top: calc(var(--paxRenMapScale) * 171.5px);
-  left: calc(var(--paxRenMapScale) * 76px);
+  top: calc(var(--paxRenMapScale) * 168.5px);
+  left: calc(var(--paxRenMapScale) * 74px);
 }
 
 .pr_map_card[data-card-id=medieval_hungary][data-map-type=ageOfReformation] {
@@ -727,60 +731,64 @@
 .pr_map_card[data-card-id=medieval_byzantium] {
   background-image: none;
   border: none;
-  width: calc(var(--paxRenCardScale) * 152px);
-  top: calc(var(--paxRenMapScale) * 269px);
-  left: calc(var(--paxRenMapScale) * 1052px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 228px);
+  top: calc(var(--paxRenMapScale) * 272px);
+  left: calc(var(--paxRenMapScale) * 1054px);
 }
 .pr_map_card[data-card-id=medieval_byzantium] .pr_city[data-city-id=tana] {
-  top: calc(var(--paxRenMapScale) * 42.5px);
-  left: calc(var(--paxRenMapScale) * 41px);
+  top: calc(var(--paxRenMapScale) * 39.5px);
+  left: calc(var(--paxRenMapScale) * 39px);
 }
 .pr_map_card[data-card-id=medieval_byzantium] .pr_city[data-city-id=caffa] {
-  top: calc(var(--paxRenMapScale) * 132.5px);
-  left: calc(var(--paxRenMapScale) * 7px);
+  top: calc(var(--paxRenMapScale) * 129.5px);
+  left: calc(var(--paxRenMapScale) * 5px);
 }
 .pr_map_card[data-card-id=medieval_byzantium] .pr_city[data-city-id=trebizond] {
-  top: calc(var(--paxRenMapScale) * 189px);
-  left: calc(var(--paxRenMapScale) * 112.5px);
+  top: calc(var(--paxRenMapScale) * 186px);
+  left: calc(var(--paxRenMapScale) * 110.5px);
 }
 
 .pr_map_card[data-card-id=medieval_portugal] {
   background-image: none;
   border: none;
-  height: calc(var(--paxRenCardScale) * 228.5px);
-  top: calc(var(--paxRenMapScale) * 525px);
-  left: calc(var(--paxRenMapScale) * 350px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 226px);
+  top: calc(var(--paxRenMapScale) * 528px);
+  left: calc(var(--paxRenMapScale) * 351px);
 }
 .pr_map_card[data-card-id=medieval_portugal] .pr_city[data-city-id=toledo] {
-  top: calc(var(--paxRenMapScale) * 63px);
-  left: calc(var(--paxRenMapScale) * 94px);
+  top: calc(var(--paxRenMapScale) * 59.5px);
+  left: calc(var(--paxRenMapScale) * 93px);
 }
 .pr_map_card[data-card-id=medieval_portugal] .pr_city[data-city-id=granada] {
-  top: calc(var(--paxRenMapScale) * 118.5px);
-  left: calc(var(--paxRenMapScale) * 103.5px);
+  top: calc(var(--paxRenMapScale) * 116px);
+  left: calc(var(--paxRenMapScale) * 102.5px);
 }
 .pr_map_card[data-card-id=medieval_portugal] .pr_city[data-city-id=spiceIslands] {
-  top: calc(var(--paxRenMapScale) * 184.5px);
-  left: calc(var(--paxRenMapScale) * 36.5px);
+  top: calc(var(--paxRenMapScale) * 181px);
+  left: calc(var(--paxRenMapScale) * 35.5px);
 }
 
 .pr_map_card[data-card-id=medieval_aragon] {
   background-image: none;
   border: none;
-  top: calc(var(--paxRenMapScale) * 524px);
-  left: calc(var(--paxRenMapScale) * 524.5px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 226px);
+  top: calc(var(--paxRenMapScale) * 528px);
+  left: calc(var(--paxRenMapScale) * 526.5px);
 }
 .pr_map_card[data-card-id=medieval_aragon] .pr_city[data-city-id=valencia] {
-  top: calc(var(--paxRenMapScale) * 57px);
-  left: calc(var(--paxRenMapScale) * 15.5px);
+  top: calc(var(--paxRenMapScale) * 53.5px);
+  left: calc(var(--paxRenMapScale) * 14px);
 }
 .pr_map_card[data-card-id=medieval_aragon] .pr_city[data-city-id=algiers] {
-  top: calc(var(--paxRenMapScale) * 145px);
-  left: calc(var(--paxRenMapScale) * 102.5px);
+  top: calc(var(--paxRenMapScale) * 141px);
+  left: calc(var(--paxRenMapScale) * 100px);
 }
 .pr_map_card[data-card-id=medieval_aragon] .pr_city[data-city-id=timbuktu] {
-  top: calc(var(--paxRenMapScale) * 167px);
-  left: calc(var(--paxRenMapScale) * 34px);
+  top: calc(var(--paxRenMapScale) * 162.5px);
+  left: calc(var(--paxRenMapScale) * 32px);
 }
 
 .pr_map_card[data-card-id=medieval_papalStates] {
@@ -803,30 +811,30 @@
 .pr_map_card[data-card-id=medieval_ottoman]:not([data-map-type=ageOfReformation]) {
   background-image: none;
   border: none;
-  width: calc(var(--paxRenCardScale) * 150.5px);
-  height: calc(var(--paxRenCardScale) * 228px);
-  top: calc(var(--paxRenMapScale) * 525px);
-  left: calc(var(--paxRenMapScale) * 875.5px);
+  width: calc(var(--paxRenCardScale) * 149px);
+  height: calc(var(--paxRenCardScale) * 226px);
+  top: calc(var(--paxRenMapScale) * 528px);
+  left: calc(var(--paxRenMapScale) * 877.5px);
 }
 .pr_map_card[data-card-id=medieval_ottoman]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=constantinople1] {
-  top: calc(var(--paxRenMapScale) * 24.5px);
-  left: calc(var(--paxRenMapScale) * 11px);
+  top: calc(var(--paxRenMapScale) * 22px);
+  left: calc(var(--paxRenMapScale) * 9px);
 }
 .pr_map_card[data-card-id=medieval_ottoman]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=constantinople2] {
-  top: calc(var(--paxRenMapScale) * 24.5px);
-  left: calc(var(--paxRenMapScale) * 45.5px);
+  top: calc(var(--paxRenMapScale) * 22px);
+  left: calc(var(--paxRenMapScale) * 43.5px);
 }
 .pr_map_card[data-card-id=medieval_ottoman]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=constantinople3] {
-  top: calc(var(--paxRenMapScale) * 24.5px);
-  left: calc(var(--paxRenMapScale) * 80px);
+  top: calc(var(--paxRenMapScale) * 22px);
+  left: calc(var(--paxRenMapScale) * 78px);
 }
 .pr_map_card[data-card-id=medieval_ottoman]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=modon] {
-  top: calc(var(--paxRenMapScale) * 96px);
-  left: calc(var(--paxRenMapScale) * 19.5px);
+  top: calc(var(--paxRenMapScale) * 93.5px);
+  left: calc(var(--paxRenMapScale) * 17.5px);
 }
 .pr_map_card[data-card-id=medieval_ottoman]:not([data-map-type=ageOfReformation]) .pr_city[data-city-id=rhodes] {
-  top: calc(var(--paxRenMapScale) * 86.5px);
-  left: calc(var(--paxRenMapScale) * 108.5px);
+  top: calc(var(--paxRenMapScale) * 84.5px);
+  left: calc(var(--paxRenMapScale) * 106.5px);
 }
 
 .pr_map_card[data-card-id=medieval_ottoman][data-map-type=ageOfReformation] {
