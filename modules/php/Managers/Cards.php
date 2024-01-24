@@ -140,6 +140,9 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
       if ($card->isAgeOfReformpationPromo() && !$addAgeOfReformationPromoCards) {
         continue;
       }
+      if ($cId === 'VictoryAgeOfByzantine' && !$addAgeOfReformationPromoCards) {
+        continue;
+      }
 
       $type = $card->getType();
 

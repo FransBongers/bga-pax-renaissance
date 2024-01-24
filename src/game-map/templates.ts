@@ -111,18 +111,18 @@ const tplGameMapMapCards = () => {
   return htmlArray.join("");
 };
 
-const tplGameMapVictoryCards = () => `
+const tplGameMapVictoryCards = ({ageOfReformation = false}: {ageOfReformation?: boolean}) => `
   ${Object.entries(VICTORY_CARD_CONFIG)
     .map(
       ([victory, { top, left }]) =>
-        `<div id="pr_${victory}_slot" class="pr_victory_slot" style="top: calc(var(--paxRenCardScale) * ${top}px); left: calc(var(--paxRenCardScale) * ${left}px);"></div>`
+        `<div id="pr_${victory}_slot" class="pr_victory_slot"${ageOfReformation ? ' data-map-type="ageOfReformation"' : ''}></div>`
     )
     .join("")}
   `;
 
-const tplGameMap = () => `
+const tplGameMap = ({ageOfReformation = false}: {ageOfReformation?: boolean}) => `
   <div id="pr_game_map">
-    ${tplGameMapVictoryCards()}
+    ${tplGameMapVictoryCards({ageOfReformation})}
     ${tplGameMapEmpireCards()}
     ${tplGameMapMapCards()}
     ${tplGameMapMapBorders()}

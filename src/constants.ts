@@ -191,6 +191,7 @@ const BORDERS = [
  */
 const VICTORY_RENAISSANCE = "victory_renaissance";
 const VICTORY_GLOBALIZATION = "victory_globalization";
+const VICTORY_AGE_OF_BYZANTINE = 'victory_ageOfByzantine'
 const VICTORY_IMPERIAL = "victory_imperial";
 const VICTORY_HOLY = "victory_holy";
 

@@ -123,6 +123,7 @@ var BORDERS = [
 ];
 var VICTORY_RENAISSANCE = "victory_renaissance";
 var VICTORY_GLOBALIZATION = "victory_globalization";
+var VICTORY_AGE_OF_BYZANTINE = 'victory_ageOfByzantine';
 var VICTORY_IMPERIAL = "victory_imperial";
 var VICTORY_HOLY = "victory_holy";
 var VICTORY_SQUARES = [
@@ -2665,6 +2666,9 @@ var VictoryCardManager = (function (_super) {
             _a[VICTORY_IMPERIAL] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_IMPERIAL, "_slot"))),
             _a[VICTORY_HOLY] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_HOLY, "_slot"))),
             _a);
+        if (this.game.gameOptions.ageOfReformationPromo) {
+            this.victoryCardStocks[VICTORY_AGE_OF_BYZANTINE] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_AGE_OF_BYZANTINE, "_slot")));
+        }
         this.setupCards({ gamedatas: this.game.gamedatas });
     };
     VictoryCardManager.prototype.setupCards = function (_a) {
@@ -2801,6 +2805,10 @@ var VICTORY_CARD_CONFIG = (_b = {},
     },
     _b[VICTORY_GLOBALIZATION] = {
         top: 296,
+        left: 135.5,
+    },
+    _b[VICTORY_AGE_OF_BYZANTINE] = {
+        top: 440,
         left: 135.5,
     },
     _b[VICTORY_IMPERIAL] = {
@@ -3170,7 +3178,9 @@ var GameMap = (function () {
         var gamedatas = _a.gamedatas;
         document
             .getElementById("pr_play_area_container")
-            .insertAdjacentHTML("afterbegin", tplGameMap());
+            .insertAdjacentHTML("afterbegin", tplGameMap({
+            ageOfReformation: this.game.gameOptions.ageOfReformationPromo,
+        }));
         this.setupEmpireCards({ gamedatas: gamedatas });
         this.setupTokensCities({ gamedatas: gamedatas });
         this.setupTokensBorders({ gamedatas: gamedatas });
@@ -3197,7 +3207,7 @@ var GameMap = (function () {
             if (!node) {
                 return;
             }
-            node.setAttribute('data-map-type', 'ageOfReformation');
+            node.setAttribute("data-map-type", "ageOfReformation");
         });
     };
     GameMap.prototype.setVenice2Visibility = function (visible) {
@@ -3219,8 +3229,8 @@ var GameMap = (function () {
         if (!coatOfArmsNode) {
             return;
         }
-        coatOfArmsNode.setAttribute('data-side', card.side);
-        coatOfArmsNode.setAttribute('data-owner', card.owningBank === null ? 'none' : card.owningBank);
+        coatOfArmsNode.setAttribute("data-side", card.side);
+        coatOfArmsNode.setAttribute("data-owner", card.owningBank === null ? "none" : card.owningBank);
     };
     return GameMap;
 }());
@@ -3278,13 +3288,19 @@ var tplGameMapMapCards = function () {
     });
     return htmlArray.join("");
 };
-var tplGameMapVictoryCards = function () { return "\n  ".concat(Object.entries(VICTORY_CARD_CONFIG)
-    .map(function (_a) {
-    var victory = _a[0], _b = _a[1], top = _b.top, left = _b.left;
-    return "<div id=\"pr_".concat(victory, "_slot\" class=\"pr_victory_slot\" style=\"top: calc(var(--paxRenCardScale) * ").concat(top, "px); left: calc(var(--paxRenCardScale) * ").concat(left, "px);\"></div>");
-})
-    .join(""), "\n  "); };
-var tplGameMap = function () { return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards(), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupply(), "\n    ").concat(tplGameMapMarket(), "\n  </div>"); };
+var tplGameMapVictoryCards = function (_a) {
+    var _b = _a.ageOfReformation, ageOfReformation = _b === void 0 ? false : _b;
+    return "\n  ".concat(Object.entries(VICTORY_CARD_CONFIG)
+        .map(function (_a) {
+        var victory = _a[0], _b = _a[1], top = _b.top, left = _b.left;
+        return "<div id=\"pr_".concat(victory, "_slot\" class=\"pr_victory_slot\"").concat(ageOfReformation ? ' data-map-type="ageOfReformation"' : '', "></div>");
+    })
+        .join(""), "\n  ");
+};
+var tplGameMap = function (_a) {
+    var _b = _a.ageOfReformation, ageOfReformation = _b === void 0 ? false : _b;
+    return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards({ ageOfReformation: ageOfReformation }), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupply(), "\n    ").concat(tplGameMapMarket(), "\n  </div>");
+};
 var Hand = (function () {
     function Hand(game) {
         this.game = game;

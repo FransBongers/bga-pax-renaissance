@@ -111,6 +111,58 @@
   background-position-x: 80%;
 }
 
+/* ------- VICTORY CARD SLOTS ------- */
+
+#pr_victory_renaissance_slot {
+  top: calc(var(--paxRenCardScale) * 120.5px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_globalization_slot {
+  top: calc(var(--paxRenCardScale) * 296px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_ageOfByzantine_slot {
+  top: calc(var(--paxRenCardScale) * 440px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_imperial_slot {
+  top: calc(var(--paxRenCardScale) * 578px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_holy_slot {
+  top: calc(var(--paxRenCardScale) * 753.5px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_renaissance_slot[data-map-type="ageOfReformation"] {
+  top: calc(var(--paxRenCardScale) * 100.5px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_globalization_slot[data-map-type="ageOfReformation"] {
+  top: calc(var(--paxRenCardScale) * 267.5px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_ageOfByzantine_slot[data-map-type="ageOfReformation"] {
+  top: calc(var(--paxRenCardScale) * 434.5px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_imperial_slot[data-map-type="ageOfReformation"] {
+  top: calc(var(--paxRenCardScale) * 601.5px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
+#pr_victory_holy_slot[data-map-type="ageOfReformation"] {
+  top: calc(var(--paxRenCardScale) * 768.5px);
+  left: calc(var(--paxRenCardScale) * 135.5px);
+}
+
 /* ------- MAP CARDS ------- */
 
 $map-cards: (

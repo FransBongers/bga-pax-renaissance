@@ -106,10 +106,11 @@ class PaxRenaissance extends Table
         // Globals::setFirstPlayer($this->getNextPlayerTable()[0]);
         Stats::checkExistence();
 
+        Empires::setupNewGame($players, $options);
         Cards::setupNewGame($players, $options);
         Tokens::setupNewGame($players, $options);
         Market::setupNewGame($players, $options);
-        Empires::setupNewGame($players, $options);
+        
 
         $this->setGameStateInitialValue('logging', false);
         $this->activeNextPlayer();

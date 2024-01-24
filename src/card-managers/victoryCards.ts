@@ -2,6 +2,7 @@ class VictoryCardManager extends CardManager<VictoryCard> {
   private victoryCardStocks: {
     [VICTORY_RENAISSANCE]: LineStock<VictoryCard>;
     [VICTORY_GLOBALIZATION]: LineStock<VictoryCard>;
+    [VICTORY_AGE_OF_BYZANTINE]?: LineStock<VictoryCard>;
     [VICTORY_IMPERIAL]: LineStock<VictoryCard>;
     [VICTORY_HOLY]: LineStock<VictoryCard>;
   };
@@ -64,11 +65,21 @@ class VictoryCardManager extends CardManager<VictoryCard> {
         document.getElementById(`pr_${VICTORY_HOLY}_slot`)
       ),
     };
+    if (this.game.gameOptions.ageOfReformationPromo) {
+      this.victoryCardStocks[VICTORY_AGE_OF_BYZANTINE] = new LineStock<VictoryCard>(
+        this,
+        document.getElementById(`pr_${VICTORY_AGE_OF_BYZANTINE}_slot`)
+      );
+    }
+
     this.setupCards({ gamedatas: this.game.gamedatas });
   }
 
   setupCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     gamedatas.victoryCards.forEach((card) => {
+      // if (card.id === 'VictoryAgeOfByzantine') {
+      //   return;
+      // }
       this.victoryCardStocks[card.location].addCard(card);
     });
   }

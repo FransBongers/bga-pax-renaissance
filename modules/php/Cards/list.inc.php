@@ -12,6 +12,7 @@ $cardIds = [
   'EmpireSquare_PapalStates',
   'EmpireSquare_Portugal',
   // Victory
+  'VictoryAgeOfByzantine',
   'VictoryGlobalization',
   'VictoryHoly',
   'VictoryImperial',

@@ -114,6 +114,10 @@ const VICTORY_CARD_CONFIG = {
     top: 296,
     left: 135.5,
   },
+  [VICTORY_AGE_OF_BYZANTINE] : {
+    top: 440,
+    left: 135.5,
+  },
   [VICTORY_IMPERIAL]: {
     top: 578,
     left: 135.5,

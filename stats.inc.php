@@ -175,6 +175,7 @@ $stats_type = [
             STAT_VICTORY_TYPE_HOLY_CATHOLIC => totranslate("Catholic Holy Victory"),
             STAT_VICTORY_TYPE_HOLY_ISLAMIC => totranslate("Islamic Holy Victory"),
             STAT_VICTORY_TYPE_HOLY_REFORMIST => totranslate("Reformist Holy Victory"),
+            STAT_VICTORY_TYPE_AGE_OF_BYZANTINE => totranslate("Age of Byzantine Victory"),
         ],
         STAT_VICTORY_BANKER => [
             STAT_BANKER_NO_BANK => totranslate("Draw"), 

@@ -79,7 +79,9 @@ class GameMap {
     gamedatas.gameMap.empires.forEach((empire) =>
       this.setEmpireReligion({ empireId: empire.id, religion: empire.religion })
     );
-    this.setAgeOfReformationPromoAttributes(gamedatas.gameOptions.ageOfReformationPromo);
+    this.setAgeOfReformationPromoAttributes(
+      gamedatas.gameOptions.ageOfReformationPromo
+    );
     this.setVenice2Visibility(gamedatas.gameMap.condottiereActive);
   }
 
@@ -208,7 +210,7 @@ class GameMap {
     });
 
     gamedatas.empireSquares.forEach((card) => {
-      this.updateCoatOfArms({card});
+      this.updateCoatOfArms({ card });
     });
   }
 
@@ -216,7 +218,12 @@ class GameMap {
   setupGameMap({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     document
       .getElementById("pr_play_area_container")
-      .insertAdjacentHTML("afterbegin", tplGameMap());
+      .insertAdjacentHTML(
+        "afterbegin",
+        tplGameMap({
+          ageOfReformation: this.game.gameOptions.ageOfReformationPromo,
+        })
+      );
     // Add in main file?
     this.setupEmpireCards({ gamedatas });
     this.setupTokensCities({ gamedatas });
@@ -285,7 +292,7 @@ class GameMap {
       if (!node) {
         return;
       }
-      node.setAttribute('data-map-type','ageOfReformation');
+      node.setAttribute("data-map-type", "ageOfReformation");
     });
   }
 
@@ -301,14 +308,18 @@ class GameMap {
     }
   }
 
-  public updateCoatOfArms({card}: {card: EmpireCard})
-  {
-    const coatOfArmsNode = document.getElementById(`pr_${card.empire}_coat_of_arms`);
+  public updateCoatOfArms({ card }: { card: EmpireCard }) {
+    const coatOfArmsNode = document.getElementById(
+      `pr_${card.empire}_coat_of_arms`
+    );
     if (!coatOfArmsNode) {
       return;
     }
-    coatOfArmsNode.setAttribute('data-side', card.side);
-    coatOfArmsNode.setAttribute('data-owner', card.owningBank === null ? 'none' : card.owningBank);
+    coatOfArmsNode.setAttribute("data-side", card.side);
+    coatOfArmsNode.setAttribute(
+      "data-owner",
+      card.owningBank === null ? "none" : card.owningBank
+    );
   }
 
   //  .##.....##.########.####.##.......####.########.##....##
@@ -318,6 +329,4 @@ class GameMap {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
-
-
 }
