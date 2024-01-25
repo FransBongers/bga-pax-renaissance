@@ -37,11 +37,11 @@ $game_options = [
       ],
       OPTION_STARTING_MAP_1550_VARIANT => [
         'name' => totranslate('1550 Map Variant'),
-        'tmdisplay' => totranslate('1550 Map Variant'),
+        'tmdisplay' => totranslate('1550 Map'),
       ],
       OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT => [
         'name' => totranslate('Age of Reformation Promo Variant'),
-        'tmdisplay' => totranslate('Age of Reformation Promo Variant'),
+        'tmdisplay' => totranslate('Age of Reformation Promo'),
       ],
     ]
   ],

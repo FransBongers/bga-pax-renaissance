@@ -68,9 +68,12 @@ class EmpireSquare_Ottoman extends \PaxRenaissance\Models\EmpireCard
         ],
       ]
     ];
-    $this->prestige = [
+    $this->prestige = $ageOfReformationVariant ? [
       KING => [],
       REPUBLIC => [LAW],
+    ] : [
+      KING => [ISLAMIC],
+      REPUBLIC => [ISLAMIC],
     ];
     $this->startLocation = 'throne_ottoman';
     $this->side = $this->getExtraData('side');
