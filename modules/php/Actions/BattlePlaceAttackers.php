@@ -131,9 +131,13 @@ class BattlePlaceAttackers extends \PaxRenaissance\Models\AtomicAction
     $empire = Empires::get($empireId);
     $borders = $empire->getBorders(true);
     $cities = $empire->getCities(true);
+    $seaBorders = Utils::filter($borders, function ($border) {
+      return $border->isSeaBorder();
+    });
 
     $hasEmptyBorders = count($borders) > 0;
     $hasEmptyCities = count($cities) > 0;
+    $hasEmptySeaborders = count($seaBorders) > 0;
 
     $agentOptions = [];
     $repressedTokenOptions = [];
@@ -146,6 +150,13 @@ class BattlePlaceAttackers extends \PaxRenaissance\Models\AtomicAction
       $type = $agent['type'];
       switch ($type) {
         case PIRATE:
+          if ($hasEmptySeaborders) {
+            $agentOptions[] = [
+              'agent' => $agent,
+              'locations' => $seaBorders
+            ];
+          }
+          break;
         case PAWN:
           if ($hasEmptyBorders) {
             $agentOptions[] = [
