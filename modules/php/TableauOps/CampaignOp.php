@@ -87,6 +87,9 @@ class CampaignOp extends \PaxRenaissance\Models\TableauOp
       ];
     }
 
-    return array_values($options);
+    // Use cost to determine if there are any attackers.
+    return Utils::filter(array_values($options), function ($option) {
+      return $option['cost'] > 0;
+    });
   }
 }

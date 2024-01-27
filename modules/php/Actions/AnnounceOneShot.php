@@ -195,6 +195,7 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
       case APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT:
       case APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT:
       case APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT:
+        return $this->apostasyCanOccur($oneShot);
       case CONSPIRACY_ONE_SHOT:
       case PEASANT_REVOLT_ONE_SHOT:
         return true;
@@ -217,6 +218,12 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
       default:
         return false;
     }
+  }
+
+  private function apostasyCanOccur($oneShot)
+  {
+    $affectedPlayers = OneShots::getPlayersAffectedByApostasy($oneShot);
+    return count($affectedPlayers) > 0;
   }
 
   private function coronationCanOccur($card)

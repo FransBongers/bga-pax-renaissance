@@ -20,7 +20,11 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
-// TODO: rename to CheckNonAttacking Agents
+/**
+ * Checks for placement of agents that did not participate in battle
+ * Usually only bishops, but there are also cases of pawns not fighting in
+ * religious wars
+ */
 class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
 {
   private $battleOneShots = [
@@ -28,6 +32,12 @@ class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
     CRUSADE_ONE_SHOT,
     JIHAD_ONE_SHOT,
     PEASANT_REVOLT_ONE_SHOT,
+    REFORMATION_ONE_SHOT,
+  ];
+
+  private $religiousWarOneShots = [
+    CRUSADE_ONE_SHOT,
+    JIHAD_ONE_SHOT,
     REFORMATION_ONE_SHOT,
   ];
 
@@ -55,7 +65,6 @@ class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
   public function stBattleCheckBishopAgent()
   {
     $parentInfo = $this->ctx->getParent()->getInfo();
-    $player = self::getPlayer();
 
     $source = $parentInfo['source'];
     $data = $parentInfo['data'];
@@ -67,15 +76,21 @@ class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
 
     $card = Cards::get($data['cardId']);
 
-    $bishopAgents = Utils::filter($card->getAgents(), function ($agent) {
-      return $agent['type'] === BISHOP;
+    $affectedAgents = Utils::filter($card->getAgents(), function ($agent) use ($source) {
+      if ($agent['type'] === BISHOP) {
+        return true;
+      }
+      if (in_array($source, $this->religiousWarOneShots) && $agent['type'] === PAWN) {
+        return true;
+      }
+      return false;
     });
 
-    if (count($bishopAgents) > 0) {
+    if (count($affectedAgents) > 0) {
       $this->ctx->insertAsBrother(new LeafNode([
         'action' => PLACE_AGENT,
         'playerId' => $this->ctx->getPlayerId(),
-        'agents' => $bishopAgents,
+        'agents' => $affectedAgents,
         'empireId' => $card->getEmpireId(),
         'source' => $source,
         'optional' => false,

@@ -95,9 +95,9 @@ trait DebugTrait
 
   function test()
   {
-    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ENGLAND_FRANCE);
-    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
-    Tokens::move('pawn_fugger_10',BORDER_ARAGON_FRANCE);
+    $this->debugPlaceToken(KNIGHT, REFORMIST, CYPRUS);
+    // $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
+    // Tokens::move('pawn_fugger_10',BORDER_ARAGON_FRANCE);
     // Cards::get('VictoryAgeOfByzantine')->setActive();
     // Notifications::log('test',Cards::get('VictoryAgeOfByzantine')->canBeDeclaredByPlayer(Players::get()));
     // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
