@@ -7225,23 +7225,10 @@ var PlaceAgentState = (function () {
         });
     };
     PlaceAgentState.prototype.updateInterfaceInitialStep = function () {
-        var _this = this;
         this.game.clearPossible();
         this.updatePageTitle();
         this.setLocationsSelectable();
-        if (this.args.optionalAction) {
-            this.game.addSkipButton({
-                callback: function () {
-                    return _this.game.takeAction({
-                        action: "actPlaceAgent",
-                        args: {
-                            agent: _this.args.agents[0],
-                            locationId: null,
-                        },
-                    });
-                },
-            });
-        }
+        this.game.addPassButton({ optionalAction: this.args.optionalAction, text: _('Do not place') });
         this.game.addUndoButtons(this.args);
     };
     PlaceAgentState.prototype.updateInterfaceConfirmCard = function (_a) {
@@ -7277,13 +7264,13 @@ var PlaceAgentState = (function () {
         this.game.clearPossible();
         this.game.setLocationSelected({ id: id });
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} must select an empire repress ${tkn_mapToken} to"),
+            text: _("${tkn_playerName} must select an empire to repress ${tkn_mapToken} to"),
             args: {
                 tkn_playerName: "${you}",
-                tkn_mapToken: tknMapToken(location.repressed.token.id),
+                tkn_mapToken: tknMapToken(location.tokenToRepress.token.id),
             },
         });
-        location.repressed.empires.forEach(function (empire) {
+        location.tokenToRepress.empires.forEach(function (empire) {
             _this.game.setLocationSelectable({
                 id: empire.id,
                 callback: function () {
@@ -7346,7 +7333,7 @@ var PlaceAgentState = (function () {
                     id: id,
                     callback: function () {
                         var _a;
-                        if ((_a = location === null || location === void 0 ? void 0 : location.repressed) === null || _a === void 0 ? void 0 : _a.empires) {
+                        if ((_a = location === null || location === void 0 ? void 0 : location.tokenToRepress) === null || _a === void 0 ? void 0 : _a.empires) {
                             _this.updateInterfaceSelectEmpireToRepressTo({ id: id, location: location });
                         }
                         else {
@@ -7370,8 +7357,8 @@ var PlaceAgentState = (function () {
     };
     PlaceAgentState.prototype.updatePageTitleConfirmLocation = function (_a) {
         var location = _a.location, empire = _a.empire;
-        var name = location.name, cost = location.cost, repressed = location.repressed;
-        if (repressed) {
+        var name = location.name, cost = location.cost, tokenToRepress = location.tokenToRepress, tokenToKill = location.tokenToKill;
+        if (tokenToRepress === null || tokenToRepress === void 0 ? void 0 : tokenToRepress.token) {
             this.game.clientUpdatePageTitle({
                 text: cost > 0
                     ? _("Place ${tkn_mapToken} on ${location} and pay ${cost} ${tkn_florin} to Repress ${tkn_mapToken_repressed} ?")
@@ -7382,7 +7369,18 @@ var PlaceAgentState = (function () {
                     location: _(name),
                     cost: cost,
                     tkn_florin: tknFlorin(),
-                    tkn_mapToken_repressed: tknMapToken(repressed.token.id),
+                    tkn_mapToken_repressed: tknMapToken(tokenToRepress.token.id),
+                },
+            });
+        }
+        else if (tokenToKill) {
+            this.game.clientUpdatePageTitle({
+                text: _("Place ${tkn_mapToken} on ${location} and Kill ${tkn_mapToken_killed} ?"),
+                args: {
+                    tkn_playerName: "${you}",
+                    tkn_mapToken: this.createMapTokenId(),
+                    location: _(name),
+                    tkn_mapToken_killed: tknMapToken(tokenToKill.id),
                 },
             });
         }

@@ -74,7 +74,8 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
         'agents' => $card->getAgents(),
         'empireId' => $card->getEmpireId(),
         'optional' => true,
-        'repressCost' => 1,
+        // 'repressCost' => 1,
+        'source' => null,
       ]));
     }
 
@@ -172,6 +173,7 @@ class AnnounceOneShot extends \PaxRenaissance\Models\AtomicAction
         'agents' => $card->getAgents(),
         'empireId' => $card->getEmpireId(),
         'optional' => true,
+        'source' => null,
       ]));
     }
 

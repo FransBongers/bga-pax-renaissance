@@ -76,8 +76,9 @@ class TradeShiftOneShot extends \PaxRenaissance\Models\AtomicAction
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $card->getAgents(),
         'empireId' => $card->getEmpireId(),
+        'source' => $oneShot,
         'optional' => false,
-        'repressCost' => 0,
+        // 'repressCost' => 0,
       ]));
     }
 

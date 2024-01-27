@@ -20,6 +20,7 @@ use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\Tokens;
 use PaxRenaissance\Models\Border;
 
+// TODO: rename to CheckNonAttacking Agents
 class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
 {
   private $battleOneShots = [
@@ -76,9 +77,10 @@ class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $bishopAgents,
         'empireId' => $card->getEmpireId(),
+        'source' => $source,
         'optional' => false,
-        'emptyCitiesFirst' => true,
-        'repressCost' => 0,
+        // 'emptyCitiesFirst' => true,
+        // 'repressCost' => 0,
       ]));
     }
 

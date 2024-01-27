@@ -22,7 +22,7 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
 {
   public function getState()
   {
-    return ST_TRADE_FAIR_LEVY;
+    // return ST_TRADE_FAIR_LEVY;
   }
 
   public function stTradeFairLevy()

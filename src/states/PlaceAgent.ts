@@ -51,18 +51,7 @@ class PlaceAgentState implements State {
     this.updatePageTitle();
     this.setLocationsSelectable();
 
-    if (this.args.optionalAction) {
-      this.game.addSkipButton({
-        callback: () =>
-          this.game.takeAction({
-            action: "actPlaceAgent",
-            args: {
-              agent: this.args.agents[0],
-              locationId: null,
-            },
-          }),
-      });
-    }
+    this.game.addPassButton({optionalAction: this.args.optionalAction, text: _('Do not place')})
     this.game.addUndoButtons(this.args);
   }
 
@@ -115,15 +104,15 @@ class PlaceAgentState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select an empire repress ${tkn_mapToken} to"
+        "${tkn_playerName} must select an empire to repress ${tkn_mapToken} to"
       ),
       args: {
         tkn_playerName: "${you}",
-        tkn_mapToken: tknMapToken(location.repressed.token.id),
+        tkn_mapToken: tknMapToken(location.tokenToRepress.token.id),
       },
     });
 
-    location.repressed.empires.forEach((empire: Empire) => {
+    location.tokenToRepress.empires.forEach((empire: Empire) => {
       this.game.setLocationSelectable({
         id: empire.id,
         callback: () =>
@@ -198,7 +187,7 @@ class PlaceAgentState implements State {
         this.game.setLocationSelectable({
           id,
           callback: () => {
-            if (location?.repressed?.empires) {
+            if (location?.tokenToRepress?.empires) {
               this.updateInterfaceSelectEmpireToRepressTo({ id, location });
             } else {
               this.updateInterfaceConfirmLocation({ id, location });
@@ -230,8 +219,8 @@ class PlaceAgentState implements State {
     location: PlaceAgentLocation;
     empire?: Empire;
   }) {
-    const { name, cost, repressed } = location;
-    if (repressed) {
+    const { name, cost, tokenToRepress, tokenToKill } = location;
+    if (tokenToRepress?.token) {
       this.game.clientUpdatePageTitle({
         text:
           cost > 0
@@ -247,7 +236,19 @@ class PlaceAgentState implements State {
           location: _(name),
           cost,
           tkn_florin: tknFlorin(),
-          tkn_mapToken_repressed: tknMapToken(repressed.token.id),
+          tkn_mapToken_repressed: tknMapToken(tokenToRepress.token.id),
+        },
+      });
+    } else if (tokenToKill) {
+      this.game.clientUpdatePageTitle({
+        text: _(
+                "Place ${tkn_mapToken} on ${location} and Kill ${tkn_mapToken_killed} ?"
+              ),
+        args: {
+          tkn_playerName: "${you}",
+          tkn_mapToken: this.createMapTokenId(),
+          location: _(name),
+          tkn_mapToken_killed: tknMapToken(tokenToKill.id),
         },
       });
     } else {
@@ -261,25 +262,6 @@ class PlaceAgentState implements State {
       });
     }
   }
-
-  // private createAgentLog() {
-  //   const {type, religion} = this.args.agents[0];
-
-  //   const isPawn = type === PAWN;
-
-  //   const result = {
-  //     log: isPawn ? '${tkn_pawn}' : '${tkn_mapToken}',
-  //     args: {}
-  //   };
-
-  //   if (isPawn) {
-  //     result.args['tkn_pawn'] =`${this.game.playerManager.getPlayer({playerId: this.game.getPlayerId()}).getBank() }_pawn`;
-  //   } else {
-  //     result.args['tkn_mapToken'] =`${religion}_${type}`;
-  //   }
-
-  //   return result;
-  // }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.

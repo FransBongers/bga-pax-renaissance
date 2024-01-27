@@ -68,7 +68,7 @@ class AtomicActions
     TABLEAU_OP_VOTE => 'TableauOpVote',
     TRADE_FAIR => 'TradeFair',
     TRADE_FAIR_PROFIT_DISPERSAL => 'TradeFairProfitDispersal',
-    TRADE_FAIR_LEVY => 'TradeFairLevy', // TODO remove
+    // TRADE_FAIR_LEVY => 'TradeFairLevy', // TODO remove
     TRADE_SHIFT_NOVGOROD_ONE_SHOT => 'TradeShiftOneShot',
     TRADE_SHIFT_RED_SEA_ONE_SHOT => 'TradeShiftOneShot',
     TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT => 'TradeShiftOneShot',

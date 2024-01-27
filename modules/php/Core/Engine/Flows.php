@@ -119,7 +119,7 @@ abstract class Flows
           ],
           'empireId' => $empireId,
           'optional' => true,
-          'repressCost' => 1,
+          'source' => REGIME_CHANGE_CONCESSION,
         ],
         [
           'action' => REGIME_CHANGE_EMANCIPATION,

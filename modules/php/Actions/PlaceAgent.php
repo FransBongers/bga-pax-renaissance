@@ -44,14 +44,12 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
   public function stPlaceAgent()
   {
-    // $args = self::getPossibleLevies();
-    // if (count($args['possibleLevies']) === 0) {
-    //   $this->resolveAction([]);
-    // } else if (count($args['possibleLevies']) === 1) {
-    //   $this->actTradeFairLevy([
-    //     'cityId' => array_keys($args['possibleLevies'])[0]
-    //   ]);
-    // }
+    $options = $this->getOptions();
+
+    $isOptional = $this->getOptional($options);
+    $this->ctx->updateInfo('optional', $isOptional);
+
+    Engine::save();
   }
 
   // ....###....########...######....######.
@@ -64,26 +62,13 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
   public function argsPlaceAgent()
   {
-    // $player = Players::get();
-    // $empireId = $this->ctx->getInfo()['empireId'];
-    // $empire = Empires::get($empireId);
-    // $cities = $empire->getCities();
+    $options = $this->getOptions();
 
-    $info = $this->ctx->getInfo();
-    $empireId = $info['empireId'];
-    $agents = $info['agents'];
-    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 1;
+    // We need to set here since this is executed before state function can update it.
+    $isOptional = $this->getOptional($options);
+    $this->ctx->updateInfo('optional', $isOptional);
 
-    $player = self::getPlayer();
-
-    $data = [
-      'agents' => $agents,
-      // Assumption: card only place agents of the same type
-      'locations' => $this->getLocations($player, $empireId, $agents[0]['type'], $repressCost),
-      // 'repressCost' => $repressCost,
-    ];
-
-    return $data;
+    return $options;
   }
 
   //  .########..##..........###....##....##.########.########.
@@ -102,39 +87,88 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
 
+  public function actPassPlaceAgent()
+  {
+    Engine::resolve(PASS);
+  }
+
   public function actPlaceAgent($args)
   {
     self::checkAction('actPlaceAgent');
     $agent = $args['agent'];
     $locationId = $args['locationId'];
 
-    $skipped = $locationId === null;
-    $optional = $this->ctx->isOptional();
-    if ($skipped && !$optional) {
-      throw new \feException("Not allowed to skip");
-    }
-
-    $stateArgs = $this->argsPlaceAgent();
+    $options = $this->getOptions();
 
 
-    if (!$skipped && !array_key_exists($locationId, $stateArgs['locations'])) {
+    if (!array_key_exists($locationId, $options['locations'])) {
       throw new \feException("Not allowed to place Agent on selected location");
     }
     $info = $this->ctx->getInfo();
     $type = $agent['type'];
-    $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 1;
 
-    if (!$skipped) {
-      $locationType = $type === BISHOP ? $stateArgs['locations'][$locationId]->getType() : $stateArgs['locations'][$locationId]['type'];
+    $locationType = $type === BISHOP ? $options['locations'][$locationId]->getType() : $options['locations'][$locationId]['type'];
+    $player = self::getPlayer();
+    $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['separator']);
 
-      $player = self::getPlayer();
+    $cost = $type !== BISHOP && isset($options['locations'][$locationId]['cost']) ? $options['locations'][$locationId]['cost'] : 0;
 
-      $supply = Locations::supply($type, $type === PAWN ? $player->getBank() : $agent['separator']);
+    Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, isset($args['empireId']) ? $args['empireId'] : $info['empireId'], $cost), $this->ctx);
 
-      Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, isset($args['empireId']) ? $args['empireId'] : $info['empireId'], $repressCost), $this->ctx);
+
+    $this->insertNextAgentAction($options, $agent);
+
+    $this->resolveAction($args);
+  }
+
+  //  .##.....##.########.####.##.......####.########.##....##
+  //  .##.....##....##.....##..##........##.....##.....##..##.
+  //  .##.....##....##.....##..##........##.....##......####..
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  .##.....##....##.....##..##........##.....##.......##...
+  //  ..#######.....##....####.########.####....##.......##...
+
+  private function getOptional($options)
+  {
+    $info = $this->ctx->getInfo();
+    $source = isset($info['source']) ? $info['source'] : null;
+
+    // Source is null if there is no one-shot, one-shot cannot be executed or player chooses not to 
+    // perform one-shot
+    if ($source === null || $source === REGIME_CHANGE_CONCESSION) {
+      return true;
     }
 
-    $agents = $stateArgs['agents'];
+    // For everything below source is a one-shot. Placement is not optional as long as empire is not saturated.
+
+    if ($options['agents'][0]['type'] === BISHOP) {
+      return false;
+    }
+
+    $hasEmptyPlacement = Utils::array_some($options['locations'], function ($location) {
+      if (isset($location['tokenToRepress']) && $location['tokenToRepress'] !== null) {
+        return false;
+      }
+      if (isset($location['tokenToKill']) && $location['tokenToKill'] !== null) {
+        return false;
+      }
+      return true;
+    });
+
+    if ($hasEmptyPlacement) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private function insertNextAgentAction($options, $agent)
+  {
+    $agents = $options['agents'];
+    $info = $this->ctx->getInfo();
+    $optional = $this->ctx->isOptional();
+    $source = isset($info['source']) ? $info['source'] : null;
 
     if (count($agents) > 1) {
       $index = Utils::array_find_index($agents, function ($argAgent) use ($agent) {
@@ -149,33 +183,41 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
         'agents' => $agents,
         'empireId' => $this->ctx->getInfo()['empireId'],
         'optional' => $optional,
-        'repressCost' => $repressCost,
+        'source' => $source,
       ]));
     }
-
-    $this->resolveAction($args);
   }
 
-  //  .##.....##.########.####.##.......####.########.##....##
-  //  .##.....##....##.....##..##........##.....##.....##..##.
-  //  .##.....##....##.....##..##........##.....##......####..
-  //  .##.....##....##.....##..##........##.....##.......##...
-  //  .##.....##....##.....##..##........##.....##.......##...
-  //  .##.....##....##.....##..##........##.....##.......##...
-  //  ..#######.....##....####.########.####....##.......##...
+  private function getOptions()
+  {
+    $info = $this->ctx->getInfo();
+    $empireId = $info['empireId'];
+    $agents = $info['agents'];
+    // $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 1;
+    $player = self::getPlayer();
+    // Assumption: card only place agents of the same type
+    $type = $agents[0]['type'];
 
-  private function getLocations($player, $empireId, $type, $repressCost = 0)
+    $playerHasFlorins = $player->getFlorins() > 0;
+    $locations = $this->getLocations($playerHasFlorins, $empireId, $type);
+    return [
+      'agents' => $agents,
+      'locations' => $locations,
+    ];
+  }
+
+
+  private function getLocations($playerHasFlorins, $empireId, $type)
   {
     $empires = $this->getEmpires($empireId);
-    $playerFlorins = $player->getFlorins();
     switch ($type) {
       case PIRATE:
       case PAWN:
-        return $this->getBorders($playerFlorins, $empireId, $type, $repressCost);
+        return $this->getBorders($playerHasFlorins, $empireId, $type);
         break;
       case KNIGHT:
       case ROOK:
-        return $this->getCities($playerFlorins, $empires, $type, $repressCost);
+        return $this->getCities($playerHasFlorins, $empires, $type);
         break;
       case BISHOP:
         return $this->getCards($empireId, $type);
@@ -192,15 +234,13 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
   }
 
-  private function getBorders($playerFlorins, $empireId, $type, $repressCost)
+  private function getBorders($playerHasFlorins, $empireId, $type)
   {
     $empires = $this->getEmpires($empireId);
     $borders = array_merge(...array_map(function ($empire) {
       return $empire->getBorders();
     }, $empires));
-    // $borders = array_map(function ($empire) {
-    //   return $empire->getBorders();
-    // }, $empires);
+
     $locations = [];
 
     foreach ($borders as $border) {
@@ -212,42 +252,60 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
         continue;
       }
 
+      $tokensInLocation = $border->getTokens();
+      $hasTokens = count($tokensInLocation) > 0;
+
       if ($type === PAWN) {
-        $tokensInLocation = $border->getTokens();
-        if (count($tokensInLocation) > 0 && (Utils::array_some($tokensInLocation, function ($tokenInLocation) {
+
+        $hasPirate = $hasTokens && Utils::array_some($tokensInLocation, function ($tokenInLocation) {
           return $tokenInLocation->getType() === PIRATE;
-        }) || $repressCost > $playerFlorins)) {
+        });
+        $hasTokenAndPlayerCannotPay = $hasTokens && !$playerHasFlorins;
+        if ($hasPirate || $hasTokenAndPlayerCannotPay) {
           continue;
-        } else if (count($tokensInLocation) > 0) {
+        } else if ($hasTokens) {
           $locations[$borderId] = [
             'id' => $borderId,
             'type' => BORDER,
-            'cost' => $repressCost,
+            'cost' => 1,
             'name' => $border->getName(),
-            'repressed' => [
+            'tokenToRepress' => [
               'token' => $tokensInLocation[0], // There is no pirate so there can only be one pawn
-              'empires' => in_array($empireId, REGIONS) ? $border->getAdjacentEmpires() : null,
+              'empires' => in_array($empireId, REGIONS) ? $border->getAdjacentEmpires() : null, // Only set if player needs to select an empire?
             ],
           ];
           continue;
+        } else {
+          $locations[$borderId] = [
+            'id' => $borderId,
+            'type' => BORDER,
+            'cost' => 0,
+            'name' => $border->getName(),
+            'tokenToRepress' => null
+          ];
         }
-      }
+      } else if ($type === PIRATE) {
+        $tokenToKill = null;
 
-      $locations[$borderId] = [
-        'id' => $borderId,
-        'type' => BORDER,
-        'cost' => 0,
-        'name' => $border->getName(),
-      ];
+        if ($hasTokens) {
+          foreach ($tokensInLocation as $currentToken) {
+            if ($currentToken->getType() === PAWN && $currentToken->getOwner()->hasSpecialAbility(SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES)) {
+              continue;
+            }
+            $tokenToKill = $currentToken;
+          }
+        };
+
+        $locations[$borderId] = [
+          'id' => $borderId,
+          'type' => BORDER,
+          'cost' => 0,
+          'name' => $border->getName(),
+          'tokenToKill' => $tokenToKill,
+        ];
+      }
     }
 
-    // foreach ($empires as $empire) {
-    //   $borders = 
-    //   $seaBorders = Utils::filter($borders, function ($border) {
-    //     return $border->isSeaBorder();
-    //   });
-    //   $locations = array_merge($locations, $seaBorders);
-    // }
     return $locations;
   }
 
@@ -274,14 +332,11 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     return $locations;
   }
 
-  private function getCities($playerFlorins, $empires, $type, $repressCost)
+  private function getCities($playerHasFlorins, $empires, $type)
   {
     $cities = array_merge(...array_map(function ($empire) {
       return $empire->getCities();
     }, $empires));
-
-    $player = self::getPlayer();
-    $florins = $player->getFlorins();
 
     $locations = [];
     foreach ($cities as $city) {
@@ -294,16 +349,17 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
           'type' => CITY,
           'cost' => 0,
           'name' => $city->getName(),
+          'tokenToRepress' => null,
         ];
-      } else if ($token->getType() === DISK || $florins === 0) {
+      } else if ($token->getType() === DISK || !$playerHasFlorins) {
         continue;
       } else {
         $locations[$cityId] = [
           'id' => $cityId,
           'type' => CITY,
-          'cost' => $repressCost,
+          'cost' => 1,
           'name' => $city->getName(),
-          'repressed' => [
+          'tokenToRepress' => [
             'token' => $token,
             'empires' => null
           ],

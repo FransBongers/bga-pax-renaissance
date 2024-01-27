@@ -230,16 +230,16 @@ $machinestates = [
         'transitions' => [],
     ],
 
-    ST_TRADE_FAIR_LEVY => [
-        'name' => 'tradeFairLevy',
-        'description' => clienttranslate('${actplayer} must choose a City to place a Levy'),
-        'descriptionmyturn' => clienttranslate('${you}'),
-        'type' => 'activeplayer',
-        'args' => 'argsAtomicAction',
-        'action' => 'stAtomicAction',
-        // 'transitions' => [],
-        'possibleactions' => ['actTradeFairLevy', 'actRestart'],
-    ],
+    // ST_TRADE_FAIR_LEVY => [
+    //     'name' => 'tradeFairLevy',
+    //     'description' => clienttranslate('${actplayer} must choose a City to place a Levy'),
+    //     'descriptionmyturn' => clienttranslate('${you}'),
+    //     'type' => 'activeplayer',
+    //     'args' => 'argsAtomicAction',
+    //     'action' => 'stAtomicAction',
+    //     // 'transitions' => [],
+    //     'possibleactions' => ['actTradeFairLevy', 'actRestart'],
+    // ],
 
     ST_PLACE_AGENT => [
         'name' => 'placeAgent',

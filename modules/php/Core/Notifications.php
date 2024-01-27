@@ -299,7 +299,7 @@ class Notifications
    * Only used in age of reformation promo variant to update the king side of the 
    * Papal States empire square. Input data is already serialized
    */
-  public static function changeEmpireSquare($oldEmpireSquare,$newEmpireSquare, $religion)
+  public static function changeEmpireSquare($oldEmpireSquare, $newEmpireSquare, $religion)
   {
     self::notifyAll("changeEmpireSquare", '', [
       'player' => Players::get(),
@@ -554,13 +554,19 @@ class Notifications
 
   public static function repressToken($player, $token, $fromLocation, $cost)
   {
+    $message = $cost > 0 ?
+      clienttranslate('${tkn_playerName} pays ${cost} ${tkn_florin} to repress ${tkn_mapToken} on ${tkn_boldText}')
+      : clienttranslate('${tkn_playerName} represses ${tkn_mapToken} on ${tkn_boldText}');
+
+
     $isPawn = $token->getType() === PAWN;
-    self::notifyAll("repressToken",  clienttranslate('${tkn_playerName} represses ${tkn_mapToken} on ${tkn_boldText}'), [
+    self::notifyAll("repressToken",  $message, [
       'player' => $player,
       'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
       'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
       'cost' => $cost,
+      'tkn_florin' => clienttranslate('Florin(s)'),
     ]);
   }
 
@@ -818,7 +824,7 @@ class Notifications
 
   public static function useApostasyAbilityAction($player, $apostasy, $card)
   {
-    
+
 
     self::message(clienttranslate('${tkn_playerName} uses ${tkn_cardName} to perform an apostasy ${tkn_oneShot}'), [
       'player' => $player,
@@ -835,7 +841,7 @@ class Notifications
       'tkn_boldText_vassal_suzerain' => $suzerain->getName(),
     ]);
   }
-  
+
 
   /*********************
    **** UPDATE ARGS ****

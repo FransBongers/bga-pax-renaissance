@@ -298,7 +298,10 @@ class BattlePlaceAttackers extends \PaxRenaissance\Models\AtomicAction
 
     $player = self::getPlayer();
 
-    $agents = $info['agents'];
+    $agents = Utils::filter($info['agents'], function ($agent) {
+      return $agent['type'] !== PIRATE;
+    });
+
 
     // We only need to repress remaining agents, since the tokens are repressed already
     if (count($agents) > 0) {

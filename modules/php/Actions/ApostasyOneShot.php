@@ -120,8 +120,9 @@ class ApostasyOneShot extends \PaxRenaissance\Models\AtomicAction
         'playerId' => $this->ctx->getPlayerId(),
         'agents' => $playerdCard->getAgents(),
         'empireId' => $playerdCard->getEmpireId(),
+        'source' => $oneShot,
         'optional' => false,
-        'repressCost' => 0, // TODO: check this => do cards with apostasy only have bishops?
+        // 'repressCost' => 0, // TODO: check this => do cards with apostasy only have bishops?
       ]));
     }
 
