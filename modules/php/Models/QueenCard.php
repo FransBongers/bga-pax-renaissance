@@ -58,6 +58,15 @@ class QueenCard extends TableauCard
   // .##.....##....##.....##..##........##.....##.......##...
   // ..#######.....##....####.########.####....##.......##...
 
+  public function getStaticData()
+  {
+    $data = parent::getStaticData();
+
+    $data['suitors'] = $this->suitors;
+
+    return $data;
+  }
+
   public function isSilenced($player)
   {
     if ($player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {

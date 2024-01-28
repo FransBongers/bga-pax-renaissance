@@ -96,6 +96,8 @@ trait DebugTrait
 
   function test()
   {
+    Notifications::log('Cards', Cards::get('PREN162X_CatherineDeMedici')->getStaticData());
+
     // Tokens::move('knight_islamic_1',Locations::supply(KNIGHT,ISLAMIC));
     // Tokens::move('knight_islamic_6',Locations::supply(KNIGHT,ISLAMIC));
     // Tokens::move('rook_islamic_1',Locations::supply(ROOK,ISLAMIC));
@@ -103,8 +105,8 @@ trait DebugTrait
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_3);
     // $this->debugPlaceToken(ROOK, REFORMIST, MODON);
-    $this->debugPlaceToken(PAWN, COEUR, BORDER_HUNGARY_OTTOMAN);
-    $this->debugPlaceToken(PAWN, COEUR, BORDER_OTTOMAN_PAPAL_STATES);
+    // $this->debugPlaceToken(PAWN, COEUR, BORDER_HUNGARY_OTTOMAN);
+    // $this->debugPlaceToken(PAWN, COEUR, BORDER_OTTOMAN_PAPAL_STATES);
     // $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
     // Tokens::move('pawn_fugger_10',BORDER_ARAGON_FRANCE);
     // Cards::get('VictoryAgeOfByzantine')->setActive();

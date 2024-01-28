@@ -1835,6 +1835,8 @@ var PaxRenaissance = (function () {
     function PaxRenaissance() {
         this._notif_uid_to_log_id = {};
         this._last_notif = null;
+        this._last_tooltip_id = 0;
+        this.tooltipsToMap = [];
         console.log("paxrenaissance constructor");
     }
     PaxRenaissance.prototype.setup = function (gamedatas) {
@@ -2285,14 +2287,34 @@ var PaxRenaissance = (function () {
         });
     };
     PaxRenaissance.prototype.addLogClass = function () {
-        if (this._last_notif == null)
+        var _a;
+        if (this._last_notif == null) {
             return;
+        }
         var notif = this._last_notif;
-        if ($("log_" + notif.logId)) {
-            var type = notif.msg.type;
-            if (type == "history_history")
-                type = notif.msg.args.originalType;
-            dojo.addClass("log_" + notif.logId, "notif_" + type);
+        var type = notif.msg.type;
+        if (type == 'history_history') {
+            type = notif.msg.args.originalType;
+        }
+        if ($('log_' + notif.logId)) {
+            dojo.addClass('log_' + notif.logId, 'notif_' + type);
+            var methodName = 'onAdding' + type.charAt(0).toUpperCase() + type.slice(1) + 'ToLog';
+            (_a = this[methodName]) === null || _a === void 0 ? void 0 : _a.call(this, notif);
+        }
+        if ($('dockedlog_' + notif.mobileLogId)) {
+            dojo.addClass('dockedlog_' + notif.mobileLogId, 'notif_' + type);
+        }
+        while (this.tooltipsToMap.length) {
+            var tooltipToMap = this.tooltipsToMap.pop();
+            if (!tooltipToMap || !tooltipToMap[1]) {
+                console.error('error tooltipToMap', tooltipToMap);
+            }
+            else {
+                var card = this.gamedatas.staticData.tableauCards[tooltipToMap[1]];
+                if (card) {
+                    this.tooltipManager.addCardTooltip({ nodeId: "pr_tooltip_".concat(tooltipToMap[0]), card: card });
+                }
+            }
         }
     };
     PaxRenaissance.prototype.setLoader = function (value, max) {
@@ -3492,7 +3514,10 @@ var getTokenDiv = function (_a) {
     var type = splitKey[1];
     switch (type) {
         case LOG_TOKEN_CARD:
-            return tplLogTokenCard(value);
+            game.tooltipsToMap.push([game._last_tooltip_id, value]);
+            var tooltipId = "pr_tooltip_".concat(game._last_tooltip_id);
+            game._last_tooltip_id++;
+            return tplLogTokenCard(value, tooltipId);
         case LOG_TOKEN_BOLD_TEXT:
         case LOG_TOKEN_CARD_NAME:
             return tlpLogTokenBoldText({ text: value });
@@ -3532,9 +3557,9 @@ var tknMapToken = function (tokenId) {
     var split = tokenId.split("_");
     return "".concat(split[1], "_").concat(split[0]);
 };
-var tplLogTokenCard = function (id) {
+var tplLogTokenCard = function (id, tooltipId) {
     var className = id.startsWith('EmpireSquare') ? 'pr_square_card' : 'pr_card';
-    return "<div class=\"".concat(className, "\" data-card-id=\"").concat(id, "\"></div>");
+    return "<div id=\"".concat(tooltipId, "\" class=\"").concat(className, "\" data-card-id=\"").concat(id, "\"></div>");
 };
 var tlpLogTokenBoldText = function (_a) {
     var text = _a.text;
@@ -3894,6 +3919,9 @@ var NotificationManager = (function () {
     NotificationManager.prototype.setupNotifications = function () {
         var _this = this;
         console.log("notifications subscriptions setup");
+        dojo.connect(this.game.framework().notifqueue, 'addToLog', function () {
+            _this.game.addLogClass();
+        });
         var notifs = [
             ["log", undefined],
             ["activateAbility", undefined],

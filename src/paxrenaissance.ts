@@ -30,6 +30,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
   private _notif_uid_to_log_id = {};
   private _last_notif = null;
+  public _last_tooltip_id = 0;
+  public tooltipsToMap: [tooltipId: number, card_id: string][] = [];
   public _connections: unknown[];
   private alwaysFixTopActions: boolean;
   private alwaysFixTopActionsMaximum: number;
@@ -789,15 +791,48 @@ class PaxRenaissance implements PaxRenaissanceGame {
     });
   }
 
+  // addLogClass() {
+  //   if (this._last_notif == null) return;
+
+  //   let notif = this._last_notif;
+  //   if ($("log_" + notif.logId)) {
+  //     let type = notif.msg.type;
+  //     if (type == "history_history") type = notif.msg.args.originalType;
+
+  //     dojo.addClass("log_" + notif.logId, "notif_" + type);
+  //   }
+  // }
   addLogClass() {
-    if (this._last_notif == null) return;
+    if (this._last_notif == null) {
+      return;
+    }
 
     let notif = this._last_notif;
-    if ($("log_" + notif.logId)) {
-      let type = notif.msg.type;
-      if (type == "history_history") type = notif.msg.args.originalType;
+    let type = notif.msg.type;
+    if (type == 'history_history') {
+      type = notif.msg.args.originalType;
+    }
 
-      dojo.addClass("log_" + notif.logId, "notif_" + type);
+    if ($('log_' + notif.logId)) {
+      dojo.addClass('log_' + notif.logId, 'notif_' + type);
+
+      var methodName = 'onAdding' + type.charAt(0).toUpperCase() + type.slice(1) + 'ToLog';
+      this[methodName]?.(notif);
+    }
+    if ($('dockedlog_' + notif.mobileLogId)) {
+      dojo.addClass('dockedlog_' + notif.mobileLogId, 'notif_' + type);
+    }
+
+    while (this.tooltipsToMap.length) {
+      const tooltipToMap = this.tooltipsToMap.pop();
+      if (!tooltipToMap || !tooltipToMap[1]) {
+          console.error('error tooltipToMap', tooltipToMap);
+      } else {
+        const card = this.gamedatas.staticData.tableauCards[tooltipToMap[1]]
+        if (card) {
+          this.tooltipManager.addCardTooltip({nodeId: `pr_tooltip_${tooltipToMap[0]}`, card });
+        }
+      }
     }
   }
 

@@ -136,6 +136,9 @@ class PaxRenaissance extends Table
             ],
             'market' => Market::getUiData(),
             'players' => Players::getUiData($playerId),
+            'staticData' => [
+                'tableauCards' => Cards::getStaticData()
+            ],
             'tokens' => Tokens::getUiData(),
             'victoryCards' => Cards::getVictoryCards(),
         ];

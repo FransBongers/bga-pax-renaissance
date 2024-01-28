@@ -100,6 +100,8 @@ class Notifications
       // Add data here that needs to be refreshed
     ];
 
+    unset($datas['staticData']);
+
     self::notifyAll('refreshUI', '', [
       // 'datas' => $fDatas,
       'datas' => $datas,

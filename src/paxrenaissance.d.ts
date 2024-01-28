@@ -13,6 +13,7 @@ interface PaxRenaissanceGame extends Game {
   addCancelButton: () => void;
   addConfirmButton: (props: { callback: Function | string }) => void;
   addDangerActionButton: (props: AddButtonProps) => void;
+  addLogClass: () => void;
   addPrimaryActionButton: (props: AddButtonProps) => void;
   addPassButton: (props: { optionalAction: boolean; text?: string; }) => void;
   addSecondaryActionButton: (props: AddButtonProps) => void;
@@ -65,6 +66,8 @@ interface PaxRenaissanceGame extends Game {
   settings: Settings;
   supply: Supply;
   tooltipManager: TooltipManager;
+  _last_tooltip_id: number;
+  tooltipsToMap: [tooltipId: number, card_id: string][];
   tableauCardManager: TableauCardManager;
   victoryCardManager: VictoryCardManager;
 }
@@ -239,6 +242,9 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
     };
   };
   players: Record<number, PaxRenaissancePlayerData>;
+  staticData: {
+    tableauCards: Record<string, TableauCard>
+  }
   tokens: {
     inPlay: Token[];
     supply: {

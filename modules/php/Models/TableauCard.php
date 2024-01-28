@@ -29,11 +29,13 @@ class TableauCard extends Card
   }
 
   protected $staticAttributes = [
+    'id',
     'agents',
     'empire',
     'flavorText',
     'name',
     'oneShot',
+    'ops',
     'prestige',
     'region',
     'type',

@@ -27,7 +27,10 @@ const getTokenDiv = ({
   const type = splitKey[1];
   switch (type) {
     case LOG_TOKEN_CARD:
-      return tplLogTokenCard(value);
+      game.tooltipsToMap.push([game._last_tooltip_id, value]);
+      const tooltipId = `pr_tooltip_${game._last_tooltip_id}`;
+      game._last_tooltip_id++;
+      return tplLogTokenCard(value, tooltipId);
     case LOG_TOKEN_BOLD_TEXT:
     case LOG_TOKEN_CARD_NAME:
       return tlpLogTokenBoldText({ text: value });
@@ -72,7 +75,7 @@ const tknMapToken = (tokenId: string) => {
   return `${split[1]}_${split[0]}`;
 };
 
-const tplLogTokenCard = (id: string) => {
+const tplLogTokenCard = (id: string, tooltipId: string) => {
   const className = id.startsWith('EmpireSquare') ? 'pr_square_card' : 'pr_card';
-  return `<div class="${className}" data-card-id="${id}"></div>`
+  return `<div id="${tooltipId}" class="${className}" data-card-id="${id}"></div>`
 }

@@ -96,6 +96,19 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
   //     ->ui();
   // }
 
+  public static function getStaticData()
+  {
+    $cards = Cards::getAll();
+    $staticData = [];
+    foreach($cards as $cardId => $card) {
+      if ($card->getType() !== TABLEAU_CARD) {
+        continue;
+      }
+      $staticData[explode('_',$card->getId())[0]] = $card->getStaticData();
+    }
+    return $staticData;
+  }
+
   // ..######..########.########.##.....##.########.
   // .##....##.##..........##....##.....##.##.....##
   // .##.......##..........##....##.....##.##.....##

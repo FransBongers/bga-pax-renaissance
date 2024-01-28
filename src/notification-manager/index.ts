@@ -33,6 +33,12 @@ class NotificationManager {
 
   setupNotifications() {
     console.log("notifications subscriptions setup");
+
+    dojo.connect(this.game.framework().notifqueue, 'addToLog', () => {
+      this.game.addLogClass();
+    });
+
+
     const notifs: [id: string, wait: number][] = [
       // checked
       ["log", undefined],

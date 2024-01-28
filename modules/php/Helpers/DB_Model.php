@@ -150,6 +150,20 @@ abstract class DB_Model extends \APP_DbObject implements \JsonSerializable
     return $data;
   }
 
+  public function getStaticData()
+  {
+    $data = [];
+    foreach ($this->staticAttributes as $attribute) {
+      if (is_array($attribute)) {
+        $attribute = $attribute[0];
+      }
+      $getter = 'get' . ucfirst($attribute);
+      $data[$attribute] = $this->$getter();
+    }
+
+    return $data;
+  }
+
   /**
    * Private DB call
    */
