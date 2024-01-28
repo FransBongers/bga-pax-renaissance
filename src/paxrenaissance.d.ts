@@ -62,6 +62,7 @@ interface PaxRenaissanceGame extends Game {
   playAreaScale: number;
   playerManager: PlayerManager;
   playerOrder: number[];
+  settings: Settings;
   supply: Supply;
   tooltipManager: TooltipManager;
   tableauCardManager: TableauCardManager;

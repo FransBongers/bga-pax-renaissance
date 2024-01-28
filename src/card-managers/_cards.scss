@@ -2,12 +2,18 @@
 @use "sass:map";
 @use "../base";
 
+.pr_card.pr_selectable {
+  /* border: 2px blue solid; */
+  cursor: pointer !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
+}
+
 .card.pr_selectable,
 .pr_card.pr_selectable,
 .pr_square_card.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
+  // box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
 }
 
 .pr_border.pr_selectable,
@@ -23,14 +29,20 @@
   box-shadow: none !important;
 }
 
+.pr_card.pr_selected,
+.pr_card.pr_selectable:hover {
+  cursor: pointer !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
+  z-index: 1;
+}
+
 .card.pr_selected,
 .card.pr_selectable:hover,
-.pr_card.pr_selected,
-.pr_card.pr_selectable:hover,
 .pr_square_card.pr_selected,
 .pr_square_card.pr_selectable:hover {
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
+  z-index: 1;
+  // box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
 }
 
 .pr_border.pr_selected,
@@ -47,6 +59,7 @@
 
 .card.pr_selected.pr_empire_square,
 .card.pr_selectable:hover.pr_empire_square {
+  z-index: 1;
   box-shadow: none !important;
 }
 
@@ -58,7 +71,8 @@
 .card.pr_selectable {
   .card-sides {
     .card-side {
-      box-shadow: none !important;
+      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
+      // box-shadow: none !important;
     }
   }
 }
@@ -73,20 +87,21 @@
 
 .card.pr_selectable:hover,
 .card.pr_selected {
-  .card-sides {
+  // .card-sides {
     .card-side {
-      box-shadow: none !important;
+      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
+      // box-shadow: none !important;
     }
-  }
+  // }
 }
 
 .card.pr_selectable:hover,
 .card.pr_selected {
-  .card-sides {
+  // .card-sides {
     .pr_square_card {
       box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
     }
-  }
+  // }
 }
 
 .pr_card {
@@ -136,13 +151,86 @@
   height: calc(var(--paxRenCardScale) * 81px);
   // background-color: orange;
   position: relative;
-  top: calc(var(--paxRenCardScale) * 35px);
+  top: calc(var(--paxRenCardScale) * 45px);
   left: calc(var(--paxRenCardScale) * 35px);
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   gap: 2px;
 }
+
+.pr_player_board_tableau_cards[data-region="west"] {
+  .pr_card_tokens_container {
+    left: calc(var(--paxRenCardScale) * 63px);
+    top: calc(var(--paxRenCardScale) * 140px);
+    justify-content: flex-end;
+    align-items: end;
+  }
+
+  .pr_empire_square {
+    .pr_card_tokens_container {
+      left: calc(var(--paxRenCardScale) * 63px);
+      top: calc(var(--paxRenCardScale) * 63px);
+      justify-content: flex-end;
+      align-items: end;
+    }
+  }
+
+  .pr_queens_container {
+    .pr_card_tokens_container {
+      left: calc(var(--paxRenCardScale) * 63px);
+      top: calc(var(--paxRenCardScale) * 45px);
+      justify-content: flex-end;
+      align-items: end;
+    }
+  }
+}
+
+.pr_player_board_tableau_cards[data-region="east"] {
+  .pr_card_tokens_container {
+    top: calc(var(--paxRenCardScale) * 140px);
+    left: calc(var(--paxRenCardScale) * 7px);
+    justify-content: flex-start;
+    align-items: end;
+  }
+
+
+  .pr_empire_square {
+    .pr_card_tokens_container {
+      top: calc(var(--paxRenCardScale) * 63px);
+      left: calc(var(--paxRenCardScale) * 7px);
+      justify-content: flex-start;
+      align-items: end;
+    }
+  }
+
+  .pr_queens_container {
+    .pr_card_tokens_container {
+      top: calc(var(--paxRenCardScale) * 45px);
+      left: calc(var(--paxRenCardScale) * 7px);
+      justify-content: flex-start;
+      align-items: end;
+    }
+  }
+}
+
+// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_card_tokens_container,
+// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container,
+// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_vassals_container > .card > .pr_card_tokens_container,
+// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_vassals_container > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container {
+//   left: calc(var(--paxRenCardScale) * 63px);
+//   justify-content: flex-end;
+//   // align-items: flex-end;
+// }
+
+// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_card_tokens_container,
+// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container,
+// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_vassals_container > .card > .pr_card_tokens_container,
+// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_vassals_container > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container {
+//   left: calc(var(--paxRenCardScale) * 7px);
+//   justify-content: flex-start;
+//   // align-items: flex-end;
+// }
 
 .pr_vassals_container {
   position: relative;

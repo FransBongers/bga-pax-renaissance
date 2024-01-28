@@ -110,7 +110,7 @@ class TableauCard extends Card
       $this->state = Cards::insertOnTop($this->getId(), $this->location);
     } else {
       $this->location = Locations::tableau($player->getId(), WEST);
-      $this->state = Cards::insertAtBottom($this->getId(), $this->location);
+      $this->state = Cards::insertOnTop($this->getId(), $this->location);
     }
 
     Notifications::playCard($player, $this);

@@ -37,7 +37,20 @@ class PlayerManager {
   setupPlayerTableaux({ playerOrder }: { playerOrder: number[] }) {
     document
       .getElementById("pr_play_area_container")
-      .insertAdjacentHTML("beforeend", tplPlayerTableauxContainer({ playerOrder }));
+      .insertAdjacentHTML(
+        "beforeend",
+        tplPlayerTableauxContainer({ playerOrder })
+      );
+    const cardsInTableauScale = this.game.settings.get({
+      id: CARD_SIZE_IN_TABLEAU,
+    });
+    const node = document.getElementById("pr_player_tableaux");
+    if (node) {
+      node.style.setProperty(
+        "--paxRenCardInTableauScale",
+        `${Number(cardsInTableauScale) / 100}`
+      );
+    }
   }
 
   getPlayer({ playerId }: { playerId: number }): PRPlayer {

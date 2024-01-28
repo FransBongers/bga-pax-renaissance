@@ -151,8 +151,10 @@ class NotificationManager {
   // Used to change king side of Papal States empire square
   async notif_changeEmpireSquare(notif: Notif<NotifChangeEmpireSquareArgs>) {
     const { oldEmpireSquare, newEmpireSquare, religion } = notif.args;
-    
-    const papalStatesIndex = this.game.gamedatas.gameMap.empires.findIndex((empire) => empire.id === PAPAL_STATES);
+
+    const papalStatesIndex = this.game.gamedatas.gameMap.empires.findIndex(
+      (empire) => empire.id === PAPAL_STATES
+    );
     this.game.gamedatas.gameMap.empires[papalStatesIndex].religion = religion;
 
     const node = document.getElementById(`${oldEmpireSquare.id}-front`);
@@ -173,9 +175,11 @@ class NotificationManager {
       oldEmpireSquare.side === KING &&
       newEmpireSquare.side === KING
     ) {
-      const player = this.getPlayer({playerId: oldEmpireSquare.owningPlayerId});
-       this.removePrestige({player, prestige: oldEmpireSquare.king.prestige});
-       this.addPrestige({player, prestige: newEmpireSquare.king.prestige});
+      const player = this.getPlayer({
+        playerId: oldEmpireSquare.owningPlayerId,
+      });
+      this.removePrestige({ player, prestige: oldEmpireSquare.king.prestige });
+      this.addPrestige({ player, prestige: newEmpireSquare.king.prestige });
     }
     this.game.tableauCardManager.updateCardInformations(newEmpireSquare);
   }
@@ -435,11 +439,29 @@ class NotificationManager {
       });
     }
 
-    const node = document.getElementById(
-      isBishop || token.location.startsWith("EmpireSquare_")
-        ? `${token.location}_tokens`
-        : `pr_${token.location}`
-    );
+    let node: HTMLElement;
+    if (isBishop) {
+      // Always place bishop on card
+      node = document.getElementById(`${token.location}_tokens`);
+    } else if (token.location.startsWith("EmpireSquare_")) {
+      // console.log()
+      // Other repressed tokens. Place based on setting
+      const repressTokensToThrones =
+        this.game.settings.get({
+          id: REPRESS_TOKENS_TO_THRONES,
+        }) === ENABLED;
+      node = repressTokensToThrones
+        ? document.getElementById(`${token.location}_throne_tokens`)
+        : document.getElementById(`${token.location}_tokens`);
+    } else {
+      // Tokens that go in cities, borders etc.
+      node = document.getElementById(`pr_${token.location}`);
+    }
+    // const node = document.getElementById(
+    //   isBishop || token.location.startsWith("EmpireSquare_")
+    //     ? `${token.location}_tokens`
+    //     : `pr_${token.location}`
+    // );
     if (!node) {
       return;
     }
@@ -566,8 +588,18 @@ class NotificationManager {
     this.getPlayer({ playerId }).counters.florins.incValue(-cost);
     const element = document.getElementById(token.id);
     const empireSquareId = token.location;
-    const toNode = document.getElementById(`${empireSquareId}_tokens`);
-    // TODO: move to empire carf
+
+    const repressTokensToThrones =
+      this.game.settings.get({
+        id: REPRESS_TOKENS_TO_THRONES,
+      }) === ENABLED;
+
+    const toNode =
+      token.type === BISHOP || !repressTokensToThrones
+        ? document.getElementById(`${empireSquareId}_tokens`)
+        : document.getElementById(`${empireSquareId}_throne_tokens`);
+
+    // TODO: move to empire card
     if (!(element && toNode)) {
       return;
     }

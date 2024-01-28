@@ -58,6 +58,14 @@ class GameMap {
     Object.keys(this.empireSquareStocks).forEach((stockId) => {
       this.empireSquareStocks[stockId].removeAll();
     });
+    Object.values(THRONES_CONFIG).forEach(({empireSquareId}) => {
+      const node = document.getElementById(`${empireSquareId}_throne_tokens`);
+      if (!node) {
+        return;
+      }
+      node.replaceChildren();
+    })
+
   }
 
   updateInterface({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
@@ -199,13 +207,21 @@ class GameMap {
         // }
         // node.setAttribute("data-card-id", `${id}_king`);
       });
+    const repressTokensToThrones =
+      this.game.settings.get({
+        id: REPRESS_TOKENS_TO_THRONES,
+      }) === ENABLED;
+
     gamedatas.gameMap.thrones.tokens.forEach((token) => {
       const { location } = token;
-      const node = document.getElementById(`${location}_tokens`);
+      const node =
+        token.type === BISHOP || !repressTokensToThrones
+          ? document.getElementById(`${location}_tokens`)
+          : document.getElementById(`${location}_throne_tokens`);
+      // const node = document.getElementById(`${location}_tokens`);
       if (!node) {
         return;
       }
-
       node.insertAdjacentHTML("beforeend", tplToken(token));
     });
 
@@ -216,14 +232,12 @@ class GameMap {
 
   // Setup functions
   setupGameMap({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
-    document
-      .getElementById("pr_play_area_container")
-      .insertAdjacentHTML(
-        "afterbegin",
-        tplGameMap({
-          ageOfReformation: this.game.gameOptions.ageOfReformationPromo,
-        })
-      );
+    document.getElementById("pr_play_area_container").insertAdjacentHTML(
+      "afterbegin",
+      tplGameMap({
+        ageOfReformation: this.game.gameOptions.ageOfReformationPromo,
+      })
+    );
     // Add in main file?
     this.setupEmpireCards({ gamedatas });
     this.setupTokensCities({ gamedatas });

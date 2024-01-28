@@ -94,17 +94,25 @@ class Settings {
 
       // Call change method to update interface based on current value
       const methodName = this.getMethodName({ id });
-      if (localValue && this[methodName]) {
+      if (setting.onChangeInSetup && localValue && this[methodName]) {
         this[methodName](localValue);
       }
 
       // Add content to modal
       if (setting.type === "select") {
+        const visible =
+          !visibleCondition ||
+          (visibleCondition &&
+            visibleCondition.values.includes(
+              this.settings[visibleCondition.id]
+            ));
+
         node.insertAdjacentHTML(
           "beforeend",
           tplPlayerPrefenceSelectRow({
             setting,
             currentValue: this.settings[setting.id] as string,
+            visible
           })
         );
         const controlId = `setting_${setting.id}`;
@@ -185,6 +193,72 @@ class Settings {
     }
   }
 
+  public async onChangeRepressTokensToThronesSetting(value: string) {
+    const animations = [];
+    Object.values(THRONES_CONFIG).forEach(({empireSquareId}) => {
+      if (value === ENABLED) {
+        const originNode = document.getElementById(`${empireSquareId}_tokens`);
+        const destinationNode = document.getElementById(`${empireSquareId}_throne_tokens`);
+        if (!(originNode && destinationNode)) {
+          return;
+        }
+        originNode.childNodes.forEach(element => {
+          if ((element as HTMLElement).id.startsWith('bishop')) {
+            return;
+          }
+          this.game.animationManager.attachWithAnimation(
+            new BgaSlideAnimation({ element }),
+            destinationNode
+          )
+        });
+        // Move from empire squares to Thrones
+      } else {
+        // Move from thrones to empire squres
+        const originNode = document.getElementById(`${empireSquareId}_throne_tokens`);
+        const destinationNode = document.getElementById(`${empireSquareId}_tokens`);
+        if (!(originNode && destinationNode)) {
+          return;
+        }
+        originNode.childNodes.forEach(element => {
+          if ((element as HTMLElement).id.startsWith('bishop')) {
+            return;
+          }
+          this.game.animationManager.attachWithAnimation(
+            new BgaSlideAnimation({ element }),
+            destinationNode
+          )
+        });
+      }
+    });
+    await Promise.all(animations);
+  }
+
+  public onChangeCardsInTableauOverlapSetting(value: string) {
+    this.checkEmpireSquaresOverlapVisible();
+    const elements = document.getElementsByClassName('pr_player_board_tableau_cards');
+    
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements.item(i);
+      element.setAttribute('data-overlap',value);
+    }
+
+    const containerElements = document.getElementsByClassName('pr_player_tableau_cards_container');
+    
+    for (let i = 0; i < containerElements.length; i++) {
+      const element = containerElements.item(i);
+      element.setAttribute('data-overlap',value);
+    }
+  }
+
+  public onChangeOverlapEmpireSquaresSetting(value: string) {
+    const elements = document.getElementsByClassName('pr_player_board_tableau_cards');
+    
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements.item(i);
+      element.setAttribute('data-overlap-empire-squares',value);
+    }
+  }
+
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
   //  .##.....##....##.....##..##........##.....##......####..
@@ -198,10 +272,22 @@ class Settings {
     if (!sliderNode) {
       return;
     }
-    if (this.settings["twoColumnsLayout"] === SETTING_ENABLED) {
+    if (this.settings["twoColumnsLayout"] === ENABLED) {
       sliderNode.style.display = "";
     } else {
       sliderNode.style.display = "none";
+    }
+  }
+
+  private checkEmpireSquaresOverlapVisible() {
+    const node = document.getElementById(`setting_row_${OVERLAP_EMPIRE_SQUARES}`);
+    if (!node) {
+      return;
+    }
+    if (this.settings[CARDS_IN_TABLEAU_OVERLAP] === ENABLED) {
+      node.style.display = "";
+    } else {
+      node.style.display = "none";
     }
   }
 

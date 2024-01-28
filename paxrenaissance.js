@@ -5,8 +5,11 @@ var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
 var CLIENT_SELL_CARD_STATE = "clientSellCardState";
 var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 var CLIENT_USE_ABILITY_ACTION_STATE = "clientUseAbilityActionState";
-var SETTING_ENABLED = 'enabled';
-var SETTING_DISABLED = 'disabled';
+var ENABLED = 'enabled';
+var REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
+var CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
+var CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
+var OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -1885,6 +1888,7 @@ var PaxRenaissance = (function () {
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
         this.infoPanel = new InfoPanel(this);
+        this.settings = new Settings(this);
         this.animationManager = new AnimationManager(this, { duration: 500 });
         this.tableauCardManager = new TableauCardManager(this);
         this.tooltipManager = new TooltipManager(this);
@@ -1897,7 +1901,6 @@ var PaxRenaissance = (function () {
         this.market = new Market(this);
         this.victoryCardManager = new VictoryCardManager(this);
         this.openHandsModal = new OpenHandsModal(this);
-        this.settings = new Settings(this);
         if (this.notificationManager != undefined) {
             this.notificationManager.destroy();
         }
@@ -1927,7 +1930,7 @@ var PaxRenaissance = (function () {
         var WIDTH = $("pr_play_area_container").getBoundingClientRect()["width"] - 8;
         var LEFT_COLUMN = 1500;
         var RIGHT_COLUMN = 1500;
-        if (this.settings.get({ id: "twoColumnsLayout" }) === SETTING_ENABLED) {
+        if (this.settings.get({ id: "twoColumnsLayout" }) === ENABLED) {
             WIDTH = WIDTH - 8;
             var size = Number(this.settings.get({ id: "columnSizes" }));
             var proportions = [size, 100 - size];
@@ -2702,51 +2705,61 @@ var pxNumber = function (px) {
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
 var THRONES_CONFIG = (_a = {},
     _a[ENGLAND] = {
+        empireSquareId: "EmpireSquare_England",
         top: 120,
         left: 349,
         location: 'top',
     },
     _a[FRANCE] = {
+        empireSquareId: "EmpireSquare_France",
         top: 120,
         left: 526,
         location: 'top',
     },
     _a[HOLY_ROMAN_EMIRE] = {
+        empireSquareId: "EmpireSquare_HolyRomanEmpire",
         top: 120,
         left: 700,
         location: 'top',
     },
     _a[HUNGARY] = {
+        empireSquareId: "EmpireSquare_Hungary",
         top: 120,
         left: 876,
         location: 'top',
     },
     _a[BYZANTIUM] = {
+        empireSquareId: "EmpireSquare_Byzantium",
         top: 120,
         left: 1052,
         location: 'top',
     },
     _a[PORTUGAL] = {
+        empireSquareId: "EmpireSquare_Portugal",
         top: 754,
         left: 349,
         location: 'bottom',
     },
     _a[ARAGON] = {
+        empireSquareId: "EmpireSquare_Aragon",
         top: 754,
         left: 526,
         location: 'bottom',
     },
     _a[PAPAL_STATES] = {
+        empireSquareId: "EmpireSquare_PapalStates",
         top: 754,
         left: 700,
         location: 'bottom',
     },
     _a[OTTOMAN] = {
+        empireSquareId: "EmpireSquare_Ottoman",
         top: 754,
         left: 876,
         location: 'bottom',
     },
     _a[MAMLUK] = {
+        empireSquareId: "EmpireSquare_Mamluk",
         top: 754,
         left: 1052,
         location: 'bottom',
@@ -3088,6 +3101,14 @@ var GameMap = (function () {
         Object.keys(this.empireSquareStocks).forEach(function (stockId) {
             _this.empireSquareStocks[stockId].removeAll();
         });
+        Object.values(THRONES_CONFIG).forEach(function (_a) {
+            var empireSquareId = _a.empireSquareId;
+            var node = document.getElementById("".concat(empireSquareId, "_throne_tokens"));
+            if (!node) {
+                return;
+            }
+            node.replaceChildren();
+        });
     };
     GameMap.prototype.updateInterface = function (_a) {
         var gamedatas = _a.gamedatas;
@@ -3168,9 +3189,14 @@ var GameMap = (function () {
                 });
             });
         });
+        var repressTokensToThrones = this.game.settings.get({
+            id: REPRESS_TOKENS_TO_THRONES,
+        }) === ENABLED;
         gamedatas.gameMap.thrones.tokens.forEach(function (token) {
             var location = token.location;
-            var node = document.getElementById("".concat(location, "_tokens"));
+            var node = token.type === BISHOP || !repressTokensToThrones
+                ? document.getElementById("".concat(location, "_tokens"))
+                : document.getElementById("".concat(location, "_throne_tokens"));
             if (!node) {
                 return;
             }
@@ -3182,9 +3208,7 @@ var GameMap = (function () {
     };
     GameMap.prototype.setupGameMap = function (_a) {
         var gamedatas = _a.gamedatas;
-        document
-            .getElementById("pr_play_area_container")
-            .insertAdjacentHTML("afterbegin", tplGameMap({
+        document.getElementById("pr_play_area_container").insertAdjacentHTML("afterbegin", tplGameMap({
             ageOfReformation: this.game.gameOptions.ageOfReformationPromo,
         }));
         this.setupEmpireCards({ gamedatas: gamedatas });
@@ -3265,8 +3289,8 @@ var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map
 }).join(""), "\n  <div id=\"pr_market_east_deck_container\" class=\"pr_market pr_card\" data-card-id=\"EAST_BACK\" style=\"top: calc(var(--paxRenCardScale) * 1200px); left: calc(var(--paxRenCardScale) * 1095px);\">\n    <div id=\"pr_market_east_deck\"></div>\n    <div id=\"pr_market_east_deck_counter_container\" class=\"pr_deck_counter\">\n      <span id=\"pr_market_east_deck_counter\" class=\"pr_deck_counter_text\"></span>\n      <span class=\"pr_deck_counter_text\">/</span>\n      <div id=\"pr_deck_counter_comet1\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET1\"></div>\n      <div id=\"pr_deck_counter_comet2\" class=\"pr_deck_counter_comet\" data-card-id=\"COMET2\"></div>\n    </div>\n  </div>\n"); };
 var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(THRONES_CONFIG)
     .map(function (_a) {
-    var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left, location = _b.location;
-    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne pr_empire_throne_").concat(location, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n          <div id=\"pr_").concat(empire, "_coat_of_arms\" class=\"pr_empire_throne_coat_of_arms\"></div>\n        </div>");
+    var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left, location = _b.location, empireSquareId = _b.empireSquareId;
+    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne pr_empire_throne_").concat(location, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n          <div id=\"pr_").concat(empire, "_coat_of_arms\" class=\"pr_empire_throne_coat_of_arms\"></div>\n          <div id=\"").concat(empireSquareId, "_throne_tokens\" class=\"pr_empire_throne_tokens\"></div>\n        </div>");
 })
     .join(""), "\n"); };
 var tplGameMapMapBorders = function () {
@@ -3990,7 +4014,9 @@ var NotificationManager = (function () {
                     newEmpireSquare.owningPlayerId &&
                     oldEmpireSquare.side === KING &&
                     newEmpireSquare.side === KING) {
-                    player = this.getPlayer({ playerId: oldEmpireSquare.owningPlayerId });
+                    player = this.getPlayer({
+                        playerId: oldEmpireSquare.owningPlayerId,
+                    });
                     this.removePrestige({ player: player, prestige: oldEmpireSquare.king.prestige });
                     this.addPrestige({ player: player, prestige: newEmpireSquare.king.prestige });
                 }
@@ -4269,7 +4295,7 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_placeToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, token, fromLocationId, split, isPawn, isBishop, fromSupply, node, tokenNode;
+            var _a, token, fromLocationId, split, isPawn, isBishop, fromSupply, node, repressTokensToThrones, tokenNode;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -4292,9 +4318,20 @@ var NotificationManager = (function () {
                                 value: -1,
                             });
                         }
-                        node = document.getElementById(isBishop || token.location.startsWith("EmpireSquare_")
-                            ? "".concat(token.location, "_tokens")
-                            : "pr_".concat(token.location));
+                        if (isBishop) {
+                            node = document.getElementById("".concat(token.location, "_tokens"));
+                        }
+                        else if (token.location.startsWith("EmpireSquare_")) {
+                            repressTokensToThrones = this.game.settings.get({
+                                id: REPRESS_TOKENS_TO_THRONES,
+                            }) === ENABLED;
+                            node = repressTokensToThrones
+                                ? document.getElementById("".concat(token.location, "_throne_tokens"))
+                                : document.getElementById("".concat(token.location, "_tokens"));
+                        }
+                        else {
+                            node = document.getElementById("pr_".concat(token.location));
+                        }
                         if (!node) {
                             return [2];
                         }
@@ -4465,7 +4502,7 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_repressToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, cost, element, empireSquareId, toNode;
+            var _a, playerId, token, cost, element, empireSquareId, repressTokensToThrones, toNode;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -4473,7 +4510,12 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
                         element = document.getElementById(token.id);
                         empireSquareId = token.location;
-                        toNode = document.getElementById("".concat(empireSquareId, "_tokens"));
+                        repressTokensToThrones = this.game.settings.get({
+                            id: REPRESS_TOKENS_TO_THRONES,
+                        }) === ENABLED;
+                        toNode = token.type === BISHOP || !repressTokensToThrones
+                            ? document.getElementById("".concat(empireSquareId, "_tokens"))
+                            : document.getElementById("".concat(empireSquareId, "_throne_tokens"));
                         if (!(element && toNode)) {
                             return [2];
                         }
@@ -4741,7 +4783,7 @@ var OpenHandsModal = (function () {
         var gamedatas = _a.gamedatas;
         var configPanel = document.getElementById("pr_info_panel");
         if (configPanel) {
-            configPanel.insertAdjacentHTML("beforeend", tplOpenHandsButton());
+            configPanel.insertAdjacentHTML("afterbegin", tplOpenHandsButton());
         }
     };
     OpenHandsModal.prototype.setupModal = function (_a) {
@@ -4857,6 +4899,13 @@ var PlayerManager = (function () {
         document
             .getElementById("pr_play_area_container")
             .insertAdjacentHTML("beforeend", tplPlayerTableauxContainer({ playerOrder: playerOrder }));
+        var cardsInTableauScale = this.game.settings.get({
+            id: CARD_SIZE_IN_TABLEAU,
+        });
+        var node = document.getElementById("pr_player_tableaux");
+        if (node) {
+            node.style.setProperty("--paxRenCardInTableauScale", "".concat(Number(cardsInTableauScale) / 100));
+        }
     };
     PlayerManager.prototype.getPlayer = function (_a) {
         var playerId = _a.playerId;
@@ -5096,9 +5145,17 @@ var PlayerTableau = (function () {
     };
     PlayerTableau.prototype.setup = function (_a) {
         var player = _a.player;
+        var overlap = this.game.settings.get({
+            id: CARDS_IN_TABLEAU_OVERLAP,
+        });
+        var overlapEmpireSquares = this.game.settings.get({
+            id: OVERLAP_EMPIRE_SQUARES,
+        });
         document
             .getElementById("pr_player_tableau_".concat(player.id))
             .insertAdjacentHTML("beforeend", tplPlayerTableauContent({
+            overlap: overlap,
+            overlapEmpireSquares: overlapEmpireSquares,
             player: player,
             title: _("${tkn_playerName}'s tableau").replace("${tkn_playerName}", tplLogTokenPlayerName({
                 name: player.name,
@@ -5136,9 +5193,14 @@ var PlayerTableau = (function () {
             _this.tableau.oldMaids.addCard(card);
         });
         this.checkOldMaidContainerHeight();
+        var repressTokensToThrones = this.game.settings.get({
+            id: REPRESS_TOKENS_TO_THRONES,
+        }) === ENABLED;
         player.tableau.tokens.forEach(function (token) {
             var location = token.location;
-            var node = document.getElementById("".concat(location, "_tokens"));
+            var node = token.type === BISHOP || !repressTokensToThrones
+                ? document.getElementById("".concat(location, "_tokens"))
+                : document.getElementById("".concat(location, "_throne_tokens"));
             if (!node) {
                 return;
             }
@@ -5172,7 +5234,7 @@ var PlayerTableau = (function () {
                     case 0:
                         node = document.getElementById("player_bank_board_".concat(this.playerId));
                         currentZIndex = node.style.zIndex;
-                        node.style.zIndex = '50';
+                        node.style.zIndex = "50";
                         this.checkOldMaidContainerHeight({ increase: 1 });
                         return [4, this.tableau.oldMaids.addCard(card)];
                     case 1:
@@ -5190,18 +5252,19 @@ var PlayerTableau = (function () {
             return;
         }
         if (this.tableau.oldMaids.getCards().length + increase > 0) {
-            node.setAttribute("data-has-old-maids", 'true');
+            node.setAttribute("data-has-old-maids", "true");
         }
         else {
-            node.setAttribute("data-has-old-maids", 'false');
+            node.setAttribute("data-has-old-maids", "false");
         }
     };
     return PlayerTableau;
 }());
 var tplPlayerTableauContent = function (_a) {
-    var player = _a.player, title = _a.title;
+    var player = _a.player, title = _a.title, overlap = _a.overlap, overlapEmpireSquares = _a.overlapEmpireSquares;
+    console.log('overlapEmpireSquares', overlapEmpireSquares);
     var playerId = player.id;
-    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\"></div>\n    <div class=\"pr_player_board_container\">\n      <div id=\"old_maids_").concat(playerId, "\" class=\"pr_old_maids_container\"></div>\n      <div id=\"player_bank_board_").concat(playerId, "\" class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    </div>\n\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\"></div>\n  </div>\n    ");
+    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\" data-overlap=\"").concat(overlap, "\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n    <div class=\"pr_player_board_container\">\n      <div id=\"old_maids_").concat(playerId, "\" class=\"pr_old_maids_container\"></div>\n      <div id=\"player_bank_board_").concat(playerId, "\" class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    </div>\n\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n  </div>\n    ");
 };
 var tplPlayerPanel = function (_a) {
     var playerId = _a.playerId;
@@ -5215,92 +5278,155 @@ var tplPlayerTableauxContainer = function (_a) {
     })
         .join(""), "\n    </div>\n  ");
 };
-var getSettingsConfig = function () { return ({
-    backgroundImage: {
-        id: "backgroundImage",
-        defaultValue: "goldsmith",
-        label: _("Background image"),
-        type: "select",
-        options: [
-            {
-                label: _("No image"),
-                value: "none",
+var getSettingsConfig = function () {
+    var _a;
+    return (_a = {
+            backgroundImage: {
+                id: "backgroundImage",
+                onChangeInSetup: true,
+                defaultValue: "goldsmith",
+                label: _("Background image"),
+                type: "select",
+                options: [
+                    {
+                        label: _("No image"),
+                        value: "none",
+                    },
+                    {
+                        label: _("Balcony"),
+                        value: "balcony",
+                    },
+                    {
+                        label: _("Cathedral"),
+                        value: "cathedral",
+                    },
+                    {
+                        label: _("Goldsmith"),
+                        value: "goldsmith",
+                    },
+                    {
+                        label: _("Lucrezia"),
+                        value: "lucrezia",
+                    },
+                    {
+                        label: _("Poison"),
+                        value: "poison",
+                    },
+                    {
+                        label: _("War"),
+                        value: "war",
+                    },
+                ],
             },
-            {
-                label: _("Balcony"),
-                value: "balcony",
+            twoColumnsLayout: {
+                id: "twoColumnsLayout",
+                onChangeInSetup: true,
+                defaultValue: "disabled",
+                label: _("Two column layout"),
+                type: "select",
+                options: [
+                    {
+                        label: _("Enabled"),
+                        value: "enabled",
+                    },
+                    {
+                        label: _("Disabled (single column)"),
+                        value: "disabled",
+                    },
+                ],
             },
-            {
-                label: _("Cathedral"),
-                value: "cathedral",
-            },
-            {
-                label: _("Goldsmith"),
-                value: "goldsmith",
-            },
-            {
-                label: _("Lucrezia"),
-                value: "lucrezia",
-            },
-            {
-                label: _("Poison"),
-                value: "poison",
-            },
-            {
-                label: _("War"),
-                value: "war",
-            },
-        ],
-    },
-    twoColumnsLayout: {
-        id: "twoColumnsLayout",
-        defaultValue: "disabled",
-        label: _("Two column layout"),
-        type: "select",
-        options: [
-            {
-                label: _("Enabled"),
-                value: "enabled",
-            },
-            {
-                label: _("Disabled (single column)"),
-                value: "disabled",
-            },
-        ],
-    },
-    columnSizes: {
-        id: "columnSizes",
-        label: _("Column sizes"),
-        defaultValue: 50,
-        visibleCondition: {
-            id: 'twoColumnsLayout',
-            values: [SETTING_ENABLED],
+            columnSizes: {
+                id: "columnSizes",
+                onChangeInSetup: true,
+                label: _("Column sizes"),
+                defaultValue: 50,
+                visibleCondition: {
+                    id: 'twoColumnsLayout',
+                    values: [ENABLED],
+                },
+                sliderConfig: {
+                    step: 5,
+                    padding: 0,
+                    range: {
+                        min: 30,
+                        max: 70,
+                    },
+                },
+                type: "slider",
+            }
         },
-        sliderConfig: {
-            step: 5,
-            padding: 0,
-            range: {
-                min: 30,
-                max: 70,
+        _a[CARD_SIZE_IN_TABLEAU] = {
+            id: CARD_SIZE_IN_TABLEAU,
+            onChangeInSetup: false,
+            label: _("Size of cards in tableau"),
+            defaultValue: 100,
+            sliderConfig: {
+                step: 5,
+                padding: 0,
+                range: {
+                    min: 50,
+                    max: 200,
+                },
             },
+            type: "slider",
         },
-        type: "slider",
-    },
-    cardSizeInTableau: {
-        id: "cardSizeInTableau",
-        label: _("Size of cards in tableau"),
-        defaultValue: 100,
-        sliderConfig: {
-            step: 5,
-            padding: 0,
-            range: {
-                min: 50,
-                max: 200,
+        _a[REPRESS_TOKENS_TO_THRONES] = {
+            id: REPRESS_TOKENS_TO_THRONES,
+            onChangeInSetup: false,
+            defaultValue: ENABLED,
+            label: _("Repress tokens to thrones"),
+            type: "select",
+            options: [
+                {
+                    label: _("Enabled"),
+                    value: ENABLED,
+                },
+                {
+                    label: _("Disabled (repress to empire squares)"),
+                    value: DISABLED,
+                },
+            ],
+        },
+        _a[CARDS_IN_TABLEAU_OVERLAP] = {
+            id: CARDS_IN_TABLEAU_OVERLAP,
+            onChangeInSetup: false,
+            defaultValue: DISABLED,
+            label: _("Cards in tableau overlap"),
+            type: "select",
+            options: [
+                {
+                    label: _("Enabled"),
+                    value: ENABLED,
+                },
+                {
+                    label: _("Disabled"),
+                    value: DISABLED,
+                },
+            ],
+        },
+        _a[OVERLAP_EMPIRE_SQUARES] = {
+            id: OVERLAP_EMPIRE_SQUARES,
+            onChangeInSetup: false,
+            defaultValue: ENABLED,
+            visibleCondition: {
+                id: CARDS_IN_TABLEAU_OVERLAP,
+                values: [ENABLED],
             },
+            label: _("Cards overlap empire squares"),
+            type: "select",
+            options: [
+                {
+                    label: _("Enabled"),
+                    value: ENABLED,
+                },
+                {
+                    label: _("Disabled"),
+                    value: DISABLED,
+                },
+            ],
         },
-        type: "slider",
-    },
-}); };
+        _a);
+};
 var Settings = (function () {
     function Settings(game) {
         this.settings = {};
@@ -5352,13 +5478,17 @@ var Settings = (function () {
             var localValue = localStorage.getItem(_this.getLocalStorageKey({ id: id }));
             _this.settings[id] = localValue || defaultValue;
             var methodName = _this.getMethodName({ id: id });
-            if (localValue && _this[methodName]) {
+            if (setting.onChangeInSetup && localValue && _this[methodName]) {
                 _this[methodName](localValue);
             }
             if (setting.type === "select") {
+                var visible = !visibleCondition ||
+                    (visibleCondition &&
+                        visibleCondition.values.includes(_this.settings[visibleCondition.id]));
                 node.insertAdjacentHTML("beforeend", tplPlayerPrefenceSelectRow({
                     setting: setting,
                     currentValue: _this.settings[setting.id],
+                    visible: visible
                 }));
                 var controlId_1 = "setting_".concat(setting.id);
                 $(controlId_1).addEventListener("change", function () {
@@ -5413,16 +5543,93 @@ var Settings = (function () {
             node.style.setProperty('--paxRenCardInTableauScale', "".concat(Number(value) / 100));
         }
     };
+    Settings.prototype.onChangeRepressTokensToThronesSetting = function (value) {
+        return __awaiter(this, void 0, void 0, function () {
+            var animations;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        animations = [];
+                        Object.values(THRONES_CONFIG).forEach(function (_a) {
+                            var empireSquareId = _a.empireSquareId;
+                            if (value === ENABLED) {
+                                var originNode = document.getElementById("".concat(empireSquareId, "_tokens"));
+                                var destinationNode_1 = document.getElementById("".concat(empireSquareId, "_throne_tokens"));
+                                if (!(originNode && destinationNode_1)) {
+                                    return;
+                                }
+                                originNode.childNodes.forEach(function (element) {
+                                    if (element.id.startsWith('bishop')) {
+                                        return;
+                                    }
+                                    _this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: element }), destinationNode_1);
+                                });
+                            }
+                            else {
+                                var originNode = document.getElementById("".concat(empireSquareId, "_throne_tokens"));
+                                var destinationNode_2 = document.getElementById("".concat(empireSquareId, "_tokens"));
+                                if (!(originNode && destinationNode_2)) {
+                                    return;
+                                }
+                                originNode.childNodes.forEach(function (element) {
+                                    if (element.id.startsWith('bishop')) {
+                                        return;
+                                    }
+                                    _this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: element }), destinationNode_2);
+                                });
+                            }
+                        });
+                        return [4, Promise.all(animations)];
+                    case 1:
+                        _a.sent();
+                        return [2];
+                }
+            });
+        });
+    };
+    Settings.prototype.onChangeCardsInTableauOverlapSetting = function (value) {
+        this.checkEmpireSquaresOverlapVisible();
+        var elements = document.getElementsByClassName('pr_player_board_tableau_cards');
+        for (var i = 0; i < elements.length; i++) {
+            var element = elements.item(i);
+            element.setAttribute('data-overlap', value);
+        }
+        var containerElements = document.getElementsByClassName('pr_player_tableau_cards_container');
+        for (var i = 0; i < containerElements.length; i++) {
+            var element = containerElements.item(i);
+            element.setAttribute('data-overlap', value);
+        }
+    };
+    Settings.prototype.onChangeOverlapEmpireSquaresSetting = function (value) {
+        var elements = document.getElementsByClassName('pr_player_board_tableau_cards');
+        for (var i = 0; i < elements.length; i++) {
+            var element = elements.item(i);
+            element.setAttribute('data-overlap-empire-squares', value);
+        }
+    };
     Settings.prototype.checkColumnSizesVisisble = function () {
         var sliderNode = document.getElementById("setting_row_columnSizes");
         if (!sliderNode) {
             return;
         }
-        if (this.settings["twoColumnsLayout"] === SETTING_ENABLED) {
+        if (this.settings["twoColumnsLayout"] === ENABLED) {
             sliderNode.style.display = "";
         }
         else {
             sliderNode.style.display = "none";
+        }
+    };
+    Settings.prototype.checkEmpireSquaresOverlapVisible = function () {
+        var node = document.getElementById("setting_row_".concat(OVERLAP_EMPIRE_SQUARES));
+        if (!node) {
+            return;
+        }
+        if (this.settings[CARDS_IN_TABLEAU_OVERLAP] === ENABLED) {
+            node.style.display = "";
+        }
+        else {
+            node.style.display = "none";
         }
     };
     Settings.prototype.getMethodName = function (_a) {
@@ -5450,13 +5657,13 @@ var tplSettingsButton = function () {
     return "<div id=\"pr_show_settings\">\n  <svg  xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 512\">\n    <g>\n      <path class=\"fa-secondary\" fill=\"currentColor\" d=\"M638.41 387a12.34 12.34 0 0 0-12.2-10.3h-16.5a86.33 86.33 0 0 0-15.9-27.4L602 335a12.42 12.42 0 0 0-2.8-15.7 110.5 110.5 0 0 0-32.1-18.6 12.36 12.36 0 0 0-15.1 5.4l-8.2 14.3a88.86 88.86 0 0 0-31.7 0l-8.2-14.3a12.36 12.36 0 0 0-15.1-5.4 111.83 111.83 0 0 0-32.1 18.6 12.3 12.3 0 0 0-2.8 15.7l8.2 14.3a86.33 86.33 0 0 0-15.9 27.4h-16.5a12.43 12.43 0 0 0-12.2 10.4 112.66 112.66 0 0 0 0 37.1 12.34 12.34 0 0 0 12.2 10.3h16.5a86.33 86.33 0 0 0 15.9 27.4l-8.2 14.3a12.42 12.42 0 0 0 2.8 15.7 110.5 110.5 0 0 0 32.1 18.6 12.36 12.36 0 0 0 15.1-5.4l8.2-14.3a88.86 88.86 0 0 0 31.7 0l8.2 14.3a12.36 12.36 0 0 0 15.1 5.4 111.83 111.83 0 0 0 32.1-18.6 12.3 12.3 0 0 0 2.8-15.7l-8.2-14.3a86.33 86.33 0 0 0 15.9-27.4h16.5a12.43 12.43 0 0 0 12.2-10.4 112.66 112.66 0 0 0 .01-37.1zm-136.8 44.9c-29.6-38.5 14.3-82.4 52.8-52.8 29.59 38.49-14.3 82.39-52.8 52.79zm136.8-343.8a12.34 12.34 0 0 0-12.2-10.3h-16.5a86.33 86.33 0 0 0-15.9-27.4l8.2-14.3a12.42 12.42 0 0 0-2.8-15.7 110.5 110.5 0 0 0-32.1-18.6A12.36 12.36 0 0 0 552 7.19l-8.2 14.3a88.86 88.86 0 0 0-31.7 0l-8.2-14.3a12.36 12.36 0 0 0-15.1-5.4 111.83 111.83 0 0 0-32.1 18.6 12.3 12.3 0 0 0-2.8 15.7l8.2 14.3a86.33 86.33 0 0 0-15.9 27.4h-16.5a12.43 12.43 0 0 0-12.2 10.4 112.66 112.66 0 0 0 0 37.1 12.34 12.34 0 0 0 12.2 10.3h16.5a86.33 86.33 0 0 0 15.9 27.4l-8.2 14.3a12.42 12.42 0 0 0 2.8 15.7 110.5 110.5 0 0 0 32.1 18.6 12.36 12.36 0 0 0 15.1-5.4l8.2-14.3a88.86 88.86 0 0 0 31.7 0l8.2 14.3a12.36 12.36 0 0 0 15.1 5.4 111.83 111.83 0 0 0 32.1-18.6 12.3 12.3 0 0 0 2.8-15.7l-8.2-14.3a86.33 86.33 0 0 0 15.9-27.4h16.5a12.43 12.43 0 0 0 12.2-10.4 112.66 112.66 0 0 0 .01-37.1zm-136.8 45c-29.6-38.5 14.3-82.5 52.8-52.8 29.59 38.49-14.3 82.39-52.8 52.79z\" opacity=\"0.4\"></path>\n      <path class=\"fa-primary\" fill=\"currentColor\" d=\"M420 303.79L386.31 287a173.78 173.78 0 0 0 0-63.5l33.7-16.8c10.1-5.9 14-18.2 10-29.1-8.9-24.2-25.9-46.4-42.1-65.8a23.93 23.93 0 0 0-30.3-5.3l-29.1 16.8a173.66 173.66 0 0 0-54.9-31.7V58a24 24 0 0 0-20-23.6 228.06 228.06 0 0 0-76 .1A23.82 23.82 0 0 0 158 58v33.7a171.78 171.78 0 0 0-54.9 31.7L74 106.59a23.91 23.91 0 0 0-30.3 5.3c-16.2 19.4-33.3 41.6-42.2 65.8a23.84 23.84 0 0 0 10.5 29l33.3 16.9a173.24 173.24 0 0 0 0 63.4L12 303.79a24.13 24.13 0 0 0-10.5 29.1c8.9 24.1 26 46.3 42.2 65.7a23.93 23.93 0 0 0 30.3 5.3l29.1-16.7a173.66 173.66 0 0 0 54.9 31.7v33.6a24 24 0 0 0 20 23.6 224.88 224.88 0 0 0 75.9 0 23.93 23.93 0 0 0 19.7-23.6v-33.6a171.78 171.78 0 0 0 54.9-31.7l29.1 16.8a23.91 23.91 0 0 0 30.3-5.3c16.2-19.4 33.7-41.6 42.6-65.8a24 24 0 0 0-10.5-29.1zm-151.3 4.3c-77 59.2-164.9-28.7-105.7-105.7 77-59.2 164.91 28.7 105.71 105.7z\"></path>\n    </g>\n  </svg>\n</div>";
 };
 var tplPlayerPrefenceSelectRow = function (_a) {
-    var setting = _a.setting, currentValue = _a.currentValue;
+    var setting = _a.setting, currentValue = _a.currentValue, _b = _a.visible, visible = _b === void 0 ? true : _b;
     var values = setting.options
         .map(function (option) {
         return "<option value='".concat(option.value, "' ").concat(option.value === currentValue ? 'selected="selected"' : "", ">").concat(_(option.label), "</option>");
     })
         .join("");
-    return "\n    <div class=\"player_preference_row\">\n      <div class=\"player_preference_row_label\">".concat(_(setting.label), "</div>\n      <div class=\"player_preference_row_value\">\n        <select id=\"setting_").concat(setting.id, "\" class=\"\" style=\"display: block;\">\n        ").concat(values, "\n        </select>\n      </div>\n    </div>\n  ");
+    return "\n    <div id=\"setting_row_".concat(setting.id, "\" class=\"player_preference_row\"").concat(!visible ? " style=\"display: none;\"" : '', ">\n      <div class=\"player_preference_row_label\">").concat(_(setting.label), "</div>\n      <div class=\"player_preference_row_value\">\n        <select id=\"setting_").concat(setting.id, "\" class=\"\" style=\"display: block;\">\n        ").concat(values, "\n        </select>\n      </div>\n    </div>\n  ");
 };
 var tplSettingsModalContent = function () {
     return "<div id=\"setting_modal_content\"></div>";

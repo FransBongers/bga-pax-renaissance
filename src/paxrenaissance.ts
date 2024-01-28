@@ -150,7 +150,10 @@ class PaxRenaissance implements PaxRenaissanceGame {
       tradeFairLevy: new TradeFairLevyState(this),
     };
 
+    
     this.infoPanel = new InfoPanel(this);
+    
+    this.settings = new Settings(this);
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
 
@@ -163,9 +166,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.supply = new Supply(this);
     this.market = new Market(this);
     this.victoryCardManager = new VictoryCardManager(this);
-
+    
     this.openHandsModal = new OpenHandsModal(this);
-    this.settings = new Settings(this);
 
     if (this.notificationManager != undefined) {
       this.notificationManager.destroy();
@@ -213,7 +215,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     const LEFT_COLUMN = 1500;
     const RIGHT_COLUMN = 1500;
 
-    if (this.settings.get({ id: "twoColumnsLayout" }) === SETTING_ENABLED) {
+    if (this.settings.get({ id: "twoColumnsLayout" }) === ENABLED) {
       WIDTH = WIDTH - 8; // grid gap
       const size = Number(this.settings.get({ id: "columnSizes" }));
       const proportions = [size, 100 - size];

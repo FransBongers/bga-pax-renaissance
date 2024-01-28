@@ -57,6 +57,7 @@ class TableauOpsSelectState implements State {
       this.game.addSkipButton({
         callback: () =>
           this.game.takeAction({
+            // text: 'Done',
             action: "actTableauOpsSelect",
             args: {
               cardId: null,

@@ -12,9 +12,11 @@ const tplSettingsButton = () => {
 const tplPlayerPrefenceSelectRow = ({
   setting,
   currentValue,
+  visible = true,
 }: {
   setting: PlayerPreferenceSelectConfig;
   currentValue: string;
+  visible: boolean;
 }) => {
   let values = setting.options
     .map(
@@ -26,7 +28,7 @@ const tplPlayerPrefenceSelectRow = ({
     .join("");
 
   return `
-    <div class="player_preference_row">
+    <div id="setting_row_${setting.id}" class="player_preference_row"${!visible ? ` style="display: none;"` : ''}>
       <div class="player_preference_row_label">${_(setting.label)}</div>
       <div class="player_preference_row_value">
         <select id="setting_${

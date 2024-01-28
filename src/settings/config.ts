@@ -5,6 +5,7 @@ interface PlayerPreferenceOption {
 
 interface PlayerPreferenceConfigBase {
   id: string;
+  onChangeInSetup: boolean;
   label: string;
   visibleCondition?: {
     id: string;
@@ -38,6 +39,7 @@ type PlayerPreferenceConfig =
 const getSettingsConfig = (): Record<string, PlayerPreferenceConfig> => ({
   backgroundImage: {
     id: "backgroundImage",
+    onChangeInSetup: true,
     defaultValue: "goldsmith",
     label: _("Background image"),
     type: "select",
@@ -74,6 +76,7 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceConfig> => ({
   },
   twoColumnsLayout: {
     id: "twoColumnsLayout",
+    onChangeInSetup: true,
     defaultValue: "disabled",
     label: _("Two column layout"),
     type: "select",
@@ -90,11 +93,12 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceConfig> => ({
   },
   columnSizes: {
     id: "columnSizes",
+    onChangeInSetup: true,
     label: _("Column sizes"),
     defaultValue: 50,
     visibleCondition: {
       id: 'twoColumnsLayout',
-      values: [SETTING_ENABLED],
+      values: [ENABLED],
     },
     sliderConfig: {
       step: 5,
@@ -106,8 +110,9 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceConfig> => ({
     },
     type: "slider",
   },
-  cardSizeInTableau: {
-    id: "cardSizeInTableau",
+  [CARD_SIZE_IN_TABLEAU]: {
+    id: CARD_SIZE_IN_TABLEAU,
+    onChangeInSetup: false,
     label: _("Size of cards in tableau"),
     defaultValue: 100,
     sliderConfig: {
@@ -119,5 +124,60 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceConfig> => ({
       },
     },
     type: "slider",
+  },
+  [REPRESS_TOKENS_TO_THRONES]: {
+    id: REPRESS_TOKENS_TO_THRONES,
+    onChangeInSetup: false,
+    defaultValue: ENABLED,
+    label: _("Repress tokens to thrones"),
+    type: "select",
+    options: [
+      {
+        label: _("Enabled"),
+        value: ENABLED,
+      },
+      {
+        label: _("Disabled (repress to empire squares)"),
+        value: DISABLED,
+      },
+    ],
+  },
+  [CARDS_IN_TABLEAU_OVERLAP]: {
+    id: CARDS_IN_TABLEAU_OVERLAP,
+    onChangeInSetup: false,
+    defaultValue: DISABLED,
+    label: _("Cards in tableau overlap"),
+    type: "select",
+    options: [
+      {
+        label: _("Enabled"),
+        value: ENABLED,
+      },
+      {
+        label: _("Disabled"),
+        value: DISABLED,
+      },
+    ],
+  },
+  [OVERLAP_EMPIRE_SQUARES]: {
+    id: OVERLAP_EMPIRE_SQUARES,
+    onChangeInSetup: false,
+    defaultValue: ENABLED,
+    visibleCondition: {
+      id: CARDS_IN_TABLEAU_OVERLAP,
+      values: [ENABLED],
+    },
+    label: _("Cards overlap empire squares"),
+    type: "select",
+    options: [
+      {
+        label: _("Enabled"),
+        value: ENABLED,
+      },
+      {
+        label: _("Disabled"),
+        value: DISABLED,
+      },
+    ],
   },
 });

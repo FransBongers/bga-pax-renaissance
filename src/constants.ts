@@ -9,8 +9,17 @@ const CLIENT_SELL_CARD_STATE = "clientSellCardState";
 const CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 const CLIENT_USE_ABILITY_ACTION_STATE = "clientUseAbilityActionState";
 
-const SETTING_ENABLED = 'enabled';
-const SETTING_DISABLED = 'disabled';
+const ENABLED = 'enabled';
+// hello
+// const DISABLED = "disabled"; // Defined in class names
+
+/**
+ * Setting ids
+ */
+const REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
+const CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
+const CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
+const OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
 
 /**
  * Player colors

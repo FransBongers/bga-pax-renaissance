@@ -118,6 +118,8 @@
 .pr_rook {
   background-image: url("img/rooks.webp");
   background-size: 300% 100%;
-  width: calc(var(--paxRenTokenScale) * 30px);
-  height: calc(var(--paxRenTokenScale) * 49px);
+  min-width: calc(var(--paxRenTokenScale) * 30px);
+  max-width: calc(var(--paxRenTokenScale) * 30px);
+  min-height: calc(var(--paxRenTokenScale) * 49px);
+  max-height: calc(var(--paxRenTokenScale) * 49px);
 }

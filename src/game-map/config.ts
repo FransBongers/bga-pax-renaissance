@@ -1,50 +1,60 @@
-const THRONES_CONFIG: Record<string, {top: number; left: number; location: 'top' | 'bottom'}> = {
+const THRONES_CONFIG: Record<string, {empireSquareId: string; top: number; left: number; location: 'top' | 'bottom'}> = {
   [ENGLAND]: {
+    empireSquareId: "EmpireSquare_England",
     top: 120,
     left: 349,
     location: 'top',
   },
   [FRANCE]: {
+    empireSquareId: "EmpireSquare_France",
     top: 120,
     left: 526,
     location: 'top',
   },
   [HOLY_ROMAN_EMIRE]: {
+    empireSquareId: "EmpireSquare_HolyRomanEmpire",
     top: 120,
     left: 700,
     location: 'top',
   },
   [HUNGARY]: {
+    empireSquareId: "EmpireSquare_Hungary",
     top: 120,
     left: 876,
     location: 'top',
   },
   [BYZANTIUM]: {
+    empireSquareId: "EmpireSquare_Byzantium",
     top: 120,
     left: 1052,
     location: 'top',
   },
   [PORTUGAL]: {
+    empireSquareId: "EmpireSquare_Portugal",
     top: 754,
     left: 349,
     location: 'bottom',
   },
   [ARAGON]: {
+    empireSquareId: "EmpireSquare_Aragon",
     top: 754,
     left: 526,
     location: 'bottom',
   },
   [PAPAL_STATES]: {
+    empireSquareId: "EmpireSquare_PapalStates",
     top: 754,
     left: 700,
     location: 'bottom',
   },
   [OTTOMAN]: {
+    empireSquareId: "EmpireSquare_Ottoman",
     top: 754,
     left: 876,
     location: 'bottom',
   },
   [MAMLUK]: {
+    empireSquareId: "EmpireSquare_Mamluk",
     top: 754,
     left: 1052,
     location: 'bottom',

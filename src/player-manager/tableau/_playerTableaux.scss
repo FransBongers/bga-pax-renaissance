@@ -6,8 +6,10 @@
   flex-direction: column;
   --paxRenCardInTableauScale: 1;
   --paxRenTableauScale: var(--paxRenRightColumnScale);
-  --paxRenCardScale: var(--paxRenRightColumnScale) * var(--paxRenCardInTableauScale);
-  --paxRenTokenScale:  var(--paxRenRightColumnScale);
+  --paxRenCardScale: var(--paxRenRightColumnScale) *
+    var(--paxRenCardInTableauScale);
+  --paxRenTokenScale: var(--paxRenRightColumnScale) *
+    var(--paxRenCardInTableauScale);
   // min-height: calc(var(--paxRenTableauScale) * 400px);
   min-width: calc(var(--paxRenTableauScale) * 1500px);
   // width: 100%;
@@ -27,7 +29,7 @@
 }
 
 .pr_player_tableau:before {
-  content: ' ';
+  content: " ";
   display: block;
   position: absolute;
   left: 0;
@@ -57,16 +59,47 @@
   align-items: center;
 }
 
+.pr_player_tableau_cards_container[data-overlap="enabled"] {
+  overflow-y: auto;
+}
+
 .pr_player_board_tableau_cards {
   // min-height: 229px;
   // background-color: blue;
   flex-grow: 1;
   align-items: center;
-  gap: calc(var(--paxRenTableauScale) * 12px)
+  gap: calc(var(--paxRenTableauScale) * 12px);
 }
 
-.pr_player_board_tableau_cards[data-region=west] {
-  justify-content: flex-end;
+.pr_player_board_tableau_cards[data-region="west"] {
+  // justify-content: flex-end;
+  flex-direction: row-reverse !important;
+}
+
+.pr_player_board_tableau_cards[data-overlap="enabled"] {
+  flex-wrap: nowrap !important;
+}
+
+.pr_player_board_tableau_cards[data-region="east"][data-overlap="enabled"]
+  .card:nth-child(n + 2) {
+  margin-left: calc(var(--paxRenCardScale) * -110px);
+}
+
+.pr_player_board_tableau_cards[data-region="east"][data-overlap="enabled"][data-overlap-empire-squares="disabled"] {
+  .pr_empire_square:not(:last-child) {
+    margin-right: calc(var(--paxRenCardScale) * 110px);
+  }
+}
+
+.pr_player_board_tableau_cards[data-region="west"][data-overlap="enabled"][data-overlap-empire-squares="disabled"] {
+  .pr_empire_square:not(:last-child) {
+    margin-left: calc(var(--paxRenCardScale) * 110px);
+  }
+}
+
+.pr_player_board_tableau_cards[data-region="west"][data-overlap="enabled"]
+  .card:nth-child(n + 2) {
+  margin-right: calc(var(--paxRenCardScale) * -110px);
 }
 
 /**
@@ -78,7 +111,7 @@
   height: calc(var(--paxRenCardScale) * 230px);
 }
 
-.pr_old_maids_container[data-has-old-maids=true] {
+.pr_old_maids_container[data-has-old-maids="true"] {
   margin-bottom: calc(var(--paxRenCardScale) * -190px);
 }
 
@@ -94,35 +127,34 @@
   height: calc(var(--paxRenCardScale) * 400px);
   min-width: calc(var(--paxRenCardScale) * 293px);
   filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
-
 }
 
-.pr_player_board[data-color=blue] {
+.pr_player_board[data-color="blue"] {
   background-position-x: 0%;
   background-position-y: 0%;
 }
 
-.pr_player_board[data-color=green] {
+.pr_player_board[data-color="green"] {
   background-position-x: 100%;
   background-position-y: 0%;
 }
 
-.pr_player_board[data-color=purple] {
+.pr_player_board[data-color="purple"] {
   background-position-x: 0%;
   background-position-y: 50%;
 }
 
-.pr_player_board[data-color=yellow] {
+.pr_player_board[data-color="yellow"] {
   background-position-x: 100%;
   background-position-y: 50%;
 }
 
-.pr_player_board[data-color=black] {
+.pr_player_board[data-color="black"] {
   background-position-x: 0%;
   background-position-y: 100%;
 }
 
-.pr_player_board[data-color=white] {
+.pr_player_board[data-color="white"] {
   background-position-x: 100%;
   background-position-y: 100%;
 }

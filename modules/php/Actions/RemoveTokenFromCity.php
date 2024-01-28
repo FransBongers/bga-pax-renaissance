@@ -51,8 +51,7 @@ class RemoveTokenFromCity extends \PaxRenaissance\Models\AtomicAction
   public function stRemoveTokenFromCity()
   {
     $cities = $this->ctx->getInfo()['cities'];
-    Notifications::log('stRemoveTokenFromCity', count($cities));
-    Notifications::log('cities', $cities);
+
     if (count($cities) > 1) {
       return;
     }

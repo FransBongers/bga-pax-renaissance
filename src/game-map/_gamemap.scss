@@ -75,6 +75,27 @@
   height: calc(var(--paxRenMapScale) * 46px);
 }
 
+.pr_empire_throne_tokens {
+  // background-color: yellow;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: calc(var(--paxRenMapScale) * 8px);
+  align-items: flex-end;
+  gap: 6px;
+  flex-wrap: wrap-reverse;
+  justify-content: flex-end;
+  align-items: end;
+
+  .pr_token {
+    z-index: 1;
+  }
+}
+
 .pr_empire_throne_coat_of_arms[data-side="king"] {
   // filter: drop-shadow(calc(var(--paxRenMapScale) * 2px) 0px 0px yellow) drop-shadow(calc(var(--paxRenMapScale) * -2px) 0px 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * 2px) 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * -2px) 0px yellow);
   filter: drop-shadow(2px 0px 0px base.$empire-square-king)

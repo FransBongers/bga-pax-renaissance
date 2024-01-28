@@ -16,7 +16,7 @@ class PlayerTableau {
     player: PaxRenaissancePlayerData;
   }) {
     this.game = game;
-    this.playerId = Number(player.id)
+    this.playerId = Number(player.id);
     this.setup({ player });
   }
 
@@ -46,11 +46,19 @@ class PlayerTableau {
   // ..######..########....##.....#######..##.......
 
   private setup({ player }: { player: PaxRenaissancePlayerData }) {
+    const overlap = this.game.settings.get({
+      id: CARDS_IN_TABLEAU_OVERLAP,
+    }) as string;
+    const overlapEmpireSquares = this.game.settings.get({
+      id: OVERLAP_EMPIRE_SQUARES,
+    }) as string;
     document
       .getElementById(`pr_player_tableau_${player.id}`)
       .insertAdjacentHTML(
         "beforeend",
         tplPlayerTableauContent({
+          overlap,
+          overlapEmpireSquares,
           player,
           // Not using format_string_recursive here as tkn_playerName requires players to be set up,
           // but this is during player setup
@@ -128,9 +136,18 @@ class PlayerTableau {
     //     });
     //   });
 
+    const repressTokensToThrones =
+      this.game.settings.get({
+        id: REPRESS_TOKENS_TO_THRONES,
+      }) === ENABLED;
+
     player.tableau.tokens.forEach((token) => {
       const { location } = token;
-      const node = document.getElementById(`${location}_tokens`);
+      // const node = document.getElementById(`${location}_tokens`);
+      const node =
+        token.type === BISHOP || !repressTokensToThrones
+          ? document.getElementById(`${location}_tokens`)
+          : document.getElementById(`${location}_throne_tokens`);
       if (!node) {
         return;
       }
@@ -150,23 +167,24 @@ class PlayerTableau {
   public async addOldMaid(card: QueenCard) {
     const node = document.getElementById(`player_bank_board_${this.playerId}`);
     const currentZIndex = node.style.zIndex;
-    node.style.zIndex = '50';
+    node.style.zIndex = "50";
 
-    this.checkOldMaidContainerHeight({increase: 1});
+    this.checkOldMaidContainerHeight({ increase: 1 });
     await this.tableau.oldMaids.addCard(card);
     node.style.zIndex = currentZIndex;
   }
 
-  public checkOldMaidContainerHeight({increase}: {increase: number} = {increase: 0})
-  {
+  public checkOldMaidContainerHeight(
+    { increase }: { increase: number } = { increase: 0 }
+  ) {
     const node = document.getElementById(`old_maids_${this.playerId}`);
     if (!node) {
       return;
     }
     if (this.tableau.oldMaids.getCards().length + increase > 0) {
-      node.setAttribute("data-has-old-maids", 'true');
+      node.setAttribute("data-has-old-maids", "true");
     } else {
-      node.setAttribute("data-has-old-maids", 'false');
+      node.setAttribute("data-has-old-maids", "false");
     }
   }
 }

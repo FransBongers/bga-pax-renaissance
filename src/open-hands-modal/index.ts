@@ -56,7 +56,7 @@ class OpenHandsModal {
   private addButton({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     const configPanel = document.getElementById("pr_info_panel");
     if (configPanel) {
-      configPanel.insertAdjacentHTML("beforeend", tplOpenHandsButton());
+      configPanel.insertAdjacentHTML("afterbegin", tplOpenHandsButton());
     }
   }
 

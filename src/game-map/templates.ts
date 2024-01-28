@@ -69,9 +69,10 @@ const tplGameMapMarket = () => `
 const tplGameMapEmpireCards = () => `
   ${Object.entries(THRONES_CONFIG)
     .map(
-      ([empire, { top, left, location }]) =>
+      ([empire, { top, left, location, empireSquareId }]) =>
         `<div id="pr_${empire}_throne" class="pr_empire_throne pr_empire_throne_${location}" style="top: calc(var(--paxRenMapScale) * ${top}px); left: calc(var(--paxRenMapScale) * ${left}px);">
           <div id="pr_${empire}_coat_of_arms" class="pr_empire_throne_coat_of_arms"></div>
+          <div id="${empireSquareId}_throne_tokens" class="pr_empire_throne_tokens"></div>
         </div>`
     )
     .join("")}
