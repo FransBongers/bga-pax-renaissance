@@ -510,14 +510,16 @@ class Notifications
 
   public static function purchaseCard($player, $card, $placedFlorins, $takenFlorins, $discard = false)
   {
-    self::notifyAll("purchaseCard",  clienttranslate('${tkn_playerName} purchases ${tkn_cardName} ${tkn_card}'), [
+    self::notifyAll("purchaseCard", clienttranslate('${tkn_playerName} pays ${amount} ${tkn_florin} to purchase ${tkn_cardName} ${tkn_card}'), [
       'player' => $player,
       'card' => $card,
+      'amount' => count($placedFlorins),
       'tkn_cardName' => $card->getName(),
       'placedFlorins' => $placedFlorins,
       'takenFlorins' => $takenFlorins,
       'discard' => $discard,
       'tkn_card' => explode('_', $card->getId())[0],
+      'tkn_florin' => clienttranslate('Florin(s)'),
     ]);
   }
 

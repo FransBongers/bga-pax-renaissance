@@ -81,7 +81,10 @@ class AbilityAction implements \JsonSerializable
    */
   public function canBePerformed($player = null, $card = null)
   {
-    return false;
+    if ($card !== null && $player !== null && $card->isSilenced($player)) {
+      return false;
+    }
+    return true;
   }
 
   public function isFreeAction()

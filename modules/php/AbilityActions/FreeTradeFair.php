@@ -21,6 +21,9 @@ class FreeTradeFair extends \PaxRenaissance\Models\AbilityAction
 
   public function canBePerformed($player = null, $card = null)
   {
+    if (!parent::canBePerformed($player, $card)) {
+      return false;
+    }
     // First trade fair will be the free one by default
     return count(Engine::getResolvedActions([TRADE_FAIR])) === 0;
   }

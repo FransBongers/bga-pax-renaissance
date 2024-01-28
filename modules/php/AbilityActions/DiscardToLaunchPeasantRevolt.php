@@ -21,6 +21,10 @@ class DiscardToLaunchPeasantRevolt extends \PaxRenaissance\Models\AbilityAction
 
   public function canBePerformed($player = null, $card = null)
   {
+    if (!parent::canBePerformed($player, $card)) {
+      return false;
+    }
+
     // TODO: there needs to be at least one peasant?
     return true;
   }

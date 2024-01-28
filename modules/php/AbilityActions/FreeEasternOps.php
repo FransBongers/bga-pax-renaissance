@@ -22,6 +22,10 @@ class FreeEasternOps extends \PaxRenaissance\Models\AbilityAction
 
   public function canBePerformed($player = null, $card = null)
   {
+    if (!parent::canBePerformed($player, $card)) {
+      return false;
+    }
+
     // First trade fair will be the free one by default
     return count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST])) === 0 && count($player->getAvailableOps()[EAST]) > 0;
   }

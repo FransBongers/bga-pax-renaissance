@@ -23,6 +23,10 @@ class ApostasyAction extends \PaxRenaissance\Models\AbilityAction
 
   public function canBePerformed($player = null, $card = null)
   {
+    if (!parent::canBePerformed($player, $card)) {
+      return false;
+    }
+
     $options = $this->getOptions();
     return count($options) > 0;
   }
@@ -47,7 +51,7 @@ class ApostasyAction extends \PaxRenaissance\Models\AbilityAction
   {
     $options = [];
 
-    foreach([APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT] as $apostasy) {
+    foreach ([APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT] as $apostasy) {
       $affectedPlayers = OneShots::getPlayersAffectedByApostasy($apostasy);
       if (count($affectedPlayers) > 0) {
         $options[] = $apostasy;

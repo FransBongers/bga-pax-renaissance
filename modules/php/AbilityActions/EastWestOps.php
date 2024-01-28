@@ -22,6 +22,10 @@ class EastWestOps extends \PaxRenaissance\Models\AbilityAction
 
   public function canBePerformed($player = null, $card = null)
   {
+    if (!parent::canBePerformed($player, $card)) {
+      return false;
+    }
+
     return count(Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST, TABLEAU_OPS_SELECT_WEST, TABLEAU_OPS_SELECT_EAST_AND_WEST])) === 0 && count($player->getAvailableOps()[EAST]) + count($player->getAvailableOps()[WEST]) > 0;
   }
 
