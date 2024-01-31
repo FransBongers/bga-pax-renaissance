@@ -4262,9 +4262,9 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_discardQueen = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, queen, king, player;
+            var _a, playerId, queen, king, fromTableau, fromOldMaid, player;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, queen = _a.queen, king = _a.king;
+                _a = notif.args, playerId = _a.playerId, queen = _a.queen, king = _a.king, fromTableau = _a.fromTableau, fromOldMaid = _a.fromOldMaid;
                 player = this.getPlayer({ playerId: playerId });
                 if (king) {
                     this.game.tableauCardManager.updateCardInformations(king);
@@ -4277,9 +4277,11 @@ var NotificationManager = (function () {
                     this.game.tableauCardManager.removeCard(queen);
                     player.tableau.checkOldMaidContainerHeight();
                 }
-                queen.prestige.forEach(function (item) {
-                    return player.counters.prestige[item].incValue(-1);
-                });
+                if (fromTableau || fromOldMaid) {
+                    queen.prestige.forEach(function (item) {
+                        return player.counters.prestige[item].incValue(-1);
+                    });
+                }
                 return [2];
             });
         });

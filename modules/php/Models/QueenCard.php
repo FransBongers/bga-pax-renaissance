@@ -28,6 +28,8 @@ class QueenCard extends TableauCard
   public function discard($messageType = DISCARD, $player = null)
   {
     $player = $this->getOwner();
+    $fromTableau = $this->isInTableau();
+    $fromOldMaid = $this->isOldMaid();
 
     $king = $this->getKing();
 
@@ -39,7 +41,7 @@ class QueenCard extends TableauCard
     Cards::insertOnTop($this->getId(), DISCARD);
     $this->location = DISCARD;
 
-    Notifications::discardQueen($player, $this, $king);
+    Notifications::discardQueen($player, $this, $king, $fromTableau, $fromOldMaid);
     $this->deactivateAbility();
   }
 

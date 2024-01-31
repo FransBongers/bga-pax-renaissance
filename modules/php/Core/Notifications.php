@@ -405,7 +405,7 @@ class Notifications
     ]);
   }
 
-  public static function discardQueen($player, $queen, $king)
+  public static function discardQueen($player, $queen, $king, $fromTableau, $fromOldMaid)
   {
     $kingCard = $king !== null ? $king->jsonSerialize() : null;
 
@@ -414,6 +414,8 @@ class Notifications
       'tkn_boldText' => $queen->getName(),
       'queen' => $queen,
       'king' => $kingCard,
+      'fromTableau' => $fromTableau,
+      'fromOldMaid' => $fromOldMaid
     ]);
   }
 

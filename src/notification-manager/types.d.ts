@@ -93,6 +93,8 @@ interface NotifDiscardQueenArgs extends NotifWithPlayerArgs {
   queen: QueenCard;
   tkn_cardName: string;
   king: EmpireCard | null;
+  fromTableau: boolean;
+  fromOldMaid: boolean;
 }
 
 interface NotifFlipEmpireCardArgs extends NotifWithPlayerArgs {

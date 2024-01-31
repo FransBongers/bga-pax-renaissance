@@ -330,7 +330,7 @@ class NotificationManager {
   }
 
   async notif_discardQueen(notif: Notif<NotifDiscardQueenArgs>) {
-    const { playerId, queen, king } = notif.args;
+    const { playerId, queen, king, fromTableau, fromOldMaid } = notif.args;
     const player = this.getPlayer({ playerId });
 
     if (king) {
@@ -347,9 +347,11 @@ class NotificationManager {
       player.tableau.checkOldMaidContainerHeight();
     }
 
-    queen.prestige.forEach((item) =>
-      player.counters.prestige[item].incValue(-1)
-    );
+    if (fromTableau || fromOldMaid) {
+      queen.prestige.forEach((item) =>
+        player.counters.prestige[item].incValue(-1)
+      );
+    }
   }
 
   async notif_flipEmpireCard(notif: Notif<NotifFlipEmpireCardArgs>) {
