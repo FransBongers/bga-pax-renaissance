@@ -132,6 +132,15 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
     return $hasMorePrestigeThanEachOpponent;
   }
 
+  public function getSupremeReligionCounts()
+  {
+    $greenPiratesReformist = Players::anyPlayerHasSpecialAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS);
+    return [
+      'bishops' => $this->getNumberOfBishopsInPlay($greenPiratesReformist),
+      'tokens' => $this->getNumberOfTokensInTheocracies($greenPiratesReformist),
+    ];
+  }
+
   /**
    * A religion is the supreme religion if it has both
    * - More bishops of its color in Tableax or Thrones than both other religions combined
@@ -143,6 +152,64 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
   {
 
     $greenPiratesReformist = Players::anyPlayerHasSpecialAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS);
+
+    // /**
+    //  * Bishops in play
+    //  */
+    $numberOfBishopsInPlay = $this->getNumberOfBishopsInPlay($greenPiratesReformist);
+
+    $numberOfBishopsInPlayRanking = [];
+    foreach ($numberOfBishopsInPlay as $religion => $numberOfBishops) {
+      $numberOfBishopsInPlayRanking[] = [
+        'religion' => $religion,
+        'numberOfBishops' => $numberOfBishops
+      ];
+    }
+
+    usort($numberOfBishopsInPlayRanking, function ($a, $b) {
+      return $b['numberOfBishops'] - $a['numberOfBishops'];
+    });
+
+    $supremeReligionBishopsInPlay = null;
+    if ($numberOfBishopsInPlayRanking[0]['numberOfBishops'] > $numberOfBishopsInPlayRanking[1]['numberOfBishops'] + $numberOfBishopsInPlayRanking[2]['numberOfBishops']) {
+      $supremeReligionBishopsInPlay = $numberOfBishopsInPlayRanking[0]['religion'];
+    }
+
+    if ($supremeReligionBishopsInPlay === null) {
+      return null;
+    }
+
+    // /**
+    //  * Tokens in theocracies
+    //  */
+
+    $numberOfTokensInTheocracies = $this->getNumberOfTokensInTheocracies($greenPiratesReformist);
+
+    $tokensInTheocraciesRanking = [];
+    foreach ($numberOfTokensInTheocracies as $religion => $numberOfTokens) {
+      $tokensInTheocraciesRanking[] = [
+        'religion' => $religion,
+        'numberOfTokens' => $numberOfTokens
+      ];
+    }
+    usort($tokensInTheocraciesRanking, function ($a, $b) {
+      return $b['numberOfTokens'] - $a['numberOfTokens'];
+    });
+
+    $supremeReligionsTokensInTheocracies = null;
+    if ($tokensInTheocraciesRanking[0]['numberOfTokens'] > $tokensInTheocraciesRanking[1]['numberOfTokens'] + $tokensInTheocraciesRanking[2]['numberOfTokens']) {
+      $supremeReligionsTokensInTheocracies = $tokensInTheocraciesRanking[0]['religion'];
+    }
+
+    if ($supremeReligionsTokensInTheocracies !== null && $supremeReligionsTokensInTheocracies === $supremeReligionBishopsInPlay) {
+      return $supremeReligionsTokensInTheocracies;
+    }
+    return null;
+  }
+
+  private function getNumberOfBishopsInPlay($greenPiratesReformist)
+  {
+    // $greenPiratesReformist = Players::anyPlayerHasSpecialAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS);
 
     /**
      * Bishops in play
@@ -170,26 +237,13 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
       $numberOfBishopsInPlay[ISLAMIC] = $numberOfBishopsInPlay[ISLAMIC] + $patronPrestige;
     }
 
-    $numberOfBishopsInPlayRanking = [];
-    foreach ($numberOfBishopsInPlay as $religion => $numberOfBishops) {
-      $numberOfBishopsInPlayRanking[] = [
-        'religion' => $religion,
-        'numberOfBishops' => $numberOfBishops
-      ];
-    }
-    usort($numberOfBishopsInPlayRanking, function ($a, $b) {
-      return $b['numberOfBishops'] - $a['numberOfBishops'];
-    });
+    return $numberOfBishopsInPlay;
 
-    $supremeReligionBishopsInPlay = null;
-    if ($numberOfBishopsInPlayRanking[0]['numberOfBishops'] > $numberOfBishopsInPlayRanking[1]['numberOfBishops'] + $numberOfBishopsInPlayRanking[2]['numberOfBishops']) {
-      $supremeReligionBishopsInPlay = $numberOfBishopsInPlayRanking[0]['religion'];
-    }
+    // return $numberOfBishopsInPlayRanking;
+  }
 
-    if ($supremeReligionBishopsInPlay === null) {
-      return null;
-    }
-
+  private function getNumberOfTokensInTheocracies($greenPiratesReformist)
+  {
     /**
      * Tokens in theocracies
      */
@@ -228,26 +282,6 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
         }
       }
     }
-
-    $tokensInTheocraciesRanking = [];
-    foreach ($numberOfTokensInTheocracies as $religion => $numberOfTokens) {
-      $tokensInTheocraciesRanking[] = [
-        'religion' => $religion,
-        'numberOfTokens' => $numberOfTokens
-      ];
-    }
-    usort($tokensInTheocraciesRanking, function ($a, $b) {
-      return $b['numberOfTokens'] - $a['numberOfTokens'];
-    });
-
-    $supremeReligionsTokensInTheocracies = null;
-    if ($tokensInTheocraciesRanking[0]['numberOfTokens'] > $tokensInTheocraciesRanking[1]['numberOfTokens'] + $tokensInTheocraciesRanking[2]['numberOfTokens']) {
-      $supremeReligionsTokensInTheocracies = $tokensInTheocraciesRanking[0]['religion'];
-    }
-
-    if ($supremeReligionsTokensInTheocracies !== null && $supremeReligionsTokensInTheocracies === $supremeReligionBishopsInPlay) {
-      return $supremeReligionsTokensInTheocracies;
-    }
-    return null;
+    return $numberOfTokensInTheocracies;
   }
 }

@@ -139,6 +139,7 @@ class PaxRenaissance extends Table
             'staticData' => [
                 'tableauCards' => Cards::getStaticData()
             ],
+            'supremeReligion' => Cards::get('VictoryHoly')->getSupremeReligionCounts(),
             'tokens' => Tokens::getUiData(),
             'victoryCards' => Cards::getVictoryCards(),
         ];

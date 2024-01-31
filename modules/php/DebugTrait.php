@@ -96,12 +96,13 @@ trait DebugTrait
 
   function test()
   {
-    Notifications::log('Cards', Cards::get('PREN162X_CatherineDeMedici')->getStaticData());
+    // Notifications::log('Cards', Cards::get('PREN162X_CatherineDeMedici')->getStaticData());
+    // Cards::get('PREN168X_ZionistState')->activateAbility();
 
     // Tokens::move('knight_islamic_1',Locations::supply(KNIGHT,ISLAMIC));
     // Tokens::move('knight_islamic_6',Locations::supply(KNIGHT,ISLAMIC));
     // Tokens::move('rook_islamic_1',Locations::supply(ROOK,ISLAMIC));
-    // Empires::get(OTTOMAN)->changeToTheocracy(REFORMIST);
+    Empires::get(OTTOMAN)->changeToTheocracy(REFORMIST);
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, CONSTANTINOPLE_3);
     // $this->debugPlaceToken(ROOK, REFORMIST, MODON);

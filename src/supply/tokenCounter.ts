@@ -6,7 +6,7 @@ class TokenCounter {
   }
 
   public setup({ separator, type, value}: {separator: string; type: string; value: number;}) {
-    const supplyContainer = document.getElementById('pr_supply');
+    const supplyContainer = document.getElementById('pr_supply_counters');
     if (!supplyContainer) {
       return;
     }

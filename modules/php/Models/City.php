@@ -114,6 +114,8 @@ class City implements \JsonSerializable
       $data[$attribute] = $this->$attribute;
     }
 
+    $data['empire'] = Empires::get($this->getEmpire());
+
     return $data;
   }
 }

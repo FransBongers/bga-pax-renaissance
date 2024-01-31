@@ -2,6 +2,10 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Managers\Borders;
+use PaxRenaissance\Managers\Tokens;
+
 class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -47,5 +51,36 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
         ],
       ]
     ];
+  }
+
+  public function deactivateAbility()
+  {
+    Notifications::deactivateAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, $this->getAbilityData() );
+  }
+
+  public function activateAbility()
+  {
+    Notifications::activateAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, $this->getAbilityData() );
+  }
+
+  private function getAbilityData() {
+    $pirates = Tokens::getOfTypeInLocation('pirate_islamic','border_');
+
+    $tokenCount = 0;
+    
+    foreach($pirates as $pirate) {
+      $border = Borders::get($pirate->getLocation());
+      foreach($border->getAdjacentEmpires() as $empire) {
+        if ($empire->getReligion() === REFORMIST) {
+          $tokenCount += 1;
+        }
+      }
+    }
+
+    $data = [
+      'bishops' => count($pirates),
+      'tokens' => $tokenCount,
+    ];
+    return $data;
   }
 }

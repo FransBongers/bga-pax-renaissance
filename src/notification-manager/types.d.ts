@@ -18,17 +18,49 @@ interface NotifWithPlayerArgs {
   tkn_playerName: string;
 }
 
-interface NotifActivateAbilityArgs extends NotifWithPlayerArgs {
-  ability: string;
+type NotifActivateAbilityArgs =
+  | NotifAbilityArgsVeniceCanHoldTwoGoldTokens
+  | NotifAbilityArgsPatronCountsAsGreenBishops
+  | NotifAbilityArgsGreenPiratesCountAsRed;
+
+type NotifDeactivateAbilityArgs =
+  | NotifAbilityArgsVeniceCanHoldTwoGoldTokens
+  | NotifAbilityArgsPatronCountsAsGreenBishops
+  | NotifAbilityArgsGreenPiratesCountAsRed;
+
+interface NotifAbilityArgsGreenPiratesCountAsRed extends NotifWithPlayerArgs {
+  ability: "SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS";
+  data: {
+    bishops: number;
+    tokens: number;
+  };
+  ownerId: null;
+}
+
+interface NotifAbilityArgsPatronCountsAsGreenBishops
+  extends NotifWithPlayerArgs {
+  ability: "SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY";
+  data: null;
+  ownerId: null | number;
+}
+
+interface NotifAbilityArgsVeniceCanHoldTwoGoldTokens
+  extends NotifWithPlayerArgs {
+  ability: "SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS";
+  data: null;
+  ownerId: null;
 }
 
 interface NotifChangeEmpireToMedievalStateArgs {
   empire: Empire;
+  fromReligion: Religion;
+  tokensInEmpire: Token[];
 }
 
 interface NotifChangeEmpireToTheocracyArgs {
   empire: Empire;
   religion: string;
+  tokensInEmpire: Token[];
 }
 
 interface NotifChangeEmpireSquareArgs {
@@ -44,10 +76,6 @@ interface NotifCoronationArgs extends NotifWithPlayerArgs {
 
 interface NotifDeclareVictoryArgs extends NotifWithPlayerArgs {
   victoryCard: VictoryCard;
-}
-
-interface NotifDeactivateAbilityArgs extends NotifWithPlayerArgs {
-  ability: string;
 }
 
 interface NotifDiscardCardArgs extends NotifWithPlayerArgs {
@@ -79,6 +107,7 @@ interface NotifFlipVictoryCardArgs extends NotifWithPlayerArgs {
 }
 
 interface NotifReturnToSupplyArgs extends NotifWithPlayerArgs {
+  from: Border | City | TableauCard | EmpireCard;
   token: Token;
 }
 
@@ -138,6 +167,7 @@ interface NotifOldMaidArgs extends NotifWithPlayerArgs {
 interface NotifPlaceTokenArgs extends NotifWithPlayerArgs {
   token: Token;
   fromLocationId: string;
+  to: Border | City | TableauCard | EmpireCard | null;
 }
 
 interface NotifPlayCardArgs extends NotifWithPlayerArgs {

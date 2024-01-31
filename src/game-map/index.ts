@@ -14,6 +14,23 @@ const MAX_MAP_WIDTH = 1500;
 class GameMap {
   protected game: PaxRenaissanceGame;
   private zoomLevel: number;
+  public supremeReligion: Record<
+    Religion,
+    { bishops: Counter; tokens: Counter }
+  > = {
+    [CATHOLIC]: {
+      bishops: new ebg.counter(),
+      tokens: new ebg.counter(),
+    },
+    [ISLAMIC]: {
+      bishops: new ebg.counter(),
+      tokens: new ebg.counter(),
+    },
+    [REFORMIST]: {
+      bishops: new ebg.counter(),
+      tokens: new ebg.counter(),
+    },
+  };
 
   private empireSquareStocks: {
     [ARAGON]: LineStock<EmpireCard | TableauCard>;
@@ -58,14 +75,13 @@ class GameMap {
     Object.keys(this.empireSquareStocks).forEach((stockId) => {
       this.empireSquareStocks[stockId].removeAll();
     });
-    Object.values(THRONES_CONFIG).forEach(({empireSquareId}) => {
+    Object.values(THRONES_CONFIG).forEach(({ empireSquareId }) => {
       const node = document.getElementById(`${empireSquareId}_throne_tokens`);
       if (!node) {
         return;
       }
       node.replaceChildren();
-    })
-
+    });
   }
 
   updateInterface({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
@@ -73,6 +89,7 @@ class GameMap {
     this.setupTokensCities({ gamedatas });
     this.updateEmpireCards({ gamedatas });
     this.setupMapCards({ gamedatas });
+    this.updateSupremeReligionCounters({ gamedatas });
   }
 
   // ..######..########.########.##.....##.########.
@@ -82,6 +99,22 @@ class GameMap {
   // .......##.##..........##....##.....##.##.......
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
+
+  setupSupremeReligionCounters({
+    gamedatas,
+  }: {
+    gamedatas: PaxRenaissanceGamedatas;
+  }) {
+    RELIGIONS.forEach((religion) => {
+      this.supremeReligion[religion].bishops.create(
+        `pr_supreme_religion_bishop_counter_${religion}`
+      );
+      this.supremeReligion[religion].tokens.create(
+        `pr_tokens_theocracies_counter_${religion}`
+      );
+    });
+    this.updateSupremeReligionCounters({ gamedatas });
+  }
 
   setupMapCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     gamedatas.gameMap.empires.forEach((empire) =>
@@ -243,6 +276,22 @@ class GameMap {
     this.setupTokensCities({ gamedatas });
     this.setupTokensBorders({ gamedatas });
     this.setupMapCards({ gamedatas });
+    this.setupSupremeReligionCounters({ gamedatas });
+  }
+
+  updateSupremeReligionCounters({
+    gamedatas,
+  }: {
+    gamedatas: PaxRenaissanceGamedatas;
+  }) {
+    RELIGIONS.forEach((religion) => {
+      this.supremeReligion[religion].bishops.setValue(
+        gamedatas.supremeReligion.bishops[religion]
+      );
+      this.supremeReligion[religion].tokens.setValue(
+        gamedatas.supremeReligion.tokens[religion]
+      );
+    });
   }
 
   // ..######...########.########.########.########.########...######.

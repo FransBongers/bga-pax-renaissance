@@ -41,6 +41,115 @@
   --paxRenIconScale: var(--paxRenLeftColumnScale);
 }
 
+#pr_supreme_religion_container {
+  position: absolute;
+  // height: calc(var(--paxRenMapScale) * 100px);
+  width: calc(var(--paxRenMapScale) * 200px);
+  // background-color: yellow;
+  left: calc(var(--paxRenMapScale) * 1252px);
+  top: calc(var(--paxRenMapScale) * 270px);
+  // display: grid;
+  // grid-template-columns: calc(var(--paxRenMapScale) * 60px) calc(var(--paxRenMapScale) * 60px) calc(var(--paxRenMapScale) * 60px);
+  // column-gap: calc(var(--paxRenMapScale) * 4px);
+  // row-gap: calc(var(--paxRenMapScale) * 8px);
+  // span {
+  //   font-weight: bold;
+  //   font-size: calc(var(--paxRenMapScale) * 40px);
+  //   letter-spacing: calc(var(--paxRenMapScale) * -2px);
+  //   text-shadow: 2px 0 2px rgba(255, 255, 255, 0.6), 0 -2px 2px rgba(255, 255, 255, 0.6), 0 2px 2px rgba(255, 255, 255, 0.6), -2px 0 2px rgba(255, 255, 255, 0.6);
+  // }
+  span {
+    font-weight: bold;
+    font-size: calc(var(--paxRenMapScale) * 40px);
+    letter-spacing: calc(var(--paxRenMapScale) * -2px);
+    text-shadow: 1px 0 0 white, 0 1px 0 white, -1px 0 0 white, 0 -1px 0 white,
+      1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white !important;
+  }
+
+  .pr_religion_icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    .pr_religion_icon {
+      background-image: url("img/religions.webp");
+      background-size: 300% 100%;
+      height: calc(var(--paxRenMapScale) * 60px);
+      width: calc(var(--paxRenMapScale) * 48px);
+      // height: 40px;
+      // width: 32px;
+    }
+
+    .pr_religion_icon[data-religion="catholic"] {
+      background-position-x: 0%;
+    }
+
+    .pr_religion_icon[data-religion="islamic"] {
+      background-position-x: 50%;
+    }
+
+    .pr_religion_icon[data-religion="reformist"] {
+      background-position-x: 100%;
+    }
+  }
+
+  #pr_supreme_religion_bishops {
+    margin-top: calc(var(--paxRenMapScale) * 16px);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    --paxRenTokenScale: var(--paxRenMapScale) * 0.8;
+
+    .pr_supreme_religion_bishop_counter {
+      height: calc(var(--paxRenMapScale) * 67px);
+      width: calc(var(--paxRenMapScale) * 32px);
+      position: relative;
+
+      .pr_bishop {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+      }
+
+      span {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+      }
+    }
+  }
+
+  #pr_supreme_religion_tokens_theocracies {
+    margin-top: calc(var(--paxRenMapScale) * 16px);
+    display: flex;
+    flex-direction: row;
+    // justify-content: space-between;
+    --paxRenTokenScale: var(--paxRenMapScale) * 0.8;
+
+    .pr_supreme_religion_token_counter {
+      height: calc(var(--paxRenMapScale) * 58px);
+      width: calc(var(--paxRenMapScale) * 68px);
+      position: relative;
+
+      .pr_supreme_religion_tokens_theocracies_icon_container {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        display: flex;
+        flex-direction: row;
+        // align-items: center;
+        // width: calc(var(--paxRenMapScale) * 80px);
+      }
+
+      span {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+      }
+    }
+  }
+}
+
 .pr_game_map_zoom_buttons {
   display: flex;
   flex-direction: row;

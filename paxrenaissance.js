@@ -10,6 +10,9 @@ var REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
 var CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 var CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
 var OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
+var CITY = 'city';
+var BORDER = 'border';
+var CARD = 'card';
 var BLUE = "blue";
 var GREEN = "green";
 var PURPLE = "purple";
@@ -233,6 +236,7 @@ var VOTE_OP_WEST = "VOTE_OP_WEST";
 var APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT = 'APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT';
 var APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT = 'APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT';
 var APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT = 'APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT';
+var SA_BEHEAD_EAST_CARD_WITH_BISHOP_ONLY = 'SA_BEHEAD_EAST_CARD_WITH_BISHOP_ONLY';
 var SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY';
 var SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY';
 var SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1 = 'SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1';
@@ -240,15 +244,31 @@ var SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2 = 'SA_CARD_COUNTS_AS_RE
 var SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_1 = 'SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_1';
 var SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_2 = 'SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_2';
 var SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES = 'SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES';
+var SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES = 'SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES';
+var SA_CORONATION_CAN_CLAIM_MARRIED_KINGS = 'SA_CORONATION_CAN_CLAIM_MARRIED_KINGS';
 var SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS = 'SA_DECLARE_GLOBALIZATION_COSTS_TWO_ACTIONS';
 var SA_DECLARE_HOLY_COSTS_TWO_ACTIONS = 'SA_DECLARE_HOLY_COSTS_TWO_ACTIONS';
 var SA_DECLARE_IMPERIAL_COSTS_TWO_ACTIONS = 'SA_DECLARE_IMPERIAL_COSTS_TWO_ACTIONS';
+var SA_DISCARD_TO_LAUNCH_PEASANT_REVOLT = 'SA_DISCARD_TO_LAUNCH_PEASANT_REVOLT';
+var SA_EAST_AND_WEST_OPS_IN_ONE_ACTION = 'SA_EAST_AND_WEST_OPS_IN_ONE_ACTION';
+var SA_EMPORIUM_SUBSIDY_2_FLORINS = 'SA_EMPORIUM_SUBSIDY_2_FLORINS';
 var SA_FREE_EASTERN_OPS = 'SA_FREE_EASTERN_OPS';
 var SA_FREE_WESTERN_OPS = 'SA_FREE_WESTERN_OPS';
 var SA_FREE_TRADE_FAIR = 'SA_FREE_TRADE_FAIR';
+var SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS = 'SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS';
+var SA_IMMUNE_TO_APOSTASY = 'SA_IMMUNE_TO_APOSTASY';
 var SA_IMMUNE_TO_SILENCING = 'SA_IMMUNE_TO_SILENCING';
+var SA_IN_CRUSADE_COUNT_ROOKS_AS_KNIGHTS = 'SA_IN_CRUSADE_COUNT_ROOKS_AS_KNIGHTS';
+var SA_PERFORM_APOSTASY_AS_AN_ACTION = 'SA_PERFORM_APOSTASY_AS_AN_ACTION';
 var SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY = 'SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY';
+var SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY = 'SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY';
 var SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY = 'SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY';
+var SA_PATRON_REDUCES_VOTE_OPS_COST = 'SA_PATRON_REDUCES_VOTE_OPS_COST';
+var SA_PORTUGAL_FRANCE_NOT_ADJACENT = 'SA_PORTUGAL_FRANCE_NOT_ADJACENT';
+var SA_REPRESSED_TOKENS_COUNTS_AS_KNIGHT_IN_EAST_CAMPAIGN = 'SA_REPRESSED_TOKENS_COUNTS_AS_KNIGHT_IN_EAST_CAMPAIGN';
+var SA_SELL_AND_EMANCIPATE_ALL_REPRESSED_TOKENS_IN_THE_WEST = 'SA_SELL_AND_EMANCIPATE_ALL_REPRESSED_TOKENS_IN_THE_WEST';
+var SA_SELL_AND_PERFORM_ONE_SHOT = 'SA_SELL_AND_PERFORM_ONE_SHOT';
+var SA_SELL_AND_PERFORM_PURPLE_OP_FROM_OPPONENT = 'SA_SELL_AND_PERFORM_PURPLE_OP_FROM_OPPONENT';
 var SA_SELL_FOR_4 = 'SA_SELL_FOR_4';
 var SA_UNLIMITED_HAND_SIZE = 'SA_UNLIMITED_HAND_SIZE';
 var SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS = 'SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS';
@@ -1843,6 +1863,7 @@ var PaxRenaissance = (function () {
         var _a;
         dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
         this.setAlwaysFixTopActions();
+        this.setupDontPreloadImages();
         this.gamedatas = gamedatas;
         this.gameOptions = gamedatas.gameOptions;
         debug("gamedatas", gamedatas);
@@ -1922,6 +1943,14 @@ var PaxRenaissance = (function () {
             }
         }
         this.playerOrder = customPlayerOrder;
+    };
+    PaxRenaissance.prototype.setupDontPreloadImages = function () {
+        this.framework().dontPreloadImage('background_balcony.webp');
+        this.framework().dontPreloadImage('background_cathedral.webp');
+        this.framework().dontPreloadImage('background_goldsmith.webp');
+        this.framework().dontPreloadImage('background_lucrezia.webp');
+        this.framework().dontPreloadImage('background_poison.webp');
+        this.framework().dontPreloadImage('background_war.webp');
     };
     PaxRenaissance.prototype.updateLayout = function () {
         if (!this.settings) {
@@ -2293,26 +2322,29 @@ var PaxRenaissance = (function () {
         }
         var notif = this._last_notif;
         var type = notif.msg.type;
-        if (type == 'history_history') {
+        if (type == "history_history") {
             type = notif.msg.args.originalType;
         }
-        if ($('log_' + notif.logId)) {
-            dojo.addClass('log_' + notif.logId, 'notif_' + type);
-            var methodName = 'onAdding' + type.charAt(0).toUpperCase() + type.slice(1) + 'ToLog';
+        if ($("log_" + notif.logId)) {
+            dojo.addClass("log_" + notif.logId, "notif_" + type);
+            var methodName = "onAdding" + type.charAt(0).toUpperCase() + type.slice(1) + "ToLog";
             (_a = this[methodName]) === null || _a === void 0 ? void 0 : _a.call(this, notif);
         }
-        if ($('dockedlog_' + notif.mobileLogId)) {
-            dojo.addClass('dockedlog_' + notif.mobileLogId, 'notif_' + type);
+        if ($("dockedlog_" + notif.mobileLogId)) {
+            dojo.addClass("dockedlog_" + notif.mobileLogId, "notif_" + type);
         }
         while (this.tooltipsToMap.length) {
             var tooltipToMap = this.tooltipsToMap.pop();
             if (!tooltipToMap || !tooltipToMap[1]) {
-                console.error('error tooltipToMap', tooltipToMap);
+                console.error("error tooltipToMap", tooltipToMap);
             }
             else {
                 var card = this.gamedatas.staticData.tableauCards[tooltipToMap[1]];
                 if (card) {
-                    this.tooltipManager.addCardTooltip({ nodeId: "pr_tooltip_".concat(tooltipToMap[0]), card: card });
+                    this.tooltipManager.addCardTooltip({
+                        nodeId: "pr_tooltip_".concat(tooltipToMap[0]),
+                        card: card,
+                    });
                 }
             }
         }
@@ -3107,6 +3139,21 @@ var MAX_MAP_HEIGHT = 1500;
 var MAX_MAP_WIDTH = 1500;
 var GameMap = (function () {
     function GameMap(game) {
+        var _a;
+        this.supremeReligion = (_a = {},
+            _a[CATHOLIC] = {
+                bishops: new ebg.counter(),
+                tokens: new ebg.counter(),
+            },
+            _a[ISLAMIC] = {
+                bishops: new ebg.counter(),
+                tokens: new ebg.counter(),
+            },
+            _a[REFORMIST] = {
+                bishops: new ebg.counter(),
+                tokens: new ebg.counter(),
+            },
+            _a);
         this.game = game;
         var gamedatas = game.gamedatas;
         this.setupGameMap({ gamedatas: gamedatas });
@@ -3138,6 +3185,16 @@ var GameMap = (function () {
         this.setupTokensCities({ gamedatas: gamedatas });
         this.updateEmpireCards({ gamedatas: gamedatas });
         this.setupMapCards({ gamedatas: gamedatas });
+        this.updateSupremeReligionCounters({ gamedatas: gamedatas });
+    };
+    GameMap.prototype.setupSupremeReligionCounters = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        RELIGIONS.forEach(function (religion) {
+            _this.supremeReligion[religion].bishops.create("pr_supreme_religion_bishop_counter_".concat(religion));
+            _this.supremeReligion[religion].tokens.create("pr_tokens_theocracies_counter_".concat(religion));
+        });
+        this.updateSupremeReligionCounters({ gamedatas: gamedatas });
     };
     GameMap.prototype.setupMapCards = function (_a) {
         var _this = this;
@@ -3237,6 +3294,15 @@ var GameMap = (function () {
         this.setupTokensCities({ gamedatas: gamedatas });
         this.setupTokensBorders({ gamedatas: gamedatas });
         this.setupMapCards({ gamedatas: gamedatas });
+        this.setupSupremeReligionCounters({ gamedatas: gamedatas });
+    };
+    GameMap.prototype.updateSupremeReligionCounters = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        RELIGIONS.forEach(function (religion) {
+            _this.supremeReligion[religion].bishops.setValue(gamedatas.supremeReligion.bishops[religion]);
+            _this.supremeReligion[religion].tokens.setValue(gamedatas.supremeReligion.tokens[religion]);
+        });
     };
     GameMap.prototype.getEmpireSquareStock = function (_a) {
         var empireId = _a.empireId;
@@ -3349,9 +3415,14 @@ var tplGameMapVictoryCards = function (_a) {
     })
         .join(""), "\n  ");
 };
+var tplGameMapTheocraciesCounter = function (_a) {
+    var religion = _a.religion;
+    return "\n  <div class=\"pr_supreme_religion_token_counter\">\n  <div class=\"pr_supreme_religion_tokens_theocracies_icon_container\">\n    <div class=\"pr_token pr_pirate\" data-separator=\"".concat(religion, "\"></div>\n    <div class=\"pr_token pr_knight\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -20px);\"></div>\n    <div class=\"pr_token pr_rook\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -8px);\"></div>\n  </div>\n  <span id=\"pr_tokens_theocracies_counter_").concat(religion, "\"></span>\n</div>\n  ");
+};
+var tplGameMapSupremeReligion = function () { return "\n  <div id=\"pr_supreme_religion_container\">\n    <div class=\"pr_religion_icons\">\n      <div id=\"pr_catholic_icon\" class=\"pr_religion_icon\" data-religion=\"catholic\"></div>\n      <div id=\"pr_islamic_icon\" class=\"pr_religion_icon\" data-religion=\"islamic\"></div>\n      <div id=\"pr_reformist_icon\" class=\"pr_religion_icon\" data-religion=\"reformist\"></div>\n    </div>\n    <div id=\"pr_supreme_religion_bishops\">\n      <div class=\"pr_supreme_religion_bishop_counter\" style=\"margin-left: calc(var(--paxRenMapScale) * 26px);\">\n        <div id=\"bishop_catholic_sr\" class=\"pr_token pr_bishop\" data-separator=\"catholic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_catholic\"></span>\n      </div>\n      <div class=\"pr_supreme_religion_bishop_counter\">\n        <div id=\"bishop_islamic_sr\" class=\"pr_token pr_bishop\" data-separator=\"islamic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_islamic\"></span>\n      </div>\n      <div class=\"pr_supreme_religion_bishop_counter\" style=\"margin-right: calc(var(--paxRenMapScale) * 19px);\">\n        <div id=\"bishop_reformist_sr\" class=\"pr_token pr_bishop\" data-separator=\"reformist\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_reformist\"></span>\n      </div>\n    </div>\n    <div id=\"pr_supreme_religion_tokens_theocracies\">\n      ".concat(RELIGIONS.map(function (religion) { return tplGameMapTheocraciesCounter({ religion: religion }); }).join(''), "\n    </div>\n  </div>\n  "); };
 var tplGameMap = function (_a) {
     var _b = _a.ageOfReformation, ageOfReformation = _b === void 0 ? false : _b;
-    return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards({ ageOfReformation: ageOfReformation }), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupply(), "\n    ").concat(tplGameMapMarket(), "\n  </div>");
+    return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards({ ageOfReformation: ageOfReformation }), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupremeReligion(), "\n    ").concat(tplGameMapSupply({ title: _('Supply') }), "\n    ").concat(tplGameMapMarket(), "\n  </div>");
 };
 var Hand = (function () {
     function Hand(game) {
@@ -3919,7 +3990,7 @@ var NotificationManager = (function () {
     NotificationManager.prototype.setupNotifications = function () {
         var _this = this;
         console.log("notifications subscriptions setup");
-        dojo.connect(this.game.framework().notifqueue, 'addToLog', function () {
+        dojo.connect(this.game.framework().notifqueue, "addToLog", function () {
             _this.game.addLogClass();
         });
         var notifs = [
@@ -3984,12 +4055,58 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_activateAbility = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var ability;
-            return __generator(this, function (_a) {
-                ability = notif.args.ability;
+            var _a, ability, playerId, data, ownerId, player, valueChange;
+            return __generator(this, function (_b) {
+                _a = notif.args, ability = _a.ability, playerId = _a.playerId, data = _a.data, ownerId = _a.ownerId;
+                player = this.getPlayer({ playerId: playerId });
                 switch (ability) {
                     case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
                         this.game.gameMap.setVenice2Visibility(true);
+                        break;
+                    case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
+                        valueChange = ownerId !== null
+                            ? this.getPlayer({
+                                playerId: ownerId,
+                            }).counters.prestige.patron.getValue()
+                            : 0;
+                        this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
+                        player.activateAbility({ ability: ability });
+                        break;
+                    case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+                        this.game.gameMap.supremeReligion.reformist.bishops.incValue(data.bishops);
+                        this.game.gameMap.supremeReligion.reformist.tokens.incValue(data.tokens);
+                        player.activateAbility({ ability: ability });
+                        break;
+                    default:
+                        debug("Unhandled ability: ", ability);
+                }
+                return [2];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_deactivateAbility = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, ability, data, playerId, ownerId, player, valueChange;
+            return __generator(this, function (_b) {
+                _a = notif.args, ability = _a.ability, data = _a.data, playerId = _a.playerId, ownerId = _a.ownerId;
+                player = this.getPlayer({ playerId: playerId });
+                switch (ability) {
+                    case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
+                        this.game.gameMap.setVenice2Visibility(false);
+                        break;
+                    case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
+                        valueChange = ownerId !== null
+                            ? this.getPlayer({
+                                playerId: ownerId,
+                            }).counters.prestige.patron.getValue() * -1
+                            : 0;
+                        this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
+                        player.deactivateAbility({ ability: ability });
+                        break;
+                    case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+                        this.game.gameMap.supremeReligion.reformist.bishops.incValue(-data.bishops);
+                        this.game.gameMap.supremeReligion.reformist.tokens.incValue(-data.tokens);
+                        player.deactivateAbility({ ability: ability });
                         break;
                     default:
                         debug("Unhandled ability: ", ability);
@@ -4000,23 +4117,27 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_changeEmpireToMedievalState = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var empire;
-            return __generator(this, function (_a) {
-                empire = notif.args.empire;
+            var _a, empire, tokensInEmpire, fromReligion, count;
+            return __generator(this, function (_b) {
+                _a = notif.args, empire = _a.empire, tokensInEmpire = _a.tokensInEmpire, fromReligion = _a.fromReligion;
                 this.game.gameMap.setEmpireReligion({
                     empireId: empire.id,
                     religion: MEDIEVAL,
                 });
+                count = tokensInEmpire.filter(function (token) { return token.separator === fromReligion; }).length;
+                this.game.gameMap.supremeReligion[fromReligion].tokens.incValue(-count);
                 return [2];
             });
         });
     };
     NotificationManager.prototype.notif_changeEmpireToTheocracy = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, empire, religion;
+            var _a, empire, religion, tokensInEmpire, count;
             return __generator(this, function (_b) {
-                _a = notif.args, empire = _a.empire, religion = _a.religion;
+                _a = notif.args, empire = _a.empire, religion = _a.religion, tokensInEmpire = _a.tokensInEmpire;
                 this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: religion });
+                count = tokensInEmpire.filter(function (token) { return token.separator === religion; }).length;
+                this.game.gameMap.supremeReligion[religion].tokens.incValue(count);
                 return [2];
             });
         });
@@ -4074,22 +4195,6 @@ var NotificationManager = (function () {
             });
         });
     };
-    NotificationManager.prototype.notif_deactivateAbility = function (notif) {
-        return __awaiter(this, void 0, void 0, function () {
-            var ability;
-            return __generator(this, function (_a) {
-                ability = notif.args.ability;
-                switch (ability) {
-                    case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
-                        this.game.gameMap.setVenice2Visibility(false);
-                        break;
-                    default:
-                        debug("Unhandled ability: ", ability);
-                }
-                return [2];
-            });
-        });
-    };
     NotificationManager.prototype.notif_declareVictory = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             var playerId;
@@ -4102,7 +4207,7 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_discardCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, adjustPrestige, playerId, card, fromLocationId, toLocationId, wasVassalTo, king, wasOldMaid, player, prestige;
+            var _a, adjustPrestige, playerId, card, fromLocationId, toLocationId, wasVassalTo, king, wasOldMaid, player;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -4136,8 +4241,19 @@ var NotificationManager = (function () {
                             player.tableau.checkOldMaidContainerHeight();
                         }
                         if (adjustPrestige) {
-                            prestige = card.type === EMPIRE_CARD ? card[card.side].prestige : card.prestige;
-                            prestige.forEach(function (item) { return player.counters.prestige[item].incValue(-1); });
+                            if (card.type === EMPIRE_CARD) {
+                                this.removeEmpireSquarePrestige({
+                                    empireSquare: card,
+                                    side: card.side,
+                                    playerId: playerId,
+                                });
+                            }
+                            else {
+                                this.removePrestige({
+                                    player: this.getPlayer({ playerId: playerId }),
+                                    prestige: card.prestige,
+                                });
+                            }
                         }
                         return [2];
                 }
@@ -4323,11 +4439,11 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_placeToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, token, fromLocationId, split, isPawn, isBishop, fromSupply, node, repressTokensToThrones, tokenNode;
+            var _a, token, fromLocationId, to, split, isPawn, isBishop, fromSupply, node, repressTokensToThrones, tokenNode;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, token = _a.token, fromLocationId = _a.fromLocationId;
+                        _a = notif.args, token = _a.token, fromLocationId = _a.fromLocationId, to = _a.to;
                         split = token.id.split("_");
                         isPawn = split[0] === PAWN;
                         isBishop = split[0] === BISHOP;
@@ -4373,7 +4489,13 @@ var NotificationManager = (function () {
                     case 2:
                         _b.sent();
                         _b.label = 3;
-                    case 3: return [2, Promise.resolve()];
+                    case 3:
+                        this.adjustSupremeReligionCounters({
+                            token: token,
+                            location: to,
+                            addOrRemove: "add",
+                        });
+                        return [2, Promise.resolve()];
                 }
             });
         });
@@ -4391,9 +4513,7 @@ var NotificationManager = (function () {
                         return [4, player.tableau.addCard(card)];
                     case 1:
                         _b.sent();
-                        card.prestige.forEach(function (prestige) {
-                            return player.counters.prestige[prestige].incValue(1);
-                        });
+                        this.addPrestige({ player: player, prestige: card.prestige });
                         return [2];
                 }
             });
@@ -4596,9 +4716,14 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_returnToSupply = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, node, split;
+            var _a, playerId, token, from, node, split;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, token = _a.token;
+                _a = notif.args, playerId = _a.playerId, token = _a.token, from = _a.from;
+                this.adjustSupremeReligionCounters({
+                    token: token,
+                    location: from,
+                    addOrRemove: "remove",
+                });
                 node = document.getElementById(token.id);
                 if (node) {
                     node.remove();
@@ -4725,6 +4850,40 @@ var NotificationManager = (function () {
         this.game.gamedatas = updatedGamedatas;
         this.game.playerManager.updatePlayers({ gamedatas: updatedGamedatas });
     };
+    NotificationManager.prototype.adjustSupremeReligionCounters = function (_a) {
+        var _this = this;
+        var token = _a.token, location = _a.location, addOrRemove = _a.addOrRemove;
+        var add = addOrRemove === "add";
+        if (token.type === PAWN || !location) {
+            return;
+        }
+        else if (token.type === BISHOP) {
+            this.game.gameMap.supremeReligion[token.separator].bishops.incValue(add ? 1 : -1);
+        }
+        else if ((token.type === KNIGHT || token.type === ROOK) &&
+            location.type === CITY &&
+            token.separator === location.empire.religion) {
+            this.game.gameMap.supremeReligion[token.separator].tokens.incValue(add ? 1 : -1);
+        }
+        else if (token.type === PIRATE && location.type === BORDER) {
+            var pirateAbilityActive_1 = this.game.playerManager.anyPlayerHasActiveAbility({
+                ability: SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS,
+            });
+            location.adjacentEmpires.forEach(function (empire) {
+                if (empire.religion === token.separator) {
+                    _this.game.gameMap.supremeReligion[token.separator].tokens.incValue(add ? 1 : -1);
+                }
+                if (pirateAbilityActive_1 &&
+                    empire.religion === REFORMIST &&
+                    token.separator === ISLAMIC) {
+                    _this.game.gameMap.supremeReligion.reformist.tokens.incValue(add ? 1 : -1);
+                }
+            });
+            if (pirateAbilityActive_1 && token.separator === ISLAMIC) {
+                this.game.gameMap.supremeReligion.reformist.bishops.incValue(add ? 1 : -1);
+            }
+        }
+    };
     NotificationManager.prototype.addEmpireSquarePrestige = function (_a) {
         var empireSquare = _a.empireSquare, side = _a.side, playerId = _a.playerId;
         var owner = this.getPlayer({ playerId: playerId });
@@ -4746,15 +4905,31 @@ var NotificationManager = (function () {
         return prestige;
     };
     NotificationManager.prototype.addPrestige = function (_a) {
+        var _this = this;
         var player = _a.player, prestige = _a.prestige;
         prestige.forEach(function (prestige) {
             player.counters.prestige[prestige].incValue(1);
+            if (prestige === PATRON) {
+                if (player.hasActiveAbility({
+                    ability: SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY,
+                })) {
+                    _this.game.gameMap.supremeReligion.islamic.bishops.incValue(1);
+                }
+            }
         });
     };
     NotificationManager.prototype.removePrestige = function (_a) {
+        var _this = this;
         var player = _a.player, prestige = _a.prestige;
         prestige.forEach(function (prestige) {
             player.counters.prestige[prestige].incValue(-1);
+            if (prestige === PATRON) {
+                if (player.hasActiveAbility({
+                    ability: SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY,
+                })) {
+                    _this.game.gameMap.supremeReligion.islamic.bishops.incValue(-1);
+                }
+            }
         });
     };
     NotificationManager.prototype.destroy = function () {
@@ -4935,6 +5110,9 @@ var PlayerManager = (function () {
             node.style.setProperty("--paxRenCardInTableauScale", "".concat(Number(cardsInTableauScale) / 100));
         }
     };
+    PlayerManager.prototype.anyPlayerHasActiveAbility = function (props) {
+        return this.getPlayers().some(function (player) { return player.hasActiveAbility(props); });
+    };
     PlayerManager.prototype.getPlayer = function (_a) {
         var playerId = _a.playerId;
         return this.players[playerId];
@@ -4966,6 +5144,7 @@ var PRPlayer = (function () {
             prestige: {},
             cards: {},
         };
+        this.activeAbilities = [];
         this.game = game;
         this.bank = player.bank;
         var playerId = player.id;
@@ -4974,6 +5153,7 @@ var PRPlayer = (function () {
         this.playerName = player.name;
         this.playerColor = COLOR_MAP[player.color];
         this.playerHexColor = player.color;
+        this.activeAbilities = player.activeAbilities;
         var gamedatas = game.gamedatas;
         this.setupPlayer({ gamedatas: gamedatas, player: player });
     }
@@ -4983,6 +5163,7 @@ var PRPlayer = (function () {
     PRPlayer.prototype.updatePlayer = function (_a) {
         var gamedatas = _a.gamedatas;
         var playerGamedatas = gamedatas.players[this.playerId];
+        this.activeAbilities = playerGamedatas.activeAbilities;
         this.player = playerGamedatas;
         this.updatePlayerPanel({ playerGamedatas: playerGamedatas });
         this.tableau.updateInterface({ player: playerGamedatas });
@@ -5103,6 +5284,18 @@ var PRPlayer = (function () {
     };
     PRPlayer.prototype.getPlayerId = function () {
         return this.playerId;
+    };
+    PRPlayer.prototype.hasActiveAbility = function (_a) {
+        var ability = _a.ability;
+        return this.activeAbilities.includes(ability);
+    };
+    PRPlayer.prototype.activateAbility = function (_a) {
+        var ability = _a.ability;
+        this.activeAbilities.push(ability);
+    };
+    PRPlayer.prototype.deactivateAbility = function (_a) {
+        var ability = _a.ability;
+        this.activeAbilities = this.activeAbilities.filter(function (item) { return item !== ability; });
     };
     PRPlayer.prototype.addCardToHand = function (_a) {
         var card = _a.card;
@@ -5706,7 +5899,7 @@ var TokenCounter = (function () {
     }
     TokenCounter.prototype.setup = function (_a) {
         var separator = _a.separator, type = _a.type, value = _a.value;
-        var supplyContainer = document.getElementById('pr_supply');
+        var supplyContainer = document.getElementById('pr_supply_counters');
         if (!supplyContainer) {
             return;
         }
@@ -5844,10 +6037,11 @@ var SUPPLY_TOKENS_CONFIG = [
 ];
 var tplTokenCounter = function (_a) {
     var id = _a.id, separator = _a.separator, type = _a.type;
-    return "\n    <div class=\"pr_token_counter_container\">\n      <span id=\"".concat(id, "_counter\" ></span>\n      <div class=\"pr_token_counter_token\">\n        ").concat(tplToken({ id: id, type: type, separator: separator }), "\n      </div>\n    </div>");
+    return "\n    <div class=\"pr_token_counter_container\" data-token-type=\"".concat(type, "\">\n      <div class=\"pr_token_counter_token\">\n        ").concat(tplToken({ id: id, type: type, separator: separator }), "\n      </div>\n      <span id=\"").concat(id, "_counter\" ></span>\n    </div>");
 };
-var tplGameMapSupply = function () {
-    return "\n    <div id=\"pr_supply\">\n      \n    </div>\n  ";
+var tplGameMapSupply = function (_a) {
+    var title = _a.title;
+    return "\n    <div id=\"pr_supply\">\n      <span>".concat(title, "</span>\n      <div id=\"pr_supply_counters\">\n\n      </div>\n    </div>\n  ");
 };
 var AbilityActionSelectApostasyState = (function () {
     function AbilityActionSelectApostasyState(game) {

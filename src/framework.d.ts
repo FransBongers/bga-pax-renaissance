@@ -30,6 +30,7 @@ interface Framework {
   ) => void;
   attachToNewParent: (mobile_obj: string | Element, target_obj: string | Element) => void;
   checkAction: (action: string) => boolean;
+  dontPreloadImage: (filename: string) => void;
   format_block: (jstpl: string, args: Record<string, unknown>) => string;
   game_name: string;
   isCurrentPlayerActive: () => boolean;

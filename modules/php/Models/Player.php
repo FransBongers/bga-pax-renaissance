@@ -55,8 +55,16 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       EAST => $this->getTableauCardsForRegion(EAST),
       WEST => $this->getTableauCardsForRegion(WEST),
     ];
+    // abilities needed to track counters in the frontend:
+    $activeAbilities = [];
+    foreach([SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY] as $ability) {
+      if ($this->hasSpecialAbility($ability)) {
+        $activeAbilities[] = $ability;
+      }
+    }
     // return $data;
     return array_merge($data, [
+      'activeAbilities' => $activeAbilities,
       'bank' => $extra['bank'],
       'florins' => intval($extra['florins']),
       'hand' => [

@@ -53,6 +53,10 @@ class PlayerManager {
     }
   }
 
+  anyPlayerHasActiveAbility(props: { ability: string }): boolean {
+    return this.getPlayers().some((player) => player.hasActiveAbility(props));
+  }
+
   getPlayer({ playerId }: { playerId: number }): PRPlayer {
     return this.players[playerId];
   }

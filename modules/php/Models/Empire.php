@@ -49,10 +49,12 @@ class Empire implements \JsonSerializable
 
   public function changeToMedievalState($player) {
     $religions = Globals::getEmpireReligions();
-    if ($religions[$this->id] !== MEDIEVAL) {
+    $fromReligion = $religions[$this->id];
+    if ($fromReligion !== MEDIEVAL) {
+      
       $religions[$this->id] = MEDIEVAL;
       Globals::setEmpireReligions($religions);
-      Notifications::changeEmpireToMedievalState($player, $this);
+      Notifications::changeEmpireToMedievalState($player, $this, $fromReligion);
     }
   }
 

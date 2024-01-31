@@ -39,6 +39,11 @@ class Border implements \JsonSerializable
     foreach ($this->attributes as $attribute => $field) {
       $data[$attribute] = $this->$attribute;
     }
+    if ($this->isSeaBorder()) {
+      $data['adjacentEmpires'] = array_map(function ($empireId) {
+        return Empires::get($empireId);
+      }, $this->adjacentEmpires);
+    }
 
     return $data;
   }

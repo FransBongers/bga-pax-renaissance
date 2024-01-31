@@ -76,16 +76,19 @@ interface Border {
   id: string;
   name: string;
   type: "border";
+  adjacentEmpires: Empire[];
 }
 
 interface City {
   capital: boolean;
-  empire: string;
+  empire: Empire;
   emporium: string | null;
   id: string;
   name: string;
   type: "city";
 }
+
+type Religion = 'catholic' | 'islamic' | 'reformist';
 
 interface Empire {
   id: string;
@@ -244,6 +247,18 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
   players: Record<number, PaxRenaissancePlayerData>;
   staticData: {
     tableauCards: Record<string, TableauCard>
+  };
+  supremeReligion: {
+    bishops: {
+      catholic: number;
+      islamic: number;
+      reformist: number;
+    };
+    tokens: {
+      catholic: number;
+      islamic: number;
+      reformist: number;
+    }
   }
   tokens: {
     inPlay: Token[];
@@ -273,6 +288,7 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
 
 interface PaxRenaissancePlayerData extends BgaPlayer {
   // hexColor: string;
+  activeAbilities: string[];
   cardsPlayerCanSell: {
     hand: TableauCard[];
     tableau: TableauCard[];

@@ -12,13 +12,6 @@ const tplToken = ({
   } class="pr_token pr_${type}" data-separator="${separator}"></div>`;
 };
 
-// <div id="pr_market_west_${index}_florins" class="pr_icon pr_none" data-icon="florin" data-region="west">
-// <span id="pr_market_west_${index}_counter" class="pr_counter">5</span>
-// </div>
-// <div id="pr_market_east_${index}_florins" class="pr_icon pr_none" data-icon="florin" data-region="east">
-// <span id="pr_market_east_${index}_counter" class="pr_counter"></span>
-// </div>
-
 const tplGameMapMarket = () => `
   ${MARKET_WEST_CONFIG.map(
     ({ top, left }, index) => `
@@ -121,12 +114,51 @@ const tplGameMapVictoryCards = ({ageOfReformation = false}: {ageOfReformation?: 
     .join("")}
   `;
 
+  const tplGameMapTheocraciesCounter = ({religion}: {religion: string;}) => `
+  <div class="pr_supreme_religion_token_counter">
+  <div class="pr_supreme_religion_tokens_theocracies_icon_container">
+    <div class="pr_token pr_pirate" data-separator="${religion}"></div>
+    <div class="pr_token pr_knight" data-separator="${religion}" style="margin-left: calc(var(--paxRenMapScale) * -20px);"></div>
+    <div class="pr_token pr_rook" data-separator="${religion}" style="margin-left: calc(var(--paxRenMapScale) * -8px);"></div>
+  </div>
+  <span id="pr_tokens_theocracies_counter_${religion}"></span>
+</div>
+  `
+
+  const tplGameMapSupremeReligion = () => `
+  <div id="pr_supreme_religion_container">
+    <div class="pr_religion_icons">
+      <div id="pr_catholic_icon" class="pr_religion_icon" data-religion="catholic"></div>
+      <div id="pr_islamic_icon" class="pr_religion_icon" data-religion="islamic"></div>
+      <div id="pr_reformist_icon" class="pr_religion_icon" data-religion="reformist"></div>
+    </div>
+    <div id="pr_supreme_religion_bishops">
+      <div class="pr_supreme_religion_bishop_counter" style="margin-left: calc(var(--paxRenMapScale) * 26px);">
+        <div id="bishop_catholic_sr" class="pr_token pr_bishop" data-separator="catholic"></div>
+        <span id="pr_supreme_religion_bishop_counter_catholic"></span>
+      </div>
+      <div class="pr_supreme_religion_bishop_counter">
+        <div id="bishop_islamic_sr" class="pr_token pr_bishop" data-separator="islamic"></div>
+        <span id="pr_supreme_religion_bishop_counter_islamic"></span>
+      </div>
+      <div class="pr_supreme_religion_bishop_counter" style="margin-right: calc(var(--paxRenMapScale) * 19px);">
+        <div id="bishop_reformist_sr" class="pr_token pr_bishop" data-separator="reformist"></div>
+        <span id="pr_supreme_religion_bishop_counter_reformist"></span>
+      </div>
+    </div>
+    <div id="pr_supreme_religion_tokens_theocracies">
+      ${RELIGIONS.map((religion) => tplGameMapTheocraciesCounter({religion})).join('')}
+    </div>
+  </div>
+  `
+  // <span>Supreme Religion</span>
 const tplGameMap = ({ageOfReformation = false}: {ageOfReformation?: boolean}) => `
   <div id="pr_game_map">
     ${tplGameMapVictoryCards({ageOfReformation})}
     ${tplGameMapEmpireCards()}
     ${tplGameMapMapCards()}
     ${tplGameMapMapBorders()}
-    ${tplGameMapSupply()}
+    ${tplGameMapSupremeReligion()}
+    ${tplGameMapSupply({title: _('Supply')})}
     ${tplGameMapMarket()}
   </div>`;

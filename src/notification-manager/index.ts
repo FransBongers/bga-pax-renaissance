@@ -34,10 +34,9 @@ class NotificationManager {
   setupNotifications() {
     console.log("notifications subscriptions setup");
 
-    dojo.connect(this.game.framework().notifqueue, 'addToLog', () => {
+    dojo.connect(this.game.framework().notifqueue, "addToLog", () => {
       this.game.addLogClass();
     });
-
 
     const notifs: [id: string, wait: number][] = [
       // checked
@@ -126,11 +125,65 @@ class NotificationManager {
   }
 
   async notif_activateAbility(notif: Notif<NotifActivateAbilityArgs>) {
-    const { ability } = notif.args;
+    const { ability, playerId, data, ownerId } = notif.args;
+
+    const player = this.getPlayer({ playerId });
 
     switch (ability) {
       case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
         this.game.gameMap.setVenice2Visibility(true);
+        break;
+      case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
+        const valueChange =
+          ownerId !== null
+            ? this.getPlayer({
+                playerId: ownerId,
+              }).counters.prestige.patron.getValue()
+            : 0;
+        this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
+        player.activateAbility({ ability });
+        break;
+      case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+        this.game.gameMap.supremeReligion.reformist.bishops.incValue(
+          data.bishops
+        );
+        this.game.gameMap.supremeReligion.reformist.tokens.incValue(
+          data.tokens
+        );
+        player.activateAbility({ ability });
+        break;
+      default:
+        debug("Unhandled ability: ", ability);
+    }
+  }
+
+  async notif_deactivateAbility(notif: Notif<NotifDeactivateAbilityArgs>) {
+    const { ability, data, playerId, ownerId } = notif.args;
+
+    const player = this.getPlayer({ playerId });
+
+    switch (ability) {
+      case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
+        this.game.gameMap.setVenice2Visibility(false);
+        break;
+      case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
+        const valueChange =
+          ownerId !== null
+            ? this.getPlayer({
+                playerId: ownerId,
+              }).counters.prestige.patron.getValue() * -1
+            : 0;
+        this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
+        player.deactivateAbility({ ability });
+        break;
+      case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+        this.game.gameMap.supremeReligion.reformist.bishops.incValue(
+          -data.bishops
+        );
+        this.game.gameMap.supremeReligion.reformist.tokens.incValue(
+          -data.tokens
+        );
+        player.deactivateAbility({ ability });
         break;
       default:
         debug("Unhandled ability: ", ability);
@@ -140,18 +193,28 @@ class NotificationManager {
   async notif_changeEmpireToMedievalState(
     notif: Notif<NotifChangeEmpireToMedievalStateArgs>
   ) {
-    const { empire } = notif.args;
+    const { empire, tokensInEmpire, fromReligion } = notif.args;
     this.game.gameMap.setEmpireReligion({
       empireId: empire.id,
       religion: MEDIEVAL,
     });
+    const count = tokensInEmpire.filter(
+      (token) => token.separator === fromReligion
+    ).length;
+    this.game.gameMap.supremeReligion[fromReligion].tokens.incValue(-count);
   }
 
   async notif_changeEmpireToTheocracy(
     notif: Notif<NotifChangeEmpireToTheocracyArgs>
   ) {
-    const { empire, religion } = notif.args;
+    const { empire, religion, tokensInEmpire } = notif.args;
     this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion });
+    const count = tokensInEmpire.filter(
+      (token) => token.separator === religion
+    ).length;
+    this.game.gameMap.supremeReligion[religion as Religion].tokens.incValue(
+      count
+    );
   }
 
   // Used to change king side of Papal States empire square
@@ -197,18 +260,6 @@ class NotificationManager {
     await this.game.tableauCardManager.removeCard(queen);
     await this.game.tableauCardManager.updateCardInformations(king);
     await this.game.tableauCardManager.addQueen({ king, queen });
-  }
-
-  async notif_deactivateAbility(notif: Notif<NotifDeactivateAbilityArgs>) {
-    const { ability } = notif.args;
-
-    switch (ability) {
-      case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
-        this.game.gameMap.setVenice2Visibility(false);
-        break;
-      default:
-        debug("Unhandled ability: ", ability);
-    }
   }
 
   async notif_declareVictory(notif: Notif<NotifDeclareVictoryArgs>) {
@@ -259,9 +310,22 @@ class NotificationManager {
     }
     if (adjustPrestige) {
       // TODO: check discarding of republics
-      const prestige =
-        card.type === EMPIRE_CARD ? card[card.side].prestige : card.prestige;
-      prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
+      if (card.type === EMPIRE_CARD) {
+        // TODO: check this. Empires don't get discarded with this function anymore?
+        this.removeEmpireSquarePrestige({
+          empireSquare: card,
+          side: card.side,
+          playerId,
+        });
+      } else {
+        this.removePrestige({
+          player: this.getPlayer({ playerId }),
+          prestige: card.prestige,
+        });
+      }
+      // const prestige =
+      //   card.type === EMPIRE_CARD ? card[card.side].prestige : card.prestige;
+      // prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
     }
   }
 
@@ -425,7 +489,7 @@ class NotificationManager {
   }
 
   async notif_placeToken(notif: Notif<NotifPlaceTokenArgs>) {
-    const { token, fromLocationId } = notif.args;
+    const { token, fromLocationId, to } = notif.args;
 
     const split = token.id.split("_");
     const isPawn = split[0] === PAWN;
@@ -484,6 +548,12 @@ class NotificationManager {
       }
     }
 
+    this.adjustSupremeReligionCounters({
+      token,
+      location: to,
+      addOrRemove: "add",
+    });
+
     return Promise.resolve();
   }
 
@@ -494,9 +564,10 @@ class NotificationManager {
     player.counters.cards[card.region].incValue(-1);
     this.game.openHandsModal.removeCard({ playerId, card });
     await player.tableau.addCard(card);
-    card.prestige.forEach((prestige) =>
-      player.counters.prestige[prestige].incValue(1)
-    );
+    this.addPrestige({ player, prestige: card.prestige });
+    // card.prestige.forEach((prestige) =>
+    //   player.counters.prestige[prestige].incValue(1)
+    // );
     // return Promise.resolve();
   }
 
@@ -649,7 +720,13 @@ class NotificationManager {
   }
 
   async notif_returnToSupply(notif: Notif<NotifReturnToSupplyArgs>) {
-    const { playerId, token } = notif.args;
+    const { playerId, token, from } = notif.args;
+
+    this.adjustSupremeReligionCounters({
+      token,
+      location: from,
+      addOrRemove: "remove",
+    });
 
     const node = document.getElementById(token.id);
     if (node) {
@@ -763,6 +840,61 @@ class NotificationManager {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
+  private adjustSupremeReligionCounters({
+    token,
+    location,
+    addOrRemove,
+  }: {
+    token: Token;
+    location: City | Border | TableauCard | EmpireCard | null;
+    addOrRemove: "add" | "remove";
+  }) {
+    const add = addOrRemove === "add";
+
+    if (token.type === PAWN || !location) {
+      return;
+    } else if (token.type === BISHOP) {
+      this.game.gameMap.supremeReligion[
+        token.separator as Religion
+      ].bishops.incValue(add ? 1 : -1);
+    } else if (
+      (token.type === KNIGHT || token.type === ROOK) &&
+      location.type === CITY &&
+      token.separator === location.empire.religion
+    ) {
+      this.game.gameMap.supremeReligion[
+        token.separator as Religion
+      ].tokens.incValue(add ? 1 : -1);
+    } else if (token.type === PIRATE && location.type === BORDER) {
+      const pirateAbilityActive =
+        this.game.playerManager.anyPlayerHasActiveAbility({
+          ability: SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS,
+        });
+      location.adjacentEmpires.forEach((empire) => {
+        if (empire.religion === token.separator) {
+          this.game.gameMap.supremeReligion[
+            token.separator as Religion
+          ].tokens.incValue(add ? 1 : -1);
+        }
+        if (
+          pirateAbilityActive &&
+          empire.religion === REFORMIST &&
+          token.separator === ISLAMIC
+        ) {
+          this.game.gameMap.supremeReligion.reformist.tokens.incValue(
+            add ? 1 : -1
+          );
+        }
+      });
+
+      if (pirateAbilityActive && token.separator === ISLAMIC) {
+        this.game.gameMap.supremeReligion.reformist.bishops.incValue(
+          add ? 1 : -1
+        );
+      }
+    }
+  }
+
   private addEmpireSquarePrestige({
     empireSquare,
     side,
@@ -832,6 +964,15 @@ class NotificationManager {
   }) {
     prestige.forEach((prestige) => {
       player.counters.prestige[prestige].incValue(1);
+      if (prestige === PATRON) {
+        if (
+          player.hasActiveAbility({
+            ability: SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY,
+          })
+        ) {
+          this.game.gameMap.supremeReligion.islamic.bishops.incValue(1);
+        }
+      }
     });
   }
 
@@ -844,6 +985,15 @@ class NotificationManager {
   }) {
     prestige.forEach((prestige) => {
       player.counters.prestige[prestige].incValue(-1);
+      if (prestige === PATRON) {
+        if (
+          player.hasActiveAbility({
+            ability: SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY,
+          })
+        ) {
+          this.game.gameMap.supremeReligion.islamic.bishops.incValue(-1);
+        }
+      }
     });
   }
 

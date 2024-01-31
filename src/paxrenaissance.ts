@@ -98,6 +98,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       "after"
     );
     this.setAlwaysFixTopActions();
+    this.setupDontPreloadImages();
 
     // const playAreaWidth = document.getElementById('pp_play_area').offsetWidth;
     // console.log('playAreaWidth',playAreaWidth);
@@ -152,9 +153,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
       tradeFairLevy: new TradeFairLevyState(this),
     };
 
-    
     this.infoPanel = new InfoPanel(this);
-    
+
     this.settings = new Settings(this);
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
@@ -168,7 +168,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.supply = new Supply(this);
     this.market = new Market(this);
     this.victoryCardManager = new VictoryCardManager(this);
-    
+
     this.openHandsModal = new OpenHandsModal(this);
 
     if (this.notificationManager != undefined) {
@@ -199,6 +199,15 @@ class PaxRenaissance implements PaxRenaissanceGame {
       }
     }
     this.playerOrder = customPlayerOrder;
+  }
+
+  setupDontPreloadImages() {
+    this.framework().dontPreloadImage('background_balcony.webp');
+    this.framework().dontPreloadImage('background_cathedral.webp');
+    this.framework().dontPreloadImage('background_goldsmith.webp');
+    this.framework().dontPreloadImage('background_lucrezia.webp');
+    this.framework().dontPreloadImage('background_poison.webp');
+    this.framework().dontPreloadImage('background_war.webp'); 
   }
 
   public updateLayout() {
@@ -809,28 +818,32 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
     let notif = this._last_notif;
     let type = notif.msg.type;
-    if (type == 'history_history') {
+    if (type == "history_history") {
       type = notif.msg.args.originalType;
     }
 
-    if ($('log_' + notif.logId)) {
-      dojo.addClass('log_' + notif.logId, 'notif_' + type);
+    if ($("log_" + notif.logId)) {
+      dojo.addClass("log_" + notif.logId, "notif_" + type);
 
-      var methodName = 'onAdding' + type.charAt(0).toUpperCase() + type.slice(1) + 'ToLog';
+      var methodName =
+        "onAdding" + type.charAt(0).toUpperCase() + type.slice(1) + "ToLog";
       this[methodName]?.(notif);
     }
-    if ($('dockedlog_' + notif.mobileLogId)) {
-      dojo.addClass('dockedlog_' + notif.mobileLogId, 'notif_' + type);
+    if ($("dockedlog_" + notif.mobileLogId)) {
+      dojo.addClass("dockedlog_" + notif.mobileLogId, "notif_" + type);
     }
 
     while (this.tooltipsToMap.length) {
       const tooltipToMap = this.tooltipsToMap.pop();
       if (!tooltipToMap || !tooltipToMap[1]) {
-          console.error('error tooltipToMap', tooltipToMap);
+        console.error("error tooltipToMap", tooltipToMap);
       } else {
-        const card = this.gamedatas.staticData.tableauCards[tooltipToMap[1]]
+        const card = this.gamedatas.staticData.tableauCards[tooltipToMap[1]];
         if (card) {
-          this.tooltipManager.addCardTooltip({nodeId: `pr_tooltip_${tooltipToMap[0]}`, card });
+          this.tooltipManager.addCardTooltip({
+            nodeId: `pr_tooltip_${tooltipToMap[0]}`,
+            card,
+          });
         }
       }
     }

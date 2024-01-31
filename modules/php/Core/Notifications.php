@@ -125,11 +125,23 @@ class Notifications
    **** GAME METHODS ****
    *************************/
 
-  public static function activateAbility($ability)
+  public static function activateAbility($ability, $data = null,  $ownerId = null)
   {
     self::notifyAll("activateAbility", '', [
       'player' => Players::get(),
       'ability' => $ability,
+      'data' => $data,
+      'ownerId' => $ownerId,
+    ]);
+  }
+
+  public static function deactivateAbility($ability, $data = null, $ownerId = null)
+  {
+    self::notifyAll("deactivateAbility", '', [
+      'player' => Players::get(),
+      'ability' => $ability,
+      'data' => $data,
+      'ownerId' => $ownerId,
     ]);
   }
 
@@ -288,12 +300,34 @@ class Notifications
     ]);
   }
 
-  public static function changeEmpireToMedievalState($player, $empire)
+  private static function getTokensInEmpire($empire)
+  {
+    $borders = [];
+    $cities = [];
+    foreach($empire->getCities() as $city) {
+      $token = $city->getToken();
+      if ($token !== null) {
+        $cities[] = $token;
+      }
+    }
+    foreach($empire->getBorders() as $border) {
+      if (!$border->isSeaBorder()) {
+        continue;
+      }
+      $tokens = $border->getTokens();
+      $borders = array_merge($borders, $tokens);
+    }
+    return array_merge($borders,$cities);
+  }
+
+  public static function changeEmpireToMedievalState($player, $empire, $fromReligion)
   {
     self::notifyAll("changeEmpireToMedievalState",  clienttranslate('${tkn_playerName} creates a Medieval ${tkn_boldText_empire_name} state'), [
       'player' => $player,
       'tkn_boldText_empire_name' => $empire->getName(),
       'empire' => $empire,
+      'tokensInEmpire' => self::getTokensInEmpire($empire),
+      'fromReligion' => $fromReligion,
     ]);
   }
 
@@ -313,10 +347,13 @@ class Notifications
 
   public static function changeEmpireToTheocracy($empire, $religion)
   {
+  
+
     self::notifyAll("changeEmpireToTheocracy",  clienttranslate('${tkn_boldText_empire_name} changes into a ${religion} Theocracy'), [
       'tkn_boldText_empire_name' => $empire->getName(),
       'empire' => $empire,
       'religion' => $religion,
+      'tokensInEmpire' => self::getTokensInEmpire($empire),
     ]);
   }
 
@@ -339,13 +376,6 @@ class Notifications
     ]);
   }
 
-  public static function deactivateAbility($ability)
-  {
-    self::notifyAll("deactivateAbility", '', [
-      'player' => Players::get(),
-      'ability' => $ability,
-    ]);
-  }
 
   public static function declareVictory($player, $victoryCard)
   {
@@ -497,6 +527,7 @@ class Notifications
       'tkn_boldText' => $toLocation !== null ? $toLocation->getName() : '',
       'token' => $token,
       'fromLocationId' => $fromLocationId,
+      'to' => $toLocation->jsonSerialize(),
     ]);
   }
 
@@ -593,7 +624,7 @@ class Notifications
       'tkn_mapToken' => $token->getSeparator() . '_' . $token->getType(),
       'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
-      'from' => $fromLocation,
+      'from' => $fromLocation->jsonSerialize(),
     ]);
   }
 

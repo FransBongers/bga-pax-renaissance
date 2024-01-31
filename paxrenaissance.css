@@ -75,6 +75,84 @@
   --paxRenIconScale: var(--paxRenLeftColumnScale);
 }
 
+#pr_supreme_religion_container {
+  position: absolute;
+  width: calc(var(--paxRenMapScale) * 200px);
+  left: calc(var(--paxRenMapScale) * 1252px);
+  top: calc(var(--paxRenMapScale) * 270px);
+}
+#pr_supreme_religion_container span {
+  font-weight: bold;
+  font-size: calc(var(--paxRenMapScale) * 40px);
+  letter-spacing: calc(var(--paxRenMapScale) * -2px);
+  text-shadow: 1px 0 0 white, 0 1px 0 white, -1px 0 0 white, 0 -1px 0 white, 1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white !important;
+}
+#pr_supreme_religion_container .pr_religion_icons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+#pr_supreme_religion_container .pr_religion_icons .pr_religion_icon {
+  background-image: url("img/religions.webp");
+  background-size: 300% 100%;
+  height: calc(var(--paxRenMapScale) * 60px);
+  width: calc(var(--paxRenMapScale) * 48px);
+}
+#pr_supreme_religion_container .pr_religion_icons .pr_religion_icon[data-religion=catholic] {
+  background-position-x: 0%;
+}
+#pr_supreme_religion_container .pr_religion_icons .pr_religion_icon[data-religion=islamic] {
+  background-position-x: 50%;
+}
+#pr_supreme_religion_container .pr_religion_icons .pr_religion_icon[data-religion=reformist] {
+  background-position-x: 100%;
+}
+#pr_supreme_religion_container #pr_supreme_religion_bishops {
+  margin-top: calc(var(--paxRenMapScale) * 16px);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  --paxRenTokenScale: var(--paxRenMapScale) * 0.8;
+}
+#pr_supreme_religion_container #pr_supreme_religion_bishops .pr_supreme_religion_bishop_counter {
+  height: calc(var(--paxRenMapScale) * 67px);
+  width: calc(var(--paxRenMapScale) * 32px);
+  position: relative;
+}
+#pr_supreme_religion_container #pr_supreme_religion_bishops .pr_supreme_religion_bishop_counter .pr_bishop {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+#pr_supreme_religion_container #pr_supreme_religion_bishops .pr_supreme_religion_bishop_counter span {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+#pr_supreme_religion_container #pr_supreme_religion_tokens_theocracies {
+  margin-top: calc(var(--paxRenMapScale) * 16px);
+  display: flex;
+  flex-direction: row;
+  --paxRenTokenScale: var(--paxRenMapScale) * 0.8;
+}
+#pr_supreme_religion_container #pr_supreme_religion_tokens_theocracies .pr_supreme_religion_token_counter {
+  height: calc(var(--paxRenMapScale) * 58px);
+  width: calc(var(--paxRenMapScale) * 68px);
+  position: relative;
+}
+#pr_supreme_religion_container #pr_supreme_religion_tokens_theocracies .pr_supreme_religion_token_counter .pr_supreme_religion_tokens_theocracies_icon_container {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: flex;
+  flex-direction: row;
+}
+#pr_supreme_religion_container #pr_supreme_religion_tokens_theocracies .pr_supreme_religion_token_counter span {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
 .pr_game_map_zoom_buttons {
   display: flex;
   flex-direction: row;
@@ -4279,33 +4357,68 @@
 
 #pr_supply {
   position: absolute;
-  width: calc(var(--paxRenMapScale) * 188px);
-  left: calc(var(--paxRenMapScale) * 1250px);
-  top: calc(var(--paxRenMapScale) * 500px);
+  width: calc(var(--paxRenMapScale) * 170px);
+  left: calc(var(--paxRenMapScale) * 1268px);
+  top: calc(var(--paxRenMapScale) * 580px);
+}
+#pr_supply #pr_supply_counters {
   display: grid;
-  grid-template-columns: calc(var(--paxRenMapScale) * 60px) calc(var(--paxRenMapScale) * 60px) calc(var(--paxRenMapScale) * 60px);
-  column-gap: calc(var(--paxRenMapScale) * 4px);
-  row-gap: calc(var(--paxRenMapScale) * 8px);
+  grid-template-columns: calc(var(--paxRenMapScale) * 50px) calc(var(--paxRenMapScale) * 50px) calc(var(--paxRenMapScale) * 50px);
+  column-gap: calc(var(--paxRenMapScale) * 10px);
+  row-gap: calc(var(--paxRenMapScale) * 2px);
+}
+#pr_supply span {
+  font-weight: bold;
+  font-size: calc(var(--paxRenMapScale) * 40px);
+  text-shadow: 1px 0 0 white, 0 1px 0 white, -1px 0 0 white, 0 -1px 0 white, 1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white !important;
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-bottom: calc(var(--paxRenMapScale) * 8px);
+}
+
+.pr_token_counter_container[data-token-type=bishop] {
+  height: calc(var(--paxRenMapScale) * 70px);
+}
+
+.pr_token_counter_container[data-token-type=knight] {
+  height: calc(var(--paxRenMapScale) * 58px);
+}
+
+.pr_token_counter_container[data-token-type=rook] {
+  height: calc(var(--paxRenMapScale) * 60px);
+}
+
+.pr_token_counter_container[data-token-type=pirate] {
+  height: calc(var(--paxRenMapScale) * 56px);
+}
+
+.pr_token_counter_container[data-token-type=pawn] {
+  height: calc(var(--paxRenMapScale) * 55px);
 }
 
 .pr_token_counter_container {
-  display: flex;
-  flex-direction: row;
-  width: calc(var(--paxRenMapScale) * 60px);
-  gap: calc(var(--paxRenMapScale) * 4px);
+  position: relative;
+  width: calc(var(--paxRenMapScale) * 47px);
 }
 .pr_token_counter_container .pr_token_counter_token {
+  position: relative;
+  top: 0px;
+  left: 0px;
   width: calc(var(--paxRenMapScale) * 40px);
   display: flex;
   flex-direction: row;
   justify-content: center;
 }
 .pr_token_counter_container span {
+  position: absolute;
+  bottom: calc(var(--paxRenMapScale) * -10px);
+  right: calc(var(--paxRenMapScale) * -5px);
   align-self: center;
   font-weight: bold;
   font-size: calc(var(--paxRenMapScale) * 40px);
   letter-spacing: calc(var(--paxRenMapScale) * -2px);
-  text-shadow: 2px 0 2px rgba(255, 255, 255, 0.6), 0 -2px 2px rgba(255, 255, 255, 0.6), 0 2px 2px rgba(255, 255, 255, 0.6), -2px 0 2px rgba(255, 255, 255, 0.6);
+  text-shadow: 1px 0 0 white, 0 1px 0 white, -1px 0 0 white, 0 -1px 0 white, 1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white !important;
 }
 
 .dijitTooltipContainer {

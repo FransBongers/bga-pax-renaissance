@@ -33,6 +33,7 @@ class PRPlayer {
     prestige: {},
     cards: {},
   };
+  private activeAbilities = [];
   // private hand: LineStock<TableauCard>;
 
   constructor({
@@ -51,6 +52,7 @@ class PRPlayer {
     this.playerName = player.name;
     this.playerColor = COLOR_MAP[player.color];
     this.playerHexColor = player.color;
+    this.activeAbilities = player.activeAbilities;
     const gamedatas = game.gamedatas;
 
     // if (this.playerId === this.game.getPlayerId()) {
@@ -74,9 +76,10 @@ class PRPlayer {
 
   updatePlayer({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     const playerGamedatas = gamedatas.players[this.playerId];
+    this.activeAbilities = playerGamedatas.activeAbilities;
     this.player = playerGamedatas;
     this.updatePlayerPanel({ playerGamedatas });
-    this.tableau.updateInterface({player: playerGamedatas});
+    this.tableau.updateInterface({ player: playerGamedatas });
   }
 
   // ..######..########.########.##.....##.########.
@@ -200,12 +203,12 @@ class PRPlayer {
       [REFORMIST]: 0,
       [LAW]: 0,
       [DISCOVERY]: 0,
-      [PATRON]: 0
+      [PATRON]: 0,
     };
     allCards.forEach((card) => {
       if (card.type === TABLEAU_CARD) {
         card.prestige.forEach((prestige) => {
-          prestigeCount[prestige] = prestigeCount[prestige] + 1; 
+          prestigeCount[prestige] = prestigeCount[prestige] + 1;
           // this.counters.prestige[prestige].incValue(1);
         });
       } else if (card.type === EMPIRE_CARD) {
@@ -217,7 +220,7 @@ class PRPlayer {
     });
     Object.keys(prestigeCount).forEach((prestige) => {
       this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
-    })
+    });
   }
 
   // ..######...########.########.########.########.########...######.
@@ -254,6 +257,20 @@ class PRPlayer {
 
   getPlayerId(): number {
     return this.playerId;
+  }
+
+  hasActiveAbility({ ability }: { ability: string }): boolean {
+    return this.activeAbilities.includes(ability);
+  }
+
+  activateAbility({ ability }: { ability: string }) {
+    this.activeAbilities.push(ability);
+  }
+
+  deactivateAbility({ ability }: { ability: string }) {
+    this.activeAbilities = this.activeAbilities.filter(
+      (item) => item !== ability
+    );
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

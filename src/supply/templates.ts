@@ -43,18 +43,21 @@ const SUPPLY_TOKENS_CONFIG: {
 
 const tplTokenCounter = ({id, separator, type}: {id: string; separator: string; type: string}) => {
   return `
-    <div class="pr_token_counter_container">
-      <span id="${id}_counter" ></span>
+    <div class="pr_token_counter_container" data-token-type="${type}">
       <div class="pr_token_counter_token">
         ${tplToken({id, type, separator})}
       </div>
+      <span id="${id}_counter" ></span>
     </div>`
 }
 
-const tplGameMapSupply = () => {
+const tplGameMapSupply = ({title}: {title: string;}) => {
   return `
     <div id="pr_supply">
-      
+      <span>${title}</span>
+      <div id="pr_supply_counters">
+
+      </div>
     </div>
   `
 }
