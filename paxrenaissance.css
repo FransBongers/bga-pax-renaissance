@@ -1414,21 +1414,21 @@
   border-radius: calc(var(--paxRenCardScale) * 5px);
 }
 
-.card.pr_selectable .card-sides .card-side {
+.card.pr_selectable > .card-sides > .card-side {
   box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) yellow !important;
 }
 
-.card.pr_selectable .card-sides .pr_square_card {
+.card.pr_selectable > .card-sides > .pr_square_card {
   box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) yellow !important;
 }
 
-.card.pr_selectable:hover .card-side,
-.card.pr_selected .card-side {
+.card.pr_selectable:hover > .card-sides > .card-side,
+.card.pr_selected > .card-sides > .card-side {
   box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) blue !important;
 }
 
-.card.pr_selectable:hover .pr_square_card,
-.card.pr_selected .pr_square_card {
+.card.pr_selectable:hover > .card-sides > .pr_square_card,
+.card.pr_selected > .card-sides > .pr_square_card {
   box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) blue !important;
 }
 
@@ -3165,7 +3165,7 @@
 }
 .log > .roundedbox .pr_icon[data-icon=florin], .log > .roundedboxinner .pr_icon[data-icon=florin] {
   --paxRenIconScale: 0.5;
-  margin-bottom: -6px;
+  margin-bottom: -4px;
 }
 .log > .roundedbox .pr_token, .log > .roundedboxinner .pr_token {
   display: inline-block;
@@ -4169,7 +4169,10 @@
 }
 
 .pr_player_tableau_cards_container[data-overlap=enabled] {
-  overflow-y: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 16px;
+  padding-top: 8px;
 }
 
 .pr_player_board_tableau_cards {
@@ -4186,19 +4189,19 @@
   flex-wrap: nowrap !important;
 }
 
-.pr_player_board_tableau_cards[data-region=east][data-overlap=enabled] .card:nth-child(n+2) {
+.pr_player_board_tableau_cards[data-region=east][data-overlap=enabled] > .card:nth-child(n+2) {
   margin-left: calc(var(--paxRenCardScale) * -110px);
 }
 
-.pr_player_board_tableau_cards[data-region=east][data-overlap=enabled][data-overlap-empire-squares=disabled] .pr_empire_square:not(:last-child) {
+.pr_player_board_tableau_cards[data-region=east][data-overlap=enabled][data-overlap-empire-squares=disabled] > .pr_empire_square:not(:last-child) {
   margin-right: calc(var(--paxRenCardScale) * 110px);
 }
 
-.pr_player_board_tableau_cards[data-region=west][data-overlap=enabled][data-overlap-empire-squares=disabled] .pr_empire_square:not(:last-child) {
+.pr_player_board_tableau_cards[data-region=west][data-overlap=enabled][data-overlap-empire-squares=disabled] > .pr_empire_square:not(:last-child) {
   margin-left: calc(var(--paxRenCardScale) * 110px);
 }
 
-.pr_player_board_tableau_cards[data-region=west][data-overlap=enabled] .card:nth-child(n+2) {
+.pr_player_board_tableau_cards[data-region=west][data-overlap=enabled] > .card:nth-child(n+2) {
   margin-right: calc(var(--paxRenCardScale) * -110px);
 }
 

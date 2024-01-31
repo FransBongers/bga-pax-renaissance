@@ -68,39 +68,39 @@
   border-radius: calc(var(--paxRenCardScale) * 5px);
 }
 
-.card.pr_selectable {
-  .card-sides {
-    .card-side {
-      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
-      // box-shadow: none !important;
-    }
-  }
-}
-
-.card.pr_selectable {
-  .card-sides {
-    .pr_square_card {
-      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
-    }
-  }
-}
-
-.card.pr_selectable:hover,
-.card.pr_selected {
+.card.pr_selectable > .card-sides > .card-side {
   // .card-sides {
-    .card-side {
-      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
+  //   .card-side {
+      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
       // box-shadow: none !important;
-    }
+  //   }
   // }
 }
 
-.card.pr_selectable:hover,
-.card.pr_selected {
+.card.pr_selectable > .card-sides > .pr_square_card {
   // .card-sides {
-    .pr_square_card {
+  //   .pr_square_card {
+      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selectable-color !important;
+  //   }
+  // }
+}
+
+.card.pr_selectable:hover > .card-sides > .card-side,
+.card.pr_selected > .card-sides > .card-side {
+  // .card-sides {
+    // .card-side {
       box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
-    }
+      // box-shadow: none !important;
+    // }
+  // }
+}
+
+.card.pr_selectable:hover > .card-sides > .pr_square_card,
+.card.pr_selected > .card-sides > .pr_square_card {
+  // .card-sides {
+    // .pr_square_card {
+      box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) base.$selected-color !important;
+    // }
   // }
 }
 

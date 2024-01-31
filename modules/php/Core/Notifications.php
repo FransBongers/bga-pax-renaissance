@@ -591,9 +591,13 @@ class Notifications
 
   public static function repressToken($player, $token, $fromLocation, $cost)
   {
-    $message = $cost > 0 ?
-      clienttranslate('${tkn_playerName} pays ${cost} ${tkn_florin} to repress ${tkn_mapToken} on ${tkn_boldText}')
-      : clienttranslate('${tkn_playerName} represses ${tkn_mapToken} on ${tkn_boldText}');
+    $message = clienttranslate('${tkn_playerName} represses ${tkn_mapToken} on ${tkn_boldText}');
+    if ($cost > 0) {
+      $message = clienttranslate('${tkn_playerName} pays ${cost} ${tkn_florin} to repress ${tkn_mapToken} on ${tkn_boldText}');
+    } else if ($cost < 0) {
+      $message = clienttranslate('${tkn_playerName} represses ${tkn_mapToken} on ${tkn_boldText} and gains ${gain} ${tkn_florin}');
+    }
+
 
 
     $isPawn = $token->getType() === PAWN;
@@ -604,6 +608,7 @@ class Notifications
       'token' => $token,
       'cost' => $cost,
       'tkn_florin' => clienttranslate('Florin(s)'),
+      'gain' => $cost * -1,
     ]);
   }
 
