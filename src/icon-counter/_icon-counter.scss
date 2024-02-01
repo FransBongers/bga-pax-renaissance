@@ -6,18 +6,20 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  // justify-content: center;
   position: relative;
   gap: 4px;
 
   .pr_icon[data-icon=florin] {
     width: 25px;
     height: 25px;
+    margin-left: 4px;
   }
 
   .pr_card_back_icon {
     width: 22px;
     height: 33px;
+    margin-left: 5px;
   }
 
   .pr_counter {

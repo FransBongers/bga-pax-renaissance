@@ -53,16 +53,15 @@ class PREN164X_CircassianMamluks extends \PaxRenaissance\Models\TableauCard
     ];
   }
 
-  public function deactivateAbility()
-  {
-    $owner = $this->getOwner();
-    Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY, null, $owner === null ? null : $owner->getId() );
-  }
-
   public function activateAbility()
   {
     $owner = $this->getOwner();
     Notifications::activateAbility(SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY, null, $owner === null ? null : $owner->getId() );
   }
 
+  public function deactivateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY, null, $owner === null ? null : $owner->getId() );
+  }
 }

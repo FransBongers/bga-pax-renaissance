@@ -2,6 +2,8 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Notifications;
+
 class PREN155X_EpicureanSwerve extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -43,5 +45,17 @@ class PREN155X_EpicureanSwerve extends \PaxRenaissance\Models\TableauCard
         ],
       ]
     ];
+  }
+
+  public function activateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::activateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2, null, $owner === null ? null : $owner->getId() );
+  }
+
+  public function deactivateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::deactivateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2, null, $owner === null ? null : $owner->getId() );
   }
 }

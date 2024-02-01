@@ -57,7 +57,18 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     ];
     // abilities needed to track counters in the frontend:
     $activeAbilities = [];
-    foreach([SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY] as $ability) {
+    $abilitiesToCheck = [
+      SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS,
+      SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY,
+      SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1,
+      SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2,
+      SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1,
+      SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2,
+      SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3,
+      SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1,
+      SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2,
+    ];
+    foreach ($abilitiesToCheck as $ability) {
       if ($this->hasSpecialAbility($ability)) {
         $activeAbilities[] = $ability;
       }
@@ -99,7 +110,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     foreach ($tableauCards as $card) {
       $specialAbilities = $card->getSpecialAbilities();
 
-      foreach($specialAbilities as $ability) {
+      foreach ($specialAbilities as $ability) {
         if (!isset($ability['abilityAction']) || !$ability['abilityAction']) {
           continue;
         }
@@ -221,7 +232,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
       }
       $vassals = $card->getVassals();
       $queensAndVassals = array_merge($queensAndVassals, $card->getQueens(), $vassals);
-      foreach($vassals as $vassal) {
+      foreach ($vassals as $vassal) {
         $vassalQueens = $vassal->getQueens();
         if (count($vassalQueens) > 0) {
           $queensAndVassals = array_merge($queensAndVassals, $vassalQueens);

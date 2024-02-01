@@ -2,6 +2,8 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Notifications;
+
 class PREN102X_SahnISemanMadrese extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -18,7 +20,7 @@ class PREN102X_SahnISemanMadrese extends \PaxRenaissance\Models\TableauCard
     $this->region = EAST;
     $this->specialAbilities = [
       [
-        'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY,
+        'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1,
         'title' => clienttranslate('ASTRONOMICAL NAVIGATION:'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige} count as Concessions in a Globalization Victory.'),
@@ -28,5 +30,17 @@ class PREN102X_SahnISemanMadrese extends \PaxRenaissance\Models\TableauCard
         ],
       ]
     ];
+  }
+
+  public function activateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::activateAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1, null, $owner === null ? null : $owner->getId() );
+  }
+
+  public function deactivateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1, null, $owner === null ? null : $owner->getId() );
   }
 }

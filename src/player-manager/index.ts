@@ -65,6 +65,10 @@ class PlayerManager {
     return Object.values(this.players);
   }
 
+  getPlayerForBank({bank}: {bank: string;}): PRPlayer {
+    return this.getPlayers().find((player) => player.getBank() === bank);
+  }
+
   getPlayerIds(): number[] {
     return Object.keys(this.players).map(Number);
   }

@@ -260,9 +260,12 @@ var SA_IMMUNE_TO_APOSTASY = 'SA_IMMUNE_TO_APOSTASY';
 var SA_IMMUNE_TO_SILENCING = 'SA_IMMUNE_TO_SILENCING';
 var SA_IN_CRUSADE_COUNT_ROOKS_AS_KNIGHTS = 'SA_IN_CRUSADE_COUNT_ROOKS_AS_KNIGHTS';
 var SA_PERFORM_APOSTASY_AS_AN_ACTION = 'SA_PERFORM_APOSTASY_AS_AN_ACTION';
-var SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY = 'SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY';
+var SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1 = 'SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1';
+var SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2 = 'SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2';
 var SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY = 'SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY';
-var SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY = 'SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY';
+var SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1 = 'SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1';
+var SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2 = 'SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2';
+var SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3 = 'SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3';
 var SA_PATRON_REDUCES_VOTE_OPS_COST = 'SA_PATRON_REDUCES_VOTE_OPS_COST';
 var SA_PORTUGAL_FRANCE_NOT_ADJACENT = 'SA_PORTUGAL_FRANCE_NOT_ADJACENT';
 var SA_REPRESSED_TOKENS_COUNTS_AS_KNIGHT_IN_EAST_CAMPAIGN = 'SA_REPRESSED_TOKENS_COUNTS_AS_KNIGHT_IN_EAST_CAMPAIGN';
@@ -3378,7 +3381,7 @@ var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map
 var tplGameMapEmpireCards = function () { return "\n  ".concat(Object.entries(THRONES_CONFIG)
     .map(function (_a) {
     var empire = _a[0], _b = _a[1], top = _b.top, left = _b.left, location = _b.location, empireSquareId = _b.empireSquareId;
-    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne pr_empire_throne_").concat(location, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n          <div id=\"pr_").concat(empire, "_coat_of_arms\" class=\"pr_empire_throne_coat_of_arms\"></div>\n          <div id=\"").concat(empireSquareId, "_throne_tokens\" class=\"pr_empire_throne_tokens\"></div>\n        </div>");
+    return "<div id=\"pr_".concat(empire, "_throne\" class=\"pr_empire_throne pr_empire_throne_").concat(location, "\" style=\"top: calc(var(--paxRenMapScale) * ").concat(top, "px); left: calc(var(--paxRenMapScale) * ").concat(left, "px);\">\n          <div id=\"pr_").concat(empire, "_coat_of_arms\" class=\"pr_empire_throne_coat_of_arms pr_coat_of_arms\"></div>\n          <div id=\"").concat(empireSquareId, "_throne_tokens\" class=\"pr_empire_throne_tokens\"></div>\n        </div>");
 })
     .join(""), "\n"); };
 var tplGameMapMapBorders = function () {
@@ -3491,12 +3494,12 @@ var IconCounter = (function () {
         this.setup(config);
     }
     IconCounter.prototype.setup = function (_a) {
-        var icon = _a.icon, initialValue = _a.initialValue, extraIconClasses = _a.extraIconClasses;
+        var icon = _a.icon, initialValue = _a.initialValue, extraIconClasses = _a.extraIconClasses, insert = _a.insert, dataAttribute = _a.dataAttribute;
         var container = document.getElementById(this.containerId);
         if (!container) {
             return;
         }
-        container.insertAdjacentHTML("beforeend", tplIconCounter({ extraIconClasses: extraIconClasses, icon: icon, iconCounterId: this.iconCounterId, value: initialValue }));
+        container.insertAdjacentHTML(insert || "beforeend", tplIconCounter({ extraIconClasses: extraIconClasses, icon: icon, iconCounterId: this.iconCounterId, value: initialValue, dataAttribute: dataAttribute }));
         this.counter = new ebg.counter();
         this.counter.create("".concat(this.iconCounterId, "_counter"));
         this.counter.setValue(initialValue);
@@ -3532,8 +3535,8 @@ var IconCounter = (function () {
     return IconCounter;
 }());
 var tplIconCounter = function (_a) {
-    var icon = _a.icon, iconCounterId = _a.iconCounterId, value = _a.value, extraIconClasses = _a.extraIconClasses;
-    return "\n  <div id=\"".concat(iconCounterId, "\" class=\"pr_icon_counter_container").concat(value === 0 ? ' pr_none' : '', "\">\n    <span id=\"").concat(iconCounterId, "_counter\" class=\"pr_counter\"></span>\n    <div id=\"").concat(iconCounterId, "_icon\" class=\"pr_icon").concat(extraIconClasses ? " ".concat(extraIconClasses) : '', "\" data-icon=\"").concat(icon, "\"></div>\n  </div>");
+    var icon = _a.icon, iconCounterId = _a.iconCounterId, value = _a.value, extraIconClasses = _a.extraIconClasses, dataAttribute = _a.dataAttribute;
+    return "\n  <div id=\"".concat(iconCounterId, "\" class=\"pr_icon_counter_container").concat(value === 0 ? " pr_none" : "", "\">\n    <span id=\"").concat(iconCounterId, "_counter\" class=\"pr_counter\"></span>\n    <div id=\"").concat(iconCounterId, "_icon\" class=\"pr_icon").concat(extraIconClasses ? " ".concat(extraIconClasses) : "", "\" data-icon=\"").concat(icon, "\"").concat(dataAttribute ? " ".concat(dataAttribute.key, "=\"").concat(dataAttribute.value, "\"") : '', "></div>\n  </div>");
 };
 var tplIcon = function (_a) {
     var id = _a.id, children = _a.children, classes = _a.classes, _b = _a.extra, extra = _b === void 0 ? "" : _b, icon = _a.icon, style = _a.style;
@@ -4055,13 +4058,32 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_activateAbility = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, ability, playerId, data, ownerId, player, valueChange;
+            var _a, ability, playerId, data, ownerId, player, concessionChange, valueChange, lawChange;
             return __generator(this, function (_b) {
                 _a = notif.args, ability = _a.ability, playerId = _a.playerId, data = _a.data, ownerId = _a.ownerId;
                 player = this.getPlayer({ playerId: playerId });
                 switch (ability) {
+                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+                        if (ownerId == null) {
+                            break;
+                        }
+                        this.getPlayer({
+                            playerId: ownerId,
+                        }).counters.republic.incValue(1);
+                        break;
                     case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
                         this.game.gameMap.setVenice2Visibility(true);
+                        break;
+                    case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1:
+                    case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2:
+                        if (ownerId == null) {
+                            break;
+                        }
+                        concessionChange = this.getPlayer({
+                            playerId: ownerId,
+                        }).counters.prestige.patron.getValue();
+                        this.getPlayer({ playerId: ownerId }).counters.concessions.incValue(concessionChange);
                         break;
                     case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
                         valueChange = ownerId !== null
@@ -4071,6 +4093,17 @@ var NotificationManager = (function () {
                             : 0;
                         this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
                         player.activateAbility({ ability: ability });
+                        break;
+                    case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1:
+                    case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2:
+                    case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3:
+                        if (ownerId == null) {
+                            break;
+                        }
+                        lawChange = this.getPlayer({
+                            playerId: ownerId,
+                        }).counters.prestige.patron.getValue();
+                        this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(lawChange);
                         break;
                     case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
                         this.game.gameMap.supremeReligion.reformist.bishops.incValue(data.bishops);
@@ -4086,13 +4119,32 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_deactivateAbility = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, ability, data, playerId, ownerId, player, valueChange;
+            var _a, ability, data, playerId, ownerId, player, concessionChange, valueChange, lawChange;
             return __generator(this, function (_b) {
                 _a = notif.args, ability = _a.ability, data = _a.data, playerId = _a.playerId, ownerId = _a.ownerId;
                 player = this.getPlayer({ playerId: playerId });
                 switch (ability) {
+                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+                        if (ownerId == null) {
+                            break;
+                        }
+                        this.getPlayer({
+                            playerId: ownerId,
+                        }).counters.republic.incValue(-1);
+                        break;
                     case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
                         this.game.gameMap.setVenice2Visibility(false);
+                        break;
+                    case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1:
+                    case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2:
+                        if (ownerId == null) {
+                            break;
+                        }
+                        concessionChange = this.getPlayer({
+                            playerId: ownerId,
+                        }).counters.prestige.patron.getValue() * -1;
+                        this.getPlayer({ playerId: ownerId }).counters.concessions.incValue(concessionChange);
                         break;
                     case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
                         valueChange = ownerId !== null
@@ -4102,6 +4154,17 @@ var NotificationManager = (function () {
                             : 0;
                         this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
                         player.deactivateAbility({ ability: ability });
+                        break;
+                    case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1:
+                    case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2:
+                    case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3:
+                        if (ownerId == null) {
+                            break;
+                        }
+                        lawChange = this.getPlayer({
+                            playerId: ownerId,
+                        }).counters.prestige.patron.getValue() * -1;
+                        this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(lawChange);
                         break;
                     case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
                         this.game.gameMap.supremeReligion.reformist.bishops.incValue(-data.bishops);
@@ -4297,6 +4360,7 @@ var NotificationManager = (function () {
                         player = this.getPlayer({ playerId: playerId });
                         this.game.gameMap.updateCoatOfArms({ card: card });
                         this.removePrestige({ prestige: card[oldSide].prestige, player: player });
+                        player.counters[oldSide].incValue(-1);
                         if (!(formerSuzerain !== null)) return [3, 2];
                         this.game.tableauCardManager.removeVassal({
                             suzerain: formerSuzerain,
@@ -4311,6 +4375,7 @@ var NotificationManager = (function () {
                         _b.label = 3;
                     case 3:
                         this.addPrestige({ prestige: card[card.side].prestige, player: player });
+                        player.counters[card.side].incValue(1);
                         return [2];
                 }
             });
@@ -4497,6 +4562,11 @@ var NotificationManager = (function () {
                             location: to,
                             addOrRemove: "add",
                         });
+                        if (isPawn) {
+                            this.game.playerManager
+                                .getPlayerForBank({ bank: split[1] })
+                                .counters.concessions.incValue(1);
+                        }
                         return [2, Promise.resolve()];
                 }
             });
@@ -4652,14 +4722,24 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_repressToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, cost, element, empireSquareId, repressTokensToThrones, toNode;
+            var _a, playerId, token, cost, from, element, empireSquareId, repressTokensToThrones, toNode;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost;
+                        _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost, from = _a.from;
                         this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
                         element = document.getElementById(token.id);
                         empireSquareId = token.location;
+                        this.adjustSupremeReligionCounters({
+                            token: token,
+                            location: from,
+                            addOrRemove: "remove",
+                        });
+                        if (token.type === PAWN) {
+                            this.game.playerManager
+                                .getPlayerForBank({ bank: token.separator })
+                                .counters.concessions.incValue(-1);
+                        }
                         repressTokensToThrones = this.game.settings.get({
                             id: REPRESS_TOKENS_TO_THRONES,
                         }) === ENABLED;
@@ -4726,6 +4806,11 @@ var NotificationManager = (function () {
                     location: from,
                     addOrRemove: "remove",
                 });
+                if (token.type === PAWN) {
+                    this.game.playerManager
+                        .getPlayerForBank({ bank: token.separator })
+                        .counters.concessions.incValue(-1);
+                }
                 node = document.getElementById(token.id);
                 if (node) {
                     node.remove();
@@ -4889,12 +4974,14 @@ var NotificationManager = (function () {
     NotificationManager.prototype.addEmpireSquarePrestige = function (_a) {
         var empireSquare = _a.empireSquare, side = _a.side, playerId = _a.playerId;
         var owner = this.getPlayer({ playerId: playerId });
+        owner.counters[side].incValue(1);
         var prestige = empireSquare[side].prestige.concat(this.getQueensPrestige({ queens: empireSquare.queens }));
         this.addPrestige({ player: owner, prestige: prestige });
     };
     NotificationManager.prototype.removeEmpireSquarePrestige = function (_a) {
         var empireSquare = _a.empireSquare, side = _a.side, playerId = _a.playerId;
         var owner = this.getPlayer({ playerId: playerId });
+        owner.counters[side].incValue(-1);
         var prestige = empireSquare[side].prestige.concat(this.getQueensPrestige({ queens: empireSquare.queens }));
         this.removePrestige({ player: owner, prestige: prestige });
     };
@@ -4917,6 +5004,27 @@ var NotificationManager = (function () {
                 })) {
                     _this.game.gameMap.supremeReligion.islamic.bishops.incValue(1);
                 }
+                [
+                    SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1,
+                    SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2,
+                ].forEach(function (ability) {
+                    if (player.hasActiveAbility({
+                        ability: ability,
+                    })) {
+                        player.counters.concessions.incValue(1);
+                    }
+                });
+                [
+                    SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1,
+                    SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2,
+                    SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3,
+                ].forEach(function (ability) {
+                    if (player.hasActiveAbility({
+                        ability: ability,
+                    })) {
+                        player.counters.prestige.law.incValue(1);
+                    }
+                });
             }
         });
     };
@@ -4931,6 +5039,27 @@ var NotificationManager = (function () {
                 })) {
                     _this.game.gameMap.supremeReligion.islamic.bishops.incValue(-1);
                 }
+                [
+                    SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1,
+                    SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2,
+                ].forEach(function (ability) {
+                    if (player.hasActiveAbility({
+                        ability: ability,
+                    })) {
+                        player.counters.concessions.incValue(-1);
+                    }
+                });
+                [
+                    SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1,
+                    SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2,
+                    SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3,
+                ].forEach(function (ability) {
+                    if (player.hasActiveAbility({
+                        ability: ability,
+                    })) {
+                        player.counters.prestige.law.incValue(-1);
+                    }
+                });
             }
         });
     };
@@ -5122,6 +5251,10 @@ var PlayerManager = (function () {
     PlayerManager.prototype.getPlayers = function () {
         return Object.values(this.players);
     };
+    PlayerManager.prototype.getPlayerForBank = function (_a) {
+        var bank = _a.bank;
+        return this.getPlayers().find(function (player) { return player.getBank() === bank; });
+    };
     PlayerManager.prototype.getPlayerIds = function () {
         return Object.keys(this.players).map(Number);
     };
@@ -5167,7 +5300,7 @@ var PRPlayer = (function () {
         var playerGamedatas = gamedatas.players[this.playerId];
         this.activeAbilities = playerGamedatas.activeAbilities;
         this.player = playerGamedatas;
-        this.updatePlayerPanel({ playerGamedatas: playerGamedatas });
+        this.updatePlayerPanel({ playerGamedatas: playerGamedatas, gamedatas: gamedatas });
         this.tableau.updateInterface({ player: playerGamedatas });
     };
     PRPlayer.prototype.setupHand = function (_a) {
@@ -5180,14 +5313,34 @@ var PRPlayer = (function () {
         var gamedatas = _a.gamedatas, player = _a.player;
         var playerGamedatas = gamedatas.players[this.playerId];
         this.tableau = new PlayerTableau({ game: this.game, player: player });
-        this.setupPlayerPanel({ playerGamedatas: playerGamedatas, player: player });
+        this.setupPlayerPanel({ playerGamedatas: playerGamedatas, player: player, gamedatas: gamedatas });
         this.setupHand({ gamedatas: gamedatas, player: player });
     };
     PRPlayer.prototype.setupPlayerPanel = function (_a) {
         var _this = this;
-        var playerGamedatas = _a.playerGamedatas, player = _a.player;
+        var playerGamedatas = _a.playerGamedatas, player = _a.player, gamedatas = _a.gamedatas;
         var playerBoardDiv = $("player_board_" + this.playerId);
-        playerBoardDiv.insertAdjacentHTML("beforeend", tplPlayerPanel({ playerId: this.playerId }));
+        playerBoardDiv.insertAdjacentHTML("beforeend", tplPlayerPanel({ playerId: this.playerId, banker: this.bank }));
+        this.counters.florins = new IconCounter({
+            containerId: "pr_player_panel_icons_".concat(this.playerId),
+            icon: "florin",
+            iconCounterId: "pr_florins_counter_".concat(this.playerId),
+            initialValue: player.florins,
+        });
+        this.counters.cards.west = new IconCounter({
+            containerId: "pr_player_panel_icons_".concat(this.playerId),
+            extraIconClasses: "pr_card_back_icon",
+            icon: "west_back",
+            iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
+            initialValue: 0,
+        });
+        this.counters.cards.east = new IconCounter({
+            containerId: "pr_player_panel_icons_".concat(this.playerId),
+            extraIconClasses: "pr_card_back_icon",
+            icon: "east_back",
+            iconCounterId: "pr_cards_east_counter_".concat(this.playerId),
+            initialValue: 0,
+        });
         [CATHOLIC, ISLAMIC, REFORMIST].forEach(function (prestige) {
             _this.counters.prestige[prestige] = new IconCounter({
                 containerId: "pr_player_panel_icons_".concat(_this.playerId),
@@ -5197,14 +5350,7 @@ var PRPlayer = (function () {
                 initialValue: 0,
             });
         });
-        this.counters.cards.west = new IconCounter({
-            containerId: "pr_player_panel_icons_".concat(this.playerId),
-            extraIconClasses: "pr_card_back_icon",
-            icon: "west_back",
-            iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
-            initialValue: 0,
-        });
-        [LAW, DISCOVERY, PATRON].forEach(function (prestige) {
+        [DISCOVERY, LAW, PATRON].forEach(function (prestige) {
             _this.counters.prestige[prestige] = new IconCounter({
                 containerId: "pr_player_panel_icons_".concat(_this.playerId),
                 extraIconClasses: "pr_prestige_icon",
@@ -5213,18 +5359,38 @@ var PRPlayer = (function () {
                 initialValue: 0,
             });
         });
-        this.counters.cards.east = new IconCounter({
+        this.counters.concessions = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
-            extraIconClasses: "pr_card_back_icon",
-            icon: "east_back",
-            iconCounterId: "pr_cards_east_counter_".concat(this.playerId),
+            extraIconClasses: "pr_concession_icon",
+            icon: "concession",
+            iconCounterId: "pr_concessions_counter_".concat(this.playerId),
             initialValue: 0,
+            dataAttribute: {
+                key: "data-bank",
+                value: this.bank,
+            },
         });
-        this.counters.florins = new IconCounter({
+        this.counters.republic = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
-            icon: "florin",
-            iconCounterId: "pr_florins_counter_".concat(this.playerId),
-            initialValue: player.florins,
+            extraIconClasses: "pr_square_card_icon",
+            icon: "republic",
+            iconCounterId: "pr_republics_counter_".concat(this.playerId),
+            initialValue: 0,
+            dataAttribute: {
+                key: "data-bank",
+                value: this.bank,
+            },
+        });
+        this.counters.king = new IconCounter({
+            containerId: "pr_player_panel_icons_".concat(this.playerId),
+            extraIconClasses: "pr_square_card_icon",
+            icon: "king",
+            iconCounterId: "pr_kings_counter_".concat(this.playerId),
+            initialValue: 0,
+            dataAttribute: {
+                key: "data-bank",
+                value: this.bank,
+            },
         });
         if (COLORS_WITH_SHADOW.includes(this.getColor())) {
             var node = document.getElementById("player_name_".concat(this.playerId));
@@ -5232,13 +5398,13 @@ var PRPlayer = (function () {
                 node.setAttribute("data-shadow", "true");
             }
         }
-        this.updatePlayerPanel({ playerGamedatas: playerGamedatas });
+        this.updatePlayerPanel({ playerGamedatas: playerGamedatas, gamedatas: gamedatas });
     };
     PRPlayer.prototype.updatePlayerPanel = function (_a) {
         var _b;
         var _this = this;
-        var _c;
-        var playerGamedatas = _a.playerGamedatas;
+        var _c, _d, _e, _f, _g, _h;
+        var gamedatas = _a.gamedatas, playerGamedatas = _a.playerGamedatas;
         this.counters.cards.east.setValue(playerGamedatas.hand.counts.east);
         this.counters.cards.west.setValue(playerGamedatas.hand.counts.west);
         this.counters.florins.setValue(playerGamedatas.florins);
@@ -5268,9 +5434,16 @@ var PRPlayer = (function () {
                 });
             }
         });
-        Object.keys(prestigeCount).forEach(function (prestige) {
+        Object.keys(prestigeCount)
+            .filter(function (prestige) { return [CATHOLIC, ISLAMIC, REFORMIST, PATRON].includes(prestige); })
+            .forEach(function (prestige) {
             _this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
         });
+        this.counters.prestige[LAW].setValue(((_d = gamedatas.victoryCounts.lawPrestige.find(function (item) { return item.playerId === _this.playerId; })) === null || _d === void 0 ? void 0 : _d.lawPrestige) || 0);
+        this.counters.prestige[DISCOVERY].setValue(((_e = gamedatas.victoryCounts.discoveryPrestige.find(function (item) { return item.playerId === _this.playerId; })) === null || _e === void 0 ? void 0 : _e.discoveryPrestige) || 0);
+        this.counters.king.setValue(((_f = gamedatas.victoryCounts.kings.find(function (item) { return item.playerId === _this.playerId; })) === null || _f === void 0 ? void 0 : _f.numberOfKings) || 0);
+        this.counters.republic.setValue(((_g = gamedatas.victoryCounts.republics.find(function (item) { return item.playerId === _this.playerId; })) === null || _g === void 0 ? void 0 : _g.numberOfRepublics) || 0);
+        this.counters.concessions.setValue(((_h = gamedatas.victoryCounts.concessions.find(function (item) { return item.playerId === _this.playerId; })) === null || _h === void 0 ? void 0 : _h.numberOfConcessions) || 0);
     };
     PRPlayer.prototype.getBank = function () {
         return this.bank;
@@ -5490,8 +5663,8 @@ var tplPlayerTableauContent = function (_a) {
     return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\" data-overlap=\"").concat(overlap, "\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n    <div class=\"pr_player_board_container\">\n      <div id=\"old_maids_").concat(playerId, "\" class=\"pr_old_maids_container\"></div>\n      <div id=\"player_bank_board_").concat(playerId, "\" class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    </div>\n\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n  </div>\n    ");
 };
 var tplPlayerPanel = function (_a) {
-    var playerId = _a.playerId;
-    return "<div id=\"pr_player_panel_".concat(playerId, "\" class=\"pr_player_panel\">\n            <div id=\"pr_player_panel_icons_").concat(playerId, "\" class=\"pr_player_panel_icons\"></div>\n          </div>");
+    var banker = _a.banker, playerId = _a.playerId;
+    return "<div id=\"pr_player_panel_".concat(playerId, "\" class=\"pr_player_panel\">\n            <div id=\"pr_player_panel_icons_").concat(playerId, "\" class=\"pr_player_panel_icons\"></div>\n            <div class=\"pr_coat_of_arms\" data-owner=\"").concat(banker, "\"></div>\n          </div>");
 };
 var tplPlayerTableauxContainer = function (_a) {
     var playerOrder = _a.playerOrder;

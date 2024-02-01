@@ -609,6 +609,7 @@ class Notifications
       'cost' => $cost,
       'tkn_florin' => clienttranslate('Florin(s)'),
       'gain' => $cost * -1,
+      'from' => $fromLocation,
     ]);
   }
 

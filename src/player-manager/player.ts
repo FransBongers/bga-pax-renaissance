@@ -24,6 +24,9 @@ class PRPlayer {
       discovery?: IconCounter;
       patron?: IconCounter;
     };
+    king?: IconCounter;
+    republic?: IconCounter;
+    concessions?: IconCounter;
     cards?: {
       west?: IconCounter;
       east?: IconCounter;
@@ -78,7 +81,7 @@ class PRPlayer {
     const playerGamedatas = gamedatas.players[this.playerId];
     this.activeAbilities = playerGamedatas.activeAbilities;
     this.player = playerGamedatas;
-    this.updatePlayerPanel({ playerGamedatas });
+    this.updatePlayerPanel({ playerGamedatas, gamedatas });
     this.tableau.updateInterface({ player: playerGamedatas });
   }
 
@@ -113,23 +116,45 @@ class PRPlayer {
     const playerGamedatas = gamedatas.players[this.playerId];
     this.tableau = new PlayerTableau({ game: this.game, player });
     // this.setupPlayerTableau({ playerGamedatas });
-    this.setupPlayerPanel({ playerGamedatas, player });
+    this.setupPlayerPanel({ playerGamedatas, player, gamedatas });
     this.setupHand({ gamedatas, player });
   }
 
   setupPlayerPanel({
     playerGamedatas,
     player,
+    gamedatas,
   }: {
     playerGamedatas: PaxRenaissancePlayerData;
     player: PaxRenaissancePlayerData;
+    gamedatas: PaxRenaissanceGamedatas;
   }) {
     const playerBoardDiv: HTMLElement = $("player_board_" + this.playerId);
     playerBoardDiv.insertAdjacentHTML(
       "beforeend",
-      tplPlayerPanel({ playerId: this.playerId })
+      tplPlayerPanel({ playerId: this.playerId, banker: this.bank })
     );
 
+    this.counters.florins = new IconCounter({
+      containerId: `pr_player_panel_icons_${this.playerId}`,
+      icon: "florin",
+      iconCounterId: `pr_florins_counter_${this.playerId}`,
+      initialValue: player.florins,
+    });
+    this.counters.cards.west = new IconCounter({
+      containerId: `pr_player_panel_icons_${this.playerId}`,
+      extraIconClasses: "pr_card_back_icon",
+      icon: "west_back",
+      iconCounterId: `pr_cards_west_counter_${this.playerId}`,
+      initialValue: 0,
+    });
+    this.counters.cards.east = new IconCounter({
+      containerId: `pr_player_panel_icons_${this.playerId}`,
+      extraIconClasses: "pr_card_back_icon",
+      icon: "east_back",
+      iconCounterId: `pr_cards_east_counter_${this.playerId}`,
+      initialValue: 0,
+    });
     [CATHOLIC, ISLAMIC, REFORMIST].forEach((prestige) => {
       this.counters.prestige[prestige] = new IconCounter({
         containerId: `pr_player_panel_icons_${this.playerId}`,
@@ -139,14 +164,8 @@ class PRPlayer {
         initialValue: 0,
       });
     });
-    this.counters.cards.west = new IconCounter({
-      containerId: `pr_player_panel_icons_${this.playerId}`,
-      extraIconClasses: "pr_card_back_icon",
-      icon: "west_back",
-      iconCounterId: `pr_cards_west_counter_${this.playerId}`,
-      initialValue: 0,
-    });
-    [LAW, DISCOVERY, PATRON].forEach((prestige) => {
+
+    [DISCOVERY, LAW, PATRON].forEach((prestige) => {
       this.counters.prestige[prestige] = new IconCounter({
         containerId: `pr_player_panel_icons_${this.playerId}`,
         extraIconClasses: "pr_prestige_icon",
@@ -155,18 +174,41 @@ class PRPlayer {
         initialValue: 0,
       });
     });
-    this.counters.cards.east = new IconCounter({
+
+    this.counters.concessions = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
-      extraIconClasses: "pr_card_back_icon",
-      icon: "east_back",
-      iconCounterId: `pr_cards_east_counter_${this.playerId}`,
+      extraIconClasses: "pr_concession_icon",
+      icon: `concession`,
+      iconCounterId: `pr_concessions_counter_${this.playerId}`,
       initialValue: 0,
+      dataAttribute: {
+        key: "data-bank",
+        value: this.bank,
+      },
     });
-    this.counters.florins = new IconCounter({
+
+    this.counters.republic = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
-      icon: "florin",
-      iconCounterId: `pr_florins_counter_${this.playerId}`,
-      initialValue: player.florins,
+      extraIconClasses: "pr_square_card_icon",
+      icon: `republic`,
+      iconCounterId: `pr_republics_counter_${this.playerId}`,
+      initialValue: 0,
+      dataAttribute: {
+        key: "data-bank",
+        value: this.bank,
+      },
+    });
+
+    this.counters.king = new IconCounter({
+      containerId: `pr_player_panel_icons_${this.playerId}`,
+      extraIconClasses: "pr_square_card_icon",
+      icon: `king`,
+      iconCounterId: `pr_kings_counter_${this.playerId}`,
+      initialValue: 0,
+      dataAttribute: {
+        key: "data-bank",
+        value: this.bank,
+      },
     });
 
     if (COLORS_WITH_SHADOW.includes(this.getColor())) {
@@ -176,13 +218,15 @@ class PRPlayer {
       }
     }
 
-    this.updatePlayerPanel({ playerGamedatas });
+    this.updatePlayerPanel({ playerGamedatas, gamedatas });
   }
 
   updatePlayerPanel({
+    gamedatas,
     playerGamedatas,
   }: {
     playerGamedatas: PaxRenaissancePlayerData;
+    gamedatas: PaxRenaissanceGamedatas;
   }) {
     this.counters.cards.east.setValue(playerGamedatas.hand.counts.east);
     this.counters.cards.west.setValue(playerGamedatas.hand.counts.west);
@@ -218,9 +262,36 @@ class PRPlayer {
         });
       }
     });
-    Object.keys(prestigeCount).forEach((prestige) => {
-      this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
-    });
+    Object.keys(prestigeCount)
+      .filter((prestige) => [CATHOLIC, ISLAMIC, REFORMIST, PATRON].includes(prestige))
+      .forEach((prestige) => {
+        this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
+      });
+    this.counters.prestige[LAW].setValue(
+      gamedatas.victoryCounts.lawPrestige.find(
+        (item) => item.playerId === this.playerId
+      )?.lawPrestige || 0
+    );
+    this.counters.prestige[DISCOVERY].setValue(
+      gamedatas.victoryCounts.discoveryPrestige.find(
+        (item) => item.playerId === this.playerId
+      )?.discoveryPrestige || 0
+    );
+    this.counters.king.setValue(
+      gamedatas.victoryCounts.kings.find(
+        (item) => item.playerId === this.playerId
+      )?.numberOfKings || 0
+    );
+    this.counters.republic.setValue(
+      gamedatas.victoryCounts.republics.find(
+        (item) => item.playerId === this.playerId
+      )?.numberOfRepublics || 0
+    );
+    this.counters.concessions.setValue(
+      gamedatas.victoryCounts.concessions.find(
+        (item) => item.playerId === this.playerId
+      )?.numberOfConcessions || 0
+    );
   }
 
   // ..######...########.########.########.########.########...######.

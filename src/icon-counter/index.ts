@@ -12,14 +12,14 @@ class IconCounter {
     
   }
 
-  setup({icon, initialValue, extraIconClasses}: IconCounterConfig) {
+  setup({icon, initialValue, extraIconClasses, insert, dataAttribute}: IconCounterConfig) {
     const container = document.getElementById(this.containerId);
     if (!container) {
       return;
     }
     container.insertAdjacentHTML(
-      "beforeend",
-      tplIconCounter({ extraIconClasses, icon, iconCounterId: this.iconCounterId, value: initialValue })
+      insert || "beforeend",
+      tplIconCounter({ extraIconClasses, icon, iconCounterId: this.iconCounterId, value: initialValue, dataAttribute })
     );
 
     this.counter = new ebg.counter();

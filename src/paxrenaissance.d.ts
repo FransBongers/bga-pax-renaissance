@@ -15,7 +15,7 @@ interface PaxRenaissanceGame extends Game {
   addDangerActionButton: (props: AddButtonProps) => void;
   addLogClass: () => void;
   addPrimaryActionButton: (props: AddButtonProps) => void;
-  addPassButton: (props: { optionalAction: boolean; text?: string; }) => void;
+  addPassButton: (props: { optionalAction: boolean; text?: string }) => void;
   addSecondaryActionButton: (props: AddButtonProps) => void;
   addSkipButton: (props: { callback: Function | string }) => void;
   addUndoButtons: (props: CommonArgs) => void;
@@ -35,7 +35,7 @@ interface PaxRenaissanceGame extends Game {
     id: string;
     callback: (event: PointerEvent) => void;
   }) => void;
-  setCardSelected: (props: { id: string; }) => void;
+  setCardSelected: (props: { id: string }) => void;
   setLocationSelectable: (props: {
     id: string;
     callback: (event: PointerEvent) => void;
@@ -55,7 +55,7 @@ interface PaxRenaissanceGame extends Game {
   animationManager: AnimationManager;
   // cardManager: CardManager<TableauCard>;
   gameMap: GameMap;
-  gameOptions: PaxRenaissanceGamedatas['gameOptions'];
+  gameOptions: PaxRenaissanceGamedatas["gameOptions"];
   hand: Hand;
   market: Market;
   notificationManager: NotificationManager;
@@ -88,7 +88,7 @@ interface City {
   type: "city";
 }
 
-type Religion = 'catholic' | 'islamic' | 'reformist';
+type Religion = "catholic" | "islamic" | "reformist";
 
 interface Empire {
   id: string;
@@ -246,7 +246,7 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
   };
   players: Record<number, PaxRenaissancePlayerData>;
   staticData: {
-    tableauCards: Record<string, TableauCard>
+    tableauCards: Record<string, TableauCard>;
   };
   supremeReligion: {
     bishops: {
@@ -258,8 +258,8 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
       catholic: number;
       islamic: number;
       reformist: number;
-    }
-  }
+    };
+  };
   tokens: {
     inPlay: Token[];
     supply: {
@@ -282,6 +282,13 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
     };
   };
   victoryCards: VictoryCard[];
+  victoryCounts: {
+    concessions: {playerId: number; numberOfConcessions: number}[];
+    discoveryPrestige: {playerId: number; discoveryPrestige: number}[];
+    kings: {playerId: number; numberOfKings: number}[];
+    republics: {playerId: number; numberOfRepublics: number}[];
+    lawPrestige: {playerId: number; lawPrestige: number}[];
+  };
   // REMOVE
   testCard: TableauCard;
 }

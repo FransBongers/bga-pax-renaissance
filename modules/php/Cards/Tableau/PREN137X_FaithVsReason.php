@@ -2,6 +2,8 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Notifications;
+
 class PREN137X_FaithVsReason extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -26,7 +28,7 @@ class PREN137X_FaithVsReason extends \PaxRenaissance\Models\TableauCard
         'allPlayers' => true,
       ],
       [
-        'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY,
+        'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2,
         'title' => clienttranslate('Cartography:'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige} count as Concessions in a Globalization Victory.'),
@@ -36,5 +38,17 @@ class PREN137X_FaithVsReason extends \PaxRenaissance\Models\TableauCard
         ],
       ]
     ];
+  }
+
+  public function activateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::activateAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2, null, $owner === null ? null : $owner->getId() );
+  }
+
+  public function deactivateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2, null, $owner === null ? null : $owner->getId() );
   }
 }

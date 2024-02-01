@@ -125,6 +125,8 @@ class PaxRenaissance extends Table
     {
         $playerId = $playerId ?? Players::getCurrentId();
 
+        $players = Players::getAll()->toArray();
+
         $data = [
             'canceledNotifIds' => Log::getCanceledNotifIds(),
             'customPlayerOrder' => Players::getPlayerOrder(),
@@ -140,6 +142,13 @@ class PaxRenaissance extends Table
                 'tableauCards' => Cards::getStaticData()
             ],
             'supremeReligion' => Cards::get('VictoryHoly')->getSupremeReligionCounts(),
+            'victoryCounts' => [
+                'concessions' => Cards::get('VictoryGlobalization')->getNumberOfConcessionsPerPlayer($players),
+                'discoveryPrestige' => Cards::get('VictoryGlobalization')->getDiscoveryPrestigePerPlayer($players),
+                'kings' => Cards::get('VictoryImperial')->getNumberOfKingsPerPlayer($players),
+                'republics' => Cards::get('VictoryRenaissance')->getNumberOfRepublicsPerPlayer($players),
+                'lawPrestige' => Cards::get('VictoryRenaissance')->getLawPrestigePerPlayer($players),
+            ],
             'tokens' => Tokens::getUiData(),
             'victoryCards' => Cards::getVictoryCards(),
         ];

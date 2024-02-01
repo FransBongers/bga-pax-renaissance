@@ -2,6 +2,8 @@
 
 namespace PaxRenaissance\Cards\Tableau;
 
+use PaxRenaissance\Core\Notifications;
+
 class PREN159X_ConsentOfTheGoverned extends \PaxRenaissance\Models\TableauCard
 {
   public function __construct($row)
@@ -19,7 +21,7 @@ class PREN159X_ConsentOfTheGoverned extends \PaxRenaissance\Models\TableauCard
     $this->region = WEST;
     $this->specialAbilities = [
       [
-        'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY,
+        'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3,
         'title' => clienttranslate('GERMAN HUMANISM:'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige_patron} counts as ${tkn_prestige_law} for Renaissance Victory.'),
@@ -30,5 +32,17 @@ class PREN159X_ConsentOfTheGoverned extends \PaxRenaissance\Models\TableauCard
         ],
       ]
     ];
+  }
+
+  public function activateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::activateAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3, null, $owner === null ? null : $owner->getId() );
+  }
+
+  public function deactivateAbility()
+  {
+    $owner = $this->getOwner();
+    Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3, null, $owner === null ? null : $owner->getId() );
   }
 }

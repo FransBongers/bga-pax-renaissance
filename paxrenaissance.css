@@ -212,31 +212,31 @@
   filter: drop-shadow(2px 0px 0px rgb(210, 206, 196)) drop-shadow(-2px 0px 0px rgb(210, 206, 196)) drop-shadow(0px 2px 0px rgb(210, 206, 196)) drop-shadow(0px -2px 0px rgb(210, 206, 196));
 }
 
-.pr_empire_throne_coat_of_arms[data-owner=none] {
+.pr_coat_of_arms[data-owner=none] {
   display: none;
 }
 
-.pr_empire_throne_coat_of_arms[data-owner=coeur] {
+.pr_coat_of_arms[data-owner=coeur] {
   background-position-x: 28.5714285714%;
 }
 
-.pr_empire_throne_coat_of_arms[data-owner=fugger] {
+.pr_coat_of_arms[data-owner=fugger] {
   background-position-x: 42.8571428571%;
 }
 
-.pr_empire_throne_coat_of_arms[data-owner=medici] {
+.pr_coat_of_arms[data-owner=medici] {
   background-position-x: 71.4285714286%;
 }
 
-.pr_empire_throne_coat_of_arms[data-owner=marchionni] {
+.pr_coat_of_arms[data-owner=marchionni] {
   background-position-x: 57.1428571429%;
 }
 
-.pr_empire_throne_coat_of_arms[data-owner=berenberg] {
+.pr_coat_of_arms[data-owner=berenberg] {
   background-position-x: 85.7142857143%;
 }
 
-.pr_empire_throne_coat_of_arms[data-owner=mendes] {
+.pr_coat_of_arms[data-owner=mendes] {
   background-position-x: 100%;
 }
 
@@ -3053,7 +3053,7 @@
 
 .pr_card_back_icon {
   box-sizing: border-box;
-  border-radius: 1px;
+  border-radius: 2px;
   border: 1px solid;
 }
 
@@ -3100,6 +3100,112 @@
 
 .pr_icon[data-icon=prestige_patron] {
   background-position-x: 80%;
+}
+
+.pr_icon[data-icon=concession] {
+  background-image: url("img/pawns.webp");
+  background-size: 600% 100%;
+  min-width: calc(var(--paxRenTokenScale) * 20px);
+  min-height: calc(var(--paxRenTokenScale) * 33px);
+  max-width: calc(var(--paxRenTokenScale) * 20px);
+  max-height: calc(var(--paxRenTokenScale) * 33px);
+  margin-left: 6px;
+}
+
+.pr_icon[data-icon=concession][data-bank=fugger] {
+  background-position-x: 0%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_icon[data-icon=concession][data-bank=marchionni] {
+  background-position-x: 20%;
+}
+
+.pr_icon[data-icon=concession][data-bank=coeur] {
+  background-position-x: 40%;
+}
+
+.pr_icon[data-icon=concession][data-bank=medici] {
+  background-position-x: 60%;
+}
+
+.pr_icon[data-icon=concession][data-bank=berenberg] {
+  background-position-x: 80%;
+}
+
+.pr_icon[data-icon=concession][data-bank=mendes] {
+  background-position-x: 100%;
+}
+
+.pr_square_card_icon {
+  background-image: url("img/square_cards.webp");
+  background-size: 1000% 400%;
+  width: calc(var(--paxRenIconScale) * 30px);
+  height: calc(var(--paxRenIconScale) * 30px);
+  margin-left: 2px;
+  box-sizing: border-box;
+  border: 1px solid black;
+  border-radius: 2px;
+}
+
+.pr_square_card_icon[data-icon=king][data-bank=fugger] {
+  background-position-x: 0%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_square_card_icon[data-icon=king][data-bank=marchionni] {
+  background-position-x: 88.8888888889%;
+  background-position-y: 0%;
+}
+
+.pr_square_card_icon[data-icon=king][data-bank=coeur] {
+  background-position-x: 88.8888888889%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_square_card_icon[data-icon=king][data-bank=medici] {
+  background-position-x: 66.6666666667%;
+  background-position-y: 0%;
+}
+
+.pr_square_card_icon[data-icon=king][data-bank=berenberg] {
+  background-position-x: 22.2222222222%;
+  background-position-y: 0%;
+}
+
+.pr_square_card_icon[data-icon=king][data-bank=mendes] {
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+
+.pr_square_card_icon[data-icon=republic][data-bank=fugger] {
+  background-position-x: 11.1111111111%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_square_card_icon[data-icon=republic][data-bank=marchionni] {
+  background-position-x: 100%;
+  background-position-y: 0%;
+}
+
+.pr_square_card_icon[data-icon=republic][data-bank=coeur] {
+  background-position-x: 100%;
+  background-position-y: 33.3333333333%;
+}
+
+.pr_square_card_icon[data-icon=republic][data-bank=medici] {
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+
+.pr_square_card_icon[data-icon=republic][data-bank=berenberg] {
+  background-position-x: 33.3333333333%;
+  background-position-y: 0%;
+}
+
+.pr_square_card_icon[data-icon=republic][data-bank=mendes] {
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
 }
 
 #pr_info_panel {
@@ -4093,15 +4199,23 @@
 /* ------- PLAYER BOARD ------- */
 .pr_player_panel {
   padding: 4px;
+  display: flex;
+  flex-direction: row;
+}
+.pr_player_panel .pr_coat_of_arms {
+  background-image: url("img/tokens.webp");
+  background-size: 800% 100%;
+  width: 40px;
+  height: 46px;
+  margin-left: auto;
+  margin-right: 4px;
 }
 
 .pr_player_panel_icons {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  gap: 6px;
-  flex-wrap: wrap;
-  align-items: center;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto auto auto;
+  grid-gap: 6px;
 }
 
 /**
@@ -4518,17 +4632,18 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
   position: relative;
   gap: 4px;
 }
 .pr_icon_counter_container .pr_icon[data-icon=florin] {
   width: 25px;
   height: 25px;
+  margin-left: 4px;
 }
 .pr_icon_counter_container .pr_card_back_icon {
   width: 22px;
   height: 33px;
+  margin-left: 5px;
 }
 .pr_icon_counter_container .pr_counter {
   font-weight: bold;

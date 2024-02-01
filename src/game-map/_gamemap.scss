@@ -221,31 +221,31 @@
     drop-shadow(0px -2px 0px base.$empire-square-republic);
 }
 
-.pr_empire_throne_coat_of_arms[data-owner="none"] {
+.pr_coat_of_arms[data-owner="none"] {
   display: none;
 }
 
-.pr_empire_throne_coat_of_arms[data-owner="coeur"] {
+.pr_coat_of_arms[data-owner="coeur"] {
   background-position-x: math.div((2 * 100%), 7);
 }
 
-.pr_empire_throne_coat_of_arms[data-owner="fugger"] {
+.pr_coat_of_arms[data-owner="fugger"] {
   background-position-x: math.div((3 * 100%), 7);
 }
 
-.pr_empire_throne_coat_of_arms[data-owner="medici"] {
+.pr_coat_of_arms[data-owner="medici"] {
   background-position-x: math.div((5 * 100%), 7);
 }
 
-.pr_empire_throne_coat_of_arms[data-owner="marchionni"] {
+.pr_coat_of_arms[data-owner="marchionni"] {
   background-position-x: math.div((4 * 100%), 7);
 }
 
-.pr_empire_throne_coat_of_arms[data-owner="berenberg"] {
+.pr_coat_of_arms[data-owner="berenberg"] {
   background-position-x: math.div((6 * 100%), 7);
 }
 
-.pr_empire_throne_coat_of_arms[data-owner="mendes"] {
+.pr_coat_of_arms[data-owner="mendes"] {
   background-position-x: math.div((7 * 100%), 7);
 }
 

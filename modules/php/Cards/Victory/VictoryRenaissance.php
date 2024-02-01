@@ -77,8 +77,55 @@ class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
     
     $requiredDifference = 2;
 
-    $republicRanking = [];
+    $republicRanking = $this->getNumberOfRepublicsPerPlayer($players);
+    $lawPrestigeRanking = $this->getLawPrestigePerPlayer($players);
+
+
+    usort($republicRanking, function ($a, $b) {
+      return $b['numberOfRepublics'] - $a['numberOfRepublics'];
+    });
+    usort($lawPrestigeRanking, function ($a, $b) {
+      return $b['lawPrestige'] - $a['lawPrestige'];
+    });
+
+    $hasAtLeastTwoMoreLawPrestigeThanEachOpponent = $lawPrestigeRanking[0]['playerId'] === $activePlayer->getId() && $lawPrestigeRanking[0]['lawPrestige'] - $lawPrestigeRanking[1]['lawPrestige'] >= $requiredDifference;
+    $hasMoreRepublicsThanEachOpponent = $republicRanking[0]['playerId'] === $activePlayer->getId() && $republicRanking[0]['numberOfRepublics'] > $republicRanking[1]['numberOfRepublics'];
+    return $hasAtLeastTwoMoreLawPrestigeThanEachOpponent && $hasMoreRepublicsThanEachOpponent;
+  }
+
+  public function getLawPrestigePerPlayer($players)
+  {
     $lawPrestigeRanking = [];
+
+    foreach ($players as $player) {
+      $lawPrestige = $player->getPrestige(true)[LAW];
+
+      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1)) {
+        $patronPrestige = $player->getPrestige()[PATRON];
+        $lawPrestige += $patronPrestige;
+      }
+      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2)) {
+        $patronPrestige = $player->getPrestige()[PATRON];
+        $lawPrestige += $patronPrestige;
+      }
+      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3)) {
+        $patronPrestige = $player->getPrestige()[PATRON];
+        $lawPrestige += $patronPrestige;
+      }
+
+      $lawPrestigeRanking[] = [
+        'playerId' => $player->getId(),
+        'lawPrestige' => $lawPrestige,
+      ];
+    }
+
+    return $lawPrestigeRanking;
+  }
+
+  public function getNumberOfRepublicsPerPlayer($players)
+  {
+    $republicRanking = [];
+
     foreach ($players as $player) {
       $numberOfRepublics = count(Utils::filter($player->getTableauCards(), function ($cardInTableau) {
         return $cardInTableau->getType() === EMPIRE_CARD && $cardInTableau->getSide() === REPUBLIC;
@@ -91,32 +138,12 @@ class VictoryRenaissance extends \PaxRenaissance\Models\VictoryCard
         $numberOfRepublics += 1;
       }
       
-      $lawPrestige = $player->getPrestige(true)[LAW];
-
-      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY)) {
-        $patronPrestige = $player->getPrestige()[PATRON];
-        $lawPrestige += $patronPrestige;
-      }
-
       $republicRanking[] = [
         'playerId' => $player->getId(),
         'numberOfRepublics' => $numberOfRepublics,
       ];
-      $lawPrestigeRanking[] = [
-        'playerId' => $player->getId(),
-        'lawPrestige' => $lawPrestige,
-      ];
     }
 
-    usort($republicRanking, function ($a, $b) {
-      return $b['numberOfRepublics'] - $a['numberOfRepublics'];
-    });
-    usort($lawPrestigeRanking, function ($a, $b) {
-      return $b['lawPrestige'] - $a['lawPrestige'];
-    });
-
-    $hasAtLeastTwoMoreLawPrestigeThanEachOpponent = $lawPrestigeRanking[0]['playerId'] === $activePlayer->getId() && $lawPrestigeRanking[0]['lawPrestige'] - $lawPrestigeRanking[1]['lawPrestige'] >= $requiredDifference;
-    $hasMoreRepublicsThanEachOpponent = $republicRanking[0]['playerId'] === $activePlayer->getId() && $republicRanking[0]['numberOfRepublics'] > $republicRanking[1]['numberOfRepublics'];
-    return $hasAtLeastTwoMoreLawPrestigeThanEachOpponent && $hasMoreRepublicsThanEachOpponent;
+    return $republicRanking;
   }
 }

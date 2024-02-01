@@ -20,12 +20,12 @@ interface NotifWithPlayerArgs {
 
 type NotifActivateAbilityArgs =
   | NotifAbilityArgsVeniceCanHoldTwoGoldTokens
-  | NotifAbilityArgsPatronCountsAsGreenBishops
+  | NotifAbilityArgsPatronOrCardCounts
   | NotifAbilityArgsGreenPiratesCountAsRed;
 
 type NotifDeactivateAbilityArgs =
   | NotifAbilityArgsVeniceCanHoldTwoGoldTokens
-  | NotifAbilityArgsPatronCountsAsGreenBishops
+  | NotifAbilityArgsPatronOrCardCounts
   | NotifAbilityArgsGreenPiratesCountAsRed;
 
 interface NotifAbilityArgsGreenPiratesCountAsRed extends NotifWithPlayerArgs {
@@ -37,9 +37,16 @@ interface NotifAbilityArgsGreenPiratesCountAsRed extends NotifWithPlayerArgs {
   ownerId: null;
 }
 
-interface NotifAbilityArgsPatronCountsAsGreenBishops
-  extends NotifWithPlayerArgs {
-  ability: "SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY";
+interface NotifAbilityArgsPatronOrCardCounts extends NotifWithPlayerArgs {
+  ability:
+    | "SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1"
+    | "SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2"
+    | "SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1"
+    | "SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2"
+    | "SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY"
+    | "SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1"
+    | "SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2"
+    | "SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3";
   data: null;
   ownerId: null | number;
 }
@@ -205,6 +212,7 @@ interface NotifRefreshUIArgs {
 interface NotifRepressTokenArgs extends NotifWithPlayerArgs {
   token: Token;
   cost: number;
+  from: Border | City | TableauCard | EmpireCard;
 }
 
 interface NotifReturnToThroneArgs extends NotifWithPlayerArgs {

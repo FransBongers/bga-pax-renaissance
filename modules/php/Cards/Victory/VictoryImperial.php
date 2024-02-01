@@ -57,6 +57,24 @@ class VictoryImperial extends \PaxRenaissance\Models\VictoryCard
     $numberOfPlayers = count($players);
     $requiredDifference = $numberOfPlayers === 2 ? 3 : 2;
 
+    $ranking = $this->getNumberOfKingsPerPlayer($players);
+    // $ranking = array_map(function ($player) {
+    //   $numberOfKings = count(Utils::filter($player->getTableauCards(), function ($cardInTableau) {
+    //     return $cardInTableau->getType() === EMPIRE_CARD && $cardInTableau->getSide() === KING;
+    //   }));
+    //   return [
+    //     'playerId' => $player->getId(),
+    //     'numberOfKings' => $numberOfKings,
+    //   ];
+    // }, $players);
+    usort($ranking, function ($a, $b) {
+      return $b['numberOfKings'] - $a['numberOfKings'];
+    });
+    // Notifications::log('ranking',$ranking);
+    return $ranking[0]['playerId'] === $activePlayer->getId() && $ranking[0]['numberOfKings'] - $ranking[1]['numberOfKings'] >= $requiredDifference;
+  }
+
+  public function getNumberOfKingsPerPlayer($players) {
     $ranking = array_map(function ($player) {
       $numberOfKings = count(Utils::filter($player->getTableauCards(), function ($cardInTableau) {
         return $cardInTableau->getType() === EMPIRE_CARD && $cardInTableau->getSide() === KING;
@@ -66,10 +84,7 @@ class VictoryImperial extends \PaxRenaissance\Models\VictoryCard
         'numberOfKings' => $numberOfKings,
       ];
     }, $players);
-    usort($ranking, function ($a, $b) {
-      return $b['numberOfKings'] - $a['numberOfKings'];
-    });
-    // Notifications::log('ranking',$ranking);
-    return $ranking[0]['playerId'] === $activePlayer->getId() && $ranking[0]['numberOfKings'] - $ranking[1]['numberOfKings'] >= $requiredDifference;
+
+    return $ranking;
   }
 }

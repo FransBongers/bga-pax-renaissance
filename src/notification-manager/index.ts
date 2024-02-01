@@ -130,8 +130,29 @@ class NotificationManager {
     const player = this.getPlayer({ playerId });
 
     switch (ability) {
+      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+        if (ownerId == null) {
+          break;
+        }
+        this.getPlayer({
+          playerId: ownerId,
+        }).counters.republic.incValue(1);
+        break;
       case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
         this.game.gameMap.setVenice2Visibility(true);
+        break;
+      case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1:
+      case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2:
+        if (ownerId == null) {
+          break;
+        }
+        const concessionChange = this.getPlayer({
+          playerId: ownerId,
+        }).counters.prestige.patron.getValue();
+        this.getPlayer({ playerId: ownerId }).counters.concessions.incValue(
+          concessionChange
+        );
         break;
       case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
         const valueChange =
@@ -142,6 +163,19 @@ class NotificationManager {
             : 0;
         this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
         player.activateAbility({ ability });
+        break;
+      case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1:
+      case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2:
+      case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3:
+        if (ownerId == null) {
+          break;
+        }
+        const lawChange = this.getPlayer({
+          playerId: ownerId,
+        }).counters.prestige.patron.getValue();
+        this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(
+          lawChange
+        );
         break;
       case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
         this.game.gameMap.supremeReligion.reformist.bishops.incValue(
@@ -163,8 +197,30 @@ class NotificationManager {
     const player = this.getPlayer({ playerId });
 
     switch (ability) {
+      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+        if (ownerId == null) {
+          break;
+        }
+        this.getPlayer({
+          playerId: ownerId,
+        }).counters.republic.incValue(-1);
+        break;
       case SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS:
         this.game.gameMap.setVenice2Visibility(false);
+        break;
+      case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1:
+      case SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2:
+        if (ownerId == null) {
+          break;
+        }
+        const concessionChange =
+          this.getPlayer({
+            playerId: ownerId,
+          }).counters.prestige.patron.getValue() * -1;
+        this.getPlayer({ playerId: ownerId }).counters.concessions.incValue(
+          concessionChange
+        );
         break;
       case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
         const valueChange =
@@ -175,6 +231,20 @@ class NotificationManager {
             : 0;
         this.game.gameMap.supremeReligion.islamic.bishops.incValue(valueChange);
         player.deactivateAbility({ ability });
+        break;
+      case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1:
+      case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2:
+      case SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3:
+        if (ownerId == null) {
+          break;
+        }
+        const lawChange =
+          this.getPlayer({
+            playerId: ownerId,
+          }).counters.prestige.patron.getValue() * -1;
+        this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(
+          lawChange
+        );
         break;
       case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
         this.game.gameMap.supremeReligion.reformist.bishops.incValue(
@@ -362,6 +432,7 @@ class NotificationManager {
     this.game.gameMap.updateCoatOfArms({ card });
 
     this.removePrestige({ prestige: card[oldSide].prestige, player });
+    player.counters[oldSide].incValue(-1);
 
     if (formerSuzerain !== null) {
       this.game.tableauCardManager.removeVassal({
@@ -374,6 +445,7 @@ class NotificationManager {
     }
 
     this.addPrestige({ prestige: card[card.side].prestige, player });
+    player.counters[card.side].incValue(1);
   }
 
   async notif_flipVictoryCard(notif: Notif<NotifFlipVictoryCardArgs>) {
@@ -555,6 +627,11 @@ class NotificationManager {
       location: to,
       addOrRemove: "add",
     });
+    if (isPawn) {
+      this.game.playerManager
+        .getPlayerForBank({ bank: split[1] })
+        .counters.concessions.incValue(1);
+    }
 
     return Promise.resolve();
   }
@@ -662,11 +739,22 @@ class NotificationManager {
   }
 
   async notif_repressToken(notif: Notif<NotifRepressTokenArgs>) {
-    const { playerId, token, cost } = notif.args;
+    const { playerId, token, cost, from } = notif.args;
 
     this.getPlayer({ playerId }).counters.florins.incValue(-cost);
     const element = document.getElementById(token.id);
     const empireSquareId = token.location;
+
+    this.adjustSupremeReligionCounters({
+      token,
+      location: from,
+      addOrRemove: "remove",
+    });
+    if (token.type === PAWN) {
+      this.game.playerManager
+        .getPlayerForBank({ bank: token.separator })
+        .counters.concessions.incValue(-1);
+    }
 
     const repressTokensToThrones =
       this.game.settings.get({
@@ -729,6 +817,11 @@ class NotificationManager {
       location: from,
       addOrRemove: "remove",
     });
+    if (token.type === PAWN) {
+      this.game.playerManager
+        .getPlayerForBank({ bank: token.separator })
+        .counters.concessions.incValue(-1);
+    }
 
     const node = document.getElementById(token.id);
     if (node) {
@@ -907,6 +1000,8 @@ class NotificationManager {
     playerId: number;
   }) {
     const owner = this.getPlayer({ playerId });
+    owner.counters[side].incValue(1);
+
     const prestige = empireSquare[side].prestige.concat(
       this.getQueensPrestige({ queens: empireSquare.queens })
     );
@@ -923,6 +1018,8 @@ class NotificationManager {
     playerId: number;
   }) {
     const owner = this.getPlayer({ playerId });
+    owner.counters[side].incValue(-1);
+
     const prestige = empireSquare[side].prestige.concat(
       this.getQueensPrestige({ queens: empireSquare.queens })
     );
@@ -974,6 +1071,31 @@ class NotificationManager {
         ) {
           this.game.gameMap.supremeReligion.islamic.bishops.incValue(1);
         }
+        [
+          SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1,
+          SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2,
+        ].forEach((ability) => {
+          if (
+            player.hasActiveAbility({
+              ability,
+            })
+          ) {
+            player.counters.concessions.incValue(1);
+          }
+        });
+        [
+          SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1,
+          SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2,
+          SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3,
+        ].forEach((ability) => {
+          if (
+            player.hasActiveAbility({
+              ability,
+            })
+          ) {
+            player.counters.prestige.law.incValue(1);
+          }
+        });
       }
     });
   }
@@ -995,6 +1117,31 @@ class NotificationManager {
         ) {
           this.game.gameMap.supremeReligion.islamic.bishops.incValue(-1);
         }
+        [
+          SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1,
+          SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2,
+        ].forEach((ability) => {
+          if (
+            player.hasActiveAbility({
+              ability,
+            })
+          ) {
+            player.counters.concessions.incValue(-1);
+          }
+        });
+        [
+          SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1,
+          SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2,
+          SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3,
+        ].forEach((ability) => {
+          if (
+            player.hasActiveAbility({
+              ability,
+            })
+          ) {
+            player.counters.prestige.law.incValue(-1);
+          }
+        });
       }
     });
   }

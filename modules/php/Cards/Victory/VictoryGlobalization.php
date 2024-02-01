@@ -63,33 +63,11 @@ class VictoryGlobalization extends \PaxRenaissance\Models\VictoryCard
     }
 
     $players = Players::getAll()->toArray();
-    $concessions = Tokens::getConcessions();
 
     $requiredDifference = 2;
 
-    $concessionRanking = [];
-    $discoveryPrestigeRanking = [];
-    foreach ($players as $player) {
-      $numberOfConcessions = count(Utils::filter($concessions, function ($concession) use ($player) {
-        return $concession->getOwner()->getId() === $player->getId();
-      }));
-
-      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY)) {
-        $patronPrestige = $player->getPrestige()[PATRON];
-        $numberOfConcessions += $patronPrestige;
-      }
-
-      $discoveryPrestige = $player->getPrestige(true)[DISCOVERY];
-
-      $concessionRanking[] = [
-        'playerId' => $player->getId(),
-        'numberOfConcessions' => $numberOfConcessions,
-      ];
-      $discoveryPrestigeRanking[] = [
-        'playerId' => $player->getId(),
-        'discoveryPrestige' => $discoveryPrestige,
-      ];
-    }
+    $concessionRanking = $this->getNumberOfConcessionsPerPlayer($players);
+    $discoveryPrestigeRanking = $this->getDiscoveryPrestigePerPlayer($players);
 
     usort($concessionRanking, function ($a, $b) {
       return $b['numberOfConcessions'] - $a['numberOfConcessions'];
@@ -101,5 +79,49 @@ class VictoryGlobalization extends \PaxRenaissance\Models\VictoryCard
     $hasAtLeastTwoMoreConcessionsThanEachOpponent = $concessionRanking[0]['playerId'] === $activePlayer->getId() && $concessionRanking[0]['numberOfConcessions'] - $concessionRanking[1]['numberOfConcessions'] >= $requiredDifference;
     $hasMoreDiscoveryPrestigeThanEachOpponent = $discoveryPrestigeRanking[0]['playerId'] === $activePlayer->getId() && $discoveryPrestigeRanking[0]['discoveryPrestige'] > $discoveryPrestigeRanking[1]['discoveryPrestige'];
     return $hasAtLeastTwoMoreConcessionsThanEachOpponent && $hasMoreDiscoveryPrestigeThanEachOpponent;
+  }
+
+  public function getDiscoveryPrestigePerPlayer($players)
+  {
+    $discoveryPrestigeRanking = [];
+
+    foreach ($players as $player) {
+      $discoveryPrestige = $player->getPrestige(true)[DISCOVERY];
+
+      $discoveryPrestigeRanking[] = [
+        'playerId' => $player->getId(),
+        'discoveryPrestige' => $discoveryPrestige,
+      ];
+    }
+
+    return $discoveryPrestigeRanking;
+  }
+
+  public function getNumberOfConcessionsPerPlayer($players)
+  {
+    $concessions = Tokens::getConcessions();
+    $concessionRanking = [];
+
+    foreach ($players as $player) {
+      $numberOfConcessions = count(Utils::filter($concessions, function ($concession) use ($player) {
+        return $concession->getOwner()->getId() === $player->getId();
+      }));
+
+      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1)) {
+        $patronPrestige = $player->getPrestige()[PATRON];
+        $numberOfConcessions += $patronPrestige;
+      }
+      if ($player->hasSpecialAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2)) {
+        $patronPrestige = $player->getPrestige()[PATRON];
+        $numberOfConcessions += $patronPrestige;
+      }
+
+      $concessionRanking[] = [
+        'playerId' => $player->getId(),
+        'numberOfConcessions' => $numberOfConcessions,
+      ];
+    }
+
+    return $concessionRanking;
   }
 }
