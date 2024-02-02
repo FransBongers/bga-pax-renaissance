@@ -4064,7 +4064,7 @@ var NotificationManager = (function () {
                 player = this.getPlayer({ playerId: playerId });
                 switch (ability) {
                     case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
-                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2:
                         if (ownerId == null) {
                             break;
                         }
@@ -4125,7 +4125,7 @@ var NotificationManager = (function () {
                 player = this.getPlayer({ playerId: playerId });
                 switch (ability) {
                     case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
-                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+                    case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2:
                         if (ownerId == null) {
                             break;
                         }
@@ -5350,7 +5350,7 @@ var PRPlayer = (function () {
                 initialValue: 0,
             });
         });
-        [DISCOVERY, LAW, PATRON].forEach(function (prestige) {
+        [PATRON, LAW, DISCOVERY].forEach(function (prestige) {
             _this.counters.prestige[prestige] = new IconCounter({
                 containerId: "pr_player_panel_icons_".concat(_this.playerId),
                 extraIconClasses: "pr_prestige_icon",
@@ -5359,11 +5359,11 @@ var PRPlayer = (function () {
                 initialValue: 0,
             });
         });
-        this.counters.concessions = new IconCounter({
+        this.counters.king = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
-            extraIconClasses: "pr_concession_icon",
-            icon: "concession",
-            iconCounterId: "pr_concessions_counter_".concat(this.playerId),
+            extraIconClasses: "pr_square_card_icon",
+            icon: "king",
+            iconCounterId: "pr_kings_counter_".concat(this.playerId),
             initialValue: 0,
             dataAttribute: {
                 key: "data-bank",
@@ -5381,11 +5381,11 @@ var PRPlayer = (function () {
                 value: this.bank,
             },
         });
-        this.counters.king = new IconCounter({
+        this.counters.concessions = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
-            extraIconClasses: "pr_square_card_icon",
-            icon: "king",
-            iconCounterId: "pr_kings_counter_".concat(this.playerId),
+            extraIconClasses: "pr_concession_icon",
+            icon: "concession",
+            iconCounterId: "pr_concessions_counter_".concat(this.playerId),
             initialValue: 0,
             dataAttribute: {
                 key: "data-bank",

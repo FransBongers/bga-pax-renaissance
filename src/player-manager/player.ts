@@ -165,7 +165,7 @@ class PRPlayer {
       });
     });
 
-    [DISCOVERY, LAW, PATRON].forEach((prestige) => {
+    [PATRON, LAW, DISCOVERY].forEach((prestige) => {
       this.counters.prestige[prestige] = new IconCounter({
         containerId: `pr_player_panel_icons_${this.playerId}`,
         extraIconClasses: "pr_prestige_icon",
@@ -175,11 +175,11 @@ class PRPlayer {
       });
     });
 
-    this.counters.concessions = new IconCounter({
+    this.counters.king = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
-      extraIconClasses: "pr_concession_icon",
-      icon: `concession`,
-      iconCounterId: `pr_concessions_counter_${this.playerId}`,
+      extraIconClasses: "pr_square_card_icon",
+      icon: `king`,
+      iconCounterId: `pr_kings_counter_${this.playerId}`,
       initialValue: 0,
       dataAttribute: {
         key: "data-bank",
@@ -199,11 +199,11 @@ class PRPlayer {
       },
     });
 
-    this.counters.king = new IconCounter({
+    this.counters.concessions = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
-      extraIconClasses: "pr_square_card_icon",
-      icon: `king`,
-      iconCounterId: `pr_kings_counter_${this.playerId}`,
+      extraIconClasses: "pr_concession_icon",
+      icon: `concession`,
+      iconCounterId: `pr_concessions_counter_${this.playerId}`,
       initialValue: 0,
       dataAttribute: {
         key: "data-bank",

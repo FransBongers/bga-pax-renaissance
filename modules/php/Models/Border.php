@@ -41,7 +41,7 @@ class Border implements \JsonSerializable
     }
     if ($this->isSeaBorder()) {
       $data['adjacentEmpires'] = array_map(function ($empireId) {
-        return Empires::get($empireId);
+        return Empires::get($empireId)->jsonSerialize();
       }, $this->adjacentEmpires);
     }
 

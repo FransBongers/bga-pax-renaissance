@@ -6,6 +6,7 @@ use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
 use PaxRenaissance\Managers\Cities;
+use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Players;
 
 class Notifications
@@ -353,7 +354,7 @@ class Notifications
       'tkn_boldText_empire_name' => $empire->getName(),
       'empire' => $empire,
       'religion' => $religion,
-      'tokensInEmpire' => self::getTokensInEmpire($empire),
+      'tokensInEmpire' => array_map(function ($token) { return $token->jsonSerialize();}, self::getTokensInEmpire($empire)),
     ]);
   }
 
@@ -633,6 +634,7 @@ class Notifications
       'tkn_boldText' => $fromLocation->getName(),
       'token' => $token,
       'from' => $fromLocation->jsonSerialize(),
+      'religion' => $fromLocation->getType() === CITY ? Empires::get($fromLocation->getEmpire())->getReligion() : null,
     ]);
   }
 

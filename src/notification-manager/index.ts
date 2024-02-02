@@ -131,7 +131,7 @@ class NotificationManager {
 
     switch (ability) {
       case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
-      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2:
         if (ownerId == null) {
           break;
         }
@@ -198,7 +198,7 @@ class NotificationManager {
 
     switch (ability) {
       case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
-      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1:
+      case SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_2:
         if (ownerId == null) {
           break;
         }
