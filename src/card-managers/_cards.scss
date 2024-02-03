@@ -179,7 +179,7 @@
   .pr_queens_container {
     .pr_card_tokens_container {
       left: calc(var(--paxRenCardScale) * 63px);
-      top: calc(var(--paxRenCardScale) * 45px);
+      top: calc(var(--paxRenCardScale) * 20px);
       justify-content: flex-end;
       align-items: end;
     }
@@ -206,7 +206,7 @@
 
   .pr_queens_container {
     .pr_card_tokens_container {
-      top: calc(var(--paxRenCardScale) * 45px);
+      top: calc(var(--paxRenCardScale) * 20px);
       left: calc(var(--paxRenCardScale) * 7px);
       justify-content: flex-start;
       align-items: end;

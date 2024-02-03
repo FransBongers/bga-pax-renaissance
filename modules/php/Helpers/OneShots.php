@@ -92,8 +92,7 @@ abstract class OneShots extends \APP_DbObject
       if (
         count($suitor->getQueens()) === 0 &&
         (Utils::startsWith($location, 'throne') ||
-          $location === Locations::tableau($playerId, WEST) ||
-          $location === Locations::tableau($playerId, EAST))
+        ($suitor->isInTableau() && $suitor->getOwner()->getId() === $playerId))
       ) {
         $options[] = $suitor;
       } else if ($player->hasSpecialAbility(SA_CORONATION_CAN_CLAIM_MARRIED_KINGS)) {
