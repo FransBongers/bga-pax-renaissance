@@ -464,6 +464,8 @@ class Notifications
       'tkn_boldText_from' => $fromLocation->getName(),
       'tkn_boldText_to' => $toLocation->getName(),
       'token' => $token,
+      'from' => $fromLocation->jsonSerialize(),
+      'to' => $toLocation->jsonSerialize()
     ]);
   }
 
@@ -530,7 +532,7 @@ class Notifications
       'tkn_boldText' => $toLocation !== null ? $toLocation->getName() : '',
       'token' => $token,
       'fromLocationId' => $fromLocationId,
-      'to' => $toLocation->jsonSerialize(),
+      'to' => $toLocation !== null ? $toLocation->jsonSerialize() : null,
     ]);
   }
 

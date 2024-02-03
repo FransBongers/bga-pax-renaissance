@@ -163,6 +163,8 @@ interface NotifMoveEmpireSquareArgs extends NotifWithPlayerArgs {
 
 interface NotifMoveTokenArgs extends NotifWithPlayerArgs {
   token: Token;
+  from: Border | City | TableauCard | EmpireCard | null;
+  to: Border | City | TableauCard | EmpireCard | null;
 }
 
 interface NotifMoveTokensWithinContantinopleArgs extends NotifWithPlayerArgs {

@@ -4434,21 +4434,43 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_moveToken = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, token, tokenNode, node;
+            var _a, playerId, token, from, to, tokenNode, isPawn, node;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _a = notif.args, playerId = _a.playerId, token = _a.token;
+                        _a = notif.args, playerId = _a.playerId, token = _a.token, from = _a.from, to = _a.to;
                         tokenNode = document.getElementById(token.id);
+                        if (!tokenNode) {
+                            return [2];
+                        }
+                        isPawn = token.type === PAWN;
+                        this.adjustSupremeReligionCounters({
+                            token: token,
+                            location: from,
+                            addOrRemove: "remove",
+                        });
+                        if (isPawn && from.type === BORDER) {
+                            this.game.playerManager
+                                .getPlayerForBank({ bank: token.id.split("_")[1] })
+                                .counters.concessions.incValue(-1);
+                        }
                         node = document.getElementById(token["type"] === BISHOP
                             ? "".concat(token.location, "_tokens")
                             : "pr_".concat(token.location));
-                        if (!tokenNode) return [3, 2];
                         return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), node)];
                     case 1:
                         _b.sent();
-                        _b.label = 2;
-                    case 2: return [2, Promise.resolve()];
+                        this.adjustSupremeReligionCounters({
+                            token: token,
+                            location: to,
+                            addOrRemove: "add",
+                        });
+                        if (isPawn && to.type === BORDER) {
+                            this.game.playerManager
+                                .getPlayerForBank({ bank: token.id.split("_")[1] })
+                                .counters.concessions.incValue(1);
+                        }
+                        return [2];
                 }
             });
         });

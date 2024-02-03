@@ -491,43 +491,47 @@ class NotificationManager {
   }
 
   async notif_moveToken(notif: Notif<NotifMoveTokenArgs>) {
-    const { playerId, token } = notif.args;
+    const { playerId, token, from, to } = notif.args;
 
     const tokenNode = document.getElementById(token.id);
 
-    // const node: HTMLElement = document.getElementById(`pr_${token.location}`);
+    if (!tokenNode) {
+      return;
+    }
+    const isPawn = token.type === PAWN;
+
+    this.adjustSupremeReligionCounters({
+      token,
+      location: from,
+      addOrRemove: "remove",
+    });
+    if (isPawn && from.type === BORDER) {
+      this.game.playerManager
+        .getPlayerForBank({ bank: token.id.split("_")[1] })
+        .counters.concessions.incValue(-1);
+    }
+
     const node = document.getElementById(
       token["type"] === BISHOP
         ? `${token.location}_tokens`
         : `pr_${token.location}`
     );
-    if (tokenNode) {
-      await this.game.animationManager.attachWithAnimation(
-        new BgaSlideAnimation({ element: tokenNode }),
-        node
-      );
+
+    await this.game.animationManager.attachWithAnimation(
+      new BgaSlideAnimation({ element: tokenNode }),
+      node
+    );
+
+    this.adjustSupremeReligionCounters({
+      token,
+      location: to,
+      addOrRemove: "add",
+    });
+    if (isPawn && to.type === BORDER) {
+      this.game.playerManager
+        .getPlayerForBank({ bank: token.id.split("_")[1] })
+        .counters.concessions.incValue(1);
     }
-
-    // const node = document.getElementById(token.id);
-    // if (node) {
-    //   node.remove();
-    // }
-    // const split = token.id.split("_");
-    // if (split[0] === PAWN) {
-    //   this.game.supply.incValue({
-    //     bank: split[1],
-    //     type: split[0],
-    //     value: 1,
-    //   });
-    // } else {
-    //   this.game.supply.incValue({
-    //     religion: split[1],
-    //     type: split[0],
-    //     value: 1,
-    //   });
-    // }
-
-    return Promise.resolve();
   }
 
   async notif_moveTokensWithinConstantinople(

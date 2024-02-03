@@ -192,6 +192,12 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
     }
     $vassals = $card->getVassals();
     $options = array_merge($options, $vassals);
+    foreach($vassals as $vassal) {
+      $queens = $vassal->getQueens();
+      $options = array_merge($options, $queens);
+    }
+    $options = array_merge($options, $card->getQueens());
+
     return $options;
   }
 }
