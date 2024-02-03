@@ -112,7 +112,7 @@ class Settings {
           tplPlayerPrefenceSelectRow({
             setting,
             currentValue: this.settings[setting.id] as string,
-            visible
+            visible,
           })
         );
         const controlId = `setting_${setting.id}`;
@@ -174,9 +174,9 @@ class Settings {
 
   public onChangeTwoColumnsLayoutSetting(value: string) {
     this.checkColumnSizesVisisble();
-    const node = document.getElementById('pr_play_area_container');
+    const node = document.getElementById("pr_play_area_container");
     if (node) {
-      node.setAttribute('data-two-columns',value);
+      node.setAttribute("data-two-columns", value);
     }
     this.game.updateLayout();
     // document.documentElement.setAttribute("data-background-pref", value);
@@ -187,75 +187,80 @@ class Settings {
   }
 
   public onChangeCardSizeInTableauSetting(value: number) {
-    const node = document.getElementById('pr_player_tableaux');
+    const node = document.getElementById("pr_player_tableaux");
     if (node) {
-      node.style.setProperty('--paxRenCardInTableauScale', `${Number(value) / 100}`);
+      node.style.setProperty(
+        "--paxRenCardInTableauScale",
+        `${Number(value) / 100}`
+      );
     }
   }
 
   public async onChangeRepressTokensToThronesSetting(value: string) {
     const animations = [];
-    Object.values(THRONES_CONFIG).forEach(({empireSquareId}) => {
-      if (value === ENABLED) {
-        const originNode = document.getElementById(`${empireSquareId}_tokens`);
-        const destinationNode = document.getElementById(`${empireSquareId}_throne_tokens`);
-        if (!(originNode && destinationNode)) {
-          return;
-        }
-        originNode.childNodes.forEach(element => {
-          if ((element as HTMLElement).id.startsWith('bishop')) {
-            return;
-          }
-          this.game.animationManager.attachWithAnimation(
-            new BgaSlideAnimation({ element }),
-            destinationNode
-          )
-        });
-        // Move from empire squares to Thrones
-      } else {
-        // Move from thrones to empire squres
-        const originNode = document.getElementById(`${empireSquareId}_throne_tokens`);
-        const destinationNode = document.getElementById(`${empireSquareId}_tokens`);
-        if (!(originNode && destinationNode)) {
-          return;
-        }
-        originNode.childNodes.forEach(element => {
-          if ((element as HTMLElement).id.startsWith('bishop')) {
-            return;
-          }
-          this.game.animationManager.attachWithAnimation(
-            new BgaSlideAnimation({ element }),
-            destinationNode
-          )
-        });
+    Object.values(THRONES_CONFIG).forEach(({ empireSquareId }) => {
+      const originNode =
+        value === ENABLED
+          ? document.getElementById(`${empireSquareId}_tokens`)
+          : document.getElementById(`${empireSquareId}_throne_tokens`);
+      const destinationNode =
+        value === ENABLED
+          ? document.getElementById(`${empireSquareId}_throne_tokens`)
+          : document.getElementById(`${empireSquareId}_tokens`);
+      if (!(originNode && destinationNode)) {
+        return;
       }
+
+      const ids = [];
+      originNode.childNodes.forEach((element: HTMLElement) => {
+        if (element.id.startsWith("bishop")) {
+          return;
+        }
+        ids.push(element.id);
+      });
+
+      ids.forEach((id: string) => {
+        const element = document.getElementById(id);
+        animations.push(
+          this.game.animationManager.attachWithAnimation(
+            new BgaSlideAnimation({ element }),
+            destinationNode
+          )
+        );
+      });
     });
     await Promise.all(animations);
   }
 
   public onChangeCardsInTableauOverlapSetting(value: string) {
     this.checkEmpireSquaresOverlapVisible();
-    const elements = document.getElementsByClassName('pr_player_board_tableau_cards');
-    
+    const elements = document.getElementsByClassName(
+      "pr_player_board_tableau_cards"
+    );
+
     for (let i = 0; i < elements.length; i++) {
       const element = elements.item(i);
-      element.setAttribute('data-overlap',value);
+      element.setAttribute("data-overlap", value);
     }
 
-    const containerElements = document.getElementsByClassName('pr_player_tableau_cards_container');
-    
+    const containerElements = document.getElementsByClassName(
+      "pr_player_tableau_cards_container"
+    );
+
     for (let i = 0; i < containerElements.length; i++) {
       const element = containerElements.item(i);
-      element.setAttribute('data-overlap',value);
+      element.setAttribute("data-overlap", value);
     }
   }
 
   public onChangeOverlapEmpireSquaresSetting(value: string) {
-    const elements = document.getElementsByClassName('pr_player_board_tableau_cards');
-    
+    const elements = document.getElementsByClassName(
+      "pr_player_board_tableau_cards"
+    );
+
     for (let i = 0; i < elements.length; i++) {
       const element = elements.item(i);
-      element.setAttribute('data-overlap-empire-squares',value);
+      element.setAttribute("data-overlap-empire-squares", value);
     }
   }
 
@@ -280,7 +285,9 @@ class Settings {
   }
 
   private checkEmpireSquaresOverlapVisible() {
-    const node = document.getElementById(`setting_row_${OVERLAP_EMPIRE_SQUARES}`);
+    const node = document.getElementById(
+      `setting_row_${OVERLAP_EMPIRE_SQUARES}`
+    );
     if (!node) {
       return;
     }
