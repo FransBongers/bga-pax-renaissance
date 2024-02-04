@@ -16,6 +16,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public hand: Hand;
   // public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
   public infoPanel: InfoPanel;
+  public informationModal: InformationModal;
   public market: Market;
   public notificationManager: NotificationManager;
   public openHandsModal: OpenHandsModal;
@@ -154,8 +155,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
     };
 
     this.infoPanel = new InfoPanel(this);
-
+    this.informationModal = new InformationModal(this);
     this.settings = new Settings(this);
+    
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
 

@@ -236,6 +236,16 @@ var VOTE_OP_WEST = "VOTE_OP_WEST";
 var APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT = 'APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT';
 var APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT = 'APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT';
 var APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT = 'APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT';
+var CONSPIRACY_ONE_SHOT = 'CONSPIRACY_ONE_SHOT';
+var CORONATION_ONE_SHOT = 'CORONATION_ONE_SHOT';
+var CRUSADE_ONE_SHOT = 'CRUSADE_ONE_SHOT';
+var JIHAD_ONE_SHOT = 'JIHAD_ONE_SHOT';
+var PEASANT_REVOLT_ONE_SHOT = 'PEASANT_REVOLT_ONE_SHOT';
+var REFORMATION_ONE_SHOT = 'REFORMATION_ONE_SHOT';
+var TRADE_SHIFT_NOVGOROD_ONE_SHOT = 'TRADE_SHIFT_NOVGOROD_ONE_SHOT';
+var TRADE_SHIFT_RED_SEA_ONE_SHOT = 'TRADE_SHIFT_RED_SEA_ONE_SHOT';
+var TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT = 'TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT';
+var TRADE_SHIFT_TIMBUKTU_ONE_SHOT = 'TRADE_SHIFT_TIMBUKTU_ONE_SHOT';
 var SA_BEHEAD_EAST_CARD_WITH_BISHOP_ONLY = 'SA_BEHEAD_EAST_CARD_WITH_BISHOP_ONLY';
 var SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY';
 var SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY = 'SA_BEHEAD_WEST_CARD_WITH_CATHOLIC_REFORMIST_BISHOP_ONLY';
@@ -1914,6 +1924,7 @@ var PaxRenaissance = (function () {
             _a.tradeFairLevy = new TradeFairLevyState(this),
             _a);
         this.infoPanel = new InfoPanel(this);
+        this.informationModal = new InformationModal(this);
         this.settings = new Settings(this);
         this.animationManager = new AnimationManager(this, { duration: 500 });
         this.tableauCardManager = new TableauCardManager(this);
@@ -3571,6 +3582,352 @@ var InfoPanel = (function () {
     return InfoPanel;
 }());
 var tplInfoPanel = function () { return "<div class='player-board' id=\"pr_info_panel\"></div>"; };
+var getBattleTableConfig = function () { return ({
+    headers: [
+        _("TYPE"),
+        _("ATTACKER"),
+        _("DEFENDER"),
+        _("VICTOR PLACEMENT"),
+        _("NON-STRAWMAN"),
+        _("STRAWMAN"),
+    ],
+    rows: [
+        {
+            type: {
+                iconType: 'operation',
+                icons: [CAMPAIGN_OP],
+                text: _('CAMPAIGN'),
+            },
+            attacker: [
+                _("• Knights in attacker's Location adjacent to target Empire")
+            ],
+            defender: [
+                _("• Knights / Rooks in target Empire")
+            ],
+            victorPlacement: [
+                _('• (optional) All Repressed Tokens'),
+                _('• Bonus Concession')
+            ],
+            nonStrawman: 'Place King as Vassal.',
+            strawman: 'Not allowed.'
+        },
+        {
+            type: {
+                iconType: 'oneShot',
+                icons: [CONSPIRACY_ONE_SHOT],
+                text: _('CONSPIRACY'),
+            },
+            attacker: [
+                _("• Agents"),
+                _("• Pirates bordering"),
+                _("• Repressed Knights / Rooks"),
+            ],
+            defender: [
+                _("• Knights / Rooks in card's Location")
+            ],
+            victorPlacement: [
+                _('• Agents'),
+                _('• Repressed Knights / Rooks'),
+                _('• (optional) Repressed Pawns'),
+                _('• Bonus Concession')
+            ],
+            nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop.',
+            strawman: 'Flip Empire Card.'
+        },
+        {
+            type: {
+                iconType: 'oneShot',
+                icons: [PEASANT_REVOLT_ONE_SHOT],
+                text: _('PEASANT REVOLT'),
+            },
+            attacker: [
+                _("• Agents"),
+                _("• Pirates bordering"),
+                _("• Your Concessions bordering"),
+                _("• Repressed Pawns"),
+            ],
+            defender: [
+                _("• Knights / Rooks in card's Location")
+            ],
+            victorPlacement: [
+                _('• Agents'),
+                _('• Repressed Pawns'),
+                _('• (optional) Repressed Knights / Rooks'),
+                _('• Bonus Concession')
+            ],
+            nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop.',
+            strawman: 'Flip Empire Card.'
+        },
+        {
+            type: {
+                iconType: 'oneShot',
+                icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT, REFORMATION_ONE_SHOT],
+                text: _('RELIGIOUS WAR'),
+            },
+            attacker: [
+                _("• Agents (Knights & Rooks)"),
+                _("• Believer Knights / Rooks in target"),
+                _("• Believer Knights adjacent"),
+                _("• Believer Pirates bordering"),
+            ],
+            defender: [
+                _("• Heretic Knights / Rooks in card's Location"),
+                _("• Heretic Pirates bordering"),
+            ],
+            victorPlacement: [
+                _('• Agents'),
+                _('• (optional) All Repressed Tokens'),
+                _('• Bonus Concession')
+            ],
+            nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop. Change Map Card to the indicated Theocracy.',
+            strawman: 'Flip Empire Card.'
+        },
+    ]
+}); };
+var getOperationsConfig = function () { return ({
+    headers: [
+        "",
+        _("TARGET"),
+        _("REQUIREMENT"),
+        _("EFFECT"),
+    ],
+    rows: [
+        {
+            icons: [INQUISITOR_OP_CATHOLIC],
+            target: _("Bishop of indicated religion"),
+            effect: _("Move to adjacent Tableau card or to card with same Location. If Bishop on card: Kill both. If Repressed Tokens on card: optional Kill one. On Card: Silence."),
+        },
+        {
+            icons: [COMMERCE_OP_EAST],
+            target: _("Market (East or West)"),
+            effect: _("Take on Florin from any space in the market row specified (West/East)."),
+        },
+        {
+            icons: [BEHEAD_OP],
+            target: _("Tableau Card with the card's Location"),
+            effect: _("Discard target card. Also discard itself if target is an Empire."),
+        },
+        {
+            icons: [TAX_OP],
+            target: _("Concession bordering the card's Location"),
+            requirement: _("Empire must have 1 or more empty Cities"),
+            effect: _("Target pays 1 Florin to China or is Repressed, Target places a Levy."),
+        },
+        {
+            icons: [REPRESS_OP_PAWN_ROOK_KNIGHT],
+            target: _("Rook / Knight / Concession on Map with card's Location"),
+            requirement: _("Must Repress 1 Token."),
+            effect: _("Move to Empire square as repressed Token. Gain 1 Florin from China."),
+        },
+        {
+            icons: [VOTE_OP_EAST],
+            target: _("Empire card in Tableau, same EAST or WEST as card"),
+            requirement: _("Have Concession majority. Pay 1 Florin per Repressed Token. Empire not on a Throne, or be a Vassal."),
+            effect: _("Regime Change. Golden Liberty (optional): change Map Card to medieval."),
+        },
+        {
+            icons: [CORSAIR_OP_CATHOLIC],
+            target: _("Pirate bordering the card's Location"),
+            effect: _("Move to any Sea Border on same or Adjacent Location sharing a Sea Border. Kill Pirate or Concession in the destination (if any)."),
+        },
+        {
+            icons: [SIEGE_OP],
+            target: _("Rook / Knight / Pirate on Map with card's Location"),
+            effect: _("Kill target."),
+        },
+        {
+            icons: [CAMPAIGN_OP],
+            target: _("Adjacent target Empire"),
+            requirement: _("Pay 1 Florin per Attacker."),
+            effect: _("Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."),
+        },
+    ],
+}); };
+var getOneShotsConfig = function () { return ({
+    headers: [
+        "",
+        _("TARGET"),
+        _("REQUIREMENT"),
+        _("EFFECT"),
+    ],
+    rows: [
+        {
+            icons: [TRADE_SHIFT_NOVGOROD_ONE_SHOT, TRADE_SHIFT_RED_SEA_ONE_SHOT, TRADE_SHIFT_TIMBUKTU_ONE_SHOT],
+            target: _("Busted Disk on indicated Emporium"),
+            effect: _("New Trade Route. Move Busted disk to uncovered Emporium of the same color, Repressing Token."),
+        },
+        {
+            icons: [TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT],
+            target: _("Busted Disk on Spice Islands"),
+            requirement: _("Must have at least one Discovery Prestige in Tableau (not counting card being played)"),
+            effect: _("New Trade Route. Move Busted disk to uncovered Emporium of the same color, Repressing Token."),
+        },
+        {
+            icons: [PEASANT_REVOLT_ONE_SHOT, CONSPIRACY_ONE_SHOT],
+            target: _("Empire / Map Card on card's Location"),
+            effect: _("Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."),
+        },
+        {
+            icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT, REFORMATION_ONE_SHOT],
+            target: _("Empire / Map Card on card's Location"),
+            requirement: _('Heretic(s) in target Empire.'),
+            effect: _("Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."),
+        },
+        {
+            icons: [APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT],
+            target: _("All players with both types of indicated Religious Prestige in Tableau"),
+            effect: _("Discard all Tableau cards with indicated Religious Prestige."),
+        },
+    ]
+}); };
+var InformationModal = (function () {
+    function InformationModal(game) {
+        this.selectedTab = 'battleTable';
+        this.tabs = {
+            battleTable: {
+                text: _('Battle Table')
+            },
+            operations: {
+                text: _('Operations')
+            },
+            oneShots: {
+                text: _('One-Shots')
+            },
+        };
+        this.game = game;
+        var gamedatas = game.gamedatas;
+        this.setup({ gamedatas: gamedatas });
+    }
+    InformationModal.prototype.clearInterface = function () { };
+    InformationModal.prototype.updateInterface = function (_a) {
+        var gamedatas = _a.gamedatas;
+    };
+    InformationModal.prototype.addButton = function (_a) {
+        var gamedatas = _a.gamedatas;
+        var configPanel = document.getElementById("pr_info_panel");
+        if (configPanel) {
+            configPanel.insertAdjacentHTML("beforeend", tplInformationButton());
+        }
+    };
+    InformationModal.prototype.setupModal = function (_a) {
+        var gamedatas = _a.gamedatas;
+        this.modal = new Modal("information_modal", {
+            class: "pr_information_modal",
+            closeIcon: "fa-times",
+            contents: tplInformationModalContent({ tabs: this.tabs }),
+            closeAction: "hide",
+            verticalAlign: "flex-start",
+            breakpoint: 740,
+        });
+    };
+    InformationModal.prototype.setup = function (_a) {
+        var _this = this;
+        var gamedatas = _a.gamedatas;
+        this.addButton({ gamedatas: gamedatas });
+        this.setupModal({ gamedatas: gamedatas });
+        this.informationModalContent();
+        this.changeTab({ id: this.selectedTab });
+        Object.keys(this.tabs).forEach(function (id) {
+            dojo.connect($("pr_information_modal_tab_".concat(id)), "onclick", function () { return _this.changeTab({ id: id }); });
+        });
+        dojo.connect($("pr_information_button"), "onclick", function () { return _this.modal.show(); });
+    };
+    InformationModal.prototype.informationModalContent = function () {
+    };
+    InformationModal.prototype.changeTab = function (_a) {
+        var id = _a.id;
+        var currentTab = document.getElementById("pr_information_modal_tab_".concat(this.selectedTab));
+        var currentTabContent = document.getElementById("pr_".concat(this.selectedTab));
+        currentTab.removeAttribute('data-state');
+        if (currentTabContent) {
+            currentTabContent.style.display = 'none';
+        }
+        this.selectedTab = id;
+        var tab = document.getElementById("pr_information_modal_tab_".concat(id));
+        var tabContent = document.getElementById("pr_".concat(this.selectedTab));
+        tab.setAttribute('data-state', 'selected');
+        if (tabContent) {
+            tabContent.style.display = '';
+        }
+    };
+    return InformationModal;
+}());
+var tplInformationButton = function () { return "<button id=\"pr_information_button\" type=\"button\" class=\"pr_button\">\n<div class=\"pr_icon\"></div>\n</button>"; };
+var tplInfoModalTab = function (_a) {
+    var id = _a.id, text = _a.text;
+    return "\n  <div id=\"pr_information_modal_tab_".concat(id, "\" class=\"pr_informdation_modal_tab\">\n    <span>").concat(_(text), "</span>\n  </div>");
+};
+var tplOperationsInfoRow = function (_a) {
+    var row = _a.row, last = _a.last, lightBackground = _a.lightBackground, _b = _a.type, type = _b === void 0 ? "operation" : _b;
+    var icons = row.icons, target = row.target, requirement = row.requirement, effect = row.effect;
+    return "\n  <div class=\"pr_cell".concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n    ").concat(icons
+        .map(function (icon) {
+        return type === "operation"
+            ? "<div class=\"pr_tableau_op\" data-tableau-op-id=\"".concat(icon, "\"></div>")
+            : "<div class=\"pr_one_shot\" data-one-shot-id=\"".concat(icon, "\"></div>");
+    })
+        .join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n      <span style=\"font-weight: bold;\">").concat(_(target), "</span>\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n    <span>").concat(_(requirement || ""), "</span>\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n    <span>").concat(_(effect), "</span>\n  </div>\n");
+};
+var tplBattleTableRow = function (_a) {
+    var row = _a.row, lightBackground = _a.lightBackground, last = _a.last;
+    var type = row.type, attacker = row.attacker, defender = row.defender, victorPlacement = row.victorPlacement, nonStrawman = row.nonStrawman, strawman = row.strawman;
+    return "\n  <div class=\"pr_cell".concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\" style=\"justify-content: space-between;\">\n  <span style=\"font-weight: bold;\">").concat(_(type.text), "</span>\n    ").concat(type.icons
+        .map(function (icon) {
+        return type.iconType === "operation"
+            ? "<div class=\"pr_tableau_op\" data-tableau-op-id=\"".concat(icon, "\"></div>")
+            : "<div class=\"pr_one_shot\" data-one-shot-id=\"".concat(icon, "\"></div>");
+    })
+        .join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n      ").concat(attacker.map(function (text) { return "<span>".concat(_(text), "</span>"); }).join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n  ").concat(defender.map(function (text) { return "<span>".concat(_(text), "</span>"); }).join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n  ").concat(victorPlacement.map(function (text) { return "<span>".concat(_(text), "</span>"); }).join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n    <span>").concat(_(nonStrawman), "</span>\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n    <span>").concat(_(strawman), "</span>\n  </div>\n");
+};
+var tplInformationModalContent = function (_a) {
+    var tabs = _a.tabs;
+    var OPERATIONS_INFO_CONFIG = getOperationsConfig();
+    var ONE_SHOTS_INFO_CONFIG = getOneShotsConfig();
+    var BATTLE_TABLE_CONFIG = getBattleTableConfig();
+    return "<div id=\"pr_information_modal_content\">\n    <div class=\"pr_informdation_modal_tabs\">\n      ".concat(Object.entries(tabs)
+        .map(function (_a) {
+        var id = _a[0], info = _a[1];
+        return tplInfoModalTab({ id: id, text: info.text });
+    })
+        .join(""), "\n    </div>\n      <div id=\"pr_operations\" style=\"display: none;\">\n        ").concat(OPERATIONS_INFO_CONFIG.headers
+        .map(function (headerText) {
+        return "<div class=\"pr_header\"><span>".concat(_(headerText), "</span></div>");
+    })
+        .join(""), "\n        ").concat(OPERATIONS_INFO_CONFIG.rows
+        .map(function (row, index) {
+        return tplOperationsInfoRow({
+            row: row,
+            last: index === OPERATIONS_INFO_CONFIG.rows.length - 1,
+            lightBackground: index % 2 === 1,
+        });
+    })
+        .join(""), "\n      </div>\n      <div id=\"pr_oneShots\" style=\"display: none;\">\n      ").concat(ONE_SHOTS_INFO_CONFIG.headers
+        .map(function (headerText) {
+        return "<div class=\"pr_header\"><span>".concat(_(headerText), "</span></div>");
+    })
+        .join(""), "\n      ").concat(ONE_SHOTS_INFO_CONFIG.rows
+        .map(function (row, index) {
+        return tplOperationsInfoRow({
+            row: row,
+            last: index === ONE_SHOTS_INFO_CONFIG.rows.length - 1,
+            type: "oneShot",
+            lightBackground: index % 2 === 1,
+        });
+    })
+        .join(""), "\n    </div>\n    <div id=\"pr_battleTable\" style=\"display: none;\">\n    ").concat(BATTLE_TABLE_CONFIG.headers
+        .map(function (headerText) {
+        return "<div class=\"pr_header\"><span>".concat(_(headerText), "</span></div>");
+    })
+        .join(""), "\n      ").concat(BATTLE_TABLE_CONFIG.rows
+        .map(function (row, index) {
+        return tplBattleTableRow({
+            row: row,
+            last: index === BATTLE_TABLE_CONFIG.rows.length - 1,
+            lightBackground: index % 2 === 1,
+        });
+    })
+        .join(""), "\n    </div>\n  </div>");
+};
 var LOG_TOKEN_BOLD_TEXT = "boldText";
 var LOG_TOKEN_CARD_NAME = "cardName";
 var LOG_TOKEN_NEW_LINE = "newLine";
