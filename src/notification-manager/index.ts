@@ -786,13 +786,12 @@ class NotificationManager {
 
     this.game.gameMap.updateCoatOfArms({ card: king });
 
+    this.getPlayer({ playerId }).counters[fromSide].incValue(-1);
+
     await this.game.gameMap
       .getEmpireSquareStock({ empireId: king.empire })
       .addCard(king);
 
-    if (suzerain) {
-      this.game.tableauCardManager.removeVassal({ suzerain });
-    }
 
     this.game.tableauCardManager.updateCardInformations(king);
 

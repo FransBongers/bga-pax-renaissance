@@ -5144,14 +5144,12 @@ var NotificationManager = (function () {
                     case 0:
                         _a = notif.args, king = _a.king, fromSide = _a.fromSide, playerId = _a.playerId, suzerain = _a.suzerain;
                         this.game.gameMap.updateCoatOfArms({ card: king });
+                        this.getPlayer({ playerId: playerId }).counters[fromSide].incValue(-1);
                         return [4, this.game.gameMap
                                 .getEmpireSquareStock({ empireId: king.empire })
                                 .addCard(king)];
                     case 1:
                         _b.sent();
-                        if (suzerain) {
-                            this.game.tableauCardManager.removeVassal({ suzerain: suzerain });
-                        }
                         this.game.tableauCardManager.updateCardInformations(king);
                         player = this.getPlayer({ playerId: playerId });
                         prestige = king[fromSide].prestige;
@@ -5504,8 +5502,6 @@ var OpenHandsModal = (function () {
         this.modal = new Modal("open_hand_modal", {
             class: "pr_open_hands_modal",
             closeIcon: "fa-times",
-            openAnimation: true,
-            openAnimationTarget: "pr_open_hands_button",
             contents: tplOpenHandsModal({
                 data: Object.values(this.handCardData),
                 game: this.game,

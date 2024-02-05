@@ -220,7 +220,7 @@ interface NotifRepressTokenArgs extends NotifWithPlayerArgs {
 interface NotifReturnToThroneArgs extends NotifWithPlayerArgs {
   king: EmpireCard;
   fromSide: "king" | "republic";
-  suzerain: EmpireCard;
+  suzerain: EmpireCard | null;
 }
 
 interface NotifSellCardArgs extends NotifWithPlayerArgs {

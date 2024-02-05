@@ -96,7 +96,8 @@ trait DebugTrait
 
   function test()
   {
-    $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371052);
+    // $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371052);
+
     // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), "EmpireSquare_Hungary");
     // Notifications::log('Cards', Cards::get('PREN162X_CatherineDeMedici')->getStaticData());
     // Cards::get('PREN168X_ZionistState')->activateAbility();
