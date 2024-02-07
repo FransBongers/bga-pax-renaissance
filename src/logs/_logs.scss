@@ -77,6 +77,12 @@
     display: none;
     // --paxRenCardScale: 0.2;
   }
+
+  .pr_tableau_op {
+    display: inline-block;
+    --paxRenIconScale: 0.45;
+    margin-bottom: -9px;
+  }
 }
 
 .log > .roundedbox, .log > .roundedboxinner {

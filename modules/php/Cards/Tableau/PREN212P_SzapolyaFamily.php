@@ -30,14 +30,14 @@ class PREN212P_SzapolyaFamily extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Siege of Vienna 1529"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Ottoman Tribute"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106.5,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

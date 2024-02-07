@@ -25,14 +25,14 @@ class PREN081_CrimeanGoths extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_EAST,
         'flavorText' => clienttranslate("Golden Horder Jarig Law"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Tatar goths"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ]
     ];
     $this->prestige = [LAW];

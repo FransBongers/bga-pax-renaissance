@@ -25,14 +25,14 @@ class PREN009_HouseOfBorgia extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Cesare Borgia'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Extravagantes Communes'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 111,
       ]
     ];
     $this->prestige = [PATRON];

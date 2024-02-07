@@ -25,20 +25,20 @@ class PREN036_FlandersGuild extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Golden Spurs'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Salt Wars'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Flemish weavers & spinners guild'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145,
+        'left' => 110,
       ]
     ];
     $this->prestige = [LAW];

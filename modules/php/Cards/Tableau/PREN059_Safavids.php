@@ -25,14 +25,14 @@ class PREN059_Safavids extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Shi'i Alevi holocaust"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Forced conversions of Twelver Shi'a"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 4,
       ]
     ];
     $this->prestige = [ISLAMIC];

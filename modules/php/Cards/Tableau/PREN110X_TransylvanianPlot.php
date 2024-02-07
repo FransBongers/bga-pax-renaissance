@@ -30,14 +30,14 @@ class PREN110X_TransylvanianPlot extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Medgyes siege"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate("Venetian spies"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

@@ -29,20 +29,20 @@ class PREN066_BlackArmy extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Grgeteg monastery"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Arquebus mercenaries'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Fiery Dragon"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 147,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

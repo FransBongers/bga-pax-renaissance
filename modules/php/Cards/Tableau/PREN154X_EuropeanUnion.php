@@ -25,8 +25,8 @@ class PREN154X_EuropeanUnion extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_ROOK,
         'flavorText' => clienttranslate('Zdeniek Lev, Supreme Burgrave of Prague'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

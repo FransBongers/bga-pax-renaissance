@@ -25,20 +25,20 @@ class PREN116X_CelebiTaxRevolts extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Sipahis feudalism"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Şahkulu; Nur Ali Halife; Baba Zünnun"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Mystic rebel Celebi"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 155,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

@@ -18,8 +18,8 @@ class PREN151X_CatherineOfNavarre extends \PaxRenaissance\Models\QueenCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Basque War of the Bands'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 4.5,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

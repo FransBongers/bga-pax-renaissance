@@ -25,8 +25,8 @@ class PREN114X_CountsOfCelji extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN_KNIGHT,
         'flavorText' => clienttranslate("stara pravada"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

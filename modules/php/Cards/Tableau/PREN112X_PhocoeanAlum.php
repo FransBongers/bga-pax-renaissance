@@ -28,14 +28,14 @@ class PREN112X_PhocoeanAlum extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN_ROOK,
         'flavorText' => clienttranslate("Slave market of Chios"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Alum farmer Bartolomeo Zorzi"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

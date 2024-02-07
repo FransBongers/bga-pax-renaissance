@@ -25,14 +25,14 @@ class PREN013_GenoeseFleet extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Commerce raid'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Imperial Navy'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

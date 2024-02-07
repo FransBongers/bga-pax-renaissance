@@ -29,20 +29,20 @@ class PREN120X_AgentsOfDukagjini extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN_ROOK,
         'flavorText' => clienttranslate("Pronoier"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("League of Lezha"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Zaharia feud"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146.5,
+        'left' => 4,
       ],
     ];
     $this->prestige = [LAW];

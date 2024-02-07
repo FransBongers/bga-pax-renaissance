@@ -29,14 +29,14 @@ class PREN051_Kingmaker extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_ROOK,
         'flavorText' => clienttranslate('Constable of Calais'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('War of the Roses'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

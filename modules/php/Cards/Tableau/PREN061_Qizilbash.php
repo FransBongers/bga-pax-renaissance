@@ -25,20 +25,20 @@ class PREN061_Qizilbash extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Khurramites"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Shi'i militia"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Shi'i Alevi holocaust"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146,
+        'left' => 4,
       ]
     ];
     $this->prestige = [ISLAMIC];

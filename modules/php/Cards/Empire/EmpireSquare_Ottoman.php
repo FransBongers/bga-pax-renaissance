@@ -45,26 +45,33 @@ class EmpireSquare_Ottoman extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Komnenian army"),
-          'top' => 0,
-          'left' => 0,
-        ],
-      ],
-      REPUBLIC => []
-    ] : [
-      KING =>  [
-        [
-          'id' => CAMPAIGN_OP,
-          'flavorText' => clienttranslate("Conquest of East Europe"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 4.5,
         ],
       ],
       REPUBLIC => [
         [
           'id' => COMMERCE_OP_EAST,
           'flavorText' => clienttranslate('Tolerate dhimmis'),
-          'top' => 0,
-          'left' => 0,
+          'top' => 73,
+          'left' => 4.5,
+        ],
+      ]
+    ] : [
+      KING =>  [
+        [
+          'id' => CAMPAIGN_OP,
+          'flavorText' => clienttranslate("Conquest of East Europe"),
+          'top' => 64.5,
+          'left' => 5,
+        ],
+      ],
+      REPUBLIC => [
+        [
+          'id' => COMMERCE_OP_EAST,
+          'flavorText' => clienttranslate('Tolerate dhimmis'),
+          'top' => 73,
+          'left' => 4.5,
         ],
       ]
     ];

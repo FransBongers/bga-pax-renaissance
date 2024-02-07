@@ -26,8 +26,8 @@ class PREN214P_Huguenots extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate("Human capital"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
     ];
     $this->prestige = [REFORMIST];

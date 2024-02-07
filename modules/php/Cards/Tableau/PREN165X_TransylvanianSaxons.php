@@ -25,14 +25,14 @@ class PREN165X_TransylvanianSaxons extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_EAST,
         'flavorText' => clienttranslate("Unio Trium Nationum"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Voivode of Transylvania"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

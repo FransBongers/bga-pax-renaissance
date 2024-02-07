@@ -24,14 +24,14 @@ class PREN108X_IsfendiyaridDynasty extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Commerce raid"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => CORSAIR_OP_ISLAMIC,
         'flavorText' => clienttranslate('Euxine pirates'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

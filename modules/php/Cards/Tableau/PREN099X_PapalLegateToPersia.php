@@ -25,14 +25,14 @@ class PREN099X_PapalLegateToPersia extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate("Imperial & papal envoy"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 75,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Council of Florence'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 122,
+        'left' => 4,
       ]
     ];
     $this->prestige = [REFORMIST];

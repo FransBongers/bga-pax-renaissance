@@ -25,8 +25,8 @@ class PREN118X_GrandMufti extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Fatwās"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
     ];
     $this->prestige = [ISLAMIC];

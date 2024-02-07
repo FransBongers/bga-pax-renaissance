@@ -25,14 +25,14 @@ class PREN100X_UnifiedChristendom extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate("Papal legate"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Anti-schism party'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 4,
       ]
     ];
     $this->prestige = [PATRON];

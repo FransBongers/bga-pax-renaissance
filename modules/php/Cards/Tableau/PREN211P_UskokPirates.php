@@ -25,20 +25,20 @@ class PREN211P_UskokPirates extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Hundred Years' Croatian-Ottoman War"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 45.5,
+        'left' => 4.5,
       ],
       [
         'id' => CORSAIR_OP_REFORMIST,
         'flavorText' => clienttranslate("Petar Kružić"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106.5,
+        'left' => 4,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate("Petar Kružić"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 140.5,
+        'left' => 2.5,
       ],
     ];
     $this->region = EAST;

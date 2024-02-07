@@ -25,14 +25,14 @@ class PREN215P_ReformationParliament extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Crown Annates"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Royal Supremacy"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
     ];
     $this->prestige = [REFORMIST];

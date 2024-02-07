@@ -18,14 +18,14 @@ class PREN079_CarlottaLusignanOfCyprus extends \PaxRenaissance\Models\QueenCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Lusignan Civil War"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 5.5,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Episkopi sugar plantation"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 45.5,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

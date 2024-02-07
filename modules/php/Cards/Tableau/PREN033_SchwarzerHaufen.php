@@ -25,14 +25,14 @@ class PREN033_SchwarzerHaufen extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Reformatio Sigismundi'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Nulla crux, nulla corona'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

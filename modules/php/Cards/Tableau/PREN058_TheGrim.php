@@ -25,20 +25,20 @@ class PREN058_TheGrim extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Vizier of Selim's"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Janissaries'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Shi'i Alevi holocaust"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146,
+        'left' => 4,
       ]
     ];
     $this->prestige = [ISLAMIC];

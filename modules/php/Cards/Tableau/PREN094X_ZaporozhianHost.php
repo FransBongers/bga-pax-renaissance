@@ -25,14 +25,14 @@ class PREN094X_ZaporozhianHost extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Cossack Code"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 70,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Registered Cossack Uprisings'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 110.5,
+        'left' => 4,
       ]
     ];
     $this->prestige = [REFORMIST];

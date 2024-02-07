@@ -24,8 +24,8 @@ class PREN145X_KappelerMilchsuppe extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Swiss federal diet'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

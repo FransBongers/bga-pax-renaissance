@@ -25,14 +25,14 @@ class PREN139X_FrenchPirates extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Commerce raid'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 112,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Solent landing'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 112,
       ]
     ];
     $this->prestige = [DISCOVERY];

@@ -25,8 +25,8 @@ class PREN011_AnabaptistReformation extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Malleus maleficarum (hammer of witches)'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 68,
+        'left' => 111,
       ]
     ];
     $this->prestige = [REFORMIST];

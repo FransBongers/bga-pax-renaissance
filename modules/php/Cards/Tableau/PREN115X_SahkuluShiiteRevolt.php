@@ -25,14 +25,14 @@ class PREN115X_SahkuluShiiteRevolt extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Shi'ia mullahs"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Şahkulu Messiah"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 108,
+        'left' => 4,
       ],
     ];
     $this->prestige = [ISLAMIC];

@@ -25,20 +25,20 @@ class PREN010_BonfireOfTheVanities extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Medici banishment'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Consiglio Maggiore'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Piagioni disciples'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146.5,
+        'left' => 110,
       ]
     ];
     $this->prestige = [LAW];

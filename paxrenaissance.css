@@ -1351,6 +1351,7 @@
  * PaxRenaissance stylesheet
  *
  */
+.pr_tableau_op_select.pr_selectable,
 .pr_card.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
@@ -1377,6 +1378,8 @@
   box-shadow: none !important;
 }
 
+.pr_tableau_op_select.pr_selected,
+.pr_tableau_op_select.pr_selectable:hover,
 .pr_card.pr_selected,
 .pr_card.pr_selectable:hover {
   cursor: pointer !important;
@@ -1432,6 +1435,12 @@
   box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) blue !important;
 }
 
+.pr_tableau_op_select.pr_selectable,
+.pr_tableau_op_select.pr_selected,
+.pr_tableau_op_select.pr_selectable:hover {
+  z-index: 1;
+}
+
 .pr_card {
   box-sizing: border-box;
   width: calc(var(--paxRenCardScale) * 151px);
@@ -1443,12 +1452,24 @@
   image-rendering: high-quality;
 }
 
+.pr_tableau_op_select {
+  width: calc(var(--paxRenCardScale) * 37px);
+  height: calc(var(--paxRenCardScale) * 27px);
+  position: absolute;
+  border-radius: 50%;
+}
+
 .card-sides {
   position: relative !important;
 }
 
 .pr_card[data-card-id=null] {
   opacity: 0;
+}
+
+.pr_empire_square_container {
+  min-width: calc(var(--paxRenCardScale) * 151px);
+  min-height: calc(var(--paxRenCardScale) * 151px);
 }
 
 .pr_square_card {
@@ -1518,14 +1539,15 @@
 }
 
 .pr_vassals_container {
-  position: relative;
-  top: calc(var(--paxRenCardScale) * 82px);
-  left: 0px;
   width: calc(var(--paxRenCardScale) * 151px);
+  gap: calc(var(--paxRenCardScale) * 12px);
+}
+
+.pr_vassals_container:not(:empty) {
+  padding-top: calc(var(--paxRenCardScale) * 12px);
 }
 
 .pr_queens_container {
-  position: relative;
   width: calc(var(--paxRenCardScale) * 151px);
 }
 
@@ -3264,6 +3286,11 @@
 }
 #pagemaintitletext .pr_square_card, #gameaction_status .pr_square_card {
   display: none;
+}
+#pagemaintitletext .pr_tableau_op, #gameaction_status .pr_tableau_op {
+  display: inline-block;
+  --paxRenIconScale: 0.45;
+  margin-bottom: -9px;
 }
 
 .log > .roundedbox .pr_icon, .log > .roundedboxinner .pr_icon {

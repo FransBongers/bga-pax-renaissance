@@ -25,14 +25,14 @@ class PREN073_TheCrimHorde extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Abdan Khan Gothian slave raids'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 65,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate('Zichian grain'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 109.5,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

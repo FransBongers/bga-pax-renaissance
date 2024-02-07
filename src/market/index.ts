@@ -13,8 +13,8 @@ class Market {
     [WEST]: Counter[];
   };
   private decks: {
-    [EAST]: LineStock<EmpireCard | TableauCard>;
-    [WEST]: LineStock<EmpireCard | TableauCard>;
+    [EAST]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [WEST]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
   };
   private deckCounters: {
     [EAST]: Counter;
@@ -24,8 +24,8 @@ class Market {
     [WEST]: new ebg.counter(),
   };
   private stocks: {
-    [EAST]: LineStock<EmpireCard | TableauCard>[];
-    [WEST]: LineStock<EmpireCard | TableauCard>[];
+    [EAST]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>[];
+    [WEST]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>[];
   };
 
   constructor(game: PaxRenaissanceGame) {
@@ -112,13 +112,13 @@ class Market {
       [WEST]: [],
     };
     for (let i = 0; i <= 5; i++) {
-      this.stocks[EAST][i] = new LineStock<EmpireCard | TableauCard>(
+      this.stocks[EAST][i] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_market_east_${i}_stock`)
       );
       this.counters[EAST][i] = new ebg.counter();
       this.counters[EAST][i].create(`pr_market_east_${i}_counter`);
-      this.stocks[WEST][i] = new LineStock<EmpireCard | TableauCard>(
+      this.stocks[WEST][i] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_market_west_${i}_stock`)
       );
@@ -162,7 +162,7 @@ class Market {
     region,
   }: {
     region: "east" | "west";
-  }): LineStock<EmpireCard | TableauCard> {
+  }): LineStock<EmpireCard | TableauCard | EmpireCardContainer> {
     return this.decks[region];
   }
 

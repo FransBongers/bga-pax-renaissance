@@ -18,8 +18,8 @@ class PREN045_AnneOfBrittany extends \PaxRenaissance\Models\QueenCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Brittany War of Independence'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 5.5,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

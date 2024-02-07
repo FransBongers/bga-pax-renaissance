@@ -25,8 +25,8 @@ class PREN167X_TwelverGhulat extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Sheikh Junayd"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67.5,
+        'left' => 4,
       ],
     ];
     $this->prestige = [ISLAMIC];

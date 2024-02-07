@@ -26,16 +26,16 @@ class EmpireSquare_Mamluk extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Mamluk slaves"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 5,
         ],
       ],
       REPUBLIC => [
         [
           'id' => COMMERCE_OP_EAST,
           'flavorText' => clienttranslate('Western conspiracy'),
-          'top' => 0,
-          'left' => 0,
+          'top' => 69,
+          'left' => 4.5,
         ],
       ]
     ];

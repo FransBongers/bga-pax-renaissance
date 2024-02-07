@@ -26,8 +26,8 @@ class PREN164X_CircassianMamluks extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Burji family"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 57.5,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

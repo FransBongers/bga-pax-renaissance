@@ -29,20 +29,20 @@ class PREN126X_LizardUnion extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_KNIGHT,
         'flavorText' => clienttranslate("Nieszama laws"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("13-years war"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Prussian Confederation"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 147,
+        'left' => 4,
       ],
     ];
     $this->prestige = [LAW];

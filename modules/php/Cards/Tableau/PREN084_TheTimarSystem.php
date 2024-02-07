@@ -24,20 +24,20 @@ class PREN084_TheTimarSystem extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Kapikulu sipahi"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Timarli sipahi"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Keetuda"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

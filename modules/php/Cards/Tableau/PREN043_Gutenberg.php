@@ -28,8 +28,8 @@ class PREN043_Gutenberg extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Mass production of printed books'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 111,
       ]
     ];
     $this->prestige = [LAW];

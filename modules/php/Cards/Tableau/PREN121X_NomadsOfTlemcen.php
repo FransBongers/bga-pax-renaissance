@@ -25,8 +25,8 @@ class PREN121X_NomadsOfTlemcen extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Gold traders"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

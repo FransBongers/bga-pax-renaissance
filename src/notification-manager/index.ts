@@ -325,10 +325,9 @@ class NotificationManager {
 
   async notif_coronation(notif: Notif<NotifCoronationArgs>) {
     const { queen, king, playerId } = notif.args;
-    // const player = this.getPlayer({ playerId });
-    // await player.tableau.tableau[queen.region].
+    // TODO: check why we need to call removeCard first
     await this.game.tableauCardManager.removeCard(queen);
-    await this.game.tableauCardManager.updateCardInformations(king);
+    // await this.game.tableauCardManager.updateCardInformations(king);
     await this.game.tableauCardManager.addQueen({ king, queen });
   }
 
@@ -365,9 +364,9 @@ class NotificationManager {
       });
     }
 
-    if (wasVassalTo) {
-      this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
-    }
+    // if (wasVassalTo) {
+    //   this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
+    // }
     // if (king) {
     //   this.game.tableauCardManager.updateCardInformations(king);
 
@@ -404,12 +403,12 @@ class NotificationManager {
     const player = this.getPlayer({ playerId });
 
     if (king) {
-      this.game.tableauCardManager.updateCardInformations(king);
-
-      this.game.tableauCardManager.removeQueen({
-        king,
-        queen,
-      });
+      // this.game.tableauCardManager.updateCardInformations(king);
+      this.game.tableauCardManager.removeCard(queen);
+      // this.game.tableauCardManager.removeQueen({
+      //   king,
+      //   queen,
+      // });
     }
     if (king === null) {
       this.game.tableauCardManager.removeCard(queen);
@@ -435,10 +434,10 @@ class NotificationManager {
     player.counters[oldSide].incValue(-1);
 
     if (formerSuzerain !== null) {
-      this.game.tableauCardManager.removeVassal({
-        suzerain: formerSuzerain,
-        beforeMove: true,
-      });
+      // this.game.tableauCardManager.removeVassal({
+      //   suzerain: formerSuzerain,
+      //   beforeMove: true,
+      // });
       await player.tableau.addCard(card);
     } else {
       this.game.tableauCardManager.updateCardInformations(card);
@@ -467,10 +466,13 @@ class NotificationManager {
       });
     }
 
+    
     if (destination.type === KING) {
       const newOwner = this.getPlayer({ playerId: destination.ownerId });
-      await newOwner.tableau.addCard(card);
+      const container = createEmpireCardContainer(card);
+      await newOwner.tableau.addCard(container);
     } else if (destination.type === VASSAL) {
+
       await this.game.tableauCardManager.addVassal({
         vassal: card,
         suzerain: destination.suzerain,
@@ -790,10 +792,10 @@ class NotificationManager {
 
     await this.game.gameMap
       .getEmpireSquareStock({ empireId: king.empire })
-      .addCard(king);
+      .addCard(createEmpireCardContainer(king));
 
 
-    this.game.tableauCardManager.updateCardInformations(king);
+    // this.game.tableauCardManager.updateCardInformations(king);
 
     const player = this.getPlayer({ playerId });
     let prestige = king[fromSide].prestige;

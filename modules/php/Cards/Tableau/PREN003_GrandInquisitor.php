@@ -25,20 +25,20 @@ class PREN003_GrandInquisitor extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate('Auto-da-fé'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 110,
       ],
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Consejo Real'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Alumbrados'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146.5,
+        'left' => 110,
       ]
     ];
     $this->prestige = [CATHOLIC];

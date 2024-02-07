@@ -18,8 +18,8 @@ class PREN046_JoannaTheMad extends \PaxRenaissance\Models\QueenCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Revolt of the Comuneros'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 43,
+        'left' => 111,
       ]
     ];
     $this->prestige = [CATHOLIC];

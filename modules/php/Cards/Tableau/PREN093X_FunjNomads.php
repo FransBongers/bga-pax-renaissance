@@ -25,20 +25,20 @@ class PREN093X_FunjNomads extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Royal monopoly"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Amara Dunqas'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Red Sea trade"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145.5,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

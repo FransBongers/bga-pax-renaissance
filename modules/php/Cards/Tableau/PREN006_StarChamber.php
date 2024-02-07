@@ -25,14 +25,14 @@ class PREN006_StarChamber extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate('Tower of London'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Royal Bounty'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107.5,
+        'left' => 111,
       ]
     ];
     $this->prestige = [REFORMIST];

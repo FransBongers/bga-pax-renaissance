@@ -28,20 +28,20 @@ class PREN024_Gonfalonier extends \PaxRenaissance\Models\Cards\CondottiereCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Anti-Ghibelline'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 69,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Condottieri'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Noble Order of the Garter'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 142,
+        'left' => 110,
       ]
     ];
     $this->prestige = [PATRON, LAW];

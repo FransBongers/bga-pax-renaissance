@@ -20,8 +20,8 @@ class PREN103X_Academia extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_EAST,
         'flavorText' => clienttranslate("Academic society"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
     ];
     $this->prestige = [DISCOVERY];

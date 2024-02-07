@@ -29,14 +29,14 @@ class PREN049_OrderOfSantiago extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Cortes de Santarém'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('The Farce of Avila'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 111,
       ]
     ];
     $this->prestige = [CATHOLIC];

@@ -25,14 +25,14 @@ class PREN089_GrandeOfSpain extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Ebolist Party"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4.5,
       ],
       [
         'id' => REPRESS_OP_KNIGHT,
         'flavorText' => clienttranslate("Prince of Eboli"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

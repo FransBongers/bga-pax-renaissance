@@ -134,6 +134,15 @@ interface EmpireCardSide {
   agents: Agent[];
 }
 
+interface EmpireCardContainer {
+  id: string;
+  empireId: string;
+  type: "empireCardContainer";
+  card: EmpireCard;
+  location: string;
+  state: number;
+}
+
 interface EmpireCard extends PaxRenCard {
   empire: string;
   sellValue: number;

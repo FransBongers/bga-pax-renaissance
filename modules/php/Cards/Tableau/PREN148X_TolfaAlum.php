@@ -28,14 +28,14 @@ class PREN148X_TolfaAlum extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Camera Apostolica'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Papal dyeing industry'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

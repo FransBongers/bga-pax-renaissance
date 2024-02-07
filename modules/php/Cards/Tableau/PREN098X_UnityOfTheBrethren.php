@@ -25,14 +25,14 @@ class PREN098X_UnityOfTheBrethren extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_KNIGHT,
         'flavorText' => clienttranslate("Pacifism"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 78,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Bohemian Reformation'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 117.5,
+        'left' => 4,
       ]
     ];
     $this->prestige = [REFORMIST];

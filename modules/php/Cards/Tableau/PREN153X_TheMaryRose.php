@@ -24,20 +24,20 @@ class PREN153X_TheMaryRose extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_ROOK_KNIGHT,
         'flavorText' => clienttranslate('Henry VII bonds & recognisances'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 64.5,
+        'left' => 111,
       ],
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Benevolences'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
       [
         'id' => CORSAIR_OP_REFORMIST,
         'flavorText' => clienttranslate('Anglo-Hansa Wars'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145,
+        'left' => 110,
       ],
     ];
     $this->prestige = [DISCOVERY];

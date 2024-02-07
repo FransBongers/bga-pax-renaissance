@@ -29,22 +29,22 @@ class EmpireSquare_England extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("War of the Roses"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 111,
         ]
       ],
       REPUBLIC => [
         [
           'id' => VOTE_OP_WEST,
           'flavorText' => clienttranslate("House of Commons"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64,
+          'left' => 110.5,
         ],
         [
           'id' => COMMERCE_OP_WEST,
           'flavorText' => '',
-          'top' => 0,
-          'left' => 0,
+          'top' => 103,
+          'left' => 110.5,
         ],
       ]
     ];

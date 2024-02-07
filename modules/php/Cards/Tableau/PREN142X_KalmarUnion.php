@@ -24,14 +24,14 @@ class PREN142X_KalmarUnion extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Commerce raid'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => CORSAIR_OP_REFORMIST,
         'flavorText' => clienttranslate("Magdalene's vendetta"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
     ];
     $this->prestige = [DISCOVERY];

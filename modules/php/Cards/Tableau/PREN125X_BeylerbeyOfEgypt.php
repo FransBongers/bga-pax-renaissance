@@ -29,14 +29,14 @@ class PREN125X_BeylerbeyOfEgypt extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Süleyman the Magnificent"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Cairo citadel"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 4,
       ],
     ];
     $this->prestige = [LAW];

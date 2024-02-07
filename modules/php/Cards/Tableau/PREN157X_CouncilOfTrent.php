@@ -24,8 +24,8 @@ class PREN157X_CouncilOfTrent extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Decrees & Canons'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67.5,
+        'left' => 111,
       ],
     ];
     $this->prestige = [CATHOLIC];

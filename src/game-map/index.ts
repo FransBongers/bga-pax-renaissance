@@ -33,16 +33,16 @@ class GameMap {
   };
 
   private empireSquareStocks: {
-    [ARAGON]: LineStock<EmpireCard | TableauCard>;
-    [BYZANTIUM]: LineStock<EmpireCard | TableauCard>;
-    [ENGLAND]: LineStock<EmpireCard | TableauCard>;
-    [FRANCE]: LineStock<EmpireCard | TableauCard>;
-    [HOLY_ROMAN_EMIRE]: LineStock<EmpireCard | TableauCard>;
-    [HUNGARY]: LineStock<EmpireCard | TableauCard>;
-    [MAMLUK]: LineStock<EmpireCard | TableauCard>;
-    [OTTOMAN]: LineStock<EmpireCard | TableauCard>;
-    [PAPAL_STATES]: LineStock<EmpireCard | TableauCard>;
-    [PORTUGAL]: LineStock<EmpireCard | TableauCard>;
+    [ARAGON]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [BYZANTIUM]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [ENGLAND]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [FRANCE]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HUNGARY]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [MAMLUK]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [OTTOMAN]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PAPAL_STATES]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PORTUGAL]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
   };
 
   constructor(game: PaxRenaissanceGame) {
@@ -162,52 +162,52 @@ class GameMap {
 
   setupEmpireCards({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     this.empireSquareStocks = {
-      [ARAGON]: new LineStock<EmpireCard | TableauCard>(
+      [ARAGON]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${ARAGON}_throne`),
         { direction: "column", center: false }
       ),
-      [BYZANTIUM]: new LineStock<EmpireCard | TableauCard>(
+      [BYZANTIUM]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${BYZANTIUM}_throne`),
         { direction: "column", center: false }
       ),
-      [ENGLAND]: new LineStock<EmpireCard | TableauCard>(
+      [ENGLAND]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${ENGLAND}_throne`),
         { direction: "column", center: false }
       ),
-      [FRANCE]: new LineStock<EmpireCard | TableauCard>(
+      [FRANCE]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${FRANCE}_throne`),
         { direction: "column", center: false }
       ),
-      [HOLY_ROMAN_EMIRE]: new LineStock<EmpireCard | TableauCard>(
+      [HOLY_ROMAN_EMIRE]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${HOLY_ROMAN_EMIRE}_throne`),
         { direction: "column", center: false }
       ),
-      [HUNGARY]: new LineStock<EmpireCard | TableauCard>(
+      [HUNGARY]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${HUNGARY}_throne`),
         { direction: "column", center: false }
       ),
-      [MAMLUK]: new LineStock<EmpireCard | TableauCard>(
+      [MAMLUK]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${MAMLUK}_throne`),
         { direction: "column", center: false }
       ),
-      [OTTOMAN]: new LineStock<EmpireCard | TableauCard>(
+      [OTTOMAN]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${OTTOMAN}_throne`),
         { direction: "column", center: false }
       ),
-      [PAPAL_STATES]: new LineStock<EmpireCard | TableauCard>(
+      [PAPAL_STATES]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${PAPAL_STATES}_throne`),
         { direction: "column", center: false }
       ),
-      [PORTUGAL]: new LineStock<EmpireCard | TableauCard>(
+      [PORTUGAL]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
         this.game.tableauCardManager,
         document.getElementById(`pr_${PORTUGAL}_throne`),
         { direction: "column", center: false }
@@ -222,17 +222,30 @@ class GameMap {
       .filter((card) => !card.isQueen)
       .forEach((card) => {
         const empire = card.location.split("_")[1];
+
         if (this.empireSquareStocks[empire]) {
-          this.empireSquareStocks[empire].addCard(card);
+          const container: EmpireCardContainer = {
+            type: EMPIRE_CARD_CONTAINER,
+            id: `${empire}_container`,
+            empireId: card.empire,
+            card,
+            state: card.state,
+            location: card.location
+          }
+          this.empireSquareStocks[empire].addCard(container);
         }
-        card.queens.forEach((queen) => {
-          const queenTokensNode = document.getElementById(`${queen.id}_tokens`);
-          gamedatas.tokens.inPlay
-            .filter((token) => token.location === queen.id)
-            .forEach((token) => {
-              queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
-            });
-        });
+
+        // if (this.empireSquareStocks[empire]) {
+        //   this.empireSquareStocks[empire].addCard(card);
+        // }
+        // card.queens.forEach((queen) => {
+        //   const queenTokensNode = document.getElementById(`${queen.id}_tokens`);
+        //   gamedatas.tokens.inPlay
+        //     .filter((token) => token.location === queen.id)
+        //     .forEach((token) => {
+        //       queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
+        //     });
+        // });
         // const { id, location } = card;
         // const node = document.getElementById(`pr_${location}`);
         // if (!node) {
@@ -321,7 +334,7 @@ class GameMap {
     empireId,
   }: {
     empireId: string;
-  }): LineStock<EmpireCard | TableauCard> {
+  }): LineStock<EmpireCard | TableauCard | EmpireCardContainer> {
     return this.empireSquareStocks[empireId];
   }
 

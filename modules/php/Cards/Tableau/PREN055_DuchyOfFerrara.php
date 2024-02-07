@@ -25,14 +25,14 @@ class PREN055_DuchyOfFerrara extends \PaxRenaissance\Models\Cards\CondottiereCar
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Salt War'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67.5,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Comacchio saltworks'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->prestige = [PATRON];

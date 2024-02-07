@@ -82,20 +82,58 @@ trait DebugTrait
 
   function debugAgeOfReformationCards()
   {
-    Notifications::log('adding reformation cards',[]);
-    $this->debugPlaceCardInMarket('PREN208P_Sarmatism',EAST,4);
-    $this->debugPlaceCardInMarket('PREN209P_BureauOfBarbarians',EAST,3);
-    $this->debugPlaceCardInMarket('PREN210P_KaysarIRum',EAST,2);
-    $this->debugPlaceCardInMarket('PREN211P_UskokPirates',EAST,1);
-    $this->debugPlaceCardInMarket('PREN212P_SzapolyaFamily',WEST,5);
-    $this->debugPlaceCardInMarket('PREN213P_NetherlandsInquisition',WEST,4);
-    $this->debugPlaceCardInMarket('PREN214P_Huguenots',WEST,3);
-    $this->debugPlaceCardInMarket('PREN215P_ReformationParliament',WEST,2);
-    $this->debugPlaceCardInMarket('PREN216P_MargaretOfParma',WEST,1);
+    Notifications::log('adding reformation cards', []);
+    $this->debugPlaceCardInMarket('PREN208P_Sarmatism', EAST, 4);
+    $this->debugPlaceCardInMarket('PREN209P_BureauOfBarbarians', EAST, 3);
+    $this->debugPlaceCardInMarket('PREN210P_KaysarIRum', EAST, 2);
+    $this->debugPlaceCardInMarket('PREN211P_UskokPirates', EAST, 1);
+    $this->debugPlaceCardInMarket('PREN212P_SzapolyaFamily', WEST, 5);
+    $this->debugPlaceCardInMarket('PREN213P_NetherlandsInquisition', WEST, 4);
+    $this->debugPlaceCardInMarket('PREN214P_Huguenots', WEST, 3);
+    $this->debugPlaceCardInMarket('PREN215P_ReformationParliament', WEST, 2);
+    $this->debugPlaceCardInMarket('PREN216P_MargaretOfParma', WEST, 1);
   }
 
   function test()
   {
+    // Load list of cards
+    // include dirname(__FILE__) . '/Cards/list.inc.php';
+
+    // $counter = 0;
+    // // $baseProjects = [];
+    // foreach ($cardIds as $cId) {
+      
+    //   $card = Cards::get($cId);
+    //   if ($card->getType() !== TABLEAU_CARD) {
+    //     continue;
+    //   }
+    //   $ops = $card->getOps();
+    //   if (count($ops) === 0) {
+    //     continue;
+    //   }
+
+    //   $hasOpWithTopZero = Utils::array_some($ops,function ($op) {
+    //     return $op['top'] === 0;
+    //   });
+
+    //   if (!$hasOpWithTopZero) {
+    //     continue;
+    //   }
+    //   $this->debugPlaceCardInTableau($cId, WEST, 2371052);
+
+    //   $counter += 1;
+    //   if ($counter >= 30) {
+    //     return;
+    //   }
+    // }
+    // $this->debugPlaceToken(KNIGHT, CATHOLIC, BORDEAUX);
+    // $this->debugPlaceCardInTableau('PREN081_CrimeanGoths', EAST, 2371053);
+    // Cards::get('EmpireSquare_England')->setSide(KING);
+    $squares = Cards::getAllEmpireSquares();
+    foreach($squares as $square) {
+      $square->setSide(REPUBLIC);
+    }
+    // Empires::get(PAPAL_STATES)->changeToTheocracy(REFORMIST);
     // $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371052);
 
     // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), "EmpireSquare_Hungary");
@@ -132,11 +170,11 @@ trait DebugTrait
     // Cards::move('PREN078_SittIHatunOfDulkadir','queens_byzantium');
     // $this->debugPlaceCardInTableau('PREN059_Safavids', EAST, 2371053);
     // $this->debugPlaceCardInTableau('PREN008_Jesuits', WEST, 2371053);
-    
+
 
     // $this->debugPlaceToken(ROOK,REFORMIST,PARIS);
     // $this->debugPlaceCardInMarket('COMET1_Copernicus');
-    
+
 
     // return Utils::filter($marketCards, function ($card) use ($florins) {
     //   return explode('_',$card->getLocation())[1] === $this->region && $florins[$card->getLocation().'_florins'] > 0;

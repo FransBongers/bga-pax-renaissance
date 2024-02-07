@@ -25,8 +25,8 @@ class PREN039_FlorentineWool extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Arte Della Lana guild'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

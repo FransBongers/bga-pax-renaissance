@@ -30,20 +30,20 @@ class PREN085_VladTheImpaler extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Impalement"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Night Attack"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate("Order of the Dragon"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146.5,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

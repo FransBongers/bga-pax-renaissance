@@ -25,14 +25,14 @@ class PREN019_GoldCoastMonopoly extends \PaxRenaissance\Models\TableauCard
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Elmina castle'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Gulf of Guinea royal monopoly'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

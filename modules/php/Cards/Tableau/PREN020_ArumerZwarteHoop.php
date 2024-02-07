@@ -25,14 +25,14 @@ class PREN020_ArumerZwarteHoop extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN_ROOK_KNIGHT,
         'flavorText' => clienttranslate('Freedom fighters'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => CORSAIR_OP_ISLAMIC,
         'flavorText' => clienttranslate('Arumer Zwarte'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

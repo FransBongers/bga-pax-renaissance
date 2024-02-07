@@ -29,14 +29,14 @@ class PREN026_Cromwell extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Pilgrimage of Grace'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Dissolution of the Monasteries'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 111,
       ]
     ];
     $this->prestige = [REFORMIST];

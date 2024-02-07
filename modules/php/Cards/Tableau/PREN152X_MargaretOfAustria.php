@@ -18,8 +18,8 @@ class PREN152X_MargaretOfAustria extends \PaxRenaissance\Models\QueenCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Franche-Comté election'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 5,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

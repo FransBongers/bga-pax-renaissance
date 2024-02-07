@@ -24,8 +24,8 @@ class PREN113X_DalmatianMerchantMarine extends \PaxRenaissance\Models\Cards\Conc
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Euxine trade"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

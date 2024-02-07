@@ -30,14 +30,14 @@ class PREN086_SaintStefanCelMare extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Christianae fidei athleta"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Orthodox Putna monastery"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 4,
       ],
     ];
     $this->prestige = [REFORMIST];

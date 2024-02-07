@@ -25,14 +25,14 @@ class PREN068_BlackSheepTribe extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Diyar Bakr annexation"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Kara Koyunlu Turkmen"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

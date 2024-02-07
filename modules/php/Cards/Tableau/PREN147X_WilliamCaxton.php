@@ -27,8 +27,8 @@ class PREN147X_WilliamCaxton extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Worshipful Company of Mercers'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
     ];
     $this->prestige = [LAW];

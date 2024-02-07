@@ -25,20 +25,20 @@ class PREN209P_BureauOfBarbarians extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate('"Hunting Accident"'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 38,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Postal spy network"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 78,
+        'left' => 4,
       ],
       [
         'id' => REPRESS_OP_ROOK,
         'flavorText' => clienttranslate("Purge of Andronikos"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 116,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

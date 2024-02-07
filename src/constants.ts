@@ -87,6 +87,7 @@ const REGIONS: ("east" | "west")[] = [WEST, EAST];
 const EMPIRE_CARD = "empireCard";
 const TABLEAU_CARD = "tableauCard";
 const VICTORY_CARD = "victoryCard";
+const EMPIRE_CARD_CONTAINER = "empireCardContainer";
 
 // Sides for empire cards
 const KING = "king";

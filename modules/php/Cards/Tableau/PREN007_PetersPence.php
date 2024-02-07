@@ -26,14 +26,14 @@ class PREN007_PetersPence extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Peter's Pence"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Apostolic Camera'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 111,
       ]
     ];
     $this->prestige = [CATHOLIC];

@@ -29,14 +29,14 @@ class PREN025_TeutonicKnights extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN_ROOK,
         'flavorText' => clienttranslate('Großschäffer'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('13-years war'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

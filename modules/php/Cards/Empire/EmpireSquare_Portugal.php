@@ -26,16 +26,16 @@ class EmpireSquare_Portugal extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Invention of the Caravel"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 110,
         ],
       ],
       REPUBLIC => [
         [
           'id' => COMMERCE_OP_WEST,
           'flavorText' => clienttranslate('Fueros'),
-          'top' => 0,
-          'left' => 0,
+          'top' => 71,
+          'left' => 110.5,
         ],
       ]
     ];

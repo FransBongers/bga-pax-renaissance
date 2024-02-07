@@ -20,8 +20,8 @@ class PREN138X_Reichskrone extends \PaxRenaissance\Models\QueenCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate("Bribing electors"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 30.5,
+        'left' => 111,
       ],
     ];
     $this->prestige = [CATHOLIC];

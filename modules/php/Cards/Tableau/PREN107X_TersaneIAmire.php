@@ -25,14 +25,14 @@ class PREN107X_TersaneIAmire extends \PaxRenaissance\Models\Cards\ConcessionsCan
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Commerce raid"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 65,
+        'left' => 4,
       ],
       [
         'id' => CORSAIR_OP_ISLAMIC,
         'flavorText' => clienttranslate('Privateer'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

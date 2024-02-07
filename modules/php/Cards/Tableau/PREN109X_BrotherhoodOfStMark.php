@@ -24,8 +24,8 @@ class PREN109X_BrotherhoodOfStMark extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Kampf-probe legal dueling"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

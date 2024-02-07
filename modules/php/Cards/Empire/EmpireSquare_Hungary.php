@@ -42,22 +42,22 @@ class EmpireSquare_Hungary extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Livonian War"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 4.5,
         ],
       ],
       REPUBLIC => [
         [
           'id' => VOTE_OP_EAST,
           'flavorText' => clienttranslate("Free Elections"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 65,
+          'left' => 4.5,
         ],
         [
           'id' => COMMERCE_OP_EAST,
           'flavorText' => '',
-          'top' => 0,
-          'left' => 0,
+          'top' => 104,
+          'left' => 5,
         ],
       ]
     ] : [
@@ -65,22 +65,22 @@ class EmpireSquare_Hungary extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Black Army"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 5,
         ],
       ],
       REPUBLIC => [
         [
           'id' => VOTE_OP_EAST,
           'flavorText' => clienttranslate("Mielnik Privilege"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 65,
+          'left' => 4.5,
         ],
         [
           'id' => COMMERCE_OP_EAST,
           'flavorText' => '',
-          'top' => 0,
-          'left' => 0,
+          'top' => 104,
+          'left' => 4.5,
         ],
       ]
     ];

@@ -25,8 +25,8 @@ class PREN074_TheKremlin extends \PaxRenaissance\Models\Cards\ImmuneToSilencingC
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Ivan's Hundred"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

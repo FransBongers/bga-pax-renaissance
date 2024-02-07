@@ -24,8 +24,8 @@ class PREN069_BashiBazouk extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Ottoman irregulars"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

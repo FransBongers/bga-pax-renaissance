@@ -3,9 +3,9 @@ class PlayerTableau {
   private playerId: number;
 
   public tableau: {
-    [EAST]?: LineStock<EmpireCard | TableauCard>;
-    [WEST]?: LineStock<EmpireCard | TableauCard>;
-    oldMaids?: LineStock<EmpireCard | TableauCard>;
+    [EAST]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [WEST]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    oldMaids?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
   } = {};
 
   constructor({
@@ -92,27 +92,27 @@ class PlayerTableau {
   }
 
   updateCards({ player }: { player: PaxRenaissancePlayerData }) {
-    this.tableau[EAST].addCards(
-      player.tableau.cards[EAST].filter((card) => {
-        if (card.isQueen && (card as QueenCard).hasKing) {
-          return false;
-        }
-        return card.type === TABLEAU_CARD || !card.isVassal;
-      })
-    );
-    this.tableau[WEST].addCards(
-      player.tableau.cards[WEST].filter((card) => {
-        if (card.isQueen && (card as QueenCard).hasKing) {
-          return false;
-        }
-        return card.type === TABLEAU_CARD || !card.isVassal;
-      })
-    );
+    player.tableau.cards[EAST].filter(noMarriedQueensNoVassals).forEach((card) => {
+      if (card.type === EMPIRE_CARD) {
+        this.tableau[EAST].addCard(createEmpireCardContainer(card));
+      } else {
+        this.tableau[EAST].addCard(card);
+      }
+    })
+
+    player.tableau.cards[WEST].filter(noMarriedQueensNoVassals).forEach((card) => {
+      if (card.type === EMPIRE_CARD) {
+        this.tableau[WEST].addCard(createEmpireCardContainer(card));
+      } else {
+        this.tableau[WEST].addCard(card);
+      }
+    });
+
 
     [...player.tableau.cards[EAST], ...player.tableau.cards[WEST]]
       .filter((card) => card.type === EMPIRE_CARD && card.isVassal)
       .forEach((card: EmpireCard) => {
-        this.game.tableauCardManager.addVassal({
+        this.game.tableauCardManager.setupVassal({
           vassal: card,
           suzerain: this.game.gamedatas.empireSquares.find(
             (empireCard) => empireCard.id === card.suzerainId
@@ -156,7 +156,7 @@ class PlayerTableau {
     });
   }
 
-  public async addCard(card: EmpireCard | TableauCard) {
+  public async addCard(card: EmpireCard | TableauCard | EmpireCardContainer) {
     if (card.location.split("_")[1] === EAST) {
       await this.tableau[EAST].addCard(card);
     } else {

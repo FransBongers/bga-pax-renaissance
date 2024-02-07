@@ -25,20 +25,20 @@ class PREN015_HanseaticLeague extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Commerce raid'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Peter von Danzig'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Hansa Guild'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145.5,
+        'left' => 110,
       ]
     ];
     $this->region = WEST;

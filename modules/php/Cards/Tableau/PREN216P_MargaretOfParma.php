@@ -19,14 +19,14 @@ class PREN216P_MargaretOfParma extends \PaxRenaissance\Models\QueenCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Dutch Revolt'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 8,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Iconoclastic Fury'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 49.5,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

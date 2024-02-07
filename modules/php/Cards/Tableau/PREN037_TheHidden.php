@@ -25,20 +25,20 @@ class PREN037_TheHidden extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Golden republic'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Valencian artisan guilds'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Hidden Messiah'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 151.5,
+        'left' => 110,
       ],
     ];
     $this->prestige = [LAW];

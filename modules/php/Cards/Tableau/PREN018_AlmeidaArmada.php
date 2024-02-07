@@ -25,14 +25,14 @@ class PREN018_AlmeidaArmada extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Commerce raid'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Albuquerque the Great'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->prestige = [DISCOVERY];

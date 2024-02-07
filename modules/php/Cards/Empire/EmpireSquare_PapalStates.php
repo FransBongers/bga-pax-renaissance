@@ -58,22 +58,22 @@ class EmpireSquare_PapalStates extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Holy League"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 81,
+          'left' => 109.5,
         ],
       ],
       REPUBLIC => [
         [
           'id' => VOTE_OP_WEST,
           'flavorText' => clienttranslate("Balance of Power"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 68,
+          'left' => 109.5,
         ],
         [
           'id' => COMMERCE_OP_WEST,
           'flavorText' => '',
-          'top' => 0,
-          'left' => 0,
+          'top' => 106.5,
+          'left' => 109.5,
         ],
       ]
     ];
@@ -82,8 +82,8 @@ class EmpireSquare_PapalStates extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Justification by Faith"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 65,
+          'left' => 110,
         ],
       ];
     } else if ($ageOfReformationVariant && $religion === ISLAMIC) {
@@ -91,8 +91,8 @@ class EmpireSquare_PapalStates extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Italian Wars"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 110,
         ],
       ];
     }

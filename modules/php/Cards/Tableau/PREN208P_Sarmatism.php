@@ -26,14 +26,14 @@ class PREN208P_Sarmatism extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_EAST,
         'flavorText' => clienttranslate("Sejmik liberum veto"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Henrician Articles"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
     ];
     $this->prestige = [LAW];

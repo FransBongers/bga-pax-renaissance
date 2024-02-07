@@ -25,14 +25,14 @@ class PREN040_SindicatRemenca extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Grande Guerra Irmandiño'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 64.5,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Catalan artisan guilds'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 108,
+        'left' => 111,
       ]
     ];
     $this->prestige = [LAW];

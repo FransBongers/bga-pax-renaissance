@@ -25,14 +25,14 @@ class PREN096X_AmerigoVespucci extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Council of the Indies'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Archbishop Rodríguez de Fonseca'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->prestige = [DISCOVERY];

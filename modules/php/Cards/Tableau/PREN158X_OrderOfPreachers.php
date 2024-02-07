@@ -24,8 +24,8 @@ class PREN158X_OrderOfPreachers extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Thomas Cajetan'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 68,
+        'left' => 111,
       ],
     ];
     $this->prestige = [CATHOLIC];

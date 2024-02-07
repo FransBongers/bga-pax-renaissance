@@ -18,14 +18,14 @@ class PREN117X_DespinaKhatun extends \PaxRenaissance\Models\QueenCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("White Sheep Tribe"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 32.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Damsel in distress legend"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 72,
+        'left' => 4,
       ],
     ];
     $this->prestige = [REFORMIST];

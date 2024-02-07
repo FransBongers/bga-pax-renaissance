@@ -25,8 +25,8 @@ class PREN163X_JizyaTaxRevolt extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Forest of the Dead"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

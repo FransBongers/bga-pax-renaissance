@@ -25,8 +25,8 @@ class PREN150X_CatalanPactists extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Busca faction'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
     ];
     $this->prestige = [LAW];

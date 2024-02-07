@@ -29,14 +29,14 @@ class PREN071_TheHandsome extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Janissaries"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Pasha"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 4,
       ]
     ];
     $this->prestige = [ISLAMIC];

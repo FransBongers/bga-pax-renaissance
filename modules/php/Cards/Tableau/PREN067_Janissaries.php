@@ -29,20 +29,20 @@ class PREN067_Janissaries extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Kanune Raya"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Sultan's elite bodyguard"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Grand Vizier"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

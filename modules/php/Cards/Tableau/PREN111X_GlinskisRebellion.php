@@ -25,20 +25,20 @@ class PREN111X_GlinskisRebellion extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_ROOK_KNIGHT,
         'flavorText' => clienttranslate("Council of Lords"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Battle of Kletsk"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Lithuanian was chandlers"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145.5,
+        'left' => 4,
       ],
     ];
     $this->prestige = [REFORMIST];

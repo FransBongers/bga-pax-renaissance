@@ -18,8 +18,8 @@ class PREN095X_ElizabethBathory extends \PaxRenaissance\Models\QueenCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Conscription Long War"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 6.5,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

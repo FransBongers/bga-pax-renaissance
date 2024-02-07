@@ -26,20 +26,20 @@ class PREN119X_GrandHetman extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Military tax"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => REPRESS_OP_PAWN_ROOK,
         'flavorText' => clienttranslate("Laski's statute"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Polish-Lithuanian commonwealth"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145,
+        'left' => 4,
       ],
     ];
     $this->prestige = [REFORMIST];

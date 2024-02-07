@@ -25,14 +25,14 @@ class PREN122X_TheLastSigh extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Castilian tribute"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4.5,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Mumhamed XII civil war"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

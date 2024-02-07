@@ -26,16 +26,16 @@ class EmpireSquare_Byzantium extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Despina Khatun of Ak Koyunlu"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 4.5,
         ],
       ],
       REPUBLIC => [
         [
           'id' => COMMERCE_OP_EAST,
           'flavorText' => clienttranslate('Envoy of Venice, Caterino Zeno'),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 4.5,
         ],
       ]
     ];

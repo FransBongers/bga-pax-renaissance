@@ -29,14 +29,14 @@ class PREN027_SwabianLeague extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN_ROOK,
         'flavorText' => clienttranslate('Bauernjörg, scourge of the peasants'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Imperial Ban'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 109.5,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

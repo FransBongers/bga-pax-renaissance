@@ -18,14 +18,14 @@ class PREN076_SophiaPalaiologina extends \PaxRenaissance\Models\QueenCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Ivan's Sudebnik"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 32.5,
+        'left' => 4,
       ],
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Latin-Greek Unification"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 73.5,
+        'left' => 4,
       ]
     ];
     $this->prestige = [REFORMIST];

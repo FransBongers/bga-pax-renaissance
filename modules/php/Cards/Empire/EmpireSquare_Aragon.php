@@ -26,22 +26,22 @@ class EmpireSquare_Aragon extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Navarrese Civil War"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 110.5,
         ]
       ],
       REPUBLIC => [
         [
           'id' => VOTE_OP_WEST,
           'flavorText' => clienttranslate("University of Pavia"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 109.5,
         ],
         [
           'id' => COMMERCE_OP_WEST,
           'flavorText' => '',
-          'top' => 0,
-          'left' => 0,
+          'top' => 103,
+          'left' => 109.5,
         ],
       ]
     ];

@@ -18,8 +18,8 @@ class PREN162X_CatherineDeMedici extends \PaxRenaissance\Models\QueenCard
       [
         'id' => REPRESS_OP_ROOK,
         'flavorText' => clienttranslate("Saint Bartholomew's Day massacre"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 5,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

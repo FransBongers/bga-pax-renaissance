@@ -29,20 +29,20 @@ class PREN028_TheBold extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Revolt of Liège'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('League of the Public Weal'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Golden Fleece'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 149,
+        'left' => 110,
       ]
     ];
     $this->region = WEST;

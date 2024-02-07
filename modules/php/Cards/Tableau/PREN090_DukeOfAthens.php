@@ -25,8 +25,8 @@ class PREN090_DukeOfAthens extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Acropolis fortification"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4.5,
       ]
     ];
     $this->region = EAST;

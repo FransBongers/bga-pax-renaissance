@@ -29,14 +29,14 @@ class PREN052_Luther extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('Anti-Semitism'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 68.5,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('League of Schmalkaldic'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->prestige = [REFORMIST];

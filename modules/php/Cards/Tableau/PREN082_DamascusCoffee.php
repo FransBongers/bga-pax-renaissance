@@ -25,14 +25,14 @@ class PREN082_DamascusCoffee extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("al-Ghazali Mamluk revolt"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 64.5,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Shams coffee house, first in the world"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 108,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

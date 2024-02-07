@@ -25,20 +25,20 @@ class PREN050_LaSerenissima extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Supreme Tribunal'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Venice arsenal'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Council of Ten'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 146,
+        'left' => 111,
       ]
     ];
     $this->prestige = [LAW];

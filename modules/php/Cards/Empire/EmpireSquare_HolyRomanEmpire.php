@@ -26,22 +26,22 @@ class EmpireSquare_HolyRomanEmpire extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Bohemian War"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 110,
         ],
       ],
       REPUBLIC => [
         [
           'id' => VOTE_OP_WEST,
           'flavorText' => clienttranslate("Imperial reform"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 65.5,
+          'left' => 110,
         ],
         [
           'id' => COMMERCE_OP_WEST,
           'flavorText' => '',
-          'top' => 0,
-          'left' => 0,
+          'top' => 104,
+          'left' => 110.5,
         ],
       ]
     ];

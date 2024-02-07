@@ -26,16 +26,16 @@ class EmpireSquare_France extends \PaxRenaissance\Models\EmpireCard
         [
           'id' => CAMPAIGN_OP,
           'flavorText' => clienttranslate("Centralized state"),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64.5,
+          'left' => 110.5,
         ]
       ],
       REPUBLIC => [
         [
           'id' => COMMERCE_OP_WEST,
           'flavorText' => clienttranslate('Great Privilege'),
-          'top' => 0,
-          'left' => 0,
+          'top' => 64,
+          'left' => 110.5,
         ],
       ]
     ];

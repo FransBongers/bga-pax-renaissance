@@ -18,14 +18,14 @@ class PREN044_IsabellaOfCastille extends \PaxRenaissance\Models\QueenCard
       [
         'id' => REPRESS_OP_PAWN_ROOK,
         'flavorText' => clienttranslate('Alhambra Decree'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 30,
+        'left' => 111,
       ],
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate('Reconquista'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 68,
+        'left' => 111,
       ]
     ];
     $this->prestige = [CATHOLIC];

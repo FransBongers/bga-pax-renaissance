@@ -31,14 +31,14 @@ class PREN088_CemAntiHostage extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Legal fratricide"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Janissary revolt"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4.5,
       ]
     ];
     $this->region = EAST;

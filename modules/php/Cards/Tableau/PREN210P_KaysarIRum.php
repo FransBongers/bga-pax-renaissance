@@ -26,20 +26,20 @@ class PREN210P_KaysarIRum extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Siege of Otranto'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 70,
+        'left' => 2.5,
       ],
       [
         'id' => INQUISITOR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Martyrs of Otranto"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 108.5,
+        'left' => 2.5,
       ],
       [
         'id' => CORSAIR_OP_ISLAMIC,
         'flavorText' => clienttranslate("Adm Gedik Ahmed Pasha"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 148.5,
+        'left' => 2.5,
       ],
     ];
     $this->prestige = [ISLAMIC];

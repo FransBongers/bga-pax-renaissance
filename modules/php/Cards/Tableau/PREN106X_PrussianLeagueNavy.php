@@ -24,20 +24,20 @@ class PREN106X_PrussianLeagueNavy extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Anti-Hansa raid"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Battle of Vistula Lagoon'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate('Danzig grain'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 150,
+        'left' => 4,
       ]
     ];
     $this->prestige = [];

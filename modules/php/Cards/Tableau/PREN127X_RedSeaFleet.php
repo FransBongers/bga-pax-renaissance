@@ -25,20 +25,20 @@ class PREN127X_RedSeaFleet extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_ROOK,
         'flavorText' => clienttranslate("Al-Ghuri reprisals"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 4,
       ],
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Al-Ghuri tax riots"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Red Sea trade"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145.5,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

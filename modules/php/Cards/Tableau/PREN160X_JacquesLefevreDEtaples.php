@@ -25,8 +25,8 @@ class PREN160X_JacquesLefevreDEtaples extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate('Reformed Church'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 68,
+        'left' => 111,
       ],
     ];
     $this->prestige = [REFORMIST];

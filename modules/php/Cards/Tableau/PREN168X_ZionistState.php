@@ -29,14 +29,14 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Anti-papal embargo"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 68,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Black Pepper Trade"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106.5,
+        'left' => 4,
       ],
     ];
     $this->prestige = [REFORMIST];

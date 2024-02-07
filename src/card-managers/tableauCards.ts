@@ -1,15 +1,41 @@
-class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
+class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCardContainer> {
+  public empireSquareStocks: {
+    [ARAGON]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [BYZANTIUM]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [ENGLAND]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [FRANCE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HUNGARY]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [MAMLUK]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [OTTOMAN]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PAPAL_STATES]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PORTUGAL]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+  } = {};
+
   public vassalStocks: {
-    [ARAGON]?: LineStock<EmpireCard | TableauCard>;
-    [BYZANTIUM]?: LineStock<EmpireCard | TableauCard>;
-    [ENGLAND]?: LineStock<EmpireCard | TableauCard>;
-    [FRANCE]?: LineStock<EmpireCard | TableauCard>;
-    [HOLY_ROMAN_EMIRE]?: LineStock<EmpireCard | TableauCard>;
-    [HUNGARY]?: LineStock<EmpireCard | TableauCard>;
-    [MAMLUK]?: LineStock<EmpireCard | TableauCard>;
-    [OTTOMAN]?: LineStock<EmpireCard | TableauCard>;
-    [PAPAL_STATES]?: LineStock<EmpireCard | TableauCard>;
-    [PORTUGAL]?: LineStock<EmpireCard | TableauCard>;
+    [ARAGON]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [BYZANTIUM]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [ENGLAND]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [FRANCE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HUNGARY]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [MAMLUK]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [OTTOMAN]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PAPAL_STATES]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PORTUGAL]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+  } = {};
+
+  public queenStocks: {
+    [ARAGON]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [BYZANTIUM]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [ENGLAND]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [FRANCE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HUNGARY]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [MAMLUK]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [OTTOMAN]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PAPAL_STATES]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [PORTUGAL]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
   } = {};
 
   constructor(public game: PaxRenaissanceGame) {
@@ -30,7 +56,16 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     });
   }
 
-  setupDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
+  setupDiv(card: EmpireCard | TableauCard | EmpireCardContainer, div: HTMLElement) {
+    if (card.type === EMPIRE_CARD_CONTAINER) {
+      this.setupEmpireCardContainerDiv(card,div);
+      // div.style.minWidth = "calc(var(--paxRenCardScale) * 151px)";
+      // div.style.minHeight = "calc(var(--paxRenCardScale) * 151px)";
+      
+      return;
+    }
+
+    const isEmpireCard = card.type === EMPIRE_CARD;
     // div.classList.add("pr_card");
     if (card.type === TABLEAU_CARD) {
       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
@@ -39,46 +74,103 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
       div.style.minWidth = "calc(var(--paxRenCardScale) * 151px)";
       div.style.minHeight = "calc(var(--paxRenCardScale) * 151px)";
     }
+    div.style.position = 'relative';
     div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
+
+    // const ops = isEmpireCard ? [...card[KING].ops,...card[REPUBLIC].ops] : card.ops;
+    
+    if (isEmpireCard) {
+      (card.king.ops || []).forEach((operation) => {
+        const element = document.getElementById(`pr_${card.id}_${operation.id}_king`);
+        // TODO: check why setupFrontDiv is called twice for each card
+        if (!element) {
+          div.insertAdjacentHTML(
+            "beforeend",
+            tplOperationSelect({
+              operation,
+              cardId: card.id,
+              side: KING,
+            })
+          );        
+        }
+      });
+      (card.republic.ops || []).forEach((operation) => {
+        const element = document.getElementById(`pr_${card.id}_${operation.id}_republic`);
+        // TODO: check why setupFrontDiv is called twice for each card
+        if (!element) {
+          div.insertAdjacentHTML(
+            "beforeend",
+            tplOperationSelect({
+              operation,
+              cardId: card.id,
+              side: REPUBLIC,
+            })
+          );        
+        }
+      });
+    } else {
+      const ops = card.ops;
+      (ops || []).forEach((operation) => {
+        const element = document.getElementById(`pr_${card.id}_${operation.id}${isEmpireCard ? `_${KING}` : ''}`);
+        // TODO: check why setupFrontDiv is called twice for each card
+        if (!element) {
+          div.insertAdjacentHTML(
+            "beforeend",
+            tplOperationSelect({
+              operation,
+              cardId: card.id,
+              side: null,
+            })
+          );        
+        }
+      });
+    }
+
+
 
     if (card.type === EMPIRE_CARD) {
       div.classList.add("pr_empire_square");
       // setup container for queens
-      div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
-      const queenContainerNode = document.getElementById(`queens_${card.id}`);
-      card.queens.forEach((queen) => {
-        // add queens
-        queenContainerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
-        // add tooltip to queen
-        this.game.tooltipManager.addCardTooltip({
-          nodeId: queen.id,
-          card: queen,
-        });
-      });
+      // div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
+      // const queenContainerNode = document.getElementById(`queens_${card.id}`);
+      // card.queens.forEach((queen) => {
+      //   // add queens
+      //   queenContainerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
+      //   // add tooltip to queen
+      //   this.game.tooltipManager.addCardTooltip({
+      //     nodeId: queen.id,
+      //     card: queen,
+      //   });
+      // });
 
-      div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
+      // div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
 
-      this.vassalStocks[card.empire] = new LineStock<EmpireCard | TableauCard>(
-        this,
-        document.getElementById(`vassals_${card.id}`),
-        { gap: "12px", sort: sortFunction("state") }
-      );
-      this.updateQueenContainerHeightAndPositions({ card });
-      this.updateEmpireCardHeight({ card });
+      // this.vassalStocks[card.empire] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+      //   this,
+      //   document.getElementById(`vassals_${card.id}`),
+      //   { gap: "12px", sort: sortFunction("state") }
+      // );
+      // this.updateQueenContainerHeightAndPositions({ card });
+      // this.updateEmpireCardHeight({ card });
     }
   }
 
-  setupFrontDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
+  setupFrontDiv(card: EmpireCard | TableauCard | EmpireCardContainer, div: HTMLElement) {
+    if (card.type === EMPIRE_CARD_CONTAINER) {
+      div.style.display = 'none';
+      return;
+    }
+
     // if (!card.id.startsWith('Empire')) {
     //   console.log('setupFrontDiv',card);
     // }
-
+    const isEmpireCard = card.type === EMPIRE_CARD;
     if (card.type === TABLEAU_CARD) {
       div.classList.add("pr_card");
       div.setAttribute("data-card-id", card.id.split("_")[0]);
       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
       div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-    } else if (card.type === EMPIRE_CARD) {
+    } else if (isEmpireCard) {
       div.classList.add("pr_square_card");
       div.setAttribute("data-card-id", `${card.id}_king`);
       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
@@ -122,7 +214,14 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     }
   }
 
-  setupBackDiv(card: EmpireCard | TableauCard, div: HTMLElement) {
+  setupBackDiv(card: EmpireCard | TableauCard | EmpireCardContainer, div: HTMLElement) {
+    if (card.type === EMPIRE_CARD_CONTAINER) {
+      div.style.display = 'none';
+      return;
+    }
+
+    const isEmpireCard = card.type === EMPIRE_CARD;
+
     if (card.type === TABLEAU_CARD) {
       div.classList.add("pr_card");
       div.setAttribute(
@@ -131,7 +230,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
       );
       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
       div.style.height = "calc(var(--paxRenCardScale) * 230px)";
-    } else if (card.type === EMPIRE_CARD) {
+    } else if (isEmpireCard) {
       div.classList.add("pr_square_card");
       div.setAttribute("data-card-id", `${card.id}_republic`);
       div.style.width = "calc(var(--paxRenCardScale) * 151px)";
@@ -139,9 +238,16 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     }
   }
 
-  isCardVisible(card: EmpireCard | TableauCard) {
+  isCardVisible(card: EmpireCard | TableauCard | EmpireCardContainer) {
+    if (card.type === EMPIRE_CARD_CONTAINER) {
+      return true;
+    }
+    
     const { location, type } = card;
-    if (location.startsWith("deck")) {
+    if (!location) {
+      console.log('isCardVisible',card);
+    }
+    if (location && location.startsWith("deck")) {
       return false;
     }
     if (location === "market_west_0" || location === "market_east_0") {
@@ -153,6 +259,16 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     return true;
   }
 
+  public async setupVassal({
+    vassal,
+    suzerain,
+  }: {
+    vassal: EmpireCard;
+    suzerain: EmpireCard;
+  }) {
+    this.vassalStocks[suzerain.empire].addCard(createEmpireCardContainer(vassal));
+  }
+
   public async addVassal({
     vassal,
     suzerain,
@@ -160,22 +276,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     vassal: EmpireCard;
     suzerain: EmpireCard;
   }) {
-    this.updateEmpireCardHeight({ card: suzerain, vassalChange: 1 });
-    this.vassalStocks[suzerain.empire].addCard(vassal);
-  }
-
-  // Card move has alreasy been done, need to update height
-  public removeVassal({
-    suzerain,
-    beforeMove = false,
-  }: {
-    suzerain: EmpireCard;
-    beforeMove?: boolean;
-  }) {
-    this.updateEmpireCardHeight({
-      card: suzerain,
-      vassalChange: beforeMove ? -1 : 0,
-    });
+    this.vassalStocks[suzerain.empire].addCard(createEmpireCardContainer(vassal));
   }
 
   public async addQueen({
@@ -185,90 +286,47 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard> {
     king: EmpireCard;
     queen: QueenCard;
   }) {
-    const { id, queens } = king;
-    const div = document.getElementById(id);
-    if (!div) {
+    console.log('addQueen',king.empire, queen,king);
+    await this.queenStocks[king.empire].addCard(queen);
+    this.addMarginBottomQueen({queen});
+  }
+
+  private setupEmpireCardContainerDiv(container: EmpireCardContainer, div: HTMLElement) {
+    div.classList.add('pr_empire_square_container');
+    div.insertAdjacentHTML('beforeend',`<div id="${container.id}_queens" class="pr_queens_container"></div>`);
+    div.insertAdjacentHTML('beforeend',`<div id="${container.id}_empire_square" style="width: calc(var(--paxRenCardScale) * 151px); height: calc(var(--paxRenCardScale) * 151px);"></div>`);
+    div.insertAdjacentHTML('beforeend',`<div id="${container.id}_vassals" class="pr_vassals_container"></div>`);
+
+    this.empireSquareStocks[container.empireId] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+      this,
+      document.getElementById(`${container.id}_empire_square`),
+      { gap: "12px", sort: sortFunction("state") }
+    );
+    this.empireSquareStocks[container.empireId].addCard(container.card);
+
+    this.vassalStocks[container.empireId] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+      this,
+      document.getElementById(`${container.id}_vassals`),
+      { sort: sortFunction("state"), gap: 'calc(var(--paxRenCardScale) * 12px)' }
+    );
+
+    this.queenStocks[container.empireId] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+      this,
+      document.getElementById(`${container.id}_queens`),
+      // { gap: "12px", sort: sortFunction("state") }
+    );
+
+    for (const queen of container.card.queens) {
+      this.queenStocks[container.empireId].addCard(queen);
+      this.addMarginBottomQueen({queen});
+    }
+  }
+
+  private addMarginBottomQueen = ({queen}: {queen: QueenCard}) => {
+    const queenNode = document.getElementById(queen.id);
+    if (!queenNode) {
       return;
     }
-
-    const containerNode = document.getElementById(`queens_${king.id}`);
-    if (containerNode) {
-      containerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
-      this.game.tooltipManager.addCardTooltip({
-        nodeId: queen.id,
-        card: queen,
-      });
-    }
-
-    this.updateEmpireCardHeight({
-      card: king,
-    });
-    this.updateQueenContainerHeightAndPositions({ card: king });
-  }
-
-  public async removeQueen({
-    king,
-    queen,
-  }: {
-    king: EmpireCard;
-    queen: QueenCard;
-  }) {
-    // TODO: discard animation
-    const node = document.getElementById(`${queen.id}`);
-
-    if (node) {
-      node.remove();
-    }
-    this.updateEmpireCardHeight({ card: king });
-    this.updateQueenContainerHeightAndPositions({ card: king });
-  }
-
-  private updateEmpireCardHeight({
-    card,
-    vassalChange = 0,
-  }: {
-    card: EmpireCard;
-    vassalChange?: number;
-  }) {
-    const empire = card.empire;
-    const numberOfVassals =
-      this.vassalStocks[empire].getCards().length + vassalChange;
-    const queenHeight = getTotalHeightQueens({ queens: card.queens });
-
-    const node = document.getElementById(card.id);
-    node.style.minHeight = `calc(var(--paxRenCardScale) * ${
-      (numberOfVassals + 1) * 151 + numberOfVassals * 12 + queenHeight
-    }px)`;
-
-    // const queensContainer = document.getElementById(`queens_${card.id}`);
-    // console.log('queensContainer', queensContainer);
-    // console.log('queenHeight', queenHeight);
-    // console.log('queensContainer', queensContainer?.style);
-    // if (queensContainer) {
-    //   queensContainer.style.height = `calc(var(--paxRenCardScale) * ${queenHeight}px);`
-    // }
-  }
-
-  private updateQueenContainerHeightAndPositions({
-    card,
-  }: {
-    card: EmpireCard;
-  }) {
-    let offSetTop = 0;
-    card.queens.forEach((queen) => {
-      const queenNode = document.getElementById(`${queen.id}`);
-      if (!queenNode) {
-        return;
-      }
-      queenNode.style.position = "absolute";
-      queenNode.style.top = `calc(var(--paxRenCardScale) * ${offSetTop}px)`;
-      offSetTop = offSetTop + queen.height;
-    });
-    const queensContainer = document.getElementById(`queens_${card.id}`);
-    if (!queensContainer) {
-      return;
-    }
-    const style = `calc(var(--paxRenCardScale) * ${offSetTop}px)`;
-    queensContainer.style.height = style;
+    queenNode.style.marginBottom = `calc(var(--paxRenCardScale) * -${230-queen.height}px)`;
   }
 }

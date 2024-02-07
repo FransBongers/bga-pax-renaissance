@@ -25,14 +25,14 @@ class PREN063_OttomanNavy extends \PaxRenaissance\Models\TableauCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate('Commerce raid'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 4,
       ],
       [
         'id' => CORSAIR_OP_ISLAMIC,
         'flavorText' => clienttranslate('Göke flagship'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106.5,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

@@ -25,20 +25,20 @@ class PREN105X_FrancoOttomanNavy extends \PaxRenaissance\Models\TableauCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Siege of Corfu (1537)"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => CORSAIR_OP_ISLAMIC,
         'flavorText' => clienttranslate('Barbarossa'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4.5,
       ],
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Franco-Habsburg War (1521-29)'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145.5,
+        'left' => 4.5,
       ]
     ];
     $this->prestige = [DISCOVERY];

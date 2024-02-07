@@ -26,8 +26,8 @@ class PREN213P_NetherlandsInquisition extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Edict of 1521"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
     ];
     $this->prestige = [CATHOLIC];

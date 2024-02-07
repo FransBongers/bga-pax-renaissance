@@ -25,20 +25,20 @@ class PREN070_ZupyKrakowskieCompany extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Székely seizures"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => REPRESS_OP_ROOK,
         'flavorText' => clienttranslate("Hajdú Parolees"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Salt mining company"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 145.5,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

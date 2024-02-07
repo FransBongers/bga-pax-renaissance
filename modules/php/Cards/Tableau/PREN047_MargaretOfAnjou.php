@@ -18,14 +18,14 @@ class PREN047_MargaretOfAnjou extends \PaxRenaissance\Models\QueenCard
       [
         'id' => REPRESS_OP_ROOK,
         'flavorText' => clienttranslate('Great Council'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 6,
+        'left' => 111,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('War of the Roses'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 46,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

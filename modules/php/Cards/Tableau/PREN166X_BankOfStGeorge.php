@@ -25,8 +25,8 @@ class PREN166X_BankOfStGeorge extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate("Sea Consul Jacques Doria"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
     ];
     $this->region = EAST;

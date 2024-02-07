@@ -24,14 +24,14 @@ class PREN140X_VenetianNavy extends \PaxRenaissance\Models\TableauCard
       [
         'id' => CORSAIR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Arsenale Nuovo'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Italic League'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

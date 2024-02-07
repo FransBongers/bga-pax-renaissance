@@ -25,8 +25,8 @@ class PREN008_Jesuits extends \PaxRenaissance\Models\TableauCard
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Council of Trent'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67.5,
+        'left' => 111,
       ]
     ];
     $this->prestige = [CATHOLIC];

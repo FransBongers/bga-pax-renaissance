@@ -25,8 +25,8 @@ class PREN034_MerchantsOfTheStaple extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Cotswold Lion Wool Guild'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

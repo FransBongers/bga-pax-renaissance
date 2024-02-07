@@ -29,14 +29,14 @@ class PREN143X_WolfOfRimini extends \PaxRenaissance\Models\Cards\CondottiereCard
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate('Neapolitan baron revolt'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate("Murano glassmakers"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ],
     ];
     $this->region = WEST;

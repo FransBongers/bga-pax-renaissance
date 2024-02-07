@@ -24,14 +24,14 @@ class PREN083_PospoliteRuszenie extends \PaxRenaissance\Models\TableauCard
       [
         'id' => VOTE_OP_EAST,
         'flavorText' => clienttranslate("Golden Liberty"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => SIEGE_OP,
         'flavorText' => clienttranslate("Szlachta levy"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 105.5,
+        'left' => 4,
       ]
     ];
     $this->prestige = [LAW];

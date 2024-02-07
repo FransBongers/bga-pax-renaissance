@@ -25,14 +25,14 @@ class PREN072_BosnianAndSerbianSilver extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate("Anti-despot elections"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ],
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate("Srebrenica & Novo Brdo silver mines"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 107.5,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

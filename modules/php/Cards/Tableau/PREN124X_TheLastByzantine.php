@@ -25,21 +25,21 @@ class PREN124X_TheLastByzantine extends \PaxRenaissance\Models\TableauCard
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Amiroutzes treachery"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 67,
+        'left' => 4,
       ],
       [
         'id' => REPRESS_OP_PAWN_ROOK,
         'flavorText' => clienttranslate("Enslavement"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 4,
       ],
 
       [
         'id' => INQUISITOR_OP_REFORMIST,
         'flavorText' => clienttranslate("Council of Florence bribe"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 147,
+        'left' => 4,
       ],
     ];
     $this->prestige = [REFORMIST];

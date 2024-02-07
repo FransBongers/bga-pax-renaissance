@@ -18,14 +18,14 @@ class PREN077_HurremSultanRoxelana extends \PaxRenaissance\Models\QueenCard
       [
         'id' => REPRESS_OP_PAWN,
         'flavorText' => clienttranslate("Sultanate of Women"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 5,
+        'left' => 4,
       ],
       [
         'id' => BEHEAD_OP,
         'flavorText' => clienttranslate("Prince rivalry"),
-        'top' => 0,
-        'left' => 0,
+        'top' => 46,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

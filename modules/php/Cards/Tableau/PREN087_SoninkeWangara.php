@@ -25,8 +25,8 @@ class PREN087_SoninkeWangara extends \PaxRenaissance\Models\TableauCard
       [
         'id' => COMMERCE_OP_EAST,
         'flavorText' => clienttranslate('Gold traders'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66.5,
+        'left' => 4,
       ]
     ];
     $this->region = EAST;

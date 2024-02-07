@@ -25,14 +25,14 @@ class PREN030_SantaHermandad extends \PaxRenaissance\Models\TableauCard
       [
         'id' => TAX_OP,
         'flavorText' => clienttranslate('"Green Sleeves" police'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 65.5,
+        'left' => 111,
       ],
       [
         'id' => INQUISITOR_OP_CATHOLIC,
         'flavorText' => clienttranslate('Alhambra Decree'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 109.5,
+        'left' => 111,
       ]
     ];
     $this->region = WEST;

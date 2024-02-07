@@ -25,14 +25,14 @@ class PREN041_PeasantRepublicOfDithmarschen extends \PaxRenaissance\Models\Table
       [
         'id' => VOTE_OP_WEST,
         'flavorText' => clienttranslate('Dithmarschen autonomy'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 66,
+        'left' => 111,
       ],
       [
         'id' => COMMERCE_OP_WEST,
         'flavorText' => clienttranslate('Council of the 48 Hansa privileges'),
-        'top' => 0,
-        'left' => 0,
+        'top' => 106,
+        'left' => 111,
       ]
     ];
     $this->prestige = [LAW];
