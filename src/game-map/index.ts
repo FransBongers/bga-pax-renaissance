@@ -37,7 +37,9 @@ class GameMap {
     [BYZANTIUM]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [ENGLAND]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [FRANCE]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
-    [HOLY_ROMAN_EMIRE]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]: LineStock<
+      EmpireCard | TableauCard | EmpireCardContainer
+    >;
     [HUNGARY]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [MAMLUK]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [OTTOMAN]: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
@@ -112,6 +114,13 @@ class GameMap {
       this.supremeReligion[religion].tokens.create(
         `pr_tokens_theocracies_counter_${religion}`
       );
+      this.game.tooltipManager.addTextToolTip({
+        nodeId: `pr_supreme_religion_token_counter_${religion}`,
+        text: this.game.format_string_recursive(
+          _("Number of ${religion} Tokens in ${religion} Theocracies"),
+          { religion }
+        ),
+      });
     });
     this.updateSupremeReligionCounters({ gamedatas });
   }
@@ -167,7 +176,9 @@ class GameMap {
         document.getElementById(`pr_${ARAGON}_throne`),
         { direction: "column", center: false }
       ),
-      [BYZANTIUM]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+      [BYZANTIUM]: new LineStock<
+        EmpireCard | TableauCard | EmpireCardContainer
+      >(
         this.game.tableauCardManager,
         document.getElementById(`pr_${BYZANTIUM}_throne`),
         { direction: "column", center: false }
@@ -182,7 +193,9 @@ class GameMap {
         document.getElementById(`pr_${FRANCE}_throne`),
         { direction: "column", center: false }
       ),
-      [HOLY_ROMAN_EMIRE]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+      [HOLY_ROMAN_EMIRE]: new LineStock<
+        EmpireCard | TableauCard | EmpireCardContainer
+      >(
         this.game.tableauCardManager,
         document.getElementById(`pr_${HOLY_ROMAN_EMIRE}_throne`),
         { direction: "column", center: false }
@@ -202,7 +215,9 @@ class GameMap {
         document.getElementById(`pr_${OTTOMAN}_throne`),
         { direction: "column", center: false }
       ),
-      [PAPAL_STATES]: new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+      [PAPAL_STATES]: new LineStock<
+        EmpireCard | TableauCard | EmpireCardContainer
+      >(
         this.game.tableauCardManager,
         document.getElementById(`pr_${PAPAL_STATES}_throne`),
         { direction: "column", center: false }
@@ -230,8 +245,8 @@ class GameMap {
             empireId: card.empire,
             card,
             state: card.state,
-            location: card.location
-          }
+            location: card.location,
+          };
           this.empireSquareStocks[empire].addCard(container);
         }
 

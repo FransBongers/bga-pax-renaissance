@@ -89,14 +89,14 @@
 }
 
 .pr_player_board_tableau_cards[data-region="east"][data-overlap="enabled"][data-overlap-empire-squares="disabled"]
-  > .pr_empire_square:not(:last-child) {
+  > .pr_empire_square_container:not(:last-child) {
   // .pr_empire_square:not(:last-child) {
   margin-right: calc(var(--paxRenCardScale) * 110px);
   // }
 }
 
 .pr_player_board_tableau_cards[data-region="west"][data-overlap="enabled"][data-overlap-empire-squares="disabled"]
-  > .pr_empire_square:not(:last-child) {
+  > .pr_empire_square_container:not(:last-child) {
   // .pr_empire_square:not(:last-child) {
   margin-left: calc(var(--paxRenCardScale) * 110px);
   // }

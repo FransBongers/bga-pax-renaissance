@@ -115,7 +115,7 @@ const tplGameMapVictoryCards = ({ageOfReformation = false}: {ageOfReformation?: 
   `;
 
   const tplGameMapTheocraciesCounter = ({religion}: {religion: string;}) => `
-  <div class="pr_supreme_religion_token_counter">
+  <div id="pr_supreme_religion_token_counter_${religion}" class="pr_supreme_religion_token_counter">
   <div class="pr_supreme_religion_tokens_theocracies_icon_container">
     <div class="pr_token pr_pirate" data-separator="${religion}"></div>
     <div class="pr_token pr_knight" data-separator="${religion}" style="margin-left: calc(var(--paxRenMapScale) * -20px);"></div>

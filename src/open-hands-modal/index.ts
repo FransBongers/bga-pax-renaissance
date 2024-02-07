@@ -64,8 +64,8 @@ class OpenHandsModal {
     this.modal = new Modal(`open_hand_modal`, {
       class: "pr_open_hands_modal",
       closeIcon: "fa-times",
-      openAnimation: true,
-      openAnimationTarget: `pr_open_hands_button`,
+      // openAnimation: true,
+      // openAnimationTarget: `pr_open_hands_button`,
       // titleTpl: '<h2 id="popin_${id}_title" class="${class}_title">${title}</h2>',
       // title: _('Player hands'),
       // contents: tplOpenHandsModal({

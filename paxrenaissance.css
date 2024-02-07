@@ -3131,7 +3131,7 @@
   min-height: calc(var(--paxRenTokenScale) * 33px);
   max-width: calc(var(--paxRenTokenScale) * 20px);
   max-height: calc(var(--paxRenTokenScale) * 33px);
-  margin-left: 6px;
+  margin-left: 2px;
 }
 
 .pr_icon[data-icon=concession][data-bank=fugger] {
@@ -4105,6 +4105,7 @@
   width: 48px;
   height: 48px;
   margin: 4px;
+  margin-right: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -4358,8 +4359,6 @@
 }
 
 .pr_open_hands_modal {
-  position: fixed;
-  top: 10vh;
   min-width: 300px;
 }
 .pr_open_hands_modal .pr_open_hands_modal_closeicon {
@@ -4568,11 +4567,11 @@
   margin-left: calc(var(--paxRenCardScale) * -110px);
 }
 
-.pr_player_board_tableau_cards[data-region=east][data-overlap=enabled][data-overlap-empire-squares=disabled] > .pr_empire_square:not(:last-child) {
+.pr_player_board_tableau_cards[data-region=east][data-overlap=enabled][data-overlap-empire-squares=disabled] > .pr_empire_square_container:not(:last-child) {
   margin-right: calc(var(--paxRenCardScale) * 110px);
 }
 
-.pr_player_board_tableau_cards[data-region=west][data-overlap=enabled][data-overlap-empire-squares=disabled] > .pr_empire_square:not(:last-child) {
+.pr_player_board_tableau_cards[data-region=west][data-overlap=enabled][data-overlap-empire-squares=disabled] > .pr_empire_square_container:not(:last-child) {
   margin-left: calc(var(--paxRenCardScale) * 110px);
 }
 

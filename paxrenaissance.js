@@ -3250,6 +3250,10 @@ var GameMap = (function () {
         RELIGIONS.forEach(function (religion) {
             _this.supremeReligion[religion].bishops.create("pr_supreme_religion_bishop_counter_".concat(religion));
             _this.supremeReligion[religion].tokens.create("pr_tokens_theocracies_counter_".concat(religion));
+            _this.game.tooltipManager.addTextToolTip({
+                nodeId: "pr_supreme_religion_token_counter_".concat(religion),
+                text: _this.game.format_string_recursive(_("Number of ${religion} Tokens in ${religion} Theocracies"), { religion: religion }),
+            });
         });
         this.updateSupremeReligionCounters({ gamedatas: gamedatas });
     };
@@ -3320,7 +3324,7 @@ var GameMap = (function () {
                     empireId: card.empire,
                     card: card,
                     state: card.state,
-                    location: card.location
+                    location: card.location,
                 };
                 _this.empireSquareStocks[empire].addCard(container);
             }
@@ -3474,7 +3478,7 @@ var tplGameMapVictoryCards = function (_a) {
 };
 var tplGameMapTheocraciesCounter = function (_a) {
     var religion = _a.religion;
-    return "\n  <div class=\"pr_supreme_religion_token_counter\">\n  <div class=\"pr_supreme_religion_tokens_theocracies_icon_container\">\n    <div class=\"pr_token pr_pirate\" data-separator=\"".concat(religion, "\"></div>\n    <div class=\"pr_token pr_knight\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -20px);\"></div>\n    <div class=\"pr_token pr_rook\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -8px);\"></div>\n  </div>\n  <span id=\"pr_tokens_theocracies_counter_").concat(religion, "\"></span>\n</div>\n  ");
+    return "\n  <div id=\"pr_supreme_religion_token_counter_".concat(religion, "\" class=\"pr_supreme_religion_token_counter\">\n  <div class=\"pr_supreme_religion_tokens_theocracies_icon_container\">\n    <div class=\"pr_token pr_pirate\" data-separator=\"").concat(religion, "\"></div>\n    <div class=\"pr_token pr_knight\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -20px);\"></div>\n    <div class=\"pr_token pr_rook\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -8px);\"></div>\n  </div>\n  <span id=\"pr_tokens_theocracies_counter_").concat(religion, "\"></span>\n</div>\n  ");
 };
 var tplGameMapSupremeReligion = function () { return "\n  <div id=\"pr_supreme_religion_container\">\n    <div class=\"pr_religion_icons\">\n      <div id=\"pr_catholic_icon\" class=\"pr_religion_icon\" data-religion=\"catholic\"></div>\n      <div id=\"pr_islamic_icon\" class=\"pr_religion_icon\" data-religion=\"islamic\"></div>\n      <div id=\"pr_reformist_icon\" class=\"pr_religion_icon\" data-religion=\"reformist\"></div>\n    </div>\n    <div id=\"pr_supreme_religion_bishops\">\n      <div class=\"pr_supreme_religion_bishop_counter\" style=\"margin-left: calc(var(--paxRenMapScale) * 26px);\">\n        <div id=\"bishop_catholic_sr\" class=\"pr_token pr_bishop\" data-separator=\"catholic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_catholic\"></span>\n      </div>\n      <div class=\"pr_supreme_religion_bishop_counter\">\n        <div id=\"bishop_islamic_sr\" class=\"pr_token pr_bishop\" data-separator=\"islamic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_islamic\"></span>\n      </div>\n      <div class=\"pr_supreme_religion_bishop_counter\" style=\"margin-right: calc(var(--paxRenMapScale) * 19px);\">\n        <div id=\"bishop_reformist_sr\" class=\"pr_token pr_bishop\" data-separator=\"reformist\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_reformist\"></span>\n      </div>\n    </div>\n    <div id=\"pr_supreme_religion_tokens_theocracies\">\n      ".concat(RELIGIONS.map(function (religion) { return tplGameMapTheocraciesCounter({ religion: religion }); }).join(''), "\n    </div>\n  </div>\n  "); };
 var tplGameMap = function (_a) {
@@ -5531,8 +5535,6 @@ var OpenHandsModal = (function () {
         this.modal = new Modal("open_hand_modal", {
             class: "pr_open_hands_modal",
             closeIcon: "fa-times",
-            openAnimation: true,
-            openAnimationTarget: "pr_open_hands_button",
             contents: tplOpenHandsModal({
                 data: Object.values(this.handCardData),
                 game: this.game,
