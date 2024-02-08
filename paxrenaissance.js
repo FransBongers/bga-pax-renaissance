@@ -6784,48 +6784,58 @@ var AbilityOpponentsPurpleOpState = (function () {
                 tkn_playerName: "${you}",
             },
         });
-        this.setCardsSelectable();
+        this.setOperationsSelectable();
         this.game.addUndoButtons(this.args);
     };
-    AbilityOpponentsPurpleOpState.prototype.updateInterfaceSelectOp = function (_a) {
-        var cardId = _a.cardId, ops = _a.ops;
+    AbilityOpponentsPurpleOpState.prototype.updateInterfaceConfirmOp = function (_a) {
+        var _this = this;
+        var card = _a.card, operation = _a.operation;
         this.game.clearPossible();
-        this.game.setCardSelected({ id: cardId });
+        this.setOpSelected({ card: card, operation: operation });
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} may select an Op to perform"),
+            text: _("Perform ${tkn_tableauOp} with ${cardName}?"),
             args: {
-                tkn_playerName: "${you}",
+                tkn_tableauOp: operation.id,
+                cardName: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
             },
         });
-        this.addButtons({ cardId: cardId, ops: ops });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actAbilityOpponentsPurpleOp",
+                    args: {
+                        cardId: card.id,
+                        tableauOpId: operation.id,
+                    },
+                });
+            },
+        });
         this.game.addCancelButton();
     };
-    AbilityOpponentsPurpleOpState.prototype.setCardsSelectable = function () {
+    AbilityOpponentsPurpleOpState.prototype.setOperationsSelectable = function () {
         var _this = this;
         Object.entries(this.args.options).forEach(function (_a) {
-            var cardId = _a[0], ops = _a[1];
-            _this.game.setCardSelectable({ id: cardId, callback: function () {
-                    _this.updateInterfaceSelectOp({ cardId: cardId, ops: ops });
-                } });
+            var cardId = _a[0], operations = _a[1];
+            var card = _this.args.tableauCards.find(function (card) { return card.id === cardId; });
+            operations.forEach(function (operation) {
+                var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
+                console.log("operationId", operationId);
+                _this.game.setLocationSelectable({
+                    id: operationId,
+                    callback: function () {
+                        console.log("clicked", card.id, operation.id);
+                        _this.updateInterfaceConfirmOp({ card: card, operation: operation });
+                    },
+                });
+            });
         });
     };
-    AbilityOpponentsPurpleOpState.prototype.addButtons = function (_a) {
-        var _this = this;
-        var cardId = _a.cardId, ops = _a.ops;
-        ops.forEach(function (op, index) {
-            _this.game.addPrimaryActionButton({
-                id: "op_btn_".concat(index),
-                text: _(op.name),
-                callback: function () {
-                    return _this.game.takeAction({
-                        action: "actAbilityOpponentsPurpleOp",
-                        args: {
-                            cardId: cardId,
-                            tableauOpId: op.id,
-                        },
-                    });
-                },
-            });
+    AbilityOpponentsPurpleOpState.prototype.setOpSelected = function (_a) {
+        var card = _a.card, operation = _a.operation;
+        var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
+        console.log("operationId", operationId);
+        this.game.setLocationSelected({
+            id: operationId,
         });
     };
     return AbilityOpponentsPurpleOpState;
@@ -9732,21 +9742,6 @@ var TableauOpsSelectState = (function () {
         console.log("operationId", operationId);
         this.game.setLocationSelected({
             id: operationId,
-        });
-    };
-    TableauOpsSelectState.prototype.setCardsSelectable = function () {
-        var _this = this;
-        Object.keys(this.args.availableOps).forEach(function (id) {
-            var card = _this.args.tableauCards.find(function (card) { return card.id === id; });
-            _this.game.setCardSelectable({
-                id: id,
-                callback: function () {
-                    return _this.updateInterfaceConfirm({
-                        cardId: id,
-                        ops: _this.args.availableOps[id],
-                    });
-                },
-            });
         });
     };
     return TableauOpsSelectState;

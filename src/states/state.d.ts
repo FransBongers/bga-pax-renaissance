@@ -67,6 +67,7 @@ interface OnEnteringAbilityActionSelectTradeFairArgs extends CommonArgs {
 
 interface OnEnteringAbilityOpponentsPurpleOpStateArgs extends CommonArgs {
   options: Record<string, TableauOp[]>;
+  tableauCards: (EmpireCard | TableauCard)[];
 }
 
 interface OnEnteringBattleCasualtiesArgs extends CommonArgs {

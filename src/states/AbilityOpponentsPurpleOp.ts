@@ -52,22 +52,39 @@ class AbilityOpponentsPurpleOpState implements State {
       },
     });
 
-    this.setCardsSelectable();
+    this.setOperationsSelectable();
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceSelectOp({cardId, ops}: {cardId: string, ops: TableauOp[]}) {
+  private updateInterfaceConfirmOp({
+    card,
+    operation,
+  }: {
+    card: TableauCard | EmpireCard;
+    operation: TableauOp;
+  }) {
     this.game.clearPossible();
-    this.game.setCardSelected({id: cardId});
+    this.setOpSelected({ card, operation });
 
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select an Op to perform"),
+      text: _("Perform ${tkn_tableauOp} with ${cardName}?"),
       args: {
-        tkn_playerName: "${you}",
+        tkn_tableauOp: operation.id,
+        cardName: _(
+          card.type === EMPIRE_CARD ? card[card.side].name : card.name
+        ),
       },
     });
-
-    this.addButtons({ cardId, ops})
+    this.game.addConfirmButton({
+      callback: () =>
+        this.game.takeAction({
+          action: "actAbilityOpponentsPurpleOp",
+          args: {
+            cardId: card.id,
+            tableauOpId: operation.id,
+          },
+        }),
+    });
     this.game.addCancelButton();
   }
 
@@ -79,29 +96,40 @@ class AbilityOpponentsPurpleOpState implements State {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private setCardsSelectable() {
-    Object.entries(this.args.options).forEach(([cardId, ops]) => {
-      this.game.setCardSelectable({id: cardId, callback: () => {
-        this.updateInterfaceSelectOp({cardId, ops});
-      }})
+  private setOperationsSelectable() {
+    Object.entries(this.args.options).forEach(([cardId, operations]) => {
+      const card = this.args.tableauCards.find((card) => card.id === cardId);
+
+      operations.forEach((operation) => {
+        const operationId = `${card.id}_${operation.id}${
+          card.type === EMPIRE_CARD ? `_${card.side}` : ""
+        }`;
+        console.log("operationId", operationId);
+        this.game.setLocationSelectable({
+          id: operationId,
+          callback: () => {
+            console.log("clicked", card.id, operation.id);
+            this.updateInterfaceConfirmOp({ card, operation });
+          },
+        });
+      });
     });
   }
 
-  private addButtons({cardId, ops}: {cardId: string; ops: TableauOp[]}) {
-    ops.forEach((op, index) => {
-      this.game.addPrimaryActionButton({
-        id: `op_btn_${index}`,
-        text: _(op.name),
-        callback: () =>
-          this.game.takeAction({
-            action: "actAbilityOpponentsPurpleOp",
-            args: {
-              cardId,
-              tableauOpId: op.id,
-            },
-          }),
-      })
-    })
+  private setOpSelected({
+    card,
+    operation,
+  }: {
+    card: TableauCard | EmpireCard;
+    operation: TableauOp;
+  }) {
+    const operationId = `${card.id}_${operation.id}${
+      card.type === EMPIRE_CARD ? `_${card.side}` : ""
+    }`;
+    console.log("operationId", operationId);
+    this.game.setLocationSelected({
+      id: operationId,
+    });
   }
 
   //  ..######..##.......####..######..##....##

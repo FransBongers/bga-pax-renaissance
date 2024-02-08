@@ -57,9 +57,10 @@ class AbilityOpponentsPurpleOp extends \PaxRenaissance\Models\AtomicAction
 
   public function argsAbilityOpponentsPurpleOp()
   {
-    $data = [
-      'options' => $this->getOptions(),
-    ];
+    $data = $this->getOptions();
+    // $data = [
+    //   'options' => $op
+    // ];
 
     return $data;
   }
@@ -88,7 +89,7 @@ class AbilityOpponentsPurpleOp extends \PaxRenaissance\Models\AtomicAction
 
     $player = self::getPlayer();
 
-    $available = $this->getOptions();
+    $available = $this->getOptions()['options'];
 
     $cardId = $args['cardId'];
 
@@ -128,6 +129,7 @@ class AbilityOpponentsPurpleOp extends \PaxRenaissance\Models\AtomicAction
     $activePlayer = self::getPlayer();
     $players = Players::getAll();
     $options = [];
+    $cards = [];
 
     foreach ($players as $player) {
       if ($player->getId() === $activePlayer->getId()) {
@@ -138,17 +140,21 @@ class AbilityOpponentsPurpleOp extends \PaxRenaissance\Models\AtomicAction
       // $availableOps = array_merge($availableOps, $availableOpsPlayer);
       $tableauCards = $player->getTableauCards();
       foreach ($tableauCards as $card) {
-        $availableOps = $card->getAvailableOps($player);
+        $availableOps = $card->getAvailableOps($activePlayer);
         $availableOps = Utils::filter($availableOps, function ($op) {
           return $op->getType() === POLITICAL;
         });
         if (count($availableOps) > 0) {
           $options[$card->getId()] = $availableOps;
+          $cards[] = $card;
         }
       }
     }
 
-    return $options;
+    return [
+      'options' => $options,
+      'tableauCards' => $cards,
+    ];
   }
 
 }

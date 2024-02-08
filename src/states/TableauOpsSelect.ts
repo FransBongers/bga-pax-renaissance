@@ -157,15 +157,6 @@ class TableauOpsSelectState implements State {
           },
         });
       });
-
-      // this.game.setCardSelectable({
-      //   id,
-      //   callback: () =>
-      //     this.updateInterfaceConfirm({
-      //       cardId: id,
-      //       ops: this.args.availableOps[id],
-      //     }),
-      // });
     });
   }
 
@@ -185,20 +176,20 @@ class TableauOpsSelectState implements State {
     });
   }
 
-  private setCardsSelectable() {
-    Object.keys(this.args.availableOps).forEach((id: string) => {
-      const card = this.args.tableauCards.find((card) => card.id === id);
+  // private setCardsSelectable() {
+  //   Object.keys(this.args.availableOps).forEach((id: string) => {
+  //     const card = this.args.tableauCards.find((card) => card.id === id);
 
-      this.game.setCardSelectable({
-        id,
-        callback: () =>
-          this.updateInterfaceConfirm({
-            cardId: id,
-            ops: this.args.availableOps[id],
-          }),
-      });
-    });
-  }
+  //     this.game.setCardSelectable({
+  //       id,
+  //       callback: () =>
+  //         this.updateInterfaceConfirm({
+  //           cardId: id,
+  //           ops: this.args.availableOps[id],
+  //         }),
+  //     });
+  //   });
+  // }
 
   //  ..######..##.......####..######..##....##
   //  .##....##.##........##..##....##.##...##.
