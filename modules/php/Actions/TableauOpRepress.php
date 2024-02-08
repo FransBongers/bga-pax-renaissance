@@ -45,7 +45,6 @@ class TableauOpRepress extends \PaxRenaissance\Models\AtomicAction
 
   public function stTableauOpRepress()
   {
-
   }
 
   // ....###....########...######....######.
@@ -62,7 +61,7 @@ class TableauOpRepress extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+    $cardId = $info['cardId'];
 
     $data = [
       'tokens' => $tableauOp->getOptions(Cards::get($cardId)),
@@ -95,13 +94,13 @@ class TableauOpRepress extends \PaxRenaissance\Models\AtomicAction
     $tableauOpId = $info['tableauOpId'];
 
     $tableauOp = TableauOps::get($tableauOpId);
-    $cardId = $info['cardId']; 
+    $cardId = $info['cardId'];
 
-    
+
     $options = $tableauOp->getOptions(Cards::get($cardId));
-    
+
     $tokenId = $args['tokenId'];
-    
+
     if (!isset($options[$tokenId])) {
       throw new \feException("Not allowed to Repress selected Token");
     }
@@ -109,12 +108,17 @@ class TableauOpRepress extends \PaxRenaissance\Models\AtomicAction
     $card = Cards::get($cardId);
     $empireIds = $card->getAllEmpireIds(false);
     // Notifications::log('empires', $)
-    if (count($empireIds) > 1) {
-      throw new \feException("Multiple empires to select from. Please create a bug report.");
-    }
-
-    $token = Tokens::get($tokenId);
     $empireId = $empireIds[0];
+    $token = Tokens::get($tokenId);
+
+    if (count($empireIds) > 1) {
+      $location = $token->getLocationInstance();
+      if ($location->getType() === CITY) {
+        $empireId = $location->getEmpire();
+      } else {
+        throw new \feException("Multiple empires to select from. Please create a bug report.");
+      }
+    }
 
     $token->repress($empireId, -1);
 
@@ -142,7 +146,7 @@ class TableauOpRepress extends \PaxRenaissance\Models\AtomicAction
     // $player->incFlorins(1);
 
     // Notifications::tableauOpRepress($player, $card);
-    
+
     $this->resolveAction($args);
   }
 
