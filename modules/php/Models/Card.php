@@ -90,7 +90,9 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
 
   public function isInTableau()
   {
-    return Utils::startsWith($this->getLocation(), 'tableau_') || Utils::startsWith($this->getLocation(), 'vassals_') || Utils::startsWith($this->getLocation(), 'queens_');
+    return Utils::startsWith($this->getLocation(), 'tableau_') ||
+      Utils::startsWith($this->getLocation(), 'vassals_') ||
+      (Utils::startsWith($this->getLocation(), 'queens_') && !Utils::startsWith($this->getKing()->getLocation(), 'throne_'));
   }
 
   public function getVassals()

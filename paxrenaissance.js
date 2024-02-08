@@ -3250,10 +3250,6 @@ var GameMap = (function () {
         RELIGIONS.forEach(function (religion) {
             _this.supremeReligion[religion].bishops.create("pr_supreme_religion_bishop_counter_".concat(religion));
             _this.supremeReligion[religion].tokens.create("pr_tokens_theocracies_counter_".concat(religion));
-            _this.game.tooltipManager.addTextToolTip({
-                nodeId: "pr_supreme_religion_token_counter_".concat(religion),
-                text: _this.game.format_string_recursive(_("Number of ${religion} Tokens in ${religion} Theocracies"), { religion: religion }),
-            });
         });
         this.updateSupremeReligionCounters({ gamedatas: gamedatas });
     };
@@ -3327,6 +3323,14 @@ var GameMap = (function () {
                     location: card.location,
                 };
                 _this.empireSquareStocks[empire].addCard(container);
+                card.queens.forEach(function (queen) {
+                    var queenTokensNode = document.getElementById("".concat(queen.id, "_tokens"));
+                    gamedatas.tokens.inPlay
+                        .filter(function (token) { return token.location === queen.id; })
+                        .forEach(function (token) {
+                        queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
+                    });
+                });
             }
         });
         var repressTokensToThrones = this.game.settings.get({

@@ -96,43 +96,18 @@ trait DebugTrait
 
   function test()
   {
-    // Load list of cards
-    // include dirname(__FILE__) . '/Cards/list.inc.php';
+    // $this->debugPlaceToken(BISHOP, ISLAMIC, 'PREN117X_DespinaKhatun');
+    // Cards::move("PREN117X_DespinaKhatun",'queens_ottoman');
+    $this->debugPlaceCardInTableau('PREN067_Janissaries', EAST, 2371053);
+    
 
-    // $counter = 0;
-    // // $baseProjects = [];
-    // foreach ($cardIds as $cId) {
-      
-    //   $card = Cards::get($cId);
-    //   if ($card->getType() !== TABLEAU_CARD) {
-    //     continue;
-    //   }
-    //   $ops = $card->getOps();
-    //   if (count($ops) === 0) {
-    //     continue;
-    //   }
-
-    //   $hasOpWithTopZero = Utils::array_some($ops,function ($op) {
-    //     return $op['top'] === 0;
-    //   });
-
-    //   if (!$hasOpWithTopZero) {
-    //     continue;
-    //   }
-    //   $this->debugPlaceCardInTableau($cId, WEST, 2371052);
-
-    //   $counter += 1;
-    //   if ($counter >= 30) {
-    //     return;
-    //   }
-    // }
     // $this->debugPlaceToken(KNIGHT, CATHOLIC, BORDEAUX);
     // $this->debugPlaceCardInTableau('PREN081_CrimeanGoths', EAST, 2371053);
     // Cards::get('EmpireSquare_England')->setSide(KING);
-    $squares = Cards::getAllEmpireSquares();
-    foreach($squares as $square) {
-      $square->setSide(REPUBLIC);
-    }
+    // $squares = Cards::getAllEmpireSquares();
+    // foreach($squares as $square) {
+    //   $square->setSide(REPUBLIC);
+    // }
     // Empires::get(PAPAL_STATES)->changeToTheocracy(REFORMIST);
     // $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371052);
 

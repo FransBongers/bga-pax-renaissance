@@ -114,13 +114,13 @@ class GameMap {
       this.supremeReligion[religion].tokens.create(
         `pr_tokens_theocracies_counter_${religion}`
       );
-      this.game.tooltipManager.addTextToolTip({
-        nodeId: `pr_supreme_religion_token_counter_${religion}`,
-        text: this.game.format_string_recursive(
-          _("Number of ${religion} Tokens in ${religion} Theocracies"),
-          { religion }
-        ),
-      });
+      // this.game.tooltipManager.addTextToolTip({
+      //   nodeId: `pr_supreme_religion_token_counter_${religion}`,
+      //   text: this.game.format_string_recursive(
+      //     _("Number of ${religion} Tokens in ${religion} Theocracies"),
+      //     { religion }
+      //   ),
+      // });
     });
     this.updateSupremeReligionCounters({ gamedatas });
   }
@@ -248,25 +248,22 @@ class GameMap {
             location: card.location,
           };
           this.empireSquareStocks[empire].addCard(container);
-        }
 
-        // if (this.empireSquareStocks[empire]) {
-        //   this.empireSquareStocks[empire].addCard(card);
-        // }
-        // card.queens.forEach((queen) => {
-        //   const queenTokensNode = document.getElementById(`${queen.id}_tokens`);
-        //   gamedatas.tokens.inPlay
-        //     .filter((token) => token.location === queen.id)
-        //     .forEach((token) => {
-        //       queenTokensNode.insertAdjacentHTML("beforeend", tplToken(token));
-        //     });
-        // });
-        // const { id, location } = card;
-        // const node = document.getElementById(`pr_${location}`);
-        // if (!node) {
-        //   debug("Unable to get empire card node");
-        // }
-        // node.setAttribute("data-card-id", `${id}_king`);
+          // Add tokens to queens
+          card.queens.forEach((queen) => {
+            const queenTokensNode = document.getElementById(
+              `${queen.id}_tokens`
+            );
+            gamedatas.tokens.inPlay
+              .filter((token) => token.location === queen.id)
+              .forEach((token) => {
+                queenTokensNode.insertAdjacentHTML(
+                  "beforeend",
+                  tplToken(token)
+                );
+              });
+          });
+        }
       });
     const repressTokensToThrones =
       this.game.settings.get({
