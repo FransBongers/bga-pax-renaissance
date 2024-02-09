@@ -402,24 +402,26 @@ class NotificationManager {
     const { playerId, queen, king, fromTableau, fromOldMaid } = notif.args;
     const player = this.getPlayer({ playerId });
 
+    if (fromTableau || fromOldMaid) {
+      queen.prestige.forEach((item) =>
+        player.counters.prestige[item].incValue(-1)
+      );
+    } else {
+      // Only from hand left
+      player.counters.cards[queen.region].incValue(-1);
+      this.game.openHandsModal.removeCard({
+        playerId,
+        card: queen,
+      });
+    }
+
     if (king) {
-      // this.game.tableauCardManager.updateCardInformations(king);
       this.game.tableauCardManager.removeCard(queen);
-      // this.game.tableauCardManager.removeQueen({
-      //   king,
-      //   queen,
-      // });
     }
     if (king === null) {
       this.game.tableauCardManager.removeCard(queen);
 
       player.tableau.checkOldMaidContainerHeight();
-    }
-
-    if (fromTableau || fromOldMaid) {
-      queen.prestige.forEach((item) =>
-        player.counters.prestige[item].incValue(-1)
-      );
     }
   }
 

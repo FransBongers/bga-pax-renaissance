@@ -119,7 +119,7 @@ class TableauOpBehead extends \PaxRenaissance\Models\AtomicAction
     // Get latest card data because there are cases where a queen with behead op can cause herself to be 
     // discarded before triggering this check
     if ($selectedCard->getType() === EMPIRE_CARD && Cards::get($cardId)->getLocation() !== DISCARD) {
-      $card->discard(KILL, $player);
+      $card->discard(KILL, $card->getOwner());
     }
     
     $this->resolveAction($args);

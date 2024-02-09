@@ -4731,17 +4731,24 @@ var NotificationManager = (function () {
             return __generator(this, function (_b) {
                 _a = notif.args, playerId = _a.playerId, queen = _a.queen, king = _a.king, fromTableau = _a.fromTableau, fromOldMaid = _a.fromOldMaid;
                 player = this.getPlayer({ playerId: playerId });
+                if (fromTableau || fromOldMaid) {
+                    queen.prestige.forEach(function (item) {
+                        return player.counters.prestige[item].incValue(-1);
+                    });
+                }
+                else {
+                    player.counters.cards[queen.region].incValue(-1);
+                    this.game.openHandsModal.removeCard({
+                        playerId: playerId,
+                        card: queen,
+                    });
+                }
                 if (king) {
                     this.game.tableauCardManager.removeCard(queen);
                 }
                 if (king === null) {
                     this.game.tableauCardManager.removeCard(queen);
                     player.tableau.checkOldMaidContainerHeight();
-                }
-                if (fromTableau || fromOldMaid) {
-                    queen.prestige.forEach(function (item) {
-                        return player.counters.prestige[item].incValue(-1);
-                    });
                 }
                 return [2];
             });
