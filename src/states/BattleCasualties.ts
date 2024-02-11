@@ -123,13 +123,11 @@ class BattleCasualtiesState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private addAgentButtons() {
-    this.args.agents.forEach((agent, index) => {
-      this.game.addPrimaryActionButton({
+    const uniqueAgents = getUniqueAgents({ agents: this.args.agents });
+    uniqueAgents.forEach((agent, index) => {
+      this.game.addAgentButton({
         id: `agent_button_${index}`,
-        text: `${agent.type} agent`,
-        // text: this.game.format_string_recursive("${tkn_mapToken} Agent", {
-        //   tkn_mapToken: tknMapToken(this.createAgentMapTokenId(agent)),
-        // }),
+        agent,
         callback: () => this.updateInterfaceConfirmSelectAgent({ agent }),
       });
     });

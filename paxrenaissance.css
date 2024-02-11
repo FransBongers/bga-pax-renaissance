@@ -3254,69 +3254,117 @@
   background-color: #ef9a9a;
 }
 
-[style*="color: #bfc0c3"], [style*="color:#bfc0c3"],
-[style*="color: #ffce00"], [style*="color:#ffce00"],
-[style*="color: #bddcc6"], [style*="color:#bddcc6"] {
+[style*="color: #bfc0c3"],
+[style*="color:#bfc0c3"],
+[style*="color: #ffce00"],
+[style*="color:#ffce00"],
+[style*="color: #bddcc6"],
+[style*="color:#bddcc6"] {
   text-shadow: 1px 0 0 black, 0 1px 0 black, -1px 0 0 black, 0 -1px 0 black, 1px 1px 0 black, -1px 1px 0 black, 1px -1px 0 black, -1px -1px 0 black !important;
 }
 
 /* ------- LOG TOKENS ------- */
-#pagemaintitletext .pr_icon, #gameaction_status .pr_icon {
+#pagemaintitletext .pr_icon,
+#gameaction_status .pr_icon {
   display: inline-block;
 }
-#pagemaintitletext .pr_icon[data-icon=florin], #gameaction_status .pr_icon[data-icon=florin] {
+#pagemaintitletext .pr_icon[data-icon=florin],
+#gameaction_status .pr_icon[data-icon=florin] {
   --paxRenIconScale: 0.5;
   margin-bottom: -4px;
 }
-#pagemaintitletext .pr_token, #gameaction_status .pr_token {
+#pagemaintitletext .pr_token,
+#gameaction_status .pr_token {
   display: inline-block;
   margin-bottom: -8px;
   --paxRenTokenScale: 0.7;
 }
-#pagemaintitletext .pr_rook, #gameaction_status .pr_rook {
+#pagemaintitletext .pr_rook,
+#gameaction_status .pr_rook {
   --paxRenTokenScale: 0.65;
 }
-#pagemaintitletext .pr_one_shot, #gameaction_status .pr_one_shot {
+#pagemaintitletext .pr_one_shot,
+#gameaction_status .pr_one_shot {
   display: inline-block;
   --paxRenIconScale: 0.75;
   margin-bottom: -14px;
 }
-#pagemaintitletext .pr_card, #gameaction_status .pr_card {
+#pagemaintitletext .pr_card,
+#gameaction_status .pr_card {
   display: none;
 }
-#pagemaintitletext .pr_square_card, #gameaction_status .pr_square_card {
+#pagemaintitletext .pr_square_card,
+#gameaction_status .pr_square_card {
   display: none;
 }
-#pagemaintitletext .pr_tableau_op, #gameaction_status .pr_tableau_op {
+#pagemaintitletext .pr_tableau_op,
+#gameaction_status .pr_tableau_op {
   display: inline-block;
   --paxRenIconScale: 0.45;
   margin-bottom: -9px;
 }
 
-.log > .roundedbox .pr_icon, .log > .roundedboxinner .pr_icon {
+.log > .roundedbox .pr_icon,
+.log > .roundedboxinner .pr_icon {
   display: inline-block;
 }
-.log > .roundedbox .pr_icon[data-icon=florin], .log > .roundedboxinner .pr_icon[data-icon=florin] {
+.log > .roundedbox .pr_icon[data-icon=florin],
+.log > .roundedboxinner .pr_icon[data-icon=florin] {
   --paxRenIconScale: 0.5;
   margin-bottom: -4px;
 }
-.log > .roundedbox .pr_token, .log > .roundedboxinner .pr_token {
+.log > .roundedbox .pr_token,
+.log > .roundedboxinner .pr_token {
   display: inline-block;
   --paxRenTokenScale: 0.7;
   margin-bottom: -5px;
 }
-.log > .roundedbox .pr_prestige_icon, .log > .roundedboxinner .pr_prestige_icon {
+.log > .roundedbox .pr_prestige_icon,
+.log > .roundedboxinner .pr_prestige_icon {
   margin-bottom: -6px;
   --paxRenIconScale: 0.8;
 }
-.log > .roundedbox .pr_tableau_op, .log > .roundedboxinner .pr_tableau_op {
+.log > .roundedbox .pr_tableau_op,
+.log > .roundedboxinner .pr_tableau_op {
   --paxRenIconScale: 0.8;
 }
-.log > .roundedbox .pr_card, .log > .roundedboxinner .pr_card {
+.log > .roundedbox .pr_card,
+.log > .roundedboxinner .pr_card {
   --paxRenCardScale: 0.5;
 }
-.log > .roundedbox .pr_square_card, .log > .roundedboxinner .pr_square_card {
+.log > .roundedbox .pr_square_card,
+.log > .roundedboxinner .pr_square_card {
   --paxRenCardScale: 0.5;
+}
+
+.pr_agent_button {
+  box-sizing: border-box;
+  --paxRenTokenScale: 0.8;
+  height: 50px;
+}
+.pr_agent_button .pr_token {
+  display: inline-block;
+  position: relative;
+  top: 11px;
+  margin-top: -11px;
+  margin-right: 4px;
+}
+.pr_agent_button .pr_bishop {
+  --paxRenTokenScale: 0.61;
+  top: 12px;
+  margin-top: -12px;
+}
+.pr_agent_button .pr_knight {
+  --paxRenTokenScale: 0.75;
+}
+.pr_agent_button .pr_pawn {
+  --paxRenTokenScale: 0.8;
+}
+.pr_agent_button .pr_pirate {
+  --paxRenTokenScale: 0.75;
+}
+.pr_agent_button .pr_rook {
+  --paxRenTokenScale: 0.7;
 }
 
 #pr_market_west_deck,

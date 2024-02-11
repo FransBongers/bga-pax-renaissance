@@ -157,7 +157,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.infoPanel = new InfoPanel(this);
     this.informationModal = new InformationModal(this);
     this.settings = new Settings(this);
-    
+
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
 
@@ -204,12 +204,12 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }
 
   setupDontPreloadImages() {
-    this.framework().dontPreloadImage('background_balcony.webp');
-    this.framework().dontPreloadImage('background_cathedral.webp');
-    this.framework().dontPreloadImage('background_goldsmith.webp');
-    this.framework().dontPreloadImage('background_lucrezia.webp');
-    this.framework().dontPreloadImage('background_poison.webp');
-    this.framework().dontPreloadImage('background_war.webp'); 
+    this.framework().dontPreloadImage("background_balcony.webp");
+    this.framework().dontPreloadImage("background_cathedral.webp");
+    this.framework().dontPreloadImage("background_goldsmith.webp");
+    this.framework().dontPreloadImage("background_lucrezia.webp");
+    this.framework().dontPreloadImage("background_poison.webp");
+    this.framework().dontPreloadImage("background_war.webp");
   }
 
   public updateLayout() {
@@ -400,6 +400,50 @@ class PaxRenaissance implements PaxRenaissanceGame {
       text: _("Confirm"),
       callback,
     });
+  }
+
+  private createAgentMapTokenId(agent: Agent) {
+    let id = "";
+    if (agent.type === PAWN) {
+      const bank = this.playerManager
+        .getPlayer({ playerId: this.getPlayerId() })
+        .getBank();
+      id = `${bank}_pawn`;
+    } else {
+      id = `${agent.separator}_${agent.type}`;
+    }
+    return id;
+  }
+
+  addAgentButton({
+    id,
+    callback,
+    agent,
+  }: {
+    id: string;
+    callback: Function | string;
+    agent: Agent;
+  }) {
+    const text = this.format_string_recursive(_("${tkn_mapToken} Agent"), {
+      tkn_mapToken: this.createAgentMapTokenId(agent),
+    });
+    this.addSecondaryActionButton({
+      id,
+      callback,
+      text,
+      extraClasses: "pr_agent_button",
+    });
+    // const html = tplToken({
+    //   type: agent.type,
+    //   separator:
+    //     agent.type === PAWN
+    //       ? this.playerManager
+    //           .getPlayer({ playerId: this.getPlayerId() })
+    //           .getBank()
+    //       : agent.separator,
+    // })
+    // const node = document.getElementById(id);
+    // node.insertAdjacentHTML('afterbegin', html)
   }
 
   addPassButton({

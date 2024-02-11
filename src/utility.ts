@@ -12,3 +12,16 @@ const pxNumber = (px?: string): number => {
     return 0;
   }
 }
+
+const getUniqueAgents = ({ agents }: { agents: Agent[] }): Agent[] => {
+  if (agents.length === 1) {
+    return agents;
+  }
+  const equalSeparator = agents[0].separator === agents[1].separator;
+  const equalType = agents[0].type === agents[1].type;
+  if (equalSeparator && equalType) {
+    return [agents[0]];
+  } else {
+    return agents;
+  }
+}

@@ -1960,12 +1960,12 @@ var PaxRenaissance = (function () {
         this.playerOrder = customPlayerOrder;
     };
     PaxRenaissance.prototype.setupDontPreloadImages = function () {
-        this.framework().dontPreloadImage('background_balcony.webp');
-        this.framework().dontPreloadImage('background_cathedral.webp');
-        this.framework().dontPreloadImage('background_goldsmith.webp');
-        this.framework().dontPreloadImage('background_lucrezia.webp');
-        this.framework().dontPreloadImage('background_poison.webp');
-        this.framework().dontPreloadImage('background_war.webp');
+        this.framework().dontPreloadImage("background_balcony.webp");
+        this.framework().dontPreloadImage("background_cathedral.webp");
+        this.framework().dontPreloadImage("background_goldsmith.webp");
+        this.framework().dontPreloadImage("background_lucrezia.webp");
+        this.framework().dontPreloadImage("background_poison.webp");
+        this.framework().dontPreloadImage("background_war.webp");
     };
     PaxRenaissance.prototype.updateLayout = function () {
         if (!this.settings) {
@@ -2082,6 +2082,31 @@ var PaxRenaissance = (function () {
             id: "confirm_btn",
             text: _("Confirm"),
             callback: callback,
+        });
+    };
+    PaxRenaissance.prototype.createAgentMapTokenId = function (agent) {
+        var id = "";
+        if (agent.type === PAWN) {
+            var bank = this.playerManager
+                .getPlayer({ playerId: this.getPlayerId() })
+                .getBank();
+            id = "".concat(bank, "_pawn");
+        }
+        else {
+            id = "".concat(agent.separator, "_").concat(agent.type);
+        }
+        return id;
+    };
+    PaxRenaissance.prototype.addAgentButton = function (_a) {
+        var id = _a.id, callback = _a.callback, agent = _a.agent;
+        var text = this.format_string_recursive(_("${tkn_mapToken} Agent"), {
+            tkn_mapToken: this.createAgentMapTokenId(agent),
+        });
+        this.addSecondaryActionButton({
+            id: id,
+            callback: callback,
+            text: text,
+            extraClasses: "pr_agent_button",
         });
     };
     PaxRenaissance.prototype.addPassButton = function (_a) {
@@ -2811,6 +2836,20 @@ var pxNumber = function (px) {
     }
     else {
         return 0;
+    }
+};
+var getUniqueAgents = function (_a) {
+    var agents = _a.agents;
+    if (agents.length === 1) {
+        return agents;
+    }
+    var equalSeparator = agents[0].separator === agents[1].separator;
+    var equalType = agents[0].type === agents[1].type;
+    if (equalSeparator && equalType) {
+        return [agents[0]];
+    }
+    else {
+        return agents;
     }
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
@@ -6995,10 +7034,11 @@ var BattleCasualtiesState = (function () {
     };
     BattleCasualtiesState.prototype.addAgentButtons = function () {
         var _this = this;
-        this.args.agents.forEach(function (agent, index) {
-            _this.game.addPrimaryActionButton({
+        var uniqueAgents = getUniqueAgents({ agents: this.args.agents });
+        uniqueAgents.forEach(function (agent, index) {
+            _this.game.addAgentButton({
                 id: "agent_button_".concat(index),
-                text: "".concat(agent.type, " agent"),
+                agent: agent,
                 callback: function () { return _this.updateInterfaceConfirmSelectAgent({ agent: agent }); },
             });
         });
@@ -7136,7 +7176,9 @@ var BattlePlaceAttackersState = (function () {
             text: _("${tkn_playerName} must select a ${borderOrCity} to place ${tkn_mapToken} onto"),
             args: {
                 tkn_playerName: "${you}",
-                borderOrCity: option.agent.type === PAWN || option.agent.type === PIRATE ? _("Border") : _("City"),
+                borderOrCity: option.agent.type === PAWN || option.agent.type === PIRATE
+                    ? _("Border")
+                    : _("City"),
                 tkn_mapToken: this.createMapTokenId({ agent: option.agent }),
             },
         });
@@ -7247,10 +7289,20 @@ var BattlePlaceAttackersState = (function () {
     };
     BattlePlaceAttackersState.prototype.addAgentButtons = function () {
         var _this = this;
-        this.args.options.agents.forEach(function (option, index) {
-            _this.game.addPrimaryActionButton({
+        var uniqueAgents = getUniqueAgents({
+            agents: this.args.options.agents.map(function (option) { return option.agent; }),
+        });
+        uniqueAgents.forEach(function (agent, index) {
+            var option = _this.args.options.agents.find(function (option) {
+                return option.agent.separator === agent.separator &&
+                    option.agent.type === agent.type;
+            });
+            if (!option) {
+                return;
+            }
+            _this.game.addAgentButton({
                 id: "agent_button_".concat(index),
-                text: "".concat(option.agent.type, " agent"),
+                agent: option.agent,
                 callback: function () { return _this.updateInterfaceAgentSelected({ option: option }); },
             });
         });
@@ -8233,11 +8285,19 @@ var FreeActionState = (function () {
 }());
 var PlaceAgentState = (function () {
     function PlaceAgentState(game) {
+        this.selectedAgent = null;
         this.game = game;
     }
     PlaceAgentState.prototype.onEnteringState = function (args) {
         this.args = args;
-        this.updateInterfaceInitialStep();
+        this.selectedAgent = null;
+        var uniqueAgents = getUniqueAgents({ agents: args.agents });
+        if (uniqueAgents.length > 1) {
+            this.updateInterfaceSelectAgent({ agents: uniqueAgents });
+        }
+        else {
+            this.updateInterfaceSelectLocation({ agent: uniqueAgents[0] });
+        }
     };
     PlaceAgentState.prototype.onLeavingState = function () {
         debug("Leaving PlaceAgentState");
@@ -8245,21 +8305,41 @@ var PlaceAgentState = (function () {
     PlaceAgentState.prototype.setDescription = function (activePlayerId, args) {
         this.args = args;
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} may place ${tkn_mapToken}"),
+            text: _("${tkn_playerName} may place Agents"),
             args: {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
                     .getName(),
-                tkn_mapToken: this.createMapTokenId(activePlayerId),
             },
             nonActivePlayers: true,
         });
     };
-    PlaceAgentState.prototype.updateInterfaceInitialStep = function () {
+    PlaceAgentState.prototype.updateInterfaceSelectAgent = function (_a) {
+        var agents = _a.agents;
+        this.game.clearPossible();
+        this.game.clientUpdatePageTitle({
+            text: _("${tkn_playerName} must select an Agent to place"),
+            args: {
+                tkn_playerName: "${you}",
+            },
+        });
+        this.addAgentButtons({ agents: agents });
+        this.game.addPassButton({
+            optionalAction: this.args.optionalAction,
+            text: _("Do not place"),
+        });
+        this.game.addUndoButtons(this.args);
+    };
+    PlaceAgentState.prototype.updateInterfaceSelectLocation = function (_a) {
+        var agent = _a.agent;
+        this.selectedAgent = agent;
         this.game.clearPossible();
         this.updatePageTitle();
         this.setLocationsSelectable();
-        this.game.addPassButton({ optionalAction: this.args.optionalAction, text: _('Do not place') });
+        this.game.addPassButton({
+            optionalAction: this.args.optionalAction,
+            text: _("Do not place"),
+        });
         this.game.addUndoButtons(this.args);
     };
     PlaceAgentState.prototype.updateInterfaceConfirmCard = function (_a) {
@@ -8324,7 +8404,7 @@ var PlaceAgentState = (function () {
                 return _this.game.takeAction({
                     action: "actPlaceAgent",
                     args: {
-                        agent: _this.args.agents[0],
+                        agent: _this.selectedAgent,
                         locationId: id,
                         empireId: empire ? empire.id : null,
                     },
@@ -8334,7 +8414,7 @@ var PlaceAgentState = (function () {
         this.game.addCancelButton();
     };
     PlaceAgentState.prototype.createMapTokenId = function (activePlayerId) {
-        var agent = this.args.agents[0];
+        var agent = this.selectedAgent;
         var id = "";
         if (agent.type === PAWN) {
             var bank = this.game.playerManager
@@ -8425,6 +8505,20 @@ var PlaceAgentState = (function () {
                 },
             });
         }
+    };
+    PlaceAgentState.prototype.addAgentButtons = function (_a) {
+        var _this = this;
+        var agents = _a.agents;
+        agents.forEach(function (agent, index) {
+            _this.game.addAgentButton({
+                callback: function () {
+                    _this.selectedAgent = agent;
+                    _this.updateInterfaceSelectLocation({ agent: agent });
+                },
+                id: "agent_".concat(index),
+                agent: agent,
+            });
+        });
     };
     return PlaceAgentState;
 }());

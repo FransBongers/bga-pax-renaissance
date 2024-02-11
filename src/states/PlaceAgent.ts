@@ -1,6 +1,7 @@
 class PlaceAgentState implements State {
   private game: PaxRenaissanceGame;
   private args: OnEnteringPlaceAgentsArgs;
+  private selectedAgent: Agent | null = null;
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
@@ -8,7 +9,13 @@ class PlaceAgentState implements State {
 
   onEnteringState(args: OnEnteringPlaceAgentsArgs) {
     this.args = args;
-    this.updateInterfaceInitialStep();
+    this.selectedAgent = null;
+    const uniqueAgents = getUniqueAgents({ agents: args.agents });
+    if (uniqueAgents.length > 1) {
+      this.updateInterfaceSelectAgent({ agents: uniqueAgents });
+    } else {
+      this.updateInterfaceSelectLocation({ agent: uniqueAgents[0] });
+    }
   }
 
   onLeavingState() {
@@ -18,12 +25,12 @@ class PlaceAgentState implements State {
   setDescription(activePlayerId: number, args: OnEnteringPlaceAgentsArgs) {
     this.args = args;
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may place ${tkn_mapToken}"),
+      text: _("${tkn_playerName} may place Agents"),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
           .getName(),
-        tkn_mapToken: this.createMapTokenId(activePlayerId),
+        // tkn_mapToken: this.createMapTokenId(activePlayerId),
       },
       nonActivePlayers: true,
     });
@@ -45,13 +52,35 @@ class PlaceAgentState implements State {
   // .##....##....##....##.......##........##....##
   // ..######.....##....########.##.........######.
 
-  private updateInterfaceInitialStep() {
+  private updateInterfaceSelectAgent({ agents }: { agents: Agent[] }) {
+    this.game.clearPossible();
+
+    this.game.clientUpdatePageTitle({
+      text: _("${tkn_playerName} must select an Agent to place"),
+      args: {
+        tkn_playerName: "${you}",
+      },
+    });
+    this.addAgentButtons({ agents });
+
+    this.game.addPassButton({
+      optionalAction: this.args.optionalAction,
+      text: _("Do not place"),
+    });
+    this.game.addUndoButtons(this.args);
+  }
+
+  private updateInterfaceSelectLocation({ agent }: { agent: Agent }) {
+    this.selectedAgent = agent;
     this.game.clearPossible();
 
     this.updatePageTitle();
     this.setLocationsSelectable();
 
-    this.game.addPassButton({optionalAction: this.args.optionalAction, text: _('Do not place')})
+    this.game.addPassButton({
+      optionalAction: this.args.optionalAction,
+      text: _("Do not place"),
+    });
     this.game.addUndoButtons(this.args);
   }
 
@@ -144,7 +173,7 @@ class PlaceAgentState implements State {
         this.game.takeAction({
           action: "actPlaceAgent",
           args: {
-            agent: this.args.agents[0],
+            agent: this.selectedAgent,
             locationId: id,
             empireId: empire ? empire.id : null,
           },
@@ -162,7 +191,7 @@ class PlaceAgentState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private createMapTokenId(activePlayerId?: number) {
-    const agent = this.args.agents[0];
+    const agent = this.selectedAgent;
     let id = "";
     if (agent.type === PAWN) {
       const bank = this.game.playerManager
@@ -242,8 +271,8 @@ class PlaceAgentState implements State {
     } else if (tokenToKill) {
       this.game.clientUpdatePageTitle({
         text: _(
-                "Place ${tkn_mapToken} on ${location} and Kill ${tkn_mapToken_killed} ?"
-              ),
+          "Place ${tkn_mapToken} on ${location} and Kill ${tkn_mapToken_killed} ?"
+        ),
         args: {
           tkn_playerName: "${you}",
           tkn_mapToken: this.createMapTokenId(),
@@ -261,6 +290,19 @@ class PlaceAgentState implements State {
         },
       });
     }
+  }
+
+  private addAgentButtons({ agents }: { agents: Agent[] }) {
+    agents.forEach((agent, index) => {
+      this.game.addAgentButton({
+        callback: () => {
+          this.selectedAgent = agent;
+          this.updateInterfaceSelectLocation({ agent });
+        },
+        id: `agent_${index}`,
+        agent,
+      });
+    });
   }
 
   //  ..######..##.......####..######..##....##

@@ -96,11 +96,12 @@ trait DebugTrait
 
   function test()
   {
+    $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_HolyRomanEmpire');
     // $this->debugPlaceCardInTableau('EmpireSquare_Hungary', EAST, 2371053); // Republic
     // $this->debugPlaceCardInTableau('PREN165X_TransylvanianSaxons', EAST, 2371052); // Republic
     // $this->debugPlaceCardInTableau('PREN130X_Cryptography', EAST, 2371053); // Republic
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_HUNGARY_OTTOMAN);
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_BYZANTIUM_HUNGARY);
+    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_HUNGARY_OTTOMAN);
+    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_BYZANTIUM_HUNGARY);
     // $this->debugPlaceToken(BISHOP, ISLAMIC, 'PREN117X_DespinaKhatun');
     // Cards::move("EmpireSquare_Hungary",'vassals_'.HOLY_ROMAN_EMIRE);
     // Cards::move("EmpireSquare_Aragon",'vassals_'.HOLY_ROMAN_EMIRE);

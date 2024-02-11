@@ -143,10 +143,7 @@ interface PlaceAgentLocation {
 }
 
 interface OnEnteringPlaceAgentsArgs extends CommonArgs {
-  agents: {
-    type: string;
-    separator: string | null;
-  }[];
+  agents: Agent[];
   locations: Record<string, PlaceAgentLocation | EmpireCard | TableauCard>;
   optionalAction: boolean;
   repressCost: number;

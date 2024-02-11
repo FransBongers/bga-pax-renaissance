@@ -13,6 +13,11 @@ interface PaxRenaissanceGame extends Game {
   addCancelButton: () => void;
   addConfirmButton: (props: { callback: Function | string }) => void;
   addDangerActionButton: (props: AddButtonProps) => void;
+  addAgentButton: (props: {
+    id: string;
+    callback: Function | string;
+    agent: Agent;
+  }) => void;
   addLogClass: () => void;
   addPrimaryActionButton: (props: AddButtonProps) => void;
   addPassButton: (props: { optionalAction: boolean; text?: string }) => void;
@@ -292,11 +297,11 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
   };
   victoryCards: VictoryCard[];
   victoryCounts: {
-    concessions: {playerId: number; numberOfConcessions: number}[];
-    discoveryPrestige: {playerId: number; discoveryPrestige: number}[];
-    kings: {playerId: number; numberOfKings: number}[];
-    republics: {playerId: number; numberOfRepublics: number}[];
-    lawPrestige: {playerId: number; lawPrestige: number}[];
+    concessions: { playerId: number; numberOfConcessions: number }[];
+    discoveryPrestige: { playerId: number; discoveryPrestige: number }[];
+    kings: { playerId: number; numberOfKings: number }[];
+    republics: { playerId: number; numberOfRepublics: number }[];
+    lawPrestige: { playerId: number; lawPrestige: number }[];
   };
   // REMOVE
   testCard: TableauCard;

@@ -69,7 +69,10 @@ class BattlePlaceAttackersState implements State {
       ),
       args: {
         tkn_playerName: "${you}",
-        borderOrCity: option.agent.type === PAWN || option.agent.type === PIRATE ? _("Border") : _("City"),
+        borderOrCity:
+          option.agent.type === PAWN || option.agent.type === PIRATE
+            ? _("Border")
+            : _("City"),
         tkn_mapToken: this.createMapTokenId({ agent: option.agent }),
       },
     });
@@ -207,18 +210,35 @@ class BattlePlaceAttackersState implements State {
   }
 
   private addAgentButtons() {
-    this.args.options.agents.forEach(
-      (option: PlaceAttackingAgentOption, index) => {
-        this.game.addPrimaryActionButton({
-          id: `agent_button_${index}`,
-          text: `${option.agent.type} agent`,
-          // text: this.game.format_string_recursive("${tkn_mapToken} Agent", {
-          //   tkn_mapToken: tknMapToken(this.createAgentMapTokenId(agent)),
-          // }),
-          callback: () => this.updateInterfaceAgentSelected({ option }),
-        });
+    const uniqueAgents = getUniqueAgents({
+      agents: this.args.options.agents.map(
+        (option: PlaceAttackingAgentOption) => option.agent
+      ),
+    });
+
+    uniqueAgents.forEach((agent: Agent, index) => {
+      const option = this.args.options.agents.find(
+        (option) =>
+          option.agent.separator === agent.separator &&
+          option.agent.type === agent.type
+      );
+      if (!option) {
+        return;
       }
-    );
+      // this.game.addPrimaryActionButton({
+      //   id: `agent_button_${index}`,
+      //   text: `${option.agent.type} agent`,
+      //   // text: this.game.format_string_recursive("${tkn_mapToken} Agent", {
+      //   //   tkn_mapToken: tknMapToken(this.createAgentMapTokenId(agent)),
+      //   // }),
+      //   callback: () => this.updateInterfaceAgentSelected({ option }),
+      // });
+      this.game.addAgentButton({
+        id: `agent_button_${index}`,
+        agent: option.agent,
+        callback: () => this.updateInterfaceAgentSelected({ option }),
+      });
+    });
   }
 
   // private createAgentMapTokenId(agent: Agent) {
@@ -235,12 +255,14 @@ class BattlePlaceAttackersState implements State {
   // }
 
   private setTokensSelectable() {
-    this.args.options.repressedTokens.forEach((option: PlaceAttackingRepressedTokenOption) => {
-      this.game.setTokenSelectable({
-        id: option.token.id,
-        callback: () => this.updateInterfaceTokenSelected({ option }),
-      });
-    });
+    this.args.options.repressedTokens.forEach(
+      (option: PlaceAttackingRepressedTokenOption) => {
+        this.game.setTokenSelectable({
+          id: option.token.id,
+          callback: () => this.updateInterfaceTokenSelected({ option }),
+        });
+      }
+    );
   }
 
   //  ..######..##.......####..######..##....##
