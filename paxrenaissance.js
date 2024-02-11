@@ -8228,7 +8228,7 @@ var FreeActionState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("Perform ${actionTitle} action?"),
             args: {
-                actionTitle: _(ability.title).replace(':', ''),
+                actionTitle: _(ability.title).replace(":", ""),
             },
         });
         this.game.addConfirmButton({
@@ -8252,10 +8252,12 @@ var FreeActionState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("Perform ${actionTitle} action?"),
             args: {
-                actionTitle: _(ability.title).replace(':', ''),
+                actionTitle: _(ability.title).replace(":", ""),
             },
         });
-        this.game.addConfirmButton({
+        this.game.addPrimaryActionButton({
+            id: "free_action_button",
+            text: _("Perform action"),
             callback: function () {
                 return _this.game.takeAction({
                     action: "actFreeAction",
@@ -8267,7 +8269,10 @@ var FreeActionState = (function () {
                 });
             },
         });
-        this.game.addPassButton({ optionalAction: this.args.optionalAction });
+        this.game.addPassButton({
+            text: _("Do not perform action"),
+            optionalAction: this.args.optionalAction,
+        });
         this.game.addUndoButtons(this.args);
     };
     FreeActionState.prototype.addActionButtons = function () {
@@ -8276,7 +8281,7 @@ var FreeActionState = (function () {
             var cardId = _a[0], ability = _a[1];
             _this.game.addPrimaryActionButton({
                 id: "abiliy_action_".concat(index, "_btn"),
-                text: _(ability.title).replace(':', ''),
+                text: _(ability.title).replace(":", ""),
                 callback: function () { return _this.updateInterfaceConfirm({ cardId: cardId, ability: ability }); },
             });
         });

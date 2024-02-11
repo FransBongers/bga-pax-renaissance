@@ -28,7 +28,7 @@ class PREN014_IndiaArmada extends \PaxRenaissance\Models\TableauCard
         'id' => SA_CONCESSIONS_2X_SPICE_ISLANDS_TRADE_FAIRS_1,
         'title' => clienttranslate("CAPE OF GOOD HOPE:"),
         'text' => [
-          'log' => clienttranslate("Your Concessions count 2x is Spice Island trade fairs."),
+          'log' => clienttranslate("Your Concessions count 2x in Spice Island trade fairs."),
           'args' => [],
         ],
       ]
