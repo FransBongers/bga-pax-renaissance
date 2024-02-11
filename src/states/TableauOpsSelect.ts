@@ -46,7 +46,7 @@ class TableauOpsSelectState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select a card to perform Ops"),
+      text: _("${tkn_playerName} may select an Op to perform"),
       args: {
         tkn_playerName: "${you}",
       },
@@ -54,53 +54,57 @@ class TableauOpsSelectState implements State {
 
     // this.setCardsSelectable();
     this.setOperationsSelectable();
-    if (this.args.optional) {
-      this.game.addSkipButton({
-        callback: () =>
-          this.game.takeAction({
-            // text: 'Done',
-            action: "actTableauOpsSelect",
-            args: {
-              cardId: null,
-              tableauOpId: null,
-            },
-          }),
-      });
-    }
+    this.game.addPassButton({
+      text: _('Done'),
+      optionalAction: this.args.optional
+    })
+    // if (this.args.optional) {
+    //   this.game.addSkipButton({
+    //     callback: () =>
+    //       this.game.takeAction({
+    //         // text: 'Done',
+    //         action: "actTableauOpsSelect",
+    //         args: {
+    //           cardId: null,
+    //           tableauOpId: null,
+    //         },
+    //       }),
+    //   });
+    // }
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceConfirm({
-    cardId,
-    ops,
-  }: {
-    cardId: string;
-    ops: TableauOp[];
-  }) {
-    this.game.clearPossible();
-    this.game.setCardSelected({ id: cardId });
-    this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may choose an Op to perform"),
-      args: {
-        tkn_playerName: "${you}",
-      },
-    });
-    ops.forEach((tableauOp, index) => {
-      this.game.addPrimaryActionButton({
-        id: `${tableauOp.id}_${index}_btn`,
-        text: _(tableauOp.name),
-        callback: () =>
-          this.game.takeAction({
-            action: "actTableauOpsSelect",
-            args: {
-              cardId,
-              tableauOpId: tableauOp.id,
-            },
-          }),
-      });
-    });
-    this.game.addCancelButton();
-  }
+  // private updateInterfaceConfirm({
+  //   cardId,
+  //   ops,
+  // }: {
+  //   cardId: string;
+  //   ops: TableauOp[];
+  // }) {
+  //   this.game.clearPossible();
+  //   this.game.setCardSelected({ id: cardId });
+  //   this.game.clientUpdatePageTitle({
+  //     text: _("${tkn_playerName} may choose an Op to perform"),
+  //     args: {
+  //       tkn_playerName: "${you}",
+  //     },
+  //   });
+  //   ops.forEach((tableauOp, index) => {
+  //     this.game.addPrimaryActionButton({
+  //       id: `${tableauOp.id}_${index}_btn`,
+  //       text: _(tableauOp.name),
+  //       callback: () =>
+  //         this.game.takeAction({
+  //           action: "actTableauOpsSelect",
+  //           args: {
+  //             cardId,
+  //             tableauOpId: tableauOp.id,
+  //           },
+  //         }),
+  //     });
+  //   });
+  //   this.game.addCancelButton();
+  // }
 
   private updateInterfaceConfirmOp({
     card,

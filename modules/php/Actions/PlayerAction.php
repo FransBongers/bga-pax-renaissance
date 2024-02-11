@@ -168,6 +168,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
               'action' => $action,
               'playerId' => $this->ctx->getPlayerId(),
               'region' => $args['region'],
+              'firstOp' => $args['firstOp'],
             ]
           ]
         ]));

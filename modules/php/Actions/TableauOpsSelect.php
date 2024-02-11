@@ -45,11 +45,23 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
 
   public function stTableauOpsSelect()
   {
+    $optional = $this->hasAtLeastOneOpBeenResolved();
+    if ($optional && !$this->ctx->isOptional()) {
+      $this->ctx->updateInfo('optional',$optional);
+      Engine::save();
+    }
+
     $player = self::getPlayer();
     $availableOps = $this->getAvailableOps($player);
 
     if (count($availableOps) === 0) {
       $this->resolveAction(['automatic' => true]);
+    }
+    $info = $this->ctx->getInfo();
+    if (isset($info['firstOp']) && $info['firstOp'] !== null) {
+      $selectedOp = $info['firstOp'];
+      $this->ctx->updateInfo('firstOp',null);
+      $this->actTableauOpsSelect($selectedOp);
     }
   }
 
@@ -93,6 +105,11 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
   // .#########.##..........##.....##..##.....##.##..####
   // .##.....##.##....##....##.....##..##.....##.##...###
   // .##.....##..######.....##....####..#######..##....##
+
+  public function actPassTableauOpsSelect()
+  {
+    $this->resolveAction('DONE');
+  }
 
   public function actTableauOpsSelect($args)
   {

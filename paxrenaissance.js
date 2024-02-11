@@ -7669,14 +7669,9 @@ var ClientConfirmTableauOpsState = (function () {
     }
     ClientConfirmTableauOpsState.prototype.onEnteringState = function (args) {
         this.args = args;
+        console.log("confirm ops args", this.args);
         if (!this.args.availableOps.eastAndWest) {
-            this.game.takeAction({
-                action: "actPlayerAction",
-                args: {
-                    action: "tableauOps",
-                    region: this.args.region,
-                },
-            });
+            this.updateInterfaceConfirm();
         }
         else {
             this.updateInterfaceInitialStep();
@@ -7694,24 +7689,54 @@ var ClientConfirmTableauOpsState = (function () {
             args: {},
         });
         this.game.addConfirmButton({
-            callback: function () { return _this.game.takeAction({
-                action: "actPlayerAction",
-                args: {
-                    action: "tableauOps",
-                    region: EAST_AND_WEST,
-                },
-            }); },
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "tableauOps",
+                        region: EAST_AND_WEST,
+                        firstOp: _this.args.firstOp,
+                    },
+                });
+            },
         });
         this.game.addSecondaryActionButton({
-            id: 'region_ops_btn',
-            text: this.args.region === EAST ? _('East ops only') : _('West ops only'),
-            callback: function () { return _this.game.takeAction({
-                action: "actPlayerAction",
-                args: {
-                    action: "tableauOps",
-                    region: _this.args.region,
-                },
-            }); },
+            id: "region_ops_btn",
+            text: this.args.region === EAST ? _("East ops only") : _("West ops only"),
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "tableauOps",
+                        region: _this.args.region,
+                        firstOp: _this.args.firstOp,
+                    },
+                });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    ClientConfirmTableauOpsState.prototype.updateInterfaceConfirm = function () {
+        var _this = this;
+        this.game.clearPossible();
+        var text = this.args.region === EAST
+            ? _("Perform Tableau Ops East?")
+            : _("Perform Tableau Ops West?");
+        this.game.clientUpdatePageTitle({
+            text: text,
+            args: {},
+        });
+        this.game.addConfirmButton({
+            callback: function () {
+                return _this.game.takeAction({
+                    action: "actPlayerAction",
+                    args: {
+                        action: "tableauOps",
+                        region: _this.args.region,
+                        firstOp: _this.args.firstOp,
+                    },
+                });
+            },
         });
         this.game.addCancelButton();
     };
@@ -8622,10 +8647,22 @@ var PlayerActionState = (function () {
         this.setMarketCardsSelectable();
         this.setHandCardsSelectable();
         this.setTradeFairSelectable();
+        this.setOperationsSelectable();
         this.setVictoryCardsSelectable();
         this.addActionButtons();
         this.game.addPassButton({ optionalAction: this.args.optionalAction });
         this.game.addUndoButtons(this.args);
+    };
+    PlayerActionState.prototype.updateInterfaceSelectCardToPurchase = function () {
+        this.game.clearPossible();
+        this.setMarketCardsSelectable();
+        this.game.clientUpdatePageTitle({
+            text: _("${you} must select a card to purchase"),
+            args: {
+                you: "${you}",
+            },
+        });
+        this.game.addCancelButton();
     };
     PlayerActionState.prototype.updateInterfaceConfirmPurchase = function (_a) {
         var _this = this;
@@ -8649,6 +8686,17 @@ var PlayerActionState = (function () {
                         cardId: card.id,
                     },
                 });
+            },
+        });
+        this.game.addCancelButton();
+    };
+    PlayerActionState.prototype.updateInterfaceSelectHandCard = function () {
+        this.game.clearPossible();
+        this.setHandCardsSelectable();
+        this.game.clientUpdatePageTitle({
+            text: _("${you} must select a card to play"),
+            args: {
+                you: "${you}",
             },
         });
         this.game.addCancelButton();
@@ -8677,8 +8725,50 @@ var PlayerActionState = (function () {
         });
         this.game.addCancelButton();
     };
+    PlayerActionState.prototype.updateInterfaceSelectVictory = function () {
+        this.game.clearPossible();
+        this.setVictoryCardsSelectable();
+        this.game.clientUpdatePageTitle({
+            text: _("${you} must select a Victory to declare"),
+            args: {
+                you: "${you}",
+            },
+        });
+        this.game.addCancelButton();
+    };
     PlayerActionState.prototype.addActionButtons = function () {
         var _this = this;
+        if (this.args.cardsPlayerCanPurchase.length > 0) {
+            this.game.addPrimaryActionButton({
+                id: "purchase_card_btn",
+                text: _("Purchase"),
+                callback: function () { return _this.updateInterfaceSelectCardToPurchase(); },
+            });
+        }
+        var handCards = this.game.hand.getCards();
+        console.log("handCards", handCards);
+        if (handCards.length > 0) {
+            this.game.addPrimaryActionButton({
+                id: "play_card_btn",
+                text: _("Play"),
+                callback: function () { return _this.updateInterfaceSelectHandCard(); },
+            });
+        }
+        if (this.args._private.cardsPlayerCanSell.cards.length +
+            this.args._private.cardsPlayerCanSell.royalCouples.length >
+            0) {
+            this.game.addPrimaryActionButton({
+                id: "sell_card_btn",
+                text: _("Sell"),
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_SELL_CARD_STATE, {
+                        args: _this.args._private.cardsPlayerCanSell,
+                    });
+                },
+            });
+        }
         REGIONS.forEach(function (region) {
             if (Object.keys(_this.args.availableOps[region]).length > 0) {
                 _this.game.addPrimaryActionButton({
@@ -8691,25 +8781,44 @@ var PlayerActionState = (function () {
                             args: {
                                 availableOps: _this.args.availableOps,
                                 region: region,
+                                firstOp: null,
                             },
                         });
                     },
                 });
             }
         });
-        if (this.args._private.cardsPlayerCanSell.cards.length +
-            this.args._private.cardsPlayerCanSell.royalCouples.length >
-            0) {
+        if (this.args.tradeFair.east) {
             this.game.addPrimaryActionButton({
-                id: "sell_card_btn",
-                text: _("Sell card"),
+                id: "trade_fair_east_btn",
+                text: _("Trade Fair East"),
                 callback: function () {
                     return _this.game
                         .framework()
-                        .setClientState(CLIENT_SELL_CARD_STATE, {
-                        args: _this.args._private.cardsPlayerCanSell,
+                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, {
+                        args: __assign(__assign({}, _this.args.tradeFair.east), { action: "actPlayerAction" }),
                     });
                 },
+            });
+        }
+        if (this.args.tradeFair.west) {
+            this.game.addPrimaryActionButton({
+                id: "trade_fair_west_btn",
+                text: _("Trade Fair West"),
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, {
+                        args: __assign(__assign({}, _this.args.tradeFair.west), { action: "actPlayerAction" }),
+                    });
+                },
+            });
+        }
+        if (this.args.declarableVictories.length > 0) {
+            this.game.addPrimaryActionButton({
+                id: "declare_victory_btn",
+                text: _("Declare Victory"),
+                callback: function () { return _this.updateInterfaceSelectVictory(); },
             });
         }
         if (Object.entries(this.args.abilityActions).length > 0) {
@@ -8726,8 +8835,7 @@ var PlayerActionState = (function () {
             });
         }
     };
-    PlayerActionState.prototype.addTest = function () {
-    };
+    PlayerActionState.prototype.addTest = function () { };
     PlayerActionState.prototype.updatePageTitle = function () {
         var remainingActions = this.args.remainingActions;
         var titleText = _("${tkn_playerName} may perform an action");
@@ -8782,6 +8890,37 @@ var PlayerActionState = (function () {
                         args: __assign(__assign({}, _this.args.tradeFair[region]), { action: "actPlayerAction" }),
                     });
                 },
+            });
+        });
+    };
+    PlayerActionState.prototype.setOperationsSelectable = function () {
+        var _this = this;
+        REGIONS.forEach(function (region) {
+            Object.entries(_this.args.availableOps[region]).forEach(function (_a) {
+                var cardId = _a[0], operations = _a[1];
+                var card = cardId.startsWith("EmpireSquare")
+                    ? _this.game.gamedatas.empireSquares.find(function (square) { return square.id === cardId; })
+                    : _this.game.gamedatas.staticData.tableauCards[cardId.split('_')[0]];
+                operations.forEach(function (operation) {
+                    var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
+                    _this.game.setLocationSelectable({
+                        id: operationId,
+                        callback: function () {
+                            return _this.game
+                                .framework()
+                                .setClientState(CLIENT_CONFIRM_TABLEAU_OPS, {
+                                args: {
+                                    availableOps: _this.args.availableOps,
+                                    region: region,
+                                    firstOp: {
+                                        tableauOpId: operation.id,
+                                        cardId: cardId
+                                    }
+                                },
+                            });
+                        },
+                    });
+                });
             });
         });
     };
@@ -9747,57 +9886,19 @@ var TableauOpsSelectState = (function () {
         });
     };
     TableauOpsSelectState.prototype.updateInterfaceInitialStep = function () {
-        var _this = this;
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} may select a card to perform Ops"),
+            text: _("${tkn_playerName} may select an Op to perform"),
             args: {
                 tkn_playerName: "${you}",
             },
         });
         this.setOperationsSelectable();
-        if (this.args.optional) {
-            this.game.addSkipButton({
-                callback: function () {
-                    return _this.game.takeAction({
-                        action: "actTableauOpsSelect",
-                        args: {
-                            cardId: null,
-                            tableauOpId: null,
-                        },
-                    });
-                },
-            });
-        }
+        this.game.addPassButton({
+            text: _('Done'),
+            optionalAction: this.args.optional
+        });
         this.game.addUndoButtons(this.args);
-    };
-    TableauOpsSelectState.prototype.updateInterfaceConfirm = function (_a) {
-        var _this = this;
-        var cardId = _a.cardId, ops = _a.ops;
-        this.game.clearPossible();
-        this.game.setCardSelected({ id: cardId });
-        this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} may choose an Op to perform"),
-            args: {
-                tkn_playerName: "${you}",
-            },
-        });
-        ops.forEach(function (tableauOp, index) {
-            _this.game.addPrimaryActionButton({
-                id: "".concat(tableauOp.id, "_").concat(index, "_btn"),
-                text: _(tableauOp.name),
-                callback: function () {
-                    return _this.game.takeAction({
-                        action: "actTableauOpsSelect",
-                        args: {
-                            cardId: cardId,
-                            tableauOpId: tableauOp.id,
-                        },
-                    });
-                },
-            });
-        });
-        this.game.addCancelButton();
     };
     TableauOpsSelectState.prototype.updateInterfaceConfirmOp = function (_a) {
         var _this = this;

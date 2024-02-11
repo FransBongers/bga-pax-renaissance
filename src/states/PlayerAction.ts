@@ -49,11 +49,24 @@ class PlayerActionState implements State {
     this.setMarketCardsSelectable();
     this.setHandCardsSelectable();
     this.setTradeFairSelectable();
+    this.setOperationsSelectable();
     this.setVictoryCardsSelectable();
     this.addActionButtons();
     // this.addTest();
     this.game.addPassButton({ optionalAction: this.args.optionalAction });
     this.game.addUndoButtons(this.args);
+  }
+
+  private updateInterfaceSelectCardToPurchase() {
+    this.game.clearPossible();
+    this.setMarketCardsSelectable();
+    this.game.clientUpdatePageTitle({
+      text: _("${you} must select a card to purchase"),
+      args: {
+        you: "${you}",
+      },
+    });
+    this.game.addCancelButton();
   }
 
   private updateInterfaceConfirmPurchase({
@@ -87,6 +100,18 @@ class PlayerActionState implements State {
     this.game.addCancelButton();
   }
 
+  private updateInterfaceSelectHandCard() {
+    this.game.clearPossible();
+    this.setHandCardsSelectable();
+    this.game.clientUpdatePageTitle({
+      text: _("${you} must select a card to play"),
+      args: {
+        you: "${you}",
+      },
+    });
+    this.game.addCancelButton();
+  }
+
   private updateInterfaceOnClickHandCard({ card }: { card: TableauCard }) {
     this.game.clearPossible();
     this.game.setCardSelected({ id: card.id });
@@ -108,47 +133,18 @@ class PlayerActionState implements State {
         }),
     });
 
-    // this.game.addPrimaryActionButton({
-    //   id: "play_card_button",
-    //   text: _("Play"),
-    //   callback: () =>
-    //     this.game.takeAction({
-    //       action: "actPlayerAction",
-    //       args: {
-    //         action: "playCard",
-    //         cardId: card.id,
-    //       },
-    //     }),
-    // });
-    // this.game.addPrimaryActionButton({
-    //   id: "sell_card_button",
-    //   text: _("Sell"),
-    //   // text: this.game.format_string_recursive(
-    //   //   "Sell for ${amount} ${tkn_florin}",
-    //   //   {
-    //   //     amount: 2,
-    //   //     tkn_florin: _("Florin(s)"),
-    //   //   }
-    //   // ),
-    //   callback: () =>
-    //     this.game.takeAction({
-    //       action: "actPlayerAction",
-    //       args: {
-    //         action: "sellCard",
-    //         cardId: card.id,
-    //       },
-    //     }),
-    // });
-    // this.game.addConfirmButton({
-    //   callback: () =>
-    //     this.game.takeAction({
-    //       action: "actPlayerAction",
-    //       args: {
-    //         action: "sellCard",
-    //         cardId: card.id,
-    //       },
-    //     }),
-    // });
+    this.game.addCancelButton();
+  }
+
+  private updateInterfaceSelectVictory() {
+    this.game.clearPossible();
+    this.setVictoryCardsSelectable();
+    this.game.clientUpdatePageTitle({
+      text: _("${you} must select a Victory to declare"),
+      args: {
+        you: "${you}",
+      },
+    });
     this.game.addCancelButton();
   }
 
@@ -161,6 +157,48 @@ class PlayerActionState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private addActionButtons() {
+    // Purchase card action
+    if (this.args.cardsPlayerCanPurchase.length > 0) {
+      this.game.addPrimaryActionButton({
+        id: "purchase_card_btn",
+        text: _("Purchase"),
+        callback: () => this.updateInterfaceSelectCardToPurchase(),
+      });
+    }
+
+    // Play card
+    const handCards = this.game.hand.getCards();
+    console.log("handCards", handCards);
+    if (handCards.length > 0) {
+      this.game.addPrimaryActionButton({
+        id: "play_card_btn",
+        text: _("Play"),
+        callback: () => this.updateInterfaceSelectHandCard(),
+      });
+    }
+
+    // Sell card
+    if (
+      this.args._private.cardsPlayerCanSell.cards.length +
+        this.args._private.cardsPlayerCanSell.royalCouples.length >
+      0
+    ) {
+      this.game.addPrimaryActionButton({
+        id: "sell_card_btn",
+        text: _("Sell"),
+        callback: () =>
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientSellCardArgs>(
+              CLIENT_SELL_CARD_STATE,
+              {
+                args: this.args._private.cardsPlayerCanSell,
+              }
+            ),
+      });
+    }
+
+    // Tableau Ops
     REGIONS.forEach((region) => {
       if (Object.keys(this.args.availableOps[region]).length > 0) {
         this.game.addPrimaryActionButton({
@@ -175,31 +213,62 @@ class PlayerActionState implements State {
                   args: {
                     availableOps: this.args.availableOps,
                     region,
+                    firstOp: null,
                   },
                 }
               ),
         });
       }
     });
-    if (
-      this.args._private.cardsPlayerCanSell.cards.length +
-        this.args._private.cardsPlayerCanSell.royalCouples.length >
-      0
-    ) {
+
+    // Trade fair
+    if (this.args.tradeFair.east) {
       this.game.addPrimaryActionButton({
-        id: "sell_card_btn",
-        text: _("Sell card"),
+        id: "trade_fair_east_btn",
+        text: _("Trade Fair East"),
         callback: () =>
           this.game
             .framework()
-            .setClientState<OnEnteringClientSellCardArgs>(
-              CLIENT_SELL_CARD_STATE,
+            .setClientState<OnEnteringClientStartTradeFairArgs>(
+              CLIENT_START_TRADE_FAIR_STATE,
               {
-                args: this.args._private.cardsPlayerCanSell,
+                args: {
+                  ...this.args.tradeFair.east,
+                  action: "actPlayerAction",
+                },
               }
             ),
       });
     }
+    if (this.args.tradeFair.west) {
+      this.game.addPrimaryActionButton({
+        id: "trade_fair_west_btn",
+        text: _("Trade Fair West"),
+        callback: () =>
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientStartTradeFairArgs>(
+              CLIENT_START_TRADE_FAIR_STATE,
+              {
+                args: {
+                  ...this.args.tradeFair.west,
+                  action: "actPlayerAction",
+                },
+              }
+            ),
+      });
+    }
+
+    // Claim Victory
+    if (this.args.declarableVictories.length > 0) {
+      this.game.addPrimaryActionButton({
+        id: "declare_victory_btn",
+        text: _("Declare Victory"),
+        callback: () => this.updateInterfaceSelectVictory(),
+      });
+    }
+
+    // Extra abilities
     if (Object.entries(this.args.abilityActions).length > 0) {
       this.game.addPrimaryActionButton({
         id: "abiliy_action_btn",
@@ -217,9 +286,7 @@ class PlayerActionState implements State {
     }
   }
 
-  private addTest() {
-
-  }
+  private addTest() {}
 
   private updatePageTitle() {
     const remainingActions = this.args.remainingActions;
@@ -283,6 +350,47 @@ class PlayerActionState implements State {
               }
             ),
       });
+    });
+  }
+
+  private setOperationsSelectable() {
+    REGIONS.forEach((region) => {
+      Object.entries(this.args.availableOps[region]).forEach(
+        ([cardId, operations]) => {
+          const card: TableauCard | EmpireCard = cardId.startsWith(
+            "EmpireSquare"
+          )
+            ? this.game.gamedatas.empireSquares.find(
+                (square) => square.id === cardId
+              )
+            : this.game.gamedatas.staticData.tableauCards[cardId.split('_')[0]];
+          operations.forEach((operation) => {
+            const operationId = `${card.id}_${operation.id}${
+              card.type === EMPIRE_CARD ? `_${card.side}` : ""
+            }`;
+
+            this.game.setLocationSelectable({
+              id: operationId,
+              callback: () =>
+              this.game
+                .framework()
+                .setClientState<OnEnteringClientConfirmTableauOpsArgs>(
+                  CLIENT_CONFIRM_TABLEAU_OPS,
+                  {
+                    args: {
+                      availableOps: this.args.availableOps,
+                      region,
+                      firstOp: {
+                        tableauOpId: operation.id,
+                        cardId
+                      }
+                    },
+                  }
+                ),
+            });
+          });
+        }
+      );
     });
   }
 

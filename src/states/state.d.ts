@@ -25,6 +25,10 @@ type PaxRenAction = PurchaseAction | PlayAction;
 interface OnEnteringClientConfirmTableauOpsArgs {
   availableOps: OnEnteringPlayerActionArgs['availableOps'];
   region: 'east' | 'west';
+  firstOp: {
+    cardId: string;
+    tableauOpId: string;
+  } | null;
 }
 
 interface OnEnteringClientDeclareVictoryArgs {
@@ -176,8 +180,8 @@ interface OnEnteringPlayerActionArgs extends CommonArgs {
   };
   abilityActions: Record<string, Ability>;
   availableOps: {
-    east: Record<string, { id: string; text: string }>;
-    west: Record<string, { id: string; text: string }>;
+    east: Record<string, TableauOp[]>;
+    west: Record<string, TableauOp[]>;
     eastAndWest: boolean;
   };
   declarableVictories: VictoryCard[];
