@@ -47,7 +47,7 @@ class BattleCasualtiesState implements State {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a Tokens to eliminate ${remaining}"
+        "${tkn_playerName} must select a Token to eliminate ${remaining}"
       ),
       args: {
         tkn_playerName: "${you}",

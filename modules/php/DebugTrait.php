@@ -97,8 +97,10 @@ trait DebugTrait
   function test()
   {
     // $this->debugPlaceToken(ROOK, REFORMIST, 'EmpireSquare_HolyRomanEmpire');
-    $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052); // Republic
+    // $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052); // Republic
     // Cards::get('EmpireSquare_HolyRomanEmpire')->setSide(REPUBLIC);
+    // Empires::get(PAPAL_STATES)->changeToTheocracy(REFORMIST);
+    Cities::get(VENICE)->getToken()->returnToSupply(KILL);
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052); // Republic
     // $this->debugPlaceCardInTableau('PREN161X_Enclosure', WEST, 2371052); // Republic
     

@@ -2840,7 +2840,7 @@ var pxNumber = function (px) {
 };
 var getUniqueAgents = function (_a) {
     var agents = _a.agents;
-    if (agents.length === 1) {
+    if (agents.length <= 1) {
         return agents;
     }
     var equalSeparator = agents[0].separator === agents[1].separator;
@@ -6971,7 +6971,7 @@ var BattleCasualtiesState = (function () {
     BattleCasualtiesState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
         this.game.clientUpdatePageTitle({
-            text: _("${tkn_playerName} must select a Tokens to eliminate ${remaining}"),
+            text: _("${tkn_playerName} must select a Token to eliminate ${remaining}"),
             args: {
                 tkn_playerName: "${you}",
                 remaining: {
