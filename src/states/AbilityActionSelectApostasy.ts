@@ -3,10 +3,10 @@ class AbilityActionSelectApostasyState implements State {
   private args: OnEnteringAbilityActionSelectApostastStateArgs;
 
   private apostasyTextMap = {
-    [APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT]: _('Islamic-Catholic'),
-    [APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT]: _('Reformist-Catholic'),
-    [APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT]: _('Reformist-Islamic'),
-  }
+    [APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT]: _("Islamic-Catholic"),
+    [APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT]: _("Reformist-Catholic"),
+    [APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT]: _("Reformist-Islamic"),
+  };
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
@@ -62,7 +62,7 @@ class AbilityActionSelectApostasyState implements State {
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceConfirm({apostasy}: {apostasy: string;}) {
+  private updateInterfaceConfirm({ apostasy }: { apostasy: string }) {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _("Perform ${tkn_oneShot} apostasy?"),
@@ -71,18 +71,28 @@ class AbilityActionSelectApostasyState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actAbilityActionSelectApostasy",
-          args: {
-            apostasy,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actAbilityActionSelectApostasy",
+        args: {
+          apostasy,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
-
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -97,9 +107,9 @@ class AbilityActionSelectApostasyState implements State {
       this.game.addPrimaryActionButton({
         id: `apostasy_btn_${index}`,
         text: this.apostasyTextMap[apostasy],
-        callback: () => this.updateInterfaceConfirm({apostasy})
-      })
-    })
+        callback: () => this.updateInterfaceConfirm({ apostasy }),
+      });
+    });
   }
 
   //  ..######..##.......####..######..##....##

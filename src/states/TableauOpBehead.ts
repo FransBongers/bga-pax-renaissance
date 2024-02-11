@@ -46,9 +46,7 @@ class TableauOpBeheadState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _(
-        "${tkn_playerName} must select a card to behead"
-      ),
+      text: _("${tkn_playerName} must select a card to behead"),
       args: {
         tkn_playerName: "${you}",
       },
@@ -65,18 +63,30 @@ class TableauOpBeheadState implements State {
       text: _("Behead ${cardName}?"),
       args: {
         tkn_florin: tknFlorin(),
-        cardName: card.type === EMPIRE_CARD ? _(card[card.side].name) : _(card.name),
+        cardName:
+          card.type === EMPIRE_CARD ? _(card[card.side].name) : _(card.name),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpBehead",
-          args: {
-            cardId: card.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actTableauOpBehead",
+        args: {
+          cardId: card.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 

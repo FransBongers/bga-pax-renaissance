@@ -46,41 +46,55 @@ class PlaceLevySelectCityState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a City in ${empireName} to place a Levy"),
+      text: _(
+        "${tkn_playerName} must select a City in ${empireName} to place a Levy"
+      ),
       args: {
         tkn_playerName: "${you}",
-        empireName: _(this.args.empire.name)
+        empireName: _(this.args.empire.name),
       },
     });
     Object.keys(this.args.possibleLevies).forEach((cityId) => {
       this.game.setLocationSelectable({
         id: cityId,
-        callback: () => this.updateInterfaceConfirmPlaceLevy({cityId}),
+        callback: () => this.updateInterfaceConfirmPlaceLevy({ cityId }),
       });
     });
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceConfirmPlaceLevy({cityId}: {cityId: string;}) {
+  private updateInterfaceConfirmPlaceLevy({ cityId }: { cityId: string }) {
     this.game.clearPossible();
-    this.game.setLocationSelected({id: cityId});
-    const {separator, levyIcon} = this.args.possibleLevies[cityId].levy;
+    this.game.setLocationSelected({ id: cityId });
+    const { separator, levyIcon } = this.args.possibleLevies[cityId].levy;
     this.game.clientUpdatePageTitle({
       text: _("Place ${tkn_mapToken} in ${cityName}?"),
       args: {
-        tkn_mapToken: [separator, levyIcon].join('_'),
-        cityName: _(this.args.possibleLevies[cityId].cityName)
+        tkn_mapToken: [separator, levyIcon].join("_"),
+        cityName: _(this.args.possibleLevies[cityId].cityName),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlaceLevySelectCity",
-          args: {
-            cityId,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlaceLevySelectCity",
+        args: {
+          cityId,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

@@ -63,7 +63,7 @@ class TableauOpCommerceState implements State {
   private updateInterfaceConfirm({ card }: { card: TableauCard }) {
     this.game.clearPossible();
     const isTradeFairCard = Number(card.location.split("_")[2]) === 0;
-    this.game.setCardSelected({ id: card.id, });
+    this.game.setCardSelected({ id: card.id });
     this.game.clientUpdatePageTitle({
       text: _("Take ${tkn_florin} from ${cardName}?"),
       args: {
@@ -71,21 +71,32 @@ class TableauOpCommerceState implements State {
         cardName: isTradeFairCard ? _("trade fair card") : _(card.name),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpCommerce",
-          args: {
-            cardId: card.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actTableauOpCommerce",
+        args: {
+          cardId: card.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 
   private updateInterfaceConfirmSpace({ space }: { space: string }) {
     this.game.clearPossible();
-    this.game.setLocationSelected({ id: space, });
+    this.game.setLocationSelected({ id: space });
     this.game.clientUpdatePageTitle({
       text: _("Take ${tkn_florin} from ${cardName}?"),
       args: {
@@ -93,15 +104,26 @@ class TableauOpCommerceState implements State {
         cardName: _("trade fair space"),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpCommerce",
-          args: {
-            space,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actTableauOpCommerce",
+        args: {
+          space,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 

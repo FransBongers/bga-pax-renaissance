@@ -87,16 +87,27 @@ class PlayerActionState implements State {
         tkn_florin: _("Florin(s)"),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlayerAction",
-          args: {
-            action: "purchaseCard",
-            cardId: card.id,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: "purchaseCard",
+          cardId: card.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 
@@ -122,16 +133,27 @@ class PlayerActionState implements State {
         cardName: _(card.name),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlayerAction",
-          args: {
-            action: "playCard",
-            cardId: card.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: "playCard",
+          cardId: card.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
 
     this.game.addCancelButton();
   }
@@ -363,7 +385,7 @@ class PlayerActionState implements State {
             ? this.game.gamedatas.empireSquares.find(
                 (square) => square.id === cardId
               )
-            : this.game.gamedatas.staticData.tableauCards[cardId.split('_')[0]];
+            : this.game.gamedatas.staticData.tableauCards[cardId.split("_")[0]];
           operations.forEach((operation) => {
             const operationId = `${card.id}_${operation.id}${
               card.type === EMPIRE_CARD ? `_${card.side}` : ""
@@ -372,21 +394,21 @@ class PlayerActionState implements State {
             this.game.setLocationSelectable({
               id: operationId,
               callback: () =>
-              this.game
-                .framework()
-                .setClientState<OnEnteringClientConfirmTableauOpsArgs>(
-                  CLIENT_CONFIRM_TABLEAU_OPS,
-                  {
-                    args: {
-                      availableOps: this.args.availableOps,
-                      region,
-                      firstOp: {
-                        tableauOpId: operation.id,
-                        cardId
-                      }
-                    },
-                  }
-                ),
+                this.game
+                  .framework()
+                  .setClientState<OnEnteringClientConfirmTableauOpsArgs>(
+                    CLIENT_CONFIRM_TABLEAU_OPS,
+                    {
+                      args: {
+                        availableOps: this.args.availableOps,
+                        region,
+                        firstOp: {
+                          tableauOpId: operation.id,
+                          cardId,
+                        },
+                      },
+                    }
+                  ),
             });
           });
         }

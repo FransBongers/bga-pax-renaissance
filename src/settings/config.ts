@@ -180,4 +180,21 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceConfig> => ({
       },
     ],
   },
+  [CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY]: {
+    id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+    onChangeInSetup: false,
+    defaultValue: DISABLED,
+    label: _("Confirm end of turn and player switch only"),
+    type: "select",
+    options: [
+      {
+        label: _("Enabled"),
+        value: ENABLED,
+      },
+      {
+        label: _("Disabled (confirm every move)"),
+        value: DISABLED,
+      },
+    ],
+  }
 });

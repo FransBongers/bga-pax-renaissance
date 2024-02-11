@@ -66,22 +66,36 @@ class TableauOpVoteState implements State {
     this.game.clearPossible();
     this.game.setLocationSelected({ id: empire.id });
     this.game.clientUpdatePageTitle({
-      text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to vote in ${empireName}?") : _("Vote in ${empireName}?"),
+      text:
+        cost > 0
+          ? _("Pay ${cost} ${tkn_florin} to vote in ${empireName}?")
+          : _("Vote in ${empireName}?"),
       args: {
         empireName: _(empire.name),
         cost,
         tkn_florin: tknFlorin(),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpVote",
-          args: {
-            empireId: empire.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actTableauOpVote",
+        args: {
+          empireId: empire.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 

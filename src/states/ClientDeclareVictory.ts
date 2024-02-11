@@ -43,15 +43,28 @@ class ClientDeclareVictoryState implements State {
         victoryTitle: _(this.args.victoryCard.active.title),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>         this.game.takeAction({
+
+    const callback = () =>
+      this.game.takeAction({
         action: "actPlayerAction",
         args: {
           action: "declareVictory",
           cardId: this.args.victoryCard.id,
         },
-      }),
-    });
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

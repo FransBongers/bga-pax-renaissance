@@ -108,28 +108,6 @@ class BattleReconfigureConstantinopleState implements State {
     this.addResetButton();
   }
 
-  // private updateInterfaceConfirmPlaceLevy({cityId}: {cityId: string;}) {
-  //   this.game.clearPossible();
-  //   this.game.setLocationSelected({id: cityId});
-  //   const {separator, levyIcon} = this.args.possibleLevies[cityId].levy;
-  //   this.game.clientUpdatePageTitle({
-  //     text: _("Place ${tkn_mapToken} in ${cityName}?"),
-  //     args: {
-  //       tkn_mapToken: [separator, levyIcon].join('_'),
-  //       cityName: _(this.args.possibleLevies[cityId].cityName)
-  //     },
-  //   });
-  //   this.game.addConfirmButton({
-  //     callback: () =>
-  //       this.game.takeAction({
-  //         action: "actPlaceLevySelectCity",
-  //         args: {
-  //           cityId,
-  //         },
-  //       }),
-  //   });
-  //   this.game.addCancelButton();
-  // }
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -169,6 +147,7 @@ class BattleReconfigureConstantinopleState implements State {
         });
       },
     });
+    
     this.addResetButton();
   }
 

@@ -73,15 +73,26 @@ class TradeFairLevyState implements State {
         cityName: _(this.args.possibleLevies[cityId].cityName)
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
+    
+    const callback = () =>
         this.game.takeAction({
           action: "actTradeFairLevy",
           args: {
             cityId,
           },
-        }),
-    });
+        });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 

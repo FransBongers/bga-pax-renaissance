@@ -45,15 +45,6 @@ class ClientSellCardState implements State {
       },
     });
 
-    // this.game.addConfirmButton({
-    //   callback: () =>         this.game.takeAction({
-    //     action: "actPlayerAction",
-    //     args: {
-    //       action: "tradeFair",
-    //       region: this.args.city.emporium,
-    //     },
-    //   }),
-    // });
     this.game.addCancelButton();
   }
 
@@ -69,17 +60,29 @@ class ClientSellCardState implements State {
         tkn_florin: tknFlorin(),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlayerAction",
-          args: {
-            action: "sellCard",
-            cardId: card.id,
-            royalCouple: false,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: "sellCard",
+          cardId: card.id,
+          royalCouple: false,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 
@@ -101,17 +104,29 @@ class ClientSellCardState implements State {
         tkn_florin: tknFlorin(),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlayerAction",
-          args: {
-            action: "sellCard",
-            cardId: king.id,
-            royalCouple: true,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: "sellCard",
+          cardId: king.id,
+          royalCouple: true,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

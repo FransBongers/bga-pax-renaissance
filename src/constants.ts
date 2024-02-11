@@ -20,6 +20,7 @@ const REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
 const CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 const CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
 const OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
+const CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOnly';
 
 /**
  * Map location types

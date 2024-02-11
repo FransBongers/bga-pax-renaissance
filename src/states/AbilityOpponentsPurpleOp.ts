@@ -75,16 +75,28 @@ class AbilityOpponentsPurpleOpState implements State {
         ),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actAbilityOpponentsPurpleOp",
-          args: {
-            cardId: card.id,
-            tableauOpId: operation.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actAbilityOpponentsPurpleOp",
+        args: {
+          cardId: card.id,
+          tableauOpId: operation.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

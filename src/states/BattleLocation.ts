@@ -66,15 +66,25 @@ class BattleLocationState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actBattleLocation",
-          args: {
-            empireId: empire.id,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actBattleLocation",
+        args: {
+          empireId: empire.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 

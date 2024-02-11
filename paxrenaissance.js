@@ -10,6 +10,7 @@ var REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
 var CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 var CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
 var OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
+var CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOnly';
 var CITY = 'city';
 var BORDER = 'border';
 var CARD = 'card';
@@ -6283,6 +6284,23 @@ var getSettingsConfig = function () {
                 },
             ],
         },
+        _a[CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY] = {
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+            onChangeInSetup: false,
+            defaultValue: DISABLED,
+            label: _("Confirm end of turn and player switch only"),
+            type: "select",
+            options: [
+                {
+                    label: _("Enabled"),
+                    value: ENABLED,
+                },
+                {
+                    label: _("Disabled (confirm every move)"),
+                    value: DISABLED,
+                },
+            ],
+        },
         _a);
 };
 var Settings = (function () {
@@ -6678,9 +6696,9 @@ var AbilityActionSelectApostasyState = (function () {
     function AbilityActionSelectApostasyState(game) {
         var _a;
         this.apostasyTextMap = (_a = {},
-            _a[APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT] = _('Islamic-Catholic'),
-            _a[APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT] = _('Reformist-Catholic'),
-            _a[APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT] = _('Reformist-Islamic'),
+            _a[APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT] = _("Islamic-Catholic"),
+            _a[APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT] = _("Reformist-Catholic"),
+            _a[APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT] = _("Reformist-Islamic"),
             _a);
         this.game = game;
     }
@@ -6723,16 +6741,24 @@ var AbilityActionSelectApostasyState = (function () {
                 tkn_oneShot: apostasy,
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actAbilityActionSelectApostasy",
-                    args: {
-                        apostasy: apostasy,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actAbilityActionSelectApostasy",
+                args: {
+                    apostasy: apostasy,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     AbilityActionSelectApostasyState.prototype.addButtons = function () {
@@ -6741,7 +6767,7 @@ var AbilityActionSelectApostasyState = (function () {
             _this.game.addPrimaryActionButton({
                 id: "apostasy_btn_".concat(index),
                 text: _this.apostasyTextMap[apostasy],
-                callback: function () { return _this.updateInterfaceConfirm({ apostasy: apostasy }); }
+                callback: function () { return _this.updateInterfaceConfirm({ apostasy: apostasy }); },
             });
         });
     };
@@ -6845,17 +6871,25 @@ var AbilityOpponentsPurpleOpState = (function () {
                 cardName: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actAbilityOpponentsPurpleOp",
-                    args: {
-                        cardId: card.id,
-                        tableauOpId: operation.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actAbilityOpponentsPurpleOp",
+                args: {
+                    cardId: card.id,
+                    tableauOpId: operation.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     AbilityOpponentsPurpleOpState.prototype.setOperationsSelectable = function () {
@@ -6996,16 +7030,24 @@ var BattleCasualtiesState = (function () {
                 tkn_mapToken: this.createAgentMapTokenId(agent),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actBattleCasualties",
-                    args: {
-                        agent: agent,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actBattleCasualties",
+                args: {
+                    agent: agent,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     BattleCasualtiesState.prototype.updateInterfaceConfirmSelectToken = function (_a) {
@@ -7020,16 +7062,24 @@ var BattleCasualtiesState = (function () {
                 locationName: _(token.locationName),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actBattleCasualties",
-                    args: {
-                        tokenId: token.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actBattleCasualties",
+                args: {
+                    tokenId: token.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     BattleCasualtiesState.prototype.addAgentButtons = function () {
@@ -7111,16 +7161,24 @@ var BattleLocationState = (function () {
                 empireName: _(empire.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actBattleLocation",
-                    args: {
-                        empireId: empire.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actBattleLocation",
+                args: {
+                    empireId: empire.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     BattleLocationState.prototype.setEmpiresSelectable = function () {
@@ -7207,18 +7265,26 @@ var BattlePlaceAttackersState = (function () {
                 locationName: _(location.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                _this.game.clearPossible();
-                _this.game.takeAction({
-                    action: "actBattlePlaceAttackers",
-                    args: {
-                        agent: agent,
-                        locationId: location.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            _this.game.clearPossible();
+            _this.game.takeAction({
+                action: "actBattlePlaceAttackers",
+                args: {
+                    agent: agent,
+                    locationId: location.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     BattlePlaceAttackersState.prototype.updateInterfaceTokenSelected = function (_a) {
@@ -7259,18 +7325,26 @@ var BattlePlaceAttackersState = (function () {
                 locationName: _(location.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                _this.game.clearPossible();
-                _this.game.takeAction({
-                    action: "actBattlePlaceAttackers",
-                    args: {
-                        tokenId: token.id,
-                        locationId: location.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            _this.game.clearPossible();
+            _this.game.takeAction({
+                action: "actBattlePlaceAttackers",
+                args: {
+                    tokenId: token.id,
+                    locationId: location.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     BattlePlaceAttackersState.prototype.createMapTokenId = function (_a) {
@@ -7532,7 +7606,9 @@ var BishopPacificationState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} may select a Token to Kill"),
             args: {
-                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
             },
             nonActivePlayers: true,
         });
@@ -7543,7 +7619,7 @@ var BishopPacificationState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} may choose a Token to Kill"),
             args: {
-                tkn_playerName: '${you}'
+                tkn_playerName: "${you}",
             },
         });
         this.game.addSecondaryActionButton({
@@ -7572,16 +7648,24 @@ var BishopPacificationState = (function () {
                 tkn_mapToken: tknMapToken(token.id),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actBishopPacification",
-                    args: {
-                        tokenId: token.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actBishopPacification",
+                args: {
+                    tokenId: token.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     BishopPacificationState.prototype.setTokensSelectable = function () {
@@ -7640,16 +7724,24 @@ var CoronationState = (function () {
                 queenName: _(this.args.queen.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actCoronationOneShot",
-                    args: {
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actCoronationOneShot",
+                args: {
+                    cardId: card.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     CoronationState.prototype.setCardsSelectable = function () {
@@ -7726,18 +7818,26 @@ var ClientConfirmTableauOpsState = (function () {
             text: text,
             args: {},
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlayerAction",
-                    args: {
-                        action: "tableauOps",
-                        region: _this.args.region,
-                        firstOp: _this.args.firstOp,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "tableauOps",
+                    region: _this.args.region,
+                    firstOp: _this.args.firstOp,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     return ClientConfirmTableauOpsState;
@@ -7764,15 +7864,25 @@ var ClientDeclareVictoryState = (function () {
                 victoryTitle: _(this.args.victoryCard.active.title),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () { return _this.game.takeAction({
+        var callback = function () {
+            return _this.game.takeAction({
                 action: "actPlayerAction",
                 args: {
                     action: "declareVictory",
                     cardId: _this.args.victoryCard.id,
                 },
-            }); },
-        });
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     return ClientDeclareVictoryState;
@@ -7814,18 +7924,26 @@ var ClientSellCardState = (function () {
                 tkn_florin: tknFlorin(),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlayerAction",
-                    args: {
-                        action: "sellCard",
-                        cardId: card.id,
-                        royalCouple: false,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "sellCard",
+                    cardId: card.id,
+                    royalCouple: false,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     ClientSellCardState.prototype.updateInterfaceConfirmRoyalCouple = function (_a) {
@@ -7845,18 +7963,26 @@ var ClientSellCardState = (function () {
                 tkn_florin: tknFlorin(),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlayerAction",
-                    args: {
-                        action: "sellCard",
-                        cardId: king.id,
-                        royalCouple: true,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "sellCard",
+                    cardId: king.id,
+                    royalCouple: true,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     ClientSellCardState.prototype.getQueenNamesLog = function (_a) {
@@ -7924,7 +8050,7 @@ var ClientStartTradeFairState = (function () {
     ClientStartTradeFairState.prototype.updateInterfaceInitialStep = function () {
         var _this = this;
         this.game.clearPossible();
-        this.game.setCardSelected({ id: this.args.card.id, });
+        this.game.setCardSelected({ id: this.args.card.id });
         this.game.setLocationSelected({ id: this.args.city.id });
         this.game.clientUpdatePageTitle({
             text: _("Convene ${region} trade fair from ${cityName}?"),
@@ -7933,15 +8059,25 @@ var ClientStartTradeFairState = (function () {
                 region: this.args.city.emporium === EAST ? _("East") : _("West"),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () { return _this.game.takeAction({
+        var callback = function () {
+            return _this.game.takeAction({
                 action: _this.args.action,
                 args: {
                     action: "tradeFair",
                     region: _this.args.city.emporium,
                 },
-            }); },
-        });
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     return ClientStartTradeFairState;
@@ -7985,18 +8121,26 @@ var ClientUseAbilityActionState = (function () {
                 actionTitle: _(ability.title).replace(":", ""),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlayerAction",
-                    args: {
-                        action: "abilityAction",
-                        cardId: cardId,
-                        abilityId: ability.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "abilityAction",
+                    cardId: cardId,
+                    abilityId: ability.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     ClientUseAbilityActionState.prototype.addActionButtons = function () {
@@ -8099,7 +8243,9 @@ var DiscardDownToHandLimitState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} must discard a card form hand"),
             args: {
-                tkn_playerName: this.game.playerManager.getPlayer({ playerId: activePlayerId }).getName()
+                tkn_playerName: this.game.playerManager
+                    .getPlayer({ playerId: activePlayerId })
+                    .getName(),
             },
             nonActivePlayers: true,
         });
@@ -8109,7 +8255,7 @@ var DiscardDownToHandLimitState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} must select a card to discard"),
             args: {
-                tkn_playerName: '${you}'
+                tkn_playerName: "${you}",
             },
         });
         this.setCardsSelectable();
@@ -8126,22 +8272,33 @@ var DiscardDownToHandLimitState = (function () {
                 tkn_cardName: card.name,
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actDiscardDownToHandLimit",
-                    args: {
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actDiscardDownToHandLimit",
+                args: {
+                    cardId: card.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     DiscardDownToHandLimitState.prototype.setCardsSelectable = function () {
         var _this = this;
         this.args._private.hand.forEach(function (card) {
-            _this.game.setCardSelectable({ id: card.id, callback: function () { return _this.updateInterfaceConfirm({ card: card }); } });
+            _this.game.setCardSelectable({
+                id: card.id,
+                callback: function () { return _this.updateInterfaceConfirm({ card: card }); },
+            });
         });
     };
     return DiscardDownToHandLimitState;
@@ -8194,16 +8351,24 @@ var FlipVictoryCardState = (function () {
                 titleActive: _(card.active.title),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actFlipVictoryCard",
-                    args: {
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actFlipVictoryCard",
+                args: {
+                    cardId: card.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     FlipVictoryCardState.prototype.setVictoryCardsSelectable = function () {
@@ -8256,18 +8421,26 @@ var FreeActionState = (function () {
                 actionTitle: _(ability.title).replace(":", ""),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actFreeAction",
-                    args: {
-                        action: "abilityAction",
-                        cardId: cardId,
-                        abilityId: ability.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actFreeAction",
+                args: {
+                    action: "abilityAction",
+                    cardId: cardId,
+                    abilityId: ability.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     FreeActionState.prototype.updateInterfaceSingleOption = function () {
@@ -8386,17 +8559,25 @@ var PlaceAgentState = (function () {
                 location: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlaceAgent",
-                    args: {
-                        agent: _this.args.agents[0],
-                        locationId: id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlaceAgent",
+                args: {
+                    agent: _this.args.agents[0],
+                    locationId: id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     PlaceAgentState.prototype.updateInterfaceSelectEmpireToRepressTo = function (_a) {
@@ -8429,18 +8610,26 @@ var PlaceAgentState = (function () {
             this.game.setLocationSelected({ id: empire.id });
         }
         this.updatePageTitleConfirmLocation({ location: location, empire: empire });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlaceAgent",
-                    args: {
-                        agent: _this.selectedAgent,
-                        locationId: id,
-                        empireId: empire ? empire.id : null,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlaceAgent",
+                args: {
+                    agent: _this.selectedAgent,
+                    locationId: id,
+                    empireId: empire ? empire.id : null,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     PlaceAgentState.prototype.createMapTokenId = function (activePlayerId) {
@@ -8581,7 +8770,7 @@ var PlaceLevySelectCityState = (function () {
             text: _("${tkn_playerName} must select a City in ${empireName} to place a Levy"),
             args: {
                 tkn_playerName: "${you}",
-                empireName: _(this.args.empire.name)
+                empireName: _(this.args.empire.name),
             },
         });
         Object.keys(this.args.possibleLevies).forEach(function (cityId) {
@@ -8601,20 +8790,28 @@ var PlaceLevySelectCityState = (function () {
         this.game.clientUpdatePageTitle({
             text: _("Place ${tkn_mapToken} in ${cityName}?"),
             args: {
-                tkn_mapToken: [separator, levyIcon].join('_'),
-                cityName: _(this.args.possibleLevies[cityId].cityName)
+                tkn_mapToken: [separator, levyIcon].join("_"),
+                cityName: _(this.args.possibleLevies[cityId].cityName),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlaceLevySelectCity",
-                    args: {
-                        cityId: cityId,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlaceLevySelectCity",
+                args: {
+                    cityId: cityId,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     return PlaceLevySelectCityState;
@@ -8677,17 +8874,25 @@ var PlayerActionState = (function () {
                 tkn_florin: _("Florin(s)"),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlayerAction",
-                    args: {
-                        action: "purchaseCard",
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "purchaseCard",
+                    cardId: card.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     PlayerActionState.prototype.updateInterfaceSelectHandCard = function () {
@@ -8712,17 +8917,25 @@ var PlayerActionState = (function () {
                 cardName: _(card.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actPlayerAction",
-                    args: {
-                        action: "playCard",
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actPlayerAction",
+                args: {
+                    action: "playCard",
+                    cardId: card.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     PlayerActionState.prototype.updateInterfaceSelectVictory = function () {
@@ -8900,7 +9113,7 @@ var PlayerActionState = (function () {
                 var cardId = _a[0], operations = _a[1];
                 var card = cardId.startsWith("EmpireSquare")
                     ? _this.game.gamedatas.empireSquares.find(function (square) { return square.id === cardId; })
-                    : _this.game.gamedatas.staticData.tableauCards[cardId.split('_')[0]];
+                    : _this.game.gamedatas.staticData.tableauCards[cardId.split("_")[0]];
                 operations.forEach(function (operation) {
                     var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
                     _this.game.setLocationSelectable({
@@ -8914,8 +9127,8 @@ var PlayerActionState = (function () {
                                     region: region,
                                     firstOp: {
                                         tableauOpId: operation.id,
-                                        cardId: cardId
-                                    }
+                                        cardId: cardId,
+                                    },
                                 },
                             });
                         },
@@ -8975,7 +9188,7 @@ var RegimeChangeEmancipationState = (function () {
         });
         this.game.addPassButton({
             optionalAction: this.args.optionalAction,
-            text: _('Done')
+            text: _("Done"),
         });
         this.setTokensSelectable();
         this.game.addUndoButtons(this.args);
@@ -8988,9 +9201,7 @@ var RegimeChangeEmancipationState = (function () {
             text: _("${tkn_playerName} must select a ${borderOrCity} to move ${tkn_mapToken} onto"),
             args: {
                 tkn_playerName: "${you}",
-                borderOrCity: token.type === PAWN
-                    ? _("Border")
-                    : _("City"),
+                borderOrCity: token.type === PAWN ? _("Border") : _("City"),
                 tkn_mapToken: tknMapToken(token.id),
             },
         });
@@ -9010,18 +9221,26 @@ var RegimeChangeEmancipationState = (function () {
                 locationName: _(location.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                _this.game.clearPossible();
-                _this.game.takeAction({
-                    action: "actRegimeChangeEmancipation",
-                    args: {
-                        tokenId: token.id,
-                        locationId: location.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            _this.game.clearPossible();
+            _this.game.takeAction({
+                action: "actRegimeChangeEmancipation",
+                args: {
+                    tokenId: token.id,
+                    locationId: location.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     RegimeChangeEmancipationState.prototype.setLocationsSelectable = function (_a) {
@@ -9157,16 +9376,24 @@ var RemoveTokenFromCityState = (function () {
                 locationName: _(cityName),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actRemoveTokenFromCity",
-                    args: {
-                        tokenId: tokenId,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actRemoveTokenFromCity",
+                args: {
+                    tokenId: tokenId,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     RemoveTokenFromCityState.prototype.setTokensSelectable = function () {
@@ -9175,7 +9402,9 @@ var RemoveTokenFromCityState = (function () {
             var tokenId = _a[0], cityName = _a[1];
             _this.game.setTokenSelectable({
                 id: tokenId,
-                callback: function () { return _this.updateInterfaceConfirmSelectToken({ tokenId: tokenId, cityName: cityName }); },
+                callback: function () {
+                    return _this.updateInterfaceConfirmSelectToken({ tokenId: tokenId, cityName: cityName });
+                },
             });
         });
     };
@@ -9228,16 +9457,24 @@ var SelectTokenState = (function () {
                 tkn_mapToken: tknMapToken(this.args.tokens[0].id),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actSelectToken",
-                    args: {
-                        tokenId: id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actSelectToken",
+                args: {
+                    tokenId: id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     SelectTokenState.prototype.setTokensSelectable = function () {
@@ -9297,16 +9534,24 @@ var TableauOpBeheadState = (function () {
                 cardName: card.type === EMPIRE_CARD ? _(card[card.side].name) : _(card.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpBehead",
-                    args: {
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpBehead",
+                args: {
+                    cardId: card.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpBeheadState.prototype.setCardsSelectable = function () {
@@ -9363,23 +9608,33 @@ var TableauOpCampaignState = (function () {
         this.game.clearPossible();
         this.game.setLocationSelected({ id: empire.id });
         this.game.clientUpdatePageTitle({
-            text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to campaign against ${empireName}?") : _("Campaign against ${empireName}?"),
+            text: cost > 0
+                ? _("Pay ${cost} ${tkn_florin} to campaign against ${empireName}?")
+                : _("Campaign against ${empireName}?"),
             args: {
                 empireName: _(empire.name),
                 cost: cost,
                 tkn_florin: tknFlorin(),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpCampaign",
-                    args: {
-                        empireId: empire.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpCampaign",
+                args: {
+                    empireId: empire.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpCampaignState.prototype.setEmpiresSelectable = function () {
@@ -9433,7 +9688,7 @@ var TableauOpCommerceState = (function () {
         var card = _a.card;
         this.game.clearPossible();
         var isTradeFairCard = Number(card.location.split("_")[2]) === 0;
-        this.game.setCardSelected({ id: card.id, });
+        this.game.setCardSelected({ id: card.id });
         this.game.clientUpdatePageTitle({
             text: _("Take ${tkn_florin} from ${cardName}?"),
             args: {
@@ -9441,23 +9696,31 @@ var TableauOpCommerceState = (function () {
                 cardName: isTradeFairCard ? _("trade fair card") : _(card.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpCommerce",
-                    args: {
-                        cardId: card.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpCommerce",
+                args: {
+                    cardId: card.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpCommerceState.prototype.updateInterfaceConfirmSpace = function (_a) {
         var _this = this;
         var space = _a.space;
         this.game.clearPossible();
-        this.game.setLocationSelected({ id: space, });
+        this.game.setLocationSelected({ id: space });
         this.game.clientUpdatePageTitle({
             text: _("Take ${tkn_florin} from ${cardName}?"),
             args: {
@@ -9465,16 +9728,24 @@ var TableauOpCommerceState = (function () {
                 cardName: _("trade fair space"),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpCommerce",
-                    args: {
-                        space: space,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpCommerce",
+                args: {
+                    space: space,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpCommerceState.prototype.setCardsSelectable = function () {
@@ -9561,24 +9832,34 @@ var TableauOpCorsairState = (function () {
         this.game.setTokenSelected({ id: token.id });
         this.game.setLocationSelected({ id: destination.border.id });
         this.game.clientUpdatePageTitle({
-            text: destination.token !== null ? _("Move ${tkn_mapToken} into ${borderName} and Kill ${tkn_mapToken_2}?") : _("Move ${tkn_mapToken} into ${borderName}?"),
+            text: destination.token !== null
+                ? _("Move ${tkn_mapToken} into ${borderName} and Kill ${tkn_mapToken_2}?")
+                : _("Move ${tkn_mapToken} into ${borderName}?"),
             args: {
                 tkn_mapToken: tknMapToken(token.id),
-                tkn_mapToken_2: destination.token !== null ? tknMapToken(destination.token.id) : '',
+                tkn_mapToken_2: destination.token !== null ? tknMapToken(destination.token.id) : "",
                 borderName: _(destination.border.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpCorsair",
-                    args: {
-                        tokenId: token.id,
-                        destinationId: destination.border.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpCorsair",
+                args: {
+                    tokenId: token.id,
+                    destinationId: destination.border.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpCorsairState.prototype.setDestinationBordersSelectable = function (_a) {
@@ -9677,17 +9958,25 @@ var TableauOpInquisitorState = (function () {
                     : destination.name,
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpInquisitor",
-                    args: {
-                        tokenId: token.id,
-                        destinationId: destination.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpInquisitor",
+                args: {
+                    tokenId: token.id,
+                    destinationId: destination.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpInquisitorState.prototype.setCardsSelectable = function (option) {
@@ -9764,16 +10053,24 @@ var TableauOpRepressState = (function () {
                 tkn_mapToken: tknMapToken(token.id),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpRepress",
-                    args: {
-                        tokenId: token.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpRepress",
+                args: {
+                    tokenId: token.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpRepressState.prototype.setTokensSelectable = function () {
@@ -9836,16 +10133,24 @@ var TableauOpSiegeState = (function () {
                 tkn_mapToken: tknMapToken(token.id),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpSiege",
-                    args: {
-                        tokenId: token.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpSiege",
+                args: {
+                    tokenId: token.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpSiegeState.prototype.setTokensSelectable = function () {
@@ -9895,8 +10200,8 @@ var TableauOpsSelectState = (function () {
         });
         this.setOperationsSelectable();
         this.game.addPassButton({
-            text: _('Done'),
-            optionalAction: this.args.optional
+            text: _("Done"),
+            optionalAction: this.args.optional,
         });
         this.game.addUndoButtons(this.args);
     };
@@ -9912,17 +10217,25 @@ var TableauOpsSelectState = (function () {
                 cardName: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpsSelect",
-                    args: {
-                        cardId: card.id,
-                        tableauOpId: operation.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpsSelect",
+                args: {
+                    cardId: card.id,
+                    tableauOpId: operation.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpsSelectState.prototype.setOperationsSelectable = function () {
@@ -10017,17 +10330,25 @@ var TableauOpTaxState = (function () {
                 tkn_boldText: _(empire.name),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpTax",
-                    args: {
-                        tokenId: token.id,
-                        empireId: empire.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpTax",
+                args: {
+                    tokenId: token.id,
+                    empireId: empire.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpTaxState.prototype.setTokensSelectable = function () {
@@ -10157,23 +10478,33 @@ var TableauOpVoteState = (function () {
         this.game.clearPossible();
         this.game.setLocationSelected({ id: empire.id });
         this.game.clientUpdatePageTitle({
-            text: cost > 0 ? _("Pay ${cost} ${tkn_florin} to vote in ${empireName}?") : _("Vote in ${empireName}?"),
+            text: cost > 0
+                ? _("Pay ${cost} ${tkn_florin} to vote in ${empireName}?")
+                : _("Vote in ${empireName}?"),
             args: {
                 empireName: _(empire.name),
                 cost: cost,
                 tkn_florin: tknFlorin(),
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTableauOpVote",
-                    args: {
-                        empireId: empire.id,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTableauOpVote",
+                args: {
+                    empireId: empire.id,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     TableauOpVoteState.prototype.setEmpiresSelectable = function () {
@@ -10240,16 +10571,24 @@ var TradeFairLevyState = (function () {
                 cityName: _(this.args.possibleLevies[cityId].cityName)
             },
         });
-        this.game.addConfirmButton({
-            callback: function () {
-                return _this.game.takeAction({
-                    action: "actTradeFairLevy",
-                    args: {
-                        cityId: cityId,
-                    },
-                });
-            },
-        });
+        var callback = function () {
+            return _this.game.takeAction({
+                action: "actTradeFairLevy",
+                args: {
+                    cityId: cityId,
+                },
+            });
+        };
+        if (this.game.settings.get({
+            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        }) === ENABLED) {
+            callback();
+        }
+        else {
+            this.game.addConfirmButton({
+                callback: callback,
+            });
+        }
         this.game.addCancelButton();
     };
     return TradeFairLevyState;

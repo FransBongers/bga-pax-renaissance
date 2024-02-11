@@ -75,15 +75,7 @@ class TableauOpCorsairState implements State {
       },
     });
     this.setDestinationBordersSelectable({ option });
-    // this.game.addConfirmButton({
-    //   callback: () =>
-    //     this.game.takeAction({
-    //       action: "actTableauOpSiege",
-    //       args: {
-    //         tokenId: token.id,
-    //       },
-    //     }),
-    // });
+
     this.game.addCancelButton();
   }
 
@@ -99,23 +91,41 @@ class TableauOpCorsairState implements State {
     this.game.setLocationSelected({ id: destination.border.id });
 
     this.game.clientUpdatePageTitle({
-      text: destination.token !== null ? _("Move ${tkn_mapToken} into ${borderName} and Kill ${tkn_mapToken_2}?") : _("Move ${tkn_mapToken} into ${borderName}?"),
+      text:
+        destination.token !== null
+          ? _(
+              "Move ${tkn_mapToken} into ${borderName} and Kill ${tkn_mapToken_2}?"
+            )
+          : _("Move ${tkn_mapToken} into ${borderName}?"),
       args: {
         tkn_mapToken: tknMapToken(token.id),
-        tkn_mapToken_2: destination.token !== null ? tknMapToken(destination.token.id) : '',
+        tkn_mapToken_2:
+          destination.token !== null ? tknMapToken(destination.token.id) : "",
         borderName: _(destination.border.name),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpCorsair",
-          args: {
-            tokenId: token.id,
-            destinationId: destination.border.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actTableauOpCorsair",
+        args: {
+          tokenId: token.id,
+          destinationId: destination.border.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

@@ -74,15 +74,26 @@ class BattleCasualtiesState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actBattleCasualties",
-          args: {
-            agent,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actBattleCasualties",
+        args: {
+          agent,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 
@@ -102,15 +113,26 @@ class BattleCasualtiesState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actBattleCasualties",
-          args: {
-            tokenId: token.id,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actBattleCasualties",
+        args: {
+          tokenId: token.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

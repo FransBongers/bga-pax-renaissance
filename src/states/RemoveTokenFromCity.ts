@@ -46,21 +46,19 @@ class RemoveTokenFromCityState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _(
-        "${tkn_playerName} must select a Token to remove"
-      ),
+      text: _("${tkn_playerName} must select a Token to remove"),
       args: {
         tkn_playerName: "${you}",
       },
     });
     this.setTokensSelectable();
-    this.game.addPassButton({optionalAction: this.args.optionalAction});
+    this.game.addPassButton({ optionalAction: this.args.optionalAction });
     this.game.addUndoButtons(this.args);
   }
 
   private updateInterfaceConfirmSelectToken({
     tokenId,
-    cityName
+    cityName,
   }: {
     tokenId: string;
     cityName: string;
@@ -76,15 +74,26 @@ class RemoveTokenFromCityState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actRemoveTokenFromCity",
-          args: {
-            tokenId,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actRemoveTokenFromCity",
+        args: {
+          tokenId,
+        },
+      });
+      
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 
@@ -100,7 +109,8 @@ class RemoveTokenFromCityState implements State {
     Object.entries(this.args.options).forEach(([tokenId, cityName]) => {
       this.game.setTokenSelectable({
         id: tokenId,
-        callback: () => this.updateInterfaceConfirmSelectToken({tokenId, cityName}),
+        callback: () =>
+          this.updateInterfaceConfirmSelectToken({ tokenId, cityName }),
       });
     });
   }

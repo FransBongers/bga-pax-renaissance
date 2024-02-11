@@ -46,9 +46,7 @@ class TableauOpRepressState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _(
-        "${tkn_playerName} must select a Token to Repress"
-      ),
+      text: _("${tkn_playerName} must select a Token to Repress"),
       args: {
         tkn_florin: tknFlorin(),
         tkn_playerName: "${you}",
@@ -61,23 +59,34 @@ class TableauOpRepressState implements State {
 
   private updateInterfaceConfirm({ token }: { token: Token }) {
     this.game.clearPossible();
-    
-    this.game.setTokenSelected({ id: token.id});
+
+    this.game.setTokenSelected({ id: token.id });
     this.game.clientUpdatePageTitle({
       text: _("Repress ${tkn_mapToken}?"),
       args: {
         tkn_mapToken: tknMapToken(token.id),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpRepress",
-          args: {
-            tokenId: token.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actTableauOpRepress",
+        args: {
+          tokenId: token.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 

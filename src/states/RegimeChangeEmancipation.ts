@@ -55,7 +55,7 @@ class RegimeChangeEmancipationState implements State {
     });
     this.game.addPassButton({
       optionalAction: this.args.optionalAction,
-      text: _('Done')
+      text: _("Done"),
     });
     this.setTokensSelectable();
     this.game.addUndoButtons(this.args);
@@ -77,10 +77,7 @@ class RegimeChangeEmancipationState implements State {
       ),
       args: {
         tkn_playerName: "${you}",
-        borderOrCity:
-          token.type === PAWN
-            ? _("Border")
-            : _("City"),
+        borderOrCity: token.type === PAWN ? _("Border") : _("City"),
         tkn_mapToken: tknMapToken(token.id),
       },
     });
@@ -107,18 +104,29 @@ class RegimeChangeEmancipationState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () => {
-        this.game.clearPossible();
-        this.game.takeAction({
-          action: "actRegimeChangeEmancipation",
-          args: {
-            tokenId: token.id,
-            locationId: location.id,
-          },
-        });
-      },
-    });
+    const callback = () => {
+      this.game.clearPossible();
+      this.game.takeAction({
+        action: "actRegimeChangeEmancipation",
+        args: {
+          tokenId: token.id,
+          locationId: location.id,
+        },
+      });
+    };
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 
@@ -147,13 +155,15 @@ class RegimeChangeEmancipationState implements State {
   }
 
   private setTokensSelectable() {
-    Object.entries(this.args.options).forEach(([tokenId, {locations, token}]) => {
-      this.game.setTokenSelectable({
-        id: tokenId,
-        callback: () =>
-          this.updateInterfaceSelectLocation({ locations , token }),
-      });
-    });
+    Object.entries(this.args.options).forEach(
+      ([tokenId, { locations, token }]) => {
+        this.game.setTokenSelectable({
+          id: tokenId,
+          callback: () =>
+            this.updateInterfaceSelectLocation({ locations, token }),
+        });
+      }
+    );
   }
 
   //  ..######..##.......####..######..##....##

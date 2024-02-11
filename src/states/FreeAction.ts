@@ -67,17 +67,29 @@ class FreeActionState implements State {
         actionTitle: _(ability.title).replace(":", ""),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actFreeAction",
-          args: {
-            action: "abilityAction",
-            cardId,
-            abilityId: ability.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actFreeAction",
+        args: {
+          action: "abilityAction",
+          cardId,
+          abilityId: ability.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 
@@ -105,17 +117,7 @@ class FreeActionState implements State {
           },
         }),
     });
-    // this.game.addConfirmButton({
-    //   callback: () =>
-    //     this.game.takeAction({
-    //       action: "actFreeAction",
-    //       args: {
-    //         action: "abilityAction",
-    //         cardId,
-    //         abilityId: ability.id,
-    //       },
-    //     }),
-    // });
+
     this.game.addPassButton({
       text: _("Do not perform action"),
       optionalAction: this.args.optionalAction,

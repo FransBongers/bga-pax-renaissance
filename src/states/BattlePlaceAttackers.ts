@@ -108,18 +108,28 @@ class BattlePlaceAttackersState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () => {
-        this.game.clearPossible();
-        this.game.takeAction({
-          action: "actBattlePlaceAttackers",
-          args: {
-            agent,
-            locationId: location.id,
-          },
-        });
-      },
-    });
+    const callback = () => {
+      this.game.clearPossible();
+      this.game.takeAction({
+        action: "actBattlePlaceAttackers",
+        args: {
+          agent,
+          locationId: location.id,
+        },
+      });
+    };
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 
@@ -173,18 +183,29 @@ class BattlePlaceAttackersState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () => {
-        this.game.clearPossible();
-        this.game.takeAction({
-          action: "actBattlePlaceAttackers",
-          args: {
-            tokenId: token.id,
-            locationId: location.id,
-          },
-        });
-      },
-    });
+    const callback = () => {
+      this.game.clearPossible();
+      this.game.takeAction({
+        action: "actBattlePlaceAttackers",
+        args: {
+          tokenId: token.id,
+          locationId: location.id,
+        },
+      });
+    };
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

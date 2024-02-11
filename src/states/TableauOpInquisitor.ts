@@ -100,16 +100,27 @@ class TableauOpInquisitorState implements State {
             : destination.name,
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actTableauOpInquisitor",
-          args: {
-            tokenId: token.id,
-            destinationId: destination.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actTableauOpInquisitor",
+        args: {
+          tokenId: token.id,
+          destinationId: destination.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 
@@ -141,7 +152,7 @@ class TableauOpInquisitorState implements State {
         callback: (event) => {
           event.preventDefault();
           event.stopPropagation();
-          this.updateInterfaceSelectDestination(option)
+          this.updateInterfaceSelectDestination(option);
         },
       });
     });

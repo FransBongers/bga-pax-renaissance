@@ -57,7 +57,7 @@ class CoronationState implements State {
 
   private updateInterfaceConfirmSelectCard({ card }: { card: EmpireCard }) {
     this.game.clearPossible();
-    this.game.setCardSelected({id: card.id});
+    this.game.setCardSelected({ id: card.id });
     this.game.clientUpdatePageTitle({
       text: _("Marry ${queenName} to ${kingName}?"),
       args: {
@@ -66,15 +66,26 @@ class CoronationState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actCoronationOneShot",
-          args: {
-            cardId: card.id,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actCoronationOneShot",
+        args: {
+          cardId: card.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

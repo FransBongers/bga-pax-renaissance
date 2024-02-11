@@ -83,17 +83,28 @@ class ClientConfirmTableauOpsState implements State {
       text,
       args: {},
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlayerAction",
-          args: {
-            action: `tableauOps`,
-            region: this.args.region,
-            firstOp: this.args.firstOp,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlayerAction",
+        args: {
+          action: `tableauOps`,
+          region: this.args.region,
+          firstOp: this.args.firstOp,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
 
     this.game.addCancelButton();
   }

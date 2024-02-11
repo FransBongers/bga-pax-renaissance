@@ -19,7 +19,9 @@ class BishopPacificationState implements State {
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} may select a Token to Kill"),
       args: {
-        tkn_playerName: this.game.playerManager.getPlayer({playerId: activePlayerId}).getName()
+        tkn_playerName: this.game.playerManager
+          .getPlayer({ playerId: activePlayerId })
+          .getName(),
       },
       nonActivePlayers: true,
     });
@@ -46,7 +48,7 @@ class BishopPacificationState implements State {
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} may choose a Token to Kill"),
       args: {
-        tkn_playerName: '${you}'
+        tkn_playerName: "${you}",
       },
     });
     this.game.addSecondaryActionButton({
@@ -64,9 +66,9 @@ class BishopPacificationState implements State {
     this.game.addUndoButtons(this.args);
   }
 
-  private updateInterfaceConfirm({token}: {token: Token}) {
+  private updateInterfaceConfirm({ token }: { token: Token }) {
     this.game.clearPossible();
-    this.game.setTokenSelected({id: token.id});
+    this.game.setTokenSelected({ id: token.id });
 
     this.game.clientUpdatePageTitle({
       text: _("Kill ${tkn_mapToken} ?"),
@@ -74,15 +76,27 @@ class BishopPacificationState implements State {
         tkn_mapToken: tknMapToken(token.id),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actBishopPacification",
-          args: {
-            tokenId: token.id,
-          },
-        }),
-    });
+
+    const callback = () =>
+      this.game.takeAction({
+        action: "actBishopPacification",
+        args: {
+          tokenId: token.id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

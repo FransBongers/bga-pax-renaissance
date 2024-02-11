@@ -35,7 +35,7 @@ class ClientStartTradeFairState implements State {
 
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
-    this.game.setCardSelected({ id: this.args.card.id, });
+    this.game.setCardSelected({ id: this.args.card.id });
     this.game.setLocationSelected({ id: this.args.city.id });
 
     this.game.clientUpdatePageTitle({
@@ -45,15 +45,28 @@ class ClientStartTradeFairState implements State {
         region: this.args.city.emporium === EAST ? _("East") : _("West"),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>         this.game.takeAction({
+
+    const callback = () =>
+      this.game.takeAction({
         action: this.args.action,
         args: {
           action: "tradeFair",
           region: this.args.city.emporium,
         },
-      }),
-    });
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 

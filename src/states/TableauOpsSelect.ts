@@ -55,9 +55,9 @@ class TableauOpsSelectState implements State {
     // this.setCardsSelectable();
     this.setOperationsSelectable();
     this.game.addPassButton({
-      text: _('Done'),
-      optionalAction: this.args.optional
-    })
+      text: _("Done"),
+      optionalAction: this.args.optional,
+    });
     // if (this.args.optional) {
     //   this.game.addSkipButton({
     //     callback: () =>
@@ -120,19 +120,32 @@ class TableauOpsSelectState implements State {
       text: _("Perform ${tkn_tableauOp} with ${cardName}?"),
       args: {
         tkn_tableauOp: operation.id,
-        cardName: _(card.type === EMPIRE_CARD ? card[card.side].name : card.name),
+        cardName: _(
+          card.type === EMPIRE_CARD ? card[card.side].name : card.name
+        ),
       },
     });
-    this.game.addConfirmButton({
-      callback: () =>
+
+    const callback = () =>
       this.game.takeAction({
         action: "actTableauOpsSelect",
         args: {
           cardId: card.id,
           tableauOpId: operation.id,
         },
-      }),
-    })
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 
@@ -157,7 +170,7 @@ class TableauOpsSelectState implements State {
           id: operationId,
           callback: () => {
             console.log("clicked", card.id, operation.id);
-            this.updateInterfaceConfirmOp({card, operation});
+            this.updateInterfaceConfirmOp({ card, operation });
           },
         });
       });

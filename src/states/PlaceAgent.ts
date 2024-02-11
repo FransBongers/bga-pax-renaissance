@@ -108,16 +108,26 @@ class PlaceAgentState implements State {
       },
     });
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlaceAgent",
-          args: {
-            agent: this.args.agents[0],
-            locationId: id,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlaceAgent",
+        args: {
+          agent: this.args.agents[0],
+          locationId: id,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
     this.game.addCancelButton();
   }
 
@@ -168,17 +178,28 @@ class PlaceAgentState implements State {
     this.updatePageTitleConfirmLocation({ location, empire });
     // TODO handle cases where there are two different agents
 
-    this.game.addConfirmButton({
-      callback: () =>
-        this.game.takeAction({
-          action: "actPlaceAgent",
-          args: {
-            agent: this.selectedAgent,
-            locationId: id,
-            empireId: empire ? empire.id : null,
-          },
-        }),
-    });
+    const callback = () =>
+      this.game.takeAction({
+        action: "actPlaceAgent",
+        args: {
+          agent: this.selectedAgent,
+          locationId: id,
+          empireId: empire ? empire.id : null,
+        },
+      });
+
+    if (
+      this.game.settings.get({
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      }) === ENABLED
+    ) {
+      callback();
+    } else {
+      this.game.addConfirmButton({
+        callback,
+      });
+    }
+
     this.game.addCancelButton();
   }
 
