@@ -368,7 +368,7 @@ class PRPlayer {
       await moveToAnimation({
         game: this.game,
         element,
-        toId: `overall_player_board_${this.playerId}`,
+        toId: `pr_cards_${card.region}_counter_${this.playerId}`,
         remove: true,
       });
       this.game.tableauCardManager.removeCard(card);

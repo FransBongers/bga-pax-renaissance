@@ -1670,6 +1670,41 @@ var ManualPositionStock = (function (_super) {
     };
     return ManualPositionStock;
 }(CardStock));
+var VoidStock = (function (_super) {
+    __extends(VoidStock, _super);
+    function VoidStock(manager, element) {
+        var _this = _super.call(this, manager, element) || this;
+        _this.manager = manager;
+        _this.element = element;
+        element.classList.add('void-stock');
+        return _this;
+    }
+    VoidStock.prototype.addCard = function (card, animation, settings) {
+        var _this = this;
+        var _a;
+        var promise = _super.prototype.addCard.call(this, card, animation, settings);
+        var cardElement = this.getCardElement(card);
+        var originalLeft = cardElement.style.left;
+        var originalTop = cardElement.style.top;
+        cardElement.style.left = "".concat((this.element.clientWidth - cardElement.clientWidth) / 2, "px");
+        cardElement.style.top = "".concat((this.element.clientHeight - cardElement.clientHeight) / 2, "px");
+        if (!promise) {
+            console.warn("VoidStock.addCard didn't return a Promise");
+            promise = Promise.resolve(false);
+        }
+        if ((_a = settings === null || settings === void 0 ? void 0 : settings.remove) !== null && _a !== void 0 ? _a : true) {
+            return promise.then(function () {
+                return _this.removeCard(card);
+            });
+        }
+        else {
+            cardElement.style.left = originalLeft;
+            cardElement.style.top = originalTop;
+            return promise;
+        }
+    };
+    return VoidStock;
+}(CardStock));
 function sortFunction() {
     var sortedFields = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -1930,6 +1965,7 @@ var PaxRenaissance = (function () {
         this.settings = new Settings(this);
         this.animationManager = new AnimationManager(this, { duration: 500 });
         this.tableauCardManager = new TableauCardManager(this);
+        this.discard = new VoidStock(this.tableauCardManager, document.getElementById("pr_discard"));
         this.tooltipManager = new TooltipManager(this);
         this.gameMap = new GameMap(this);
         if (this.playerOrder.includes(this.getPlayerId())) {
@@ -4721,7 +4757,7 @@ var NotificationManager = (function () {
                     case 0:
                         _a = notif.args, adjustPrestige = _a.adjustPrestige, playerId = _a.playerId, card = _a.card, fromLocationId = _a.fromLocationId, toLocationId = _a.toLocationId, wasVassalTo = _a.wasVassalTo, king = _a.wasQueenTo, wasOldMaid = _a.wasOldMaid;
                         if (!(card.type === TABLEAU_CARD && toLocationId === DISCARD)) return [3, 2];
-                        return [4, this.game.tableauCardManager.removeCard(card)];
+                        return [4, this.game.discard.addCard(card)];
                     case 1:
                         _b.sent();
                         return [3, 4];
@@ -4783,11 +4819,8 @@ var NotificationManager = (function () {
                         card: queen,
                     });
                 }
-                if (king) {
-                    this.game.tableauCardManager.removeCard(queen);
-                }
+                this.game.discard.addCard(queen);
                 if (king === null) {
-                    this.game.tableauCardManager.removeCard(queen);
                     player.tableau.checkOldMaidContainerHeight();
                 }
                 return [2];
@@ -4864,6 +4897,7 @@ var NotificationManager = (function () {
                         _b.sent();
                         _b.label = 4;
                     case 4:
+                        this.game.tableauCardManager.updateCardInformations(card);
                         this.addEmpireSquarePrestige({
                             empireSquare: card,
                             side: KING,
@@ -4969,12 +5003,13 @@ var NotificationManager = (function () {
         });
     };
     NotificationManager.prototype.notif_placeToken = function (notif) {
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var _a, token, fromLocationId, to, split, isPawn, isBishop, fromSupply, node, repressTokensToThrones, tokenNode;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var _b, token, fromLocationId, to, split, isPawn, isBishop, fromSupply, node, repressTokensToThrones, element, fromRect, tokenNode;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        _a = notif.args, token = _a.token, fromLocationId = _a.fromLocationId, to = _a.to;
+                        _b = notif.args, token = _b.token, fromLocationId = _b.fromLocationId, to = _b.to;
                         split = token.id.split("_");
                         isPawn = split[0] === PAWN;
                         isBishop = split[0] === BISHOP;
@@ -5010,17 +5045,27 @@ var NotificationManager = (function () {
                         if (!node) {
                             return [2];
                         }
-                        if (!fromSupply) return [3, 1];
+                        if (!fromSupply) return [3, 2];
                         node.insertAdjacentHTML("beforeend", tplToken(token));
-                        return [3, 3];
+                        element = document.getElementById(token.id);
+                        fromRect = (_a = document
+                            .getElementById("".concat(token.type, "_").concat(token.separator, "_supply"))) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
+                        return [4, this.game.animationManager.play(new BgaSlideAnimation({
+                                element: element,
+                                transitionTimingFunction: "ease-in-out",
+                                fromRect: fromRect,
+                            }))];
                     case 1:
-                        tokenNode = document.getElementById(token.id);
-                        if (!tokenNode) return [3, 3];
-                        return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), node)];
+                        _c.sent();
+                        return [3, 4];
                     case 2:
-                        _b.sent();
-                        _b.label = 3;
+                        tokenNode = document.getElementById(token.id);
+                        if (!tokenNode) return [3, 4];
+                        return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), node)];
                     case 3:
+                        _c.sent();
+                        _c.label = 4;
+                    case 4:
                         this.adjustSupremeReligionCounters({
                             token: token,
                             location: to,
@@ -5261,37 +5306,44 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, token, from, node, split;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, token = _a.token, from = _a.from;
-                this.adjustSupremeReligionCounters({
-                    token: token,
-                    location: from,
-                    addOrRemove: "remove",
-                });
-                if (token.type === PAWN) {
-                    this.game.playerManager
-                        .getPlayerForBank({ bank: token.separator })
-                        .counters.concessions.incValue(-1);
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, token = _a.token, from = _a.from;
+                        this.adjustSupremeReligionCounters({
+                            token: token,
+                            location: from,
+                            addOrRemove: "remove",
+                        });
+                        if (token.type === PAWN) {
+                            this.game.playerManager
+                                .getPlayerForBank({ bank: token.separator })
+                                .counters.concessions.incValue(-1);
+                        }
+                        node = document.getElementById(token.id);
+                        if (!node) return [3, 2];
+                        return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: node }), document.getElementById("".concat(token.type, "_").concat(token.separator, "_supply")))];
+                    case 1:
+                        _b.sent();
+                        node.remove();
+                        _b.label = 2;
+                    case 2:
+                        split = token.id.split("_");
+                        if (split[0] === PAWN) {
+                            this.game.supply.incValue({
+                                bank: split[1],
+                                type: split[0],
+                                value: 1,
+                            });
+                        }
+                        else {
+                            this.game.supply.incValue({
+                                religion: split[1],
+                                type: split[0],
+                                value: 1,
+                            });
+                        }
+                        return [2, Promise.resolve()];
                 }
-                node = document.getElementById(token.id);
-                if (node) {
-                    node.remove();
-                }
-                split = token.id.split("_");
-                if (split[0] === PAWN) {
-                    this.game.supply.incValue({
-                        bank: split[1],
-                        type: split[0],
-                        value: 1,
-                    });
-                }
-                else {
-                    this.game.supply.incValue({
-                        religion: split[1],
-                        type: split[0],
-                        value: 1,
-                    });
-                }
-                return [2, Promise.resolve()];
             });
         });
     };
@@ -5948,7 +6000,7 @@ var PRPlayer = (function () {
                         return [4, moveToAnimation({
                                 game: this.game,
                                 element: element,
-                                toId: "overall_player_board_".concat(this.playerId),
+                                toId: "pr_cards_".concat(card.region, "_counter_").concat(this.playerId),
                                 remove: true,
                             })];
                     case 3:
@@ -10134,7 +10186,8 @@ var TableauOpSiegeState = (function () {
             },
         });
         var callback = function () {
-            return _this.game.takeAction({
+            _this.game.clearPossible();
+            _this.game.takeAction({
                 action: "actTableauOpSiege",
                 args: {
                     tokenId: token.id,

@@ -11,6 +11,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public gamedatas: PaxRenaissanceGamedatas;
   public animationManager: AnimationManager;
   // public cardManager: CardManager<TableauCard>;
+  public discard: VoidStock<EmpireCard | TableauCard | EmpireCardContainer>;
   public gameMap: GameMap;
   public gameOptions: PaxRenaissanceGamedatas["gameOptions"];
   public hand: Hand;
@@ -160,6 +161,10 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
     this.animationManager = new AnimationManager(this, { duration: 500 });
     this.tableauCardManager = new TableauCardManager(this);
+    this.discard = new VoidStock(
+      this.tableauCardManager,
+      document.getElementById("pr_discard")
+    );
 
     this.tooltipManager = new TooltipManager(this);
     this.gameMap = new GameMap(this);

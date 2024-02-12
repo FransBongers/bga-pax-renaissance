@@ -59,6 +59,7 @@ interface PaxRenaissanceGame extends Game {
   _connections: unknown[];
   animationManager: AnimationManager;
   // cardManager: CardManager<TableauCard>;
+  discard: VoidStock<TableauCard | EmpireCard | EmpireCardContainer>;
   gameMap: GameMap;
   gameOptions: PaxRenaissanceGamedatas["gameOptions"];
   hand: Hand;

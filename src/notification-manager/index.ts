@@ -349,7 +349,7 @@ class NotificationManager {
       wasOldMaid,
     } = notif.args;
     if (card.type === TABLEAU_CARD && toLocationId === DISCARD) {
-      await this.game.tableauCardManager.removeCard(card);
+      await this.game.discard.addCard(card);
     } else if (card.type === EMPIRE_CARD) {
       await this.game.gameMap
         .getEmpireSquareStock({ empireId: card.empire })
@@ -364,16 +364,6 @@ class NotificationManager {
       });
     }
 
-    // if (wasVassalTo) {
-    //   this.game.tableauCardManager.removeVassal({ suzerain: wasVassalTo });
-    // }
-    // if (king) {
-    //   this.game.tableauCardManager.updateCardInformations(king);
-
-    //   this.game.tableauCardManager.removeQueen({
-    //     king,
-    //   });
-    // }
     if (wasOldMaid) {
       player.tableau.checkOldMaidContainerHeight();
     }
@@ -392,9 +382,6 @@ class NotificationManager {
           prestige: card.prestige,
         });
       }
-      // const prestige =
-      //   card.type === EMPIRE_CARD ? card[card.side].prestige : card.prestige;
-      // prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
     }
   }
 
@@ -415,12 +402,9 @@ class NotificationManager {
       });
     }
 
-    if (king) {
-      this.game.tableauCardManager.removeCard(queen);
-    }
-    if (king === null) {
-      this.game.tableauCardManager.removeCard(queen);
+    this.game.discard.addCard(queen);
 
+    if (king === null) {
       player.tableau.checkOldMaidContainerHeight();
     }
   }
@@ -468,18 +452,18 @@ class NotificationManager {
       });
     }
 
-    
     if (destination.type === KING) {
       const newOwner = this.getPlayer({ playerId: destination.ownerId });
       const container = createEmpireCardContainer(card);
+      
       await newOwner.tableau.addCard(container);
     } else if (destination.type === VASSAL) {
-
       await this.game.tableauCardManager.addVassal({
         vassal: card,
         suzerain: destination.suzerain,
       });
     }
+    this.game.tableauCardManager.updateCardInformations(card);
 
     this.addEmpireSquarePrestige({
       empireSquare: card,
@@ -620,6 +604,17 @@ class NotificationManager {
 
     if (fromSupply) {
       node.insertAdjacentHTML("beforeend", tplToken(token));
+      const element = document.getElementById(token.id);
+      const fromRect = document
+        .getElementById(`${token.type}_${token.separator}_supply`)
+        ?.getBoundingClientRect();
+      await this.game.animationManager.play(
+        new BgaSlideAnimation({
+          element,
+          transitionTimingFunction: "ease-in-out",
+          fromRect,
+        })
+      );
     } else {
       const tokenNode = document.getElementById(token.id);
       if (tokenNode) {
@@ -796,7 +791,6 @@ class NotificationManager {
       .getEmpireSquareStock({ empireId: king.empire })
       .addCard(createEmpireCardContainer(king));
 
-
     // this.game.tableauCardManager.updateCardInformations(king);
 
     const player = this.getPlayer({ playerId });
@@ -832,6 +826,10 @@ class NotificationManager {
 
     const node = document.getElementById(token.id);
     if (node) {
+      await this.game.animationManager.attachWithAnimation(
+        new BgaSlideAnimation({ element: node }),
+        document.getElementById(`${token.type}_${token.separator}_supply`),
+      );
       node.remove();
     }
     const split = token.id.split("_");

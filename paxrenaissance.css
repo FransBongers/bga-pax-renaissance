@@ -5571,6 +5571,15 @@ html[data-background-pref=war] {
   grid-gap: 8px;
 }
 
+#pr_discard {
+  position: absolute;
+  top: -200px;
+  left: -200px;
+  --paxRenCardScale: 1;
+  width: 150px;
+  height: 230px;
+}
+
 #page-title {
   min-height: 36px;
 }

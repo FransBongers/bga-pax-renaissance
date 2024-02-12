@@ -28,75 +28,11 @@ use PaxRenaissance\Models\Token;
 
 trait DebugTrait
 {
-  function testGlobalizationVictory()
-  {
-    $this->debugPlaceCardInTableau('PREN102X_SahnISemanMadrese', EAST, 2371052); // Ability / Discovery
-    $this->debugPlaceCardInTableau('PREN009_HouseOfBorgia', WEST, 2371052); // PATRON
-    // $this->debugPlaceCardInTableau('PREN100X_UnifiedChristendom', WEST, 2371053); // PATRON
-    $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371053); // DISCOVERY
-    $this->debugPlaceCardInTableau('PREN105X_FrancoOttomanNavy', EAST, 2371053); // DISCOVERY
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_PORTUGAL);
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_OTTOMAN_PAPAL_STATES);
-
-    Cards::get('VictoryGlobalization')->setActive();
-  }
-
-  function testRenaissanceVictory()
-  {
-    $this->debugPlaceCardInTableau('PREN103X_Academia', EAST, 2371053); // Republic
-    $this->debugPlaceCardInTableau('PREN037_TheHidden', WEST, 2371052); // LAW
-    $this->debugPlaceCardInTableau('PREN010_BonfireOfTheVanities', WEST, 2371052); // LAW
-    $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371052);
-    Cards::get('EmpireSquare_France')->setSide(REPUBLIC);
-    Cards::get('VictoryRenaissance')->setActive();
-  }
-
-  function testHolyVictory()
-  {
-    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_HUNGARY_OTTOMAN);
-    // Cards::get('VictoryHoly')->setActive();
-  }
-
-  function fillSeaBorders()
-  {
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ENGLAND_FRANCE);
-    // $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ENGLAND_PORTUGAL);
-    $this->debugPlaceToken(PAWN, Players::get(2371053)->getBank(), BORDER_ARAGON_PORTUGAL);
-    // $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_ARAGON_PAPAL_STATES);
-    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_OTTOMAN_PAPAL_STATES);
-    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_MAMLUK_OTTOMAN);
-    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_HUNGARY_OTTOMAN);
-    $this->debugPlaceToken(PAWN, Players::get(2371052)->getBank(), BORDER_BYZANTIUM_HUNGARY);
-
-    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ENGLAND_FRANCE);
-    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_FRANCE_HOLY_ROMAN_EMPIRE);
-    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ENGLAND_PORTUGAL);
-    $this->debugPlaceToken(PIRATE, ISLAMIC, BORDER_ARAGON_PORTUGAL);
-    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_ARAGON_PAPAL_STATES);
-    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_OTTOMAN_PAPAL_STATES);
-    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_MAMLUK_OTTOMAN);
-    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_HUNGARY_OTTOMAN);
-    $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_BYZANTIUM_HUNGARY);
-  }
-
-  function debugAgeOfReformationCards()
-  {
-    Notifications::log('adding reformation cards', []);
-    $this->debugPlaceCardInMarket('PREN208P_Sarmatism', EAST, 4);
-    $this->debugPlaceCardInMarket('PREN209P_BureauOfBarbarians', EAST, 3);
-    $this->debugPlaceCardInMarket('PREN210P_KaysarIRum', EAST, 2);
-    $this->debugPlaceCardInMarket('PREN211P_UskokPirates', EAST, 1);
-    $this->debugPlaceCardInMarket('PREN212P_SzapolyaFamily', WEST, 5);
-    $this->debugPlaceCardInMarket('PREN213P_NetherlandsInquisition', WEST, 4);
-    $this->debugPlaceCardInMarket('PREN214P_Huguenots', WEST, 3);
-    $this->debugPlaceCardInMarket('PREN215P_ReformationParliament', WEST, 2);
-    $this->debugPlaceCardInMarket('PREN216P_MargaretOfParma', WEST, 1);
-  }
-
   function test()
   {
-    Notifications::log('test',Engine::getResolvedActions([TABLEAU_OPS_SELECT_EAST, TABLEAU_OPS_SELECT_EAST_AND_WEST]));
+    $this->debugPlaceCardInTableau('PREN024_Gonfalonier', WEST, 2371052);
+    $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371053); // DISCOVERY
+    Cards::get('EmpireSquare_Portugal')->setSide(REPUBLIC);
   }
 
   function debugPlaceCardInMarket($cardId, $region = WEST, $column = 1)

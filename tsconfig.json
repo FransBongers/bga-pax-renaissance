@@ -30,6 +30,7 @@
     "node_modules/bga-cards/src/stocks/deck.ts",
     "node_modules/bga-cards/src/stocks/line-stock.ts",
     "node_modules/bga-cards/src/stocks/manual-position-stock.ts",
+    "node_modules/bga-cards/src/stocks/void-stock.ts",
     "node_modules/bga-cards/src/sort.ts",
     "node_modules/bga-cards/src/card-manager.ts",
     "src/paxrenaissance.ts",

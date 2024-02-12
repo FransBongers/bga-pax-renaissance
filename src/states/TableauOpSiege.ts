@@ -68,14 +68,15 @@ class TableauOpSiegeState implements State {
       },
     });
 
-    const callback = () =>
+    const callback = () => {
+      this.game.clearPossible();
       this.game.takeAction({
         action: "actTableauOpSiege",
         args: {
           tokenId: token.id,
         },
       });
-
+    };
     if (
       this.game.settings.get({
         id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
