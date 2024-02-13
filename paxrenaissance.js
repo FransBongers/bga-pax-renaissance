@@ -5838,12 +5838,28 @@ var PRPlayer = (function () {
             iconCounterId: "pr_florins_counter_".concat(this.playerId),
             initialValue: player.florins,
         });
+        this.game.tooltipManager.addIconTooltip({
+            iconHtml: tplIcon({ icon: "florin", style: '--paxRenIconScale: 0.85;' }),
+            nodeId: "pr_florins_counter_".concat(this.playerId),
+            title: _('Florins'),
+            text: "The amount of Florins this player owns.",
+        });
         this.counters.cards.west = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
             extraIconClasses: "pr_card_back_icon",
             icon: "west_back",
             iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
             initialValue: 0,
+        });
+        this.game.tooltipManager.addIconTooltip({
+            iconHtml: tplIcon({
+                icon: "west_back",
+                classes: "pr_card_back_icon",
+                style: 'width: 30px; height: 45px;',
+            }),
+            nodeId: "pr_cards_west_counter_".concat(this.playerId),
+            title: _('West cards'),
+            text: "The number of cards from the West deck this player has in their hand.",
         });
         this.counters.cards.east = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
@@ -5852,22 +5868,104 @@ var PRPlayer = (function () {
             iconCounterId: "pr_cards_east_counter_".concat(this.playerId),
             initialValue: 0,
         });
+        this.game.tooltipManager.addIconTooltip({
+            iconHtml: tplIcon({
+                icon: "east_back",
+                classes: "pr_card_back_icon",
+                style: 'width: 30px; height: 45px;',
+            }),
+            nodeId: "pr_cards_east_counter_".concat(this.playerId),
+            title: _('East cards'),
+            text: "The number of cards from the East deck this player has in their hand.",
+        });
+        var prestigeText = _('The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory.');
+        var prestigeTitle = _('${prestige} Prestige');
         [CATHOLIC, ISLAMIC, REFORMIST].forEach(function (prestige) {
+            var _a, _b;
+            var titleArgs = (_a = {},
+                _a[CATHOLIC] = {
+                    prestige: _('Catholic')
+                },
+                _a[ISLAMIC] = {
+                    prestige: _('Islamic')
+                },
+                _a[REFORMIST] = {
+                    prestige: _('Reformist')
+                },
+                _a);
+            var textArgs = (_b = {},
+                _b[CATHOLIC] = {
+                    prestige: _('Catholic'),
+                    victory: _('Holy')
+                },
+                _b[ISLAMIC] = {
+                    prestige: _('Islamic'),
+                    victory: _('Holy')
+                },
+                _b[REFORMIST] = {
+                    prestige: _('Reformist'),
+                    victory: _('Holy')
+                },
+                _b);
+            var icon = "prestige_".concat(prestige);
+            var id = "pr_prestige_".concat(prestige, "_counter_").concat(_this.playerId);
+            var classes = "pr_prestige_icon";
             _this.counters.prestige[prestige] = new IconCounter({
                 containerId: "pr_player_panel_icons_".concat(_this.playerId),
-                extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_".concat(prestige),
-                iconCounterId: "pr_prestige_".concat(prestige, "_counter_").concat(_this.playerId),
+                extraIconClasses: classes,
+                icon: icon,
+                iconCounterId: id,
                 initialValue: 0,
+            });
+            _this.game.tooltipManager.addIconTooltip({
+                iconHtml: tplIcon({ icon: icon, classes: classes, style: '--paxRenIconScale: 1.35;' }),
+                nodeId: id,
+                text: _this.game.format_string_recursive(prestigeText, textArgs[prestige]),
+                title: _this.game.format_string_recursive(prestigeTitle, titleArgs[prestige])
             });
         });
         [PATRON, LAW, DISCOVERY].forEach(function (prestige) {
+            var _a, _b;
+            var titleArgs = (_a = {},
+                _a[PATRON] = {
+                    prestige: _('Patron')
+                },
+                _a[LAW] = {
+                    prestige: _('Law'),
+                },
+                _a[DISCOVERY] = {
+                    prestige: _('Discovery')
+                },
+                _a);
+            var textArgs = (_b = {},
+                _b[PATRON] = {
+                    prestige: _('Patron'),
+                    victory: _('Patron')
+                },
+                _b[LAW] = {
+                    prestige: _('Law'),
+                    victory: _('Renaissance')
+                },
+                _b[DISCOVERY] = {
+                    prestige: _('Discovery'),
+                    victory: _('Globalization')
+                },
+                _b);
+            var icon = "prestige_".concat(prestige);
+            var id = "pr_prestige_".concat(prestige, "_counter_").concat(_this.playerId);
+            var classes = "pr_prestige_icon";
             _this.counters.prestige[prestige] = new IconCounter({
                 containerId: "pr_player_panel_icons_".concat(_this.playerId),
-                extraIconClasses: "pr_prestige_icon",
-                icon: "prestige_".concat(prestige),
-                iconCounterId: "pr_prestige_".concat(prestige, "_counter_").concat(_this.playerId),
+                extraIconClasses: classes,
+                icon: icon,
+                iconCounterId: id,
                 initialValue: 0,
+            });
+            _this.game.tooltipManager.addIconTooltip({
+                iconHtml: tplIcon({ icon: icon, classes: classes, style: '--paxRenIconScale: 1.35;' }),
+                nodeId: id,
+                text: _this.game.format_string_recursive(prestigeText, textArgs[prestige]),
+                title: _this.game.format_string_recursive(prestigeTitle, titleArgs[prestige])
             });
         });
         this.counters.king = new IconCounter({
@@ -5881,6 +5979,17 @@ var PRPlayer = (function () {
                 value: this.bank,
             },
         });
+        this.game.tooltipManager.addIconTooltip({
+            iconHtml: tplIcon({
+                icon: "king",
+                classes: "pr_square_card_icon",
+                extra: "data-bank=\"".concat(this.bank, "\""),
+                style: '--paxRenIconScale: 1.45;'
+            }),
+            nodeId: "pr_kings_counter_".concat(this.playerId),
+            text: _('The number of Empire Squares on their King side this player has in their tableau. Counts for Imperial Victory.'),
+            title: _('Kings')
+        });
         this.counters.republic = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
             extraIconClasses: "pr_square_card_icon",
@@ -5892,6 +6001,17 @@ var PRPlayer = (function () {
                 value: this.bank,
             },
         });
+        this.game.tooltipManager.addIconTooltip({
+            iconHtml: tplIcon({
+                icon: "republic",
+                classes: "pr_square_card_icon",
+                extra: "data-bank=\"".concat(this.bank, "\""),
+                style: '--paxRenIconScale: 1.45;'
+            }),
+            nodeId: "pr_republics_counter_".concat(this.playerId),
+            text: _('The number of Empire Squares on their Republic side this player has in their tableau. Counts for Renaissance Victory.'),
+            title: _('Republics')
+        });
         this.counters.concessions = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
             extraIconClasses: "pr_concession_icon",
@@ -5902,6 +6022,17 @@ var PRPlayer = (function () {
                 key: "data-bank",
                 value: this.bank,
             },
+        });
+        this.game.tooltipManager.addIconTooltip({
+            iconHtml: tplIcon({
+                icon: "concession",
+                classes: "pr_concession_icon",
+                extra: "data-bank=\"".concat(this.bank, "\""),
+                style: '--paxRenTokenScale: 1.35;'
+            }),
+            nodeId: "pr_concessions_counter_".concat(this.playerId),
+            text: _('The number of Concessions this player has in play. Counts for Globalization Victory.'),
+            title: _('Concessions')
         });
         if (COLORS_WITH_SHADOW.includes(this.getColor())) {
             var node = document.getElementById("player_name_".concat(this.playerId));
@@ -5946,7 +6077,9 @@ var PRPlayer = (function () {
             }
         });
         Object.keys(prestigeCount)
-            .filter(function (prestige) { return [CATHOLIC, ISLAMIC, REFORMIST, PATRON].includes(prestige); })
+            .filter(function (prestige) {
+            return [CATHOLIC, ISLAMIC, REFORMIST, PATRON].includes(prestige);
+        })
             .forEach(function (prestige) {
             _this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
         });
@@ -9053,19 +9186,6 @@ var PlayerActionState = (function () {
                 });
             }
         });
-        if (this.args.tradeFair.east) {
-            this.game.addPrimaryActionButton({
-                id: "trade_fair_east_btn",
-                text: _("Trade Fair East"),
-                callback: function () {
-                    return _this.game
-                        .framework()
-                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, {
-                        args: __assign(__assign({}, _this.args.tradeFair.east), { action: "actPlayerAction" }),
-                    });
-                },
-            });
-        }
         if (this.args.tradeFair.west) {
             this.game.addPrimaryActionButton({
                 id: "trade_fair_west_btn",
@@ -9075,6 +9195,19 @@ var PlayerActionState = (function () {
                         .framework()
                         .setClientState(CLIENT_START_TRADE_FAIR_STATE, {
                         args: __assign(__assign({}, _this.args.tradeFair.west), { action: "actPlayerAction" }),
+                    });
+                },
+            });
+        }
+        if (this.args.tradeFair.east) {
+            this.game.addPrimaryActionButton({
+                id: "trade_fair_east_btn",
+                text: _("Trade Fair East"),
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_START_TRADE_FAIR_STATE, {
+                        args: __assign(__assign({}, _this.args.tradeFair.east), { action: "actPlayerAction" }),
                     });
                 },
             });
@@ -10673,7 +10806,7 @@ var tplAgentsSection = function (_a) {
     return "\n  <div>\n  <span class=\"pr_section_title\">".concat(_("Agents"), "</span>\n  ").concat(Object.entries(agentIcons)
         .map(function (_a) {
         var id = _a[0], count = _a[1];
-        return tplAgentsRow({ agentIcon: "".concat(id, "_").concat(count) });
+        return tplAgentsRow({ agentIcon: "".concat(id, "_").concat(id === PAWN ? 1 : count) });
     })
         .join(""), "\n  </div>\n");
 };
@@ -10790,6 +10923,10 @@ var tplVictoryCardTooltip = function (_a) {
             .join(""), "\n    "),
     });
 };
+var tplTooltipWithIcon = function (_a) {
+    var title = _a.title, text = _a.text, iconHtml = _a.iconHtml, iconWidth = _a.iconWidth;
+    return "<div class=\"pr_icon_tooltip\">\n            <div class=\"pr_icon_tooltip_icon\"".concat(iconWidth ? "style=\"min-width: ".concat(iconWidth, "px;\"") : "", ">\n              ").concat(iconHtml, "\n            </div>\n            <div class=\"pr_icon_tooltip_content\">\n              ").concat(title ? "<span class=\"pr_tooltip_title\" >".concat(title, "</span>") : "", "\n              <span class=\"pr_tooltip_text\">").concat(text, "</span>\n            </div>\n          </div>");
+};
 var TooltipManager = (function () {
     function TooltipManager(game) {
         this.idRegex = /id="[a-z]*_[0-9]*_[0-9]*"/;
@@ -10797,13 +10934,17 @@ var TooltipManager = (function () {
     }
     TooltipManager.prototype.addTextToolTip = function (_a) {
         var nodeId = _a.nodeId, text = _a.text;
-        this.game.framework().addTooltip(nodeId, _(text), '', 500);
+        this.game.framework().addTooltip(nodeId, _(text), "", 500);
+    };
+    TooltipManager.prototype.addIconTooltip = function (_a) {
+        var nodeId = _a.nodeId, iconHtml = _a.iconHtml, text = _a.text, title = _a.title;
+        var html = tplTooltipWithIcon({ iconHtml: iconHtml, text: text, title: title });
+        this.game.framework().addTooltipHtml(nodeId, html, 250);
     };
     TooltipManager.prototype.removeTooltip = function (nodeId) {
         this.game.framework().removeTooltip(nodeId);
     };
-    TooltipManager.prototype.setupTooltips = function () {
-    };
+    TooltipManager.prototype.setupTooltips = function () { };
     TooltipManager.prototype.addCardTooltip = function (_a) {
         var nodeId = _a.nodeId, card = _a.card;
         var html = tplTableauCardTooltip({ card: card, game: this.game });
@@ -10811,7 +10952,11 @@ var TooltipManager = (function () {
     };
     TooltipManager.prototype.addEmpireCardTooltip = function (_a) {
         var nodeId = _a.nodeId, card = _a.card, religion = _a.religion;
-        var html = tplEmireCardTooltip({ card: card, ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo, religion: religion });
+        var html = tplEmireCardTooltip({
+            card: card,
+            ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo,
+            religion: religion,
+        });
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     TooltipManager.prototype.addVictoryCardTooltip = function (_a) {

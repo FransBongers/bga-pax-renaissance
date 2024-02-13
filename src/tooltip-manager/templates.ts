@@ -55,7 +55,9 @@ const tplAgentsSection = ({ agents }: { agents: Agent[] }) => {
   <div>
   <span class="pr_section_title">${_("Agents")}</span>
   ${Object.entries(agentIcons)
-    .map(([id, count]) => tplAgentsRow({ agentIcon: `${id}_${count}` }))
+    .map(([id, count]) =>
+      tplAgentsRow({ agentIcon: `${id}_${id === PAWN ? 1 : count}` })
+    )
     .join("")}
   </div>
 `;
@@ -345,4 +347,28 @@ const tplVictoryCardTooltip = ({
         .join("")}
     `,
   });
+};
+
+const tplTooltipWithIcon = ({
+  title,
+  text,
+  iconHtml,
+  iconWidth,
+}: {
+  title?: string;
+  text: string;
+  iconHtml: string;
+  iconWidth?: number;
+}): string => {
+  return `<div class="pr_icon_tooltip">
+            <div class="pr_icon_tooltip_icon"${
+              iconWidth ? `style="min-width: ${iconWidth}px;"` : ""
+            }>
+              ${iconHtml}
+            </div>
+            <div class="pr_icon_tooltip_content">
+              ${title ? `<span class="pr_tooltip_title" >${title}</span>` : ""}
+              <span class="pr_tooltip_text">${text}</span>
+            </div>
+          </div>`;
 };

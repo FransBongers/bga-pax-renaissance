@@ -141,6 +141,13 @@ class PRPlayer {
       iconCounterId: `pr_florins_counter_${this.playerId}`,
       initialValue: player.florins,
     });
+    this.game.tooltipManager.addIconTooltip({
+      iconHtml: tplIcon({ icon: "florin", style: '--paxRenIconScale: 0.85;' }),
+      nodeId: `pr_florins_counter_${this.playerId}`,
+      title: _('Florins'),
+      text: "The amount of Florins this player owns.",
+    });
+
     this.counters.cards.west = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
       extraIconClasses: "pr_card_back_icon",
@@ -148,6 +155,17 @@ class PRPlayer {
       iconCounterId: `pr_cards_west_counter_${this.playerId}`,
       initialValue: 0,
     });
+    this.game.tooltipManager.addIconTooltip({
+      iconHtml: tplIcon({
+        icon: `west_back`,
+        classes: "pr_card_back_icon",
+        style: 'width: 30px; height: 45px;',
+      }),
+      nodeId: `pr_cards_west_counter_${this.playerId}`,
+      title: _('West cards'),
+      text: "The number of cards from the West deck this player has in their hand.",
+    });
+
     this.counters.cards.east = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
       extraIconClasses: "pr_card_back_icon",
@@ -155,23 +173,108 @@ class PRPlayer {
       iconCounterId: `pr_cards_east_counter_${this.playerId}`,
       initialValue: 0,
     });
+    this.game.tooltipManager.addIconTooltip({
+      iconHtml: tplIcon({
+        icon: `east_back`,
+        classes: "pr_card_back_icon",
+        style: 'width: 30px; height: 45px;',
+      }),
+      nodeId: `pr_cards_east_counter_${this.playerId}`,
+      title: _('East cards'),
+      text: "The number of cards from the East deck this player has in their hand.",
+    });
+
+    const prestigeText = _('The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory.');
+    const prestigeTitle = _('${prestige} Prestige');
     [CATHOLIC, ISLAMIC, REFORMIST].forEach((prestige) => {
+      
+      const titleArgs = {
+        [CATHOLIC]: {
+          prestige: _('Catholic')
+        },
+        [ISLAMIC]: {
+          prestige: _('Islamic')
+        },
+        [REFORMIST]: {
+          prestige: _('Reformist')
+        }
+      };
+      
+      const textArgs = {
+        [CATHOLIC]: {
+          prestige: _('Catholic'),
+          victory: _('Holy')
+        },
+        [ISLAMIC]: {
+          prestige: _('Islamic'),
+          victory: _('Holy')
+        },
+        [REFORMIST]: {
+          prestige: _('Reformist'),
+          victory: _('Holy')
+        }
+      }
+
+      const icon = `prestige_${prestige}`;
+      const id = `pr_prestige_${prestige}_counter_${this.playerId}`;
+      const classes = "pr_prestige_icon";
       this.counters.prestige[prestige] = new IconCounter({
         containerId: `pr_player_panel_icons_${this.playerId}`,
-        extraIconClasses: "pr_prestige_icon",
-        icon: `prestige_${prestige}`,
-        iconCounterId: `pr_prestige_${prestige}_counter_${this.playerId}`,
+        extraIconClasses: classes,
+        icon,
+        iconCounterId: id,
         initialValue: 0,
+      });
+      this.game.tooltipManager.addIconTooltip({
+        iconHtml: tplIcon({ icon, classes, style: '--paxRenIconScale: 1.35;' }),
+        nodeId: id,
+        text: this.game.format_string_recursive(prestigeText, textArgs[prestige]),
+        title: this.game.format_string_recursive(prestigeTitle, titleArgs[prestige])
       });
     });
 
     [PATRON, LAW, DISCOVERY].forEach((prestige) => {
+      const titleArgs = {
+        [PATRON]: {
+          prestige: _('Patron')
+        },
+        [LAW]: {
+          prestige: _('Law'),
+        },
+        [DISCOVERY]: {
+          prestige: _('Discovery')
+        },
+      };
+      const textArgs = {
+        [PATRON]: {
+          prestige: _('Patron'),
+          victory: _('Patron')
+        },
+        [LAW]: {
+          prestige: _('Law'),
+          victory: _('Renaissance')
+        },
+        [DISCOVERY]: {
+          prestige: _('Discovery'),
+          victory: _('Globalization')
+        },
+      }
+
+      const icon = `prestige_${prestige}`;
+      const id = `pr_prestige_${prestige}_counter_${this.playerId}`;
+      const classes = "pr_prestige_icon";
       this.counters.prestige[prestige] = new IconCounter({
         containerId: `pr_player_panel_icons_${this.playerId}`,
-        extraIconClasses: "pr_prestige_icon",
-        icon: `prestige_${prestige}`,
-        iconCounterId: `pr_prestige_${prestige}_counter_${this.playerId}`,
+        extraIconClasses: classes,
+        icon,
+        iconCounterId: id,
         initialValue: 0,
+      });
+      this.game.tooltipManager.addIconTooltip({
+        iconHtml: tplIcon({ icon, classes, style: '--paxRenIconScale: 1.35;' }),
+        nodeId: id,
+        text: this.game.format_string_recursive(prestigeText, textArgs[prestige]),
+        title: this.game.format_string_recursive(prestigeTitle, titleArgs[prestige])
       });
     });
 
@@ -186,6 +289,17 @@ class PRPlayer {
         value: this.bank,
       },
     });
+    this.game.tooltipManager.addIconTooltip({
+      iconHtml: tplIcon({
+        icon: `king`,
+        classes: "pr_square_card_icon",
+        extra: `data-bank="${this.bank}"`,
+        style: '--paxRenIconScale: 1.45;'
+      }),
+      nodeId: `pr_kings_counter_${this.playerId}`,
+      text: _('The number of Empire Squares on their King side this player has in their tableau. Counts for Imperial Victory.'),
+      title: _('Kings')
+    });
 
     this.counters.republic = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
@@ -198,6 +312,17 @@ class PRPlayer {
         value: this.bank,
       },
     });
+    this.game.tooltipManager.addIconTooltip({
+      iconHtml: tplIcon({
+        icon: `republic`,
+        classes: "pr_square_card_icon",
+        extra: `data-bank="${this.bank}"`,
+        style: '--paxRenIconScale: 1.45;'
+      }),
+      nodeId: `pr_republics_counter_${this.playerId}`,
+      text: _('The number of Empire Squares on their Republic side this player has in their tableau. Counts for Renaissance Victory.'),
+      title: _('Republics')
+    });
 
     this.counters.concessions = new IconCounter({
       containerId: `pr_player_panel_icons_${this.playerId}`,
@@ -209,6 +334,17 @@ class PRPlayer {
         key: "data-bank",
         value: this.bank,
       },
+    });
+    this.game.tooltipManager.addIconTooltip({
+      iconHtml: tplIcon({
+        icon: `concession`,
+        classes: "pr_concession_icon",
+        extra: `data-bank="${this.bank}"`,
+        style: '--paxRenTokenScale: 1.35;'
+      }),
+      nodeId: `pr_concessions_counter_${this.playerId}`,
+      text: _('The number of Concessions this player has in play. Counts for Globalization Victory.'),
+      title: _('Concessions')
     });
 
     if (COLORS_WITH_SHADOW.includes(this.getColor())) {
@@ -263,7 +399,9 @@ class PRPlayer {
       }
     });
     Object.keys(prestigeCount)
-      .filter((prestige) => [CATHOLIC, ISLAMIC, REFORMIST, PATRON].includes(prestige))
+      .filter((prestige) =>
+        [CATHOLIC, ISLAMIC, REFORMIST, PATRON].includes(prestige)
+      )
       .forEach((prestige) => {
         this.counters.prestige[prestige].setValue(prestigeCount[prestige]);
       });

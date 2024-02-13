@@ -127,3 +127,35 @@
     }
   }
 }
+
+.pr_icon_tooltip {
+  display: flex;
+  flex-direction: row;
+  width: 250px;
+  
+  .pr_icon {
+    margin: 0px;
+  }
+
+  .pr_tooltip_title {
+    font-size: medium;
+    font-style: italic;
+  }
+
+  .pr_icon_tooltip_icon {
+    padding-top: 4px;
+    // min-width: 44px;
+  }
+
+  .pr_icon_tooltip_content {
+    display: flex;
+    flex-direction: column;
+    margin-left: 8px;
+  }
+
+  .pr_tooltip_text {
+    text-align: left;
+    font-size: small;
+    
+  }
+}

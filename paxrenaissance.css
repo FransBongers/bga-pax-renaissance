@@ -3654,32 +3654,40 @@
 .pr_agent_icon[data-agent-icon=pawn_1] {
   background-image: url("img/agents_square_2.webp");
   background-size: 500% 100%;
-  width: calc(var(--paxRenIconScale) * 40px);
-  height: calc(var(--paxRenIconScale) * 40px);
+  min-width: calc(var(--paxRenIconScale) * 40px);
+  max-width: calc(var(--paxRenIconScale) * 40px);
+  min-height: calc(var(--paxRenIconScale) * 40px);
+  max-height: calc(var(--paxRenIconScale) * 40px);
   background-position-x: 0%;
 }
 
 .pr_agent_icon[data-agent-icon=catholic_pirate_1] {
   background-image: url("img/agents_square_2.webp");
   background-size: 500% 100%;
-  width: calc(var(--paxRenIconScale) * 40px);
-  height: calc(var(--paxRenIconScale) * 40px);
+  min-width: calc(var(--paxRenIconScale) * 40px);
+  max-width: calc(var(--paxRenIconScale) * 40px);
+  min-height: calc(var(--paxRenIconScale) * 40px);
+  max-height: calc(var(--paxRenIconScale) * 40px);
   background-position-x: 25%;
 }
 
 .pr_agent_icon[data-agent-icon=islamic_pirate_1] {
   background-image: url("img/agents_square_2.webp");
   background-size: 500% 100%;
-  width: calc(var(--paxRenIconScale) * 40px);
-  height: calc(var(--paxRenIconScale) * 40px);
+  min-width: calc(var(--paxRenIconScale) * 40px);
+  max-width: calc(var(--paxRenIconScale) * 40px);
+  min-height: calc(var(--paxRenIconScale) * 40px);
+  max-height: calc(var(--paxRenIconScale) * 40px);
   background-position-x: 50%;
 }
 
 .pr_agent_icon[data-agent-icon=reformist_pirate_1] {
   background-image: url("img/agents_square_2.webp");
   background-size: 500% 100%;
-  width: calc(var(--paxRenIconScale) * 40px);
-  height: calc(var(--paxRenIconScale) * 40px);
+  min-width: calc(var(--paxRenIconScale) * 40px);
+  max-width: calc(var(--paxRenIconScale) * 40px);
+  min-height: calc(var(--paxRenIconScale) * 40px);
+  max-height: calc(var(--paxRenIconScale) * 40px);
   background-position-x: 75%;
 }
 
@@ -4934,6 +4942,31 @@
   font-size: small;
   font-style: italic;
   margin-bottom: 4px;
+}
+
+.pr_icon_tooltip {
+  display: flex;
+  flex-direction: row;
+  width: 250px;
+}
+.pr_icon_tooltip .pr_icon {
+  margin: 0px;
+}
+.pr_icon_tooltip .pr_tooltip_title {
+  font-size: medium;
+  font-style: italic;
+}
+.pr_icon_tooltip .pr_icon_tooltip_icon {
+  padding-top: 4px;
+}
+.pr_icon_tooltip .pr_icon_tooltip_content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+}
+.pr_icon_tooltip .pr_tooltip_text {
+  text-align: left;
+  font-size: small;
 }
 
 .pr_icon_counter_container {

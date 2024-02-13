@@ -244,24 +244,6 @@ class PlayerActionState implements State {
     });
 
     // Trade fair
-    if (this.args.tradeFair.east) {
-      this.game.addPrimaryActionButton({
-        id: "trade_fair_east_btn",
-        text: _("Trade Fair East"),
-        callback: () =>
-          this.game
-            .framework()
-            .setClientState<OnEnteringClientStartTradeFairArgs>(
-              CLIENT_START_TRADE_FAIR_STATE,
-              {
-                args: {
-                  ...this.args.tradeFair.east,
-                  action: "actPlayerAction",
-                },
-              }
-            ),
-      });
-    }
     if (this.args.tradeFair.west) {
       this.game.addPrimaryActionButton({
         id: "trade_fair_west_btn",
@@ -274,6 +256,24 @@ class PlayerActionState implements State {
               {
                 args: {
                   ...this.args.tradeFair.west,
+                  action: "actPlayerAction",
+                },
+              }
+            ),
+      });
+    }
+    if (this.args.tradeFair.east) {
+      this.game.addPrimaryActionButton({
+        id: "trade_fair_east_btn",
+        text: _("Trade Fair East"),
+        callback: () =>
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientStartTradeFairArgs>(
+              CLIENT_START_TRADE_FAIR_STATE,
+              {
+                args: {
+                  ...this.args.tradeFair.east,
                   action: "actPlayerAction",
                 },
               }

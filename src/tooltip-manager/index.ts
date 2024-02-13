@@ -23,28 +23,66 @@ class TooltipManager {
     this.game = game;
   }
 
-  public addTextToolTip({nodeId, text}: {nodeId: string; text: string;}) {
-    this.game.framework().addTooltip(nodeId, _(text), '', 500);
+  public addTextToolTip({ nodeId, text }: { nodeId: string; text: string }) {
+    this.game.framework().addTooltip(nodeId, _(text), "", 500);
+  }
+
+  public addIconTooltip({
+    nodeId,
+    iconHtml,
+    text,
+    title,
+  }: {
+    nodeId: string;
+    iconHtml: string;
+    text: string;
+    title?: string;
+  }) {
+    const html = tplTooltipWithIcon({ iconHtml, text, title });
+    this.game.framework().addTooltipHtml(nodeId, html, 250);
   }
 
   public removeTooltip(nodeId: string) {
     this.game.framework().removeTooltip(nodeId);
   }
 
-  public setupTooltips() {
-  }
+  public setupTooltips() {}
 
-  public addCardTooltip({ nodeId, card }: { nodeId: string; card: TableauCard }): void {
+  public addCardTooltip({
+    nodeId,
+    card,
+  }: {
+    nodeId: string;
+    card: TableauCard;
+  }): void {
     const html = tplTableauCardTooltip({ card, game: this.game });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
 
-  public addEmpireCardTooltip({ nodeId, card, religion }: { nodeId: string; card: EmpireCard; religion?: string; }): void {
-    const html = tplEmireCardTooltip({ card, ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo, religion });
+  public addEmpireCardTooltip({
+    nodeId,
+    card,
+    religion,
+  }: {
+    nodeId: string;
+    card: EmpireCard;
+    religion?: string;
+  }): void {
+    const html = tplEmireCardTooltip({
+      card,
+      ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo,
+      religion,
+    });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
 
-  public addVictoryCardTooltip({ nodeId, card }: { nodeId: string; card: VictoryCard }): void {
+  public addVictoryCardTooltip({
+    nodeId,
+    card,
+  }: {
+    nodeId: string;
+    card: VictoryCard;
+  }): void {
     const html = tplVictoryCardTooltip({ card, game: this.game });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
