@@ -47,7 +47,6 @@
     //     justify-content: center;
     //   }
 
-
     // }
 
     .pr_title {
@@ -98,8 +97,6 @@
         .pr_tableau_op {
           --paxRenIconScale: 0.4;
         }
-
-    
       }
 
       .pr_tooltip_row_text {
@@ -132,7 +129,7 @@
   display: flex;
   flex-direction: row;
   width: 250px;
-  
+
   .pr_icon {
     margin: 0px;
   }
@@ -144,7 +141,12 @@
 
   .pr_icon_tooltip_icon {
     padding-top: 4px;
-    // min-width: 44px;
+
+    .pr_supreme_religion_tokens_theocracies_icon_container {
+      --paxRenTokenScale: 0.75;
+      display: flex;
+      flex-direction: row;
+    }
   }
 
   .pr_icon_tooltip_content {
@@ -156,6 +158,5 @@
   .pr_tooltip_text {
     text-align: left;
     font-size: small;
-    
   }
 }

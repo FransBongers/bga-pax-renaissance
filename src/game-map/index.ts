@@ -107,20 +107,58 @@ class GameMap {
   }: {
     gamedatas: PaxRenaissanceGamedatas;
   }) {
+    const religionArgs = {
+      [CATHOLIC]: {
+        religion: _("Catholic"),
+      },
+      [ISLAMIC]: {
+        religion: _("Islamic"),
+      },
+      [REFORMIST]: {
+        religion: _("Reformist"),
+      },
+    };
+
     RELIGIONS.forEach((religion) => {
+      // Bishops in play
       this.supremeReligion[religion].bishops.create(
         `pr_supreme_religion_bishop_counter_${religion}`
       );
+      this.game.tooltipManager.addIconTooltip({
+        nodeId: `pr_supreme_religion_bishop_counter_container_${religion}`,
+        iconHtml: tplToken({
+          type: BISHOP,
+          separator: religion,
+          style: "--paxRenTokenScale: 0.8;",
+        }),
+        text: this.game.format_string_recursive(
+          _("The number of ${religion} Bishop Tokens in Tableaux or Thrones."),
+          religionArgs[religion]
+        ),
+        title: this.game.format_string_recursive(
+          _("${religion} Bishop Tokens"),
+          religionArgs[religion]
+        ),
+      });
+
+      // Tokens in theocracies
       this.supremeReligion[religion].tokens.create(
         `pr_tokens_theocracies_counter_${religion}`
       );
-      // this.game.tooltipManager.addTextToolTip({
-      //   nodeId: `pr_supreme_religion_token_counter_${religion}`,
-      //   text: this.game.format_string_recursive(
-      //     _("Number of ${religion} Tokens in ${religion} Theocracies"),
-      //     { religion }
-      //   ),
-      // });
+      this.game.tooltipManager.addIconTooltip({
+        nodeId: `pr_supreme_religion_token_counter_${religion}`,
+        iconHtml: tplTokensInTheocraciesIcon({ religion }),
+        text: this.game.format_string_recursive(
+          _(
+            "The number of ${religion} Tokens in play in ${religion} Theocracies"
+          ),
+          religionArgs[religion]
+        ),
+        title: this.game.format_string_recursive(
+          _("${religion} Tokens"),
+          religionArgs[religion]
+        ),
+      });
     });
     this.updateSupremeReligionCounters({ gamedatas });
   }

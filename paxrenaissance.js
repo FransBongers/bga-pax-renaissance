@@ -3321,11 +3321,39 @@ var GameMap = (function () {
         this.updateSupremeReligionCounters({ gamedatas: gamedatas });
     };
     GameMap.prototype.setupSupremeReligionCounters = function (_a) {
+        var _b;
         var _this = this;
         var gamedatas = _a.gamedatas;
+        var religionArgs = (_b = {},
+            _b[CATHOLIC] = {
+                religion: _("Catholic"),
+            },
+            _b[ISLAMIC] = {
+                religion: _("Islamic"),
+            },
+            _b[REFORMIST] = {
+                religion: _("Reformist"),
+            },
+            _b);
         RELIGIONS.forEach(function (religion) {
             _this.supremeReligion[religion].bishops.create("pr_supreme_religion_bishop_counter_".concat(religion));
+            _this.game.tooltipManager.addIconTooltip({
+                nodeId: "pr_supreme_religion_bishop_counter_container_".concat(religion),
+                iconHtml: tplToken({
+                    type: BISHOP,
+                    separator: religion,
+                    style: "--paxRenTokenScale: 0.8;",
+                }),
+                text: _this.game.format_string_recursive(_("The number of ${religion} Bishop Tokens in Tableaux or Thrones."), religionArgs[religion]),
+                title: _this.game.format_string_recursive(_("${religion} Bishop Tokens"), religionArgs[religion]),
+            });
             _this.supremeReligion[religion].tokens.create("pr_tokens_theocracies_counter_".concat(religion));
+            _this.game.tooltipManager.addIconTooltip({
+                nodeId: "pr_supreme_religion_token_counter_".concat(religion),
+                iconHtml: tplTokensInTheocraciesIcon({ religion: religion }),
+                text: _this.game.format_string_recursive(_("The number of ${religion} Tokens in play in ${religion} Theocracies"), religionArgs[religion]),
+                title: _this.game.format_string_recursive(_("${religion} Tokens"), religionArgs[religion]),
+            });
         });
         this.updateSupremeReligionCounters({ gamedatas: gamedatas });
     };
@@ -3494,8 +3522,8 @@ var GameMap = (function () {
     return GameMap;
 }());
 var tplToken = function (_a) {
-    var id = _a.id, type = _a.type, separator = _a.separator;
-    return "<div ".concat(id ? "id=\"".concat(id, "\"") : "", " class=\"pr_token pr_").concat(type, "\" data-separator=\"").concat(separator, "\"></div>");
+    var id = _a.id, type = _a.type, separator = _a.separator, style = _a.style;
+    return "<div ".concat(id ? "id=\"".concat(id, "\"") : "", " class=\"pr_token pr_").concat(type, "\" data-separator=\"").concat(separator, "\" ").concat(style ? "style=\"".concat(style, "\"") : '', "></div>");
 };
 var tplGameMapMarket = function () { return "\n  ".concat(MARKET_WEST_CONFIG.map(function (_a, index) {
     var top = _a.top, left = _a.left;
@@ -3552,18 +3580,24 @@ var tplGameMapVictoryCards = function (_a) {
     return "\n  ".concat(Object.entries(VICTORY_CARD_CONFIG)
         .map(function (_a) {
         var victory = _a[0], _b = _a[1], top = _b.top, left = _b.left;
-        return "<div id=\"pr_".concat(victory, "_slot\" class=\"pr_victory_slot\"").concat(ageOfReformation ? ' data-map-type="ageOfReformation"' : '', "></div>");
+        return "<div id=\"pr_".concat(victory, "_slot\" class=\"pr_victory_slot\"").concat(ageOfReformation ? ' data-map-type="ageOfReformation"' : "", "></div>");
     })
         .join(""), "\n  ");
 };
+var tplTokensInTheocraciesIcon = function (_a) {
+    var religion = _a.religion;
+    return "\n  <div class=\"pr_supreme_religion_tokens_theocracies_icon_container\">\n    <div class=\"pr_token pr_pirate\" data-separator=\"".concat(religion, "\"></div>\n    <div class=\"pr_token pr_knight\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenTokenScale) * -20px);\"></div>\n    <div class=\"pr_token pr_rook\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenTokenScale) * -8px);\"></div>\n  </div>\n  ");
+};
 var tplGameMapTheocraciesCounter = function (_a) {
     var religion = _a.religion;
-    return "\n  <div id=\"pr_supreme_religion_token_counter_".concat(religion, "\" class=\"pr_supreme_religion_token_counter\">\n  <div class=\"pr_supreme_religion_tokens_theocracies_icon_container\">\n    <div class=\"pr_token pr_pirate\" data-separator=\"").concat(religion, "\"></div>\n    <div class=\"pr_token pr_knight\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -20px);\"></div>\n    <div class=\"pr_token pr_rook\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenMapScale) * -8px);\"></div>\n  </div>\n  <span id=\"pr_tokens_theocracies_counter_").concat(religion, "\"></span>\n</div>\n  ");
+    return "\n  <div id=\"pr_supreme_religion_token_counter_".concat(religion, "\" class=\"pr_supreme_religion_token_counter\">\n      ").concat(tplTokensInTheocraciesIcon({ religion: religion }), "\n  <span id=\"pr_tokens_theocracies_counter_").concat(religion, "\"></span>\n</div>\n  ");
 };
-var tplGameMapSupremeReligion = function () { return "\n  <div id=\"pr_supreme_religion_container\">\n    <div class=\"pr_religion_icons\">\n      <div id=\"pr_catholic_icon\" class=\"pr_religion_icon\" data-religion=\"catholic\"></div>\n      <div id=\"pr_islamic_icon\" class=\"pr_religion_icon\" data-religion=\"islamic\"></div>\n      <div id=\"pr_reformist_icon\" class=\"pr_religion_icon\" data-religion=\"reformist\"></div>\n    </div>\n    <div id=\"pr_supreme_religion_bishops\">\n      <div class=\"pr_supreme_religion_bishop_counter\" style=\"margin-left: calc(var(--paxRenMapScale) * 26px);\">\n        <div id=\"bishop_catholic_sr\" class=\"pr_token pr_bishop\" data-separator=\"catholic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_catholic\"></span>\n      </div>\n      <div class=\"pr_supreme_religion_bishop_counter\">\n        <div id=\"bishop_islamic_sr\" class=\"pr_token pr_bishop\" data-separator=\"islamic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_islamic\"></span>\n      </div>\n      <div class=\"pr_supreme_religion_bishop_counter\" style=\"margin-right: calc(var(--paxRenMapScale) * 19px);\">\n        <div id=\"bishop_reformist_sr\" class=\"pr_token pr_bishop\" data-separator=\"reformist\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_reformist\"></span>\n      </div>\n    </div>\n    <div id=\"pr_supreme_religion_tokens_theocracies\">\n      ".concat(RELIGIONS.map(function (religion) { return tplGameMapTheocraciesCounter({ religion: religion }); }).join(''), "\n    </div>\n  </div>\n  "); };
+var tplGameMapSupremeReligion = function () { return "\n  <div id=\"pr_supreme_religion_container\">\n    <div class=\"pr_religion_icons\">\n      <div id=\"pr_catholic_icon\" class=\"pr_religion_icon\" data-religion=\"catholic\"></div>\n      <div id=\"pr_islamic_icon\" class=\"pr_religion_icon\" data-religion=\"islamic\"></div>\n      <div id=\"pr_reformist_icon\" class=\"pr_religion_icon\" data-religion=\"reformist\"></div>\n    </div>\n    <div id=\"pr_supreme_religion_bishops\">\n      <div id=\"pr_supreme_religion_bishop_counter_container_catholic\" class=\"pr_supreme_religion_bishop_counter\" style=\"margin-left: calc(var(--paxRenMapScale) * 26px);\">\n        <div id=\"bishop_catholic_sr\" class=\"pr_token pr_bishop\" data-separator=\"catholic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_catholic\"></span>\n      </div>\n      <div id=\"pr_supreme_religion_bishop_counter_container_islamic\" class=\"pr_supreme_religion_bishop_counter\">\n        <div id=\"bishop_islamic_sr\" class=\"pr_token pr_bishop\" data-separator=\"islamic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_islamic\"></span>\n      </div>\n      <div id=\"pr_supreme_religion_bishop_counter_container_reformist\" class=\"pr_supreme_religion_bishop_counter\" style=\"margin-right: calc(var(--paxRenMapScale) * 19px);\">\n        <div id=\"bishop_reformist_sr\" class=\"pr_token pr_bishop\" data-separator=\"reformist\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_reformist\"></span>\n      </div>\n    </div>\n    <div id=\"pr_supreme_religion_tokens_theocracies\">\n      ".concat(RELIGIONS.map(function (religion) {
+    return tplGameMapTheocraciesCounter({ religion: religion });
+}).join(""), "\n    </div>\n  </div>\n  "); };
 var tplGameMap = function (_a) {
     var _b = _a.ageOfReformation, ageOfReformation = _b === void 0 ? false : _b;
-    return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards({ ageOfReformation: ageOfReformation }), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupremeReligion(), "\n    ").concat(tplGameMapSupply({ title: _('Supply') }), "\n    ").concat(tplGameMapMarket(), "\n  </div>");
+    return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards({ ageOfReformation: ageOfReformation }), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupremeReligion(), "\n    ").concat(tplGameMapSupply({ title: _("Supply") }), "\n    ").concat(tplGameMapMarket(), "\n  </div>");
 };
 var Hand = (function () {
     function Hand(game) {

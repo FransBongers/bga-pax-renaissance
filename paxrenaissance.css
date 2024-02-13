@@ -4959,6 +4959,11 @@
 .pr_icon_tooltip .pr_icon_tooltip_icon {
   padding-top: 4px;
 }
+.pr_icon_tooltip .pr_icon_tooltip_icon .pr_supreme_religion_tokens_theocracies_icon_container {
+  --paxRenTokenScale: 0.75;
+  display: flex;
+  flex-direction: row;
+}
 .pr_icon_tooltip .pr_icon_tooltip_content {
   display: flex;
   flex-direction: column;
