@@ -72,6 +72,7 @@
     "src/settings/config.ts",
     "src/settings/index.ts",
     "src/settings/templates.ts",
+    "src/settings/types.d.ts",
     "src/supply/tokenCounter.ts",
     "src/supply/index.ts",
     "src/supply/templates.ts",

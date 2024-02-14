@@ -75,10 +75,69 @@
     margin: 0px;
     padding: 7px 0px;
     border-bottom: 1px solid black;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: rgb(248, 248, 248, 0.5);
   }
 
   #setting_modal_content {
-    height: 300px;
+    min-height: 300px;
+
+    .pr_settings_modal_tabs {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+
+      .pr_settings_modal_tab {
+        flex-grow: 1;
+        width: 50%;
+        background-color: rgb(30, 20, 17, 0.5);
+        border-bottom: 1px solid black;
+        border-left: 1px solid black;
+        border-radius: 1px solid black;
+        padding: 4px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+        span {
+          font-weight: bold;
+          font-size: large;
+          // width: 100%;
+          text-align: center;
+          // margin-bottom: calc(var(--paxRenMapScale) * 8px);
+        }
+      }
+
+      .pr_settings_modal_tab:first-child {
+        border-left: none;
+      }
+      .pr_settings_modal_tab:last-child {
+        border-right: none;
+      }
+
+      .pr_settings_modal_tab[data-state="selected"] {
+        background-color: transparent;
+        border-bottom: none;
+        cursor: auto;
+      }
+
+      // .pr_information_modal_tab:before {
+      //   content: " ";
+      //   display: block;
+      //   position: absolute;
+      //   left: 0;
+      //   top: 0;
+      //   width: 100%;
+      //   height: 100%;
+      //   opacity: 0.6;
+      //   // background-color: ivory;
+
+      //   z-index: -1;
+      // }
+    }
+
 
     .player_preference_row {
       display: flex;

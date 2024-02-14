@@ -63,7 +63,7 @@ class VictoryHoly extends \PaxRenaissance\Models\VictoryCard
         ]
       ],
       [
-        'log' => clienttranslate('(2) More Tokens of its color in play in its Theocracies then the combined number of Tokens both other religions have of their color in their respective Theocracies.'),
+        'log' => clienttranslate('(2) More Tokens of its color in play in its Theocracies than the combined number of Tokens both other religions have of their color in their respective Theocracies.'),
         'args' => []
       ],
     ];

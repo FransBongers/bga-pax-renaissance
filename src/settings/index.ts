@@ -4,6 +4,18 @@ class Settings {
   private modal: Modal;
   public settings: Record<string, string | number> = {};
 
+  private selectedTab: SettingsTabId = "layout";
+  private tabs: { id: SettingsTabId; name: string }[] = [
+    {
+      id: "layout",
+      name: _("Layout"),
+    },
+    {
+      id: "gameplay",
+      name: _("Gameplay"),
+    },
+  ];
+
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
     const gamedatas = game.gamedatas;
@@ -45,7 +57,9 @@ class Settings {
       titleTpl:
         '<h2 id="popin_${id}_title" class="${class}_title">${title}</h2>',
       title: _("Settings"),
-      contents: tplSettingsModalContent(),
+      contents: tplSettingsModalContent({
+        tabs: this.tabs,
+      }),
       closeAction: "hide",
       verticalAlign: "flex-start",
       breakpoint: 740,
@@ -56,10 +70,15 @@ class Settings {
   setup({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     this.addButton({ gamedatas });
     this.setupModal({ gamedatas });
-
     this.setupModalContent();
+    this.changeTab({ id: this.selectedTab });
 
     dojo.connect($(`pr_show_settings`), "onclick", () => this.open());
+    this.tabs.forEach(({ id }) => {
+      dojo.connect($(`pr_settings_modal_tab_${id}`), "onclick", () =>
+        this.changeTab({ id })
+      );
+    });
   }
 
   // .##.....##.########..########.....###....########.########
@@ -85,67 +104,83 @@ class Settings {
       return;
     }
 
-    Object.values(config).forEach((setting) => {
-      const { id, type, defaultValue, visibleCondition } = setting;
+    Object.entries(config).forEach(([tabId, tabConfig]) => {
+      node.insertAdjacentHTML(
+        "beforeend",
+        tplSettingsModalTabContent({ id: tabId })
+      );
 
-      // Set current value (local storage value or default)
-      const localValue = localStorage.getItem(this.getLocalStorageKey({ id }));
-      this.settings[id] = localValue || defaultValue;
-
-      // Call change method to update interface based on current value
-      const methodName = this.getMethodName({ id });
-      if (setting.onChangeInSetup && localValue && this[methodName]) {
-        this[methodName](localValue);
+      const tabContentNode = document.getElementById(
+        `pr_settings_modal_tab_content_${tabId}`
+      );
+      if (!tabContentNode) {
+        return;
       }
 
-      // Add content to modal
-      if (setting.type === "select") {
-        const visible =
-          !visibleCondition ||
-          (visibleCondition &&
-            visibleCondition.values.includes(
-              this.settings[visibleCondition.id]
-            ));
+      Object.values(tabConfig.config).forEach((setting) => {
+        const { id, type, defaultValue, visibleCondition } = setting;
 
-        node.insertAdjacentHTML(
-          "beforeend",
-          tplPlayerPrefenceSelectRow({
-            setting,
-            currentValue: this.settings[setting.id] as string,
-            visible,
-          })
+        // Set current value (local storage value or default)
+        const localValue = localStorage.getItem(
+          this.getLocalStorageKey({ id })
         );
-        const controlId = `setting_${setting.id}`;
-        $(controlId).addEventListener("change", () => {
-          const value = $(controlId).value;
-          this.changeSetting({ id: setting.id, value });
-        });
-      } else if (setting.type === "slider") {
-        const visible =
-          !visibleCondition ||
-          (visibleCondition &&
-            visibleCondition.values.includes(
-              this.settings[visibleCondition.id]
-            ));
+        this.settings[id] = localValue || defaultValue;
 
-        node.insertAdjacentHTML(
-          "beforeend",
-          tplPlayerPrefenceSliderRow({
-            id: setting.id,
-            label: setting.label,
-            visible,
-          })
-        );
-        const sliderConfig = {
-          ...setting.sliderConfig,
-          start: this.settings[setting.id],
-        };
+        // Call change method to update interface based on current value
+        const methodName = this.getMethodName({ id });
+        if (setting.onChangeInSetup && localValue && this[methodName]) {
+          this[methodName](localValue);
+        }
 
-        noUiSlider.create($("setting_" + setting.id), sliderConfig);
-        $("setting_" + setting.id).noUiSlider.on("slide", (arg) =>
-          this.changeSetting({ id: setting.id, value: arg[0] as string })
-        );
-      }
+        // Add content to modal
+        if (setting.type === "select") {
+          const visible =
+            !visibleCondition ||
+            (visibleCondition &&
+              visibleCondition.values.includes(
+                this.settings[visibleCondition.id]
+              ));
+
+          tabContentNode.insertAdjacentHTML(
+            "beforeend",
+            tplPlayerPrefenceSelectRow({
+              setting,
+              currentValue: this.settings[setting.id] as string,
+              visible,
+            })
+          );
+          const controlId = `setting_${setting.id}`;
+          $(controlId).addEventListener("change", () => {
+            const value = $(controlId).value;
+            this.changeSetting({ id: setting.id, value });
+          });
+        } else if (setting.type === "slider") {
+          const visible =
+            !visibleCondition ||
+            (visibleCondition &&
+              visibleCondition.values.includes(
+                this.settings[visibleCondition.id]
+              ));
+
+          tabContentNode.insertAdjacentHTML(
+            "beforeend",
+            tplPlayerPrefenceSliderRow({
+              id: setting.id,
+              label: setting.label,
+              visible,
+            })
+          );
+          const sliderConfig = {
+            ...setting.sliderConfig,
+            start: this.settings[setting.id],
+          };
+
+          noUiSlider.create($("setting_" + setting.id), sliderConfig);
+          $("setting_" + setting.id).noUiSlider.on("slide", (arg) =>
+            this.changeSetting({ id: setting.id, value: arg[0] as string })
+          );
+        }
+      });
     });
   }
 
@@ -271,6 +306,29 @@ class Settings {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
+
+  private changeTab({ id }: { id: SettingsTabId }) {
+    const currentTab = document.getElementById(
+      `pr_settings_modal_tab_${this.selectedTab}`
+    );
+    const currentTabContent = document.getElementById(
+      `pr_settings_modal_tab_content_${this.selectedTab}`
+    );
+    currentTab.removeAttribute("data-state");
+    if (currentTabContent) {
+      currentTabContent.style.display = "none";
+    }
+
+    this.selectedTab = id;
+    const tab = document.getElementById(`pr_settings_modal_tab_${id}`);
+    const tabContent = document.getElementById(
+      `pr_settings_modal_tab_content_${this.selectedTab}`
+    );
+    tab.setAttribute("data-state", "selected");
+    if (tabContent) {
+      tabContent.style.display = "";
+    }
+  }
 
   private checkColumnSizesVisisble() {
     const sliderNode = document.getElementById("setting_row_columnSizes");

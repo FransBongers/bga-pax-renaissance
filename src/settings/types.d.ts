@@ -1,0 +1,1 @@
+type SettingsTabId = 'layout' | 'gameplay';

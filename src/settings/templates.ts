@@ -41,8 +41,22 @@ const tplPlayerPrefenceSelectRow = ({
   `;
 };
 
-const tplSettingsModalContent = () => {
-  return `<div id="setting_modal_content"></div>`;
+const tplSettingsModalTabContent = ({ id }: { id: string; }) => `
+  <div id="pr_settings_modal_tab_content_${id}" style="display: none;"></div>`;
+
+const tplSettingsModalTab = ({ id, name }: { id: string; name: string }) => `
+  <div id="pr_settings_modal_tab_${id}" class="pr_settings_modal_tab">
+    <span>${_(name)}</span>
+  </div>`;
+
+const tplSettingsModalContent = ({tabs}: {tabs: {id: string; name: string;}[]}) => {
+  return `<div id="setting_modal_content">
+    <div class="pr_settings_modal_tabs">
+  ${tabs
+    .map(({id, name}) => tplSettingsModalTab({ id, name }))
+    .join("")}
+    </div>
+  </div>`;
 };
 
 const tplPlayerPrefenceSliderRow = ({label, id, visible = true}: {label: string; id: string; visible?: boolean}) => {

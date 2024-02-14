@@ -4,7 +4,7 @@ const tplInformationButton =
 </button>`;
 
 const tplInfoModalTab = ({ id, text }: { id: string; text: string }) => `
-  <div id="pr_information_modal_tab_${id}" class="pr_informdation_modal_tab">
+  <div id="pr_information_modal_tab_${id}" class="pr_information_modal_tab">
     <span>${_(text)}</span>
   </div>`;
 
@@ -112,7 +112,7 @@ const tplInformationModalContent = ({
   const BATTLE_TABLE_CONFIG = getBattleTableConfig();
 
   return `<div id="pr_information_modal_content">
-    <div class="pr_informdation_modal_tabs">
+    <div class="pr_information_modal_tabs">
       ${Object.entries(tabs)
         .map(([id, info]) => tplInfoModalTab({ id, text: info.text }))
         .join("")}

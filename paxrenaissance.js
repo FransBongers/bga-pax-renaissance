@@ -4016,7 +4016,7 @@ var InformationModal = (function () {
 var tplInformationButton = function () { return "<button id=\"pr_information_button\" type=\"button\" class=\"pr_button\">\n<div class=\"pr_icon\"></div>\n</button>"; };
 var tplInfoModalTab = function (_a) {
     var id = _a.id, text = _a.text;
-    return "\n  <div id=\"pr_information_modal_tab_".concat(id, "\" class=\"pr_informdation_modal_tab\">\n    <span>").concat(_(text), "</span>\n  </div>");
+    return "\n  <div id=\"pr_information_modal_tab_".concat(id, "\" class=\"pr_information_modal_tab\">\n    <span>").concat(_(text), "</span>\n  </div>");
 };
 var tplOperationsInfoRow = function (_a) {
     var row = _a.row, last = _a.last, lightBackground = _a.lightBackground, _b = _a.type, type = _b === void 0 ? "operation" : _b;
@@ -4045,7 +4045,7 @@ var tplInformationModalContent = function (_a) {
     var OPERATIONS_INFO_CONFIG = getOperationsConfig();
     var ONE_SHOTS_INFO_CONFIG = getOneShotsConfig();
     var BATTLE_TABLE_CONFIG = getBattleTableConfig();
-    return "<div id=\"pr_information_modal_content\">\n    <div class=\"pr_informdation_modal_tabs\">\n      ".concat(Object.entries(tabs)
+    return "<div id=\"pr_information_modal_content\">\n    <div class=\"pr_information_modal_tabs\">\n      ".concat(Object.entries(tabs)
         .map(function (_a) {
         var id = _a[0], info = _a[1];
         return tplInfoModalTab({ id: id, text: info.text });
@@ -6357,174 +6357,195 @@ var tplPlayerTableauxContainer = function (_a) {
         .join(""), "\n    </div>\n  ");
 };
 var getSettingsConfig = function () {
-    var _a;
-    return (_a = {
-            backgroundImage: {
-                id: "backgroundImage",
-                onChangeInSetup: true,
-                defaultValue: "goldsmith",
-                label: _("Background image"),
-                type: "select",
-                options: [
-                    {
-                        label: _("No image"),
-                        value: "none",
+    var _a, _b;
+    return ({
+        layout: {
+            id: "layout",
+            config: (_a = {
+                    backgroundImage: {
+                        id: "backgroundImage",
+                        onChangeInSetup: true,
+                        defaultValue: "goldsmith",
+                        label: _("Background image"),
+                        type: "select",
+                        options: [
+                            {
+                                label: _("No image"),
+                                value: "none",
+                            },
+                            {
+                                label: _("Balcony"),
+                                value: "balcony",
+                            },
+                            {
+                                label: _("Cathedral"),
+                                value: "cathedral",
+                            },
+                            {
+                                label: _("Goldsmith"),
+                                value: "goldsmith",
+                            },
+                            {
+                                label: _("Lucrezia"),
+                                value: "lucrezia",
+                            },
+                            {
+                                label: _("Poison"),
+                                value: "poison",
+                            },
+                            {
+                                label: _("War"),
+                                value: "war",
+                            },
+                        ],
                     },
-                    {
-                        label: _("Balcony"),
-                        value: "balcony",
+                    twoColumnsLayout: {
+                        id: "twoColumnsLayout",
+                        onChangeInSetup: true,
+                        defaultValue: "disabled",
+                        label: _("Two column layout"),
+                        type: "select",
+                        options: [
+                            {
+                                label: _("Enabled"),
+                                value: "enabled",
+                            },
+                            {
+                                label: _("Disabled (single column)"),
+                                value: "disabled",
+                            },
+                        ],
                     },
-                    {
-                        label: _("Cathedral"),
-                        value: "cathedral",
-                    },
-                    {
-                        label: _("Goldsmith"),
-                        value: "goldsmith",
-                    },
-                    {
-                        label: _("Lucrezia"),
-                        value: "lucrezia",
-                    },
-                    {
-                        label: _("Poison"),
-                        value: "poison",
-                    },
-                    {
-                        label: _("War"),
-                        value: "war",
-                    },
-                ],
-            },
-            twoColumnsLayout: {
-                id: "twoColumnsLayout",
-                onChangeInSetup: true,
-                defaultValue: "disabled",
-                label: _("Two column layout"),
-                type: "select",
-                options: [
-                    {
-                        label: _("Enabled"),
-                        value: "enabled",
-                    },
-                    {
-                        label: _("Disabled (single column)"),
-                        value: "disabled",
-                    },
-                ],
-            },
-            columnSizes: {
-                id: "columnSizes",
-                onChangeInSetup: true,
-                label: _("Column sizes"),
-                defaultValue: 50,
-                visibleCondition: {
-                    id: 'twoColumnsLayout',
-                    values: [ENABLED],
+                    columnSizes: {
+                        id: "columnSizes",
+                        onChangeInSetup: true,
+                        label: _("Column sizes"),
+                        defaultValue: 50,
+                        visibleCondition: {
+                            id: "twoColumnsLayout",
+                            values: [ENABLED],
+                        },
+                        sliderConfig: {
+                            step: 5,
+                            padding: 0,
+                            range: {
+                                min: 30,
+                                max: 70,
+                            },
+                        },
+                        type: "slider",
+                    }
                 },
-                sliderConfig: {
-                    step: 5,
-                    padding: 0,
-                    range: {
-                        min: 30,
-                        max: 70,
+                _a[CARD_SIZE_IN_TABLEAU] = {
+                    id: CARD_SIZE_IN_TABLEAU,
+                    onChangeInSetup: false,
+                    label: _("Size of cards in tableau"),
+                    defaultValue: 100,
+                    sliderConfig: {
+                        step: 5,
+                        padding: 0,
+                        range: {
+                            min: 50,
+                            max: 200,
+                        },
                     },
+                    type: "slider",
                 },
-                type: "slider",
-            }
+                _a[CARDS_IN_TABLEAU_OVERLAP] = {
+                    id: CARDS_IN_TABLEAU_OVERLAP,
+                    onChangeInSetup: false,
+                    defaultValue: DISABLED,
+                    label: _("Cards in tableau overlap"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
+                        },
+                        {
+                            label: _("Disabled"),
+                            value: DISABLED,
+                        },
+                    ],
+                },
+                _a[OVERLAP_EMPIRE_SQUARES] = {
+                    id: OVERLAP_EMPIRE_SQUARES,
+                    onChangeInSetup: false,
+                    defaultValue: ENABLED,
+                    visibleCondition: {
+                        id: CARDS_IN_TABLEAU_OVERLAP,
+                        values: [ENABLED],
+                    },
+                    label: _("Cards overlap empire squares"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
+                        },
+                        {
+                            label: _("Disabled"),
+                            value: DISABLED,
+                        },
+                    ],
+                },
+                _a),
         },
-        _a[CARD_SIZE_IN_TABLEAU] = {
-            id: CARD_SIZE_IN_TABLEAU,
-            onChangeInSetup: false,
-            label: _("Size of cards in tableau"),
-            defaultValue: 100,
-            sliderConfig: {
-                step: 5,
-                padding: 0,
-                range: {
-                    min: 50,
-                    max: 200,
+        gameplay: {
+            id: _("gameplay"),
+            config: (_b = {},
+                _b[REPRESS_TOKENS_TO_THRONES] = {
+                    id: REPRESS_TOKENS_TO_THRONES,
+                    onChangeInSetup: false,
+                    defaultValue: ENABLED,
+                    label: _("Repress tokens to thrones"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
+                        },
+                        {
+                            label: _("Disabled (repress to empire squares)"),
+                            value: DISABLED,
+                        },
+                    ],
                 },
-            },
-            type: "slider",
+                _b[CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY] = {
+                    id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+                    onChangeInSetup: false,
+                    defaultValue: DISABLED,
+                    label: _("Confirm end of turn and player switch only"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
+                        },
+                        {
+                            label: _("Disabled (confirm every move)"),
+                            value: DISABLED,
+                        },
+                    ],
+                },
+                _b),
         },
-        _a[REPRESS_TOKENS_TO_THRONES] = {
-            id: REPRESS_TOKENS_TO_THRONES,
-            onChangeInSetup: false,
-            defaultValue: ENABLED,
-            label: _("Repress tokens to thrones"),
-            type: "select",
-            options: [
-                {
-                    label: _("Enabled"),
-                    value: ENABLED,
-                },
-                {
-                    label: _("Disabled (repress to empire squares)"),
-                    value: DISABLED,
-                },
-            ],
-        },
-        _a[CARDS_IN_TABLEAU_OVERLAP] = {
-            id: CARDS_IN_TABLEAU_OVERLAP,
-            onChangeInSetup: false,
-            defaultValue: DISABLED,
-            label: _("Cards in tableau overlap"),
-            type: "select",
-            options: [
-                {
-                    label: _("Enabled"),
-                    value: ENABLED,
-                },
-                {
-                    label: _("Disabled"),
-                    value: DISABLED,
-                },
-            ],
-        },
-        _a[OVERLAP_EMPIRE_SQUARES] = {
-            id: OVERLAP_EMPIRE_SQUARES,
-            onChangeInSetup: false,
-            defaultValue: ENABLED,
-            visibleCondition: {
-                id: CARDS_IN_TABLEAU_OVERLAP,
-                values: [ENABLED],
-            },
-            label: _("Cards overlap empire squares"),
-            type: "select",
-            options: [
-                {
-                    label: _("Enabled"),
-                    value: ENABLED,
-                },
-                {
-                    label: _("Disabled"),
-                    value: DISABLED,
-                },
-            ],
-        },
-        _a[CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY] = {
-            id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
-            onChangeInSetup: false,
-            defaultValue: DISABLED,
-            label: _("Confirm end of turn and player switch only"),
-            type: "select",
-            options: [
-                {
-                    label: _("Enabled"),
-                    value: ENABLED,
-                },
-                {
-                    label: _("Disabled (confirm every move)"),
-                    value: DISABLED,
-                },
-            ],
-        },
-        _a);
+    });
 };
 var Settings = (function () {
     function Settings(game) {
         this.settings = {};
+        this.selectedTab = "layout";
+        this.tabs = [
+            {
+                id: "layout",
+                name: _("Layout"),
+            },
+            {
+                id: "gameplay",
+                name: _("Gameplay"),
+            },
+        ];
         this.game = game;
         var gamedatas = game.gamedatas;
         this.setup({ gamedatas: gamedatas });
@@ -6547,7 +6568,9 @@ var Settings = (function () {
             closeIcon: "fa-times",
             titleTpl: '<h2 id="popin_${id}_title" class="${class}_title">${title}</h2>',
             title: _("Settings"),
-            contents: tplSettingsModalContent(),
+            contents: tplSettingsModalContent({
+                tabs: this.tabs,
+            }),
             closeAction: "hide",
             verticalAlign: "flex-start",
             breakpoint: 740,
@@ -6559,7 +6582,14 @@ var Settings = (function () {
         this.addButton({ gamedatas: gamedatas });
         this.setupModal({ gamedatas: gamedatas });
         this.setupModalContent();
+        this.changeTab({ id: this.selectedTab });
         dojo.connect($("pr_show_settings"), "onclick", function () { return _this.open(); });
+        this.tabs.forEach(function (_a) {
+            var id = _a.id;
+            dojo.connect($("pr_settings_modal_tab_".concat(id)), "onclick", function () {
+                return _this.changeTab({ id: id });
+            });
+        });
     };
     Settings.prototype.setupModalContent = function () {
         var _this = this;
@@ -6568,44 +6598,52 @@ var Settings = (function () {
         if (!node) {
             return;
         }
-        Object.values(config).forEach(function (setting) {
-            var id = setting.id, type = setting.type, defaultValue = setting.defaultValue, visibleCondition = setting.visibleCondition;
-            var localValue = localStorage.getItem(_this.getLocalStorageKey({ id: id }));
-            _this.settings[id] = localValue || defaultValue;
-            var methodName = _this.getMethodName({ id: id });
-            if (setting.onChangeInSetup && localValue && _this[methodName]) {
-                _this[methodName](localValue);
+        Object.entries(config).forEach(function (_a) {
+            var tabId = _a[0], tabConfig = _a[1];
+            node.insertAdjacentHTML("beforeend", tplSettingsModalTabContent({ id: tabId }));
+            var tabContentNode = document.getElementById("pr_settings_modal_tab_content_".concat(tabId));
+            if (!tabContentNode) {
+                return;
             }
-            if (setting.type === "select") {
-                var visible = !visibleCondition ||
-                    (visibleCondition &&
-                        visibleCondition.values.includes(_this.settings[visibleCondition.id]));
-                node.insertAdjacentHTML("beforeend", tplPlayerPrefenceSelectRow({
-                    setting: setting,
-                    currentValue: _this.settings[setting.id],
-                    visible: visible,
-                }));
-                var controlId_1 = "setting_".concat(setting.id);
-                $(controlId_1).addEventListener("change", function () {
-                    var value = $(controlId_1).value;
-                    _this.changeSetting({ id: setting.id, value: value });
-                });
-            }
-            else if (setting.type === "slider") {
-                var visible = !visibleCondition ||
-                    (visibleCondition &&
-                        visibleCondition.values.includes(_this.settings[visibleCondition.id]));
-                node.insertAdjacentHTML("beforeend", tplPlayerPrefenceSliderRow({
-                    id: setting.id,
-                    label: setting.label,
-                    visible: visible,
-                }));
-                var sliderConfig = __assign(__assign({}, setting.sliderConfig), { start: _this.settings[setting.id] });
-                noUiSlider.create($("setting_" + setting.id), sliderConfig);
-                $("setting_" + setting.id).noUiSlider.on("slide", function (arg) {
-                    return _this.changeSetting({ id: setting.id, value: arg[0] });
-                });
-            }
+            Object.values(tabConfig.config).forEach(function (setting) {
+                var id = setting.id, type = setting.type, defaultValue = setting.defaultValue, visibleCondition = setting.visibleCondition;
+                var localValue = localStorage.getItem(_this.getLocalStorageKey({ id: id }));
+                _this.settings[id] = localValue || defaultValue;
+                var methodName = _this.getMethodName({ id: id });
+                if (setting.onChangeInSetup && localValue && _this[methodName]) {
+                    _this[methodName](localValue);
+                }
+                if (setting.type === "select") {
+                    var visible = !visibleCondition ||
+                        (visibleCondition &&
+                            visibleCondition.values.includes(_this.settings[visibleCondition.id]));
+                    tabContentNode.insertAdjacentHTML("beforeend", tplPlayerPrefenceSelectRow({
+                        setting: setting,
+                        currentValue: _this.settings[setting.id],
+                        visible: visible,
+                    }));
+                    var controlId_1 = "setting_".concat(setting.id);
+                    $(controlId_1).addEventListener("change", function () {
+                        var value = $(controlId_1).value;
+                        _this.changeSetting({ id: setting.id, value: value });
+                    });
+                }
+                else if (setting.type === "slider") {
+                    var visible = !visibleCondition ||
+                        (visibleCondition &&
+                            visibleCondition.values.includes(_this.settings[visibleCondition.id]));
+                    tabContentNode.insertAdjacentHTML("beforeend", tplPlayerPrefenceSliderRow({
+                        id: setting.id,
+                        label: setting.label,
+                        visible: visible,
+                    }));
+                    var sliderConfig = __assign(__assign({}, setting.sliderConfig), { start: _this.settings[setting.id] });
+                    noUiSlider.create($("setting_" + setting.id), sliderConfig);
+                    $("setting_" + setting.id).noUiSlider.on("slide", function (arg) {
+                        return _this.changeSetting({ id: setting.id, value: arg[0] });
+                    });
+                }
+            });
         });
     };
     Settings.prototype.changeSetting = function (_a) {
@@ -6697,6 +6735,22 @@ var Settings = (function () {
             element.setAttribute("data-overlap-empire-squares", value);
         }
     };
+    Settings.prototype.changeTab = function (_a) {
+        var id = _a.id;
+        var currentTab = document.getElementById("pr_settings_modal_tab_".concat(this.selectedTab));
+        var currentTabContent = document.getElementById("pr_settings_modal_tab_content_".concat(this.selectedTab));
+        currentTab.removeAttribute("data-state");
+        if (currentTabContent) {
+            currentTabContent.style.display = "none";
+        }
+        this.selectedTab = id;
+        var tab = document.getElementById("pr_settings_modal_tab_".concat(id));
+        var tabContent = document.getElementById("pr_settings_modal_tab_content_".concat(this.selectedTab));
+        tab.setAttribute("data-state", "selected");
+        if (tabContent) {
+            tabContent.style.display = "";
+        }
+    };
     Settings.prototype.checkColumnSizesVisisble = function () {
         var sliderNode = document.getElementById("setting_row_columnSizes");
         if (!sliderNode) {
@@ -6754,8 +6808,22 @@ var tplPlayerPrefenceSelectRow = function (_a) {
         .join("");
     return "\n    <div id=\"setting_row_".concat(setting.id, "\" class=\"player_preference_row\"").concat(!visible ? " style=\"display: none;\"" : '', ">\n      <div class=\"player_preference_row_label\">").concat(_(setting.label), "</div>\n      <div class=\"player_preference_row_value\">\n        <select id=\"setting_").concat(setting.id, "\" class=\"\" style=\"display: block;\">\n        ").concat(values, "\n        </select>\n      </div>\n    </div>\n  ");
 };
-var tplSettingsModalContent = function () {
-    return "<div id=\"setting_modal_content\"></div>";
+var tplSettingsModalTabContent = function (_a) {
+    var id = _a.id;
+    return "\n  <div id=\"pr_settings_modal_tab_content_".concat(id, "\" style=\"display: none;\"></div>");
+};
+var tplSettingsModalTab = function (_a) {
+    var id = _a.id, name = _a.name;
+    return "\n  <div id=\"pr_settings_modal_tab_".concat(id, "\" class=\"pr_settings_modal_tab\">\n    <span>").concat(_(name), "</span>\n  </div>");
+};
+var tplSettingsModalContent = function (_a) {
+    var tabs = _a.tabs;
+    return "<div id=\"setting_modal_content\">\n    <div class=\"pr_settings_modal_tabs\">\n  ".concat(tabs
+        .map(function (_a) {
+        var id = _a.id, name = _a.name;
+        return tplSettingsModalTab({ id: id, name: name });
+    })
+        .join(""), "\n    </div>\n  </div>");
 };
 var tplPlayerPrefenceSliderRow = function (_a) {
     var label = _a.label, id = _a.id, _b = _a.visible, visible = _b === void 0 ? true : _b;

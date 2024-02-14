@@ -4223,12 +4223,12 @@
 .pr_information_modal #pr_information_modal_content {
   min-height: 200px;
 }
-.pr_information_modal #pr_information_modal_content .pr_informdation_modal_tabs {
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
 }
-.pr_information_modal #pr_information_modal_content .pr_informdation_modal_tabs .pr_informdation_modal_tab {
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs .pr_information_modal_tab {
   flex-grow: 1;
   width: 33.33333%;
   background-color: rgba(30, 20, 17, 0.5);
@@ -4241,15 +4241,21 @@
   flex-direction: row;
   justify-content: center;
 }
-.pr_information_modal #pr_information_modal_content .pr_informdation_modal_tabs .pr_informdation_modal_tab span {
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs .pr_information_modal_tab span {
   font-weight: bold;
   font-size: large;
   text-align: center;
 }
-.pr_information_modal #pr_information_modal_content .pr_informdation_modal_tabs .pr_informdation_modal_tab[data-state=selected] {
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs .pr_information_modal_tab[data-state=selected] {
   background-color: transparent;
   border-bottom: none;
   cursor: auto;
+}
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs:first-child {
+  border-left: none;
+}
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs:last-child {
+  border-right: none;
 }
 .pr_information_modal #pr_information_modal_content #pr_operations,
 .pr_information_modal #pr_information_modal_content #pr_oneShots {
@@ -4648,8 +4654,8 @@
 }
 
 .pr_player_board_container {
-  margin-left: 8px;
-  margin-right: 8px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .pr_player_board {
@@ -4760,9 +4766,46 @@
   margin: 0px;
   padding: 7px 0px;
   border-bottom: 1px solid black;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  background-color: rgba(248, 248, 248, 0.5);
 }
 .pr_settings_modal #setting_modal_content {
-  height: 300px;
+  min-height: 300px;
+}
+.pr_settings_modal #setting_modal_content .pr_settings_modal_tabs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.pr_settings_modal #setting_modal_content .pr_settings_modal_tabs .pr_settings_modal_tab {
+  flex-grow: 1;
+  width: 50%;
+  background-color: rgba(30, 20, 17, 0.5);
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-radius: 1px solid black;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.pr_settings_modal #setting_modal_content .pr_settings_modal_tabs .pr_settings_modal_tab span {
+  font-weight: bold;
+  font-size: large;
+  text-align: center;
+}
+.pr_settings_modal #setting_modal_content .pr_settings_modal_tabs .pr_settings_modal_tab:first-child {
+  border-left: none;
+}
+.pr_settings_modal #setting_modal_content .pr_settings_modal_tabs .pr_settings_modal_tab:last-child {
+  border-right: none;
+}
+.pr_settings_modal #setting_modal_content .pr_settings_modal_tabs .pr_settings_modal_tab[data-state=selected] {
+  background-color: transparent;
+  border-bottom: none;
+  cursor: auto;
 }
 .pr_settings_modal #setting_modal_content .player_preference_row {
   display: flex;
