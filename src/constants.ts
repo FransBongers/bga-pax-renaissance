@@ -21,6 +21,8 @@ const CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 const CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
 const OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
 const CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOnly';
+const PREF_SHOW_ANIMATIONS = 'showAnimations';
+const PREF_ANIMATION_SPEED = 'animationSpeed';
 
 /**
  * Map location types

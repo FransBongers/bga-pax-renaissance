@@ -29,6 +29,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public supply: Supply;
   public tableauCardManager: TableauCardManager;
   public victoryCardManager: VictoryCardManager;
+  // public instantaneousMode: boolean = true;
 
   private _notif_uid_to_log_id = {};
   private _last_notif = null;
@@ -159,7 +160,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.informationModal = new InformationModal(this);
     this.settings = new Settings(this);
 
-    this.animationManager = new AnimationManager(this, { duration: 500 });
+    this.animationManager = new AnimationManager(this, {
+      duration:
+        this.settings.get({ id: PREF_SHOW_ANIMATIONS }) === DISABLED
+          ? 0
+          : 2100 - (this.settings.get({ id: PREF_ANIMATION_SPEED }) as number),
+    });
+
     this.tableauCardManager = new TableauCardManager(this);
     this.discard = new VoidStock(
       this.tableauCardManager,

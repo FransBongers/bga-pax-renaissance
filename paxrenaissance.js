@@ -11,6 +11,8 @@ var CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 var CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
 var OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
 var CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOnly';
+var PREF_SHOW_ANIMATIONS = 'showAnimations';
+var PREF_ANIMATION_SPEED = 'animationSpeed';
 var CITY = 'city';
 var BORDER = 'border';
 var CARD = 'card';
@@ -1963,7 +1965,11 @@ var PaxRenaissance = (function () {
         this.infoPanel = new InfoPanel(this);
         this.informationModal = new InformationModal(this);
         this.settings = new Settings(this);
-        this.animationManager = new AnimationManager(this, { duration: 500 });
+        this.animationManager = new AnimationManager(this, {
+            duration: this.settings.get({ id: PREF_SHOW_ANIMATIONS }) === DISABLED
+                ? 0
+                : 2100 - this.settings.get({ id: PREF_ANIMATION_SPEED }),
+        });
         this.tableauCardManager = new TableauCardManager(this);
         this.discard = new VoidStock(this.tableauCardManager, document.getElementById("pr_discard"));
         this.tooltipManager = new TooltipManager(this);
@@ -6516,11 +6522,11 @@ var getSettingsConfig = function () {
                         },
                     ],
                 },
-                _b[CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY] = {
-                    id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+                _b[PREF_SHOW_ANIMATIONS] = {
+                    id: PREF_SHOW_ANIMATIONS,
                     onChangeInSetup: false,
-                    defaultValue: DISABLED,
-                    label: _("Confirm end of turn and player switch only"),
+                    defaultValue: ENABLED,
+                    label: _("Show animations"),
                     type: "select",
                     options: [
                         {
@@ -6528,10 +6534,29 @@ var getSettingsConfig = function () {
                             value: ENABLED,
                         },
                         {
-                            label: _("Disabled (confirm every move)"),
+                            label: _("Disabled"),
                             value: DISABLED,
                         },
                     ],
+                },
+                _b[PREF_ANIMATION_SPEED] = {
+                    id: PREF_ANIMATION_SPEED,
+                    onChangeInSetup: false,
+                    label: _("Animation speed"),
+                    defaultValue: 1600,
+                    visibleCondition: {
+                        id: PREF_SHOW_ANIMATIONS,
+                        values: [ENABLED],
+                    },
+                    sliderConfig: {
+                        step: 100,
+                        padding: 0,
+                        range: {
+                            min: 100,
+                            max: 2000,
+                        },
+                    },
+                    type: "slider",
                 },
                 _b),
         },
@@ -6740,6 +6765,19 @@ var Settings = (function () {
             element.setAttribute("data-overlap-empire-squares", value);
         }
     };
+    Settings.prototype.onChangeAnimationSpeedSetting = function (value) {
+        var duration = 2100 - value;
+        this.game.animationManager.getSettings().duration = duration;
+    };
+    Settings.prototype.onChangeShowAnimationsSetting = function (value) {
+        if (value === ENABLED) {
+            this.game.animationManager.getSettings().duration = Number(this.settings[PREF_ANIMATION_SPEED]);
+        }
+        else {
+            this.game.animationManager.getSettings().duration = 0;
+        }
+        this.checkAnmimationSpeedVisisble();
+    };
     Settings.prototype.changeTab = function (_a) {
         var id = _a.id;
         var currentTab = document.getElementById("pr_settings_modal_tab_".concat(this.selectedTab));
@@ -6754,6 +6792,18 @@ var Settings = (function () {
         tab.setAttribute("data-state", "selected");
         if (tabContent) {
             tabContent.style.display = "";
+        }
+    };
+    Settings.prototype.checkAnmimationSpeedVisisble = function () {
+        var sliderNode = document.getElementById("setting_row_animationSpeed");
+        if (!sliderNode) {
+            return;
+        }
+        if (this.settings[PREF_SHOW_ANIMATIONS] === ENABLED) {
+            sliderNode.style.display = "";
+        }
+        else {
+            sliderNode.style.display = "none";
         }
     };
     Settings.prototype.checkColumnSizesVisisble = function () {

@@ -299,6 +299,22 @@ class Settings {
     }
   }
 
+  public onChangeAnimationSpeedSetting(value: number) {
+    
+    const duration = 2100 - value;
+    this.game.animationManager.getSettings().duration = duration;
+    
+  }
+
+  public onChangeShowAnimationsSetting(value: string) {
+    if (value === ENABLED) {
+      this.game.animationManager.getSettings().duration = Number(this.settings[PREF_ANIMATION_SPEED]);
+    } else {
+      this.game.animationManager.getSettings().duration = 0;
+    }
+    this.checkAnmimationSpeedVisisble();
+  }
+
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
   //  .##.....##....##.....##..##........##.....##......####..
@@ -327,6 +343,18 @@ class Settings {
     tab.setAttribute("data-state", "selected");
     if (tabContent) {
       tabContent.style.display = "";
+    }
+  }
+
+  private checkAnmimationSpeedVisisble() {
+    const sliderNode = document.getElementById("setting_row_animationSpeed");
+    if (!sliderNode) {
+      return;
+    }
+    if (this.settings[PREF_SHOW_ANIMATIONS] === ENABLED) {
+      sliderNode.style.display = "";
+    } else {
+      sliderNode.style.display = "none";
     }
   }
 

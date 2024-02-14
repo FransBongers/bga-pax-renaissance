@@ -4812,6 +4812,8 @@
 .pr_settings_modal #setting_modal_content .player_preference_row {
   display: flex;
   flex-direction: row;
+  margin-bottom: 4px;
+  margin-top: 4px;
 }
 .pr_settings_modal #setting_modal_content .player_preference_row .player_preference_row_label {
   flex-grow: 1;

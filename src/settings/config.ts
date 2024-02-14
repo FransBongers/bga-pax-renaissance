@@ -194,11 +194,11 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
           },
         ],
       },
-      [CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY]: {
-        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+      [PREF_SHOW_ANIMATIONS]: {
+        id: PREF_SHOW_ANIMATIONS,
         onChangeInSetup: false,
-        defaultValue: DISABLED,
-        label: _("Confirm end of turn and player switch only"),
+        defaultValue: ENABLED,
+        label: _("Show animations"),
         type: "select",
         options: [
           {
@@ -206,11 +206,30 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
             value: ENABLED,
           },
           {
-            label: _("Disabled (confirm every move)"),
+            label: _("Disabled"),
             value: DISABLED,
           },
         ],
       },
+      [PREF_ANIMATION_SPEED]: {
+        id: PREF_ANIMATION_SPEED,
+        onChangeInSetup: false,
+        label: _("Animation speed"),
+        defaultValue: 1600,
+        visibleCondition: {
+          id: PREF_SHOW_ANIMATIONS,
+          values: [ENABLED],
+        },
+        sliderConfig: {
+          step: 100,
+          padding: 0,
+          range: {
+            min: 100,
+            max: 2000,
+          },
+        },
+        type: "slider",
+      }
     },
   },
 });
