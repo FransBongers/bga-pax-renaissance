@@ -30,7 +30,7 @@ const moveToAnimation = async ({
   await game.animationManager.play(
     new BgaSlideAnimation<BgaAnimationWithOriginSettings>({
       element,
-      transitionTimingFunction: 'ease-in-out',
+      transitionTimingFunction: 'lineart',
       fromRect,
     })
   );

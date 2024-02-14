@@ -2055,39 +2055,6 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.onLeavingState = function (stateName) {
         this.clearPossible();
     };
-    PaxRenaissance.prototype.moveFlorin = function (_a) {
-        var _b;
-        var index = _a.index;
-        return __awaiter(this, void 0, void 0, function () {
-            var node, element, fromRect;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0:
-                        node = document.getElementById("pr_florins_counter_2371052_icon");
-                        node.insertAdjacentHTML("beforeend", tplIcon({
-                            id: "temp_florin_".concat(index),
-                            icon: "florin",
-                            style: "position: absolute;",
-                        }));
-                        element = document.getElementById("temp_florin_".concat(index));
-                        fromRect = (_b = $("pr_market_west_3_florins")) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect();
-                        this.market.incFlorinValue({ region: WEST, column: 3, value: -1 });
-                        return [4, this.animationManager.play(new BgaSlideAnimation({
-                                element: element,
-                                transitionTimingFunction: "ease-in-out",
-                                fromRect: fromRect,
-                            }))];
-                    case 1:
-                        _c.sent();
-                        element.remove();
-                        this.playerManager
-                            .getPlayer({ playerId: 2371052 })
-                            .counters.florins.incValue(1);
-                        return [2, true];
-                }
-            });
-        });
-    };
     PaxRenaissance.prototype.onUpdateActionButtons = function (stateName, args) {
         var _this = this;
         return;
@@ -2521,7 +2488,7 @@ var moveToAnimation = function (_a) {
                     element.style.position = 'absolute';
                     return [4, game.animationManager.play(new BgaSlideAnimation({
                             element: element,
-                            transitionTimingFunction: 'ease-in-out',
+                            transitionTimingFunction: 'lineart',
                             fromRect: fromRect,
                         }))];
                 case 1:
@@ -2693,9 +2660,6 @@ var TableauCardManager = (function (_super) {
             return true;
         }
         var location = card.location, type = card.type;
-        if (!location) {
-            console.log('isCardVisible', card);
-        }
         if (location && location.startsWith("deck")) {
             return false;
         }
@@ -2730,9 +2694,7 @@ var TableauCardManager = (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        console.log('addQueen', king.empire, queen, king);
-                        return [4, this.queenStocks[king.empire].addCard(queen)];
+                    case 0: return [4, this.queenStocks[king.empire].addCard(queen)];
                     case 1:
                         _b.sent();
                         this.addMarginBottomQueen({ queen: queen });
@@ -3604,7 +3566,7 @@ var tplGameMapSupremeReligion = function () { return "\n  <div id=\"pr_supreme_r
 }).join(""), "\n    </div>\n  </div>\n  "); };
 var tplGameMap = function (_a) {
     var _b = _a.ageOfReformation, ageOfReformation = _b === void 0 ? false : _b;
-    return "\n  <div id=\"pr_game_map\">\n    ".concat(tplGameMapVictoryCards({ ageOfReformation: ageOfReformation }), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupremeReligion(), "\n    ").concat(tplGameMapSupply({ title: _("Supply") }), "\n    ").concat(tplGameMapMarket(), "\n  </div>");
+    return "\n  <div id=\"pr_game_map\">\n    <div id=\"pr_china\" ></div>\n    ".concat(tplGameMapVictoryCards({ ageOfReformation: ageOfReformation }), "\n    ").concat(tplGameMapEmpireCards(), "\n    ").concat(tplGameMapMapCards(), "\n    ").concat(tplGameMapMapBorders(), "\n    ").concat(tplGameMapSupremeReligion(), "\n    ").concat(tplGameMapSupply({ title: _("Supply") }), "\n    ").concat(tplGameMapMarket(), "\n  </div>");
 };
 var Hand = (function () {
     function Hand(game) {
@@ -4363,7 +4325,7 @@ var Market = (function () {
         this.game.tooltipManager.cometCardInDrawDeckTooltip({ nodeId: nodeId });
     };
     Market.prototype.moveFlorinAnimation = function (_a) {
-        var index = _a.index, fromId = _a.fromId, toId = _a.toId;
+        var index = _a.index, fromId = _a.fromId, toId = _a.toId, htmlFlorinChildren = _a.htmlFlorinChildren;
         return __awaiter(this, void 0, void 0, function () {
             var from, to, node, element, elementRect, fromRect, toRect, top, left;
             return __generator(this, function (_b) {
@@ -4375,7 +4337,9 @@ var Market = (function () {
                         node.insertAdjacentHTML("beforeend", tplIcon({
                             id: "temp_florin_".concat(index),
                             icon: "florin",
+                            classes: 'pr_temp_florin',
                             style: "position: absolute;",
+                            children: htmlFlorinChildren
                         }));
                         element = document.getElementById("temp_florin_".concat(index));
                         elementRect = element.getBoundingClientRect();
@@ -4387,7 +4351,7 @@ var Market = (function () {
                         element.style.left = "".concat(pxNumber(element.style.left) + left, "px");
                         return [4, this.game.animationManager.play(new BgaSlideAnimation({
                                 element: element,
-                                transitionTimingFunction: "ease-in-out",
+                                transitionTimingFunction: "linear",
                                 fromRect: fromRect,
                             }))];
                     case 1:
@@ -5041,9 +5005,19 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, amount;
             return __generator(this, function (_b) {
-                _a = notif.args, playerId = _a.playerId, amount = _a.amount;
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-amount);
-                return [2];
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, amount = _a.amount;
+                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(-amount);
+                        return [4, this.game.market.moveFlorinAnimation({
+                                fromId: "pr_florins_counter_".concat(playerId, "_icon"),
+                                toId: 'pr_china',
+                                index: 0,
+                            })];
+                    case 1:
+                        _b.sent();
+                        return [2];
+                }
             });
         });
     };
@@ -5097,7 +5071,7 @@ var NotificationManager = (function () {
                             .getElementById("".concat(token.type, "_").concat(token.separator, "_supply"))) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
                         return [4, this.game.animationManager.play(new BgaSlideAnimation({
                                 element: element,
-                                transitionTimingFunction: "ease-in-out",
+                                transitionTimingFunction: "linear",
                                 fromRect: fromRect,
                             }))];
                     case 1:
@@ -5191,16 +5165,18 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_refreshMarket = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, cardMoves, cardDraws, _i, cardMoves_1, move, from, to, card, _b, _1, fromRegion, fromColumn, _c, _2, toRegion, toCol, florinsOnCard, _d, cardDraws_1, card;
+            var _a, cardMoves, cardDraws, index, _i, cardMoves_1, move, from, to, card, _b, _1, fromRegion, fromColumn, _c, _2, toRegion, toCol, florinsOnCard, promises, _d, cardDraws_1, card;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
                         _a = notif.args, cardMoves = _a.cardMoves, cardDraws = _a.cardDraws;
+                        index = 0;
                         _i = 0, cardMoves_1 = cardMoves;
                         _e.label = 1;
                     case 1:
                         if (!(_i < cardMoves_1.length)) return [3, 4];
                         move = cardMoves_1[_i];
+                        index += 1;
                         from = move.from, to = move.to, card = move.card;
                         _b = from.split("_"), _1 = _b[0], fromRegion = _b[1], fromColumn = _b[2];
                         _c = to.split("_"), _2 = _c[0], toRegion = _c[1], toCol = _c[2];
@@ -5214,12 +5190,23 @@ var NotificationManager = (function () {
                             column: Number(fromColumn),
                             value: 0,
                         });
-                        return [4, this.game.market
+                        promises = [
+                            this.game.market
                                 .getStock({
                                 region: toRegion,
                                 column: Number(toCol),
                             })
-                                .addCard(card)];
+                                .addCard(card),
+                        ];
+                        if (florinsOnCard > 0) {
+                            promises.push(this.game.market.moveFlorinAnimation({
+                                fromId: "pr_".concat(from, "_florins"),
+                                toId: "pr_".concat(to, "_florins"),
+                                index: index,
+                                htmlFlorinChildren: "<span class=\"pr_counter\">".concat(florinsOnCard, "</span>")
+                            }));
+                        }
+                        return [4, Promise.all(promises)];
                     case 2:
                         _e.sent();
                         this.game.market.setFlorinValue({
@@ -5281,7 +5268,27 @@ var NotificationManager = (function () {
                 switch (_b.label) {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost, from = _a.from;
+                        if (!(cost < 0)) return [3, 2];
+                        return [4, this.game.market.moveFlorinAnimation({
+                                fromId: 'pr_china',
+                                index: 0,
+                                toId: "pr_florins_counter_".concat(playerId, "_icon"),
+                            })];
+                    case 1:
+                        _b.sent();
+                        _b.label = 2;
+                    case 2:
                         this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
+                        if (!(cost > 0)) return [3, 4];
+                        return [4, this.game.market.moveFlorinAnimation({
+                                toId: 'pr_china',
+                                index: 0,
+                                fromId: "pr_florins_counter_".concat(playerId, "_icon"),
+                            })];
+                    case 3:
+                        _b.sent();
+                        _b.label = 4;
+                    case 4:
                         element = document.getElementById(token.id);
                         empireSquareId = token.location;
                         this.adjustSupremeReligionCounters({
@@ -5304,7 +5311,7 @@ var NotificationManager = (function () {
                             return [2];
                         }
                         return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: element }), toNode)];
-                    case 1:
+                    case 5:
                         _b.sent();
                         return [2];
                 }
@@ -5422,9 +5429,19 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var playerId;
             return __generator(this, function (_a) {
-                playerId = notif.args.playerId;
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(-1);
-                return [2];
+                switch (_a.label) {
+                    case 0:
+                        playerId = notif.args.playerId;
+                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(-1);
+                        return [4, this.game.market.moveFlorinAnimation({
+                                fromId: "pr_florins_counter_".concat(playerId, "_icon"),
+                                toId: 'pr_china',
+                                index: 0,
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2];
+                }
             });
         });
     };
@@ -5432,16 +5449,26 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, florinsFromChina, region, stock, card;
             return __generator(this, function (_b) {
-                _a = notif.args, florinsFromChina = _a.florinsFromChina, region = _a.region;
-                this.game.market.incFlorinValue({
-                    region: region,
-                    column: 0,
-                    value: florinsFromChina,
-                });
-                stock = this.game.market.getStock({ region: region, column: 0 });
-                card = stock.getCards()[0];
-                stock.removeCard(card);
-                return [2, Promise.resolve()];
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, florinsFromChina = _a.florinsFromChina, region = _a.region;
+                        return [4, this.game.market.moveFlorinAnimation({
+                                fromId: 'pr_china',
+                                toId: "pr_market_".concat(region, "_0_florins"),
+                                index: 1
+                            })];
+                    case 1:
+                        _b.sent();
+                        this.game.market.incFlorinValue({
+                            region: region,
+                            column: 0,
+                            value: florinsFromChina,
+                        });
+                        stock = this.game.market.getStock({ region: region, column: 0 });
+                        card = stock.getCards()[0];
+                        stock.removeCard(card);
+                        return [2, Promise.resolve()];
+                }
             });
         });
     };
@@ -5449,14 +5476,24 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, amount, playerId, region;
             return __generator(this, function (_b) {
-                _a = notif.args, amount = _a.amount, playerId = _a.playerId, region = _a.region;
-                this.game.market.incFlorinValue({
-                    region: region,
-                    column: 0,
-                    value: -amount,
-                });
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
-                return [2, Promise.resolve()];
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, amount = _a.amount, playerId = _a.playerId, region = _a.region;
+                        this.game.market.incFlorinValue({
+                            region: region,
+                            column: 0,
+                            value: -amount,
+                        });
+                        return [4, this.game.market.moveFlorinAnimation({
+                                toId: "pr_florins_counter_".concat(playerId, "_icon"),
+                                fromId: "pr_market_".concat(region, "_0_florins"),
+                                index: 1
+                            })];
+                    case 1:
+                        _b.sent();
+                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
+                        return [2];
+                }
             });
         });
     };
@@ -5464,13 +5501,23 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var region;
             return __generator(this, function (_a) {
-                region = notif.args.region;
-                this.game.market.incFlorinValue({
-                    region: region,
-                    column: 0,
-                    value: -1,
-                });
-                return [2, Promise.resolve()];
+                switch (_a.label) {
+                    case 0:
+                        region = notif.args.region;
+                        this.game.market.incFlorinValue({
+                            region: region,
+                            column: 0,
+                            value: -1,
+                        });
+                        return [4, this.game.market.moveFlorinAnimation({
+                                toId: "pr_china",
+                                fromId: "pr_market_".concat(region, "_0_florins"),
+                                index: 1
+                            })];
+                    case 1:
+                        _a.sent();
+                        return [2, Promise.resolve()];
+                }
             });
         });
     };
@@ -5478,14 +5525,24 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, region, playerId, amount;
             return __generator(this, function (_b) {
-                _a = notif.args, region = _a.region, playerId = _a.playerId, amount = _a.amount;
-                this.game.market.incFlorinValue({
-                    region: region,
-                    column: 0,
-                    value: -amount,
-                });
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
-                return [2, Promise.resolve()];
+                switch (_b.label) {
+                    case 0:
+                        _a = notif.args, region = _a.region, playerId = _a.playerId, amount = _a.amount;
+                        this.game.market.incFlorinValue({
+                            region: region,
+                            column: 0,
+                            value: -amount,
+                        });
+                        return [4, this.game.market.moveFlorinAnimation({
+                                toId: "pr_florins_counter_".concat(playerId, "_icon"),
+                                fromId: "pr_market_".concat(region, "_0_florins"),
+                                index: 1
+                            })];
+                    case 1:
+                        _b.sent();
+                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
+                        return [2, Promise.resolve()];
+                }
             });
         });
     };
@@ -6351,7 +6408,6 @@ var PlayerTableau = (function () {
 }());
 var tplPlayerTableauContent = function (_a) {
     var player = _a.player, title = _a.title, overlap = _a.overlap, overlapEmpireSquares = _a.overlapEmpireSquares;
-    console.log('overlapEmpireSquares', overlapEmpireSquares);
     var playerId = player.id;
     return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\" data-overlap=\"").concat(overlap, "\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n    <div class=\"pr_player_board_container\">\n      <div id=\"old_maids_").concat(playerId, "\" class=\"pr_old_maids_container\"></div>\n      <div id=\"player_bank_board_").concat(playerId, "\" class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    </div>\n\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n  </div>\n    ");
 };
@@ -6767,6 +6823,7 @@ var Settings = (function () {
     };
     Settings.prototype.onChangeAnimationSpeedSetting = function (value) {
         var duration = 2100 - value;
+        debug("onChangeAnimationSpeedSetting", duration);
         this.game.animationManager.getSettings().duration = duration;
     };
     Settings.prototype.onChangeShowAnimationsSetting = function (value) {
@@ -7241,11 +7298,9 @@ var AbilityOpponentsPurpleOpState = (function () {
             var card = _this.args.tableauCards.find(function (card) { return card.id === cardId; });
             operations.forEach(function (operation) {
                 var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
-                console.log("operationId", operationId);
                 _this.game.setLocationSelectable({
                     id: operationId,
                     callback: function () {
-                        console.log("clicked", card.id, operation.id);
                         _this.updateInterfaceConfirmOp({ card: card, operation: operation });
                     },
                 });
@@ -7255,7 +7310,6 @@ var AbilityOpponentsPurpleOpState = (function () {
     AbilityOpponentsPurpleOpState.prototype.setOpSelected = function (_a) {
         var card = _a.card, operation = _a.operation;
         var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
-        console.log("operationId", operationId);
         this.game.setLocationSelected({
             id: operationId,
         });
@@ -8103,7 +8157,6 @@ var ClientConfirmTableauOpsState = (function () {
     }
     ClientConfirmTableauOpsState.prototype.onEnteringState = function (args) {
         this.args = args;
-        console.log("confirm ops args", this.args);
         if (!this.args.availableOps.eastAndWest) {
             this.updateInterfaceConfirm();
         }
@@ -9301,7 +9354,6 @@ var PlayerActionState = (function () {
             });
         }
         var handCards = this.game.hand.getCards();
-        console.log("handCards", handCards);
         if (handCards.length > 0) {
             this.game.addPrimaryActionButton({
                 id: "play_card_btn",
@@ -10588,11 +10640,9 @@ var TableauOpsSelectState = (function () {
             var card = _this.args.tableauCards.find(function (card) { return card.id === cardId; });
             operations.forEach(function (operation) {
                 var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
-                console.log("operationId", operationId);
                 _this.game.setLocationSelectable({
                     id: operationId,
                     callback: function () {
-                        console.log("clicked", card.id, operation.id);
                         _this.updateInterfaceConfirmOp({ card: card, operation: operation });
                     },
                 });
@@ -10602,7 +10652,6 @@ var TableauOpsSelectState = (function () {
     TableauOpsSelectState.prototype.setOpSelected = function (_a) {
         var card = _a.card, operation = _a.operation;
         var operationId = "".concat(card.id, "_").concat(operation.id).concat(card.type === EMPIRE_CARD ? "_".concat(card.side) : "");
-        console.log("operationId", operationId);
         this.game.setLocationSelected({
             id: operationId,
         });

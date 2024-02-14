@@ -244,9 +244,6 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     }
     
     const { location, type } = card;
-    if (!location) {
-      console.log('isCardVisible',card);
-    }
     if (location && location.startsWith("deck")) {
       return false;
     }
@@ -286,7 +283,6 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     king: EmpireCard;
     queen: QueenCard;
   }) {
-    console.log('addQueen',king.empire, queen,king);
     await this.queenStocks[king.empire].addCard(queen);
     this.addMarginBottomQueen({queen});
   }

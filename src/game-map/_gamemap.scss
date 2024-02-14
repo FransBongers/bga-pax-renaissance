@@ -41,6 +41,15 @@
   --paxRenIconScale: var(--paxRenLeftColumnScale);
 }
 
+#pr_china {
+  position: absolute;
+  height: calc(var(--paxRenIconScale) * 50px);
+  width: calc(var(--paxRenIconScale) * 52px);
+  // background-color: yellow;
+  left: calc(var(--paxRenMapScale) * 1325px);
+  top: calc(var(--paxRenMapScale) * 145px);
+}
+
 #pr_supreme_religion_container {
   position: absolute;
   // height: calc(var(--paxRenMapScale) * 100px);

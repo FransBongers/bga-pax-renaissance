@@ -455,7 +455,7 @@ class NotificationManager {
     if (destination.type === KING) {
       const newOwner = this.getPlayer({ playerId: destination.ownerId });
       const container = createEmpireCardContainer(card);
-      
+
       await newOwner.tableau.addCard(container);
     } else if (destination.type === VASSAL) {
       await this.game.tableauCardManager.addVassal({
@@ -552,6 +552,11 @@ class NotificationManager {
   async notif_payFlorinsToChina(notif: Notif<NotifPayFlorinsToChinaArgs>) {
     const { playerId, amount } = notif.args;
     this.getPlayer({ playerId }).counters.florins.incValue(-amount);
+    await this.game.market.moveFlorinAnimation({
+      fromId: `pr_florins_counter_${playerId}_icon`,
+      toId: 'pr_china',
+      index: 0,
+    });
   }
 
   async notif_placeToken(notif: Notif<NotifPlaceTokenArgs>) {
@@ -611,7 +616,7 @@ class NotificationManager {
       await this.game.animationManager.play(
         new BgaSlideAnimation({
           element,
-          transitionTimingFunction: "ease-in-out",
+          transitionTimingFunction: "linear",
           fromRect,
         })
       );
@@ -683,8 +688,10 @@ class NotificationManager {
   async notif_refreshMarket(notif: Notif<NotifRefreshMarketArgs>) {
     const { cardMoves, cardDraws } = notif.args;
 
+    let index = 0;
     // Shift cards
     for (let move of cardMoves) {
+      index += 1;
       const { from, to, card } = move;
       const [_, fromRegion, fromColumn] = from.split("_");
       const [_2, toRegion, toCol] = to.split("_");
@@ -698,12 +705,25 @@ class NotificationManager {
         column: Number(fromColumn),
         value: 0,
       });
-      await this.game.market
-        .getStock({
-          region: toRegion as "east" | "west",
-          column: Number(toCol),
-        })
-        .addCard(card);
+      const promises: Promise<unknown>[] = [
+        this.game.market
+          .getStock({
+            region: toRegion as "east" | "west",
+            column: Number(toCol),
+          })
+          .addCard(card),
+      ];
+      if (florinsOnCard > 0) {
+        promises.push(
+          this.game.market.moveFlorinAnimation({
+            fromId: `pr_${from}_florins`,
+            toId: `pr_${to}_florins`,
+            index,
+            htmlFlorinChildren: `<span class="pr_counter">${florinsOnCard}</span>`
+          })
+        );
+      }
+      await Promise.all(promises);
       this.game.market.setFlorinValue({
         region: toRegion as "east" | "west",
         column: Number(toCol),
@@ -744,7 +764,21 @@ class NotificationManager {
   async notif_repressToken(notif: Notif<NotifRepressTokenArgs>) {
     const { playerId, token, cost, from } = notif.args;
 
+    if (cost < 0) {
+      await this.game.market.moveFlorinAnimation({
+        fromId: 'pr_china',
+        index: 0,
+        toId: `pr_florins_counter_${playerId}_icon`,
+      })
+    }
     this.getPlayer({ playerId }).counters.florins.incValue(-cost);
+    if (cost > 0) {
+      await this.game.market.moveFlorinAnimation({
+        toId: 'pr_china',
+        index: 0,
+        fromId: `pr_florins_counter_${playerId}_icon`,
+      })
+    }
     const element = document.getElementById(token.id);
     const empireSquareId = token.location;
 
@@ -828,7 +862,7 @@ class NotificationManager {
     if (node) {
       await this.game.animationManager.attachWithAnimation(
         new BgaSlideAnimation({ element: node }),
-        document.getElementById(`${token.type}_${token.separator}_supply`),
+        document.getElementById(`${token.type}_${token.separator}_supply`)
       );
       node.remove();
     }
@@ -869,10 +903,20 @@ class NotificationManager {
   async notif_tableauOpTaxPay(notif: Notif<NotifTableauOpTaxPayArgs>) {
     const { playerId } = notif.args;
     this.getPlayer({ playerId }).counters.florins.incValue(-1);
+    await this.game.market.moveFlorinAnimation({
+      fromId: `pr_florins_counter_${playerId}_icon`,
+      toId: 'pr_china',
+      index: 0,
+    })
   }
 
   async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {
     const { florinsFromChina, region } = notif.args;
+    await this.game.market.moveFlorinAnimation({
+      fromId: 'pr_china',
+      toId: `pr_market_${region}_0_florins`,
+      index: 1
+    })
     this.game.market.incFlorinValue({
       region: region as "east" | "west",
       column: 0,
@@ -893,8 +937,13 @@ class NotificationManager {
       column: 0,
       value: -amount,
     });
+    await this.game.market.moveFlorinAnimation({
+      toId: `pr_florins_counter_${playerId}_icon`,
+      fromId: `pr_market_${region}_0_florins`,
+      index: 1
+    });
     this.getPlayer({ playerId }).counters.florins.incValue(amount);
-    return Promise.resolve();
+    // return Promise.resolve();
   }
 
   async notif_tradeFairProfitDispersalPirates(
@@ -905,6 +954,11 @@ class NotificationManager {
       region: region as "east" | "west",
       column: 0,
       value: -1,
+    });
+    await this.game.market.moveFlorinAnimation({
+      toId: `pr_china`,
+      fromId: `pr_market_${region}_0_florins`,
+      index: 1
     });
     return Promise.resolve();
   }
@@ -917,6 +971,11 @@ class NotificationManager {
       region: region as "east" | "west",
       column: 0,
       value: -amount,
+    });
+    await this.game.market.moveFlorinAnimation({
+      toId: `pr_florins_counter_${playerId}_icon`,
+      fromId: `pr_market_${region}_0_florins`,
+      index: 1
     });
     this.getPlayer({ playerId }).counters.florins.incValue(amount);
     return Promise.resolve();

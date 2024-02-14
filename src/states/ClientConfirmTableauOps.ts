@@ -8,7 +8,6 @@ class ClientConfirmTableauOpsState implements State {
 
   onEnteringState(args: OnEnteringClientConfirmTableauOpsArgs) {
     this.args = args;
-    console.log("confirm ops args", this.args);
     if (!this.args.availableOps.eastAndWest) {
       this.updateInterfaceConfirm();
     } else {

@@ -305,37 +305,37 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.clearPossible();
   }
 
-  public async moveFlorin({ index }: { index: number }) {
-    // const element = dojo.place(
-    //   tplIcon({ id: `temp_florin_${index}`, icon: 'florin', style: 'position: absolute;' }),
-    //   `pr_florins_counter_2371052_icon`
-    // );
-    const node = document.getElementById(`pr_florins_counter_2371052_icon`);
-    node.insertAdjacentHTML(
-      "beforeend",
-      tplIcon({
-        id: `temp_florin_${index}`,
-        icon: "florin",
-        style: "position: absolute;",
-      })
-    );
-    const element = document.getElementById(`temp_florin_${index}`);
-    const fromRect = $(`pr_market_west_3_florins`)?.getBoundingClientRect();
-    this.market.incFlorinValue({ region: WEST, column: 3, value: -1 });
-    // this.incCounter({ counter: 'rupees', value: -rupees });
-    await this.animationManager.play(
-      new BgaSlideAnimation<BgaAnimationWithOriginSettings>({
-        element,
-        transitionTimingFunction: "ease-in-out",
-        fromRect,
-      })
-    );
-    element.remove();
-    this.playerManager
-      .getPlayer({ playerId: 2371052 })
-      .counters.florins.incValue(1);
-    return true;
-  }
+  // public async moveFlorin({ index }: { index: number }) {
+  //   // const element = dojo.place(
+  //   //   tplIcon({ id: `temp_florin_${index}`, icon: 'florin', style: 'position: absolute;' }),
+  //   //   `pr_florins_counter_2371052_icon`
+  //   // );
+  //   const node = document.getElementById(`pr_florins_counter_2371052_icon`);
+  //   node.insertAdjacentHTML(
+  //     "beforeend",
+  //     tplIcon({
+  //       id: `temp_florin_${index}`,
+  //       icon: "florin",
+  //       style: "position: absolute;",
+  //     })
+  //   );
+  //   const element = document.getElementById(`temp_florin_${index}`);
+  //   const fromRect = $(`pr_market_west_3_florins`)?.getBoundingClientRect();
+  //   this.market.incFlorinValue({ region: WEST, column: 3, value: -1 });
+  //   // this.incCounter({ counter: 'rupees', value: -rupees });
+  //   await this.animationManager.play(
+  //     new BgaSlideAnimation<BgaAnimationWithOriginSettings>({
+  //       element,
+  //       transitionTimingFunction: "linear",
+  //       fromRect,
+  //     })
+  //   );
+  //   element.remove();
+  //   this.playerManager
+  //     .getPlayer({ playerId: 2371052 })
+  //     .counters.florins.incValue(1);
+  //   return true;
+  // }
 
   // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
   //                        action status bar (ie: the HTML links in the status bar).

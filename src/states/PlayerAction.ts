@@ -190,7 +190,6 @@ class PlayerActionState implements State {
 
     // Play card
     const handCards = this.game.hand.getCards();
-    console.log("handCards", handCards);
     if (handCards.length > 0) {
       this.game.addPrimaryActionButton({
         id: "play_card_btn",

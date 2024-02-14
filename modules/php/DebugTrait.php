@@ -30,9 +30,15 @@ trait DebugTrait
 {
   function test()
   {
-    $this->debugPlaceCardInTableau('PREN024_Gonfalonier', WEST, 2371052);
-    $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371053); // DISCOVERY
-    Cards::get('EmpireSquare_Portugal')->setSide(REPUBLIC);
+    $this->debugPlaceToken(PAWN, MEDICI, BORDER_ENGLAND_FRANCE);
+    // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_ENGLAND_PORTUGAL);
+    // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN158X_OrderOfPreachers', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN061_Qizilbash', EAST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN118X_GrandMufti', EAST, 2371052);
+    
+    // $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371053); // DISCOVERY
+    // Cards::get('EmpireSquare_Portugal')->setSide(REPUBLIC);
   }
 
   function debugPlaceCardInMarket($cardId, $region = WEST, $column = 1)

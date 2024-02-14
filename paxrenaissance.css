@@ -75,6 +75,14 @@
   --paxRenIconScale: var(--paxRenLeftColumnScale);
 }
 
+#pr_china {
+  position: absolute;
+  height: calc(var(--paxRenIconScale) * 50px);
+  width: calc(var(--paxRenIconScale) * 52px);
+  left: calc(var(--paxRenMapScale) * 1325px);
+  top: calc(var(--paxRenMapScale) * 145px);
+}
+
 #pr_supreme_religion_container {
   position: absolute;
   width: calc(var(--paxRenMapScale) * 200px);
@@ -3487,6 +3495,20 @@
   height: 100%;
 }
 
+.pr_temp_florin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pr_temp_florin .pr_counter {
+  margin-top: 4px;
+  margin-left: -2px;
+  font-weight: bold;
+  font-size: calc(var(--paxRenMapScale) * 30px);
+  letter-spacing: -2px;
+  text-shadow: 2px 0 2px rgba(255, 255, 255, 0.6), 0 -2px 2px rgba(255, 255, 255, 0.6), 0 2px 2px rgba(255, 255, 255, 0.6), -2px 0 2px rgba(255, 255, 255, 0.6);
+}
+
 .pr_agent_icon {
   background-repeat: no-repeat;
 }
@@ -5660,8 +5682,8 @@ html[data-background-pref=war] {
 
 #pr_discard {
   position: absolute;
-  top: -200px;
-  left: -200px;
+  top: -400px;
+  left: 0px;
   --paxRenCardScale: 1;
   width: 150px;
   height: 230px;

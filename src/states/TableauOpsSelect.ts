@@ -165,11 +165,9 @@ class TableauOpsSelectState implements State {
         const operationId = `${card.id}_${operation.id}${
           card.type === EMPIRE_CARD ? `_${card.side}` : ""
         }`;
-        console.log("operationId", operationId);
         this.game.setLocationSelectable({
           id: operationId,
           callback: () => {
-            console.log("clicked", card.id, operation.id);
             this.updateInterfaceConfirmOp({ card, operation });
           },
         });
@@ -187,7 +185,6 @@ class TableauOpsSelectState implements State {
     const operationId = `${card.id}_${operation.id}${
       card.type === EMPIRE_CARD ? `_${card.side}` : ""
     }`;
-    console.log("operationId", operationId);
     this.game.setLocationSelected({
       id: operationId,
     });

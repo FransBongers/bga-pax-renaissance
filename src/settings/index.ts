@@ -300,15 +300,16 @@ class Settings {
   }
 
   public onChangeAnimationSpeedSetting(value: number) {
-    
     const duration = 2100 - value;
+    debug("onChangeAnimationSpeedSetting", duration);
     this.game.animationManager.getSettings().duration = duration;
-    
   }
 
   public onChangeShowAnimationsSetting(value: string) {
     if (value === ENABLED) {
-      this.game.animationManager.getSettings().duration = Number(this.settings[PREF_ANIMATION_SPEED]);
+      this.game.animationManager.getSettings().duration = Number(
+        this.settings[PREF_ANIMATION_SPEED]
+      );
     } else {
       this.game.animationManager.getSettings().duration = 0;
     }

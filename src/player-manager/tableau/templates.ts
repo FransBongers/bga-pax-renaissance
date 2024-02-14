@@ -9,7 +9,7 @@ const tplPlayerTableauContent = ({
   overlap: string;
   overlapEmpireSquares: string;
 }) => {
-  console.log('overlapEmpireSquares',overlapEmpireSquares);
+
   const playerId = player.id;
   return `
   <div class="pr_player_tableau_title"><span>${title}</span></div>

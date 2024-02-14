@@ -172,6 +172,7 @@ const tplGameMap = ({
   ageOfReformation?: boolean;
 }) => `
   <div id="pr_game_map">
+    <div id="pr_china" ></div>
     ${tplGameMapVictoryCards({ ageOfReformation })}
     ${tplGameMapEmpireCards()}
     ${tplGameMapMapCards()}

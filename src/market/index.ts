@@ -284,10 +284,12 @@ class Market {
     index,
     fromId,
     toId,
+    htmlFlorinChildren,
   }: {
     index: number;
     fromId: string;
     toId: string;
+    htmlFlorinChildren?: string;
   }) {
     const from = document.getElementById(fromId);
     const to = document.getElementById(toId);
@@ -299,7 +301,9 @@ class Market {
       tplIcon({
         id: `temp_florin_${index}`,
         icon: "florin",
+        classes: 'pr_temp_florin',
         style: "position: absolute;",
+        children: htmlFlorinChildren
       })
     );
 
@@ -320,7 +324,7 @@ class Market {
     await this.game.animationManager.play(
       new BgaSlideAnimation<BgaAnimationWithOriginSettings>({
         element,
-        transitionTimingFunction: "ease-in-out",
+        transitionTimingFunction: "linear",
         fromRect,
       })
     );
