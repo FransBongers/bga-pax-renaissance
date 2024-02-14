@@ -16,6 +16,7 @@
   }
 
   span {
+    cursor: default;
     font-weight: bold;
     font-size: calc(var(--paxRenMapScale) * 40px);
     // letter-spacing: calc(var(--paxRenMapScale) * -2px);

@@ -47,6 +47,7 @@
     }
 
     .pr_deck_counter_text {
+      cursor: default;
       font-weight: bold;
       font-size: calc(var(--paxRenMapScale) * 30px);
       letter-spacing: calc(var(--paxRenMapScale) * -1px);
@@ -119,7 +120,8 @@
   }
 
   .pr_icon.pr_none {
-    display: none;
+    // display: none;
+    opacity: 0;
   }
 }
 

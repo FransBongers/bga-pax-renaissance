@@ -86,4 +86,49 @@ class TooltipManager {
     const html = tplVictoryCardTooltip({ card, game: this.game });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
+
+  public cometCardInDrawDeckTooltip = ({ nodeId }: { nodeId: string }) => {
+    this.removeTooltip(nodeId);
+
+    this.game.framework().addTooltipHtml(
+      nodeId,
+      tplTextTooltip({
+        text: _("Comet card is in the Draw Deck"),
+      }),
+      250
+    );
+  };
+
+  public cometCardNoLongerInDrawDeckTooltip = ({ nodeId }: { nodeId: string }) => {
+    this.removeTooltip(nodeId);
+
+    this.game.framework().addTooltipHtml(
+      nodeId,
+      tplTextTooltip({
+        text: _("Comet card is not in the Draw Deck"),
+      }),
+      250
+    );
+  };
+
+  public setupDrawDeckTooltips = () => {
+    const text = _("Number of cards in the ${region} Draw Deck");
+
+    REGIONS.forEach((region) => {
+      this.game.framework().addTooltipHtml(
+        `pr_market_${region}_deck_counter`,
+        tplTextTooltip({
+          text: this.game.format_string_recursive(text, {
+            region: region === EAST ? _("East") : _("West"),
+          }),
+        }),
+        250
+      );
+    });
+    [1, 2, 3, 4].forEach((number) => {
+      this.cometCardInDrawDeckTooltip({
+        nodeId: `pr_deck_counter_comet${number}`,
+      });
+    });
+  };
 }

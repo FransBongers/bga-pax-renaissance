@@ -82,6 +82,7 @@
   top: calc(var(--paxRenMapScale) * 270px);
 }
 #pr_supreme_religion_container span {
+  cursor: default;
   font-weight: bold;
   font-size: calc(var(--paxRenMapScale) * 40px);
   letter-spacing: calc(var(--paxRenMapScale) * -2px);
@@ -3414,6 +3415,7 @@
 }
 #pr_market_east_deck_container .pr_deck_counter .pr_deck_counter_text,
 #pr_market_west_deck_container .pr_deck_counter .pr_deck_counter_text {
+  cursor: default;
   font-weight: bold;
   font-size: calc(var(--paxRenMapScale) * 30px);
   letter-spacing: calc(var(--paxRenMapScale) * -1px);
@@ -3477,7 +3479,7 @@
   top: calc(var(--paxRenMapScale) * 94px);
 }
 .pr_market .pr_icon.pr_none {
-  display: none;
+  opacity: 0;
 }
 
 .pr_market_stock {
@@ -4844,6 +4846,7 @@
   row-gap: calc(var(--paxRenMapScale) * 2px);
 }
 #pr_supply span {
+  cursor: default;
   font-weight: bold;
   font-size: calc(var(--paxRenMapScale) * 40px);
   text-shadow: 1px 0 0 white, 0 1px 0 white, -1px 0 0 white, 0 -1px 0 white, 1px 1px 0 white, -1px 1px 0 white, 1px -1px 0 white, -1px -1px 0 white !important;
@@ -5035,6 +5038,7 @@
   margin-left: 5px;
 }
 .pr_icon_counter_container .pr_counter {
+  cursor: default;
   font-weight: bold;
   font-size: 20px;
 }

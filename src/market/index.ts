@@ -255,17 +255,21 @@ class Market {
   }
 
   private setCometOpacity(comet: string) {
-    const node = document.getElementById(`pr_deck_counter_${comet}`);
+    const nodeId = `pr_deck_counter_${comet}`;
+    const node = document.getElementById(nodeId);
     if (node) {
       node.classList.add(PR_NONE);
     }
+    this.game.tooltipManager.cometCardNoLongerInDrawDeckTooltip({ nodeId });
   }
 
   private removeCometOpacity(comet: string) {
-    const node = document.getElementById(`pr_deck_counter_${comet}`);
+    const nodeId = `pr_deck_counter_${comet}`;
+    const node = document.getElementById(nodeId);
     if (node) {
       node.classList.remove(PR_NONE);
     }
+    this.game.tooltipManager.cometCardInDrawDeckTooltip({ nodeId });
   }
 
   // ....###....##....##.####.##.....##....###....########.####..#######..##....##

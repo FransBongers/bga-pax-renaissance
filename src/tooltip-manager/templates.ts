@@ -372,3 +372,7 @@ const tplTooltipWithIcon = ({
             </div>
           </div>`;
 };
+
+const tplTextTooltip = ({text}: {text: string}) => {
+  return `<span class="pr_text_tooltip">${text}</span>`
+}

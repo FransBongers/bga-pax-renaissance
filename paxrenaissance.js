@@ -3459,6 +3459,7 @@ var GameMap = (function () {
         document.getElementById("pr_play_area_container").insertAdjacentHTML("afterbegin", tplGameMap({
             ageOfReformation: this.game.gameOptions.ageOfReformationPromo,
         }));
+        this.game.tooltipManager.setupDrawDeckTooltips();
         this.setupEmpireCards({ gamedatas: gamedatas });
         this.setupTokensCities({ gamedatas: gamedatas });
         this.setupTokensBorders({ gamedatas: gamedatas });
@@ -4340,16 +4341,20 @@ var Market = (function () {
         }
     };
     Market.prototype.setCometOpacity = function (comet) {
-        var node = document.getElementById("pr_deck_counter_".concat(comet));
+        var nodeId = "pr_deck_counter_".concat(comet);
+        var node = document.getElementById(nodeId);
         if (node) {
             node.classList.add(PR_NONE);
         }
+        this.game.tooltipManager.cometCardNoLongerInDrawDeckTooltip({ nodeId: nodeId });
     };
     Market.prototype.removeCometOpacity = function (comet) {
-        var node = document.getElementById("pr_deck_counter_".concat(comet));
+        var nodeId = "pr_deck_counter_".concat(comet);
+        var node = document.getElementById(nodeId);
         if (node) {
             node.classList.remove(PR_NONE);
         }
+        this.game.tooltipManager.cometCardInDrawDeckTooltip({ nodeId: nodeId });
     };
     Market.prototype.moveFlorinAnimation = function (_a) {
         var index = _a.index, fromId = _a.fromId, toId = _a.toId;
@@ -11029,9 +11034,43 @@ var tplTooltipWithIcon = function (_a) {
     var title = _a.title, text = _a.text, iconHtml = _a.iconHtml, iconWidth = _a.iconWidth;
     return "<div class=\"pr_icon_tooltip\">\n            <div class=\"pr_icon_tooltip_icon\"".concat(iconWidth ? "style=\"min-width: ".concat(iconWidth, "px;\"") : "", ">\n              ").concat(iconHtml, "\n            </div>\n            <div class=\"pr_icon_tooltip_content\">\n              ").concat(title ? "<span class=\"pr_tooltip_title\" >".concat(title, "</span>") : "", "\n              <span class=\"pr_tooltip_text\">").concat(text, "</span>\n            </div>\n          </div>");
 };
+var tplTextTooltip = function (_a) {
+    var text = _a.text;
+    return "<span class=\"pr_text_tooltip\">".concat(text, "</span>");
+};
 var TooltipManager = (function () {
     function TooltipManager(game) {
+        var _this = this;
         this.idRegex = /id="[a-z]*_[0-9]*_[0-9]*"/;
+        this.cometCardInDrawDeckTooltip = function (_a) {
+            var nodeId = _a.nodeId;
+            _this.removeTooltip(nodeId);
+            _this.game.framework().addTooltipHtml(nodeId, tplTextTooltip({
+                text: _("Comet card is in the Draw Deck"),
+            }), 250);
+        };
+        this.cometCardNoLongerInDrawDeckTooltip = function (_a) {
+            var nodeId = _a.nodeId;
+            _this.removeTooltip(nodeId);
+            _this.game.framework().addTooltipHtml(nodeId, tplTextTooltip({
+                text: _("Comet card is not in the Draw Deck"),
+            }), 250);
+        };
+        this.setupDrawDeckTooltips = function () {
+            var text = _("Number of cards in the ${region} Draw Deck");
+            REGIONS.forEach(function (region) {
+                _this.game.framework().addTooltipHtml("pr_market_".concat(region, "_deck_counter"), tplTextTooltip({
+                    text: _this.game.format_string_recursive(text, {
+                        region: region === EAST ? _("East") : _("West"),
+                    }),
+                }), 250);
+            });
+            [1, 2, 3, 4].forEach(function (number) {
+                _this.cometCardInDrawDeckTooltip({
+                    nodeId: "pr_deck_counter_comet".concat(number),
+                });
+            });
+        };
         this.game = game;
     }
     TooltipManager.prototype.addTextToolTip = function (_a) {

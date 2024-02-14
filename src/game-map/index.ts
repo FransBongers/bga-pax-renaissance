@@ -334,12 +334,17 @@ class GameMap {
         ageOfReformation: this.game.gameOptions.ageOfReformationPromo,
       })
     );
+    this.game.tooltipManager.setupDrawDeckTooltips();
+      
+
     // Add in main file?
     this.setupEmpireCards({ gamedatas });
     this.setupTokensCities({ gamedatas });
     this.setupTokensBorders({ gamedatas });
     this.setupMapCards({ gamedatas });
     this.setupSupremeReligionCounters({ gamedatas });
+
+
   }
 
   updateSupremeReligionCounters({
