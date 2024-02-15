@@ -16,7 +16,7 @@ class PREN060_Dervishes extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = EAST;
     $this->flavorText = [
-      clienttranslate('The Bektashi were followers of Haji Bektaşî, a dervish who found refuge in Anatolia in the 13th century. From here Bektashism spread into the Balkans, where its leaders (known as dedes or babas) helped convert many to Islam.'),
+      clienttranslate('The Bektashi were followers of Haji Bektaşî Veli, a dervish who found refuge in Anatolia in the 13th century. From here Bektashism spread into the Balkans, where its leaders (known as dedes or babas) helped convert many to Islam.'),
       clienttranslate('The Bektaşî Sufi order became the official order of the elite Janissaries.')
     ];
     $this->name = clienttranslate('Dervishes');

@@ -21,14 +21,14 @@ class PREN126X_LizardUnion extends \PaxRenaissance\Models\TableauCard
     $this->empire = HOLY_ROMAN_EMIRE;
     $this->flavorText = [
       clienttranslate('The Teutonic Knights, who ruled Prussia, charged the cities steep taxes without representation.'),
-      clienttranslate('The secret Prussian resistance, called the Lizard Union, asked King Casimir IV to incorporate the Prussian cities into the Polish real, where the lesser nobles (szlachta) and cities enjoyed tax representation through the Nieszawa Statutes. This started the 13-Years War.'),
+      clienttranslate('The secret Prussian resistance, called the Lizard Union, asked King Casimir IV to incorporate the Prussian cities into the Polish realm, where the lesser nobles (szlachta) and cities enjoyed tax representation through the Nieszawa Statutes. This started the 13-Years War.'),
     ];
     $this->name = clienttranslate("Lizard Union");
     $this->oneShot = CONSPIRACY_ONE_SHOT;
     $this->ops = [
       [
         'id' => REPRESS_OP_KNIGHT,
-        'flavorText' => clienttranslate("Nieszama laws"),
+        'flavorText' => clienttranslate("Nieszawa laws"),
         'top' => 67.5,
         'left' => 4,
       ],

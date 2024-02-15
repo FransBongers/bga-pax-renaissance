@@ -49,14 +49,7 @@ class EmpireSquare_Ottoman extends \PaxRenaissance\Models\EmpireCard
           'left' => 4.5,
         ],
       ],
-      REPUBLIC => [
-        [
-          'id' => COMMERCE_OP_EAST,
-          'flavorText' => clienttranslate('Tolerate dhimmis'),
-          'top' => 73,
-          'left' => 4.5,
-        ],
-      ]
+      REPUBLIC => []
     ] : [
       KING =>  [
         [

@@ -30,7 +30,9 @@ trait DebugTrait
 {
   function test()
   {
-    $this->debugPlaceToken(PAWN, MEDICI, BORDER_ENGLAND_FRANCE);
+
+    Empires::get(PAPAL_STATES)->changeToTheocracy(REFORMIST);
+    // $this->debugPlaceToken(PAWN, MEDICI, BORDER_ENGLAND_FRANCE);
     // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_ENGLAND_PORTUGAL);
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN158X_OrderOfPreachers', WEST, 2371052);

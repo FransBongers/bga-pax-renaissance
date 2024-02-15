@@ -16,8 +16,8 @@ class PREN002_PapalElephant extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = WEST;
     $this->flavorText = [
-      clienttranslate('The P.T. Barnum of Popes, Leo X enjoyed touring his realm on his pet white elephand Hanna, followed by a lavish parade of jesters and performers. A scion of the Medici, he sold indulgences to patronize the arts.'),
-      clienttranslate('Luther was scandalized enough to nail theses to a church door. But other than a mild condemnation, Leo hardly cards. "Since God has given us the papacy, let us enjoy it".'),
+      clienttranslate('The P.T. Barnum of Popes, Leo X enjoyed touring his realm on his pet white elephant Hanna, followed by a lavish parade of jesters and performers. A scion of the Medici, he sold indulgences to patronize the arts.'),
+      clienttranslate('Luther was scandalized enough to nail theses to a church door. But other than a mild condemnation, Leo hardly cared. "Since God has given us the papacy, let us enjoy it".'),
     ];
     $this->name = clienttranslate('Papal Elephant');
     $this->oneShot = APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT;

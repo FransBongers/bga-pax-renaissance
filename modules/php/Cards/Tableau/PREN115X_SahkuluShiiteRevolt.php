@@ -16,7 +16,7 @@ class PREN115X_SahkuluShiiteRevolt extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = OTTOMAN;
     $this->flavorText = [
-      clienttranslate("After Persia was consolidated by the Safavid Dynasty in 1509, it sent agent provocateurs into the neighbouring Ottoman Empire, stirring up trouble with sympathetic Turkmen. This sparked a widespread pro-Shi'a uprising in Anatolia, lef by a Shi'ite religious leader named Şahkulu."),
+      clienttranslate("After Persia was consolidated by the Safavid Dynasty in 1509, it sent agent provocateurs into the neighbouring Ottoman Empire, stirring up trouble with sympathetic Turkmen. This sparked a widespread pro-Shi'a uprising in Anatolia, led by a Shi'ite religious leader named Şahkulu."),
       clienttranslate('The rebels murdered the local Sunni governors and initially defeated the Janissaries sent to stop them.')
     ];
     $this->name = clienttranslate("Şahkulu Shi'ite Revolt");

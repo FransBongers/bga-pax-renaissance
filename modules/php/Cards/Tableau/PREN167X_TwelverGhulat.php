@@ -19,7 +19,7 @@ class PREN167X_TwelverGhulat extends \PaxRenaissance\Models\TableauCard
       clienttranslate("Sheikh Junayd was the first Safavi spiritual leader to espouse specifically Shia Islamic teachings, and in particular those of the Twelver ghulat, the predominant sect of Ithnā'ashari Shia Islam."),
       clienttranslate('Junayd was viewed as a divine incarnation by his followers.'),
     ];
-    $this->name = clienttranslate("Twelver Ghulat");
+    $this->name = clienttranslate("Twelver ghulat");
     $this->oneShot = APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT;
     $this->ops = [
       [

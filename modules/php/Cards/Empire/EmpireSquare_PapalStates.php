@@ -26,7 +26,8 @@ class EmpireSquare_PapalStates extends \PaxRenaissance\Models\EmpireCard
     ];
     if ($ageOfReformationVariant && $religion === REFORMIST) {
       $this->flavorText[KING] = [
-        clienttranslate("For his humanist compromises between Catholics and Protestants, King Henry VIII has Pole's entire family martyred. Fleeing England, Pole became the leading candidate in the long and contentious papal conclave of 1549-50.")
+        clienttranslate("For his humanist compromises between Catholics and Protestants, King Henry VIII had Pole's entire family martyred."),
+        clienttranslate("Fleeing England, Pole became the leading candidate in the long and contentious papal conclave of 1549-50.")
       ];
     } else if ($ageOfReformationVariant && $religion === ISLAMIC) {
       $this->flavorText[KING] = [

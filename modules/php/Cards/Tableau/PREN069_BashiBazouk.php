@@ -16,7 +16,7 @@ class PREN069_BashiBazouk extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = EAST;
     $this->flavorText = [
-      clienttranslate('The Bashi-bazouk, the irregular and undisciplined foot-soldiers of the Ottoman army, did not receive regular salaries and lived off loot. They were little more then legalized bandits.')
+      clienttranslate('The Bashi-bazouk, the irregular and undisciplined foot-soldiers of the Ottoman army, did not receive regular salaries and lived off loot. They were little more than legalized bandits.')
     ];
     $this->name = clienttranslate('Bashi-bazouk');
     $this->oneShot = REFORMATION_ONE_SHOT;

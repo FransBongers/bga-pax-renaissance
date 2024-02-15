@@ -36,7 +36,7 @@ class PREN111X_GlinskisRebellion extends \PaxRenaissance\Models\TableauCard
       ],
       [
         'id' => COMMERCE_OP_EAST,
-        'flavorText' => clienttranslate("Lithuanian was chandlers"),
+        'flavorText' => clienttranslate("Lithuanian wax chandlers"),
         'top' => 145.5,
         'left' => 4,
       ],

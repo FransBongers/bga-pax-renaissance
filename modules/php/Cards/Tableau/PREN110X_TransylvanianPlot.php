@@ -20,7 +20,7 @@ class PREN110X_TransylvanianPlot extends \PaxRenaissance\Models\TableauCard
     ];
     $this->empire = HUNGARY;
     $this->flavorText = [
-      clienttranslate('Alvise Gritti, son of the Doge of Venice, was simultaneously a regent of Hungary, a minister of the Sultan, a business partner of the Grand Vizier, a Venetian spy.'),
+      clienttranslate('Alvise Gritti, son of the Doge of Venice, was simultaneously a regent of Hungary, a minister of the Sultan, a business partner of the Grand Vizier, and a Venetian spy.'),
       clienttranslate("In 1533 he was betrayed to Carlos V as a double agent intriguing against the emperor with the Sultan, France, England, and Bavaria."),
       clienttranslate("In 1534, imperial troops killed Gritti in his attempted conquest of Transylvania.")
     ];
