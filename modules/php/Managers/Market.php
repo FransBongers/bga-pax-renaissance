@@ -149,9 +149,10 @@ class Market
         $topCard = Cards::getTopOf(Locations::market($otherRowRegion, $i));
         $florinLocation = Locations::marketFlorins($otherRowRegion, $i);
       }
-      // TODO: check if it is possible both rows do not contain a card. 
-      // If it is possible, how should this be handled?
+      // Only case where this is possible at the moment is with Podesta of Venice ability
+      // where both trade fair cards are gone and player still has an action
       if ($topCard === null) {
+        $placedFlorins[] = 'china';
         continue;
       }
 

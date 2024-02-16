@@ -67,6 +67,7 @@ class AtomicActions
     TABLEAU_OP_TAX_PAY_OR_REPRESS => 'TableauOpTaxPayOrRepress',
     TABLEAU_OP_VOTE => 'TableauOpVote',
     TRADE_FAIR => 'TradeFair',
+    TRADE_FAIR_FREE => 'TradeFair',
     TRADE_FAIR_PROFIT_DISPERSAL => 'TradeFairProfitDispersal',
     // TRADE_FAIR_LEVY => 'TradeFairLevy', // TODO remove
     TRADE_SHIFT_NOVGOROD_ONE_SHOT => 'TradeShiftOneShot',

@@ -3,7 +3,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * PaxRenaissance implementation : © <Your name here> <Your email address here>
+ * PaxRenaissance implementation : © Frans Bongers <fjmbongers@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -58,7 +58,7 @@ $game_options = [
     ]
   ],
   OPTION_FIRST_PLAYER_VARIANT => [
-    'name' => totranslate('First Player Variant'),
+    'name' => totranslate('First Player Variant (unofficial)'),
     'values' => [
       OPTION_FIRST_PLAYER_VARIANT_DISABLED => [
         'name' => totranslate('Disabled'),

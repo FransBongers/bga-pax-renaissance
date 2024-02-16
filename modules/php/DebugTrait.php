@@ -31,7 +31,8 @@ trait DebugTrait
   function test()
   {
 
-    Empires::get(PAPAL_STATES)->changeToTheocracy(REFORMIST);
+    Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
+    Cards::get('EmpireSquare_Ottoman')->setSide(REPUBLIC);
     // $this->debugPlaceToken(PAWN, MEDICI, BORDER_ENGLAND_FRANCE);
     // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_ENGLAND_PORTUGAL);
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);

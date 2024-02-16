@@ -184,18 +184,19 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
         } else if ($args['region'] === WEST) {
           Stats::incTradeFairWestActionCount($playerId, 1);
         }
+        $freeTradeFair = $player->hasSpecialAbility(SA_FREE_TRADE_FAIR) && count(Engine::getResolvedActions([TRADE_FAIR_FREE])) === 0;
+        if ($freeTradeFair) {
+          Engine::insertExtraPlayerAction($player);
+        }
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [
-              'action' => TRADE_FAIR,
+              'action' => $freeTradeFair ? TRADE_FAIR_FREE : TRADE_FAIR,
               'playerId' => $this->ctx->getPlayerId(),
               'region' => $args['region'],
             ]
           ]
         ]));
-        if ($player->hasSpecialAbility(SA_FREE_TRADE_FAIR) && count(Engine::getResolvedActions([TRADE_FAIR])) === 0) {
-          Engine::insertExtraPlayerAction($player);
-        }
         break;
     }
 

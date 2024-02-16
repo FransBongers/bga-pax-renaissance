@@ -2608,12 +2608,12 @@ var TableauCardManager = (function (_super) {
             div.setAttribute("data-card-id", "".concat(card.id, "_king"));
             div.style.width = "calc(var(--paxRenCardScale) * 151px)";
             div.style.height = "calc(var(--paxRenCardScale) * 151px)";
-        }
-        if (this.game.gameOptions.ageOfReformationPromo) {
-            div.setAttribute("data-map-type", "ageOfReformation");
-            if (card.id === "EmpireSquare_PapalStates") {
-                var religion = this.game.gamedatas.gameMap.empires.find(function (empire) { return empire.id === PAPAL_STATES; }).religion;
-                div.setAttribute("data-religion", religion);
+            if (this.game.gameOptions.ageOfReformationPromo) {
+                div.setAttribute("data-map-type", "ageOfReformation");
+                if (card.id === "EmpireSquare_PapalStates") {
+                    var religion = this.game.gamedatas.gameMap.empires.find(function (empire) { return empire.id === PAPAL_STATES; }).religion;
+                    div.setAttribute("data-religion", religion);
+                }
             }
         }
         if (card.type === TABLEAU_CARD &&
@@ -2653,6 +2653,9 @@ var TableauCardManager = (function (_super) {
             div.setAttribute("data-card-id", "".concat(card.id, "_republic"));
             div.style.width = "calc(var(--paxRenCardScale) * 151px)";
             div.style.height = "calc(var(--paxRenCardScale) * 151px)";
+            if (this.game.gameOptions.ageOfReformationPromo) {
+                div.setAttribute("data-map-type", "ageOfReformation");
+            }
         }
     };
     TableauCardManager.prototype.isCardVisible = function (card) {

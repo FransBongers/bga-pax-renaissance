@@ -25,7 +25,7 @@ class FreeTradeFair extends \PaxRenaissance\Models\AbilityAction
       return false;
     }
     // First trade fair will be the free one by default
-    return count(Engine::getResolvedActions([TRADE_FAIR])) === 0;
+    return count(Engine::getResolvedActions([TRADE_FAIR_FREE])) === 0;
   }
 
   public function getFlow($player, $cardId)
