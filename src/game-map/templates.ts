@@ -125,8 +125,8 @@ const tplGameMapVictoryCards = ({
 const tplTokensInTheocraciesIcon = ({ religion }: { religion: string; }) => `
   <div class="pr_supreme_religion_tokens_theocracies_icon_container">
     <div class="pr_token pr_pirate" data-separator="${religion}"></div>
-    <div class="pr_token pr_knight" data-separator="${religion}" style="margin-left: calc(var(--paxRenTokenScale) * -20px);"></div>
-    <div class="pr_token pr_rook" data-separator="${religion}" style="margin-left: calc(var(--paxRenTokenScale) * -8px);"></div>
+    <div class="pr_token pr_knight" data-separator="${religion}" style="margin-left: calc(var(--paxRenTokenScale) * -32px);"></div>
+    <div class="pr_token pr_rook" data-separator="${religion}" style="margin-left: calc(var(--paxRenTokenScale) * -18px);"></div>
   </div>
   `;
 
@@ -145,7 +145,7 @@ const tplGameMapSupremeReligion = () => `
       <div id="pr_reformist_icon" class="pr_religion_icon" data-religion="reformist"></div>
     </div>
     <div id="pr_supreme_religion_bishops">
-      <div id="pr_supreme_religion_bishop_counter_container_catholic" class="pr_supreme_religion_bishop_counter" style="margin-left: calc(var(--paxRenMapScale) * 26px);">
+      <div id="pr_supreme_religion_bishop_counter_container_catholic" class="pr_supreme_religion_bishop_counter" style="margin-left: calc(var(--paxRenMapScale) * 21px);">
         <div id="bishop_catholic_sr" class="pr_token pr_bishop" data-separator="catholic"></div>
         <span id="pr_supreme_religion_bishop_counter_catholic"></span>
       </div>
@@ -153,7 +153,7 @@ const tplGameMapSupremeReligion = () => `
         <div id="bishop_islamic_sr" class="pr_token pr_bishop" data-separator="islamic"></div>
         <span id="pr_supreme_religion_bishop_counter_islamic"></span>
       </div>
-      <div id="pr_supreme_religion_bishop_counter_container_reformist" class="pr_supreme_religion_bishop_counter" style="margin-right: calc(var(--paxRenMapScale) * 19px);">
+      <div id="pr_supreme_religion_bishop_counter_container_reformist" class="pr_supreme_religion_bishop_counter" style="margin-right: calc(var(--paxRenMapScale) * 24px);">
         <div id="bishop_reformist_sr" class="pr_token pr_bishop" data-separator="reformist"></div>
         <span id="pr_supreme_religion_bishop_counter_reformist"></span>
       </div>

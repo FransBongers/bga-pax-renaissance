@@ -121,7 +121,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  --paxRenTokenScale: var(--paxRenMapScale) * 0.8;
+  --paxRenTokenScale: var(--paxRenMapScale);
 }
 #pr_supreme_religion_container #pr_supreme_religion_bishops .pr_supreme_religion_bishop_counter {
   height: calc(var(--paxRenMapScale) * 67px);
@@ -135,8 +135,8 @@
 }
 #pr_supreme_religion_container #pr_supreme_religion_bishops .pr_supreme_religion_bishop_counter span {
   position: absolute;
-  bottom: 0px;
-  right: 0px;
+  bottom: calc(var(--paxRenMapScale) * -8px);
+  right: calc(var(--paxRenMapScale) * -3px);
 }
 #pr_supreme_religion_container #pr_supreme_religion_tokens_theocracies {
   margin-top: calc(var(--paxRenMapScale) * 16px);
@@ -187,11 +187,11 @@
 .pr_empire_throne_coat_of_arms {
   position: absolute;
   background-image: url("img/tokens.webp");
-  background-size: 800% 100%;
-  top: calc(var(--paxRenMapScale) * 6px);
-  left: calc(var(--paxRenMapScale) * 6px);
-  width: calc(var(--paxRenMapScale) * 40px);
-  height: calc(var(--paxRenMapScale) * 46px);
+  background-size: 600% 300%;
+  top: calc(var(--paxRenMapScale) * -2px);
+  left: calc(var(--paxRenMapScale) * 4px);
+  width: calc(var(--paxRenMapScale) * 50px);
+  height: calc(var(--paxRenMapScale) * 70px);
 }
 
 .pr_empire_throne_tokens {
@@ -214,11 +214,11 @@
 }
 
 .pr_empire_throne_coat_of_arms[data-side=king] {
-  filter: drop-shadow(2px 0px 0px gold) drop-shadow(-2px 0px 0px gold) drop-shadow(0px 2px 0px gold) drop-shadow(0px -2px 0px gold);
+  background-position-y: 50%;
 }
 
 .pr_empire_throne_coat_of_arms[data-side=republic] {
-  filter: drop-shadow(2px 0px 0px rgb(210, 206, 196)) drop-shadow(-2px 0px 0px rgb(210, 206, 196)) drop-shadow(0px 2px 0px rgb(210, 206, 196)) drop-shadow(0px -2px 0px rgb(210, 206, 196));
+  background-position-y: 100%;
 }
 
 .pr_coat_of_arms[data-owner=none] {
@@ -226,27 +226,33 @@
 }
 
 .pr_coat_of_arms[data-owner=coeur] {
-  background-position-x: 28.5714285714%;
+  background-position-x: 0%;
 }
 
 .pr_coat_of_arms[data-owner=fugger] {
-  background-position-x: 42.8571428571%;
+  background-position-x: 20%;
 }
 
 .pr_coat_of_arms[data-owner=medici] {
-  background-position-x: 71.4285714286%;
+  background-position-x: 60%;
+  top: calc(var(--paxRenMapScale) * -3px);
 }
 
 .pr_coat_of_arms[data-owner=marchionni] {
-  background-position-x: 57.1428571429%;
+  background-position-x: 40%;
+  top: calc(var(--paxRenMapScale) * -3px);
 }
 
 .pr_coat_of_arms[data-owner=berenberg] {
-  background-position-x: 85.7142857143%;
+  background-position-x: 80%;
+  top: calc(var(--paxRenMapScale) * -4px);
 }
 
 .pr_coat_of_arms[data-owner=mendes] {
   background-position-x: 100%;
+  top: calc(var(--paxRenMapScale) * 4px);
+  width: calc(var(--paxRenMapScale) * 45px);
+  height: calc(var(--paxRenMapScale) * 63px);
 }
 
 /* ------- VICTORY CARD SLOTS ------- */
@@ -1255,11 +1261,11 @@
   margin-bottom: calc(var(--paxRenMapScale) * 3px);
 }
 .pr_city .pr_knight {
-  margin-bottom: calc(var(--paxRenMapScale) * 4px);
-  margin-right: calc(var(--paxRenMapScale) * 4px);
+  margin-bottom: calc(var(--paxRenMapScale) * 1px);
+  margin-right: calc(var(--paxRenMapScale) * 6px);
 }
 .pr_city .pr_rook {
-  margin-bottom: calc(var(--paxRenMapScale) * 4px);
+  margin-bottom: calc(var(--paxRenMapScale) * 1px);
 }
 
 .pr_card_move {
@@ -1364,7 +1370,7 @@
 .pr_card.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) yellow !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) #ffff00 !important;
 }
 
 .card.pr_selectable,
@@ -1380,7 +1386,7 @@
 .pr_market.pr_selectable {
   /* border: 2px blue solid; */
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px calc(var(--paxRenMapScale) * 4px) yellow !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenMapScale) * 4px) #ffff00 !important;
 }
 
 .card.pr_selectable.pr_empire_square {
@@ -1392,7 +1398,7 @@
 .pr_card.pr_selected,
 .pr_card.pr_selectable:hover {
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) blue !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) #0000ff !important;
   z-index: 1;
 }
 
@@ -1413,7 +1419,7 @@
 .pr_market.pr_selected,
 .pr_market.pr_selectable:hover {
   cursor: pointer !important;
-  box-shadow: 0px 0px 0px calc(var(--paxRenMapScale) * 4px) blue !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenMapScale) * 4px) #0000ff !important;
 }
 
 .card.pr_selected.pr_empire_square,
@@ -1427,21 +1433,21 @@
 }
 
 .card.pr_selectable > .card-sides > .card-side {
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) yellow !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) #ffff00 !important;
 }
 
 .card.pr_selectable > .card-sides > .pr_square_card {
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) yellow !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) #ffff00 !important;
 }
 
 .card.pr_selectable:hover > .card-sides > .card-side,
 .card.pr_selected > .card-sides > .card-side {
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) blue !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) #0000ff !important;
 }
 
 .card.pr_selectable:hover > .card-sides > .pr_square_card,
 .card.pr_selected > .card-sides > .pr_square_card {
-  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) blue !important;
+  box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) #0000ff !important;
 }
 
 .pr_tableau_op_select.pr_selectable,
@@ -1510,19 +1516,19 @@
 }
 
 .pr_player_board_tableau_cards[data-region=west] .pr_card_tokens_container {
-  left: calc(var(--paxRenCardScale) * 63px);
+  left: calc(var(--paxRenCardScale) * 66px);
   top: calc(var(--paxRenCardScale) * 140px);
   justify-content: flex-end;
   align-items: end;
 }
 .pr_player_board_tableau_cards[data-region=west] .pr_empire_square .pr_card_tokens_container {
-  left: calc(var(--paxRenCardScale) * 63px);
+  left: calc(var(--paxRenCardScale) * 66px);
   top: calc(var(--paxRenCardScale) * 63px);
   justify-content: flex-end;
   align-items: end;
 }
 .pr_player_board_tableau_cards[data-region=west] .pr_queens_container .pr_card_tokens_container {
-  left: calc(var(--paxRenCardScale) * 63px);
+  left: calc(var(--paxRenCardScale) * 66px);
   top: calc(var(--paxRenCardScale) * 20px);
   justify-content: flex-end;
   align-items: end;
@@ -1530,19 +1536,19 @@
 
 .pr_player_board_tableau_cards[data-region=east] .pr_card_tokens_container {
   top: calc(var(--paxRenCardScale) * 140px);
-  left: calc(var(--paxRenCardScale) * 7px);
+  left: calc(var(--paxRenCardScale) * 4px);
   justify-content: flex-start;
   align-items: end;
 }
 .pr_player_board_tableau_cards[data-region=east] .pr_empire_square .pr_card_tokens_container {
   top: calc(var(--paxRenCardScale) * 63px);
-  left: calc(var(--paxRenCardScale) * 7px);
+  left: calc(var(--paxRenCardScale) * 4px);
   justify-content: flex-start;
   align-items: end;
 }
 .pr_player_board_tableau_cards[data-region=east] .pr_queens_container .pr_card_tokens_container {
   top: calc(var(--paxRenCardScale) * 20px);
-  left: calc(var(--paxRenCardScale) * 7px);
+  left: calc(var(--paxRenCardScale) * 4px);
   justify-content: flex-start;
   align-items: end;
 }
@@ -3073,13 +3079,12 @@
 }
 
 .pr_icon[data-icon=florin] {
-  background-position-x: 14.2857142857%;
-  width: calc(var(--paxRenIconScale) * 50px);
-  height: calc(var(--paxRenIconScale) * 52px);
+  background-position-x: 100%;
+  width: calc(var(--paxRenIconScale) * 55px);
+  height: calc(var(--paxRenIconScale) * 55px);
   border-radius: 50%;
-  background-image: url("img/tokens.webp");
-  background-size: 800% 116%;
-  filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
+  background-image: url("img/florins.webp");
+  background-size: 200% 100%;
 }
 
 .pr_card_back_icon {
@@ -3135,17 +3140,17 @@
 
 .pr_icon[data-icon=concession] {
   background-image: url("img/pawns.webp");
-  background-size: 600% 100%;
-  min-width: calc(var(--paxRenTokenScale) * 20px);
-  min-height: calc(var(--paxRenTokenScale) * 33px);
-  max-width: calc(var(--paxRenTokenScale) * 20px);
-  max-height: calc(var(--paxRenTokenScale) * 33px);
+  background-size: 600% 300%;
+  min-width: calc(var(--paxRenTokenScale) * 23px);
+  min-height: calc(var(--paxRenTokenScale) * 36px);
+  max-width: calc(var(--paxRenTokenScale) * 23px);
+  max-height: calc(var(--paxRenTokenScale) * 36px);
   margin-left: 2px;
 }
 
 .pr_icon[data-icon=concession][data-bank=fugger] {
   background-position-x: 0%;
-  background-position-y: 33.3333333333%;
+  background-position-x: 0%;
 }
 
 .pr_icon[data-icon=concession][data-bank=marchionni] {
@@ -3280,17 +3285,21 @@
 #pagemaintitletext .pr_icon[data-icon=florin],
 #gameaction_status .pr_icon[data-icon=florin] {
   --paxRenIconScale: 0.5;
-  margin-bottom: -4px;
+  margin-bottom: -6px;
 }
 #pagemaintitletext .pr_token,
 #gameaction_status .pr_token {
   display: inline-block;
   margin-bottom: -8px;
-  --paxRenTokenScale: 0.7;
+  --paxRenTokenScale: 0.6;
 }
 #pagemaintitletext .pr_rook,
 #gameaction_status .pr_rook {
-  --paxRenTokenScale: 0.65;
+  --paxRenTokenScale: 0.6;
+}
+#pagemaintitletext .pr_pawn,
+#gameaction_status .pr_pawn {
+  --paxRenTokenScale: 0.64;
 }
 #pagemaintitletext .pr_one_shot,
 #gameaction_status .pr_one_shot {
@@ -3320,7 +3329,7 @@
 .log > .roundedbox .pr_icon[data-icon=florin],
 .log > .roundedboxinner .pr_icon[data-icon=florin] {
   --paxRenIconScale: 0.5;
-  margin-bottom: -4px;
+  margin-bottom: -6px;
 }
 .log > .roundedbox .pr_token,
 .log > .roundedboxinner .pr_token {
@@ -3354,26 +3363,26 @@
 .pr_agent_button .pr_token {
   display: inline-block;
   position: relative;
-  top: 11px;
-  margin-top: -11px;
+  top: 16px;
+  margin-top: -20px;
   margin-right: 4px;
 }
 .pr_agent_button .pr_bishop {
-  --paxRenTokenScale: 0.61;
-  top: 12px;
-  margin-top: -12px;
+  --paxRenTokenScale: 0.65;
+  top: 15px;
+  margin-top: -18px;
 }
 .pr_agent_button .pr_knight {
-  --paxRenTokenScale: 0.75;
+  --paxRenTokenScale: 0.8;
 }
 .pr_agent_button .pr_pawn {
   --paxRenTokenScale: 0.8;
 }
 .pr_agent_button .pr_pirate {
-  --paxRenTokenScale: 0.75;
+  --paxRenTokenScale: 0.8;
 }
 .pr_agent_button .pr_rook {
-  --paxRenTokenScale: 0.7;
+  --paxRenTokenScale: 0.75;
 }
 
 #pr_market_west_deck,
@@ -3471,7 +3480,7 @@
   z-index: 1;
 }
 .pr_market .pr_icon .pr_counter {
-  margin-top: 4px;
+  margin-top: 2px;
   margin-left: -2px;
   font-weight: bold;
   font-size: calc(var(--paxRenMapScale) * 30px);
@@ -3789,7 +3798,6 @@
   background-repeat: no-repeat;
   width: calc(var(--paxRenIconScale) * 100px);
   height: calc(var(--paxRenIconScale) * 58px);
-  filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
 }
 
 .pr_one_shot[data-one-shot-id=APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT] {
@@ -3859,16 +3867,15 @@
 
 .pr_token {
   background-repeat: no-repeat;
-  filter: drop-shadow(1px 0px 0px white) drop-shadow(-1px 0px 0px white) drop-shadow(0px 1px 0px white) drop-shadow(0px -1px 0px white);
 }
 
 .pr_token.pr_selectable {
-  filter: drop-shadow(2px 0px 0px yellow) drop-shadow(-2px 0px 0px yellow) drop-shadow(0px 2px 0px yellow) drop-shadow(0px -2px 0px yellow);
+  background-position-y: 50%;
 }
 
 .pr_token.pr_selected,
 .pr_token.pr_selectable:hover {
-  filter: drop-shadow(3px 0px 0px blue) drop-shadow(-3px 0px 0px blue) drop-shadow(0px 3px 0px blue) drop-shadow(0px -3px 0px blue);
+  background-position-y: 100%;
   cursor: pointer;
 }
 
@@ -3892,11 +3899,11 @@
 /* ------- PAWNS ------- */
 .pr_pawn {
   background-image: url("img/pawns.webp");
-  background-size: 600% 100%;
-  min-width: calc(var(--paxRenTokenScale) * 26px);
-  min-height: calc(var(--paxRenTokenScale) * 43px);
-  max-width: calc(var(--paxRenTokenScale) * 26px);
-  max-height: calc(var(--paxRenTokenScale) * 43px);
+  background-size: 600% 300%;
+  min-width: calc(var(--paxRenTokenScale) * 33px);
+  min-height: calc(var(--paxRenTokenScale) * 51px);
+  max-width: calc(var(--paxRenTokenScale) * 33px);
+  max-height: calc(var(--paxRenTokenScale) * 51px);
 }
 
 .pr_pawn[data-separator=fugger] {
@@ -3938,35 +3945,35 @@
 
 .pr_bishop {
   background-image: url("img/bishops.webp");
-  background-size: 300% 100%;
-  width: calc(var(--paxRenTokenScale) * 30px);
-  height: calc(var(--paxRenTokenScale) * 59px);
+  background-size: 300% 300%;
+  width: calc(var(--paxRenTokenScale) * 36px);
+  height: calc(var(--paxRenTokenScale) * 62px);
 }
 
 .pr_knight {
   background-image: url("img/knights.webp");
-  background-size: 300% 100%;
-  max-width: calc(var(--paxRenTokenScale) * 36px);
-  min-width: calc(var(--paxRenTokenScale) * 36px);
-  height: calc(var(--paxRenTokenScale) * 46px);
+  background-size: 300% 300%;
+  max-width: calc(var(--paxRenTokenScale) * 44px);
+  min-width: calc(var(--paxRenTokenScale) * 44px);
+  height: calc(var(--paxRenTokenScale) * 54px);
 }
 
 .pr_pirate {
   background-image: url("img/pirates.webp");
-  background-size: 300% 100%;
-  min-width: calc(var(--paxRenTokenScale) * 45px);
-  min-height: calc(var(--paxRenTokenScale) * 47px);
-  max-width: calc(var(--paxRenTokenScale) * 45px);
-  max-height: calc(var(--paxRenTokenScale) * 47px);
+  background-size: 300% 300%;
+  min-width: calc(var(--paxRenTokenScale) * 53px);
+  min-height: calc(var(--paxRenTokenScale) * 54px);
+  max-width: calc(var(--paxRenTokenScale) * 53px);
+  max-height: calc(var(--paxRenTokenScale) * 54px);
 }
 
 .pr_rook {
   background-image: url("img/rooks.webp");
-  background-size: 300% 100%;
-  min-width: calc(var(--paxRenTokenScale) * 30px);
-  max-width: calc(var(--paxRenTokenScale) * 30px);
-  min-height: calc(var(--paxRenTokenScale) * 49px);
-  max-height: calc(var(--paxRenTokenScale) * 49px);
+  background-size: 300% 300%;
+  min-width: calc(var(--paxRenTokenScale) * 37px);
+  max-width: calc(var(--paxRenTokenScale) * 37px);
+  min-height: calc(var(--paxRenTokenScale) * 55px);
+  max-height: calc(var(--paxRenTokenScale) * 55px);
 }
 
 .pr_tableau_op {
@@ -3975,7 +3982,6 @@
   background-repeat: no-repeat;
   width: calc(var(--paxRenIconScale) * 100px);
   height: calc(var(--paxRenIconScale) * 74px);
-  filter: drop-shadow(rgba(0, 0, 0, 0.5) 1px 1px 1px);
 }
 
 .pr_tableau_op[data-tableau-op-id=BEHEAD_OP] {
@@ -4550,11 +4556,22 @@
 }
 .pr_player_panel .pr_coat_of_arms {
   background-image: url("img/tokens.webp");
-  background-size: 800% 100%;
-  width: 40px;
-  height: 46px;
+  background-size: 600% 300%;
+  width: 50px;
+  height: 70px;
   margin-left: auto;
   margin-right: 4px;
+  margin-top: -11px;
+}
+.pr_player_panel .pr_coat_of_arms[data-owner=medici],
+.pr_player_panel .pr_coat_of_arms[data-owner=marchionni] {
+  margin-top: -12px;
+}
+.pr_player_panel .pr_coat_of_arms[data-owner=mendes] {
+  margin-top: -6px;
+}
+.pr_player_panel .pr_coat_of_arms[data-owner=berenberg] {
+  margin-top: -14px;
 }
 
 .pr_player_panel_icons {
@@ -4687,8 +4704,7 @@
   background-image: url("img/player_boards.webp");
   background-size: 200% 300%;
   height: calc(var(--paxRenCardScale) * 400px);
-  min-width: calc(var(--paxRenCardScale) * 293px);
-  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+  min-width: calc(var(--paxRenCardScale) * 295px);
 }
 
 .pr_player_board[data-color=blue] {
@@ -4915,8 +4931,8 @@
 }
 .pr_token_counter_container span {
   position: absolute;
-  bottom: calc(var(--paxRenMapScale) * -10px);
-  right: calc(var(--paxRenMapScale) * -5px);
+  bottom: calc(var(--paxRenMapScale) * -15px);
+  right: calc(var(--paxRenMapScale) * -7px);
   align-self: center;
   font-weight: bold;
   font-size: calc(var(--paxRenMapScale) * 40px);
@@ -5052,9 +5068,8 @@
   gap: 4px;
 }
 .pr_icon_counter_container .pr_icon[data-icon=florin] {
-  width: 25px;
-  height: 25px;
-  margin-left: 4px;
+  width: 33px;
+  height: 33px;
 }
 .pr_icon_counter_container .pr_card_back_icon {
   width: 22px;

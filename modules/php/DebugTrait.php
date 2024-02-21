@@ -30,15 +30,58 @@ trait DebugTrait
 {
   function test()
   {
+    $this->debugPlaceCardInTableau('EmpireSquare_England', WEST, 2371052);
+    $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371053);
+    $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371054);
+    $this->debugPlaceCardInTableau('EmpireSquare_Hungary', EAST, 2371055);
 
-    Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
-    Cards::get('EmpireSquare_Ottoman')->setSide(REPUBLIC);
+    $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371052);
+    $this->debugPlaceCardInTableau('EmpireSquare_Aragon', WEST, 2371053);
+    $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371054);
+    $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371055);
+
+    // foreach(Empires::getAll() as $empire) {
+    //   $empire->getEmpireCard()->setSide(REPUBLIC);
+    // }
+    // Tokens::get('pawn_fugger_8')->returnToSupply();
+    // Tokens::get('pawn_marchionni_4')->returnToSupply();
+    // Tokens::move('pirate_reformist_3',BORDER_MAMLUK_OTTOMAN);
+    // $index = 0;
+    // $pirateMap = [
+    //   0 => CATHOLIC,
+    //   1 => ISLAMIC,
+    //   2 => REFORMIST,
+    // ];
+    // foreach(BORDERS as $borderId) {
+    //   // $border = Borders::get($borderId);
+    //   // $token = $border->getTokens();
+    //   // if (count($token) > 0) {
+    //   //   continue;
+    //   // }
+    //   $this->debugPlaceToken(PIRATE, $pirateMap[$index % 3], $borderId);
+    //   $index += 1;
+    // }
+    // $this->debugPlaceToken(PAWN, COEUR, BORDER_OTTOMAN_PAPAL_STATES);
+
+    // Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
+    // Cards::get('EmpireSquare_Ottoman')->setSide(REPUBLIC);
     // $this->debugPlaceToken(PAWN, MEDICI, BORDER_ENGLAND_FRANCE);
     // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_ENGLAND_PORTUGAL);
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN158X_OrderOfPreachers', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN061_Qizilbash', EAST, 2371052);
     // $this->debugPlaceCardInTableau('PREN118X_GrandMufti', EAST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN009_HouseOfBorgia', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN011_AnabaptistReformation', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN010_BonfireOfTheVanities', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN013_GenoeseFleet', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN019_GoldCoastMonopoly', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN021_Conquistadors', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN028_TheBold', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN023_SpanishTercio', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN034_MerchantsOfTheStaple', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN040_SindicatRemenca', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN037_TheHidden', WEST, 2371052);
     
     // $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371053); // DISCOVERY
     // Cards::get('EmpireSquare_Portugal')->setSide(REPUBLIC);
@@ -71,7 +114,9 @@ trait DebugTrait
     $supply = Locations::supply($type, $separator);
 
     $token = Tokens::getTopOf($supply);
-
+    if ($token === null) {
+      return;
+    }
     $fromLocationId = $token->getLocation();
     $token = $token->move($locationId, false);
     Notifications::placeToken(Players::get(), $token, $fromLocationId);

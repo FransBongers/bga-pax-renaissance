@@ -181,7 +181,7 @@
 
 .pr_player_board_tableau_cards[data-region="west"] {
   .pr_card_tokens_container {
-    left: calc(var(--paxRenCardScale) * 63px);
+    left: calc(var(--paxRenCardScale) * 66px);
     top: calc(var(--paxRenCardScale) * 140px);
     justify-content: flex-end;
     align-items: end;
@@ -189,7 +189,7 @@
 
   .pr_empire_square {
     .pr_card_tokens_container {
-      left: calc(var(--paxRenCardScale) * 63px);
+      left: calc(var(--paxRenCardScale) * 66px);
       top: calc(var(--paxRenCardScale) * 63px);
       justify-content: flex-end;
       align-items: end;
@@ -198,7 +198,7 @@
 
   .pr_queens_container {
     .pr_card_tokens_container {
-      left: calc(var(--paxRenCardScale) * 63px);
+      left: calc(var(--paxRenCardScale) * 66px);
       top: calc(var(--paxRenCardScale) * 20px);
       justify-content: flex-end;
       align-items: end;
@@ -209,7 +209,7 @@
 .pr_player_board_tableau_cards[data-region="east"] {
   .pr_card_tokens_container {
     top: calc(var(--paxRenCardScale) * 140px);
-    left: calc(var(--paxRenCardScale) * 7px);
+    left: calc(var(--paxRenCardScale) * 4px);
     justify-content: flex-start;
     align-items: end;
   }
@@ -218,7 +218,7 @@
   .pr_empire_square {
     .pr_card_tokens_container {
       top: calc(var(--paxRenCardScale) * 63px);
-      left: calc(var(--paxRenCardScale) * 7px);
+      left: calc(var(--paxRenCardScale) * 4px);
       justify-content: flex-start;
       align-items: end;
     }
@@ -227,7 +227,7 @@
   .pr_queens_container {
     .pr_card_tokens_container {
       top: calc(var(--paxRenCardScale) * 20px);
-      left: calc(var(--paxRenCardScale) * 7px);
+      left: calc(var(--paxRenCardScale) * 4px);
       justify-content: flex-start;
       align-items: end;
     }

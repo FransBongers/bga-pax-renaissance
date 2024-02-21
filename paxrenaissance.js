@@ -3558,13 +3558,13 @@ var tplGameMapVictoryCards = function (_a) {
 };
 var tplTokensInTheocraciesIcon = function (_a) {
     var religion = _a.religion;
-    return "\n  <div class=\"pr_supreme_religion_tokens_theocracies_icon_container\">\n    <div class=\"pr_token pr_pirate\" data-separator=\"".concat(religion, "\"></div>\n    <div class=\"pr_token pr_knight\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenTokenScale) * -20px);\"></div>\n    <div class=\"pr_token pr_rook\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenTokenScale) * -8px);\"></div>\n  </div>\n  ");
+    return "\n  <div class=\"pr_supreme_religion_tokens_theocracies_icon_container\">\n    <div class=\"pr_token pr_pirate\" data-separator=\"".concat(religion, "\"></div>\n    <div class=\"pr_token pr_knight\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenTokenScale) * -32px);\"></div>\n    <div class=\"pr_token pr_rook\" data-separator=\"").concat(religion, "\" style=\"margin-left: calc(var(--paxRenTokenScale) * -18px);\"></div>\n  </div>\n  ");
 };
 var tplGameMapTheocraciesCounter = function (_a) {
     var religion = _a.religion;
     return "\n  <div id=\"pr_supreme_religion_token_counter_".concat(religion, "\" class=\"pr_supreme_religion_token_counter\">\n      ").concat(tplTokensInTheocraciesIcon({ religion: religion }), "\n  <span id=\"pr_tokens_theocracies_counter_").concat(religion, "\"></span>\n</div>\n  ");
 };
-var tplGameMapSupremeReligion = function () { return "\n  <div id=\"pr_supreme_religion_container\">\n    <div class=\"pr_religion_icons\">\n      <div id=\"pr_catholic_icon\" class=\"pr_religion_icon\" data-religion=\"catholic\"></div>\n      <div id=\"pr_islamic_icon\" class=\"pr_religion_icon\" data-religion=\"islamic\"></div>\n      <div id=\"pr_reformist_icon\" class=\"pr_religion_icon\" data-religion=\"reformist\"></div>\n    </div>\n    <div id=\"pr_supreme_religion_bishops\">\n      <div id=\"pr_supreme_religion_bishop_counter_container_catholic\" class=\"pr_supreme_religion_bishop_counter\" style=\"margin-left: calc(var(--paxRenMapScale) * 26px);\">\n        <div id=\"bishop_catholic_sr\" class=\"pr_token pr_bishop\" data-separator=\"catholic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_catholic\"></span>\n      </div>\n      <div id=\"pr_supreme_religion_bishop_counter_container_islamic\" class=\"pr_supreme_religion_bishop_counter\">\n        <div id=\"bishop_islamic_sr\" class=\"pr_token pr_bishop\" data-separator=\"islamic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_islamic\"></span>\n      </div>\n      <div id=\"pr_supreme_religion_bishop_counter_container_reformist\" class=\"pr_supreme_religion_bishop_counter\" style=\"margin-right: calc(var(--paxRenMapScale) * 19px);\">\n        <div id=\"bishop_reformist_sr\" class=\"pr_token pr_bishop\" data-separator=\"reformist\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_reformist\"></span>\n      </div>\n    </div>\n    <div id=\"pr_supreme_religion_tokens_theocracies\">\n      ".concat(RELIGIONS.map(function (religion) {
+var tplGameMapSupremeReligion = function () { return "\n  <div id=\"pr_supreme_religion_container\">\n    <div class=\"pr_religion_icons\">\n      <div id=\"pr_catholic_icon\" class=\"pr_religion_icon\" data-religion=\"catholic\"></div>\n      <div id=\"pr_islamic_icon\" class=\"pr_religion_icon\" data-religion=\"islamic\"></div>\n      <div id=\"pr_reformist_icon\" class=\"pr_religion_icon\" data-religion=\"reformist\"></div>\n    </div>\n    <div id=\"pr_supreme_religion_bishops\">\n      <div id=\"pr_supreme_religion_bishop_counter_container_catholic\" class=\"pr_supreme_religion_bishop_counter\" style=\"margin-left: calc(var(--paxRenMapScale) * 21px);\">\n        <div id=\"bishop_catholic_sr\" class=\"pr_token pr_bishop\" data-separator=\"catholic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_catholic\"></span>\n      </div>\n      <div id=\"pr_supreme_religion_bishop_counter_container_islamic\" class=\"pr_supreme_religion_bishop_counter\">\n        <div id=\"bishop_islamic_sr\" class=\"pr_token pr_bishop\" data-separator=\"islamic\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_islamic\"></span>\n      </div>\n      <div id=\"pr_supreme_religion_bishop_counter_container_reformist\" class=\"pr_supreme_religion_bishop_counter\" style=\"margin-right: calc(var(--paxRenMapScale) * 24px);\">\n        <div id=\"bishop_reformist_sr\" class=\"pr_token pr_bishop\" data-separator=\"reformist\"></div>\n        <span id=\"pr_supreme_religion_bishop_counter_reformist\"></span>\n      </div>\n    </div>\n    <div id=\"pr_supreme_religion_tokens_theocracies\">\n      ".concat(RELIGIONS.map(function (religion) {
     return tplGameMapTheocraciesCounter({ religion: religion });
 }).join(""), "\n    </div>\n  </div>\n  "); };
 var tplGameMap = function (_a) {
@@ -5416,15 +5416,25 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, playerId, location, _b, _, region, column;
             return __generator(this, function (_c) {
-                _a = notif.args, playerId = _a.playerId, location = _a.location;
-                _b = location.split("_"), _ = _b[0], region = _b[1], column = _b[2];
-                this.game.market.incFlorinValue({
-                    region: region,
-                    column: Number(column),
-                    value: -1,
-                });
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(1);
-                return [2];
+                switch (_c.label) {
+                    case 0:
+                        _a = notif.args, playerId = _a.playerId, location = _a.location;
+                        _b = location.split("_"), _ = _b[0], region = _b[1], column = _b[2];
+                        this.game.market.incFlorinValue({
+                            region: region,
+                            column: Number(column),
+                            value: -1,
+                        });
+                        return [4, this.game.market.moveFlorinAnimation({
+                                toId: "pr_florins_counter_".concat(playerId, "_icon"),
+                                fromId: "pr_market_".concat(region, "_").concat(column, "_florins"),
+                                index: 1
+                            })];
+                    case 1:
+                        _c.sent();
+                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(1);
+                        return [2];
+                }
             });
         });
     };

@@ -108,7 +108,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    --paxRenTokenScale: var(--paxRenMapScale) * 0.8;
+    --paxRenTokenScale: var(--paxRenMapScale);
 
     .pr_supreme_religion_bishop_counter {
       height: calc(var(--paxRenMapScale) * 67px);
@@ -123,8 +123,8 @@
 
       span {
         position: absolute;
-        bottom: 0px;
-        right: 0px;
+        bottom: calc(var(--paxRenMapScale) * -8px);
+        right: calc(var(--paxRenMapScale) * -3px);
       }
     }
   }
@@ -187,11 +187,11 @@
 .pr_empire_throne_coat_of_arms {
   position: absolute;
   background-image: url("img/tokens.webp");
-  background-size: 800% 100%;
-  top: calc(var(--paxRenMapScale) * 6px);
-  left: calc(var(--paxRenMapScale) * 6px);
-  width: calc(var(--paxRenMapScale) * 40px);
-  height: calc(var(--paxRenMapScale) * 46px);
+  background-size: 600% 300%;
+  top: calc(var(--paxRenMapScale) * -2px);
+  left: calc(var(--paxRenMapScale) * 4px);
+  width: calc(var(--paxRenMapScale) * 50px);
+  height: calc(var(--paxRenMapScale) * 70px);
 }
 
 .pr_empire_throne_tokens {
@@ -216,19 +216,11 @@
 }
 
 .pr_empire_throne_coat_of_arms[data-side="king"] {
-  // filter: drop-shadow(calc(var(--paxRenMapScale) * 2px) 0px 0px yellow) drop-shadow(calc(var(--paxRenMapScale) * -2px) 0px 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * 2px) 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * -2px) 0px yellow);
-  filter: drop-shadow(2px 0px 0px base.$empire-square-king)
-    drop-shadow(-2px 0px 0px base.$empire-square-king)
-    drop-shadow(0px 2px 0px base.$empire-square-king)
-    drop-shadow(0px -2px 0px base.$empire-square-king);
+  background-position-y: 50%;
 }
 
 .pr_empire_throne_coat_of_arms[data-side="republic"] {
-  // filter: drop-shadow(calc(var(--paxRenMapScale) * 2px) 0px 0px yellow) drop-shadow(calc(var(--paxRenMapScale) * -2px) 0px 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * 2px) 0px yellow) drop-shadow(0px calc(var(--paxRenMapScale) * -2px) 0px yellow);
-  filter: drop-shadow(2px 0px 0px base.$empire-square-republic)
-    drop-shadow(-2px 0px 0px base.$empire-square-republic)
-    drop-shadow(0px 2px 0px base.$empire-square-republic)
-    drop-shadow(0px -2px 0px base.$empire-square-republic);
+    background-position-y: 100%;
 }
 
 .pr_coat_of_arms[data-owner="none"] {
@@ -236,27 +228,34 @@
 }
 
 .pr_coat_of_arms[data-owner="coeur"] {
-  background-position-x: math.div((2 * 100%), 7);
+  background-position-x: math.div((0 * 100%), 5);
+  // top: calc(var(--paxRenMapScale) * -2px);
 }
 
 .pr_coat_of_arms[data-owner="fugger"] {
-  background-position-x: math.div((3 * 100%), 7);
+  background-position-x: math.div((1 * 100%), 5);
 }
 
 .pr_coat_of_arms[data-owner="medici"] {
-  background-position-x: math.div((5 * 100%), 7);
+  background-position-x: math.div((3 * 100%), 5);
+  top: calc(var(--paxRenMapScale) * -3px);
 }
 
 .pr_coat_of_arms[data-owner="marchionni"] {
-  background-position-x: math.div((4 * 100%), 7);
+  background-position-x: math.div((2 * 100%), 5);
+  top: calc(var(--paxRenMapScale) * -3px);
 }
 
 .pr_coat_of_arms[data-owner="berenberg"] {
-  background-position-x: math.div((6 * 100%), 7);
+  background-position-x: math.div((4 * 100%), 5);
+  top: calc(var(--paxRenMapScale) * -4px);
 }
 
 .pr_coat_of_arms[data-owner="mendes"] {
-  background-position-x: math.div((7 * 100%), 7);
+  background-position-x: math.div((5 * 100%), 5);
+  top: calc(var(--paxRenMapScale) * 4px);
+  width: calc(var(--paxRenMapScale) * 45px);
+  height: calc(var(--paxRenMapScale) * 63px);
 }
 
 /* ------- VICTORY CARD SLOTS ------- */
@@ -1466,11 +1465,11 @@ $map-cards: (
   }
 
   .pr_knight {
-    margin-bottom: calc(var(--paxRenMapScale) * 4px);
-    margin-right: calc(var(--paxRenMapScale) * 4px);
+    margin-bottom: calc(var(--paxRenMapScale) * 1px);
+    margin-right: calc(var(--paxRenMapScale) * 6px);
   }
 
   .pr_rook {
-    margin-bottom: calc(var(--paxRenMapScale) * 4px);
+    margin-bottom: calc(var(--paxRenMapScale) * 1px);
   }
 }

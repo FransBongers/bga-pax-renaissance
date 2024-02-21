@@ -5,14 +5,13 @@
  }
 
 .pr_icon[data-icon=florin] {
-  background-position-x: math.div((1 * 100%), 7);
-  width: calc(var(--paxRenIconScale) * 50px);
-  height: calc(var(--paxRenIconScale) * 52px);
+  background-position-x: 100%;
+  width: calc(var(--paxRenIconScale) * 55px);
+  height: calc(var(--paxRenIconScale) * 55px);
   // background-position-y: 8%;
   border-radius: 50%;
-  background-image: url("img/tokens.webp");
-  background-size: 800% 116%;
-  filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black) drop-shadow(0px -1px 0px black);
+  background-image: url("img/florins.webp");
+  background-size: 200% 100%;
 }
 
 .pr_card_back_icon {
@@ -68,17 +67,18 @@
 
 .pr_icon[data-icon=concession] {
   background-image: url("img/pawns.webp");
-  background-size: 600% 100%;
-  min-width: calc(var(--paxRenTokenScale) * 20px);
-  min-height: calc(var(--paxRenTokenScale) * 33px);
-  max-width: calc(var(--paxRenTokenScale) * 20px);
-  max-height: calc(var(--paxRenTokenScale) * 33px);
+  background-size: 600% 300%;
+  min-width: calc(var(--paxRenTokenScale) * 23px);
+  min-height: calc(var(--paxRenTokenScale) * 36px);
+  max-width: calc(var(--paxRenTokenScale) * 23px);
+  max-height: calc(var(--paxRenTokenScale) * 36px);
   margin-left: 2px;
 }
 
 .pr_icon[data-icon=concession][data-bank="fugger"] {
+  background-position-x: 0%;
   background-position-x: math.div(((11 - 1) % 10 * 100%), 9);
-  background-position-y: math.div(math.floor(calc((11 - 1) / 10)) * 100%, 3);
+  // background-position-y: math.div(math.floor(calc((11 - 1) / 10)) * 100%, 3);
 }
 
 .pr_icon[data-icon=concession][data-bank="marchionni"] {

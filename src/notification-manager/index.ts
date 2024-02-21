@@ -897,6 +897,11 @@ class NotificationManager {
       column: Number(column),
       value: -1,
     });
+    await this.game.market.moveFlorinAnimation({
+      toId: `pr_florins_counter_${playerId}_icon`,
+      fromId: `pr_market_${region}_${column}_florins`,
+      index: 1
+    });
     this.getPlayer({ playerId }).counters.florins.incValue(1);
   }
 

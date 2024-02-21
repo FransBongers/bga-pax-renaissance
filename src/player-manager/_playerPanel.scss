@@ -9,11 +9,25 @@
 
   .pr_coat_of_arms {
     background-image: url("img/tokens.webp");
-    background-size: 800% 100%;
-    width: 40px;
-    height: 46px;
+    background-size: 600% 300%;
+    width: 50px;
+    height: 70px;
     margin-left: auto;
     margin-right: 4px;
+    margin-top: -11px;
+  }
+
+  .pr_coat_of_arms[data-owner=medici],
+  .pr_coat_of_arms[data-owner=marchionni] {
+    margin-top: -12px;
+  }
+
+  .pr_coat_of_arms[data-owner=mendes] {
+    margin-top: -6px;
+  }
+
+  .pr_coat_of_arms[data-owner=berenberg] {
+    margin-top: -14px;
   }
 }
 

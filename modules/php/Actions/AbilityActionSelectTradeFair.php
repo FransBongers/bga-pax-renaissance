@@ -96,7 +96,7 @@ class AbilityActionSelectTradeFair extends \PaxRenaissance\Models\AtomicAction
     $this->ctx->insertAsBrother(Engine::buildTree([
       'children' => [
         [
-          'action' => TRADE_FAIR,
+          'action' => TRADE_FAIR_FREE,
           'playerId' => $this->ctx->getPlayerId(),
           'region' => $args['region'],
         ]

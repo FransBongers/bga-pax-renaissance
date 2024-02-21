@@ -1,21 +1,17 @@
 @use "sass:math";
 
 .pr_token {
-  // position: absolute;
   background-repeat: no-repeat;
-  filter: drop-shadow(1px 0px 0px white) drop-shadow(-1px 0px 0px white) drop-shadow(0px 1px 0px white) drop-shadow(0px -1px 0px white);
-  
   // opacity: 1 !important;
 }
 
 .pr_token.pr_selectable {
-  filter: drop-shadow(2px 0px 0px yellow) drop-shadow(-2px 0px 0px yellow)
-    drop-shadow(0px 2px 0px yellow) drop-shadow(0px -2px 0px yellow);
+  background-position-y: 50%;
 }
 
 .pr_token.pr_selected,
 .pr_token.pr_selectable:hover {
-  filter: drop-shadow(3px 0px 0px blue) drop-shadow(-3px 0px 0px blue) drop-shadow(0px 3px 0px blue) drop-shadow(0px -3px 0px blue);
+  background-position-y: 100%;
   cursor: pointer;
 }
 
@@ -42,15 +38,15 @@
 
 .pr_pawn {
   background-image: url("img/pawns.webp");
-  background-size: 600% 100%;
+  background-size: 600% 300%;
   // width: 143px;
   // height: 234px;
   // width: 30px;
   // height: 49px;
-  min-width: calc(var(--paxRenTokenScale) * 26px);
-  min-height: calc(var(--paxRenTokenScale) * 43px);
-  max-width: calc(var(--paxRenTokenScale) * 26px);
-  max-height: calc(var(--paxRenTokenScale) * 43px);
+  min-width: calc(var(--paxRenTokenScale) * 33px);
+  min-height: calc(var(--paxRenTokenScale) * 51px);
+  max-width: calc(var(--paxRenTokenScale) * 33px);
+  max-height: calc(var(--paxRenTokenScale) * 51px);
 }
 
 .pr_pawn[data-separator="fugger"] {
@@ -93,33 +89,33 @@
 
 .pr_bishop {
   background-image: url("img/bishops.webp");
-  background-size: 300% 100%;
-  width: calc(var(--paxRenTokenScale) * 30px);
-  height: calc(var(--paxRenTokenScale) * 59px);
+  background-size: 300% 300%;
+  width: calc(var(--paxRenTokenScale) * 36px);
+  height: calc(var(--paxRenTokenScale) * 62px);
 }
 
 .pr_knight {
   background-image: url("img/knights.webp");
-  background-size: 300% 100%;
-  max-width: calc(var(--paxRenTokenScale) * 36px);
-  min-width: calc(var(--paxRenTokenScale) * 36px);
-  height: calc(var(--paxRenTokenScale) * 46px);
+  background-size: 300% 300%;
+  max-width: calc(var(--paxRenTokenScale) * 44px);
+  min-width: calc(var(--paxRenTokenScale) * 44px);
+  height: calc(var(--paxRenTokenScale) * 54px);
 }
 
 .pr_pirate {
   background-image: url("img/pirates.webp");
-  background-size: 300% 100%;
-  min-width: calc(var(--paxRenTokenScale) * 45px);
-  min-height: calc(var(--paxRenTokenScale) * 47px);
-  max-width: calc(var(--paxRenTokenScale) * 45px);
-  max-height: calc(var(--paxRenTokenScale) * 47px);
+  background-size: 300% 300%;
+  min-width: calc(var(--paxRenTokenScale) * 53px);
+  min-height: calc(var(--paxRenTokenScale) * 54px);
+  max-width: calc(var(--paxRenTokenScale) * 53px);
+  max-height: calc(var(--paxRenTokenScale) * 54px);
 }
 
 .pr_rook {
   background-image: url("img/rooks.webp");
-  background-size: 300% 100%;
-  min-width: calc(var(--paxRenTokenScale) * 30px);
-  max-width: calc(var(--paxRenTokenScale) * 30px);
-  min-height: calc(var(--paxRenTokenScale) * 49px);
-  max-height: calc(var(--paxRenTokenScale) * 49px);
+  background-size: 300% 300%;
+  min-width: calc(var(--paxRenTokenScale) * 37px);
+  max-width: calc(var(--paxRenTokenScale) * 37px);
+  min-height: calc(var(--paxRenTokenScale) * 55px);
+  max-height: calc(var(--paxRenTokenScale) * 55px);
 }
