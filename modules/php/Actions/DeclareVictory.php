@@ -9,7 +9,7 @@ use PaxRenaissance\Core\Engine\Flows;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
-use PaxRenaissance\Helpers\Locations;
+use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Helpers\OneShots;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
@@ -57,6 +57,7 @@ class DeclareVictory extends \PaxRenaissance\Models\AtomicAction
 
     Notifications::declareVictory($player, $victoryCard);
     Players::setPlayerScore($player->getId(), 1);
+    Log::clearUndoableStepNotifications(true);
 
     switch ($victoryCard->getId()) {
       case 'VictoryAgeOfByzantine':

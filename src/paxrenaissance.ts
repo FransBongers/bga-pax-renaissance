@@ -31,9 +31,12 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public victoryCardManager: VictoryCardManager;
   // public instantaneousMode: boolean = true;
 
+  private _helpMode = false; // Use to implement help mode
   private _notif_uid_to_log_id = {};
+  private _notif_uid_to_mobile_log_id = {};
   private _last_notif = null;
   public _last_tooltip_id = 0;
+  private _selectableNodes = []; // TODO: use to keep track of selectable classed?
   public tooltipsToMap: [tooltipId: number, card_id: string][] = [];
   public _connections: unknown[];
   private alwaysFixTopActions: boolean;
@@ -288,6 +291,25 @@ class PaxRenaissance implements PaxRenaissanceGame {
         Number(args.active_player),
         args.args
       );
+    }
+
+    // Undo last steps
+    if (args.args && args.args.previousSteps) {
+      args.args.previousSteps.forEach((stepId: number) => {
+        let logEntry = $("logs").querySelector(
+          `.log.notif_newUndoableStep[data-step="${stepId}"]`
+        );
+        if (logEntry) {
+          this.onClick(logEntry, () => this.undoToStep({ stepId }));
+        }
+
+        logEntry = document.querySelector(
+          `.chatwindowlogs_zone .log.notif_newUndoableStep[data-step="${stepId}"]`
+        );
+        if (logEntry) {
+          this.onClick(logEntry, () => this.undoToStep({ stepId }));
+        }
+      });
     }
   }
 
@@ -616,6 +638,10 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
     dojo.forEach(this._connections, dojo.disconnect);
     this._connections = [];
+    this._selectableNodes.forEach((node) => {
+      if ($(node)) dojo.removeClass(node, "selectable selected");
+    });
+    this._selectableNodes = [];
 
     dojo.query(`.${PR_SELECTABLE}`).removeClass(PR_SELECTABLE);
     dojo.query(`.${PR_SELECTED}`).removeClass(PR_SELECTED);
@@ -747,16 +773,63 @@ class PaxRenaissance implements PaxRenaissanceGame {
     node.classList.add(PR_SELECTED);
   }
 
-  undoToStep({ stepId }: { stepId: string }) {
+  undoToStep({ stepId }: { stepId: string | number }) {
     // this.stopActionTimer();
-    this.framework().checkAction("actRestart");
+    // this.framework().checkAction("actRestart");
     // this.takeAction('actUndoToStep', args: { stepId });
     this.takeAction({
       action: "actUndoToStep",
       args: {
         stepId,
       },
+      checkAction: "actRestart",
     });
+  }
+
+  // .########...#######..####.##.......########.########.
+  // .##.....##.##.....##..##..##.......##.......##.....##
+  // .##.....##.##.....##..##..##.......##.......##.....##
+  // .########..##.....##..##..##.......######...########.
+  // .##.....##.##.....##..##..##.......##.......##...##..
+  // .##.....##.##.....##..##..##.......##.......##....##.
+  // .########...#######..####.########.########.##.....##
+
+  // .########..##..........###....########.########
+  // .##.....##.##.........##.##......##....##......
+  // .##.....##.##........##...##.....##....##......
+  // .########..##.......##.....##....##....######..
+  // .##........##.......#########....##....##......
+  // .##........##.......##.....##....##....##......
+  // .##........########.##.....##....##....########
+
+  /*
+   * Custom connect that keep track of all the connections
+   *  and wrap clicks to make it work with help mode
+   */
+  connect(node: HTMLElement, action: string, callback: Function) {
+    this._connections.push(dojo.connect($(node), action, callback));
+  }
+
+  onClick(node: HTMLElement, callback: Function, temporary = true) {
+    let safeCallback = (evt) => {
+      evt.stopPropagation();
+      if (this.framework().isInterfaceLocked()) {
+        return false;
+      }
+      if (this._helpMode) {
+        return false;
+      }
+      callback(evt);
+    };
+
+    if (temporary) {
+      this.connect($(node), "click", safeCallback);
+      dojo.removeClass(node, "unselectable"); // replace with pr_selectable / pr_selected
+      dojo.addClass(node, "selectable");
+      this._selectableNodes.push(node);
+    } else {
+      dojo.connect($(node), "click", safeCallback);
+    }
   }
 
   // .########.########.....###....##.....##.########.##......##..#######..########..##....##
@@ -780,6 +853,41 @@ class PaxRenaissance implements PaxRenaissanceGame {
    */
   onScreenWidthChange() {
     this.updateLayout();
+  }
+
+  /**
+   * Apparently onAdding<notif id>ToLog is called with every notification
+   */
+  onAddingNewUndoableStepToLog(notif: {
+    logId: number;
+    mobileLogId: number;
+    msg: Notif<{
+      preserve: string;
+      processed: boolean;
+      stepId: number | string;
+    }>;
+  }) {
+    console.log("onAddingNewUndoableStepToLog", notif);
+
+    if (!$(`log_${notif.logId}`)) return;
+    let stepId = notif.msg.args.stepId;
+    $(`log_${notif.logId}`).dataset.step = stepId;
+    if ($(`dockedlog_${notif.mobileLogId}`))
+      $(`dockedlog_${notif.mobileLogId}`).dataset.step = stepId;
+
+    if (
+      (
+        this.gamedatas.gamestate as ActiveGamestate<{
+          previousSteps?: number[];
+        }>
+      ).args.previousSteps?.includes(Number(stepId))
+    ) {
+      this.onClick($(`log_${notif.logId}`), () => this.undoToStep({ stepId }));
+      if ($(`dockedlog_${notif.mobileLogId}`))
+        this.onClick($(`dockedlog_${notif.mobileLogId}`), () =>
+          this.undoToStep({ stepId })
+        );
+    }
   }
 
   /* @Override */
@@ -819,10 +927,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
   onPlaceLogOnChannel(msg: Notif<unknown>) {
     // console.log('msg', msg);
     const currentLogId = this.framework().notifqueue.next_log_id;
+    const currentMobileLogId = this.framework().next_log_id;
     const res = this.framework().inherited(arguments);
     this._notif_uid_to_log_id[msg.uid] = currentLogId;
+    this._notif_uid_to_mobile_log_id[msg.uid] = currentMobileLogId;
     this._last_notif = {
       logId: currentLogId,
+      mobileLogId: currentMobileLogId,
       msg,
     };
     // console.log('_notif_uid_to_log_id', this._notif_uid_to_log_id);
@@ -833,7 +944,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
    * cancelLogs:
    *   strikes all log messages related to the given array of notif ids
    */
-  checkLogCancel(notifId) {
+  checkLogCancel(notifId: string) {
     if (
       this.gamedatas.canceledNotifIds != null &&
       this.gamedatas.canceledNotifIds.includes(notifId)
@@ -847,6 +958,11 @@ class PaxRenaissance implements PaxRenaissanceGame {
       if (this._notif_uid_to_log_id.hasOwnProperty(uid)) {
         let logId = this._notif_uid_to_log_id[uid];
         if ($("log_" + logId)) dojo.addClass("log_" + logId, "cancel");
+      }
+      if (this._notif_uid_to_mobile_log_id.hasOwnProperty(uid)) {
+        let mobileLogId = this._notif_uid_to_mobile_log_id[uid];
+        if ($("dockedlog_" + mobileLogId))
+          dojo.addClass("dockedlog_" + mobileLogId, "cancel");
       }
     });
   }
@@ -910,12 +1026,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
         });
       }
     } else if (cardId.startsWith("Victory")) {
-      console.log('victory card tooltip',cardId);
-      const card = this.gamedatas.victoryCards.find((card) => cardId === card.id);
+      const card = this.gamedatas.victoryCards.find(
+        (card) => cardId === card.id
+      );
       if (card) {
         this.tooltipManager.addVictoryCardTooltip({
           nodeId: `pr_tooltip_${tooltipId}`,
-          card
+          card,
         });
       }
     } else {

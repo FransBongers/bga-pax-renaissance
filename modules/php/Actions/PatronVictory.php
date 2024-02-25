@@ -9,7 +9,7 @@ use PaxRenaissance\Core\Engine\Flows;
 use PaxRenaissance\Core\Engine\LeafNode;
 use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Stats;
-use PaxRenaissance\Helpers\Locations;
+use PaxRenaissance\Helpers\Log;
 use PaxRenaissance\Helpers\OneShots;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
@@ -65,6 +65,7 @@ class PatronVictory extends \PaxRenaissance\Models\AtomicAction
 
     Notifications::patronVictory();
     Stats::setVictoryType(STAT_VICTORY_TYPE_PATRON);
+    Log::clearUndoableStepNotifications(true);
 
     usort($scores, function ($a, $b) {
       return $b['score'] - $a['score'];

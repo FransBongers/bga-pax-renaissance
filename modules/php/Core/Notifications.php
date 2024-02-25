@@ -41,15 +41,15 @@ class Notifications
   // TODO: check how to handle this in game log
   public static function newUndoableStep($player, $stepId)
   {
-    // self::notify($player, 'newUndoableStep', clienttranslate('Undo here'), [
-    //   'stepId' => $stepId,
-    //   'preserve' => ['stepId'],
-    // ]);
+    self::notify($player, 'newUndoableStep', clienttranslate('Undo to here'), [
+      'stepId' => $stepId,
+      'preserve' => ['stepId'],
+    ]);
   }
 
   public static function clearTurn($player, $notifIds)
   {
-    self::notifyAll('clearTurn', clienttranslate('${tkn_playerName} restarts his turn'), [
+    self::notifyAll('clearTurn', clienttranslate('${tkn_playerName} restarts their turn'), [
       'player' => $player,
       'notifIds' => $notifIds,
     ]);
@@ -699,7 +699,7 @@ class Notifications
       $key = '${tkn_cardName_queen_' . $index . "}";
       $key_card = '${tkn_card_queen_' . $index . "}";
       $queenNamesLog = $queenNamesLog . $separator . $key;
-      $queenCardsLog = $queenCardsLog.$key_card;
+      $queenCardsLog = $queenCardsLog . $key_card;
       $queenNamesArgs['tkn_cardName_queen_' . $index] = self::tknCardNameArg($queen->getId(), $queen->getName());
       $queenCardsArgs['tkn_card_queen_' . $index] = self::tknCardArg($queen);
     };
@@ -720,6 +720,13 @@ class Notifications
         'args' => $queenCardsArgs,
       ],
       'tkn_florin' => clienttranslate('Florin(s)'),
+    ]);
+  }
+
+  public static function startTurn($player)
+  {
+    self::message('${tkn_playerName} starts their turn', [
+      'player' => $player,
     ]);
   }
 
@@ -766,6 +773,21 @@ class Notifications
       'tkn_cardName' => $fromTradeFairCard ? $cardName : self::tknCardNameArg($card->getId(), $cardName),
       'location' => $card !== null ? $card->getLocation() : $space,
       'tkn_card' => $fromTradeFairCard ? '' : self::tknCardArg($card),
+    ]);
+  }
+
+  public static function tableauOpsAction($player, $action)
+  {
+    $actionTextMap = [
+      TABLEAU_OPS_SELECT_EAST => clienttranslate('East'),
+      TABLEAU_OPS_SELECT_WEST => clienttranslate('West'),
+      TABLEAU_OPS_SELECT_EAST_AND_WEST => clienttranslate('East & West'),
+    ];
+
+    self::message('${tkn_playerName} performs Tableau Ops ${action}', [
+      'player' => $player,
+      'action' => $actionTextMap[$action],
+      'i18n' => ['action']
     ]);
   }
 

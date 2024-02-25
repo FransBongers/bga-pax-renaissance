@@ -33,10 +33,10 @@ trait DebugTrait
     // Cards::move('PREN076_SophiaPalaiologina','queens_portugal');
     // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
 
-    // $this->debugPlaceCardInTableau('EmpireSquare_England', WEST, 2371052);
+    $this->debugPlaceCardInTableau('PREN110X_TransylvanianPlot', EAST, 2371052);
     // $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371053);
-    // $this->debugPlaceCardInTableau('PREN137X_FaithVsReason', WEST, 2371052);
-    // $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN043_Gutenberg', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN141X_WelserKleinVenedig', WEST, 2371052);
     // Cards::move('EmpireSquare_PapalStates',Locations::vassals(HOLY_ROMAN_EMIRE));
     // $this->debugPlaceCardInTableau('EmpireSquare_Hungary', EAST, 2371055);
 
@@ -66,7 +66,7 @@ trait DebugTrait
     //   $this->debugPlaceToken(PIRATE, $pirateMap[$index % 3], $borderId);
     //   $index += 1;
     // }
-    $this->debugPlaceToken(PAWN, MARCHIONNI, BORDER_ARAGON_PAPAL_STATES);
+    // $this->debugPlaceToken(PAWN, MARCHIONNI, BORDER_ARAGON_PAPAL_STATES);
     // $this->debugPlaceToken(PAWN, MARCHIONNI, 'EmpireSquare_Aragon');
 
     // Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);

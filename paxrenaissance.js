@@ -1907,9 +1907,12 @@ var CardManager = (function () {
 }());
 var PaxRenaissance = (function () {
     function PaxRenaissance() {
+        this._helpMode = false;
         this._notif_uid_to_log_id = {};
+        this._notif_uid_to_mobile_log_id = {};
         this._last_notif = null;
         this._last_tooltip_id = 0;
+        this._selectableNodes = [];
         this.tooltipsToMap = [];
         console.log("paxrenaissance constructor");
     }
@@ -2045,6 +2048,7 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.setupNotifications = function () {
     };
     PaxRenaissance.prototype.onEnteringState = function (stateName, args) {
+        var _this = this;
         console.log("Entering state: " + stateName, args);
         if (this.framework().isCurrentPlayerActive() &&
             this.activeStates[stateName]) {
@@ -2052,6 +2056,18 @@ var PaxRenaissance = (function () {
         }
         else if (this.activeStates[stateName]) {
             this.activeStates[stateName].setDescription(Number(args.active_player), args.args);
+        }
+        if (args.args && args.args.previousSteps) {
+            args.args.previousSteps.forEach(function (stepId) {
+                var logEntry = $("logs").querySelector(".log.notif_newUndoableStep[data-step=\"".concat(stepId, "\"]"));
+                if (logEntry) {
+                    _this.onClick(logEntry, function () { return _this.undoToStep({ stepId: stepId }); });
+                }
+                logEntry = document.querySelector(".chatwindowlogs_zone .log.notif_newUndoableStep[data-step=\"".concat(stepId, "\"]"));
+                if (logEntry) {
+                    _this.onClick(logEntry, function () { return _this.undoToStep({ stepId: stepId }); });
+                }
+            });
         }
     };
     PaxRenaissance.prototype.onLeavingState = function (stateName) {
@@ -2221,6 +2237,11 @@ var PaxRenaissance = (function () {
         dojo.empty("customActions");
         dojo.forEach(this._connections, dojo.disconnect);
         this._connections = [];
+        this._selectableNodes.forEach(function (node) {
+            if ($(node))
+                dojo.removeClass(node, "selectable selected");
+        });
+        this._selectableNodes = [];
         dojo.query(".".concat(PR_SELECTABLE)).removeClass(PR_SELECTABLE);
         dojo.query(".".concat(PR_SELECTED)).removeClass(PR_SELECTED);
     };
@@ -2308,16 +2329,60 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.undoToStep = function (_a) {
         var stepId = _a.stepId;
-        this.framework().checkAction("actRestart");
         this.takeAction({
             action: "actUndoToStep",
             args: {
                 stepId: stepId,
             },
+            checkAction: "actRestart",
         });
+    };
+    PaxRenaissance.prototype.connect = function (node, action, callback) {
+        this._connections.push(dojo.connect($(node), action, callback));
+    };
+    PaxRenaissance.prototype.onClick = function (node, callback, temporary) {
+        var _this = this;
+        if (temporary === void 0) { temporary = true; }
+        var safeCallback = function (evt) {
+            evt.stopPropagation();
+            if (_this.framework().isInterfaceLocked()) {
+                return false;
+            }
+            if (_this._helpMode) {
+                return false;
+            }
+            callback(evt);
+        };
+        if (temporary) {
+            this.connect($(node), "click", safeCallback);
+            dojo.removeClass(node, "unselectable");
+            dojo.addClass(node, "selectable");
+            this._selectableNodes.push(node);
+        }
+        else {
+            dojo.connect($(node), "click", safeCallback);
+        }
     };
     PaxRenaissance.prototype.onScreenWidthChange = function () {
         this.updateLayout();
+    };
+    PaxRenaissance.prototype.onAddingNewUndoableStepToLog = function (notif) {
+        var _this = this;
+        var _a;
+        console.log("onAddingNewUndoableStepToLog", notif);
+        if (!$("log_".concat(notif.logId)))
+            return;
+        var stepId = notif.msg.args.stepId;
+        $("log_".concat(notif.logId)).dataset.step = stepId;
+        if ($("dockedlog_".concat(notif.mobileLogId)))
+            $("dockedlog_".concat(notif.mobileLogId)).dataset.step = stepId;
+        if ((_a = this.gamedatas.gamestate.args.previousSteps) === null || _a === void 0 ? void 0 : _a.includes(Number(stepId))) {
+            this.onClick($("log_".concat(notif.logId)), function () { return _this.undoToStep({ stepId: stepId }); });
+            if ($("dockedlog_".concat(notif.mobileLogId)))
+                this.onClick($("dockedlog_".concat(notif.mobileLogId)), function () {
+                    return _this.undoToStep({ stepId: stepId });
+                });
+        }
     };
     PaxRenaissance.prototype.format_string_recursive = function (log, args) {
         var _this = this;
@@ -2343,10 +2408,13 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.onPlaceLogOnChannel = function (msg) {
         var currentLogId = this.framework().notifqueue.next_log_id;
+        var currentMobileLogId = this.framework().next_log_id;
         var res = this.framework().inherited(arguments);
         this._notif_uid_to_log_id[msg.uid] = currentLogId;
+        this._notif_uid_to_mobile_log_id[msg.uid] = currentMobileLogId;
         this._last_notif = {
             logId: currentLogId,
+            mobileLogId: currentMobileLogId,
             msg: msg,
         };
         return res;
@@ -2364,6 +2432,11 @@ var PaxRenaissance = (function () {
                 var logId = _this._notif_uid_to_log_id[uid];
                 if ($("log_" + logId))
                     dojo.addClass("log_" + logId, "cancel");
+            }
+            if (_this._notif_uid_to_mobile_log_id.hasOwnProperty(uid)) {
+                var mobileLogId = _this._notif_uid_to_mobile_log_id[uid];
+                if ($("dockedlog_" + mobileLogId))
+                    dojo.addClass("dockedlog_" + mobileLogId, "cancel");
             }
         });
     };
@@ -2410,12 +2483,11 @@ var PaxRenaissance = (function () {
             }
         }
         else if (cardId.startsWith("Victory")) {
-            console.log('victory card tooltip', cardId);
             var card = this.gamedatas.victoryCards.find(function (card) { return cardId === card.id; });
             if (card) {
                 this.tooltipManager.addVictoryCardTooltip({
                     nodeId: "pr_tooltip_".concat(tooltipId),
-                    card: card
+                    card: card,
                 });
             }
         }
@@ -4608,6 +4680,7 @@ var NotificationManager = (function () {
             ["changeEmpireToMedievalState", undefined],
             ["changeEmpireToTheocracy", undefined],
             ["changeEmpireSquare", undefined],
+            ["clearTurn", undefined],
             ["coronation", undefined],
             ["deactivateAbility", undefined],
             ["declareVictory", undefined],
@@ -4659,6 +4732,16 @@ var NotificationManager = (function () {
             return __generator(this, function (_a) {
                 debug("notif_log", notif.args);
                 return [2, Promise.resolve()];
+            });
+        });
+    };
+    NotificationManager.prototype.notif_clearTurn = function (notif) {
+        return __awaiter(this, void 0, void 0, function () {
+            var notifIds;
+            return __generator(this, function (_a) {
+                notifIds = notif.args.notifIds;
+                this.game.cancelLogs(notifIds);
+                return [2];
             });
         });
     };
@@ -5282,6 +5365,7 @@ var NotificationManager = (function () {
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
+                        this.game.clearPossible();
                         _a = notif.args, cardMoves = _a.cardMoves, cardDraws = _a.cardDraws;
                         index = 0;
                         _i = 0, cardMoves_1 = cardMoves;

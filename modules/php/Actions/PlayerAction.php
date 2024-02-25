@@ -162,6 +162,7 @@ class PlayerAction extends \PaxRenaissance\Models\AtomicAction
           throw new \feException("Not allowed to perform east and west ops in one action");
         }
         $this->incTableauOpsStat($playerId, $action);
+        Notifications::tableauOpsAction($player, $action);
         $this->ctx->insertAsBrother(Engine::buildTree([
           'children' => [
             [

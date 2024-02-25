@@ -18,6 +18,10 @@ interface NotifWithPlayerArgs {
   tkn_playerName: string;
 }
 
+interface NotifClearTurnArgs extends NotifWithPlayerArgs {
+  notifIds: string[];
+}
+
 type NotifActivateAbilityArgs =
   | NotifAbilityArgsVeniceCanHoldTwoGoldTokens
   | NotifAbilityArgsPatronOrCardCounts

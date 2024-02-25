@@ -202,16 +202,11 @@ class Log extends \APP_DbObject
 
     // Force to clear cached informations
     Globals::fetch();
-    // Players::invalidate();
-    // ZooCards::invalidate();
-    // ActionCards::invalidate();
-    // Stats::invalidate();
 
     // Notify
     $datas = Game::get()->getAllDatas();
     Notifications::refreshUI($datas);
     $player = Players::getCurrent();
-    // Notifications::refreshHand($player, $player->getHand()->ui());
     Notifications::refreshHand($player, $player->getHand());
 
     // Force notif flush to be able to delete "restart turn" notif

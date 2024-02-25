@@ -59,6 +59,7 @@ trait TurnTrait
         ],
       ],
     ];
+    Notifications::startTurn($player);
 
     // Inserting leaf Action card
     Engine::setup($node, ['method' => 'stEndOfTurn']);

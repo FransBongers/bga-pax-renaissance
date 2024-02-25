@@ -61,6 +61,7 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
     if (isset($info['firstOp']) && $info['firstOp'] !== null) {
       $selectedOp = $info['firstOp'];
       $this->ctx->updateInfo('firstOp',null);
+      $selectedOp['firstOp'] = true;
       $this->actTableauOpsSelect($selectedOp);
     }
   }
@@ -113,7 +114,8 @@ class TableauOpsSelect extends \PaxRenaissance\Models\AtomicAction
 
   public function actTableauOpsSelect($args)
   {
-    self::checkAction('actTableauOpsSelect');
+    Notifications::log('actTableauOpsSelectArgs',$args);
+    self::checkAction('actTableauOpsSelect',isset($args['firstOp']) && $args['firstOp']);
     $player = self::getPlayer();
 
     $available = $this->getAvailableOps($player);

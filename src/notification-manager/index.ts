@@ -45,6 +45,7 @@ class NotificationManager {
       ["changeEmpireToMedievalState", undefined],
       ["changeEmpireToTheocracy", undefined],
       ["changeEmpireSquare", undefined],
+      ["clearTurn",undefined],
       ["coronation", undefined],
       ["deactivateAbility", undefined],
       ["declareVictory", undefined],
@@ -122,6 +123,11 @@ class NotificationManager {
     // this is for debugging php side
     debug("notif_log", notif.args);
     return Promise.resolve();
+  }
+
+  async notif_clearTurn(notif: Notif<NotifClearTurnArgs>) {
+    const {notifIds} = notif.args;
+    this.game.cancelLogs(notifIds);
   }
 
   async notif_activateAbility(notif: Notif<NotifActivateAbilityArgs>) {
@@ -686,6 +692,7 @@ class NotificationManager {
   }
 
   async notif_refreshMarket(notif: Notif<NotifRefreshMarketArgs>) {
+    this.game.clearPossible();
     const { cardMoves, cardDraws } = notif.args;
 
     let index = 0;
