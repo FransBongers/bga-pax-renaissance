@@ -20,7 +20,7 @@ class PREN133X_RomanticRealism extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_2,
-        'title' => clienttranslate('REPUBLICAN IDEALS:'),
+        'title' => clienttranslate('REPUBLICAN IDEALS'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige_patron} counts as ${tkn_prestige_law} for Renaissance Victory.'),
           'args' => [

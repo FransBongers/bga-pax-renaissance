@@ -89,7 +89,7 @@ class FreeAction extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actFreeAction');
 
-    $this->ctx->insertAsBrother(Engine::buildTree([
+    $this->ctx->getParent()->unshiftChild(Engine::buildTree([
       'children' => [
         [
           'action' => ABILITY_ACTION_USE,
@@ -102,7 +102,9 @@ class FreeAction extends \PaxRenaissance\Models\AtomicAction
     ]));
 
 
-    $this->resolveAction($args);
+    // $this->resolveAction($args);
+    Engine::save();
+    Engine::proceed();
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

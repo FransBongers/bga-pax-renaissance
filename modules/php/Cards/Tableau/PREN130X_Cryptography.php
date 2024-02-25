@@ -22,7 +22,7 @@ class PREN130X_Cryptography extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_SELL_AND_PERFORM_PURPLE_OP_FROM_OPPONENT,
-        'title' => clienttranslate('MEDICI CIPHERS BROKEN:'),
+        'title' => clienttranslate('MEDICI CIPHERS BROKEN'),
         'text' => [
           'log' => clienttranslate("If you sell this card, may do an additional purple Op from an opponent's Tableau, exactly as if his card was in your Tableau."),
           'args' => [],

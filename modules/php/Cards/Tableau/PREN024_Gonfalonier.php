@@ -49,7 +49,7 @@ class PREN024_Gonfalonier extends \PaxRenaissance\Models\Cards\CondottiereCard
     $this->specialAbilities = [
       [
         'id' => SA_VENICE_CAN_HOLD_TWO_GOLD_TOKENS,
-        'title' => clienttranslate('Condottiere:'),
+        'title' => clienttranslate('Condottiere'),
         'text' => [
           'log' => clienttranslate('Venice can hold 2 Tokens if its City icon is gold (see G4c).'),
           'args' => [],

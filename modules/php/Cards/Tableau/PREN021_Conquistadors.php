@@ -46,7 +46,7 @@ class PREN021_Conquistadors extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_SELL_FOR_4,
-        'title' => clienttranslate('AZTEC GOLD:'),
+        'title' => clienttranslate('AZTEC GOLD'),
         'text' => [
           'log' => clienttranslate('Sell this card for 4 instead of 2 Florins.'),
           'args' => [],

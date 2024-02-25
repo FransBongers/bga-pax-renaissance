@@ -922,13 +922,24 @@ class Notifications
     self::message(clienttranslate('No profits left. The voyage does not start'), []);
   }
 
+  public static function useAbilityAction($player,$card,$abilityId) {
+    $abilityTitle = Utils::array_find($card->getSpecialAbilities(), function ($ability) use ($abilityId) {
+      return $ability['id'] === $abilityId;
+    })['title'];
 
-  public static function useApostasyAbilityAction($player, $apostasy, $card)
-  {
-    self::message(clienttranslate('${tkn_playerName} uses ${tkn_cardName} to perform an apostasy ${tkn_oneShot} ${tkn_card}'), [
+    self::message(clienttranslate('${tkn_playerName} uses ${tkn_boldText} ability from ${tkn_cardName} ${tkn_card}'), [
       'player' => $player,
       'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
       'tkn_card' => self::tknCardArg($card),
+      'tkn_boldText' => $abilityTitle,
+    ]);
+  }
+
+
+  public static function useApostasyAbilityAction($player, $apostasy, $card)
+  {
+    self::message(clienttranslate('${tkn_playerName} performs an apostasy ${tkn_oneShot}'), [
+      'player' => $player,
       'tkn_oneShot' => $apostasy,
     ]);
   }

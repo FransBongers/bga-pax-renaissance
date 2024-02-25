@@ -76,6 +76,7 @@ class AbilityActionUse extends \PaxRenaissance\Models\AtomicAction
       $this->ctx->getParent()->unshiftChild($flow);
     }
     
+    Notifications::useAbilityAction($player,Cards::get($cardId),$abilityId);
 
     $this->resolveAction(['automatic' => true]);
   }

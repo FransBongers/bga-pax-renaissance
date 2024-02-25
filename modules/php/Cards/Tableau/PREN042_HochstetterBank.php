@@ -36,7 +36,7 @@ class PREN042_HochstetterBank extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_UNLIMITED_HAND_SIZE,
-        'title' => clienttranslate('STADTWECHSEL (LETTERS OF CREDIT):'),
+        'title' => clienttranslate('STADTWECHSEL (LETTERS OF CREDIT)'),
         'text' => [
           'log' => clienttranslate('Your Hand size is unlimited'),
           'args' => [],

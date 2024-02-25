@@ -19,7 +19,7 @@ class PREN131X_Michelangelo extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_CONCESSIONS_2X_TRADE_FAIRS_VOTES,
-        'title' => clienttranslate("PATRON'S RENOWN:"),
+        'title' => clienttranslate("PATRON'S RENOWN"),
         'text' => [
           'log' => clienttranslate("Your Concessions count 2x during trade fairs and votes."),
           'args' => [],

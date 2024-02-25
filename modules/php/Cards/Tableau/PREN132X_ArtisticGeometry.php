@@ -21,7 +21,7 @@ class PREN132X_ArtisticGeometry extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1,
-        'title' => clienttranslate('GERMAN RENAISSANCE:'),
+        'title' => clienttranslate('GERMAN RENAISSANCE'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige_patron} counts as ${tkn_prestige_law} for Renaissance Victory.'),
           'args' => [

@@ -18,7 +18,7 @@ class PREN135X_Machiavellianism extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_SELL_AND_PERFORM_ONE_SHOT,
-        'title' => clienttranslate('PRAGMATIC TREACHERY:'),
+        'title' => clienttranslate('PRAGMATIC TREACHERY'),
         'text' => [
           'log' => clienttranslate('If you sell a card additionally may perform its civil war, crusade or apostasy One-shot (including adding its Agents).'),
           'args' => [],

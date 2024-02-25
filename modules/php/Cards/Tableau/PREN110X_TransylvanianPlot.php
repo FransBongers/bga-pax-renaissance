@@ -44,7 +44,7 @@ class PREN110X_TransylvanianPlot extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_EAST_AND_WEST_OPS_IN_ONE_ACTION,
-        'title' => clienttranslate('GRITTI SPIES:'),
+        'title' => clienttranslate('GRITTI SPIES'),
         'text' => [
           'log' => clienttranslate('May do east & west ops in one action.'),
           'args' => [],

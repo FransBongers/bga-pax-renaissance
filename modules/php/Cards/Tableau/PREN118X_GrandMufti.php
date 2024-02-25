@@ -34,7 +34,7 @@ class PREN118X_GrandMufti extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_BEHEAD_EAST_CARD_WITH_ISLAMIC_REFORMIST_BISHOP_ONLY,
-        'title' => clienttranslate('GENOCIDE:'),
+        'title' => clienttranslate('GENOCIDE'),
         'text' => [
           'log' => clienttranslate("The card's Op can only be used on any east card with a green or red Bishop token."),
           'args' => [],

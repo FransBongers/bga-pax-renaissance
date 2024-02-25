@@ -53,10 +53,14 @@ trait TurnTrait
           'playerId' => $player->getId(),
         ],
         [
-          'action' => FREE_ACTION,
-          'optional' => true,
-          'playerId' => $player->getId(),
-        ],
+          'children' => [
+            [
+              'action' => FREE_ACTION,
+              'optional' => true,
+              'playerId' => $player->getId(),
+            ],
+          ]
+        ]
       ],
     ];
     Notifications::startTurn($player);

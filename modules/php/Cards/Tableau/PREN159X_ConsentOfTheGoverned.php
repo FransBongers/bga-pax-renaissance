@@ -22,7 +22,7 @@ class PREN159X_ConsentOfTheGoverned extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3,
-        'title' => clienttranslate('GERMAN HUMANISM:'),
+        'title' => clienttranslate('GERMAN HUMANISM'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige_patron} counts as ${tkn_prestige_law} for Renaissance Victory.'),
           'args' => [

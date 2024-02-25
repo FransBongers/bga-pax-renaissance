@@ -42,7 +42,7 @@ class PREN146X_BankOfStrozzi extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_UNLIMITED_HAND_SIZE,
-        'title' => clienttranslate('DOUBLE ENTRY ACCOUNTING:'),
+        'title' => clienttranslate('DOUBLE ENTRY ACCOUNTING'),
         'text' => [
           'log' => clienttranslate('Your Hand size is unlimited'),
           'args' => [],

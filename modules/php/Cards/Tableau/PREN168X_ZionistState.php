@@ -44,7 +44,7 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS,
-        'title' => clienttranslate('SÜLEYMAN PATRONAGE:'),
+        'title' => clienttranslate('SÜLEYMAN PATRONAGE'),
         'text' => [
           'log' => clienttranslate('Green Pirates count both as red Bishops and red units when calculating religious supremacy.'),
           'args' => [],

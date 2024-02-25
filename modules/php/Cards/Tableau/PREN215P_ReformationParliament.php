@@ -40,7 +40,7 @@ class PREN215P_ReformationParliament extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_EMPORIUM_SUBSIDY_2_FLORINS,
-        'title' => clienttranslate('LONDON ROYAL EXCHANGE:'),
+        'title' => clienttranslate('LONDON ROYAL EXCHANGE'),
         'text' => [
           'log' => clienttranslate("Your emporium subsidy for all trade fairs is 2 instead of 1 Florins."),
           'args' => [],

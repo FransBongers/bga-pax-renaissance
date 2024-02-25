@@ -34,7 +34,7 @@ class PREN164X_CircassianMamluks extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY,
-        'title' => clienttranslate('MAMLUK GOLDEN AGE:'),
+        'title' => clienttranslate('MAMLUK GOLDEN AGE'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige_patron} counts as green Bishops in a Holy victory.'),
           'args' => [
@@ -44,7 +44,7 @@ class PREN164X_CircassianMamluks extends \PaxRenaissance\Models\TableauCard
       ],
       [
         'id' => SA_REPRESSED_TOKENS_COUNTS_AS_KNIGHT_IN_EAST_CAMPAIGN,
-        'title' => clienttranslate('SLAVE SOLDIERS:'),
+        'title' => clienttranslate('SLAVE SOLDIERS'),
         'text' => [
           'log' => clienttranslate('Each Repressed Token in Mamluk counts as a Knight in your campaigns targeting an Eastern Empire.'),
           'args' => [],

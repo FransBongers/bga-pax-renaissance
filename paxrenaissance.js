@@ -2369,7 +2369,6 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.onAddingNewUndoableStepToLog = function (notif) {
         var _this = this;
         var _a;
-        console.log("onAddingNewUndoableStepToLog", notif);
         if (!$("log_".concat(notif.logId)))
             return;
         var stepId = notif.msg.args.stepId;
@@ -4236,6 +4235,9 @@ var getTokenDiv = function (_a) {
         case LOG_TOKEN_CARD:
             return tplLogTokenCard(value);
         case LOG_TOKEN_BOLD_TEXT:
+            return tlpLogTokenBoldText({
+                text: value,
+            });
         case LOG_TOKEN_CARD_NAME:
             var cardNameTooltipId = undefined;
             var withTooltip = value.includes(":");

@@ -867,8 +867,6 @@ class PaxRenaissance implements PaxRenaissanceGame {
       stepId: number | string;
     }>;
   }) {
-    console.log("onAddingNewUndoableStepToLog", notif);
-
     if (!$(`log_${notif.logId}`)) return;
     let stepId = notif.msg.args.stepId;
     $(`log_${notif.logId}`).dataset.step = stepId;

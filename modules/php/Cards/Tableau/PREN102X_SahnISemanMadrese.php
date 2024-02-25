@@ -21,7 +21,7 @@ class PREN102X_SahnISemanMadrese extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_1,
-        'title' => clienttranslate('ASTRONOMICAL NAVIGATION:'),
+        'title' => clienttranslate('ASTRONOMICAL NAVIGATION'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige} count as Concessions in a Globalization Victory.'),
           'args' => [

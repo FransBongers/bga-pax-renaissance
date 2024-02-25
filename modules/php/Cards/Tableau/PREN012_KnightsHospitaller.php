@@ -40,7 +40,7 @@ class PREN012_KnightsHospitaller extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_IN_CRUSADE_COUNT_ROOKS_AS_KNIGHTS,
-        'title' => clienttranslate('KNIGHTS OF RHODES:'),
+        'title' => clienttranslate('KNIGHTS OF RHODES'),
         'text' => [
           'log' => clienttranslate('In crusades, you may count ruling class gold Rooks as Knights.'),
           'args' => [],

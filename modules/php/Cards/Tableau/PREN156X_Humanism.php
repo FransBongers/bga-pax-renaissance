@@ -34,7 +34,7 @@ class PREN156X_Humanism extends \PaxRenaissance\Models\Cards\ImmuneToSilencingCa
       ],
       [
         'id' => SA_IMMUNE_TO_SILENCING,
-        'title' => clienttranslate('COLLEGIUM TRINIGUE:'),
+        'title' => clienttranslate('COLLEGIUM TRINIGUE'),
         'text' => [
           'log' => clienttranslate('Your cards are immune to silencing by Bishops.'),
           'args' => [],

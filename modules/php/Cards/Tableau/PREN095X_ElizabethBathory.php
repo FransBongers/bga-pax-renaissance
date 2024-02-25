@@ -33,7 +33,7 @@ class PREN095X_ElizabethBathory extends \PaxRenaissance\Models\QueenCard
     $this->specialAbilities = [
       [
         'id' => SA_DISCARD_TO_LAUNCH_PEASANT_REVOLT,
-        'title' => clienttranslate('POPULAR REPRISALS:'),
+        'title' => clienttranslate('POPULAR REPRISALS'),
         'text' => [
           'log' => clienttranslate('As an action, Discard this card to launch a peasant revolt in her Empire.'),
           'args' => [],

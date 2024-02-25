@@ -32,7 +32,7 @@ class PREN113X_DalmatianMerchantMarine extends \PaxRenaissance\Models\Cards\Conc
     $this->specialAbilities = [
       [
         'id' => SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES,
-        'title' => clienttranslate('RAGUSAN MARITIME IMMUNITY:'),
+        'title' => clienttranslate('RAGUSAN MARITIME IMMUNITY'),
         'text' => [
           'log' => clienttranslate('Your Concessions cannot be killed by Pirates.'),
           'args' => [],

@@ -39,7 +39,7 @@ class PREN107X_TersaneIAmire extends \PaxRenaissance\Models\Cards\ConcessionsCan
     $this->specialAbilities = [
       [
         'id' => SA_CONCESSIONS_CANNOT_BE_KILLED_BY_PIRATES,
-        'title' => clienttranslate('IMPERIAL ARSENAL:'),
+        'title' => clienttranslate('IMPERIAL ARSENAL'),
         'text' => [
           'log' => clienttranslate('Your Concessions cannot be killed by Pirates.'),
           'args' => [],

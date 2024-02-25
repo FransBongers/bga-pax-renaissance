@@ -33,7 +33,7 @@ class PREN166X_BankOfStGeorge extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_PATRON_REDUCES_VOTE_OPS_COST,
-        'title' => clienttranslate('JEWISH BANKERS:'),
+        'title' => clienttranslate('JEWISH BANKERS'),
         'text' => [
           'log' => clienttranslate('Each of your ${tkn_prestige} reduce the cost to run vote ops by 1.'),
           'args' => [

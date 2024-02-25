@@ -29,7 +29,7 @@ class PREN136X_Hermeticism extends \PaxRenaissance\Models\Cards\ImmuneToSilencin
       ],
       [
         'id' => SA_IMMUNE_TO_SILENCING,
-        'title' => clienttranslate('SYNCRETISM:'),
+        'title' => clienttranslate('SYNCRETISM'),
         'text' => [
           'log' => clienttranslate('Your cards are immune to silencing by Bishops.'),
           'args' => [],

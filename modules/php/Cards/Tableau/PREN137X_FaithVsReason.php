@@ -29,7 +29,7 @@ class PREN137X_FaithVsReason extends \PaxRenaissance\Models\TableauCard
       ],
       [
         'id' => SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2,
-        'title' => clienttranslate('Cartography:'),
+        'title' => clienttranslate('Cartography'),
         'text' => [
           'log' => clienttranslate('Your ${tkn_prestige} count as Concessions in a Globalization Victory.'),
           'args' => [

@@ -45,7 +45,7 @@ class PREN209P_BureauOfBarbarians extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_BEHEAD_EAST_CARD_WITH_BISHOP_ONLY,
-        'title' => clienttranslate('DISINFORMATION:'),
+        'title' => clienttranslate('DISINFORMATION'),
         'text' => [
           'log' => clienttranslate("This card's behead Op can only be used on any east card with a Bishop Token."),
           'args' => [],

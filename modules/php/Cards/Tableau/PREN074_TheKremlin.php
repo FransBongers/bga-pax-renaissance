@@ -33,7 +33,7 @@ class PREN074_TheKremlin extends \PaxRenaissance\Models\Cards\ImmuneToSilencingC
     $this->specialAbilities = [
       [
         'id' => SA_IMMUNE_TO_SILENCING,
-        'title' => clienttranslate('SYNCRETISM:'),
+        'title' => clienttranslate('SYNCRETISM'),
         'text' => [
           'log' => clienttranslate('Your cards are immune to silencing by Bishops.'),
           'args' => [],

@@ -24,7 +24,7 @@ class PREN097X_PodestaOfVenice extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_FREE_TRADE_FAIR,
-        'title' => clienttranslate('COMMANDER OF THE VENICE GALLEYS:'),
+        'title' => clienttranslate('COMMANDER OF THE VENICE GALLEYS'),
         'text' => [
           'log' => clienttranslate('You may perform one trade fair in a turn without expending an action.'),
           'args' => [],

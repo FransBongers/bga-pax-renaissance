@@ -29,6 +29,9 @@ const getTokenDiv = ({
     case LOG_TOKEN_CARD:
       return tplLogTokenCard(value);
     case LOG_TOKEN_BOLD_TEXT:
+      return tlpLogTokenBoldText({
+        text: value,
+      });
     case LOG_TOKEN_CARD_NAME:
       let cardNameTooltipId = undefined;
       const withTooltip = value.includes(":");

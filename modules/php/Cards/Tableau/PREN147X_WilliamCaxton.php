@@ -36,7 +36,7 @@ class PREN147X_WilliamCaxton extends \PaxRenaissance\Models\TableauCard
     $this->specialAbilities = [
       [
         'id' => SA_UNLIMITED_HAND_SIZE,
-        'title' => clienttranslate('PRINTING PRESS:'),
+        'title' => clienttranslate('PRINTING PRESS'),
         'text' => [
           'log' => clienttranslate('Your Hand size is unlimited'),
           'args' => [],
