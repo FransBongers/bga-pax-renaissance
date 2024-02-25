@@ -119,13 +119,21 @@
     --paxRenIconScale: 0.8;
   }
 
-  .pr_card {
-    --paxRenCardScale: 0.5;
+  .pr_log_card {
+    --paxRenCardScale: var(--paxRenLogCardScale);
   }
 
+  .pr_card,
   .pr_square_card {
-    --paxRenCardScale: 0.5;
+    margin-top: calc(var(--paxRenLogCardScale) * 6px);
+    // margin-top: calc(round(up, var(--paxRenLeftColumnScale), 1) * 4px)
+    //  calc( * 4px);
+    // --paxRenCardScale: 0.5;
   }
+
+  // .pr_square_card {
+  //   --paxRenCardScale: 0.5;
+  // }
 }
 
 // #customActions {

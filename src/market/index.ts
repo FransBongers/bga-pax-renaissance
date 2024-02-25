@@ -64,6 +64,20 @@ class Market {
     this.setupMarket({ gamedatas });
   }
 
+  updateMarketCardTooltips() {
+    REGIONS.forEach((region) => {
+      for (let i = 1; i <= 5; i++) {
+        this.stocks[region][i].getCards().forEach((card) => {
+          this.game.tooltipManager.removeTooltip(card.id);
+          this.game.tooltipManager.addCardTooltip({
+            nodeId: card.id,
+            card: card as TableauCard,
+          });
+        });
+      }
+    });
+  }
+
   setupDecks({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     this.decks = {
       [EAST]: new LineStock(
@@ -301,9 +315,9 @@ class Market {
       tplIcon({
         id: `temp_florin_${index}`,
         icon: "florin",
-        classes: 'pr_temp_florin',
+        classes: "pr_temp_florin",
         style: "position: absolute;",
-        children: htmlFlorinChildren
+        children: htmlFlorinChildren,
       })
     );
 

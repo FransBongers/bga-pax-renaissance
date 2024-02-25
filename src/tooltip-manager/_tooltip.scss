@@ -9,20 +9,24 @@
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  width: 440px;
+  width: 500px;
   min-height: 400px;
   // background-color: purple;
 
   .pr_card {
-    margin-right: -100px;
+    // margin-right: -100px;
     margin-left: 8px;
     align-self: center;
-    width: 223px;
-    height: 340px;
+    --paxRenCardScale: 1.47;
+    // --paxRenCardScale: 1;
+    // min-width: 223px;
+    // max-width: 223px;
+    // min-height: 340px;
+    // max-height: 340px;
   }
 
   .pr_square_card_tooltip_card_container {
-    margin-right: -100px;
+    // margin-right: -100px;
     margin-left: 8px;
     align-self: center;
     --paxRenCardScale: 1.47;

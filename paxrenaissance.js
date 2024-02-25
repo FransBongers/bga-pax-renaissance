@@ -9,6 +9,8 @@ var ENABLED = 'enabled';
 var REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
 var CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 var CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
+var CARD_SIZE_IN_LOG = 'cardSizeInLog';
+var CARD_INFO_IN_TOOLTIP = 'cardInfoInTooltip';
 var OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
 var CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOnly';
 var PREF_SHOW_ANIMATIONS = 'showAnimations';
@@ -2389,15 +2391,45 @@ var PaxRenaissance = (function () {
                 console.error("error tooltipToMap", tooltipToMap);
             }
             else {
-                var card = this.gamedatas.staticData.tableauCards[tooltipToMap[1]];
-                if (card) {
-                    this.tooltipManager.addCardTooltip({
-                        nodeId: "pr_tooltip_".concat(tooltipToMap[0]),
-                        card: card,
-                    });
-                }
+                this.addLogTooltip({
+                    tooltipId: tooltipToMap[0],
+                    cardId: tooltipToMap[1],
+                });
             }
         }
+    };
+    PaxRenaissance.prototype.addLogTooltip = function (_a) {
+        var tooltipId = _a.tooltipId, cardId = _a.cardId;
+        if (cardId.startsWith("EmpireSquare")) {
+            var empireCard = this.gamedatas.empireSquares.find(function (square) { return square.id === cardId; });
+            if (empireCard) {
+                this.tooltipManager.addEmpireCardTooltip({
+                    nodeId: "pr_tooltip_".concat(tooltipId),
+                    card: empireCard,
+                });
+            }
+        }
+        else if (cardId.startsWith("Victory")) {
+            console.log('victory card tooltip', cardId);
+            var card = this.gamedatas.victoryCards.find(function (card) { return cardId === card.id; });
+            if (card) {
+                this.tooltipManager.addVictoryCardTooltip({
+                    nodeId: "pr_tooltip_".concat(tooltipId),
+                    card: card
+                });
+            }
+        }
+        else {
+            var card = this.gamedatas.staticData.tableauCards[cardId];
+            if (card) {
+                this.tooltipManager.addCardTooltip({
+                    nodeId: "pr_tooltip_".concat(tooltipId),
+                    card: card,
+                });
+            }
+        }
+    };
+    PaxRenaissance.prototype.updateLogTooltips = function () {
     };
     PaxRenaissance.prototype.setLoader = function (value, max) {
         this.framework().inherited(arguments);
@@ -2536,6 +2568,36 @@ var TableauCardManager = (function (_super) {
             _this.removeStock(_this.vassalStocks[key]);
         });
     };
+    TableauCardManager.prototype.updateCardTooltips = function () {
+        var _this = this;
+        Object.values(this.empireSquareStocks).forEach(function (stock) {
+            stock.getCards().forEach(function (card) {
+                var _a, _b;
+                if (card.type !== EMPIRE_CARD) {
+                    return;
+                }
+                _this.game.tooltipManager.removeTooltip(card.id);
+                _this.game.tooltipManager.addEmpireCardTooltip({
+                    nodeId: card.id,
+                    card: card,
+                    religion: _this.game.gameOptions.ageOfReformationPromo &&
+                        card.id === "EmpireSquare_PapalStates"
+                        ? ((_b = (_a = document
+                            .getElementById("pr_papalStates")) === null || _a === void 0 ? void 0 : _a.getAttribute("data-card-id")) === null || _b === void 0 ? void 0 : _b.split("_")[0]) || ""
+                        : "",
+                });
+            });
+        });
+        Object.values(this.queenStocks).forEach(function (stock) {
+            stock.getCards().forEach(function (card) {
+                if (card.type !== TABLEAU_CARD) {
+                    return;
+                }
+                _this.game.tooltipManager.removeTooltip(card.id);
+                _this.game.tooltipManager.addCardTooltip({ nodeId: card.id, card: card });
+            });
+        });
+    };
     TableauCardManager.prototype.setupDiv = function (card, div) {
         if (card.type === EMPIRE_CARD_CONTAINER) {
             this.setupEmpireCardContainerDiv(card, div);
@@ -2550,7 +2612,7 @@ var TableauCardManager = (function (_super) {
             div.style.minWidth = "calc(var(--paxRenCardScale) * 151px)";
             div.style.minHeight = "calc(var(--paxRenCardScale) * 151px)";
         }
-        div.style.position = 'relative';
+        div.style.position = "relative";
         div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
         if (isEmpireCard) {
             (card.king.ops || []).forEach(function (operation) {
@@ -2577,7 +2639,7 @@ var TableauCardManager = (function (_super) {
         else {
             var ops = card.ops;
             (ops || []).forEach(function (operation) {
-                var element = document.getElementById("pr_".concat(card.id, "_").concat(operation.id).concat(isEmpireCard ? "_".concat(KING) : ''));
+                var element = document.getElementById("pr_".concat(card.id, "_").concat(operation.id).concat(isEmpireCard ? "_".concat(KING) : ""));
                 if (!element) {
                     div.insertAdjacentHTML("beforeend", tplOperationSelect({
                         operation: operation,
@@ -2593,7 +2655,7 @@ var TableauCardManager = (function (_super) {
     };
     TableauCardManager.prototype.setupFrontDiv = function (card, div) {
         if (card.type === EMPIRE_CARD_CONTAINER) {
-            div.style.display = 'none';
+            div.style.display = "none";
             return;
         }
         var isEmpireCard = card.type === EMPIRE_CARD;
@@ -2638,7 +2700,7 @@ var TableauCardManager = (function (_super) {
     };
     TableauCardManager.prototype.setupBackDiv = function (card, div) {
         if (card.type === EMPIRE_CARD_CONTAINER) {
-            div.style.display = 'none';
+            div.style.display = "none";
             return;
         }
         var isEmpireCard = card.type === EMPIRE_CARD;
@@ -2707,13 +2769,19 @@ var TableauCardManager = (function (_super) {
         });
     };
     TableauCardManager.prototype.setupEmpireCardContainerDiv = function (container, div) {
-        div.classList.add('pr_empire_square_container');
-        div.insertAdjacentHTML('beforeend', "<div id=\"".concat(container.id, "_queens\" class=\"pr_queens_container\"></div>"));
-        div.insertAdjacentHTML('beforeend', "<div id=\"".concat(container.id, "_empire_square\" style=\"width: calc(var(--paxRenCardScale) * 151px); height: calc(var(--paxRenCardScale) * 151px);\"></div>"));
-        div.insertAdjacentHTML('beforeend', "<div id=\"".concat(container.id, "_vassals\" class=\"pr_vassals_container\"></div>"));
-        this.empireSquareStocks[container.empireId] = new LineStock(this, document.getElementById("".concat(container.id, "_empire_square")), { gap: "12px", sort: sortFunction("state") });
+        div.classList.add("pr_empire_square_container");
+        div.insertAdjacentHTML("beforeend", "<div id=\"".concat(container.id, "_queens\" class=\"pr_queens_container\"></div>"));
+        div.insertAdjacentHTML("beforeend", "<div id=\"".concat(container.id, "_empire_square\" style=\"width: calc(var(--paxRenCardScale) * 151px); height: calc(var(--paxRenCardScale) * 151px);\"></div>"));
+        div.insertAdjacentHTML("beforeend", "<div id=\"".concat(container.id, "_vassals\" class=\"pr_vassals_container\"></div>"));
+        this.empireSquareStocks[container.empireId] = new LineStock(this, document.getElementById("".concat(container.id, "_empire_square")), {
+            gap: "12px",
+            sort: sortFunction("state"),
+        });
         this.empireSquareStocks[container.empireId].addCard(container.card);
-        this.vassalStocks[container.empireId] = new LineStock(this, document.getElementById("".concat(container.id, "_vassals")), { sort: sortFunction("state"), gap: 'calc(var(--paxRenCardScale) * 12px)' });
+        this.vassalStocks[container.empireId] = new LineStock(this, document.getElementById("".concat(container.id, "_vassals")), {
+            sort: sortFunction("state"),
+            gap: "calc(var(--paxRenCardScale) * 12px)",
+        });
         this.queenStocks[container.empireId] = new LineStock(this, document.getElementById("".concat(container.id, "_queens")));
         for (var _i = 0, _a = container.card.queens; _i < _a.length; _i++) {
             var queen = _a[_i];
@@ -2780,7 +2848,10 @@ var VictoryCardManager = (function (_super) {
             setupDiv: function (card, div) {
                 div.style.width = "calc(var(--paxRenCardScale) * 151px)";
                 div.style.height = "calc(var(--paxRenCardScale) * 151px)";
-                _this.game.tooltipManager.addVictoryCardTooltip({ nodeId: card.id, card: card });
+                _this.game.tooltipManager.addVictoryCardTooltip({
+                    nodeId: card.id,
+                    card: card,
+                });
             },
             setupFrontDiv: function (card, div) { return _this.setupFrontDiv(card, div); },
             setupBackDiv: function (card, div) { return _this.setupBackDiv(card, div); },
@@ -2793,6 +2864,18 @@ var VictoryCardManager = (function (_super) {
         _this.setupVictorySquares();
         return _this;
     }
+    VictoryCardManager.prototype.updateCardTooltips = function () {
+        var _this = this;
+        Object.values(this.victoryCardStocks).forEach(function (stock) {
+            stock.getCards().forEach(function (card) {
+                _this.game.tooltipManager.removeTooltip(card.id);
+                _this.game.tooltipManager.addVictoryCardTooltip({
+                    nodeId: card.id,
+                    card: card,
+                });
+            });
+        });
+    };
     VictoryCardManager.prototype.clearInterface = function () {
         var _this = this;
         Object.keys(this.victoryCardStocks).forEach(function (key) {
@@ -2820,7 +2903,8 @@ var VictoryCardManager = (function (_super) {
             _a[VICTORY_HOLY] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_HOLY, "_slot"))),
             _a);
         if (this.game.gameOptions.ageOfReformationPromo) {
-            this.victoryCardStocks[VICTORY_AGE_OF_BYZANTINE] = new LineStock(this, document.getElementById("pr_".concat(VICTORY_AGE_OF_BYZANTINE, "_slot")));
+            this.victoryCardStocks[VICTORY_AGE_OF_BYZANTINE] =
+                new LineStock(this, document.getElementById("pr_".concat(VICTORY_AGE_OF_BYZANTINE, "_slot")));
         }
         this.setupCards({ gamedatas: this.game.gamedatas });
     };
@@ -3315,14 +3399,14 @@ var GameMap = (function () {
                     separator: religion,
                     style: "--paxRenTokenScale: 0.8;",
                 }),
-                text: _this.game.format_string_recursive(_("The number of ${religion} Bishop Tokens in Tableaux or Thrones."), religionArgs[religion]),
+                text: _this.game.format_string_recursive(_("The number of ${religion} Bishop Tokens in play for Holy Victory."), religionArgs[religion]),
                 title: _this.game.format_string_recursive(_("${religion} Bishop Tokens"), religionArgs[religion]),
             });
             _this.supremeReligion[religion].tokens.create("pr_tokens_theocracies_counter_".concat(religion));
             _this.game.tooltipManager.addIconTooltip({
                 nodeId: "pr_supreme_religion_token_counter_".concat(religion),
                 iconHtml: tplTokensInTheocraciesIcon({ religion: religion }),
-                text: _this.game.format_string_recursive(_("The number of ${religion} Tokens in play in ${religion} Theocracies"), religionArgs[religion]),
+                text: _this.game.format_string_recursive(_("The number of ${religion} Tokens in play in ${religion} Theocracies for Holy Victory."), religionArgs[religion]),
                 title: _this.game.format_string_recursive(_("${religion} Tokens"), religionArgs[religion]),
             });
         });
@@ -4069,8 +4153,8 @@ var LOG_TOKEN_CARD = "card";
 var LOG_TOKEN_FLORIN = "florin";
 var LOG_TOKEN_MAP_TOKEN = "mapToken";
 var LOG_TOKEN_ONE_SHOT = "oneShot";
-var LOG_TOKEN_PRESTIGE = 'prestige';
-var LOG_TOKEN_TABLEAU_OP = 'tableauOp';
+var LOG_TOKEN_PRESTIGE = "prestige";
+var LOG_TOKEN_TABLEAU_OP = "tableauOp";
 var tooltipIdCounter = 0;
 var getTokenDiv = function (_a) {
     var key = _a.key, value = _a.value, game = _a.game;
@@ -4078,13 +4162,20 @@ var getTokenDiv = function (_a) {
     var type = splitKey[1];
     switch (type) {
         case LOG_TOKEN_CARD:
-            game.tooltipsToMap.push([game._last_tooltip_id, value]);
-            var tooltipId = "pr_tooltip_".concat(game._last_tooltip_id);
-            game._last_tooltip_id++;
-            return tplLogTokenCard(value, tooltipId);
+            return tplLogTokenCard(value);
         case LOG_TOKEN_BOLD_TEXT:
         case LOG_TOKEN_CARD_NAME:
-            return tlpLogTokenBoldText({ text: value });
+            var cardNameTooltipId = undefined;
+            var withTooltip = value.includes(":");
+            if (withTooltip) {
+                cardNameTooltipId = "pr_tooltip_".concat(game._last_tooltip_id);
+                game.tooltipsToMap.push([game._last_tooltip_id, value.split(":")[0]]);
+                game._last_tooltip_id++;
+            }
+            return tlpLogTokenBoldText({
+                text: withTooltip ? value.split(":")[1] : value,
+                tooltipId: cardNameTooltipId,
+            });
         case LOG_TOKEN_FLORIN:
             return tplIcon({ icon: "florin" });
         case LOG_TOKEN_NEW_LINE:
@@ -4107,7 +4198,10 @@ var getTokenDiv = function (_a) {
                 })
                 : value;
         case LOG_TOKEN_PRESTIGE:
-            return tplIcon({ icon: "prestige_".concat(value), classes: 'pr_prestige_icon' });
+            return tplIcon({
+                icon: "prestige_".concat(value),
+                classes: "pr_prestige_icon",
+            });
         case LOG_TOKEN_TABLEAU_OP:
             return tplTableauOp({ tableauOpId: value });
         default:
@@ -4121,17 +4215,19 @@ var tknMapToken = function (tokenId) {
     var split = tokenId.split("_");
     return "".concat(split[1], "_").concat(split[0]);
 };
-var tplLogTokenCard = function (id, tooltipId) {
-    var className = id.startsWith('EmpireSquare') ? 'pr_square_card' : 'pr_card';
-    return "<div id=\"".concat(tooltipId, "\" class=\"").concat(className, "\" data-card-id=\"").concat(id, "\"></div>");
+var tplLogTokenCard = function (id) {
+    var className = id.startsWith("EmpireSquare") || id.startsWith("victory")
+        ? "pr_square_card"
+        : "pr_card";
+    return "<div class=\"".concat(className, " pr_log_card\" data-card-id=\"").concat(id, "\"></div>");
 };
 var tlpLogTokenBoldText = function (_a) {
-    var text = _a.text;
-    return "<span style=\"font-weight: 700;\">".concat(_(text), "</span>");
+    var text = _a.text, tooltipId = _a.tooltipId;
+    return "<span ".concat(tooltipId ? "id=\"".concat(tooltipId, "\"") : "", " style=\"font-weight: 700;\">").concat(_(text), "</span>");
 };
 var tplLogTokenPlayerName = function (_a) {
     var name = _a.name, color = _a.color;
-    return "<span class=\"playername\" ".concat(COLORS_WITH_SHADOW.includes(COLOR_MAP[color]) ? 'data-shadow="true"' : '', " style=\"color:#").concat(color, ";\">").concat(name, "</span>");
+    return "<span class=\"playername\" ".concat(COLORS_WITH_SHADOW.includes(COLOR_MAP[color]) ? 'data-shadow="true"' : "", " style=\"color:#").concat(color, ";\">").concat(name, "</span>");
 };
 var Market = (function () {
     function Market(game) {
@@ -4171,6 +4267,20 @@ var Market = (function () {
         var gamedatas = _a.gamedatas;
         this.updateDecks({ gamedatas: gamedatas });
         this.setupMarket({ gamedatas: gamedatas });
+    };
+    Market.prototype.updateMarketCardTooltips = function () {
+        var _this = this;
+        REGIONS.forEach(function (region) {
+            for (var i = 1; i <= 5; i++) {
+                _this.stocks[region][i].getCards().forEach(function (card) {
+                    _this.game.tooltipManager.removeTooltip(card.id);
+                    _this.game.tooltipManager.addCardTooltip({
+                        nodeId: card.id,
+                        card: card,
+                    });
+                });
+            }
+        });
     };
     Market.prototype.setupDecks = function (_a) {
         var _b;
@@ -4340,9 +4450,9 @@ var Market = (function () {
                         node.insertAdjacentHTML("beforeend", tplIcon({
                             id: "temp_florin_".concat(index),
                             icon: "florin",
-                            classes: 'pr_temp_florin',
+                            classes: "pr_temp_florin",
                             style: "position: absolute;",
-                            children: htmlFlorinChildren
+                            children: htmlFlorinChildren,
                         }));
                         element = document.getElementById("temp_florin_".concat(index));
                         elementRect = element.getBoundingClientRect();
@@ -5890,6 +6000,11 @@ var PlayerManager = (function () {
             this.players[playerId].updatePlayer({ gamedatas: gamedatas });
         }
     };
+    PlayerManager.prototype.updateCardTooltips = function () {
+        this.getPlayers().forEach(function (player) {
+            player.updateCardTooltips();
+        });
+    };
     PlayerManager.prototype.clearInterface = function () {
         var _this = this;
         Object.keys(this.players).forEach(function (playerId) {
@@ -5954,9 +6069,9 @@ var PRPlayer = (function () {
             initialValue: player.florins,
         });
         this.game.tooltipManager.addIconTooltip({
-            iconHtml: tplIcon({ icon: "florin", style: '--paxRenIconScale: 0.85;' }),
+            iconHtml: tplIcon({ icon: "florin", style: "--paxRenIconScale: 0.85;" }),
             nodeId: "pr_florins_counter_".concat(this.playerId),
-            title: _('Florins'),
+            title: _("Florins"),
             text: "The amount of Florins this player owns.",
         });
         this.counters.cards.west = new IconCounter({
@@ -5970,10 +6085,10 @@ var PRPlayer = (function () {
             iconHtml: tplIcon({
                 icon: "west_back",
                 classes: "pr_card_back_icon",
-                style: 'width: 30px; height: 45px;',
+                style: "width: 30px; height: 45px;",
             }),
             nodeId: "pr_cards_west_counter_".concat(this.playerId),
-            title: _('West cards'),
+            title: _("West cards"),
             text: "The number of cards from the West deck this player has in their hand.",
         });
         this.counters.cards.east = new IconCounter({
@@ -5987,39 +6102,39 @@ var PRPlayer = (function () {
             iconHtml: tplIcon({
                 icon: "east_back",
                 classes: "pr_card_back_icon",
-                style: 'width: 30px; height: 45px;',
+                style: "width: 30px; height: 45px;",
             }),
             nodeId: "pr_cards_east_counter_".concat(this.playerId),
-            title: _('East cards'),
+            title: _("East cards"),
             text: "The number of cards from the East deck this player has in their hand.",
         });
-        var prestigeText = _('The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory.');
-        var prestigeTitle = _('${prestige} Prestige');
+        var prestigeText = _("The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory.");
+        var prestigeTitle = _("${prestige} Prestige");
         [CATHOLIC, ISLAMIC, REFORMIST].forEach(function (prestige) {
             var _a, _b;
             var titleArgs = (_a = {},
                 _a[CATHOLIC] = {
-                    prestige: _('Catholic')
+                    prestige: _("Catholic"),
                 },
                 _a[ISLAMIC] = {
-                    prestige: _('Islamic')
+                    prestige: _("Islamic"),
                 },
                 _a[REFORMIST] = {
-                    prestige: _('Reformist')
+                    prestige: _("Reformist"),
                 },
                 _a);
             var textArgs = (_b = {},
                 _b[CATHOLIC] = {
-                    prestige: _('Catholic'),
-                    victory: _('Holy')
+                    prestige: _("Catholic"),
+                    victory: _("Holy"),
                 },
                 _b[ISLAMIC] = {
-                    prestige: _('Islamic'),
-                    victory: _('Holy')
+                    prestige: _("Islamic"),
+                    victory: _("Holy"),
                 },
                 _b[REFORMIST] = {
-                    prestige: _('Reformist'),
-                    victory: _('Holy')
+                    prestige: _("Reformist"),
+                    victory: _("Holy"),
                 },
                 _b);
             var icon = "prestige_".concat(prestige);
@@ -6033,37 +6148,37 @@ var PRPlayer = (function () {
                 initialValue: 0,
             });
             _this.game.tooltipManager.addIconTooltip({
-                iconHtml: tplIcon({ icon: icon, classes: classes, style: '--paxRenIconScale: 1.35;' }),
+                iconHtml: tplIcon({ icon: icon, classes: classes, style: "--paxRenIconScale: 1.35;" }),
                 nodeId: id,
                 text: _this.game.format_string_recursive(prestigeText, textArgs[prestige]),
-                title: _this.game.format_string_recursive(prestigeTitle, titleArgs[prestige])
+                title: _this.game.format_string_recursive(prestigeTitle, titleArgs[prestige]),
             });
         });
         [PATRON, LAW, DISCOVERY].forEach(function (prestige) {
             var _a, _b;
             var titleArgs = (_a = {},
                 _a[PATRON] = {
-                    prestige: _('Patron')
+                    prestige: _("Patron"),
                 },
                 _a[LAW] = {
-                    prestige: _('Law'),
+                    prestige: _("Law"),
                 },
                 _a[DISCOVERY] = {
-                    prestige: _('Discovery')
+                    prestige: _("Discovery"),
                 },
                 _a);
             var textArgs = (_b = {},
                 _b[PATRON] = {
-                    prestige: _('Patron'),
-                    victory: _('Patron')
+                    prestige: _("Patron"),
+                    victory: _("Patron"),
                 },
                 _b[LAW] = {
-                    prestige: _('Law'),
-                    victory: _('Renaissance')
+                    prestige: _("Law"),
+                    victory: _("Renaissance"),
                 },
                 _b[DISCOVERY] = {
-                    prestige: _('Discovery'),
-                    victory: _('Globalization')
+                    prestige: _("Discovery"),
+                    victory: _("Globalization"),
                 },
                 _b);
             var icon = "prestige_".concat(prestige);
@@ -6077,10 +6192,10 @@ var PRPlayer = (function () {
                 initialValue: 0,
             });
             _this.game.tooltipManager.addIconTooltip({
-                iconHtml: tplIcon({ icon: icon, classes: classes, style: '--paxRenIconScale: 1.35;' }),
+                iconHtml: tplIcon({ icon: icon, classes: classes, style: "--paxRenIconScale: 1.35;" }),
                 nodeId: id,
                 text: _this.game.format_string_recursive(prestigeText, textArgs[prestige]),
-                title: _this.game.format_string_recursive(prestigeTitle, titleArgs[prestige])
+                title: _this.game.format_string_recursive(prestigeTitle, titleArgs[prestige]),
             });
         });
         this.counters.king = new IconCounter({
@@ -6099,11 +6214,11 @@ var PRPlayer = (function () {
                 icon: "king",
                 classes: "pr_square_card_icon",
                 extra: "data-bank=\"".concat(this.bank, "\""),
-                style: '--paxRenIconScale: 1.45;'
+                style: "--paxRenIconScale: 1.45;",
             }),
             nodeId: "pr_kings_counter_".concat(this.playerId),
-            text: _('The number of Empire Squares on their King side this player has in their tableau. Counts for Imperial Victory.'),
-            title: _('Kings')
+            text: _("The number of Empire Squares on their King side this player has in their tableau. Counts for Imperial Victory."),
+            title: _("Kings"),
         });
         this.counters.republic = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
@@ -6121,11 +6236,11 @@ var PRPlayer = (function () {
                 icon: "republic",
                 classes: "pr_square_card_icon",
                 extra: "data-bank=\"".concat(this.bank, "\""),
-                style: '--paxRenIconScale: 1.45;'
+                style: "--paxRenIconScale: 1.45;",
             }),
             nodeId: "pr_republics_counter_".concat(this.playerId),
-            text: _('The number of Empire Squares on their Republic side this player has in their tableau. Counts for Renaissance Victory.'),
-            title: _('Republics')
+            text: _("The number of Empire Squares on their Republic side this player has in their tableau. Counts for Renaissance Victory."),
+            title: _("Republics"),
         });
         this.counters.concessions = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
@@ -6143,11 +6258,11 @@ var PRPlayer = (function () {
                 icon: "concession",
                 classes: "pr_concession_icon",
                 extra: "data-bank=\"".concat(this.bank, "\""),
-                style: '--paxRenTokenScale: 1.35;'
+                style: "--paxRenTokenScale: 1.35;",
             }),
             nodeId: "pr_concessions_counter_".concat(this.playerId),
-            text: _('The number of Concessions this player has in play. Counts for Globalization Victory.'),
-            title: _('Concessions')
+            text: _("The number of Concessions this player has in play. Counts for Globalization Victory."),
+            title: _("Concessions"),
         });
         if (COLORS_WITH_SHADOW.includes(this.getColor())) {
             var node = document.getElementById("player_name_".concat(this.playerId));
@@ -6231,6 +6346,9 @@ var PRPlayer = (function () {
         var ability = _a.ability;
         this.activeAbilities = this.activeAbilities.filter(function (item) { return item !== ability; });
     };
+    PRPlayer.prototype.updateCardTooltips = function () {
+        this.tableau.updateCardTooltips();
+    };
     PRPlayer.prototype.addCardToHand = function (_a) {
         var card = _a.card;
         return __awaiter(this, void 0, void 0, function () {
@@ -6290,6 +6408,22 @@ var PlayerTableau = (function () {
         this.playerId = Number(player.id);
         this.setup({ player: player });
     }
+    PlayerTableau.prototype.updateCardTooltips = function () {
+        var _this = this;
+        this.tableau.oldMaids.getCards().forEach(function (card) {
+            _this.game.tooltipManager.removeTooltip(card.id);
+            _this.game.tooltipManager.addCardTooltip({ nodeId: card.id, card: card });
+        });
+        REGIONS.forEach(function (region) {
+            _this.tableau[region].getCards().forEach(function (card) {
+                if (card.type !== TABLEAU_CARD) {
+                    return;
+                }
+                _this.game.tooltipManager.removeTooltip(card.id);
+                _this.game.tooltipManager.addCardTooltip({ nodeId: card.id, card: card });
+            });
+        });
+    };
     PlayerTableau.prototype.clearInterface = function () {
         this.tableau[EAST].removeAll();
         this.tableau[WEST].removeAll();
@@ -6516,6 +6650,21 @@ var getSettingsConfig = function () {
                         type: "slider",
                     }
                 },
+                _a[CARD_SIZE_IN_LOG] = {
+                    id: CARD_SIZE_IN_LOG,
+                    onChangeInSetup: true,
+                    label: _("Size of cards in log"),
+                    defaultValue: 0,
+                    sliderConfig: {
+                        step: 5,
+                        padding: 0,
+                        range: {
+                            min: 0,
+                            max: 150,
+                        },
+                    },
+                    type: "slider",
+                },
                 _a[CARD_SIZE_IN_TABLEAU] = {
                     id: CARD_SIZE_IN_TABLEAU,
                     onChangeInSetup: false,
@@ -6565,6 +6714,23 @@ var getSettingsConfig = function () {
                         },
                         {
                             label: _("Disabled"),
+                            value: DISABLED,
+                        },
+                    ],
+                },
+                _a[CARD_INFO_IN_TOOLTIP] = {
+                    id: CARD_INFO_IN_TOOLTIP,
+                    onChangeInSetup: false,
+                    defaultValue: ENABLED,
+                    label: _("Show card info in tooltip"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
+                        },
+                        {
+                            label: _("Disabled (card image only)"),
                             value: DISABLED,
                         },
                     ],
@@ -6769,6 +6935,10 @@ var Settings = (function () {
     Settings.prototype.onChangeColumnSizesSetting = function (value) {
         this.game.updateLayout();
     };
+    Settings.prototype.onChangeCardSizeInLogSetting = function (value) {
+        var ROOT = document.documentElement;
+        ROOT.style.setProperty('--paxRenLogCardScale', "".concat(Number(value) / 100));
+    };
     Settings.prototype.onChangeCardSizeInTableauSetting = function (value) {
         var node = document.getElementById("pr_player_tableaux");
         if (node) {
@@ -6847,6 +7017,13 @@ var Settings = (function () {
             this.game.animationManager.getSettings().duration = 0;
         }
         this.checkAnmimationSpeedVisisble();
+    };
+    Settings.prototype.onChangeCardInfoInTooltipSetting = function (value) {
+        this.game.market.updateMarketCardTooltips();
+        this.game.playerManager.updateCardTooltips();
+        this.game.tableauCardManager.updateCardTooltips();
+        this.game.victoryCardManager.updateCardTooltips();
+        this.game.updateLogTooltips();
     };
     Settings.prototype.changeTab = function (_a) {
         var id = _a.id;
@@ -11088,9 +11265,13 @@ var tplOpsRow = function (_a) {
         : "", "\n    <span>").concat((opTextMap === null || opTextMap === void 0 ? void 0 : opTextMap[op.id]) || "", "</span>\n  </div>\n</div>");
 };
 var tplTableauCardTooltip = function (_a) {
-    var card = _a.card, game = _a.game;
+    var card = _a.card, game = _a.game, _b = _a.imageOnly, imageOnly = _b === void 0 ? false : _b;
+    var cardHtml = "<div class=\"pr_card\" data-card-id=\"".concat(card.id.split("_")[0], "\"></div>");
+    if (imageOnly) {
+        return "<div style=\"--paxRenCardScale: 1.7;\">".concat(cardHtml, "</div>");
+    }
     return tplCardTooltipContainer({
-        card: "<div class=\"pr_card\" data-card-id=\"".concat(card.id.split("_")[0], "\"></div>"),
+        card: cardHtml,
         content: "\n    <span class=\"pr_title\">".concat(_(card.name), "</span>\n      ").concat(card.flavorText
             .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
             .join(""), "\n      ").concat((card === null || card === void 0 ? void 0 : card.empire) ? tplCardLocation({ location: card.empire }) : "", "\n      ").concat(card.prestige && card.prestige.length > 0
@@ -11110,9 +11291,13 @@ var tplTableauCardTooltip = function (_a) {
     });
 };
 var tplEmireCardTooltip = function (_a) {
-    var card = _a.card, _b = _a.ageOfReformationPromo, ageOfReformationPromo = _b === void 0 ? false : _b, religion = _a.religion;
+    var card = _a.card, _b = _a.ageOfReformationPromo, ageOfReformationPromo = _b === void 0 ? false : _b, religion = _a.religion, imageOnly = _a.imageOnly;
+    var cardHtml = "<div class=\"pr_square_card_tooltip_card_container\">\n  <div class=\"pr_square_card\" data-card-id=\"".concat(card.id, "_king\"").concat(ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : "").concat(religion ? " data-religion=\"".concat(religion, "\"") : "", " style=\"margin-bottom: 16px;\"></div>\n  <div class=\"pr_square_card\" data-card-id=\"").concat(card.id, "_republic\"").concat(ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : "", "></div>\n</div>");
+    if (imageOnly) {
+        return "<div style=\"--paxRenCardScale: 1.5;\">".concat(cardHtml, "</div>");
+    }
     return tplCardTooltipContainer({
-        card: "<div class=\"pr_square_card_tooltip_card_container\">\n      <div class=\"pr_square_card\" data-card-id=\"".concat(card.id, "_king\"").concat(ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : "").concat(religion ? " data-religion=\"".concat(religion, "\"") : "", " style=\"margin-bottom: 16px;\"></div>\n      <div class=\"pr_square_card\" data-card-id=\"").concat(card.id, "_republic\"").concat(ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : "", "></div>\n    </div>"),
+        card: cardHtml,
         content: "\n    <span class=\"pr_title\">".concat(_(card.king.name), "</span>\n    ").concat(card.king.flavorText
             .map(function (text) { return "<span class=\"pr_flavor_text\">".concat(_(text), "</span>"); })
             .join(""), "\n      ").concat(card.king.prestige && card.king.prestige.length > 0
@@ -11133,10 +11318,14 @@ var tplEmireCardTooltip = function (_a) {
     });
 };
 var tplVictoryCardTooltip = function (_a) {
-    var card = _a.card, game = _a.game;
+    var card = _a.card, game = _a.game, imageOnly = _a.imageOnly;
+    var cardHtml = "<div class=\"pr_square_card_tooltip_card_container\">\n  <div class=\"pr_square_card\" data-card-id=\"".concat(card.location, "_active\"></div>\n</div>");
+    if (imageOnly) {
+        return "<div style=\"--paxRenCardScale: 1.5;\">".concat(cardHtml, "</div>");
+    }
     return tplCardTooltipContainer({
-        style: "min-height: 250px; width: 350px;",
-        card: "<div class=\"pr_square_card_tooltip_card_container\">\n      <div class=\"pr_square_card\" data-card-id=\"".concat(card.location, "_active\"></div>\n    </div>"),
+        style: "min-height: 250px; width: 450px;",
+        card: cardHtml,
         content: "\n      <span class=\"pr_title\">".concat(_(card.active.title), "</span>\n      ").concat(card.text
             .map(function (text) { return "\n      <span class=\"pr_section_text\">".concat(game.format_string_recursive(_(text.log), text.args), "</span>\n    "); })
             .join(""), "\n    "),
@@ -11200,7 +11389,11 @@ var TooltipManager = (function () {
     TooltipManager.prototype.setupTooltips = function () { };
     TooltipManager.prototype.addCardTooltip = function (_a) {
         var nodeId = _a.nodeId, card = _a.card;
-        var html = tplTableauCardTooltip({ card: card, game: this.game });
+        var html = tplTableauCardTooltip({
+            card: card,
+            game: this.game,
+            imageOnly: this.game.settings.get({ id: CARD_INFO_IN_TOOLTIP }) === DISABLED,
+        });
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     TooltipManager.prototype.addEmpireCardTooltip = function (_a) {
@@ -11209,12 +11402,17 @@ var TooltipManager = (function () {
             card: card,
             ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo,
             religion: religion,
+            imageOnly: this.game.settings.get({ id: CARD_INFO_IN_TOOLTIP }) === DISABLED,
         });
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     TooltipManager.prototype.addVictoryCardTooltip = function (_a) {
         var nodeId = _a.nodeId, card = _a.card;
-        var html = tplVictoryCardTooltip({ card: card, game: this.game });
+        var html = tplVictoryCardTooltip({
+            card: card,
+            game: this.game,
+            imageOnly: this.game.settings.get({ id: CARD_INFO_IN_TOOLTIP }) === DISABLED,
+        });
         this.game.framework().addTooltipHtml(nodeId, html, 500);
     };
     return TooltipManager;

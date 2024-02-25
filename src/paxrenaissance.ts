@@ -191,13 +191,6 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.notificationManager = new NotificationManager(this);
     this.notificationManager.setupNotifications();
 
-    // TO CHECK: add tooltips to log here?
-    // dojo.connect(this.framework().notifqueue, 'addToLog', () => {
-    //   this.checkLogCancel(this._last_notif == null ? null : this._last_notif.msg.uid);
-    //   this.addLogClass();
-    //   this.tooltipManager.checkLogTooltip(this._last_notif);
-    // });
-    // this.setupNotifications();
     this.tooltipManager.setupTooltips();
     debug("Ending game setup");
   }
@@ -896,15 +889,49 @@ class PaxRenaissance implements PaxRenaissanceGame {
       if (!tooltipToMap || !tooltipToMap[1]) {
         console.error("error tooltipToMap", tooltipToMap);
       } else {
-        const card = this.gamedatas.staticData.tableauCards[tooltipToMap[1]];
-        if (card) {
-          this.tooltipManager.addCardTooltip({
-            nodeId: `pr_tooltip_${tooltipToMap[0]}`,
-            card,
-          });
-        }
+        this.addLogTooltip({
+          tooltipId: tooltipToMap[0],
+          cardId: tooltipToMap[1],
+        });
       }
     }
+  }
+
+  // cardId will be PRENXXXX for tableau cards and full id for empire card / victory card
+  addLogTooltip({ tooltipId, cardId }: { tooltipId: number; cardId: string }) {
+    if (cardId.startsWith("EmpireSquare")) {
+      const empireCard = this.gamedatas.empireSquares.find(
+        (square) => square.id === cardId
+      );
+      if (empireCard) {
+        this.tooltipManager.addEmpireCardTooltip({
+          nodeId: `pr_tooltip_${tooltipId}`,
+          card: empireCard,
+        });
+      }
+    } else if (cardId.startsWith("Victory")) {
+      console.log('victory card tooltip',cardId);
+      const card = this.gamedatas.victoryCards.find((card) => cardId === card.id);
+      if (card) {
+        this.tooltipManager.addVictoryCardTooltip({
+          nodeId: `pr_tooltip_${tooltipId}`,
+          card
+        });
+      }
+    } else {
+      const card = this.gamedatas.staticData.tableauCards[cardId];
+      if (card) {
+        this.tooltipManager.addCardTooltip({
+          nodeId: `pr_tooltip_${tooltipId}`,
+          card,
+        });
+      }
+    }
+  }
+
+  updateLogTooltips() {
+    // console.log("tooltipsToMap", this.tooltipsToMap);
+    // TODO: check how to update this. For now needs refresh
   }
 
   /*

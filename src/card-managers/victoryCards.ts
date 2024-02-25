@@ -13,7 +13,10 @@ class VictoryCardManager extends CardManager<VictoryCard> {
       setupDiv: (card, div: HTMLElement) => {
         div.style.width = "calc(var(--paxRenCardScale) * 151px)";
         div.style.height = "calc(var(--paxRenCardScale) * 151px)";
-        this.game.tooltipManager.addVictoryCardTooltip({nodeId: card.id, card});
+        this.game.tooltipManager.addVictoryCardTooltip({
+          nodeId: card.id,
+          card,
+        });
       },
       setupFrontDiv: (card, div: HTMLElement) => this.setupFrontDiv(card, div),
       setupBackDiv: (card, div: HTMLElement) => this.setupBackDiv(card, div),
@@ -24,6 +27,18 @@ class VictoryCardManager extends CardManager<VictoryCard> {
     });
 
     this.setupVictorySquares();
+  }
+
+  updateCardTooltips() {
+    Object.values(this.victoryCardStocks).forEach((stock) => {
+      stock.getCards().forEach((card) => {
+        this.game.tooltipManager.removeTooltip(card.id);
+        this.game.tooltipManager.addVictoryCardTooltip({
+          nodeId: card.id,
+          card,
+        });
+      });
+    });
   }
 
   clearInterface() {
@@ -66,10 +81,11 @@ class VictoryCardManager extends CardManager<VictoryCard> {
       ),
     };
     if (this.game.gameOptions.ageOfReformationPromo) {
-      this.victoryCardStocks[VICTORY_AGE_OF_BYZANTINE] = new LineStock<VictoryCard>(
-        this,
-        document.getElementById(`pr_${VICTORY_AGE_OF_BYZANTINE}_slot`)
-      );
+      this.victoryCardStocks[VICTORY_AGE_OF_BYZANTINE] =
+        new LineStock<VictoryCard>(
+          this,
+          document.getElementById(`pr_${VICTORY_AGE_OF_BYZANTINE}_slot`)
+        );
     }
 
     this.setupCards({ gamedatas: this.game.gamedatas });

@@ -305,20 +305,20 @@ class Notifications
   {
     $borders = [];
     $cities = [];
-    foreach($empire->getCities() as $city) {
+    foreach ($empire->getCities() as $city) {
       $token = $city->getToken();
       if ($token !== null) {
         $cities[] = $token;
       }
     }
-    foreach($empire->getBorders() as $border) {
+    foreach ($empire->getBorders() as $border) {
       if (!$border->isSeaBorder()) {
         continue;
       }
       $tokens = $border->getTokens();
       $borders = array_merge($borders, $tokens);
     }
-    return array_merge($borders,$cities);
+    return array_merge($borders, $cities);
   }
 
   public static function changeEmpireToMedievalState($player, $empire, $fromReligion)
@@ -348,13 +348,15 @@ class Notifications
 
   public static function changeEmpireToTheocracy($empire, $religion)
   {
-  
+
 
     self::notifyAll("changeEmpireToTheocracy",  clienttranslate('${tkn_boldText_empire_name} changes into a ${religion} Theocracy'), [
       'tkn_boldText_empire_name' => $empire->getName(),
       'empire' => $empire,
       'religion' => $religion,
-      'tokensInEmpire' => array_map(function ($token) { return $token->jsonSerialize();}, self::getTokensInEmpire($empire)),
+      'tokensInEmpire' => array_map(function ($token) {
+        return $token->jsonSerialize();
+      }, self::getTokensInEmpire($empire)),
     ]);
   }
 
@@ -368,12 +370,14 @@ class Notifications
 
   public static function coronation($player, $queen, $king)
   {
-    self::notifyAll("coronation",  clienttranslate('${tkn_playerName} marries ${tkn_boldText_queen} to ${tkn_boldText_king}'), [
+    self::notifyAll("coronation", clienttranslate('${tkn_playerName} marries ${tkn_cardName_queen} to ${tkn_cardName_king} ${tkn_card_queen} ${tkn_card_king}'), [
       'player' => $player,
-      'tkn_boldText_queen' => $queen->getName(),
-      'tkn_boldText_king' => $king->getName(),
+      'tkn_cardName_queen' => self::tknCardNameArg($queen->getId(), $queen->getName()),
+      'tkn_cardName_king' => self::tknCardNameArg($king->getId(), $king->getName()),
       'queen' => $queen,
       'king' => $king,
+      'tkn_card_queen' => self::tknCardArg($queen),
+      'tkn_card_king' => self::tknCardArg($king),
     ]);
   }
 
@@ -389,13 +393,14 @@ class Notifications
   public static function discardCard($fromLocationId, $adjustPrestige, $player, $card, $toLocationId, $messageType = DISCARD, $wasVassalTo = null, $wasQueenTo = null, $wasOldMaid = false)
   {
     $messages = [
-      DISCARD => clienttranslate('${tkn_playerName} discards ${tkn_boldText}'),
-      KILL => clienttranslate('${tkn_boldText} is killed'),
+      DISCARD => clienttranslate('${tkn_playerName} discards ${tkn_cardName} ${tkn_card}'),
+      KILL => clienttranslate('${tkn_cardName} is killed ${tkn_card}'),
     ];
 
     self::notifyAll("discardCard", $messages[$messageType], [
       'player' => $player,
-      'tkn_boldText' => $card->getName(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
+      'tkn_card' => self::tknCardArg($card),
       'card' => $card,
       'fromLocationId' => $fromLocationId,
       'toLocationId' => $toLocationId,
@@ -410,9 +415,10 @@ class Notifications
   {
     $kingCard = $king !== null ? $king->jsonSerialize() : null;
 
-    self::notifyAll("discardQueen", clienttranslate('${tkn_playerName} discards ${tkn_boldText}'), [
+    self::notifyAll("discardQueen", clienttranslate('${tkn_playerName} discards ${tkn_cardName} ${tkn_card}'), [
       'player' => $player,
-      'tkn_boldText' => $queen->getName(),
+      'tkn_cardName' => self::tknCardNameArg($queen->getId(), $queen->getName()),
+      'tkn_card' => self::tknCardArg($queen),
       'queen' => $queen,
       'king' => $kingCard,
       'fromTableau' => $fromTableau,
@@ -423,10 +429,11 @@ class Notifications
   public static function flipEmpireCard($player, $card, $formerSuzerain)
   {
     $side = $card->getSide();
-    self::notifyAll("flipEmpireCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName} to ${side} side'), [
+    self::notifyAll("flipEmpireCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName} to ${side} side ${tkn_card}'), [
       'player' => $player,
       'card' => $card,
-      'tkn_cardName' => $card->getName($side === REPUBLIC ? KING : REPUBLIC),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName($side === REPUBLIC ? KING : REPUBLIC)),
+      'tkn_card' => self::tknCardArg($card),
       'side' => $side === REPUBLIC ? clienttranslate('Republic') : clienttranslate('King'),
       'formerSuzerain' => $formerSuzerain,
       'i18n' => ['side'],
@@ -435,10 +442,11 @@ class Notifications
 
   public static function flipVictoryCard($player, $card)
   {
-    self::notifyAll("flipVictoryCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName}'), [
+    self::notifyAll("flipVictoryCard",  clienttranslate('${tkn_playerName} flips ${tkn_cardName} ${tkn_card}'), [
       'player' => $player,
       'card' => $card,
-      'tkn_cardName' => $card->getTitle(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getTitle()),
+      'tkn_card' => self::tknCardArg($card),
     ]);
   }
 
@@ -447,9 +455,10 @@ class Notifications
     $name = $empireCard->getName();
     $card = $empireCard->jsonSerialize();
 
-    self::notifyAll("moveEmpireSquare", clienttranslate('${tkn_playerName} moves ${tkn_boldText} to their tableau'), [
+    self::notifyAll("moveEmpireSquare", clienttranslate('${tkn_playerName} moves ${tkn_cardName} to their tableau ${tkn_card}'), [
       'player' => $player,
-      'tkn_boldText' => $name,
+      'tkn_cardName' => self::tknCardNameArg($empireCard->getId(), $name),
+      'tkn_card' => self::tknCardArg($empireCard),
       'card' => $card,
       'origin' => $origin,
       'destination' => $destination,
@@ -480,9 +489,10 @@ class Notifications
 
   public static function oldMaid($player, $queenCard)
   {
-    self::notifyAll("oldMaid", clienttranslate('${tkn_playerName} plays ${tkn_cardName} as an Old Maid'), [
+    self::notifyAll("oldMaid", clienttranslate('${tkn_playerName} plays ${tkn_cardName} as an Old Maid ${tkn_card}'), [
       'player' => $player,
-      'tkn_cardName' => $queenCard->getName(),
+      'tkn_cardName' => self::tknCardNameArg($queenCard->getId(), $queenCard->getName()),
+      'tkn_card' => self::tknCardArg($queenCard),
       'card' => $queenCard
     ]);
   }
@@ -539,10 +549,11 @@ class Notifications
 
   public static function playCard($player, $card)
   {
-    self::notifyAll("playCard",  clienttranslate('${tkn_playerName} plays ${tkn_cardName}'), [
+    self::notifyAll("playCard",  clienttranslate('${tkn_playerName} plays ${tkn_cardName} ${tkn_card}'), [
       'player' => $player,
       'card' => $card,
-      'tkn_cardName' => $card->getName(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
+      'tkn_card' => self::tknCardArg($card),
     ]);
   }
 
@@ -552,11 +563,11 @@ class Notifications
       'player' => $player,
       'card' => $card,
       'amount' => count($placedFlorins),
-      'tkn_cardName' => $card->getName(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
       'placedFlorins' => $placedFlorins,
       'takenFlorins' => $takenFlorins,
       'discard' => $discard,
-      'tkn_card' => explode('_', $card->getId())[0],
+      'tkn_card' => self::tknCardArg($card),
       'tkn_florin' => clienttranslate('Florin(s)'),
     ]);
   }
@@ -642,11 +653,12 @@ class Notifications
 
   public static function returnToThrone($player, $king, $fromSide, $suzerain)
   {
-    $message = clienttranslate('${tkn_playerName} returns ${tkn_cardName_king} to his throne');
+    $message = clienttranslate('${tkn_playerName} returns ${tkn_cardName_king} to his throne ${tkn_card}');
     self::notifyAll("returnToThrone",  $message, [
       'player' => $player,
       'king' => $king,
-      'tkn_cardName_king' => $king->getName(),
+      'tkn_cardName_king' => self::tknCardNameArg($king->getId(), $king->getName()),
+      'tkn_card' => self::tknCardArg($king),
       'fromSide' => $fromSide,
       'suzerain' => $suzerain,
     ]);
@@ -665,11 +677,12 @@ class Notifications
 
   public static function sellCard($player, $card, $value)
   {
-    self::notifyAll("sellCard",  clienttranslate('${tkn_playerName} sells ${tkn_cardName} for ${value} ${tkn_florin}'), [
+    self::notifyAll("sellCard", clienttranslate('${tkn_playerName} sells ${tkn_cardName} for ${value} ${tkn_florin} ${tkn_card}'), [
       'player' => $player,
       'card' => $card,
       'value' => $value,
-      'tkn_cardName' => $card->getName(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
+      'tkn_card' => self::tknCardArg($card),
       'tkn_florin' => clienttranslate('Florin(s)'),
     ]);
   }
@@ -678,23 +691,33 @@ class Notifications
   {
     $queenNamesLog = "";
     $queenNamesArgs = [];
+    $queenCardsLog = "";
+    $queenCardsArgs = [];
 
     foreach ($queens as $index => $queen) {
       $separator = $index === 0 ? "" : ", ";
       $key = '${tkn_cardName_queen_' . $index . "}";
+      $key_card = '${tkn_card_queen_' . $index . "}";
       $queenNamesLog = $queenNamesLog . $separator . $key;
-      $queenNamesArgs['tkn_cardName_queen_' . $index] = $queen->getName();
+      $queenCardsLog = $queenCardsLog.$key_card;
+      $queenNamesArgs['tkn_cardName_queen_' . $index] = self::tknCardNameArg($queen->getId(), $queen->getName());
+      $queenCardsArgs['tkn_card_queen_' . $index] = self::tknCardArg($queen);
     };
 
-    self::notifyAll("sellRoyalCouple",  clienttranslate('${tkn_playerName} sells ${queenNamesLog} and ${tkn_cardName_king} for ${value} ${tkn_florin}'), [
+    self::notifyAll("sellRoyalCouple", clienttranslate('${tkn_playerName} sells ${queenNamesLog} and ${tkn_cardName_king} for ${value} ${tkn_florin} ${tkn_card_king} ${queenCardsLog}'), [
       'player' => $player,
       'king' => $king,
       'queens' => $queens,
       'value' => $value,
-      'tkn_cardName_king' => $king->getName(),
+      'tkn_cardName_king' => self::tknCardNameArg($king->getId(), $king->getName()),
+      'tkn_card_king' => self::tknCardArg($king),
       'queenNamesLog' => [
         'log' => $queenNamesLog,
         'args' => $queenNamesArgs,
+      ],
+      'queenCardsLog' => [
+        'log' => $queenCardsLog,
+        'args' => $queenCardsArgs,
       ],
       'tkn_florin' => clienttranslate('Florin(s)'),
     ]);
@@ -702,9 +725,10 @@ class Notifications
 
   public static function tableauOpBehead($player, $card)
   {
-    self::message(clienttranslate('${tkn_playerName} beheads ${tkn_cardName}'), [
+    self::message(clienttranslate('${tkn_playerName} beheads ${tkn_cardName} ${tkn_card}'), [
       'player' => $player,
-      'tkn_cardName' => $card->getName(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
+      'tkn_card' => self::tknCardArg($card),
     ]);
   }
 
@@ -725,26 +749,34 @@ class Notifications
 
   public static function tableauOpCommerce($player, $card, $space)
   {
-    $cardName = $card === null || in_array($card->getLocation(), [Locations::market(WEST, 0), Locations::market(EAST, 0)]) ? clienttranslate('trade fair card') : $card->getName();
+    $message = clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} from ${tkn_cardName} ${tkn_card}');
+    $fromTradeFairCard = $card === null || in_array($card->getLocation(), [Locations::market(WEST, 0), Locations::market(EAST, 0)]);
+
+    $cardName = $fromTradeFairCard ? clienttranslate('trade fair card') : $card->getName();
+    if ($fromTradeFairCard) {
+      $message = clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} from ${tkn_cardName}');
+    }
     if ($space !== null) {
       $cardName = clienttranslate('trade fair space');
     }
 
-    self::notifyAll("tableauOpCommerce", clienttranslate('${tkn_playerName} takes 1 ${tkn_florin} from ${tkn_cardName}'), [
+    self::notifyAll("tableauOpCommerce", $message, [
       'player' => $player,
       'tkn_florin' => clienttranslate("Florin(s)"),
-      'tkn_cardName' => $cardName,
+      'tkn_cardName' => $fromTradeFairCard ? $cardName : self::tknCardNameArg($card->getId(), $cardName),
       'location' => $card !== null ? $card->getLocation() : $space,
+      'tkn_card' => $fromTradeFairCard ? '' : self::tknCardArg($card),
     ]);
   }
 
   public static function tableauOpSelected($player, $tableauOp, $card)
   {
-    self::message(clienttranslate('${tkn_playerName} performs ${tkn_boldText} Op with ${tkn_cardName} ${tkn_tableauOp}'), [
+    self::message(clienttranslate('${tkn_playerName} performs ${tkn_boldText} Op with ${tkn_cardName} ${tkn_tableauOp} ${tkn_card}'), [
       'player' => $player,
       'tkn_tableauOp' => $tableauOp->getId(),
       'tkn_boldText' => $tableauOp->getName(),
-      'tkn_cardName' => $card->getName(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
+      'tkn_card' => self::tknCardArg($card),
     ]);
   }
 
@@ -871,21 +903,22 @@ class Notifications
 
   public static function useApostasyAbilityAction($player, $apostasy, $card)
   {
-
-
-    self::message(clienttranslate('${tkn_playerName} uses ${tkn_cardName} to perform an apostasy ${tkn_oneShot}'), [
+    self::message(clienttranslate('${tkn_playerName} uses ${tkn_cardName} to perform an apostasy ${tkn_oneShot} ${tkn_card}'), [
       'player' => $player,
-      'tkn_cardName' => $card->getName(),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
+      'tkn_card' => self::tknCardArg($card),
       'tkn_oneShot' => $apostasy,
     ]);
   }
 
   public static function vassalage($player, $empireCard, $suzerain)
   {
-    self::message(clienttranslate('${tkn_boldText_vassal} becomes a Vassal to ${tkn_boldText_vassal_suzerain}'), [
+    self::message(clienttranslate('${tkn_cardName_vassal} becomes a Vassal to ${tkn_cardName_vassal_suzerain} ${tkn_card_vassal} ${tkn_card_suzerain}'), [
       'player' => $player,
-      'tkn_boldText_vassal' => $empireCard->getName(),
-      'tkn_boldText_vassal_suzerain' => $suzerain->getName(),
+      'tkn_cardName_vassal' => self::tknCardNameArg($empireCard->getId(), $empireCard->getName()),
+      'tkn_cardName_vassal_suzerain' => self::tknCardNameArg($suzerain->getId(), $suzerain->getName()),
+      'tkn_card_vassal' => self::tknCardArg($empireCard),
+      'tkn_card_suzerain' => self::tknCardArg($suzerain),
     ]);
   }
 
@@ -903,6 +936,28 @@ class Notifications
       $args['tkn_playerName'] = $args['player']->getName();
       $args['playerId'] = $args['player']->getId();
       unset($args['player']);
+    }
+  }
+
+  protected static function tknCardNameArg($cardId, $cardName)
+  {
+    if (Utils::startsWith($cardId, 'EmpireSquare_') || Utils::startsWith($cardId, 'Victory')) {
+      return $cardId . ':' . $cardName;
+    } else {
+      return explode('_', $cardId)[0] . ':' . $cardName;
+    }
+  }
+
+  protected static function tknCardArg($card)
+  {
+    $cardId = $card->getId();
+
+    if (Utils::startsWith($cardId, 'EmpireSquare_')) {
+      return implode('_', [$cardId, $card->getSide()]);
+    } else if (Utils::startsWith($cardId, 'Victory')) {
+      return implode('_', [$card->getStartLocation(), 'active']);
+    } else {
+      return explode('_', $cardId)[0];
     }
   }
 }

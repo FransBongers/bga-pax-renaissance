@@ -56,6 +56,7 @@ interface PaxRenaissanceGame extends Game {
     args?: Record<string, unknown>;
   }) => void;
   updateLayout: () => void;
+  updateLogTooltips: () => void;
   _connections: unknown[];
   animationManager: AnimationManager;
   // cardManager: CardManager<TableauCard>;

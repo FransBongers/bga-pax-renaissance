@@ -202,14 +202,22 @@ const tplOpsRow = ({ op }: { op: TableauOp }) => {
 const tplTableauCardTooltip = ({
   card,
   game,
+  imageOnly = false,
 }: {
   card: TableauCard | QueenCard;
   game: PaxRenaissanceGame;
+  imageOnly?: boolean;
 }) => {
+  const cardHtml = `<div class="pr_card" data-card-id="${
+    card.id.split("_")[0]
+  }"></div>`;
+  if (imageOnly) {
+    return `<div style="--paxRenCardScale: 1.7;">${cardHtml}</div>`;
+  }
   // const dataCardId = card.id.split('_')[0];
   // console.log('dataCardId',dataCardId);
   return tplCardTooltipContainer({
-    card: `<div class="pr_card" data-card-id="${card.id.split("_")[0]}"></div>`,
+    card: cardHtml,
     content: `
     <span class="pr_title">${_(card.name)}</span>
       ${card.flavorText
@@ -262,22 +270,29 @@ const tplEmireCardTooltip = ({
   card,
   ageOfReformationPromo = false,
   religion,
+  imageOnly,
 }: {
   card: EmpireCard;
   ageOfReformationPromo?: boolean;
   religion?: string;
+  imageOnly?: boolean;
 }) => {
+  const cardHtml = `<div class="pr_square_card_tooltip_card_container">
+  <div class="pr_square_card" data-card-id="${card.id}_king"${
+    ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : ""
+  }${
+    religion ? ` data-religion="${religion}"` : ""
+  } style="margin-bottom: 16px;"></div>
+  <div class="pr_square_card" data-card-id="${card.id}_republic"${
+    ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : ""
+  }></div>
+</div>`;
+  if (imageOnly) {
+    return `<div style="--paxRenCardScale: 1.5;">${cardHtml}</div>`;
+  }
+
   return tplCardTooltipContainer({
-    card: `<div class="pr_square_card_tooltip_card_container">
-      <div class="pr_square_card" data-card-id="${card.id}_king"${
-      ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : ""
-    }${
-      religion ? ` data-religion="${religion}"` : ""
-    } style="margin-bottom: 16px;"></div>
-      <div class="pr_square_card" data-card-id="${card.id}_republic"${
-      ageOfReformationPromo ? ' data-map-type="ageOfReformation"' : ""
-    }></div>
-    </div>`,
+    card: cardHtml,
     content: `
     <span class="pr_title">${_(card.king.name)}</span>
     ${card.king.flavorText
@@ -324,15 +339,23 @@ const tplEmireCardTooltip = ({
 const tplVictoryCardTooltip = ({
   card,
   game,
+  imageOnly,
 }: {
   card: VictoryCard;
   game: PaxRenaissanceGame;
+  imageOnly?: boolean;
 }) => {
+  const cardHtml = `<div class="pr_square_card_tooltip_card_container">
+  <div class="pr_square_card" data-card-id="${card.location}_active"></div>
+</div>`;
+
+  if (imageOnly) {
+    return `<div style="--paxRenCardScale: 1.5;">${cardHtml}</div>`;
+  }
+
   return tplCardTooltipContainer({
-    style: "min-height: 250px; width: 350px;",
-    card: `<div class="pr_square_card_tooltip_card_container">
-      <div class="pr_square_card" data-card-id="${card.location}_active"></div>
-    </div>`,
+    style: "min-height: 250px; width: 450px;",
+    card: cardHtml,
     content: `
       <span class="pr_title">${_(card.active.title)}</span>
       ${card.text
@@ -373,6 +396,6 @@ const tplTooltipWithIcon = ({
           </div>`;
 };
 
-const tplTextTooltip = ({text}: {text: string}) => {
-  return `<span class="pr_text_tooltip">${text}</span>`
-}
+const tplTextTooltip = ({ text }: { text: string }) => {
+  return `<span class="pr_text_tooltip">${text}</span>`;
+};

@@ -1,10 +1,14 @@
-class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCardContainer> {
+class TableauCardManager extends CardManager<
+  EmpireCard | TableauCard | EmpireCardContainer
+> {
   public empireSquareStocks: {
     [ARAGON]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [BYZANTIUM]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [ENGLAND]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [FRANCE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
-    [HOLY_ROMAN_EMIRE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]?: LineStock<
+      EmpireCard | TableauCard | EmpireCardContainer
+    >;
     [HUNGARY]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [MAMLUK]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [OTTOMAN]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
@@ -17,7 +21,9 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     [BYZANTIUM]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [ENGLAND]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [FRANCE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
-    [HOLY_ROMAN_EMIRE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]?: LineStock<
+      EmpireCard | TableauCard | EmpireCardContainer
+    >;
     [HUNGARY]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [MAMLUK]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [OTTOMAN]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
@@ -30,7 +36,9 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     [BYZANTIUM]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [ENGLAND]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [FRANCE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
-    [HOLY_ROMAN_EMIRE]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [HOLY_ROMAN_EMIRE]?: LineStock<
+      EmpireCard | TableauCard | EmpireCardContainer
+    >;
     [HUNGARY]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [MAMLUK]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
     [OTTOMAN]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
@@ -56,12 +64,50 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     });
   }
 
-  setupDiv(card: EmpireCard | TableauCard | EmpireCardContainer, div: HTMLElement) {
+  updateCardTooltips() {
+    Object.values(this.empireSquareStocks).forEach((stock) => {
+      stock.getCards().forEach((card) => {
+        if (card.type !== EMPIRE_CARD) {
+          return;
+        }
+        this.game.tooltipManager.removeTooltip(card.id);
+        this.game.tooltipManager.addEmpireCardTooltip({
+          nodeId: card.id,
+          card,
+          // With age if reformation promo papal states can have a different king side
+          // depending on religion.
+          religion:
+            this.game.gameOptions.ageOfReformationPromo &&
+            card.id === "EmpireSquare_PapalStates"
+              ? document
+                  .getElementById("pr_papalStates")
+                  ?.getAttribute("data-card-id")
+                  ?.split("_")[0] || ""
+              : "",
+        });
+      });
+    });
+
+    Object.values(this.queenStocks).forEach((stock) => {
+      stock.getCards().forEach((card) => {
+        if (card.type !== TABLEAU_CARD) {
+          return;
+        }
+        this.game.tooltipManager.removeTooltip(card.id);
+        this.game.tooltipManager.addCardTooltip({ nodeId: card.id, card });
+      });
+    });
+  }
+
+  setupDiv(
+    card: EmpireCard | TableauCard | EmpireCardContainer,
+    div: HTMLElement
+  ) {
     if (card.type === EMPIRE_CARD_CONTAINER) {
-      this.setupEmpireCardContainerDiv(card,div);
+      this.setupEmpireCardContainerDiv(card, div);
       // div.style.minWidth = "calc(var(--paxRenCardScale) * 151px)";
       // div.style.minHeight = "calc(var(--paxRenCardScale) * 151px)";
-      
+
       return;
     }
 
@@ -74,14 +120,16 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
       div.style.minWidth = "calc(var(--paxRenCardScale) * 151px)";
       div.style.minHeight = "calc(var(--paxRenCardScale) * 151px)";
     }
-    div.style.position = 'relative';
+    div.style.position = "relative";
     div.insertAdjacentHTML("beforeend", tplTokensContainer({ id: card.id }));
 
     // const ops = isEmpireCard ? [...card[KING].ops,...card[REPUBLIC].ops] : card.ops;
-    
+
     if (isEmpireCard) {
       (card.king.ops || []).forEach((operation) => {
-        const element = document.getElementById(`pr_${card.id}_${operation.id}_king`);
+        const element = document.getElementById(
+          `pr_${card.id}_${operation.id}_king`
+        );
         // TODO: check why setupFrontDiv is called twice for each card
         if (!element) {
           div.insertAdjacentHTML(
@@ -91,11 +139,13 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
               cardId: card.id,
               side: KING,
             })
-          );        
+          );
         }
       });
       (card.republic.ops || []).forEach((operation) => {
-        const element = document.getElementById(`pr_${card.id}_${operation.id}_republic`);
+        const element = document.getElementById(
+          `pr_${card.id}_${operation.id}_republic`
+        );
         // TODO: check why setupFrontDiv is called twice for each card
         if (!element) {
           div.insertAdjacentHTML(
@@ -105,13 +155,15 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
               cardId: card.id,
               side: REPUBLIC,
             })
-          );        
+          );
         }
       });
     } else {
       const ops = card.ops;
       (ops || []).forEach((operation) => {
-        const element = document.getElementById(`pr_${card.id}_${operation.id}${isEmpireCard ? `_${KING}` : ''}`);
+        const element = document.getElementById(
+          `pr_${card.id}_${operation.id}${isEmpireCard ? `_${KING}` : ""}`
+        );
         // TODO: check why setupFrontDiv is called twice for each card
         if (!element) {
           div.insertAdjacentHTML(
@@ -121,43 +173,22 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
               cardId: card.id,
               side: null,
             })
-          );        
+          );
         }
       });
     }
 
-
-
     if (card.type === EMPIRE_CARD) {
       div.classList.add("pr_empire_square");
-      // setup container for queens
-      // div.insertAdjacentHTML("afterbegin", tplQueenContainer({ id: card.id }));
-      // const queenContainerNode = document.getElementById(`queens_${card.id}`);
-      // card.queens.forEach((queen) => {
-      //   // add queens
-      //   queenContainerNode.insertAdjacentHTML("beforeend", tplQueen({ queen }));
-      //   // add tooltip to queen
-      //   this.game.tooltipManager.addCardTooltip({
-      //     nodeId: queen.id,
-      //     card: queen,
-      //   });
-      // });
-
-      // div.insertAdjacentHTML("beforeend", tplVassalsContainer({ id: card.id }));
-
-      // this.vassalStocks[card.empire] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
-      //   this,
-      //   document.getElementById(`vassals_${card.id}`),
-      //   { gap: "12px", sort: sortFunction("state") }
-      // );
-      // this.updateQueenContainerHeightAndPositions({ card });
-      // this.updateEmpireCardHeight({ card });
     }
   }
 
-  setupFrontDiv(card: EmpireCard | TableauCard | EmpireCardContainer, div: HTMLElement) {
+  setupFrontDiv(
+    card: EmpireCard | TableauCard | EmpireCardContainer,
+    div: HTMLElement
+  ) {
     if (card.type === EMPIRE_CARD_CONTAINER) {
-      div.style.display = 'none';
+      div.style.display = "none";
       return;
     }
 
@@ -181,7 +212,9 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
         if (card.id === "EmpireSquare_PapalStates") {
           const religion = (
             this.game.gamedatas as PaxRenaissanceGamedatas
-          ).gameMap.empires.find((empire) => empire.id === PAPAL_STATES).religion;
+          ).gameMap.empires.find(
+            (empire) => empire.id === PAPAL_STATES
+          ).religion;
           div.setAttribute("data-religion", religion);
         }
       }
@@ -214,9 +247,12 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     }
   }
 
-  setupBackDiv(card: EmpireCard | TableauCard | EmpireCardContainer, div: HTMLElement) {
+  setupBackDiv(
+    card: EmpireCard | TableauCard | EmpireCardContainer,
+    div: HTMLElement
+  ) {
     if (card.type === EMPIRE_CARD_CONTAINER) {
-      div.style.display = 'none';
+      div.style.display = "none";
       return;
     }
 
@@ -246,7 +282,7 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     if (card.type === EMPIRE_CARD_CONTAINER) {
       return true;
     }
-    
+
     const { location, type } = card;
     if (location && location.startsWith("deck")) {
       return false;
@@ -267,7 +303,9 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     vassal: EmpireCard;
     suzerain: EmpireCard;
   }) {
-    this.vassalStocks[suzerain.empire].addCard(createEmpireCardContainer(vassal));
+    this.vassalStocks[suzerain.empire].addCard(
+      createEmpireCardContainer(vassal)
+    );
   }
 
   public async addVassal({
@@ -277,7 +315,9 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     vassal: EmpireCard;
     suzerain: EmpireCard;
   }) {
-    this.vassalStocks[suzerain.empire].addCard(createEmpireCardContainer(vassal));
+    this.vassalStocks[suzerain.empire].addCard(
+      createEmpireCardContainer(vassal)
+    );
   }
 
   public async addQueen({
@@ -288,45 +328,63 @@ class TableauCardManager extends CardManager<EmpireCard | TableauCard | EmpireCa
     queen: QueenCard;
   }) {
     await this.queenStocks[king.empire].addCard(queen);
-    this.addMarginBottomQueen({queen});
+    this.addMarginBottomQueen({ queen });
   }
 
-  private setupEmpireCardContainerDiv(container: EmpireCardContainer, div: HTMLElement) {
-    div.classList.add('pr_empire_square_container');
-    div.insertAdjacentHTML('beforeend',`<div id="${container.id}_queens" class="pr_queens_container"></div>`);
-    div.insertAdjacentHTML('beforeend',`<div id="${container.id}_empire_square" style="width: calc(var(--paxRenCardScale) * 151px); height: calc(var(--paxRenCardScale) * 151px);"></div>`);
-    div.insertAdjacentHTML('beforeend',`<div id="${container.id}_vassals" class="pr_vassals_container"></div>`);
-
-    this.empireSquareStocks[container.empireId] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
-      this,
-      document.getElementById(`${container.id}_empire_square`),
-      { gap: "12px", sort: sortFunction("state") }
+  private setupEmpireCardContainerDiv(
+    container: EmpireCardContainer,
+    div: HTMLElement
+  ) {
+    div.classList.add("pr_empire_square_container");
+    div.insertAdjacentHTML(
+      "beforeend",
+      `<div id="${container.id}_queens" class="pr_queens_container"></div>`
     );
+    div.insertAdjacentHTML(
+      "beforeend",
+      `<div id="${container.id}_empire_square" style="width: calc(var(--paxRenCardScale) * 151px); height: calc(var(--paxRenCardScale) * 151px);"></div>`
+    );
+    div.insertAdjacentHTML(
+      "beforeend",
+      `<div id="${container.id}_vassals" class="pr_vassals_container"></div>`
+    );
+
+    this.empireSquareStocks[container.empireId] = new LineStock<
+      EmpireCard | TableauCard | EmpireCardContainer
+    >(this, document.getElementById(`${container.id}_empire_square`), {
+      gap: "12px",
+      sort: sortFunction("state"),
+    });
     this.empireSquareStocks[container.empireId].addCard(container.card);
 
-    this.vassalStocks[container.empireId] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
-      this,
-      document.getElementById(`${container.id}_vassals`),
-      { sort: sortFunction("state"), gap: 'calc(var(--paxRenCardScale) * 12px)' }
-    );
+    this.vassalStocks[container.empireId] = new LineStock<
+      EmpireCard | TableauCard | EmpireCardContainer
+    >(this, document.getElementById(`${container.id}_vassals`), {
+      sort: sortFunction("state"),
+      gap: "calc(var(--paxRenCardScale) * 12px)",
+    });
 
-    this.queenStocks[container.empireId] = new LineStock<EmpireCard | TableauCard | EmpireCardContainer>(
+    this.queenStocks[container.empireId] = new LineStock<
+      EmpireCard | TableauCard | EmpireCardContainer
+    >(
       this,
-      document.getElementById(`${container.id}_queens`),
+      document.getElementById(`${container.id}_queens`)
       // { gap: "12px", sort: sortFunction("state") }
     );
 
     for (const queen of container.card.queens) {
       this.queenStocks[container.empireId].addCard(queen);
-      this.addMarginBottomQueen({queen});
+      this.addMarginBottomQueen({ queen });
     }
   }
 
-  private addMarginBottomQueen = ({queen}: {queen: QueenCard}) => {
+  private addMarginBottomQueen = ({ queen }: { queen: QueenCard }) => {
     const queenNode = document.getElementById(queen.id);
     if (!queenNode) {
       return;
     }
-    queenNode.style.marginBottom = `calc(var(--paxRenCardScale) * -${230-queen.height}px)`;
-  }
+    queenNode.style.marginBottom = `calc(var(--paxRenCardScale) * -${
+      230 - queen.height
+    }px)`;
+  };
 }

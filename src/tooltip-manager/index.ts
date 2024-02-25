@@ -55,7 +55,12 @@ class TooltipManager {
     nodeId: string;
     card: TableauCard;
   }): void {
-    const html = tplTableauCardTooltip({ card, game: this.game });
+    const html = tplTableauCardTooltip({
+      card,
+      game: this.game,
+      imageOnly:
+        this.game.settings.get({ id: CARD_INFO_IN_TOOLTIP }) === DISABLED,
+    });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
 
@@ -72,6 +77,8 @@ class TooltipManager {
       card,
       ageOfReformationPromo: this.game.gameOptions.ageOfReformationPromo,
       religion,
+      imageOnly:
+        this.game.settings.get({ id: CARD_INFO_IN_TOOLTIP }) === DISABLED,
     });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
@@ -83,7 +90,12 @@ class TooltipManager {
     nodeId: string;
     card: VictoryCard;
   }): void {
-    const html = tplVictoryCardTooltip({ card, game: this.game });
+    const html = tplVictoryCardTooltip({
+      card,
+      game: this.game,
+      imageOnly:
+        this.game.settings.get({ id: CARD_INFO_IN_TOOLTIP }) === DISABLED,
+    });
     this.game.framework().addTooltipHtml(nodeId, html, 500);
   }
 
@@ -99,7 +111,11 @@ class TooltipManager {
     );
   };
 
-  public cometCardNoLongerInDrawDeckTooltip = ({ nodeId }: { nodeId: string }) => {
+  public cometCardNoLongerInDrawDeckTooltip = ({
+    nodeId,
+  }: {
+    nodeId: string;
+  }) => {
     this.removeTooltip(nodeId);
 
     this.game.framework().addTooltipHtml(

@@ -30,15 +30,18 @@ trait DebugTrait
 {
   function test()
   {
-    $this->debugPlaceCardInTableau('EmpireSquare_England', WEST, 2371052);
-    $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371053);
-    $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371054);
-    $this->debugPlaceCardInTableau('EmpireSquare_Hungary', EAST, 2371055);
+    // Cards::move('PREN076_SophiaPalaiologina','queens_portugal');
+    // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
 
-    $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371052);
-    $this->debugPlaceCardInTableau('EmpireSquare_Aragon', WEST, 2371053);
-    $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371054);
-    $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371055);
+    // $this->debugPlaceCardInTableau('EmpireSquare_England', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371053);
+    $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('EmpireSquare_Hungary', EAST, 2371055);
+
+    // $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('EmpireSquare_Aragon', WEST, 2371053);
+    // $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371054);
+    // $this->debugPlaceCardInTableau('EmpireSquare_Ottoman', EAST, 2371055);
 
     // foreach(Empires::getAll() as $empire) {
     //   $empire->getEmpireCard()->setSide(REPUBLIC);

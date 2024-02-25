@@ -132,7 +132,7 @@ class GameMap {
           style: "--paxRenTokenScale: 0.8;",
         }),
         text: this.game.format_string_recursive(
-          _("The number of ${religion} Bishop Tokens in Tableaux or Thrones."),
+          _("The number of ${religion} Bishop Tokens in play for Holy Victory."),
           religionArgs[religion]
         ),
         title: this.game.format_string_recursive(
@@ -150,7 +150,7 @@ class GameMap {
         iconHtml: tplTokensInTheocraciesIcon({ religion }),
         text: this.game.format_string_recursive(
           _(
-            "The number of ${religion} Tokens in play in ${religion} Theocracies"
+            "The number of ${religion} Tokens in play in ${religion} Theocracies for Holy Victory."
           ),
           religionArgs[religion]
         ),

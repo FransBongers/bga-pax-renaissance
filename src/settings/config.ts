@@ -118,6 +118,21 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
         },
         type: "slider",
       },
+      [CARD_SIZE_IN_LOG]: {
+        id: CARD_SIZE_IN_LOG,
+        onChangeInSetup: true,
+        label: _("Size of cards in log"),
+        defaultValue: 0,
+        sliderConfig: {
+          step: 5,
+          padding: 0,
+          range: {
+            min: 0,
+            max: 150,
+          },
+        },
+        type: "slider",
+      },
       [CARD_SIZE_IN_TABLEAU]: {
         id: CARD_SIZE_IN_TABLEAU,
         onChangeInSetup: false,
@@ -171,7 +186,23 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
           },
         ],
       },
-
+      [CARD_INFO_IN_TOOLTIP]: {
+        id: CARD_INFO_IN_TOOLTIP,
+        onChangeInSetup: false,
+        defaultValue: ENABLED,
+        label: _("Show card info in tooltip"),
+        type: "select",
+        options: [
+          {
+            label: _("Enabled"),
+            value: ENABLED,
+          },
+          {
+            label: _("Disabled (card image only)"),
+            value: DISABLED,
+          },
+        ],
+      }
     },
   },
   gameplay: {

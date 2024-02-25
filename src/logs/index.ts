@@ -8,8 +8,8 @@ const LOG_TOKEN_CARD = "card";
 const LOG_TOKEN_FLORIN = "florin";
 const LOG_TOKEN_MAP_TOKEN = "mapToken";
 const LOG_TOKEN_ONE_SHOT = "oneShot";
-const LOG_TOKEN_PRESTIGE = 'prestige'
-const LOG_TOKEN_TABLEAU_OP = 'tableauOp'
+const LOG_TOKEN_PRESTIGE = "prestige";
+const LOG_TOKEN_TABLEAU_OP = "tableauOp";
 // const LOG_TOKEN_PAWN = "pawn";
 
 let tooltipIdCounter = 0;
@@ -27,20 +27,27 @@ const getTokenDiv = ({
   const type = splitKey[1];
   switch (type) {
     case LOG_TOKEN_CARD:
-      game.tooltipsToMap.push([game._last_tooltip_id, value]);
-      const tooltipId = `pr_tooltip_${game._last_tooltip_id}`;
-      game._last_tooltip_id++;
-      return tplLogTokenCard(value, tooltipId);
+      return tplLogTokenCard(value);
     case LOG_TOKEN_BOLD_TEXT:
     case LOG_TOKEN_CARD_NAME:
-      return tlpLogTokenBoldText({ text: value });
+      let cardNameTooltipId = undefined;
+      const withTooltip = value.includes(":");
+      if (withTooltip) {
+        cardNameTooltipId = `pr_tooltip_${game._last_tooltip_id}`;
+        game.tooltipsToMap.push([game._last_tooltip_id, value.split(":")[0]]);
+        game._last_tooltip_id++;
+      }
+      return tlpLogTokenBoldText({
+        text: withTooltip ? value.split(":")[1] : value,
+        tooltipId: cardNameTooltipId,
+      });
     case LOG_TOKEN_FLORIN:
       return tplIcon({ icon: "florin" });
     case LOG_TOKEN_NEW_LINE:
       return "<br>";
     case LOG_TOKEN_MAP_TOKEN:
       const mtValue = value.split("_");
-      return tplToken({ type: mtValue[1], separator: mtValue[0] })
+      return tplToken({ type: mtValue[1], separator: mtValue[0] });
     case LOG_TOKEN_ONE_SHOT:
       return tplOneShot({ oneShot: value });
     // case LOG_TOKEN_PAWN:
@@ -58,7 +65,10 @@ const getTokenDiv = ({
           })
         : value;
     case LOG_TOKEN_PRESTIGE:
-      return tplIcon({icon: `prestige_${value}`, classes: 'pr_prestige_icon'})
+      return tplIcon({
+        icon: `prestige_${value}`,
+        classes: "pr_prestige_icon",
+      });
     case LOG_TOKEN_TABLEAU_OP:
       return tplTableauOp({ tableauOpId: value });
     default:
@@ -75,7 +85,9 @@ const tknMapToken = (tokenId: string) => {
   return `${split[1]}_${split[0]}`;
 };
 
-const tplLogTokenCard = (id: string, tooltipId: string) => {
-  const className = id.startsWith('EmpireSquare') ? 'pr_square_card' : 'pr_card';
-  return `<div id="${tooltipId}" class="${className}" data-card-id="${id}"></div>`
-}
+const tplLogTokenCard = (id: string) => {
+  const className = id.startsWith("EmpireSquare") || id.startsWith("victory")
+    ? "pr_square_card"
+    : "pr_card";
+  return `<div class="${className} pr_log_card" data-card-id="${id}"></div>`;
+};

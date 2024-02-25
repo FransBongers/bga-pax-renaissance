@@ -28,6 +28,22 @@ class PlayerTableau {
   // .##.....##.##...###.##.....##.##.....##
   // ..#######..##....##.########...#######.
 
+  updateCardTooltips() {
+    this.tableau.oldMaids.getCards().forEach((card: TableauCard) => {
+      this.game.tooltipManager.removeTooltip(card.id);
+      this.game.tooltipManager.addCardTooltip({ nodeId: card.id, card });
+    });
+    REGIONS.forEach((region) => {
+      this.tableau[region].getCards().forEach((card) => {
+        if (card.type !== TABLEAU_CARD) {
+          return;
+        }
+        this.game.tooltipManager.removeTooltip(card.id);
+        this.game.tooltipManager.addCardTooltip({ nodeId: card.id, card });
+      });
+    });
+  }
+
   clearInterface() {
     this.tableau[EAST].removeAll();
     this.tableau[WEST].removeAll();
@@ -92,22 +108,25 @@ class PlayerTableau {
   }
 
   updateCards({ player }: { player: PaxRenaissancePlayerData }) {
-    player.tableau.cards[EAST].filter(noMarriedQueensNoVassals).forEach((card) => {
-      if (card.type === EMPIRE_CARD) {
-        this.tableau[EAST].addCard(createEmpireCardContainer(card));
-      } else {
-        this.tableau[EAST].addCard(card);
+    player.tableau.cards[EAST].filter(noMarriedQueensNoVassals).forEach(
+      (card) => {
+        if (card.type === EMPIRE_CARD) {
+          this.tableau[EAST].addCard(createEmpireCardContainer(card));
+        } else {
+          this.tableau[EAST].addCard(card);
+        }
       }
-    })
+    );
 
-    player.tableau.cards[WEST].filter(noMarriedQueensNoVassals).forEach((card) => {
-      if (card.type === EMPIRE_CARD) {
-        this.tableau[WEST].addCard(createEmpireCardContainer(card));
-      } else {
-        this.tableau[WEST].addCard(card);
+    player.tableau.cards[WEST].filter(noMarriedQueensNoVassals).forEach(
+      (card) => {
+        if (card.type === EMPIRE_CARD) {
+          this.tableau[WEST].addCard(createEmpireCardContainer(card));
+        } else {
+          this.tableau[WEST].addCard(card);
+        }
       }
-    });
-
+    );
 
     [...player.tableau.cards[EAST], ...player.tableau.cards[WEST]]
       .filter((card) => card.type === EMPIRE_CARD && card.isVassal)

@@ -3346,13 +3346,15 @@
 .log > .roundedboxinner .pr_tableau_op {
   --paxRenIconScale: 0.8;
 }
-.log > .roundedbox .pr_card,
-.log > .roundedboxinner .pr_card {
-  --paxRenCardScale: 0.5;
+.log > .roundedbox .pr_log_card,
+.log > .roundedboxinner .pr_log_card {
+  --paxRenCardScale: var(--paxRenLogCardScale);
 }
+.log > .roundedbox .pr_card,
 .log > .roundedbox .pr_square_card,
+.log > .roundedboxinner .pr_card,
 .log > .roundedboxinner .pr_square_card {
-  --paxRenCardScale: 0.5;
+  margin-top: calc(var(--paxRenLogCardScale) * 6px);
 }
 
 .pr_agent_button {
@@ -4811,7 +4813,7 @@
   background-color: rgba(248, 248, 248, 0.5);
 }
 .pr_settings_modal #setting_modal_content {
-  min-height: 300px;
+  min-height: 340px;
 }
 .pr_settings_modal #setting_modal_content .pr_settings_modal_tabs {
   display: flex;
@@ -4948,18 +4950,15 @@
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  width: 440px;
+  width: 500px;
   min-height: 400px;
 }
 .pr_card_tooltip .pr_card {
-  margin-right: -100px;
   margin-left: 8px;
   align-self: center;
-  width: 223px;
-  height: 340px;
+  --paxRenCardScale: 1.47;
 }
 .pr_card_tooltip .pr_square_card_tooltip_card_container {
-  margin-right: -100px;
   margin-left: 8px;
   align-self: center;
   --paxRenCardScale: 1.47;

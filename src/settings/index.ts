@@ -221,6 +221,11 @@ class Settings {
     this.game.updateLayout();
   }
 
+  public onChangeCardSizeInLogSetting(value: number) {
+    const ROOT = document.documentElement;
+    ROOT.style.setProperty('--paxRenLogCardScale', `${Number(value) / 100}`);
+  }
+
   public onChangeCardSizeInTableauSetting(value: number) {
     const node = document.getElementById("pr_player_tableaux");
     if (node) {
@@ -314,6 +319,15 @@ class Settings {
       this.game.animationManager.getSettings().duration = 0;
     }
     this.checkAnmimationSpeedVisisble();
+  }
+
+  public onChangeCardInfoInTooltipSetting(value: string) {
+    this.game.market.updateMarketCardTooltips();
+    this.game.playerManager.updateCardTooltips();
+    this.game.tableauCardManager.updateCardTooltips();
+    this.game.victoryCardManager.updateCardTooltips();
+    this.game.updateLogTooltips();
+    // this.game.playerManager.get
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

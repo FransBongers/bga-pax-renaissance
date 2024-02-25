@@ -79,6 +79,12 @@ class PlayerManager {
     }
   }
 
+  updateCardTooltips() {
+    this.getPlayers().forEach((player) => {
+      player.updateCardTooltips();
+    });
+  }
+
   clearInterface() {
     Object.keys(this.players).forEach((playerId) => {
       this.players[playerId].clearInterface();
