@@ -35,7 +35,9 @@ trait DebugTrait
 
     // $this->debugPlaceCardInTableau('EmpireSquare_England', WEST, 2371052);
     // $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371053);
-    $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN137X_FaithVsReason', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052);
+    // Cards::move('EmpireSquare_PapalStates',Locations::vassals(HOLY_ROMAN_EMIRE));
     // $this->debugPlaceCardInTableau('EmpireSquare_Hungary', EAST, 2371055);
 
     // $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371052);
@@ -64,7 +66,8 @@ trait DebugTrait
     //   $this->debugPlaceToken(PIRATE, $pirateMap[$index % 3], $borderId);
     //   $index += 1;
     // }
-    // $this->debugPlaceToken(PAWN, COEUR, BORDER_OTTOMAN_PAPAL_STATES);
+    $this->debugPlaceToken(PAWN, MARCHIONNI, BORDER_ARAGON_PAPAL_STATES);
+    // $this->debugPlaceToken(PAWN, MARCHIONNI, 'EmpireSquare_Aragon');
 
     // Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
     // Cards::get('EmpireSquare_Ottoman')->setSide(REPUBLIC);

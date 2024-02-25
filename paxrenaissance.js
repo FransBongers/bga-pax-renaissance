@@ -5124,7 +5124,7 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: playerId }).counters.florins.incValue(-amount);
                         return [4, this.game.market.moveFlorinAnimation({
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
-                                toId: 'pr_china',
+                                toId: "pr_china",
                                 index: 0,
                             })];
                     case 1:
@@ -5316,7 +5316,7 @@ var NotificationManager = (function () {
                                 fromId: "pr_".concat(from, "_florins"),
                                 toId: "pr_".concat(to, "_florins"),
                                 index: index,
-                                htmlFlorinChildren: "<span class=\"pr_counter\">".concat(florinsOnCard, "</span>")
+                                htmlFlorinChildren: "<span class=\"pr_counter\">".concat(florinsOnCard, "</span>"),
                             }));
                         }
                         return [4, Promise.all(promises)];
@@ -5383,7 +5383,7 @@ var NotificationManager = (function () {
                         _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost, from = _a.from;
                         if (!(cost < 0)) return [3, 2];
                         return [4, this.game.market.moveFlorinAnimation({
-                                fromId: 'pr_china',
+                                fromId: "pr_china",
                                 index: 0,
                                 toId: "pr_florins_counter_".concat(playerId, "_icon"),
                             })];
@@ -5394,7 +5394,7 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
                         if (!(cost > 0)) return [3, 4];
                         return [4, this.game.market.moveFlorinAnimation({
-                                toId: 'pr_china',
+                                toId: "pr_china",
                                 index: 0,
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
                             })];
@@ -5439,18 +5439,18 @@ var NotificationManager = (function () {
                     case 0:
                         _a = notif.args, king = _a.king, fromSide = _a.fromSide, playerId = _a.playerId, suzerain = _a.suzerain;
                         this.game.gameMap.updateCoatOfArms({ card: king });
-                        this.getPlayer({ playerId: playerId }).counters[fromSide].incValue(-1);
+                        player = this.getPlayer({ playerId: playerId });
+                        player.counters[fromSide].incValue(-1);
+                        prestige = king[fromSide].prestige;
+                        king.queens.forEach(function (queen) {
+                            prestige.push.apply(prestige, queen.prestige);
+                        });
+                        this.removePrestige({ player: player, prestige: prestige });
                         return [4, this.game.gameMap
                                 .getEmpireSquareStock({ empireId: king.empire })
                                 .addCard(createEmpireCardContainer(king))];
                     case 1:
                         _b.sent();
-                        player = this.getPlayer({ playerId: playerId });
-                        prestige = king[fromSide].prestige;
-                        king.queens.forEach(function (queen) {
-                            prestige.push.apply(prestige, queen.prestige);
-                        });
-                        prestige.forEach(function (item) { return player.counters.prestige[item].incValue(-1); });
                         return [2];
                 }
             });
@@ -5479,7 +5479,7 @@ var NotificationManager = (function () {
                             location: from,
                             addOrRemove: "remove",
                         });
-                        if (token.type === PAWN) {
+                        if (token.type === PAWN && !from.id.startsWith("EmpireSquare")) {
                             this.game.playerManager
                                 .getPlayerForBank({ bank: token.separator })
                                 .counters.concessions.incValue(-1);
@@ -5538,7 +5538,7 @@ var NotificationManager = (function () {
                         return [4, this.game.market.moveFlorinAnimation({
                                 toId: "pr_florins_counter_".concat(playerId, "_icon"),
                                 fromId: "pr_market_".concat(region, "_").concat(column, "_florins"),
-                                index: 1
+                                index: 1,
                             })];
                     case 1:
                         _c.sent();
@@ -5558,7 +5558,7 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: playerId }).counters.florins.incValue(-1);
                         return [4, this.game.market.moveFlorinAnimation({
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
-                                toId: 'pr_china',
+                                toId: "pr_china",
                                 index: 0,
                             })];
                     case 1:
@@ -5576,9 +5576,9 @@ var NotificationManager = (function () {
                     case 0:
                         _a = notif.args, florinsFromChina = _a.florinsFromChina, region = _a.region;
                         return [4, this.game.market.moveFlorinAnimation({
-                                fromId: 'pr_china',
+                                fromId: "pr_china",
                                 toId: "pr_market_".concat(region, "_0_florins"),
-                                index: 1
+                                index: 1,
                             })];
                     case 1:
                         _b.sent();
@@ -5610,7 +5610,7 @@ var NotificationManager = (function () {
                         return [4, this.game.market.moveFlorinAnimation({
                                 toId: "pr_florins_counter_".concat(playerId, "_icon"),
                                 fromId: "pr_market_".concat(region, "_0_florins"),
-                                index: 1
+                                index: 1,
                             })];
                     case 1:
                         _b.sent();
@@ -5635,7 +5635,7 @@ var NotificationManager = (function () {
                         return [4, this.game.market.moveFlorinAnimation({
                                 toId: "pr_china",
                                 fromId: "pr_market_".concat(region, "_0_florins"),
-                                index: 1
+                                index: 1,
                             })];
                     case 1:
                         _a.sent();
@@ -5659,7 +5659,7 @@ var NotificationManager = (function () {
                         return [4, this.game.market.moveFlorinAnimation({
                                 toId: "pr_florins_counter_".concat(playerId, "_icon"),
                                 fromId: "pr_market_".concat(region, "_0_florins"),
-                                index: 1
+                                index: 1,
                             })];
                     case 1:
                         _b.sent();

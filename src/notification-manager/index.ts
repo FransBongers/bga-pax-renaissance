@@ -554,7 +554,7 @@ class NotificationManager {
     this.getPlayer({ playerId }).counters.florins.incValue(-amount);
     await this.game.market.moveFlorinAnimation({
       fromId: `pr_florins_counter_${playerId}_icon`,
-      toId: 'pr_china',
+      toId: "pr_china",
       index: 0,
     });
   }
@@ -719,7 +719,7 @@ class NotificationManager {
             fromId: `pr_${from}_florins`,
             toId: `pr_${to}_florins`,
             index,
-            htmlFlorinChildren: `<span class="pr_counter">${florinsOnCard}</span>`
+            htmlFlorinChildren: `<span class="pr_counter">${florinsOnCard}</span>`,
           })
         );
       }
@@ -766,18 +766,18 @@ class NotificationManager {
 
     if (cost < 0) {
       await this.game.market.moveFlorinAnimation({
-        fromId: 'pr_china',
+        fromId: "pr_china",
         index: 0,
         toId: `pr_florins_counter_${playerId}_icon`,
-      })
+      });
     }
     this.getPlayer({ playerId }).counters.florins.incValue(-cost);
     if (cost > 0) {
       await this.game.market.moveFlorinAnimation({
-        toId: 'pr_china',
+        toId: "pr_china",
         index: 0,
         fromId: `pr_florins_counter_${playerId}_icon`,
-      })
+      });
     }
     const element = document.getElementById(token.id);
     const empireSquareId = token.location;
@@ -819,21 +819,22 @@ class NotificationManager {
 
     this.game.gameMap.updateCoatOfArms({ card: king });
 
-    this.getPlayer({ playerId }).counters[fromSide].incValue(-1);
+    const player = this.getPlayer({ playerId });
+    player.counters[fromSide].incValue(-1);
+
+    let prestige = king[fromSide].prestige;
+    king.queens.forEach((queen) => {
+      prestige.push(...queen.prestige);
+    });
+
+    // prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
+    this.removePrestige({ player, prestige });
 
     await this.game.gameMap
       .getEmpireSquareStock({ empireId: king.empire })
       .addCard(createEmpireCardContainer(king));
 
     // this.game.tableauCardManager.updateCardInformations(king);
-
-    const player = this.getPlayer({ playerId });
-    let prestige = king[fromSide].prestige;
-    king.queens.forEach((queen) => {
-      prestige.push(...queen.prestige);
-    });
-
-    prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
   }
 
   // TODO: check if we can replace this with discardCard
@@ -852,7 +853,7 @@ class NotificationManager {
       location: from,
       addOrRemove: "remove",
     });
-    if (token.type === PAWN) {
+    if (token.type === PAWN && !from.id.startsWith("EmpireSquare")) {
       this.game.playerManager
         .getPlayerForBank({ bank: token.separator })
         .counters.concessions.incValue(-1);
@@ -900,7 +901,7 @@ class NotificationManager {
     await this.game.market.moveFlorinAnimation({
       toId: `pr_florins_counter_${playerId}_icon`,
       fromId: `pr_market_${region}_${column}_florins`,
-      index: 1
+      index: 1,
     });
     this.getPlayer({ playerId }).counters.florins.incValue(1);
   }
@@ -910,18 +911,18 @@ class NotificationManager {
     this.getPlayer({ playerId }).counters.florins.incValue(-1);
     await this.game.market.moveFlorinAnimation({
       fromId: `pr_florins_counter_${playerId}_icon`,
-      toId: 'pr_china',
+      toId: "pr_china",
       index: 0,
-    })
+    });
   }
 
   async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {
     const { florinsFromChina, region } = notif.args;
     await this.game.market.moveFlorinAnimation({
-      fromId: 'pr_china',
+      fromId: "pr_china",
       toId: `pr_market_${region}_0_florins`,
-      index: 1
-    })
+      index: 1,
+    });
     this.game.market.incFlorinValue({
       region: region as "east" | "west",
       column: 0,
@@ -945,7 +946,7 @@ class NotificationManager {
     await this.game.market.moveFlorinAnimation({
       toId: `pr_florins_counter_${playerId}_icon`,
       fromId: `pr_market_${region}_0_florins`,
-      index: 1
+      index: 1,
     });
     this.getPlayer({ playerId }).counters.florins.incValue(amount);
     // return Promise.resolve();
@@ -963,7 +964,7 @@ class NotificationManager {
     await this.game.market.moveFlorinAnimation({
       toId: `pr_china`,
       fromId: `pr_market_${region}_0_florins`,
-      index: 1
+      index: 1,
     });
     return Promise.resolve();
   }
@@ -980,7 +981,7 @@ class NotificationManager {
     await this.game.market.moveFlorinAnimation({
       toId: `pr_florins_counter_${playerId}_icon`,
       fromId: `pr_market_${region}_0_florins`,
-      index: 1
+      index: 1,
     });
     this.getPlayer({ playerId }).counters.florins.incValue(amount);
     return Promise.resolve();
