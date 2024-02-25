@@ -4306,7 +4306,7 @@
 }
 .pr_information_modal #pr_information_modal_content .pr_information_modal_tabs .pr_information_modal_tab {
   flex-grow: 1;
-  width: 33.33333%;
+  width: 25%;
   background-color: rgba(30, 20, 17, 0.5);
   border-bottom: 1px solid black;
   border-left: 1px solid black;
@@ -4332,6 +4332,93 @@
 }
 .pr_information_modal #pr_information_modal_content .pr_information_modal_tabs:last-child {
   border-right: none;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards {
+  min-width: 640px;
+  max-height: 75vh;
+  overflow-y: auto;
+  display: grid;
+  --paxRenCardScale: 1;
+  grid-template-columns: calc(var(--paxRenCardScale) * 151px) calc(var(--paxRenCardScale) * 151px) calc(var(--paxRenCardScale) * 151px) calc(var(--paxRenCardScale) * 151px);
+  gap: 16px;
+  padding: 16px;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card {
+  position: relative;
+  border: 1px solid black;
+  box-sizing: border-box;
+  width: calc(var(--paxRenCardScale) * 151px);
+  height: calc(var(--paxRenCardScale) * 230px);
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_aragon] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 66.6666666667%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_byzantium] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 44.4444444444%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_england] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 0%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_france] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 11.1111111111%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_holyRomanEmpire] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 22.2222222222%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_hungary] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 33.3333333333%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_ottoman] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 88.8888888889%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_portugal] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 55.5555555556%;
+  background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=catholic_papalStates] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 77.7777777778%;
+  background-position-y: 0%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=islamic_mamluk] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 25%;
 }
 .pr_information_modal #pr_information_modal_content #pr_operations,
 .pr_information_modal #pr_information_modal_content #pr_oneShots {

@@ -203,13 +203,6 @@ const getOneShotsConfig = (): {
         "New Trade Route. Move Busted disk to uncovered Emporium of the same color, Repressing Token."
       ),
     },
-    // {
-    //   icon: TRADE_SHIFT_RED_SEA_ONE_SHOT,
-    //   target: _("Busted Disk on Red Sea"),
-    //   effect: _(
-    //     "New Trade Route. Move Busted disk to uncoverd Emporium of the same color, Repressing Token."
-    //   ),
-    // },
     {
       icons: [TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT],
       target: _("Busted Disk on Spice Islands"),
@@ -218,13 +211,6 @@ const getOneShotsConfig = (): {
         "New Trade Route. Move Busted disk to uncovered Emporium of the same color, Repressing Token."
       ),
     },
-    // {
-    //   icon: TRADE_SHIFT_TIMBUKTU_ONE_SHOT,
-    //   target: _("Busted Disk on Timbuktu"),
-    //   effect: _(
-    //     "New Trade Route. Move Busted disk to uncoverd Emporium of the same color, Repressing Token."
-    //   ),
-    // },
     {
       icons: [PEASANT_REVOLT_ONE_SHOT, CONSPIRACY_ONE_SHOT],
       target: _("Empire / Map Card on card's Location"),
@@ -232,13 +218,6 @@ const getOneShotsConfig = (): {
         "Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."
       ),
     },
-    // {
-    //   icon: CONSPIRACY_ONE_SHOT,
-    //   target: _("Empire/Map Card on card's Location"),
-    //   effect: _(
-    //     "Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."
-    //   ),
-    // },
     {
       icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT, REFORMATION_ONE_SHOT],
       target: _("Empire / Map Card on card's Location"),
@@ -247,22 +226,6 @@ const getOneShotsConfig = (): {
         "Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."
       ),
     },
-    // {
-    //   icon: JIHAD_ONE_SHOT,
-    //   target: _("Empire/Map Card on card's Location"),
-    //   requirement: _('Heretic(s) in target Empire.'),
-    //   effect: _(
-    //     "Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."
-    //   ),
-    // },
-    // {
-    //   icon: REFORMATION_ONE_SHOT,
-    //   target: _("Empire/Map Card on card's Location"),
-    //   requirement: _('Heretic(s) in target Empire.'),
-    //   effect: _(
-    //     "Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."
-    //   ),
-    // },
     {
       icons: [APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT],
       target: _("All players with both types of indicated Religious Prestige in Tableau"),
@@ -270,19 +233,5 @@ const getOneShotsConfig = (): {
         "Discard all Tableau cards with indicated Religious Prestige."
       ),
     },
-    // {
-    //   icon: APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT,
-    //   target: _("All players with both types of indicated Religious Prestige in Tableau"),
-    //   effect: _(
-    //     "Discard all Tableau cards with indicated Religious Prestige."
-    //   ),
-    // },
-    // {
-    //   icon: APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT,
-    //   target: _("All players with both types of indicated Religious Prestige in Tableau"),
-    //   effect: _(
-    //     "Discard all Tableau cards with indicated Religious Prestige."
-    //   ),
-    // },
   ]
 })

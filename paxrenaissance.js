@@ -4081,6 +4081,9 @@ var InformationModal = (function () {
             oneShots: {
                 text: _('One-Shots')
             },
+            mapCards: {
+                text: _('Map Cards')
+            }
         };
         this.game = game;
         var gamedatas = game.gamedatas;
@@ -4214,7 +4217,12 @@ var tplInformationModalContent = function (_a) {
             lightBackground: index % 2 === 1,
         });
     })
-        .join(""), "\n    </div>\n  </div>");
+        .join(""), "\n    </div>\n    <div id=\"pr_mapCards\" style=\"display: none;\">\n      ").concat(EMPIRES.map(function (empireId) {
+        return __spreadArray([MEDIEVAL], RELIGIONS, true).map(function (religion) {
+            return "<div class=\"pr_map_card\" data-card-id=\"".concat(religion, "_").concat(empireId, "\"></div>");
+        })
+            .join("");
+    }).join(""), "\n    </div>\n  </div>");
 };
 var LOG_TOKEN_BOLD_TEXT = "boldText";
 var LOG_TOKEN_CARD_NAME = "cardName";

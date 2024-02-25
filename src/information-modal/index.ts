@@ -14,6 +14,9 @@ class InformationModal {
     oneShots: {
       text: _('One-Shots')
     },
+    mapCards: {
+      text: _('Map Cards')
+    }
     // gameTerms: {
     //   text: _('Game Terms')
     // },

@@ -169,5 +169,14 @@ const tplInformationModalContent = ({
         )
         .join("")}
     </div>
+    <div id="pr_mapCards" style="display: none;">
+      ${EMPIRES.map((empireId: string) => {
+        return [MEDIEVAL, ...RELIGIONS]
+          .map((religion) => {
+            return `<div class="pr_map_card" data-card-id="${religion}_${empireId}"></div>`;
+          })
+          .join("");
+      }).join("")}
+    </div>
   </div>`;
 };
