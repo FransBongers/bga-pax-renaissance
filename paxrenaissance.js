@@ -4070,20 +4070,20 @@ var getOneShotsConfig = function () { return ({
 }); };
 var InformationModal = (function () {
     function InformationModal(game) {
-        this.selectedTab = 'battleTable';
+        this.selectedTab = "battleTable";
         this.tabs = {
             battleTable: {
-                text: _('Battle Table')
+                text: _("Battle Table"),
             },
             operations: {
-                text: _('Operations')
+                text: _("Operations"),
             },
             oneShots: {
-                text: _('One-Shots')
+                text: _("One-Shots"),
             },
             mapCards: {
-                text: _('Map Cards')
-            }
+                text: _("Map Cards"),
+            },
         };
         this.game = game;
         var gamedatas = game.gamedatas;
@@ -4105,7 +4105,10 @@ var InformationModal = (function () {
         this.modal = new Modal("information_modal", {
             class: "pr_information_modal",
             closeIcon: "fa-times",
-            contents: tplInformationModalContent({ tabs: this.tabs }),
+            contents: tplInformationModalContent({
+                tabs: this.tabs,
+                ageOfReformation: this.game.gamedatas.gameOptions.ageOfReformationPromo,
+            }),
             closeAction: "hide",
             verticalAlign: "flex-start",
             breakpoint: 740,
@@ -4119,26 +4122,29 @@ var InformationModal = (function () {
         this.informationModalContent();
         this.changeTab({ id: this.selectedTab });
         Object.keys(this.tabs).forEach(function (id) {
-            dojo.connect($("pr_information_modal_tab_".concat(id)), "onclick", function () { return _this.changeTab({ id: id }); });
+            dojo.connect($("pr_information_modal_tab_".concat(id)), "onclick", function () {
+                return _this.changeTab({ id: id });
+            });
         });
-        dojo.connect($("pr_information_button"), "onclick", function () { return _this.modal.show(); });
+        dojo.connect($("pr_information_button"), "onclick", function () {
+            return _this.modal.show();
+        });
     };
-    InformationModal.prototype.informationModalContent = function () {
-    };
+    InformationModal.prototype.informationModalContent = function () { };
     InformationModal.prototype.changeTab = function (_a) {
         var id = _a.id;
         var currentTab = document.getElementById("pr_information_modal_tab_".concat(this.selectedTab));
         var currentTabContent = document.getElementById("pr_".concat(this.selectedTab));
-        currentTab.removeAttribute('data-state');
+        currentTab.removeAttribute("data-state");
         if (currentTabContent) {
-            currentTabContent.style.display = 'none';
+            currentTabContent.style.display = "none";
         }
         this.selectedTab = id;
         var tab = document.getElementById("pr_information_modal_tab_".concat(id));
         var tabContent = document.getElementById("pr_".concat(this.selectedTab));
-        tab.setAttribute('data-state', 'selected');
+        tab.setAttribute("data-state", "selected");
         if (tabContent) {
-            tabContent.style.display = '';
+            tabContent.style.display = "";
         }
     };
     return InformationModal;
@@ -4171,7 +4177,7 @@ var tplBattleTableRow = function (_a) {
         .join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n      ").concat(attacker.map(function (text) { return "<span>".concat(_(text), "</span>"); }).join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n  ").concat(defender.map(function (text) { return "<span>".concat(_(text), "</span>"); }).join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n  ").concat(victorPlacement.map(function (text) { return "<span>".concat(_(text), "</span>"); }).join(""), "\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n    <span>").concat(_(nonStrawman), "</span>\n  </div>\n  <div class=\"pr_cell").concat(last ? " pr_last" : "").concat(lightBackground ? " pr_light_background" : "", "\">\n    <span>").concat(_(strawman), "</span>\n  </div>\n");
 };
 var tplInformationModalContent = function (_a) {
-    var tabs = _a.tabs;
+    var tabs = _a.tabs, ageOfReformation = _a.ageOfReformation;
     var OPERATIONS_INFO_CONFIG = getOperationsConfig();
     var ONE_SHOTS_INFO_CONFIG = getOneShotsConfig();
     var BATTLE_TABLE_CONFIG = getBattleTableConfig();
@@ -4219,7 +4225,7 @@ var tplInformationModalContent = function (_a) {
     })
         .join(""), "\n    </div>\n    <div id=\"pr_mapCards\" style=\"display: none;\">\n      ").concat(EMPIRES.map(function (empireId) {
         return __spreadArray([MEDIEVAL], RELIGIONS, true).map(function (religion) {
-            return "<div class=\"pr_map_card\" data-card-id=\"".concat(religion, "_").concat(empireId, "\"></div>");
+            return "<div class=\"pr_map_card\" data-card-id=\"".concat(religion, "_").concat(empireId, "\"").concat(ageOfReformation ? 'data-map-type="ageOfReformation"' : "", "></div>");
         })
             .join("");
     }).join(""), "\n    </div>\n  </div>");

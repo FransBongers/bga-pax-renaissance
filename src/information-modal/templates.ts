@@ -104,8 +104,10 @@ const tplBattleTableRow = ({
 
 const tplInformationModalContent = ({
   tabs,
+  ageOfReformation,
 }: {
   tabs: Record<string, { text: string }>;
+  ageOfReformation: boolean;
 }) => {
   const OPERATIONS_INFO_CONFIG = getOperationsConfig();
   const ONE_SHOTS_INFO_CONFIG = getOneShotsConfig();
@@ -173,7 +175,9 @@ const tplInformationModalContent = ({
       ${EMPIRES.map((empireId: string) => {
         return [MEDIEVAL, ...RELIGIONS]
           .map((religion) => {
-            return `<div class="pr_map_card" data-card-id="${religion}_${empireId}"></div>`;
+            return `<div class="pr_map_card" data-card-id="${religion}_${empireId}"${
+              ageOfReformation ? 'data-map-type="ageOfReformation"' : ""
+            }></div>`;
           })
           .join("");
       }).join("")}

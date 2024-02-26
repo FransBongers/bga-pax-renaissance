@@ -4,7 +4,6 @@
   // box-shadow: 2px 2px 5px black;
   // background-color: gray;
   background-color: transparent;
-  
 
   // margin: 0px 5px;
   // margin-top: -38px;
@@ -150,10 +149,13 @@
       overflow-y: auto;
       display: grid;
       --paxRenCardScale: 1;
-      grid-template-columns: calc(var(--paxRenCardScale) * 151px) calc(var(--paxRenCardScale) * 151px) calc(var(--paxRenCardScale) * 151px) calc(var(--paxRenCardScale) * 151px);
+      grid-template-columns: calc(var(--paxRenCardScale) * 151px) calc(
+          var(--paxRenCardScale) * 151px
+        ) calc(var(--paxRenCardScale) * 151px) calc(
+          var(--paxRenCardScale) * 151px
+        );
       gap: 16px;
       padding: 16px;
-      
 
       .pr_map_card {
         position: relative;
@@ -203,7 +205,9 @@
         background-position-y: 50%;
       }
 
-      .pr_map_card[data-card-id="medieval_hungary"] {
+      .pr_map_card[data-card-id="medieval_hungary"]:not(
+          [data-map-type="ageOfReformation"]
+        ) {
         background-image: url("img/map_cards.webp");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
@@ -211,12 +215,30 @@
         background-position-y: 50%;
       }
 
-      .pr_map_card[data-card-id="medieval_ottoman"] {
+      .pr_map_card[data-card-id="medieval_hungary"][data-map-type="ageOfReformation"] {
+        background-image: url("img/map_cards.webp");
+        background-size: 1000% 500%;
+        background-repeat: no-repeat;
+        background-position-x: 22.2222222222%;
+        background-position-y: 100%;
+      }
+
+      .pr_map_card[data-card-id="medieval_ottoman"]:not(
+          [data-map-type="ageOfReformation"]
+        ) {
         background-image: url("img/map_cards.webp");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 88.8888888889%;
         background-position-y: 50%;
+      }
+
+      .pr_map_card[data-card-id="medieval_ottoman"][data-map-type="ageOfReformation"] {
+        background-image: url("img/map_cards.webp");
+        background-size: 1000% 500%;
+        background-repeat: no-repeat;
+        background-position-x: 33.3333333333%;
+        background-position-y: 100%;
       }
 
       .pr_map_card[data-card-id="medieval_portugal"] {
@@ -372,7 +394,8 @@
           --paxRenIconScale: 1;
         }
 
-        .pr_tableau_op, .pr_one_shot {
+        .pr_tableau_op,
+        .pr_one_shot {
           align-self: flex-end;
         }
       }

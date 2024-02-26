@@ -3,27 +3,27 @@ class InformationModal {
 
   private modal: Modal;
 
-  private selectedTab: TabId = 'battleTable';
+  private selectedTab: TabId = "battleTable";
   private tabs = {
     battleTable: {
-      text: _('Battle Table')
+      text: _("Battle Table"),
     },
     operations: {
-      text: _('Operations')
+      text: _("Operations"),
     },
     oneShots: {
-      text: _('One-Shots')
+      text: _("One-Shots"),
     },
     mapCards: {
-      text: _('Map Cards')
-    }
+      text: _("Map Cards"),
+    },
     // gameTerms: {
     //   text: _('Game Terms')
     // },
     // mapCards: {
     //   text: _('Map Cards')
     // },
-  }
+  };
 
   constructor(game: PaxRenaissanceGame) {
     this.game = game;
@@ -66,7 +66,10 @@ class InformationModal {
       // titleTpl:
       //   '<h2 id="popin_${id}_title" class="${class}_title">${title}</h2>',
       // title: _("Info"),
-      contents: tplInformationModalContent({tabs: this.tabs}),
+      contents: tplInformationModalContent({
+        tabs: this.tabs,
+        ageOfReformation: this.game.gamedatas.gameOptions.ageOfReformationPromo,
+      }),
       closeAction: "hide",
       verticalAlign: "flex-start",
       breakpoint: 740,
@@ -78,12 +81,16 @@ class InformationModal {
     this.addButton({ gamedatas });
     this.setupModal({ gamedatas });
     this.informationModalContent();
-    this.changeTab({id: this.selectedTab});
+    this.changeTab({ id: this.selectedTab });
     Object.keys(this.tabs).forEach((id: TabId) => {
-      dojo.connect($(`pr_information_modal_tab_${id}`), "onclick", () => this.changeTab({id}));
+      dojo.connect($(`pr_information_modal_tab_${id}`), "onclick", () =>
+        this.changeTab({ id })
+      );
     });
 
-    dojo.connect($(`pr_information_button`), "onclick", () => this.modal.show());
+    dojo.connect($(`pr_information_button`), "onclick", () =>
+      this.modal.show()
+    );
   }
 
   // .##.....##.########..########.....###....########.########
@@ -102,9 +109,7 @@ class InformationModal {
   // .##....##.##.....##.##...###....##....##.......##...###....##...
   // ..######...#######..##....##....##....########.##....##....##...
 
-  private informationModalContent() {
-
-  }
+  private informationModalContent() {}
 
   //  .##.....##.########.####.##.......####.########.##....##
   //  .##.....##....##.....##..##........##.....##.....##..##.
@@ -114,20 +119,22 @@ class InformationModal {
   //  .##.....##....##.....##..##........##.....##.......##...
   //  ..#######.....##....####.########.####....##.......##...
 
-  private changeTab({id}: {id: TabId;}) {
-    const currentTab = document.getElementById(`pr_information_modal_tab_${this.selectedTab}`);
+  private changeTab({ id }: { id: TabId }) {
+    const currentTab = document.getElementById(
+      `pr_information_modal_tab_${this.selectedTab}`
+    );
     const currentTabContent = document.getElementById(`pr_${this.selectedTab}`);
-    currentTab.removeAttribute('data-state');
+    currentTab.removeAttribute("data-state");
     if (currentTabContent) {
-      currentTabContent.style.display = 'none';
+      currentTabContent.style.display = "none";
     }
 
     this.selectedTab = id;
     const tab = document.getElementById(`pr_information_modal_tab_${id}`);
     const tabContent = document.getElementById(`pr_${this.selectedTab}`);
-    tab.setAttribute('data-state','selected');
+    tab.setAttribute("data-state", "selected");
     if (tabContent) {
-      tabContent.style.display = '';
+      tabContent.style.display = "";
     }
   }
 }

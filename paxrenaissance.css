@@ -4385,19 +4385,33 @@
   background-position-x: 22.2222222222%;
   background-position-y: 50%;
 }
-.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_hungary] {
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_hungary]:not([data-map-type=ageOfReformation]) {
   background-image: url("img/map_cards.webp");
   background-size: 1000% 500%;
   background-repeat: no-repeat;
   background-position-x: 33.3333333333%;
   background-position-y: 50%;
 }
-.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_ottoman] {
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_hungary][data-map-type=ageOfReformation] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 22.2222222222%;
+  background-position-y: 100%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_ottoman]:not([data-map-type=ageOfReformation]) {
   background-image: url("img/map_cards.webp");
   background-size: 1000% 500%;
   background-repeat: no-repeat;
   background-position-x: 88.8888888889%;
   background-position-y: 50%;
+}
+.pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_ottoman][data-map-type=ageOfReformation] {
+  background-image: url("img/map_cards.webp");
+  background-size: 1000% 500%;
+  background-repeat: no-repeat;
+  background-position-x: 33.3333333333%;
+  background-position-y: 100%;
 }
 .pr_information_modal #pr_information_modal_content #pr_mapCards .pr_map_card[data-card-id=medieval_portugal] {
   background-image: url("img/map_cards.webp");
@@ -4535,7 +4549,8 @@
 .pr_information_modal #pr_information_modal_content #pr_battleTable .pr_cell .pr_one_shot {
   --paxRenIconScale: 1;
 }
-.pr_information_modal #pr_information_modal_content #pr_battleTable .pr_cell .pr_tableau_op, .pr_information_modal #pr_information_modal_content #pr_battleTable .pr_cell .pr_one_shot {
+.pr_information_modal #pr_information_modal_content #pr_battleTable .pr_cell .pr_tableau_op,
+.pr_information_modal #pr_information_modal_content #pr_battleTable .pr_cell .pr_one_shot {
   align-self: flex-end;
 }
 .pr_information_modal #pr_information_modal_content #pr_battleTable .pr_cell:nth-child(6n) {
