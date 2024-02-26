@@ -5050,7 +5050,7 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_flipEmpireCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card, formerSuzerain, oldSide, player;
+            var _a, playerId, card, formerSuzerain, oldSide, player, container;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -5061,14 +5061,13 @@ var NotificationManager = (function () {
                         this.removePrestige({ prestige: card[oldSide].prestige, player: player });
                         player.counters[oldSide].incValue(-1);
                         if (!(formerSuzerain !== null)) return [3, 2];
-                        return [4, player.tableau.addCard(card)];
+                        container = createEmpireCardContainer(card);
+                        return [4, player.tableau.addCard(container)];
                     case 1:
                         _b.sent();
-                        return [3, 3];
+                        _b.label = 2;
                     case 2:
                         this.game.tableauCardManager.updateCardInformations(card);
-                        _b.label = 3;
-                    case 3:
                         this.addPrestige({ prestige: card[card.side].prestige, player: player });
                         player.counters[card.side].incValue(1);
                         return [2];
@@ -11335,11 +11334,11 @@ var tplOpsRow = function (_a) {
     var _b;
     var op = _a.op;
     var corsairText = _("Use this Op to move ${religion} Pirate in a Sea Border this card's Location to another Sea Border either in this card's Location or an Adjacent Location sharing a Sea Border.");
-    var repressText = _("Use this Op to remove one ${token} of any color in this card's Location and place it as a Repressed Token on its corresponding Empire Square");
+    var repressText = _("Use this Op to remove one ${token} of any color in this card's Location and place it as a Repressed Token on its corresponding Empire Square. Gain one Florin from China.");
     var voteOpText = _("Use this Op to cause a Regime Change in ${region} Empire. Its Empire Square can be in any Tableau, but it cannot be a Vassal.");
     var opTextMap = (_b = {},
         _b[BEHEAD_OP] = _("Use this Op to Discard one card in any Tableau. The Location of the beheaded card must share that of the acting card."),
-        _b[CAMPAIGN_OP] = _("Use this Op to create a Battle in a defending Empire Adjacent to this King's Location"),
+        _b[CAMPAIGN_OP] = _("Use this Op to create a Battle in a defending Empire Adjacent to this King's Location."),
         _b[COMMERCE_OP_EAST] = _("Use this Op to take one Florin from any card (including trade fair cards) in the East."),
         _b[COMMERCE_OP_WEST] = _("Use this Op to take one Florin from any card (including trade fair cards) in the West."),
         _b[CORSAIR_OP_CATHOLIC] = corsairText.replace("${religion}", _("a Catholic")),

@@ -122,7 +122,7 @@ const tplOpsRow = ({ op }: { op: TableauOp }) => {
     "Use this Op to move ${religion} Pirate in a Sea Border this card's Location to another Sea Border either in this card's Location or an Adjacent Location sharing a Sea Border."
   );
   const repressText = _(
-    "Use this Op to remove one ${token} of any color in this card's Location and place it as a Repressed Token on its corresponding Empire Square"
+    "Use this Op to remove one ${token} of any color in this card's Location and place it as a Repressed Token on its corresponding Empire Square. Gain one Florin from China."
   );
   const voteOpText = _(
     "Use this Op to cause a Regime Change in ${region} Empire. Its Empire Square can be in any Tableau, but it cannot be a Vassal."
@@ -133,7 +133,7 @@ const tplOpsRow = ({ op }: { op: TableauOp }) => {
       "Use this Op to Discard one card in any Tableau. The Location of the beheaded card must share that of the acting card."
     ),
     [CAMPAIGN_OP]: _(
-      "Use this Op to create a Battle in a defending Empire Adjacent to this King's Location"
+      "Use this Op to create a Battle in a defending Empire Adjacent to this King's Location."
     ),
     [COMMERCE_OP_EAST]: _(
       "Use this Op to take one Florin from any card (including trade fair cards) in the East."

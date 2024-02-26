@@ -45,7 +45,7 @@ class NotificationManager {
       ["changeEmpireToMedievalState", undefined],
       ["changeEmpireToTheocracy", undefined],
       ["changeEmpireSquare", undefined],
-      ["clearTurn",undefined],
+      ["clearTurn", undefined],
       ["coronation", undefined],
       ["deactivateAbility", undefined],
       ["declareVictory", undefined],
@@ -126,7 +126,7 @@ class NotificationManager {
   }
 
   async notif_clearTurn(notif: Notif<NotifClearTurnArgs>) {
-    const {notifIds} = notif.args;
+    const { notifIds } = notif.args;
     this.game.cancelLogs(notifIds);
   }
 
@@ -430,10 +430,10 @@ class NotificationManager {
       //   suzerain: formerSuzerain,
       //   beforeMove: true,
       // });
-      await player.tableau.addCard(card);
-    } else {
-      this.game.tableauCardManager.updateCardInformations(card);
+      const container = createEmpireCardContainer(card);
+      await player.tableau.addCard(container);
     }
+    this.game.tableauCardManager.updateCardInformations(card);
 
     this.addPrestige({ prestige: card[card.side].prestige, player });
     player.counters[card.side].incValue(1);
