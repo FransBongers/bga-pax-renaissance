@@ -30,10 +30,10 @@ class PREN097X_PodestaOfVenice extends \PaxRenaissance\Models\TableauCard
           'args' => [],
         ],
         'abilityAction' => true,
-        'top' => 0,
-        'left' => 0,
-        'height' => 0,
-        'width' => 0,
+        'top' => 148,
+        'left' => 106,
+        'height' => 63,
+        'width' => 38,
       ]
     ];
   }

@@ -26,10 +26,10 @@ class PREN134X_MiningEngineer extends \PaxRenaissance\Models\TableauCard
           'args' => [],
         ],
         'abilityAction' => true,
-        'top' => 0,
-        'left' => 0,
-        'height' => 0,
-        'width' => 0,
+        'top' => 159,
+        'left' => 108,
+        'height' => 52,
+        'width' => 36,
       ]
     ];
   }

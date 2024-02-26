@@ -39,7 +39,7 @@ class FreeActionState implements State {
 
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
-
+    this.setAbilityActionsSelectable();
     this.game.clientUpdatePageTitle({
       text: _("${tkn_playerName} may perform an action from an ability"),
       args: {
@@ -60,6 +60,7 @@ class FreeActionState implements State {
     ability: Ability;
   }) {
     this.game.clearPossible();
+    this.game.setLocationSelected({ id: `${cardId}_${ability.id}` });
 
     this.game.clientUpdatePageTitle({
       text: _("Perform ${actionTitle} action?"),
@@ -97,6 +98,7 @@ class FreeActionState implements State {
     this.game.clearPossible();
 
     const [cardId, ability] = Object.entries(this.args.freeActions)[0];
+    this.game.setLocationSelected({ id: `${cardId}_${ability.id}` });
 
     this.game.clientUpdatePageTitle({
       text: _("Perform ${actionTitle} action?"),
@@ -143,6 +145,15 @@ class FreeActionState implements State {
         });
       }
     );
+  }
+
+  private setAbilityActionsSelectable() {
+    Object.entries(this.args.freeActions).forEach(([cardId, ability]) => {
+      this.game.setLocationSelectable({
+        id: `${cardId}_${ability.id}`,
+        callback: () => this.updateInterfaceConfirm({ cardId, ability }),
+      });
+    });
   }
 
   //  ..######..##.......####..######..##....##

@@ -1,9 +1,9 @@
 const createEmpireCardContainerId = (card: EmpireCard) => {
   return `${card.empire}_container`;
-}
+};
 
 const createEmpireCardContainer = (card: EmpireCard): EmpireCardContainer => {
-  const {empire, state, location} = card;
+  const { empire, state, location } = card;
   const container: EmpireCardContainer = {
     type: EMPIRE_CARD_CONTAINER,
     id: `${empire}_container`,
@@ -13,14 +13,14 @@ const createEmpireCardContainer = (card: EmpireCard): EmpireCardContainer => {
     location,
   };
   return container;
-}
+};
 
 const noMarriedQueensNoVassals = (card: TableauCard | EmpireCard): boolean => {
   if (card.isQueen && (card as QueenCard).hasKing) {
     return false;
   }
   return card.type === TABLEAU_CARD || !card.isVassal;
-}
+};
 
 const getTotalHeightQueens = ({ queens }: { queens: QueenCard[] }) => {
   let totalHeight = 0;
@@ -29,6 +29,15 @@ const getTotalHeightQueens = ({ queens }: { queens: QueenCard[] }) => {
   });
   return totalHeight;
 };
+
+const tplAbilityActionSelect = ({
+  abilityAction,
+  cardId,
+}: {
+  abilityAction: Ability;
+  cardId: string;
+}) =>
+  `<div id="pr_${cardId}_${abilityAction.id}" class="pr_ability_action_select" style="top: calc(var(--paxRenCardScale) * ${abilityAction.top}px); left: calc(var(--paxRenCardScale) * ${abilityAction.left}px); height: calc(var(--paxRenCardScale) * ${abilityAction.height}px); width: calc(var(--paxRenCardScale) * ${abilityAction.width}px);"></div>`;
 
 const tplOperationSelect = ({
   operation,

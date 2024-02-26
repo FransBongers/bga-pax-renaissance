@@ -1366,6 +1366,7 @@
  * PaxRenaissance stylesheet
  *
  */
+.pr_ability_action_select.pr_selectable,
 .pr_tableau_op_select.pr_selectable,
 .pr_card.pr_selectable {
   /* border: 2px blue solid; */
@@ -1393,6 +1394,8 @@
   box-shadow: none !important;
 }
 
+.pr_ability_action_select.pr_selected,
+.pr_ability_action_select.pr_selectable:hover,
 .pr_tableau_op_select.pr_selected,
 .pr_tableau_op_select.pr_selectable:hover,
 .pr_card.pr_selected,
@@ -1450,6 +1453,9 @@
   box-shadow: 0px 0px 0px calc(var(--paxRenCardScale) * 4px) #0000ff !important;
 }
 
+.pr_ability_action_select.pr_selectable,
+.pr_ability_action_select.pr_selected,
+.pr_ability_action_select.pr_selectable:hover,
 .pr_tableau_op_select.pr_selectable,
 .pr_tableau_op_select.pr_selected,
 .pr_tableau_op_select.pr_selectable:hover {
@@ -1465,6 +1471,11 @@
   border-radius: calc(var(--paxRenCardScale) * 5px);
   image-rendering: -webkit-optimize-contrast;
   image-rendering: high-quality;
+}
+
+.pr_ability_action_select {
+  position: absolute;
+  border-radius: 5%;
 }
 
 .pr_tableau_op_select {

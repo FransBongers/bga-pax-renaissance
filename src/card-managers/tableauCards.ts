@@ -176,6 +176,21 @@ class TableauCardManager extends CardManager<
           );
         }
       });
+      const abilityAction = card.specialAbilities.find((ability) => ability.abilityAction);
+      if (abilityAction) {
+        const abilityActionElement = document.getElementById(
+          `pr_${card.id}_${abilityAction.id}`
+        );
+        if (!abilityActionElement) {
+          div.insertAdjacentHTML(
+            "beforeend",
+            tplAbilityActionSelect({
+              abilityAction,
+              cardId: card.id,
+            })
+          );
+        }
+      }
     }
 
     if (card.type === EMPIRE_CARD) {

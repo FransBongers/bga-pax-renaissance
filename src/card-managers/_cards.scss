@@ -2,6 +2,7 @@
 @use "sass:map";
 @use "../base";
 
+.pr_ability_action_select.pr_selectable,
 .pr_tableau_op_select.pr_selectable,
 .pr_card.pr_selectable {
   /* border: 2px blue solid; */
@@ -30,6 +31,8 @@
   box-shadow: none !important;
 }
 
+.pr_ability_action_select.pr_selected,
+.pr_ability_action_select.pr_selectable:hover,
 .pr_tableau_op_select.pr_selected,
 .pr_tableau_op_select.pr_selectable:hover,
 .pr_card.pr_selected,
@@ -108,6 +111,9 @@
 }
 
 // TODO: check if this is necessary?
+.pr_ability_action_select.pr_selectable,
+.pr_ability_action_select.pr_selected,
+.pr_ability_action_select.pr_selectable:hover,
 .pr_tableau_op_select.pr_selectable,
 .pr_tableau_op_select.pr_selected,
 .pr_tableau_op_select.pr_selectable:hover {
@@ -123,6 +129,11 @@
   border-radius: calc(var(--paxRenCardScale) * 5px);
   image-rendering: -webkit-optimize-contrast;
   image-rendering: high-quality;
+}
+
+.pr_ability_action_select {
+  position: absolute;
+  border-radius: 5%;
 }
 
 .pr_tableau_op_select {
@@ -234,32 +245,8 @@
   }
 }
 
-// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_card_tokens_container,
-// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container,
-// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_vassals_container > .card > .pr_card_tokens_container,
-// .pr_player_board_tableau_cards[data-region="west"] > .card > .pr_vassals_container > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container {
-//   left: calc(var(--paxRenCardScale) * 63px);
-//   justify-content: flex-end;
-//   // align-items: flex-end;
-// }
-
-// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_card_tokens_container,
-// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container,
-// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_vassals_container > .card > .pr_card_tokens_container,
-// .pr_player_board_tableau_cards[data-region="east"] > .card > .pr_vassals_container > .card > .pr_queens_container > .pr_card > .pr_card_tokens_container {
-//   left: calc(var(--paxRenCardScale) * 7px);
-//   justify-content: flex-start;
-//   // align-items: flex-end;
-// }
-
 .pr_vassals_container {
-  // position: relative;
-  // top: calc(var(--paxRenCardScale) * 82px);
-  // left: 0px;
   width: calc(var(--paxRenCardScale) * 151px);
-  // height: 10px;
-  // background-color: blue;
-  // padding-top: 12px;
   gap: calc(var(--paxRenCardScale) * 12px);
 }
 
@@ -268,10 +255,7 @@
 }
 
 .pr_queens_container {
-  // position: relative;
   width: calc(var(--paxRenCardScale) * 151px);
-  // height: 20px;
-  // background-color: blue;
 }
 
 /* ------- EAST CARDS ------- */

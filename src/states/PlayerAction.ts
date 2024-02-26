@@ -51,6 +51,7 @@ class PlayerActionState implements State {
     this.setTradeFairSelectable();
     this.setOperationsSelectable();
     this.setVictoryCardsSelectable();
+    this.setAbilityActionsSelectable();
     this.addActionButtons();
     // this.addTest();
     this.game.addPassButton({ optionalAction: this.args.optionalAction });
@@ -300,7 +301,10 @@ class PlayerActionState implements State {
             .setClientState<OnEnteringClientUseAbiltyActionArgs>(
               CLIENT_USE_ABILITY_ACTION_STATE,
               {
-                args: this.args.abilityActions,
+                args: {
+                  abilityActions: this.args.abilityActions,
+                  selected: null,
+                },
               }
             ),
       });
@@ -325,6 +329,29 @@ class PlayerActionState implements State {
       args: {
         tkn_playerName: "${you}",
       },
+    });
+  }
+
+  private setAbilityActionsSelectable() {
+    Object.entries(this.args.abilityActions).forEach(([cardId, ability]) => {
+      this.game.setLocationSelectable({
+        id: `${cardId}_${ability.id}`,
+        callback: () =>
+          this.game
+            .framework()
+            .setClientState<OnEnteringClientUseAbiltyActionArgs>(
+              CLIENT_USE_ABILITY_ACTION_STATE,
+              {
+                args: {
+                  abilityActions: this.args.abilityActions,
+                  selected: {
+                    cardId,
+                    abilityAction: ability,
+                  },
+                },
+              }
+            ),
+      });
     });
   }
 

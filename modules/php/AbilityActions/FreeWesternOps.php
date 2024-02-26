@@ -16,7 +16,7 @@ class FreeWesternOps extends \PaxRenaissance\Models\AbilityAction
   public function __construct($cardAbility = null)
   {
     parent::__construct($cardAbility);
-    $this->id = SA_FREE_EASTERN_OPS;
+    $this->id = SA_FREE_WESTERN_OPS;
     $this->freeAction = true;
   }
 

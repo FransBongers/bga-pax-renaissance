@@ -44,10 +44,10 @@ class PREN129X_OratoryOfDivineLove extends \PaxRenaissance\Models\TableauCard
           'args' => [],
         ],
         'abilityAction' => true,
-        'top' => 0,
-        'left' => 0,
-        'height' => 0,
-        'width' => 0,
+        'top' => 155,
+        'left' => 108,
+        'height' => 55,
+        'width' => 36,
       ]
     ];
   }

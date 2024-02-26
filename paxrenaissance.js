@@ -2719,6 +2719,16 @@ var TableauCardManager = (function (_super) {
                     }));
                 }
             });
+            var abilityAction = card.specialAbilities.find(function (ability) { return ability.abilityAction; });
+            if (abilityAction) {
+                var abilityActionElement = document.getElementById("pr_".concat(card.id, "_").concat(abilityAction.id));
+                if (!abilityActionElement) {
+                    div.insertAdjacentHTML("beforeend", tplAbilityActionSelect({
+                        abilityAction: abilityAction,
+                        cardId: card.id,
+                    }));
+                }
+            }
         }
         if (card.type === EMPIRE_CARD) {
             div.classList.add("pr_empire_square");
@@ -2890,6 +2900,10 @@ var getTotalHeightQueens = function (_a) {
         totalHeight = totalHeight + queen.height;
     });
     return totalHeight;
+};
+var tplAbilityActionSelect = function (_a) {
+    var abilityAction = _a.abilityAction, cardId = _a.cardId;
+    return "<div id=\"pr_".concat(cardId, "_").concat(abilityAction.id, "\" class=\"pr_ability_action_select\" style=\"top: calc(var(--paxRenCardScale) * ").concat(abilityAction.top, "px); left: calc(var(--paxRenCardScale) * ").concat(abilityAction.left, "px); height: calc(var(--paxRenCardScale) * ").concat(abilityAction.height, "px); width: calc(var(--paxRenCardScale) * ").concat(abilityAction.width, "px);\"></div>");
 };
 var tplOperationSelect = function (_a) {
     var operation = _a.operation, cardId = _a.cardId, side = _a.side;
@@ -8772,8 +8786,14 @@ var ClientUseAbilityActionState = (function () {
     }
     ClientUseAbilityActionState.prototype.onEnteringState = function (args) {
         this.args = args;
-        if (Object.entries(this.args).length === 1) {
-            var _a = Object.entries(this.args)[0], cardId = _a[0], ability = _a[1];
+        if (args.selected) {
+            this.updateInterfaceConfirm({
+                cardId: args.selected.cardId,
+                ability: args.selected.abilityAction,
+            });
+        }
+        else if (Object.entries(this.args.abilityActions).length === 1) {
+            var _a = Object.entries(this.args.abilityActions)[0], cardId = _a[0], ability = _a[1];
             this.updateInterfaceConfirm({ cardId: cardId, ability: ability });
         }
         else {
@@ -8793,12 +8813,14 @@ var ClientUseAbilityActionState = (function () {
             },
         });
         this.addActionButtons();
+        this.setAbilityActionsSelectable();
         this.game.addCancelButton();
     };
     ClientUseAbilityActionState.prototype.updateInterfaceConfirm = function (_a) {
         var _this = this;
         var cardId = _a.cardId, ability = _a.ability;
         this.game.clearPossible();
+        this.game.setLocationSelected({ id: "".concat(cardId, "_").concat(ability.id) });
         this.game.clientUpdatePageTitle({
             text: _("Perform ${actionTitle} action?"),
             args: {
@@ -8829,11 +8851,21 @@ var ClientUseAbilityActionState = (function () {
     };
     ClientUseAbilityActionState.prototype.addActionButtons = function () {
         var _this = this;
-        Object.entries(this.args).forEach(function (_a, index) {
+        Object.entries(this.args.abilityActions).forEach(function (_a, index) {
             var cardId = _a[0], ability = _a[1];
             _this.game.addPrimaryActionButton({
                 id: "abiliy_action_".concat(index, "_btn"),
                 text: _(ability.title).replace(":", ""),
+                callback: function () { return _this.updateInterfaceConfirm({ cardId: cardId, ability: ability }); },
+            });
+        });
+    };
+    ClientUseAbilityActionState.prototype.setAbilityActionsSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.abilityActions).forEach(function (_a) {
+            var cardId = _a[0], ability = _a[1];
+            _this.game.setLocationSelectable({
+                id: "".concat(cardId, "_").concat(ability.id),
                 callback: function () { return _this.updateInterfaceConfirm({ cardId: cardId, ability: ability }); },
             });
         });
@@ -9085,6 +9117,7 @@ var FreeActionState = (function () {
     FreeActionState.prototype.setDescription = function (activePlayerId) { };
     FreeActionState.prototype.updateInterfaceInitialStep = function () {
         this.game.clearPossible();
+        this.setAbilityActionsSelectable();
         this.game.clientUpdatePageTitle({
             text: _("${tkn_playerName} may perform an action from an ability"),
             args: {
@@ -9099,6 +9132,7 @@ var FreeActionState = (function () {
         var _this = this;
         var cardId = _a.cardId, ability = _a.ability;
         this.game.clearPossible();
+        this.game.setLocationSelected({ id: "".concat(cardId, "_").concat(ability.id) });
         this.game.clientUpdatePageTitle({
             text: _("Perform ${actionTitle} action?"),
             args: {
@@ -9131,6 +9165,7 @@ var FreeActionState = (function () {
         var _this = this;
         this.game.clearPossible();
         var _a = Object.entries(this.args.freeActions)[0], cardId = _a[0], ability = _a[1];
+        this.game.setLocationSelected({ id: "".concat(cardId, "_").concat(ability.id) });
         this.game.clientUpdatePageTitle({
             text: _("Perform ${actionTitle} action?"),
             args: {
@@ -9164,6 +9199,16 @@ var FreeActionState = (function () {
             _this.game.addPrimaryActionButton({
                 id: "abiliy_action_".concat(index, "_btn"),
                 text: _(ability.title).replace(":", ""),
+                callback: function () { return _this.updateInterfaceConfirm({ cardId: cardId, ability: ability }); },
+            });
+        });
+    };
+    FreeActionState.prototype.setAbilityActionsSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.freeActions).forEach(function (_a) {
+            var cardId = _a[0], ability = _a[1];
+            _this.game.setLocationSelectable({
+                id: "".concat(cardId, "_").concat(ability.id),
                 callback: function () { return _this.updateInterfaceConfirm({ cardId: cardId, ability: ability }); },
             });
         });
@@ -9530,6 +9575,7 @@ var PlayerActionState = (function () {
         this.setTradeFairSelectable();
         this.setOperationsSelectable();
         this.setVictoryCardsSelectable();
+        this.setAbilityActionsSelectable();
         this.addActionButtons();
         this.game.addPassButton({ optionalAction: this.args.optionalAction });
         this.game.addUndoButtons(this.args);
@@ -9725,7 +9771,10 @@ var PlayerActionState = (function () {
                     return _this.game
                         .framework()
                         .setClientState(CLIENT_USE_ABILITY_ACTION_STATE, {
-                        args: _this.args.abilityActions,
+                        args: {
+                            abilityActions: _this.args.abilityActions,
+                            selected: null,
+                        },
                     });
                 },
             });
@@ -9746,6 +9795,28 @@ var PlayerActionState = (function () {
             args: {
                 tkn_playerName: "${you}",
             },
+        });
+    };
+    PlayerActionState.prototype.setAbilityActionsSelectable = function () {
+        var _this = this;
+        Object.entries(this.args.abilityActions).forEach(function (_a) {
+            var cardId = _a[0], ability = _a[1];
+            _this.game.setLocationSelectable({
+                id: "".concat(cardId, "_").concat(ability.id),
+                callback: function () {
+                    return _this.game
+                        .framework()
+                        .setClientState(CLIENT_USE_ABILITY_ACTION_STATE, {
+                        args: {
+                            abilityActions: _this.args.abilityActions,
+                            selected: {
+                                cardId: cardId,
+                                abilityAction: ability,
+                            },
+                        },
+                    });
+                },
+            });
         });
     };
     PlayerActionState.prototype.setHandCardsSelectable = function () {

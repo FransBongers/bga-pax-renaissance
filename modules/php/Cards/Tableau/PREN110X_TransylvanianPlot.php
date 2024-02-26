@@ -50,10 +50,10 @@ class PREN110X_TransylvanianPlot extends \PaxRenaissance\Models\TableauCard
           'args' => [],
         ],
         'abilityAction' => true,
-        'top' => 0,
-        'left' => 0,
-        'height' => 0,
-        'width' => 0,
+        'top' => 155,
+        'left' => 7,
+        'height' => 40,
+        'width' => 35,
       ]
     ];
   }

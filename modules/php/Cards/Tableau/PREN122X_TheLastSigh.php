@@ -45,10 +45,10 @@ class PREN122X_TheLastSigh extends \PaxRenaissance\Models\TableauCard
           'args' => [],
         ],
         'abilityAction' => true,
-        'top' => 0,
-        'left' => 0,
-        'height' => 0,
-        'width' => 0,
+        'top' => 155,
+        'left' => 7,
+        'height' => 44,
+        'width' => 35,
       ]
     ];
   }

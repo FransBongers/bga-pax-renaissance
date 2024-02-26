@@ -39,10 +39,10 @@ class PREN095X_ElizabethBathory extends \PaxRenaissance\Models\QueenCard
           'args' => [],
         ],
         'abilityAction' => true,
-        'top' => 0,
-        'left' => 0,
-        'height' => 0,
-        'width' => 0,
+        'top' => 52,
+        'left' => 6,
+        'height' => 61,
+        'width' => 36,
       ]
     ];
   }

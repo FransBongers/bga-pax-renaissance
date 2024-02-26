@@ -8,8 +8,13 @@ class ClientUseAbilityActionState implements State {
 
   onEnteringState(args: OnEnteringClientUseAbiltyActionArgs) {
     this.args = args;
-    if (Object.entries(this.args).length === 1) {
-      const [cardId, ability] = Object.entries(this.args)[0];
+    if (args.selected) {
+      this.updateInterfaceConfirm({
+        cardId: args.selected.cardId,
+        ability: args.selected.abilityAction,
+      });
+    } else if (Object.entries(this.args.abilityActions).length === 1) {
+      const [cardId, ability] = Object.entries(this.args.abilityActions)[0];
       this.updateInterfaceConfirm({ cardId, ability });
     } else {
       this.updateInterfaceInitialStep();
@@ -49,7 +54,7 @@ class ClientUseAbilityActionState implements State {
     });
 
     this.addActionButtons();
-
+    this.setAbilityActionsSelectable();
     this.game.addCancelButton();
   }
 
@@ -61,6 +66,7 @@ class ClientUseAbilityActionState implements State {
     ability: Ability;
   }) {
     this.game.clearPossible();
+    this.game.setLocationSelected({id: `${cardId}_${ability.id}`})
 
     this.game.clientUpdatePageTitle({
       text: _("Perform ${actionTitle} action?"),
@@ -103,10 +109,21 @@ class ClientUseAbilityActionState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private addActionButtons() {
-    Object.entries(this.args).forEach(([cardId, ability], index) => {
-      this.game.addPrimaryActionButton({
-        id: `abiliy_action_${index}_btn`,
-        text: _(ability.title).replace(":", ""),
+    Object.entries(this.args.abilityActions).forEach(
+      ([cardId, ability], index) => {
+        this.game.addPrimaryActionButton({
+          id: `abiliy_action_${index}_btn`,
+          text: _(ability.title).replace(":", ""),
+          callback: () => this.updateInterfaceConfirm({ cardId, ability }),
+        });
+      }
+    );
+  }
+
+  private setAbilityActionsSelectable() {
+    Object.entries(this.args.abilityActions).forEach(([cardId, ability]) => {
+      this.game.setLocationSelectable({
+        id: `${cardId}_${ability.id}`,
         callback: () => this.updateInterfaceConfirm({ cardId, ability }),
       });
     });

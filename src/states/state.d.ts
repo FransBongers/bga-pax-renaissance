@@ -46,7 +46,13 @@ interface OnEnteringClientStartTradeFairArgs {
   action: 'actPlayerAction' | 'actAbilityActionSelectTradeFair';
 }
 
-type OnEnteringClientUseAbiltyActionArgs = Record<string, Ability>;
+type OnEnteringClientUseAbiltyActionArgs = {
+  abilityActions: Record<string, Ability>;
+  selected: {
+    cardId: string;
+    abilityAction: Ability;
+  } | null;
+};
 
 interface OnEnteringAnnounceOneShotArgs extends CommonArgs {
   oneShot: string;
