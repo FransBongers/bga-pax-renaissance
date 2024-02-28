@@ -46,9 +46,38 @@
   font-weight: bold;
   font-size: large;
   word-wrap: break-word;
+  width: 100%;
   margin: 10px;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .pr_tableau_title_icon_container {
+    width: 160px;
+    // background-color: yellow;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .pr_title {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+  // display: flex;
+  // flex:
   // margin-right: 126px;
   // flex-grow: 1;
+}
+
+.pr_player_tableau_title[data-show-counters="disabled"] {
+  .pr_tableau_title_icon_container {
+    display: none;
+  }
 }
 
 .pr_player_tableau_cards_container {

@@ -1,1 +1,1 @@
-type SettingsTabId = 'layout' | 'gameplay';
+type SettingsTabId = 'layout' | 'gameplay' | 'tableau';

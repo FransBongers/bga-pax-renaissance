@@ -357,7 +357,7 @@ class Market {
     const [_, region, column] = florinLocation.split("_");
     this.game.playerManager
       .getPlayer({ playerId })
-      .counters.florins.incValue(-1);
+      .incFlorins(-1);
 
     if (this.game.animationManager.animationsActive()) {
       await this.moveFlorinAnimation({
@@ -401,7 +401,7 @@ class Market {
 
     this.game.playerManager
       .getPlayer({ playerId })
-      .counters.florins.incValue(1);
+      .incFlorins(1);
     return true;
   }
 

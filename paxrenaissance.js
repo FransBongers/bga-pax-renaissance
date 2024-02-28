@@ -14,6 +14,7 @@ var OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
 var CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOnly';
 var PREF_SHOW_ANIMATIONS = 'showAnimations';
 var PREF_ANIMATION_SPEED = 'animationSpeed';
+var SHOW_FLORIN_CARD_COUNTERS = 'florinCardCountersTableau';
 var CITY = 'city';
 var BORDER = 'border';
 var CARD = 'card';
@@ -4564,7 +4565,7 @@ var Market = (function () {
                         _b = florinLocation.split("_"), _ = _b[0], region = _b[1], column = _b[2];
                         this.game.playerManager
                             .getPlayer({ playerId: playerId })
-                            .counters.florins.incValue(-1);
+                            .incFlorins(-1);
                         if (!this.game.animationManager.animationsActive()) return [3, 2];
                         return [4, this.moveFlorinAnimation({
                                 index: index,
@@ -4610,7 +4611,7 @@ var Market = (function () {
                     case 2:
                         this.game.playerManager
                             .getPlayer({ playerId: playerId })
-                            .counters.florins.incValue(1);
+                            .incFlorins(1);
                         return [2, true];
                 }
             });
@@ -4984,7 +4985,7 @@ var NotificationManager = (function () {
                     case 4:
                         player = this.getPlayer({ playerId: playerId });
                         if (fromLocationId.startsWith("hand_")) {
-                            player.counters.cards[card.region].incValue(-1);
+                            player.incHandCards(card.region, -1);
                             this.game.openHandsModal.removeCard({
                                 playerId: playerId,
                                 card: card,
@@ -5025,7 +5026,7 @@ var NotificationManager = (function () {
                     });
                 }
                 else {
-                    player.counters.cards[queen.region].incValue(-1);
+                    player.incHandCards(queen.region, -1);
                     this.game.openHandsModal.removeCard({
                         playerId: playerId,
                         card: queen,
@@ -5210,7 +5211,7 @@ var NotificationManager = (function () {
                 switch (_b.label) {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, amount = _a.amount;
-                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(-amount);
+                        this.getPlayer({ playerId: playerId }).incFlorins(-amount);
                         return [4, this.game.market.moveFlorinAnimation({
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
                                 toId: "pr_china",
@@ -5310,7 +5311,7 @@ var NotificationManager = (function () {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, card = _a.card;
                         player = this.getPlayer({ playerId: playerId });
-                        player.counters.cards[card.region].incValue(-1);
+                        player.incHandCards(card.region, -1);
                         this.game.openHandsModal.removeCard({ playerId: playerId, card: card });
                         return [4, player.tableau.addCard(card)];
                     case 1:
@@ -5481,7 +5482,7 @@ var NotificationManager = (function () {
                         _b.sent();
                         _b.label = 2;
                     case 2:
-                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(-cost);
+                        this.getPlayer({ playerId: playerId }).incFlorins(-cost);
                         if (!(cost > 0)) return [3, 4];
                         return [4, this.game.market.moveFlorinAnimation({
                                 toId: "pr_china",
@@ -5552,7 +5553,7 @@ var NotificationManager = (function () {
             return __generator(this, function (_b) {
                 _a = notif.args, playerId = _a.playerId, card = _a.card, value = _a.value;
                 player = this.getPlayer({ playerId: playerId });
-                player.counters.florins.incValue(value);
+                player.incFlorins(value);
                 return [2];
             });
         });
@@ -5607,7 +5608,7 @@ var NotificationManager = (function () {
             var _a, playerId, value;
             return __generator(this, function (_b) {
                 _a = notif.args, playerId = _a.playerId, value = _a.value;
-                this.getPlayer({ playerId: playerId }).counters.florins.incValue(value);
+                this.getPlayer({ playerId: playerId }).incFlorins(value);
                 return [2];
             });
         });
@@ -5632,7 +5633,7 @@ var NotificationManager = (function () {
                             })];
                     case 1:
                         _c.sent();
-                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(1);
+                        this.getPlayer({ playerId: playerId }).incFlorins(1);
                         return [2];
                 }
             });
@@ -5645,7 +5646,7 @@ var NotificationManager = (function () {
                 switch (_a.label) {
                     case 0:
                         playerId = notif.args.playerId;
-                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(-1);
+                        this.getPlayer({ playerId: playerId }).incFlorins(-1);
                         return [4, this.game.market.moveFlorinAnimation({
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
                                 toId: "pr_china",
@@ -5704,7 +5705,7 @@ var NotificationManager = (function () {
                             })];
                     case 1:
                         _b.sent();
-                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
+                        this.getPlayer({ playerId: playerId }).incFlorins(amount);
                         return [2];
                 }
             });
@@ -5753,7 +5754,7 @@ var NotificationManager = (function () {
                             })];
                     case 1:
                         _b.sent();
-                        this.getPlayer({ playerId: playerId }).counters.florins.incValue(amount);
+                        this.getPlayer({ playerId: playerId }).incFlorins(amount);
                         return [2, Promise.resolve()];
                 }
             });
@@ -6109,6 +6110,7 @@ var PRPlayer = (function () {
         this.counters = {
             prestige: {},
             cards: {},
+            cardsTableau: {},
         };
         this.activeAbilities = [];
         this.game = game;
@@ -6158,11 +6160,25 @@ var PRPlayer = (function () {
             iconCounterId: "pr_florins_counter_".concat(this.playerId),
             initialValue: player.florins,
         });
-        this.game.tooltipManager.addIconTooltip({
-            iconHtml: tplIcon({ icon: "florin", style: "--paxRenIconScale: 0.85;" }),
-            nodeId: "pr_florins_counter_".concat(this.playerId),
-            title: _("Florins"),
-            text: _("The amount of Florins this player owns."),
+        this.counters.florinsTableau = new IconCounter({
+            containerId: "pr_tableau_title_counters_".concat(this.playerId),
+            icon: "florin",
+            iconCounterId: "pr_florins_tableau_counter_".concat(this.playerId),
+            initialValue: player.florins,
+        });
+        [
+            "pr_florins_counter_".concat(this.playerId),
+            "pr_florins_tableau_counter_".concat(this.playerId),
+        ].forEach(function (nodeId) {
+            _this.game.tooltipManager.addIconTooltip({
+                iconHtml: tplIcon({
+                    icon: "florin",
+                    style: "--paxRenIconScale: 0.85;",
+                }),
+                nodeId: nodeId,
+                title: _("Florins"),
+                text: _("The amount of Florins this player owns."),
+            });
         });
         this.counters.cards.west = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
@@ -6171,15 +6187,27 @@ var PRPlayer = (function () {
             iconCounterId: "pr_cards_west_counter_".concat(this.playerId),
             initialValue: 0,
         });
-        this.game.tooltipManager.addIconTooltip({
-            iconHtml: tplIcon({
-                icon: "west_back",
-                classes: "pr_card_back_icon",
-                style: "width: 30px; height: 45px;",
-            }),
-            nodeId: "pr_cards_west_counter_".concat(this.playerId),
-            title: _("West cards"),
-            text: _("The number of cards from the West deck this player has in their hand."),
+        this.counters.cardsTableau.west = new IconCounter({
+            containerId: "pr_tableau_title_counters_".concat(this.playerId),
+            extraIconClasses: "pr_card_back_icon",
+            icon: "west_back",
+            iconCounterId: "pr_cards_tableau_west_counter_".concat(this.playerId),
+            initialValue: 0,
+        });
+        [
+            "pr_cards_west_counter_".concat(this.playerId),
+            "pr_cards_tableau_west_counter_".concat(this.playerId),
+        ].forEach(function (nodeId) {
+            _this.game.tooltipManager.addIconTooltip({
+                iconHtml: tplIcon({
+                    icon: "west_back",
+                    classes: "pr_card_back_icon",
+                    style: "width: 30px; height: 45px;",
+                }),
+                nodeId: nodeId,
+                title: _("West cards"),
+                text: _("The number of cards from the West deck this player has in their hand."),
+            });
         });
         this.counters.cards.east = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
@@ -6188,15 +6216,27 @@ var PRPlayer = (function () {
             iconCounterId: "pr_cards_east_counter_".concat(this.playerId),
             initialValue: 0,
         });
-        this.game.tooltipManager.addIconTooltip({
-            iconHtml: tplIcon({
-                icon: "east_back",
-                classes: "pr_card_back_icon",
-                style: "width: 30px; height: 45px;",
-            }),
-            nodeId: "pr_cards_east_counter_".concat(this.playerId),
-            title: _("East cards"),
-            text: _("The number of cards from the East deck this player has in their hand."),
+        this.counters.cardsTableau.east = new IconCounter({
+            containerId: "pr_tableau_title_counters_".concat(this.playerId),
+            extraIconClasses: "pr_card_back_icon",
+            icon: "east_back",
+            iconCounterId: "pr_cards_tableau_east_counter_".concat(this.playerId),
+            initialValue: 0,
+        });
+        [
+            "pr_cards_east_counter_".concat(this.playerId),
+            "pr_cards_tableau_east_counter_".concat(this.playerId),
+        ].forEach(function (nodeId) {
+            _this.game.tooltipManager.addIconTooltip({
+                iconHtml: tplIcon({
+                    icon: "east_back",
+                    classes: "pr_card_back_icon",
+                    style: "width: 30px; height: 45px;",
+                }),
+                nodeId: nodeId,
+                title: _("East cards"),
+                text: _("The number of cards from the East deck this player has in their hand."),
+            });
         });
         var prestigeText = _("The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory.");
         var prestigeTitle = _("${prestige} Prestige");
@@ -6367,9 +6407,9 @@ var PRPlayer = (function () {
         var _this = this;
         var _c, _d, _e, _f, _g, _h;
         var gamedatas = _a.gamedatas, playerGamedatas = _a.playerGamedatas;
-        this.counters.cards.east.setValue(playerGamedatas.hand.counts.east);
-        this.counters.cards.west.setValue(playerGamedatas.hand.counts.west);
-        this.counters.florins.setValue(playerGamedatas.florins);
+        this.setHandCards(EAST, playerGamedatas.hand.counts.east);
+        this.setHandCards(WEST, playerGamedatas.hand.counts.west);
+        this.setFlorins(playerGamedatas.florins);
         if ((_c = this.game.framework().scoreCtrl) === null || _c === void 0 ? void 0 : _c[this.playerId]) {
             this.game
                 .framework()
@@ -6436,6 +6476,22 @@ var PRPlayer = (function () {
         var ability = _a.ability;
         this.activeAbilities = this.activeAbilities.filter(function (item) { return item !== ability; });
     };
+    PRPlayer.prototype.incFlorins = function (value) {
+        this.counters.florins.incValue(value);
+        this.counters.florinsTableau.incValue(value);
+    };
+    PRPlayer.prototype.setFlorins = function (value) {
+        this.counters.florins.setValue(value);
+        this.counters.florinsTableau.setValue(value);
+    };
+    PRPlayer.prototype.incHandCards = function (region, value) {
+        this.counters.cards[region].incValue(value);
+        this.counters.cardsTableau[region].incValue(value);
+    };
+    PRPlayer.prototype.setHandCards = function (region, value) {
+        this.counters.cards[region].setValue(value);
+        this.counters.cardsTableau[region].setValue(value);
+    };
     PRPlayer.prototype.updateCardTooltips = function () {
         this.tableau.updateCardTooltips();
     };
@@ -6464,7 +6520,7 @@ var PRPlayer = (function () {
                         this.game.tableauCardManager.removeCard(card);
                         _b.label = 4;
                     case 4:
-                        this.counters.cards[card.region].incValue(1);
+                        this.incHandCards(card.region, 1);
                         return [2];
                 }
             });
@@ -6482,7 +6538,7 @@ var PRPlayer = (function () {
                         _b.sent();
                         _b.label = 2;
                     case 2:
-                        this.counters.cards[card.region].incValue(-1);
+                        this.incHandCards(card.region, -1);
                         return [2];
                 }
             });
@@ -6536,6 +6592,9 @@ var PlayerTableau = (function () {
             overlap: overlap,
             overlapEmpireSquares: overlapEmpireSquares,
             player: player,
+            showCounters: this.game.settings.get({
+                id: SHOW_FLORIN_CARD_COUNTERS,
+            }),
             title: _("${tkn_playerName}'s tableau").replace("${tkn_playerName}", tplLogTokenPlayerName({
                 name: player.name,
                 color: player.color,
@@ -6644,9 +6703,9 @@ var PlayerTableau = (function () {
     return PlayerTableau;
 }());
 var tplPlayerTableauContent = function (_a) {
-    var player = _a.player, title = _a.title, overlap = _a.overlap, overlapEmpireSquares = _a.overlapEmpireSquares;
+    var player = _a.player, title = _a.title, overlap = _a.overlap, overlapEmpireSquares = _a.overlapEmpireSquares, showCounters = _a.showCounters;
     var playerId = player.id;
-    return "\n  <div class=\"pr_player_tableau_title\"><span>".concat(title, "</span></div>\n  <div class=\"pr_player_tableau_cards_container\" data-overlap=\"").concat(overlap, "\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n    <div class=\"pr_player_board_container\">\n      <div id=\"old_maids_").concat(playerId, "\" class=\"pr_old_maids_container\"></div>\n      <div id=\"player_bank_board_").concat(playerId, "\" class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    </div>\n\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n  </div>\n    ");
+    return "\n  <div class=\"pr_player_tableau_title\" data-show-counters=\"".concat(showCounters, "\">\n    <div class=\"pr_tableau_title_icon_container\"></div>\n      <span class=\"pr_title\">").concat(title, "</span>\n    <div id=\"pr_tableau_title_counters_").concat(playerId, "\" class=\"pr_tableau_title_icon_container\"></div>\n  </div>\n  <div class=\"pr_player_tableau_cards_container\" data-overlap=\"").concat(overlap, "\">\n    <div id=\"tableau_west_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"west\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n    <div class=\"pr_player_board_container\">\n      <div id=\"old_maids_").concat(playerId, "\" class=\"pr_old_maids_container\"></div>\n      <div id=\"player_bank_board_").concat(playerId, "\" class=\"pr_player_board\" data-color=\"").concat(COLOR_MAP[player.color], "\"></div>\n    </div>\n\n    <div id=\"tableau_east_").concat(playerId, "\" class=\"pr_player_board_tableau_cards\" data-region=\"east\" data-overlap=\"").concat(overlap, "\" data-overlap-empire-squares=\"").concat(overlapEmpireSquares, "\"></div>\n  </div>\n    ");
 };
 var tplPlayerPanel = function (_a) {
     var banker = _a.banker, playerId = _a.playerId;
@@ -6661,7 +6720,7 @@ var tplPlayerTableauxContainer = function (_a) {
         .join(""), "\n    </div>\n  ");
 };
 var getSettingsConfig = function () {
-    var _a, _b;
+    var _a, _b, _c;
     return ({
         layout: {
             id: "layout",
@@ -6755,22 +6814,29 @@ var getSettingsConfig = function () {
                     },
                     type: "slider",
                 },
-                _a[CARD_SIZE_IN_TABLEAU] = {
-                    id: CARD_SIZE_IN_TABLEAU,
+                _a[CARD_INFO_IN_TOOLTIP] = {
+                    id: CARD_INFO_IN_TOOLTIP,
                     onChangeInSetup: false,
-                    label: _("Size of cards in tableau"),
-                    defaultValue: 100,
-                    sliderConfig: {
-                        step: 5,
-                        padding: 0,
-                        range: {
-                            min: 50,
-                            max: 200,
+                    defaultValue: ENABLED,
+                    label: _("Show card info in tooltip"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
                         },
-                    },
-                    type: "slider",
+                        {
+                            label: _("Disabled (card image only)"),
+                            value: DISABLED,
+                        },
+                    ],
                 },
-                _a[CARDS_IN_TABLEAU_OVERLAP] = {
+                _a),
+        },
+        tableau: {
+            id: "tableau",
+            config: (_b = {},
+                _b[CARDS_IN_TABLEAU_OVERLAP] = {
                     id: CARDS_IN_TABLEAU_OVERLAP,
                     onChangeInSetup: false,
                     defaultValue: DISABLED,
@@ -6787,7 +6853,7 @@ var getSettingsConfig = function () {
                         },
                     ],
                 },
-                _a[OVERLAP_EMPIRE_SQUARES] = {
+                _b[OVERLAP_EMPIRE_SQUARES] = {
                     id: OVERLAP_EMPIRE_SQUARES,
                     onChangeInSetup: false,
                     defaultValue: ENABLED,
@@ -6808,11 +6874,26 @@ var getSettingsConfig = function () {
                         },
                     ],
                 },
-                _a[CARD_INFO_IN_TOOLTIP] = {
-                    id: CARD_INFO_IN_TOOLTIP,
+                _b[CARD_SIZE_IN_TABLEAU] = {
+                    id: CARD_SIZE_IN_TABLEAU,
+                    onChangeInSetup: false,
+                    label: _("Size of cards in tableau"),
+                    defaultValue: 100,
+                    sliderConfig: {
+                        step: 5,
+                        padding: 0,
+                        range: {
+                            min: 50,
+                            max: 200,
+                        },
+                    },
+                    type: "slider",
+                },
+                _b[SHOW_FLORIN_CARD_COUNTERS] = {
+                    id: SHOW_FLORIN_CARD_COUNTERS,
                     onChangeInSetup: false,
                     defaultValue: ENABLED,
-                    label: _("Show card info in tooltip"),
+                    label: _("Show Florin and cards in hand counters"),
                     type: "select",
                     options: [
                         {
@@ -6820,17 +6901,17 @@ var getSettingsConfig = function () {
                             value: ENABLED,
                         },
                         {
-                            label: _("Disabled (card image only)"),
+                            label: _("Disabled"),
                             value: DISABLED,
                         },
                     ],
                 },
-                _a),
+                _b),
         },
         gameplay: {
-            id: _("gameplay"),
-            config: (_b = {},
-                _b[REPRESS_TOKENS_TO_THRONES] = {
+            id: "gameplay",
+            config: (_c = {},
+                _c[REPRESS_TOKENS_TO_THRONES] = {
                     id: REPRESS_TOKENS_TO_THRONES,
                     onChangeInSetup: false,
                     defaultValue: ENABLED,
@@ -6847,7 +6928,24 @@ var getSettingsConfig = function () {
                         },
                     ],
                 },
-                _b[PREF_SHOW_ANIMATIONS] = {
+                _c[CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY] = {
+                    id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+                    onChangeInSetup: false,
+                    defaultValue: DISABLED,
+                    label: _("Confirm end of turn and player switch only"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
+                        },
+                        {
+                            label: _("Disabled (confirm every move)"),
+                            value: DISABLED,
+                        },
+                    ],
+                },
+                _c[PREF_SHOW_ANIMATIONS] = {
                     id: PREF_SHOW_ANIMATIONS,
                     onChangeInSetup: false,
                     defaultValue: ENABLED,
@@ -6864,7 +6962,7 @@ var getSettingsConfig = function () {
                         },
                     ],
                 },
-                _b[PREF_ANIMATION_SPEED] = {
+                _c[PREF_ANIMATION_SPEED] = {
                     id: PREF_ANIMATION_SPEED,
                     onChangeInSetup: false,
                     label: _("Animation speed"),
@@ -6883,7 +6981,7 @@ var getSettingsConfig = function () {
                     },
                     type: "slider",
                 },
-                _b),
+                _c),
         },
     });
 };
@@ -6895,6 +6993,10 @@ var Settings = (function () {
             {
                 id: "layout",
                 name: _("Layout"),
+            },
+            {
+                id: "tableau",
+                name: _("Player Tableau"),
             },
             {
                 id: "gameplay",
@@ -7027,7 +7129,7 @@ var Settings = (function () {
     };
     Settings.prototype.onChangeCardSizeInLogSetting = function (value) {
         var ROOT = document.documentElement;
-        ROOT.style.setProperty('--paxRenLogCardScale', "".concat(Number(value) / 100));
+        ROOT.style.setProperty("--paxRenLogCardScale", "".concat(Number(value) / 100));
     };
     Settings.prototype.onChangeCardSizeInTableauSetting = function (value) {
         var node = document.getElementById("pr_player_tableaux");
@@ -7114,6 +7216,13 @@ var Settings = (function () {
         this.game.tableauCardManager.updateCardTooltips();
         this.game.victoryCardManager.updateCardTooltips();
         this.game.updateLogTooltips();
+    };
+    Settings.prototype.onChangeFlorinCardCountersTableauSetting = function (value) {
+        var elements = document.getElementsByClassName("pr_player_tableau_title");
+        for (var i = 0; i < elements.length; i++) {
+            var element = elements.item(i);
+            element.setAttribute("data-show-counters", value);
+        }
     };
     Settings.prototype.changeTab = function (_a) {
         var id = _a.id;

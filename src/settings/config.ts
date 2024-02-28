@@ -133,21 +133,28 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
         },
         type: "slider",
       },
-      [CARD_SIZE_IN_TABLEAU]: {
-        id: CARD_SIZE_IN_TABLEAU,
+      [CARD_INFO_IN_TOOLTIP]: {
+        id: CARD_INFO_IN_TOOLTIP,
         onChangeInSetup: false,
-        label: _("Size of cards in tableau"),
-        defaultValue: 100,
-        sliderConfig: {
-          step: 5,
-          padding: 0,
-          range: {
-            min: 50,
-            max: 200,
+        defaultValue: ENABLED,
+        label: _("Show card info in tooltip"),
+        type: "select",
+        options: [
+          {
+            label: _("Enabled"),
+            value: ENABLED,
           },
-        },
-        type: "slider",
+          {
+            label: _("Disabled (card image only)"),
+            value: DISABLED,
+          },
+        ],
       },
+    },
+  },
+  tableau: {
+    id: "tableau",
+    config: {
       [CARDS_IN_TABLEAU_OVERLAP]: {
         id: CARDS_IN_TABLEAU_OVERLAP,
         onChangeInSetup: false,
@@ -186,11 +193,26 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
           },
         ],
       },
-      [CARD_INFO_IN_TOOLTIP]: {
-        id: CARD_INFO_IN_TOOLTIP,
+      [CARD_SIZE_IN_TABLEAU]: {
+        id: CARD_SIZE_IN_TABLEAU,
+        onChangeInSetup: false,
+        label: _("Size of cards in tableau"),
+        defaultValue: 100,
+        sliderConfig: {
+          step: 5,
+          padding: 0,
+          range: {
+            min: 50,
+            max: 200,
+          },
+        },
+        type: "slider",
+      },
+      [SHOW_FLORIN_CARD_COUNTERS]: {
+        id: SHOW_FLORIN_CARD_COUNTERS,
         onChangeInSetup: false,
         defaultValue: ENABLED,
-        label: _("Show card info in tooltip"),
+        label: _("Show Florin and cards in hand counters"),
         type: "select",
         options: [
           {
@@ -198,7 +220,7 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
             value: ENABLED,
           },
           {
-            label: _("Disabled (card image only)"),
+            label: _("Disabled"),
             value: DISABLED,
           },
         ],
@@ -206,7 +228,7 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
     },
   },
   gameplay: {
-    id: _("gameplay"),
+    id: "gameplay",
     config: {
       [REPRESS_TOKENS_TO_THRONES]: {
         id: REPRESS_TOKENS_TO_THRONES,
@@ -221,6 +243,23 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
           },
           {
             label: _("Disabled (repress to empire squares)"),
+            value: DISABLED,
+          },
+        ],
+      },
+      [CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY]: {
+        id: CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY,
+        onChangeInSetup: false,
+        defaultValue: DISABLED,
+        label: _("Confirm end of turn and player switch only"),
+        type: "select",
+        options: [
+          {
+            label: _("Enabled"),
+            value: ENABLED,
+          },
+          {
+            label: _("Disabled (confirm every move)"),
             value: DISABLED,
           },
         ],
@@ -260,7 +299,7 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
           },
         },
         type: "slider",
-      }
+      },
     },
   },
 });

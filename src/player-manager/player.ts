@@ -31,10 +31,16 @@ class PRPlayer {
       west?: IconCounter;
       east?: IconCounter;
     };
+    cardsTableau?: {
+      west?: IconCounter;
+      east?: IconCounter;
+    };
     florins?: IconCounter;
+    florinsTableau?: IconCounter;
   } = {
     prestige: {},
     cards: {},
+    cardsTableau: {},
   };
   private activeAbilities = [];
   // private hand: LineStock<TableauCard>;
@@ -141,11 +147,25 @@ class PRPlayer {
       iconCounterId: `pr_florins_counter_${this.playerId}`,
       initialValue: player.florins,
     });
-    this.game.tooltipManager.addIconTooltip({
-      iconHtml: tplIcon({ icon: "florin", style: "--paxRenIconScale: 0.85;" }),
-      nodeId: `pr_florins_counter_${this.playerId}`,
-      title: _("Florins"),
-      text: _("The amount of Florins this player owns."),
+    this.counters.florinsTableau = new IconCounter({
+      containerId: `pr_tableau_title_counters_${this.playerId}`,
+      icon: "florin",
+      iconCounterId: `pr_florins_tableau_counter_${this.playerId}`,
+      initialValue: player.florins,
+    });
+    [
+      `pr_florins_counter_${this.playerId}`,
+      `pr_florins_tableau_counter_${this.playerId}`,
+    ].forEach((nodeId) => {
+      this.game.tooltipManager.addIconTooltip({
+        iconHtml: tplIcon({
+          icon: "florin",
+          style: "--paxRenIconScale: 0.85;",
+        }),
+        nodeId,
+        title: _("Florins"),
+        text: _("The amount of Florins this player owns."),
+      });
     });
 
     this.counters.cards.west = new IconCounter({
@@ -155,15 +175,29 @@ class PRPlayer {
       iconCounterId: `pr_cards_west_counter_${this.playerId}`,
       initialValue: 0,
     });
-    this.game.tooltipManager.addIconTooltip({
-      iconHtml: tplIcon({
-        icon: `west_back`,
-        classes: "pr_card_back_icon",
-        style: "width: 30px; height: 45px;",
-      }),
-      nodeId: `pr_cards_west_counter_${this.playerId}`,
-      title: _("West cards"),
-      text: _("The number of cards from the West deck this player has in their hand."),
+    this.counters.cardsTableau.west = new IconCounter({
+      containerId: `pr_tableau_title_counters_${this.playerId}`,
+      extraIconClasses: "pr_card_back_icon",
+      icon: "west_back",
+      iconCounterId: `pr_cards_tableau_west_counter_${this.playerId}`,
+      initialValue: 0,
+    });
+    [
+      `pr_cards_west_counter_${this.playerId}`,
+      `pr_cards_tableau_west_counter_${this.playerId}`,
+    ].forEach((nodeId) => {
+      this.game.tooltipManager.addIconTooltip({
+        iconHtml: tplIcon({
+          icon: `west_back`,
+          classes: "pr_card_back_icon",
+          style: "width: 30px; height: 45px;",
+        }),
+        nodeId,
+        title: _("West cards"),
+        text: _(
+          "The number of cards from the West deck this player has in their hand."
+        ),
+      });
     });
 
     this.counters.cards.east = new IconCounter({
@@ -173,15 +207,29 @@ class PRPlayer {
       iconCounterId: `pr_cards_east_counter_${this.playerId}`,
       initialValue: 0,
     });
-    this.game.tooltipManager.addIconTooltip({
-      iconHtml: tplIcon({
-        icon: `east_back`,
-        classes: "pr_card_back_icon",
-        style: "width: 30px; height: 45px;",
-      }),
-      nodeId: `pr_cards_east_counter_${this.playerId}`,
-      title: _("East cards"),
-      text: _("The number of cards from the East deck this player has in their hand."),
+    this.counters.cardsTableau.east = new IconCounter({
+      containerId: `pr_tableau_title_counters_${this.playerId}`,
+      extraIconClasses: "pr_card_back_icon",
+      icon: "east_back",
+      iconCounterId: `pr_cards_tableau_east_counter_${this.playerId}`,
+      initialValue: 0,
+    });
+    [
+      `pr_cards_east_counter_${this.playerId}`,
+      `pr_cards_tableau_east_counter_${this.playerId}`,
+    ].forEach((nodeId) => {
+      this.game.tooltipManager.addIconTooltip({
+        iconHtml: tplIcon({
+          icon: `east_back`,
+          classes: "pr_card_back_icon",
+          style: "width: 30px; height: 45px;",
+        }),
+        nodeId,
+        title: _("East cards"),
+        text: _(
+          "The number of cards from the East deck this player has in their hand."
+        ),
+      });
     });
 
     const prestigeText = _(
@@ -383,9 +431,9 @@ class PRPlayer {
     playerGamedatas: PaxRenaissancePlayerData;
     gamedatas: PaxRenaissanceGamedatas;
   }) {
-    this.counters.cards.east.setValue(playerGamedatas.hand.counts.east);
-    this.counters.cards.west.setValue(playerGamedatas.hand.counts.west);
-    this.counters.florins.setValue(playerGamedatas.florins);
+    this.setHandCards(EAST, playerGamedatas.hand.counts.east);
+    this.setHandCards(WEST, playerGamedatas.hand.counts.west);
+    this.setFlorins(playerGamedatas.florins);
     if (this.game.framework().scoreCtrl?.[this.playerId]) {
       this.game
         .framework()
@@ -517,6 +565,26 @@ class PRPlayer {
   // .##.....##.##....##....##.....##..##.....##.##...###.##....##
   // .##.....##..######.....##....####..#######..##....##..######.
 
+  public incFlorins(value: number) {
+    this.counters.florins.incValue(value);
+    this.counters.florinsTableau.incValue(value);
+  }
+
+  public setFlorins(value: number) {
+    this.counters.florins.setValue(value);
+    this.counters.florinsTableau.setValue(value);
+  }
+
+  public incHandCards(region: string, value: number) {
+    this.counters.cards[region].incValue(value);
+    this.counters.cardsTableau[region].incValue(value);
+  }
+
+  public setHandCards(region: string, value: number) {
+    this.counters.cards[region].setValue(value);
+    this.counters.cardsTableau[region].setValue(value);
+  }
+
   public updateCardTooltips() {
     this.tableau.updateCardTooltips();
   }
@@ -534,7 +602,7 @@ class PRPlayer {
       });
       this.game.tableauCardManager.removeCard(card);
     }
-    this.counters.cards[card.region].incValue(1);
+    this.incHandCards(card.region, 1);
   }
 
   public async removeCardFromHand({
@@ -545,6 +613,6 @@ class PRPlayer {
     if (this.getPlayerId() === this.game.getPlayerId()) {
       await this.game.hand.removeCard(card);
     }
-    this.counters.cards[card.region].incValue(-1);
+    this.incHandCards(card.region, -1);
   }
 }

@@ -11,6 +11,10 @@ class Settings {
       name: _("Layout"),
     },
     {
+      id: "tableau",
+      name: _("Player Tableau"),
+    },
+    {
       id: "gameplay",
       name: _("Gameplay"),
     },
@@ -223,7 +227,7 @@ class Settings {
 
   public onChangeCardSizeInLogSetting(value: number) {
     const ROOT = document.documentElement;
-    ROOT.style.setProperty('--paxRenLogCardScale', `${Number(value) / 100}`);
+    ROOT.style.setProperty("--paxRenLogCardScale", `${Number(value) / 100}`);
   }
 
   public onChangeCardSizeInTableauSetting(value: number) {
@@ -327,7 +331,17 @@ class Settings {
     this.game.tableauCardManager.updateCardTooltips();
     this.game.victoryCardManager.updateCardTooltips();
     this.game.updateLogTooltips();
-    // this.game.playerManager.get
+  }
+
+  public onChangeFlorinCardCountersTableauSetting(value: string) {
+    const elements = document.getElementsByClassName(
+      "pr_player_tableau_title"
+    );
+
+    for (let i = 0; i < elements.length; i++) {
+      const element = elements.item(i);
+      element.setAttribute("data-show-counters", value);
+    }
   }
 
   //  .##.....##.########.####.##.......####.########.##....##

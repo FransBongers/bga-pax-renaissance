@@ -2,17 +2,23 @@ const tplPlayerTableauContent = ({
   player,
   title,
   overlap,
-  overlapEmpireSquares
+  overlapEmpireSquares,
+  showCounters
 }: {
   player: PaxRenaissancePlayerData;
   title: string;
   overlap: string;
   overlapEmpireSquares: string;
+  showCounters: string;
 }) => {
 
   const playerId = player.id;
   return `
-  <div class="pr_player_tableau_title"><span>${title}</span></div>
+  <div class="pr_player_tableau_title" data-show-counters="${showCounters}">
+    <div class="pr_tableau_title_icon_container"></div>
+      <span class="pr_title">${title}</span>
+    <div id="pr_tableau_title_counters_${playerId}" class="pr_tableau_title_icon_container"></div>
+  </div>
   <div class="pr_player_tableau_cards_container" data-overlap="${overlap}">
     <div id="tableau_west_${playerId}" class="pr_player_board_tableau_cards" data-region="west" data-overlap="${overlap}" data-overlap-empire-squares="${overlapEmpireSquares}"></div>
     <div class="pr_player_board_container">

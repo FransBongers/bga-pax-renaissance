@@ -3858,9 +3858,6 @@
 }
 
 .pr_one_shot[data-one-shot-id=APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT] {
-  background-image: url("img/PREN2 One shot Apostacy I C.png");
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
   background-position-x: 0%;
   background-position-y: 0%;
 }
@@ -4797,7 +4794,29 @@
   font-weight: bold;
   font-size: large;
   word-wrap: break-word;
+  width: 100%;
   margin: 10px;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.pr_player_tableau_title .pr_tableau_title_icon_container {
+  width: 160px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.pr_player_tableau_title .pr_title {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.pr_player_tableau_title[data-show-counters=disabled] .pr_tableau_title_icon_container {
+  display: none;
 }
 
 .pr_player_tableau_cards_container {
@@ -4973,7 +4992,7 @@
   background-color: rgba(248, 248, 248, 0.5);
 }
 .pr_settings_modal #setting_modal_content {
-  min-height: 340px;
+  min-height: 300px;
 }
 .pr_settings_modal #setting_modal_content .pr_settings_modal_tabs {
   display: flex;
@@ -4982,7 +5001,7 @@
 }
 .pr_settings_modal #setting_modal_content .pr_settings_modal_tabs .pr_settings_modal_tab {
   flex-grow: 1;
-  width: 50%;
+  width: 33.333333333%;
   background-color: rgba(30, 20, 17, 0.5);
   border-bottom: 1px solid black;
   border-left: 1px solid black;

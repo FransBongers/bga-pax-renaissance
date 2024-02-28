@@ -363,7 +363,7 @@ class NotificationManager {
     }
     const player = this.getPlayer({ playerId });
     if (fromLocationId.startsWith("hand_")) {
-      player.counters.cards[(card as TableauCard).region].incValue(-1);
+      player.incHandCards((card as TableauCard).region, -1);
       this.game.openHandsModal.removeCard({
         playerId,
         card: card as TableauCard,
@@ -401,7 +401,7 @@ class NotificationManager {
       );
     } else {
       // Only from hand left
-      player.counters.cards[queen.region].incValue(-1);
+      player.incHandCards(queen.region, -1);
       this.game.openHandsModal.removeCard({
         playerId,
         card: queen,
@@ -557,7 +557,7 @@ class NotificationManager {
 
   async notif_payFlorinsToChina(notif: Notif<NotifPayFlorinsToChinaArgs>) {
     const { playerId, amount } = notif.args;
-    this.getPlayer({ playerId }).counters.florins.incValue(-amount);
+    this.getPlayer({ playerId }).incFlorins(-amount);
     await this.game.market.moveFlorinAnimation({
       fromId: `pr_florins_counter_${playerId}_icon`,
       toId: "pr_china",
@@ -654,7 +654,7 @@ class NotificationManager {
     const { playerId, card } = notif.args;
     const player = this.getPlayer({ playerId });
 
-    player.counters.cards[card.region].incValue(-1);
+    player.incHandCards(card.region, -1);
     this.game.openHandsModal.removeCard({ playerId, card });
     await player.tableau.addCard(card);
     this.addPrestige({ player, prestige: card.prestige });
@@ -778,7 +778,7 @@ class NotificationManager {
         toId: `pr_florins_counter_${playerId}_icon`,
       });
     }
-    this.getPlayer({ playerId }).counters.florins.incValue(-cost);
+    this.getPlayer({ playerId }).incFlorins(-cost);
     if (cost > 0) {
       await this.game.market.moveFlorinAnimation({
         toId: "pr_china",
@@ -849,7 +849,7 @@ class NotificationManager {
     const { playerId, card, value } = notif.args;
     const player = this.getPlayer({ playerId });
     // await player.removeCardFromHand({ card });
-    player.counters.florins.incValue(value);
+    player.incFlorins(value);
   }
 
   async notif_returnToSupply(notif: Notif<NotifReturnToSupplyArgs>) {
@@ -894,7 +894,7 @@ class NotificationManager {
 
   async notif_sellRoyalCouple(notif: Notif<NotifSellRoyalCoupleArgs>) {
     const { playerId, value } = notif.args;
-    this.getPlayer({ playerId }).counters.florins.incValue(value);
+    this.getPlayer({ playerId }).incFlorins(value);
   }
 
   async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {
@@ -910,12 +910,12 @@ class NotificationManager {
       fromId: `pr_market_${region}_${column}_florins`,
       index: 1,
     });
-    this.getPlayer({ playerId }).counters.florins.incValue(1);
+    this.getPlayer({ playerId }).incFlorins(1);
   }
 
   async notif_tableauOpTaxPay(notif: Notif<NotifTableauOpTaxPayArgs>) {
     const { playerId } = notif.args;
-    this.getPlayer({ playerId }).counters.florins.incValue(-1);
+    this.getPlayer({ playerId }).incFlorins(-1);
     await this.game.market.moveFlorinAnimation({
       fromId: `pr_florins_counter_${playerId}_icon`,
       toId: "pr_china",
@@ -955,7 +955,7 @@ class NotificationManager {
       fromId: `pr_market_${region}_0_florins`,
       index: 1,
     });
-    this.getPlayer({ playerId }).counters.florins.incValue(amount);
+    this.getPlayer({ playerId }).incFlorins(amount);
     // return Promise.resolve();
   }
 
@@ -990,7 +990,7 @@ class NotificationManager {
       fromId: `pr_market_${region}_0_florins`,
       index: 1,
     });
-    this.getPlayer({ playerId }).counters.florins.incValue(amount);
+    this.getPlayer({ playerId }).incFlorins(amount);
     return Promise.resolve();
   }
 

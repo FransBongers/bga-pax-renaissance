@@ -81,7 +81,7 @@
   }
 
   #setting_modal_content {
-    min-height: 340px;
+    min-height: 300px;
 
     .pr_settings_modal_tabs {
       display: flex;
@@ -90,7 +90,7 @@
 
       .pr_settings_modal_tab {
         flex-grow: 1;
-        width: 50%;
+        width: 33.333333333%;
         background-color: rgb(30, 20, 17, 0.5);
         border-bottom: 1px solid black;
         border-left: 1px solid black;

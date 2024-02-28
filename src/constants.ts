@@ -25,6 +25,7 @@ const OVERLAP_EMPIRE_SQUARES = 'overlapEmpireSquares';
 const CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOnly';
 const PREF_SHOW_ANIMATIONS = 'showAnimations';
 const PREF_ANIMATION_SPEED = 'animationSpeed';
+const SHOW_FLORIN_CARD_COUNTERS = 'florinCardCountersTableau';
 
 /**
  * Map location types

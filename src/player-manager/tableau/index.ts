@@ -76,6 +76,9 @@ class PlayerTableau {
           overlap,
           overlapEmpireSquares,
           player,
+          showCounters: this.game.settings.get({
+            id: SHOW_FLORIN_CARD_COUNTERS,
+          }) as string,
           // Not using format_string_recursive here as tkn_playerName requires players to be set up,
           // but this is during player setup
           title: _("${tkn_playerName}'s tableau").replace(
