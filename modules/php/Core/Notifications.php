@@ -725,7 +725,7 @@ class Notifications
 
   public static function startTurn($player)
   {
-    self::message('${tkn_playerName} starts their turn', [
+    self::message(clienttranslate('${tkn_playerName} starts their turn'), [
       'player' => $player,
     ]);
   }
@@ -784,7 +784,7 @@ class Notifications
       TABLEAU_OPS_SELECT_EAST_AND_WEST => clienttranslate('East & West'),
     ];
 
-    self::message('${tkn_playerName} performs Tableau Ops ${action}', [
+    self::message(clienttranslate('${tkn_playerName} performs Tableau Ops ${action}'), [
       'player' => $player,
       'action' => $actionTextMap[$action],
       'i18n' => ['action']

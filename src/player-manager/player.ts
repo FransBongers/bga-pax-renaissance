@@ -145,7 +145,7 @@ class PRPlayer {
       iconHtml: tplIcon({ icon: "florin", style: "--paxRenIconScale: 0.85;" }),
       nodeId: `pr_florins_counter_${this.playerId}`,
       title: _("Florins"),
-      text: "The amount of Florins this player owns.",
+      text: _("The amount of Florins this player owns."),
     });
 
     this.counters.cards.west = new IconCounter({
@@ -163,7 +163,7 @@ class PRPlayer {
       }),
       nodeId: `pr_cards_west_counter_${this.playerId}`,
       title: _("West cards"),
-      text: "The number of cards from the West deck this player has in their hand.",
+      text: _("The number of cards from the West deck this player has in their hand."),
     });
 
     this.counters.cards.east = new IconCounter({
@@ -181,7 +181,7 @@ class PRPlayer {
       }),
       nodeId: `pr_cards_east_counter_${this.playerId}`,
       title: _("East cards"),
-      text: "The number of cards from the East deck this player has in their hand.",
+      text: _("The number of cards from the East deck this player has in their hand."),
     });
 
     const prestigeText = _(

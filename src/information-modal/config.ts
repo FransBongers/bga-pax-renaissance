@@ -13,51 +13,49 @@ const getBattleTableConfig = (): {
   rows: [
     {
       type: {
-        iconType: 'operation',
+        iconType: "operation",
         icons: [CAMPAIGN_OP],
-        text: _('CAMPAIGN'),
+        text: _("CAMPAIGN"),
       },
       attacker: [
-        _("• Knights in attacker's Location adjacent to target Empire")
+        _("• Knights in attacker's Location adjacent to target Empire"),
       ],
-      defender: [
-        _("• Knights / Rooks in target Empire")
-      ],
+      defender: [_("• Knights / Rooks in target Empire")],
       victorPlacement: [
-        _('• (optional) All Repressed Tokens'),
-        _('• Bonus Concession')
+        _("• (optional) All Repressed Tokens"),
+        _("• Bonus Concession"),
       ],
-      nonStrawman: 'Place King as Vassal.',
-      strawman: 'Not allowed.'
+      nonStrawman: _("Place King as Vassal."),
+      strawman: _("Not allowed."),
     },
     {
       type: {
-        iconType: 'oneShot',
+        iconType: "oneShot",
         icons: [CONSPIRACY_ONE_SHOT],
-        text: _('CONSPIRACY'),
+        text: _("CONSPIRACY"),
       },
       attacker: [
         _("• Agents"),
         _("• Pirates bordering"),
         _("• Repressed Knights / Rooks"),
       ],
-      defender: [
-        _("• Knights / Rooks in card's Location")
-      ],
+      defender: [_("• Knights / Rooks in card's Location")],
       victorPlacement: [
-        _('• Agents'),
-        _('• Repressed Knights / Rooks'),
-        _('• (optional) Repressed Pawns'),
-        _('• Bonus Concession')
+        _("• Agents"),
+        _("• Repressed Knights / Rooks"),
+        _("• (optional) Repressed Pawns"),
+        _("• Bonus Concession"),
       ],
-      nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop.',
-      strawman: 'Flip Empire Card.'
+      nonStrawman: _(
+        "Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop."
+      ),
+      strawman: _("Flip Empire Card."),
     },
     {
       type: {
-        iconType: 'oneShot',
+        iconType: "oneShot",
         icons: [PEASANT_REVOLT_ONE_SHOT],
-        text: _('PEASANT REVOLT'),
+        text: _("PEASANT REVOLT"),
       },
       attacker: [
         _("• Agents"),
@@ -65,23 +63,22 @@ const getBattleTableConfig = (): {
         _("• Your Concessions bordering"),
         _("• Repressed Pawns"),
       ],
-      defender: [
-        _("• Knights / Rooks in card's Location")
-      ],
+      defender: [_("• Knights / Rooks in card's Location")],
       victorPlacement: [
-        _('• Agents'),
-        _('• Repressed Pawns'),
-        _('• (optional) Repressed Knights / Rooks'),
-        _('• Bonus Concession')
+        _("• Agents"),
+        _("• Repressed Pawns"),
+        _("• (optional) Repressed Knights / Rooks"),
+        _("• Bonus Concession"),
       ],
-      nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop.',
-      strawman: 'Flip Empire Card.'
+      nonStrawman:
+        _("Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop."),
+      strawman: _("Flip Empire Card."),
     },
     {
       type: {
-        iconType: 'oneShot',
-        icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT,REFORMATION_ONE_SHOT],
-        text: _('RELIGIOUS WAR'),
+        iconType: "oneShot",
+        icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT, REFORMATION_ONE_SHOT],
+        text: _("RELIGIOUS WAR"),
       },
       attacker: [
         _("• Agents (Knights & Rooks)"),
@@ -94,26 +91,23 @@ const getBattleTableConfig = (): {
         _("• Heretic Pirates bordering"),
       ],
       victorPlacement: [
-        _('• Agents'),
-        _('• (optional) All Repressed Tokens'),
-        _('• Bonus Concession')
+        _("• Agents"),
+        _("• (optional) All Repressed Tokens"),
+        _("• Bonus Concession"),
       ],
-      nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop. Change Map Card to the indicated Theocracy.',
-      strawman: 'Flip Empire Card.'
+      nonStrawman: _(
+        "Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop. Change Map Card to the indicated Theocracy."
+      ),
+      strawman: _("Flip Empire Card."),
     },
-  ]
-})
+  ],
+});
 
 const getOperationsConfig = (): {
   headers: string[];
   rows: OperationsOneShotsInfoRow[];
 } => ({
-  headers: [
-    "",
-    _("TARGET"),
-    _("REQUIREMENT"),
-    _("EFFECT"),
-  ],
+  headers: ["", _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
   rows: [
     {
       icons: [INQUISITOR_OP_CATHOLIC],
@@ -155,7 +149,9 @@ const getOperationsConfig = (): {
     {
       icons: [VOTE_OP_EAST],
       target: _("Empire card in Tableau, same EAST or WEST as card"),
-      requirement: _("Have Concession majority. Pay 1 Florin per Repressed Token. Empire not on a Throne, or be a Vassal."),
+      requirement: _(
+        "Have Concession majority. Pay 1 Florin per Repressed Token. Empire not on a Throne, or be a Vassal."
+      ),
       effect: _(
         "Regime Change. Golden Liberty (optional): change Map Card to medieval."
       ),
@@ -170,9 +166,7 @@ const getOperationsConfig = (): {
     {
       icons: [SIEGE_OP],
       target: _("Rook / Knight / Pirate on Map with card's Location"),
-      effect: _(
-        "Kill target."
-      ),
+      effect: _("Kill target."),
     },
     {
       icons: [CAMPAIGN_OP],
@@ -189,15 +183,14 @@ const getOneShotsConfig = (): {
   headers: string[];
   rows: OperationsOneShotsInfoRow[];
 } => ({
-  headers: [
-    "",
-    _("TARGET"),
-    _("REQUIREMENT"),
-    _("EFFECT"),
-  ],
+  headers: ["", _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
   rows: [
     {
-      icons: [TRADE_SHIFT_NOVGOROD_ONE_SHOT, TRADE_SHIFT_RED_SEA_ONE_SHOT, TRADE_SHIFT_TIMBUKTU_ONE_SHOT],
+      icons: [
+        TRADE_SHIFT_NOVGOROD_ONE_SHOT,
+        TRADE_SHIFT_RED_SEA_ONE_SHOT,
+        TRADE_SHIFT_TIMBUKTU_ONE_SHOT,
+      ],
       target: _("Busted Disk on indicated Emporium"),
       effect: _(
         "New Trade Route. Move Busted disk to uncovered Emporium of the same color, Repressing Token."
@@ -206,7 +199,9 @@ const getOneShotsConfig = (): {
     {
       icons: [TRADE_SHIFT_SPICE_ISLAND_ONE_SHOT],
       target: _("Busted Disk on Spice Islands"),
-      requirement: _("Must have at least one Discovery Prestige in Tableau (not counting card being played)"),
+      requirement: _(
+        "Must have at least one Discovery Prestige in Tableau (not counting card being played)"
+      ),
       effect: _(
         "New Trade Route. Move Busted disk to uncovered Emporium of the same color, Repressing Token."
       ),
@@ -221,17 +216,21 @@ const getOneShotsConfig = (): {
     {
       icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT, REFORMATION_ONE_SHOT],
       target: _("Empire / Map Card on card's Location"),
-      requirement: _('Heretic(s) in target Empire.'),
+      requirement: _("Heretic(s) in target Empire."),
       effect: _(
         "Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."
       ),
     },
     {
-      icons: [APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT],
-      target: _("All players with both types of indicated Religious Prestige in Tableau"),
-      effect: _(
-        "Discard all Tableau cards with indicated Religious Prestige."
+      icons: [
+        APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT,
+        APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT,
+        APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT,
+      ],
+      target: _(
+        "All players with both types of indicated Religious Prestige in Tableau"
       ),
+      effect: _("Discard all Tableau cards with indicated Religious Prestige."),
     },
-  ]
-})
+  ],
+});

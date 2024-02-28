@@ -32,12 +32,13 @@ trait DebugTrait
   {
     // Cards::move('PREN076_SophiaPalaiologina','queens_portugal');
     // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
-
+    $this->debugPlaceCardInMarket('PREN030_SantaHermandad', WEST, 2);
+    
     // $this->debugPlaceCardInTableau('PREN097X_PodestaOfVenice', WEST, 2371052);
-    $this->debugPlaceCardInTableau('PREN101X_CivilEngineer', EAST, 2371052);
-    $this->debugPlaceCardInTableau('PREN110X_TransylvanianPlot', EAST, 2371052);
-    $this->debugPlaceCardInTableau('PREN129X_OratoryOfDivineLove', WEST, 2371052);
-    $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN101X_CivilEngineer', EAST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN110X_TransylvanianPlot', EAST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN129X_OratoryOfDivineLove', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
     // $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371053);
     // $this->debugPlaceCardInTableau('PREN043_Gutenberg', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN141X_WelserKleinVenedig', WEST, 2371052);

@@ -1,4 +1,3 @@
-var _a;
 var MIN_PLAY_AREA_WIDTH = 1516;
 var CLIENT_CONFIRM_TABLEAU_OPS = "clientConfirmTableauOpsState";
 var CLIENT_DECLARE_VICTORY_STATE = "clientDeclareVictoryState";
@@ -93,20 +92,6 @@ var EMPIRES = [
     PAPAL_STATES,
     PORTUGAL,
 ];
-var EMPIRE_NAME_MAP = (_a = {},
-    _a[EAST] = "The East",
-    _a[WEST] = "The West",
-    _a[ARAGON] = "Aragon",
-    _a[BYZANTIUM] = "Byzantium",
-    _a[ENGLAND] = "England",
-    _a[FRANCE] = "France",
-    _a[HOLY_ROMAN_EMIRE] = "Holy Roman Empire",
-    _a[HUNGARY] = "Hungary",
-    _a[MAMLUK] = "Mamluk",
-    _a[OTTOMAN] = "Ottoman",
-    _a[PAPAL_STATES] = "Papal States",
-    _a[PORTUGAL] = "Portugal",
-    _a);
 var EMPIRE_SQUARE_DESTINATION_KING = 'king';
 var EMPIRE_SQUARE_DESTINATION_VASSAL = 'vassal';
 var EMPIRE_SQUARE_ORIGIN_TABLEAU = 'tableau';
@@ -3896,51 +3881,47 @@ var getBattleTableConfig = function () { return ({
     rows: [
         {
             type: {
-                iconType: 'operation',
+                iconType: "operation",
                 icons: [CAMPAIGN_OP],
-                text: _('CAMPAIGN'),
+                text: _("CAMPAIGN"),
             },
             attacker: [
-                _("• Knights in attacker's Location adjacent to target Empire")
+                _("• Knights in attacker's Location adjacent to target Empire"),
             ],
-            defender: [
-                _("• Knights / Rooks in target Empire")
-            ],
+            defender: [_("• Knights / Rooks in target Empire")],
             victorPlacement: [
-                _('• (optional) All Repressed Tokens'),
-                _('• Bonus Concession')
+                _("• (optional) All Repressed Tokens"),
+                _("• Bonus Concession"),
             ],
-            nonStrawman: 'Place King as Vassal.',
-            strawman: 'Not allowed.'
+            nonStrawman: _("Place King as Vassal."),
+            strawman: _("Not allowed."),
         },
         {
             type: {
-                iconType: 'oneShot',
+                iconType: "oneShot",
                 icons: [CONSPIRACY_ONE_SHOT],
-                text: _('CONSPIRACY'),
+                text: _("CONSPIRACY"),
             },
             attacker: [
                 _("• Agents"),
                 _("• Pirates bordering"),
                 _("• Repressed Knights / Rooks"),
             ],
-            defender: [
-                _("• Knights / Rooks in card's Location")
-            ],
+            defender: [_("• Knights / Rooks in card's Location")],
             victorPlacement: [
-                _('• Agents'),
-                _('• Repressed Knights / Rooks'),
-                _('• (optional) Repressed Pawns'),
-                _('• Bonus Concession')
+                _("• Agents"),
+                _("• Repressed Knights / Rooks"),
+                _("• (optional) Repressed Pawns"),
+                _("• Bonus Concession"),
             ],
-            nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop.',
-            strawman: 'Flip Empire Card.'
+            nonStrawman: _("Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop."),
+            strawman: _("Flip Empire Card."),
         },
         {
             type: {
-                iconType: 'oneShot',
+                iconType: "oneShot",
                 icons: [PEASANT_REVOLT_ONE_SHOT],
-                text: _('PEASANT REVOLT'),
+                text: _("PEASANT REVOLT"),
             },
             attacker: [
                 _("• Agents"),
@@ -3948,23 +3929,21 @@ var getBattleTableConfig = function () { return ({
                 _("• Your Concessions bordering"),
                 _("• Repressed Pawns"),
             ],
-            defender: [
-                _("• Knights / Rooks in card's Location")
-            ],
+            defender: [_("• Knights / Rooks in card's Location")],
             victorPlacement: [
-                _('• Agents'),
-                _('• Repressed Pawns'),
-                _('• (optional) Repressed Knights / Rooks'),
-                _('• Bonus Concession')
+                _("• Agents"),
+                _("• Repressed Pawns"),
+                _("• (optional) Repressed Knights / Rooks"),
+                _("• Bonus Concession"),
             ],
-            nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop.',
-            strawman: 'Flip Empire Card.'
+            nonStrawman: _("Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop."),
+            strawman: _("Flip Empire Card."),
         },
         {
             type: {
-                iconType: 'oneShot',
+                iconType: "oneShot",
                 icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT, REFORMATION_ONE_SHOT],
-                text: _('RELIGIOUS WAR'),
+                text: _("RELIGIOUS WAR"),
             },
             attacker: [
                 _("• Agents (Knights & Rooks)"),
@@ -3977,22 +3956,17 @@ var getBattleTableConfig = function () { return ({
                 _("• Heretic Pirates bordering"),
             ],
             victorPlacement: [
-                _('• Agents'),
-                _('• (optional) All Repressed Tokens'),
-                _('• Bonus Concession')
+                _("• Agents"),
+                _("• (optional) All Repressed Tokens"),
+                _("• Bonus Concession"),
             ],
-            nonStrawman: 'Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop. Change Map Card to the indicated Theocracy.',
-            strawman: 'Flip Empire Card.'
+            nonStrawman: _("Place King in your Tableau with Repressed and (if from Throne) Queen and Bishop. Change Map Card to the indicated Theocracy."),
+            strawman: _("Flip Empire Card."),
         },
-    ]
+    ],
 }); };
 var getOperationsConfig = function () { return ({
-    headers: [
-        "",
-        _("TARGET"),
-        _("REQUIREMENT"),
-        _("EFFECT"),
-    ],
+    headers: ["", _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
     rows: [
         {
             icons: [INQUISITOR_OP_CATHOLIC],
@@ -4046,15 +4020,14 @@ var getOperationsConfig = function () { return ({
     ],
 }); };
 var getOneShotsConfig = function () { return ({
-    headers: [
-        "",
-        _("TARGET"),
-        _("REQUIREMENT"),
-        _("EFFECT"),
-    ],
+    headers: ["", _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
     rows: [
         {
-            icons: [TRADE_SHIFT_NOVGOROD_ONE_SHOT, TRADE_SHIFT_RED_SEA_ONE_SHOT, TRADE_SHIFT_TIMBUKTU_ONE_SHOT],
+            icons: [
+                TRADE_SHIFT_NOVGOROD_ONE_SHOT,
+                TRADE_SHIFT_RED_SEA_ONE_SHOT,
+                TRADE_SHIFT_TIMBUKTU_ONE_SHOT,
+            ],
             target: _("Busted Disk on indicated Emporium"),
             effect: _("New Trade Route. Move Busted disk to uncovered Emporium of the same color, Repressing Token."),
         },
@@ -4072,15 +4045,19 @@ var getOneShotsConfig = function () { return ({
         {
             icons: [CRUSADE_ONE_SHOT, JIHAD_ONE_SHOT, REFORMATION_ONE_SHOT],
             target: _("Empire / Map Card on card's Location"),
-            requirement: _('Heretic(s) in target Empire.'),
+            requirement: _("Heretic(s) in target Empire."),
             effect: _("Battle Casualties. If successful, Regime Change with Vassal. See Battle Table."),
         },
         {
-            icons: [APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT, APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT],
+            icons: [
+                APOSTASY_ISLAMIC_CATHOLIC_ONE_SHOT,
+                APOSTASY_REFORMIST_CATHOLIC_ONE_SHOT,
+                APOSTASY_REFORMIST_ISLAMIC_ONE_SHOT,
+            ],
             target: _("All players with both types of indicated Religious Prestige in Tableau"),
             effect: _("Discard all Tableau cards with indicated Religious Prestige."),
         },
-    ]
+    ],
 }); };
 var InformationModal = (function () {
     function InformationModal(game) {
@@ -6185,7 +6162,7 @@ var PRPlayer = (function () {
             iconHtml: tplIcon({ icon: "florin", style: "--paxRenIconScale: 0.85;" }),
             nodeId: "pr_florins_counter_".concat(this.playerId),
             title: _("Florins"),
-            text: "The amount of Florins this player owns.",
+            text: _("The amount of Florins this player owns."),
         });
         this.counters.cards.west = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
@@ -6202,7 +6179,7 @@ var PRPlayer = (function () {
             }),
             nodeId: "pr_cards_west_counter_".concat(this.playerId),
             title: _("West cards"),
-            text: "The number of cards from the West deck this player has in their hand.",
+            text: _("The number of cards from the West deck this player has in their hand."),
         });
         this.counters.cards.east = new IconCounter({
             containerId: "pr_player_panel_icons_".concat(this.playerId),
@@ -6219,7 +6196,7 @@ var PRPlayer = (function () {
             }),
             nodeId: "pr_cards_east_counter_".concat(this.playerId),
             title: _("East cards"),
-            text: "The number of cards from the East deck this player has in their hand.",
+            text: _("The number of cards from the East deck this player has in their hand."),
         });
         var prestigeText = _("The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory.");
         var prestigeTitle = _("${prestige} Prestige");
@@ -11345,6 +11322,24 @@ var TradeFairLevyState = (function () {
     };
     return TradeFairLevyState;
 }());
+var getEmpireName = function (empireId) {
+    var _a;
+    var map = (_a = {},
+        _a[EAST] = _("The East"),
+        _a[WEST] = _("The West"),
+        _a[ARAGON] = _("Aragon"),
+        _a[BYZANTIUM] = _("Byzantium"),
+        _a[ENGLAND] = _("England"),
+        _a[FRANCE] = _("France"),
+        _a[HOLY_ROMAN_EMIRE] = _("Holy Roman Empire"),
+        _a[HUNGARY] = _("Hungary"),
+        _a[MAMLUK] = _("Mamluk"),
+        _a[OTTOMAN] = _("Ottoman"),
+        _a[PAPAL_STATES] = _("Papal States"),
+        _a[PORTUGAL] = _("Portugal"),
+        _a);
+    return map[empireId];
+};
 var tplCardTooltipContainer = function (_a) {
     var card = _a.card, content = _a.content, style = _a.style;
     return "<div class=\"pr_card_tooltip\"".concat(style ? " style=\"".concat(style, "\"") : "", ">\n  <div class=\"pr_card_tooltip_inner_container\">\n    ").concat(content, "\n  </div>\n  ").concat(card, "\n</div>");
@@ -11353,7 +11348,7 @@ var tplOneShotSection = function (_a) {
     var oneShot = _a.oneShot, suitors = _a.suitors;
     return "\n  <div style=\"margin-right: 20%;\">\n  <span class=\"pr_section_title\">".concat(_("One-shot"), "</span>\n  ").concat(tplOneShotRow({ oneShot: oneShot }), "\n  </div>\n  ").concat(suitors
         ? "<div style=\"display: flex; flex-direction: column;\">\n    <span class=\"pr_section_title\">".concat(_("Suitors"), "</span>\n    ").concat(suitors
-            .map(function (suitor) { return "<span>".concat(EMPIRE_NAME_MAP[suitor], "</span>"); })
+            .map(function (suitor) { return "<span>".concat(_(getEmpireName(suitor)), "</span>"); })
             .join(""), "\n    </div>")
         : "");
 };
@@ -11382,7 +11377,7 @@ var tplAgentsRow = function (_a) {
 };
 var tplCardLocation = function (_a) {
     var location = _a.location;
-    return "<div class=\"pr_card_tooltip_row\" style=\"align-items: center; font-weight: bold;\">\n  <div class=\"pr_card_tooltip_row_icon\">\n  <div class=\"pr_empire_icon\" data-empire-id=\"".concat(location, "\"></div>\n  </div>\n  <span>").concat(EMPIRE_NAME_MAP[location], "</span>\n</div>");
+    return "<div class=\"pr_card_tooltip_row\" style=\"align-items: center; font-weight: bold;\">\n  <div class=\"pr_card_tooltip_row_icon\">\n  <div class=\"pr_empire_icon\" data-empire-id=\"".concat(location, "\"></div>\n  </div>\n  <span>").concat(_(getEmpireName(location)), "</span>\n</div>");
 };
 var tplPrestigeRow = function (_a) {
     var _b;

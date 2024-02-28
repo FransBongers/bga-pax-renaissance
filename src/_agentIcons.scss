@@ -46,7 +46,7 @@ $empire-icons-square: (
 
 @for $i from 1 through 4 {
   .pr_agent_icon[data-agent-icon="#{map.get($empire-icons-square,$i)}"] {
-    background-image: url("img/agents_square_2.webp");
+    background-image: url("img/agents_square.webp");
     background-size: 500% 100%;
     min-width: calc(var(--paxRenIconScale) * 40px);
     max-width: calc(var(--paxRenIconScale) * 40px);

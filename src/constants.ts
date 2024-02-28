@@ -157,21 +157,6 @@ const EMPIRES = [
   PORTUGAL,
 ];
 
-const EMPIRE_NAME_MAP = {
-  [EAST]: "The East", // TODO: Check if this is marked for translation somewhere
-  [WEST]: "The West", // TODO: Check if this is marked for translation somewhere
-  [ARAGON]: "Aragon",
-  [BYZANTIUM]: "Byzantium",
-  [ENGLAND]: "England",
-  [FRANCE]: "France",
-  [HOLY_ROMAN_EMIRE]: "Holy Roman Empire",
-  [HUNGARY]: "Hungary",
-  [MAMLUK]: "Mamluk",
-  [OTTOMAN]: "Ottoman",
-  [PAPAL_STATES]: "Papal States",
-  [PORTUGAL]: "Portugal",
-};
-
 /**
  * Origin and destination types used in regime changes
  */

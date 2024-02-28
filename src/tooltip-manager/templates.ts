@@ -1,3 +1,21 @@
+const getEmpireName = (empireId: string) => {
+  const map = {
+    [EAST]: _("The East"),
+    [WEST]: _("The West"),
+    [ARAGON]: _("Aragon"),
+    [BYZANTIUM]: _("Byzantium"),
+    [ENGLAND]: _("England"),
+    [FRANCE]: _("France"),
+    [HOLY_ROMAN_EMIRE]: _("Holy Roman Empire"),
+    [HUNGARY]: _("Hungary"),
+    [MAMLUK]: _("Mamluk"),
+    [OTTOMAN]: _("Ottoman"),
+    [PAPAL_STATES]: _("Papal States"),
+    [PORTUGAL]: _("Portugal"),
+  };
+  return map[empireId];
+};
+
 const tplCardTooltipContainer = ({
   card,
   content,
@@ -32,7 +50,7 @@ const tplOneShotSection = ({
       ? `<div style="display: flex; flex-direction: column;">
     <span class="pr_section_title">${_("Suitors")}</span>
     ${suitors
-      .map((suitor) => `<span>${EMPIRE_NAME_MAP[suitor]}</span>`)
+      .map((suitor) => `<span>${_(getEmpireName(suitor))}</span>`)
       .join("")}
     </div>`
       : ""
@@ -76,7 +94,7 @@ const tplCardLocation = ({ location }: { location: string }) => {
   <div class="pr_card_tooltip_row_icon">
   <div class="pr_empire_icon" data-empire-id="${location}"></div>
   </div>
-  <span>${EMPIRE_NAME_MAP[location]}</span>
+  <span>${_(getEmpireName(location))}</span>
 </div>`;
 };
 
