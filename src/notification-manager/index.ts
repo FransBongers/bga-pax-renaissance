@@ -283,7 +283,7 @@ class NotificationManager {
   async notif_changeEmpireToTheocracy(
     notif: Notif<NotifChangeEmpireToTheocracyArgs>
   ) {
-    const { empire, religion, tokensInEmpire } = notif.args;
+    const { empire, religionId: religion, tokensInEmpire } = notif.args;
     this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion });
     const count = tokensInEmpire.filter(
       (token) => token.separator === religion
@@ -834,14 +834,13 @@ class NotificationManager {
       prestige.push(...queen.prestige);
     });
 
-    // prestige.forEach((item) => player.counters.prestige[item].incValue(-1));
     this.removePrestige({ player, prestige });
-
+    this.game.tableauCardManager.updateCardInformations(king);
     await this.game.gameMap
       .getEmpireSquareStock({ empireId: king.empire })
       .addCard(createEmpireCardContainer(king));
 
-    // this.game.tableauCardManager.updateCardInformations(king);
+    
   }
 
   // TODO: check if we can replace this with discardCard

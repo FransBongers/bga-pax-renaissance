@@ -348,15 +348,21 @@ class Notifications
 
   public static function changeEmpireToTheocracy($empire, $religion)
   {
-
+    $religionNameMap = [
+      CATHOLIC => clienttranslate('Catholic'),
+      ISLAMIC => clienttranslate('Islamic'),
+      REFORMIST => clienttranslate("Reformist"),
+    ];
 
     self::notifyAll("changeEmpireToTheocracy",  clienttranslate('${tkn_boldText_empire_name} changes into a ${religion} Theocracy'), [
       'tkn_boldText_empire_name' => $empire->getName(),
       'empire' => $empire,
-      'religion' => $religion,
+      'religionId' => $religion,
+      'religion' => $religionNameMap[$religion],
       'tokensInEmpire' => array_map(function ($token) {
         return $token->jsonSerialize();
       }, self::getTokensInEmpire($empire)),
+      'i18n' => ['religion'],
     ]);
   }
 

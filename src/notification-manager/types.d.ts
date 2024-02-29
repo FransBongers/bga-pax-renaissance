@@ -71,6 +71,7 @@ interface NotifChangeEmpireToMedievalStateArgs {
 interface NotifChangeEmpireToTheocracyArgs {
   empire: Empire;
   religion: string;
+  religionId: string;
   tokensInEmpire: Token[];
 }
 

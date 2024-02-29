@@ -4894,7 +4894,7 @@ var NotificationManager = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _a, empire, religion, tokensInEmpire, count;
             return __generator(this, function (_b) {
-                _a = notif.args, empire = _a.empire, religion = _a.religion, tokensInEmpire = _a.tokensInEmpire;
+                _a = notif.args, empire = _a.empire, religion = _a.religionId, tokensInEmpire = _a.tokensInEmpire;
                 this.game.gameMap.setEmpireReligion({ empireId: empire.id, religion: religion });
                 count = tokensInEmpire.filter(function (token) { return token.separator === religion; }).length;
                 this.game.gameMap.supremeReligion[religion].tokens.incValue(count);
@@ -5537,6 +5537,7 @@ var NotificationManager = (function () {
                             prestige.push.apply(prestige, queen.prestige);
                         });
                         this.removePrestige({ player: player, prestige: prestige });
+                        this.game.tableauCardManager.updateCardInformations(king);
                         return [4, this.game.gameMap
                                 .getEmpireSquareStock({ empireId: king.empire })
                                 .addCard(createEmpireCardContainer(king))];

@@ -137,7 +137,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
       return false;
     }
 
-    if ($player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
+    if ($player !== null && $player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
       return false;
     }
 
@@ -203,7 +203,13 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
    */
   public function silence()
   {
-    $this->deactivateAbility();
+    $owner = $this->getOwner();
+    // Owner should never be null, but check just in case
+    // Need check if card is silenced in case player has abilities that make
+    // them immune to silencing
+    if ($owner === null || ($owner !== null && $this->isSilenced($owner))) {
+      $this->deactivateAbility();
+    }
   }
 
   /**

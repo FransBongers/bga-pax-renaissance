@@ -338,7 +338,7 @@ class EmpireCard extends Card
 
   public function isSilenced($player)
   {
-    if ($player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
+    if ($player !== null && $player->hasSpecialAbility(SA_IMMUNE_TO_SILENCING)) {
       return false;
     }
 

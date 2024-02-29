@@ -57,6 +57,7 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
 
     $bishopsOnCard = [];
     $otherTokensOnCard = [];
+    $cardIsSilenced = $card->isSilenced($card->getOwner());
 
     foreach ($tokensOnCard as $tokenOnCard) {
       if ($tokenOnCard->getType() === BISHOP) {
@@ -70,6 +71,9 @@ class BishopDietOfWorms extends \PaxRenaissance\Models\AtomicAction
     if (count($bishopsOnCard) >= 2) {
       foreach ($bishopsOnCard as $bishop) {
         $bishop->returnToSupply(KILL, $player);
+      }
+      if ($cardIsSilenced) {
+        $card->activateAbility();
       }
       $this->resolveAction(['automatic' => true]);
       return;

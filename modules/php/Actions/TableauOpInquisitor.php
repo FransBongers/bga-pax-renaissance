@@ -114,10 +114,16 @@ class TableauOpInquisitor extends \PaxRenaissance\Models\AtomicAction
 
     $token = $options[$tokenId]['token'];
     $fromLocation = $token->getLocation();
+    $fromCard = Cards::get($fromLocation);
+
+    // Need to check in case player has abilities that make the immune to silencing
+    $fromCardWasSilenced = $fromCard->isSilenced($fromCard->getOwner());
     
     $token->move($destination->getId());
 
-    Cards::get($fromLocation)->activateAbility();
+    if ($fromCardWasSilenced) {
+      $fromCard->activateAbility();
+    }
   
     $this->ctx->insertAsBrother(new LeafNode([
       'action' => BISHOP_DIET_OF_WORMS,
