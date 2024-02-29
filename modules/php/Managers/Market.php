@@ -253,6 +253,11 @@ class Market
     $cardDraws = $drawResult['cardDraws'];
     if (count($shiftResult['cardMoves']) + count($drawResult['cardDraws']) > 0) {
       Notifications::refreshMarket($player, $shiftResult['cardMoves'], $cardDraws);
+      foreach($shiftResult['cardMoves'] as $cardMove) {
+        if ($cardMove['to'] === Locations::market(EAST,0) || $cardMove['to'] === Locations::market(WEST,0)) {
+          Notifications::refreshMarketNewTradeFairCard($cardMove);
+        }
+      }
     }
     return $drawResult['unableToRefresh'];
   }

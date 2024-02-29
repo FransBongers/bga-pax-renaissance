@@ -581,6 +581,18 @@ class Notifications
     ]);
   }
 
+  public static function refreshMarketNewTradeFairCard($cardMove)
+  {
+    $card = $cardMove['card'];
+
+    self::message(clienttranslate('${tkn_cardName} becomes the next ${region} trade fair card ${tkn_card}'), [
+      'tkn_card' => self::tknCardArg($card),
+      'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
+      'region' => $cardMove['to'] === Locations::market(EAST,0) ? clienttranslate('East') : clienttranslate('West'),
+      'i18n' => ['region'],
+    ]);
+  }
+
   public static function regimeChangeSkipEmancipation($player)
   {
     self::message(clienttranslate('${tkn_playerName} is done emancipating Repressed Tokens'), [
@@ -663,17 +675,6 @@ class Notifications
       'suzerain' => $suzerain,
     ]);
   }
-  // public static function killToken($player, $token, $fromLocation)
-  // {
-  //   $isPawn = $token->getType() === PAWN;
-  //   self::notifyAll("returnToSupply",  clienttranslate('${tkn_playerName} kills ${tkn_mapToken} on ${tkn_boldText}'), [
-  //     'player' => $player,
-  //     'tkn_mapToken' => $isPawn ? $token->getBank() . '_' . PAWN : $token->getReligion() . '_' . $token->getType(),
-  //     'tkn_boldText' => $fromLocation->getName(),
-  //     'from' => $fromLocation,
-  //     'token' => $token,
-  //   ]);
-  // }
 
   public static function sellCard($player, $card, $value)
   {
