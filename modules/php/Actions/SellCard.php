@@ -90,9 +90,12 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
     if (!$player->hasSpecialAbility(SA_SELL_AND_PERFORM_ONE_SHOT)) {
       return;
     }
-    
-    $oneShot = $card->getOneShot();
-    if ($oneShot !== null && in_array($oneShot,$this->machiavellianismOneShots)) {
+
+    $oneShot = null;
+    if ($card->getType() === TABLEAU_CARD) {
+      $card->getOneShot();
+    }
+    if ($oneShot !== null && in_array($oneShot, $this->machiavellianismOneShots)) {
       $this->ctx->insertAsBrother(new LeafNode(
         [
           'action' => ANNOUNCE_ONE_SHOT,

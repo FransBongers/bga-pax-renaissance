@@ -42,47 +42,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   private alwaysFixTopActions: boolean;
   private alwaysFixTopActionsMaximum: number;
 
-  public activeStates: {
-    [CLIENT_CONFIRM_TABLEAU_OPS]: ClientConfirmTableauOpsState;
-    [CLIENT_DECLARE_VICTORY_STATE]: ClientDeclareVictoryState;
-    [CLIENT_SELL_CARD_STATE]: ClientSellCardState;
-    [CLIENT_START_TRADE_FAIR_STATE]: ClientStartTradeFairState;
-    [CLIENT_USE_ABILITY_ACTION_STATE]: ClientUseAbilityActionState;
-    abilityActionSelectApostasy: AbilityActionSelectApostasyState;
-    abilityActionSelectTradeFair: AbilityActionSelectTradeFairState;
-    abilityOpponentsPurpleOp: AbilityOpponentsPurpleOpState;
-    announceOneShot: AnnounceOneShotState;
-    battleCasualties: BattleCasualtiesState;
-    battleLocation: BattleLocationState;
-    battlePlaceAttackers: BattlePlaceAttackersState;
-    battleReconfigureContantinople: BattleReconfigureConstantinopleState;
-    bishopPacification: BishopPacificationState;
-    confirmPartialTurn: ConfirmPartialTurnState;
-    confirmTurn: ConfirmTurnState;
-    coronationOneShot: CoronationState;
-    discardDownToHandLimit: DiscardDownToHandLimitState;
-    flipVictoryCard: FlipVictoryCardState;
-    freeAction: FreeActionState;
-    placeAgent: PlaceAgentState;
-    placeLevySelectCity: PlaceLevySelectCityState;
-    playerAction: PlayerActionState;
-    regimeChangeEmancipation: RegimeChangeEmancipationState;
-    regimeChangeGoldenLiberty: RegimeChangeGoldenLibertyState;
-    removeTokenFromCity: RemoveTokenFromCityState;
-    selectToken: SelectTokenState;
-    tableauOpBehead: TableauOpBeheadState;
-    tableauOpCampaign: TableauOpCampaignState;
-    tableauOpCommerce: TableauOpCommerceState;
-    tableauOpCorsair: TableauOpCorsairState;
-    tableauOpInquisitor: TableauOpInquisitorState;
-    tableauOpRepress: TableauOpRepressState;
-    tableauOpSiege: TableauOpSiegeState;
-    tableauOpsSelect: TableauOpsSelectState;
-    tableauOpTax: TableauOpTaxState;
-    tableauOpTaxPayOrRepress: TableauOpTaxPayOrRepressState;
-    tableauOpVote: TableauOpVoteState;
-    tradeFairLevy: TradeFairLevyState;
-  };
+  public activeStates: ActiveStates;
 
   constructor() {
     console.log("paxrenaissance constructor");
@@ -873,13 +833,6 @@ class PaxRenaissance implements PaxRenaissanceGame {
             });
           }
         });
-
-        // TODO: check below code. Looks like improved way for text shadows (source ticket to ride)
-        // ['you', 'actplayer', 'player_name'].forEach((field) => {
-        //   if (typeof args[field] === 'string' && args[field].indexOf('#ffed00;') !== -1 && args[field].indexOf('text-shadow') === -1) {
-        //     args[field] = args[field].replace('#ffed00;', '#ffed00; text-shadow: 0 0 1px black, 0 0 2px black, 0 0 3px black;');
-        //   }
-        // });
       }
     } catch (e) {
       console.error(log, args, "Exception thrown", e.stack);

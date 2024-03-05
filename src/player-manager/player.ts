@@ -233,34 +233,34 @@ class PRPlayer {
     });
 
     const prestigeText = _(
-      "The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory."
+      "The amount of ${prestige} this player has in their tableau. Counts for ${victory}."
     );
-    const prestigeTitle = _("${prestige} Prestige");
+    const prestigeTitle = _("${prestige}");
     [CATHOLIC, ISLAMIC, REFORMIST].forEach((prestige) => {
       const titleArgs = {
         [CATHOLIC]: {
-          prestige: _("Catholic"),
+          prestige: _("Catholic Prestige"),
         },
         [ISLAMIC]: {
-          prestige: _("Islamic"),
+          prestige: _("Islamic Prestige"),
         },
         [REFORMIST]: {
-          prestige: _("Reformist"),
+          prestige: _("Reformist Prestige"),
         },
       };
 
       const textArgs = {
         [CATHOLIC]: {
-          prestige: _("Catholic"),
-          victory: _("Holy"),
+          prestige: _("Catholic Prestige"),
+          victory: _("Holy Victory"),
         },
         [ISLAMIC]: {
-          prestige: _("Islamic"),
-          victory: _("Holy"),
+          prestige: _("Islamic Prestige"),
+          victory: _("Holy Victory"),
         },
         [REFORMIST]: {
-          prestige: _("Reformist"),
-          victory: _("Holy"),
+          prestige: _("Reformist Prestige"),
+          victory: _("Holy Victory"),
         },
       };
 
@@ -291,27 +291,27 @@ class PRPlayer {
     [PATRON, LAW, DISCOVERY].forEach((prestige) => {
       const titleArgs = {
         [PATRON]: {
-          prestige: _("Patron"),
+          prestige: _("Patron Prestige"),
         },
         [LAW]: {
-          prestige: _("Law"),
+          prestige: _("Law Prestige"),
         },
         [DISCOVERY]: {
-          prestige: _("Discovery"),
+          prestige: _("Discovery Prestige"),
         },
       };
       const textArgs = {
         [PATRON]: {
-          prestige: _("Patron"),
-          victory: _("Patron"),
+          prestige: _("Patron Prestige"),
+          victory: _("Patron Victory"),
         },
         [LAW]: {
-          prestige: _("Law"),
-          victory: _("Renaissance"),
+          prestige: _("Law Prestige"),
+          victory: _("Renaissance Victory"),
         },
         [DISCOVERY]: {
-          prestige: _("Discovery"),
-          victory: _("Globalization"),
+          prestige: _("Discovery Prestige"),
+          victory: _("Globalization Victory"),
         },
       };
 

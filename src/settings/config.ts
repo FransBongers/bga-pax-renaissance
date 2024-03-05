@@ -300,6 +300,23 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
         },
         type: "slider",
       },
+      [PREF_SHOW_ACTION_BUTTONS]: {
+        id: PREF_SHOW_ACTION_BUTTONS,
+        onChangeInSetup: false,
+        defaultValue: ENABLED,
+        label: _("Also show button for clickable action"),
+        type: "select",
+        options: [
+          {
+            label: _("Enabled"),
+            value: ENABLED,
+          },
+          {
+            label: _("Disabled (Sell button only)"),
+            value: DISABLED,
+          },
+        ],
+      },
     },
   },
 });

@@ -43,7 +43,7 @@ class PlayerActionState implements State {
   // .##....##....##....##.......##........##....##
   // ..######.....##....########.##.........######.
 
-  private updateInterfaceInitialStep() {
+  public updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.updatePageTitle();
     this.setMarketCardsSelectable();
@@ -180,8 +180,11 @@ class PlayerActionState implements State {
   //  ..#######.....##....####.########.####....##.......##...
 
   private addActionButtons() {
+    const showActionButtons =
+      this.game.settings.get({ id: PREF_SHOW_ACTION_BUTTONS }) === ENABLED;
+
     // Purchase card action
-    if (this.args.cardsPlayerCanPurchase.length > 0) {
+    if (showActionButtons && this.args.cardsPlayerCanPurchase.length > 0) {
       this.game.addPrimaryActionButton({
         id: "purchase_card_btn",
         text: _("Purchase"),
@@ -191,7 +194,7 @@ class PlayerActionState implements State {
 
     // Play card
     const handCards = this.game.hand.getCards();
-    if (handCards.length > 0) {
+    if (showActionButtons && handCards.length > 0) {
       this.game.addPrimaryActionButton({
         id: "play_card_btn",
         text: _("Play"),
@@ -223,6 +226,9 @@ class PlayerActionState implements State {
     // Tableau Ops
     REGIONS.forEach((region) => {
       if (Object.keys(this.args.availableOps[region]).length > 0) {
+        if (!showActionButtons) {
+          return;
+        }
         this.game.addPrimaryActionButton({
           id: `${region}_ops_btn`,
           text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
@@ -244,7 +250,7 @@ class PlayerActionState implements State {
     });
 
     // Trade fair
-    if (this.args.tradeFair.west) {
+    if (showActionButtons && this.args.tradeFair.west) {
       this.game.addPrimaryActionButton({
         id: "trade_fair_west_btn",
         text: _("Trade Fair West"),
@@ -262,7 +268,7 @@ class PlayerActionState implements State {
             ),
       });
     }
-    if (this.args.tradeFair.east) {
+    if (showActionButtons && this.args.tradeFair.east) {
       this.game.addPrimaryActionButton({
         id: "trade_fair_east_btn",
         text: _("Trade Fair East"),
@@ -282,7 +288,7 @@ class PlayerActionState implements State {
     }
 
     // Claim Victory
-    if (this.args.declarableVictories.length > 0) {
+    if (showActionButtons && this.args.declarableVictories.length > 0) {
       this.game.addPrimaryActionButton({
         id: "declare_victory_btn",
         text: _("Declare Victory"),
@@ -291,7 +297,7 @@ class PlayerActionState implements State {
     }
 
     // Extra abilities
-    if (Object.entries(this.args.abilityActions).length > 0) {
+    if (showActionButtons && Object.entries(this.args.abilityActions).length > 0) {
       this.game.addPrimaryActionButton({
         id: "abiliy_action_btn",
         text: _("Use action from ability"),

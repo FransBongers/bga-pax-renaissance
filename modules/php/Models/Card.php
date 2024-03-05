@@ -12,7 +12,6 @@ use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Players;
 use PaxRenaissance\Managers\TableauOps;
 use PaxRenaissance\Managers\Tokens;
-use PgSql\Lob;
 
 class Card extends \PaxRenaissance\Helpers\DB_Model
 {
@@ -41,6 +40,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
   public function getAgents()
   {
     return [];
+  }
+
+  public function getOneShot()
+  {
+    return null;
   }
 
   public function getOps()

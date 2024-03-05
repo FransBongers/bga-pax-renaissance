@@ -9,6 +9,48 @@ interface AddActionButtonProps extends AddButtonProps {
   color?: "blue" | "gray" | "red" | "none";
 }
 
+interface ActiveStates {
+  clientConfirmTableauOpsState: ClientConfirmTableauOpsState;
+  clientDeclareVictoryState: ClientDeclareVictoryState;
+  clientSellCardState: ClientSellCardState;
+  clientStartTradeFairState: ClientStartTradeFairState;
+  clientUseAbilityActionState: ClientUseAbilityActionState;
+  abilityActionSelectApostasy: AbilityActionSelectApostasyState;
+  abilityActionSelectTradeFair: AbilityActionSelectTradeFairState;
+  abilityOpponentsPurpleOp: AbilityOpponentsPurpleOpState;
+  announceOneShot: AnnounceOneShotState;
+  battleCasualties: BattleCasualtiesState;
+  battleLocation: BattleLocationState;
+  battlePlaceAttackers: BattlePlaceAttackersState;
+  battleReconfigureContantinople: BattleReconfigureConstantinopleState;
+  bishopPacification: BishopPacificationState;
+  confirmPartialTurn: ConfirmPartialTurnState;
+  confirmTurn: ConfirmTurnState;
+  coronationOneShot: CoronationState;
+  discardDownToHandLimit: DiscardDownToHandLimitState;
+  flipVictoryCard: FlipVictoryCardState;
+  freeAction: FreeActionState;
+  placeAgent: PlaceAgentState;
+  placeLevySelectCity: PlaceLevySelectCityState;
+  playerAction: PlayerActionState;
+  regimeChangeEmancipation: RegimeChangeEmancipationState;
+  regimeChangeGoldenLiberty: RegimeChangeGoldenLibertyState;
+  removeTokenFromCity: RemoveTokenFromCityState;
+  selectToken: SelectTokenState;
+  tableauOpBehead: TableauOpBeheadState;
+  tableauOpCampaign: TableauOpCampaignState;
+  tableauOpCommerce: TableauOpCommerceState;
+  tableauOpCorsair: TableauOpCorsairState;
+  tableauOpInquisitor: TableauOpInquisitorState;
+  tableauOpRepress: TableauOpRepressState;
+  tableauOpSiege: TableauOpSiegeState;
+  tableauOpsSelect: TableauOpsSelectState;
+  tableauOpTax: TableauOpTaxState;
+  tableauOpTaxPayOrRepress: TableauOpTaxPayOrRepressState;
+  tableauOpVote: TableauOpVoteState;
+  tradeFairLevy: TradeFairLevyState;
+}
+
 interface PaxRenaissanceGame extends Game {
   addCancelButton: () => void;
   addConfirmButton: (props: { callback: Function | string }) => void;
@@ -59,6 +101,7 @@ interface PaxRenaissanceGame extends Game {
   updateLayout: () => void;
   updateLogTooltips: () => void;
   _connections: unknown[];
+  activeStates: ActiveStates;
   animationManager: AnimationManager;
   // cardManager: CardManager<TableauCard>;
   discard: VoidStock<TableauCard | EmpireCard | EmpireCardContainer>;

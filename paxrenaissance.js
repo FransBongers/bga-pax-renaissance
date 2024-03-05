@@ -15,6 +15,7 @@ var CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitchOn
 var PREF_SHOW_ANIMATIONS = 'showAnimations';
 var PREF_ANIMATION_SPEED = 'animationSpeed';
 var SHOW_FLORIN_CARD_COUNTERS = 'florinCardCountersTableau';
+var PREF_SHOW_ACTION_BUTTONS = 'showActionButtons';
 var CITY = 'city';
 var BORDER = 'border';
 var CARD = 'card';
@@ -6239,33 +6240,33 @@ var PRPlayer = (function () {
                 text: _("The number of cards from the East deck this player has in their hand."),
             });
         });
-        var prestigeText = _("The amount of ${prestige} Prestige this player has in their tableau. Counts for ${victory} Victory.");
-        var prestigeTitle = _("${prestige} Prestige");
+        var prestigeText = _("The amount of ${prestige} this player has in their tableau. Counts for ${victory}.");
+        var prestigeTitle = _("${prestige}");
         [CATHOLIC, ISLAMIC, REFORMIST].forEach(function (prestige) {
             var _a, _b;
             var titleArgs = (_a = {},
                 _a[CATHOLIC] = {
-                    prestige: _("Catholic"),
+                    prestige: _("Catholic Prestige"),
                 },
                 _a[ISLAMIC] = {
-                    prestige: _("Islamic"),
+                    prestige: _("Islamic Prestige"),
                 },
                 _a[REFORMIST] = {
-                    prestige: _("Reformist"),
+                    prestige: _("Reformist Prestige"),
                 },
                 _a);
             var textArgs = (_b = {},
                 _b[CATHOLIC] = {
-                    prestige: _("Catholic"),
-                    victory: _("Holy"),
+                    prestige: _("Catholic Prestige"),
+                    victory: _("Holy Victory"),
                 },
                 _b[ISLAMIC] = {
-                    prestige: _("Islamic"),
-                    victory: _("Holy"),
+                    prestige: _("Islamic Prestige"),
+                    victory: _("Holy Victory"),
                 },
                 _b[REFORMIST] = {
-                    prestige: _("Reformist"),
-                    victory: _("Holy"),
+                    prestige: _("Reformist Prestige"),
+                    victory: _("Holy Victory"),
                 },
                 _b);
             var icon = "prestige_".concat(prestige);
@@ -6289,27 +6290,27 @@ var PRPlayer = (function () {
             var _a, _b;
             var titleArgs = (_a = {},
                 _a[PATRON] = {
-                    prestige: _("Patron"),
+                    prestige: _("Patron Prestige"),
                 },
                 _a[LAW] = {
-                    prestige: _("Law"),
+                    prestige: _("Law Prestige"),
                 },
                 _a[DISCOVERY] = {
-                    prestige: _("Discovery"),
+                    prestige: _("Discovery Prestige"),
                 },
                 _a);
             var textArgs = (_b = {},
                 _b[PATRON] = {
-                    prestige: _("Patron"),
-                    victory: _("Patron"),
+                    prestige: _("Patron Prestige"),
+                    victory: _("Patron Victory"),
                 },
                 _b[LAW] = {
-                    prestige: _("Law"),
-                    victory: _("Renaissance"),
+                    prestige: _("Law Prestige"),
+                    victory: _("Renaissance Victory"),
                 },
                 _b[DISCOVERY] = {
-                    prestige: _("Discovery"),
-                    victory: _("Globalization"),
+                    prestige: _("Discovery Prestige"),
+                    victory: _("Globalization Victory"),
                 },
                 _b);
             var icon = "prestige_".concat(prestige);
@@ -6982,6 +6983,23 @@ var getSettingsConfig = function () {
                     },
                     type: "slider",
                 },
+                _c[PREF_SHOW_ACTION_BUTTONS] = {
+                    id: PREF_SHOW_ACTION_BUTTONS,
+                    onChangeInSetup: false,
+                    defaultValue: ENABLED,
+                    label: _("Also show button for clickable action"),
+                    type: "select",
+                    options: [
+                        {
+                            label: _("Enabled"),
+                            value: ENABLED,
+                        },
+                        {
+                            label: _("Disabled (Sell button only)"),
+                            value: DISABLED,
+                        },
+                    ],
+                },
                 _c),
         },
     });
@@ -7223,6 +7241,12 @@ var Settings = (function () {
         for (var i = 0; i < elements.length; i++) {
             var element = elements.item(i);
             element.setAttribute("data-show-counters", value);
+        }
+    };
+    Settings.prototype.onChangeShowActionButtonsSetting = function (value) {
+        if (this.game.gamedatas.gamestate.name === "playerAction") {
+            console.log("trigger");
+            this.game.activeStates.playerAction.updateInterfaceInitialStep();
         }
     };
     Settings.prototype.changeTab = function (_a) {
@@ -9768,7 +9792,8 @@ var PlayerActionState = (function () {
     };
     PlayerActionState.prototype.addActionButtons = function () {
         var _this = this;
-        if (this.args.cardsPlayerCanPurchase.length > 0) {
+        var showActionButtons = this.game.settings.get({ id: PREF_SHOW_ACTION_BUTTONS }) === ENABLED;
+        if (showActionButtons && this.args.cardsPlayerCanPurchase.length > 0) {
             this.game.addPrimaryActionButton({
                 id: "purchase_card_btn",
                 text: _("Purchase"),
@@ -9776,7 +9801,7 @@ var PlayerActionState = (function () {
             });
         }
         var handCards = this.game.hand.getCards();
-        if (handCards.length > 0) {
+        if (showActionButtons && handCards.length > 0) {
             this.game.addPrimaryActionButton({
                 id: "play_card_btn",
                 text: _("Play"),
@@ -9800,6 +9825,9 @@ var PlayerActionState = (function () {
         }
         REGIONS.forEach(function (region) {
             if (Object.keys(_this.args.availableOps[region]).length > 0) {
+                if (!showActionButtons) {
+                    return;
+                }
                 _this.game.addPrimaryActionButton({
                     id: "".concat(region, "_ops_btn"),
                     text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
@@ -9817,7 +9845,7 @@ var PlayerActionState = (function () {
                 });
             }
         });
-        if (this.args.tradeFair.west) {
+        if (showActionButtons && this.args.tradeFair.west) {
             this.game.addPrimaryActionButton({
                 id: "trade_fair_west_btn",
                 text: _("Trade Fair West"),
@@ -9830,7 +9858,7 @@ var PlayerActionState = (function () {
                 },
             });
         }
-        if (this.args.tradeFair.east) {
+        if (showActionButtons && this.args.tradeFair.east) {
             this.game.addPrimaryActionButton({
                 id: "trade_fair_east_btn",
                 text: _("Trade Fair East"),
@@ -9843,14 +9871,14 @@ var PlayerActionState = (function () {
                 },
             });
         }
-        if (this.args.declarableVictories.length > 0) {
+        if (showActionButtons && this.args.declarableVictories.length > 0) {
             this.game.addPrimaryActionButton({
                 id: "declare_victory_btn",
                 text: _("Declare Victory"),
                 callback: function () { return _this.updateInterfaceSelectVictory(); },
             });
         }
-        if (Object.entries(this.args.abilityActions).length > 0) {
+        if (showActionButtons && Object.entries(this.args.abilityActions).length > 0) {
             this.game.addPrimaryActionButton({
                 id: "abiliy_action_btn",
                 text: _("Use action from ability"),

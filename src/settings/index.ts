@@ -334,13 +334,18 @@ class Settings {
   }
 
   public onChangeFlorinCardCountersTableauSetting(value: string) {
-    const elements = document.getElementsByClassName(
-      "pr_player_tableau_title"
-    );
+    const elements = document.getElementsByClassName("pr_player_tableau_title");
 
     for (let i = 0; i < elements.length; i++) {
       const element = elements.item(i);
       element.setAttribute("data-show-counters", value);
+    }
+  }
+
+  public onChangeShowActionButtonsSetting(value: string) {
+    if (this.game.gamedatas.gamestate.name === "playerAction") {
+      console.log("trigger");
+      this.game.activeStates.playerAction.updateInterfaceInitialStep();
     }
   }
 

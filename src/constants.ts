@@ -26,6 +26,7 @@ const CONFIRM_END_OF_TURN_AND_PLAYER_SWITCH_ONLY = 'confirmEndOfTurnPlayerSwitch
 const PREF_SHOW_ANIMATIONS = 'showAnimations';
 const PREF_ANIMATION_SPEED = 'animationSpeed';
 const SHOW_FLORIN_CARD_COUNTERS = 'florinCardCountersTableau';
+const PREF_SHOW_ACTION_BUTTONS = 'showActionButtons';
 
 /**
  * Map location types
