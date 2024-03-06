@@ -104,11 +104,6 @@ class NotificationManager {
       // make all notif as synchronous
       this.game.framework().notifqueue.setSynchronous(notif[0], notif[1]);
     });
-
-    // Use below to add tooltips to the log
-    // dojo.connect(this.game.framework().notifqueue, 'addToLog', () => {
-    //   // do stuff here
-    // });
   }
 
   // .##....##..#######..########.####.########..######.

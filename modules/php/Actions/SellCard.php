@@ -93,7 +93,7 @@ class SellCard extends \PaxRenaissance\Models\AtomicAction
 
     $oneShot = null;
     if ($card->getType() === TABLEAU_CARD) {
-      $card->getOneShot();
+      $oneShot = $card->getOneShot();
     }
     if ($oneShot !== null && in_array($oneShot, $this->machiavellianismOneShots)) {
       $this->ctx->insertAsBrother(new LeafNode(
