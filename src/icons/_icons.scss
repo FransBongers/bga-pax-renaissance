@@ -10,7 +10,7 @@
   height: calc(var(--paxRenIconScale) * 55px);
   // background-position-y: 8%;
   border-radius: 50%;
-  background-image: url("img/florins.webp");
+  background-image: url("img/florins.png");
   background-size: 200% 100%;
 }
 
@@ -21,21 +21,21 @@
 }
 
 .pr_icon[data-icon=west_back] {
-  background-image: url("img/west_cards2.webp");
-  background-size: 1000% 600%;
-  background-position-x: math.div(((53 - 1) % 10 * 100%), 9);
-  background-position-y: math.div(math.floor(calc((53 - 1) / 10)) * 100%, 5);
+  background-image: url("img/west_cards3.jpg");
+  background-size: 1000% 200%;
+  background-position-x: math.div(((13 - 1) % 10 * 100%), 9);
+  background-position-y: math.div(math.floor(calc((13 - 1) / 10)) * 100%, 1);
 }
 
 .pr_icon[data-icon=east_back] {
-  background-image: url("img/east_cards2.webp");
+  background-image: url("img/east_cards2.jpg");
   background-size: 1000% 400%;
   background-position-x: math.div(((33 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((33 - 1) / 10)) * 100%, 3);
 }
 
 .pr_prestige_icon {
-  background-image: url("img/prestige.webp");
+  background-image: url("img/prestige.png");
   background-size: 600% 100%;
   width: calc(var(--paxRenIconScale) * 33px);
   height: calc(var(--paxRenIconScale) * 33px);
@@ -66,7 +66,7 @@
 }
 
 .pr_icon[data-icon=concession] {
-  background-image: url("img/pawns.webp");
+  background-image: url("img/pawns.png");
   background-size: 600% 300%;
   min-width: calc(var(--paxRenTokenScale) * 23px);
   min-height: calc(var(--paxRenTokenScale) * 36px);
@@ -102,7 +102,7 @@
 }
 
 .pr_square_card_icon {
-  background-image: url("img/square_cards.webp");
+  background-image: url("img/square_cards.jpg");
   background-size: 1000% 400%;
   width: calc(var(--paxRenIconScale) * 30px);
   height: calc(var(--paxRenIconScale) * 30px);

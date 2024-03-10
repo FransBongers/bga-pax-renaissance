@@ -11,10 +11,10 @@
   // transform: translateY(0);
   // transition: transform 0.4s, margin 0.4s;
 
-  width: 48px;
-  height: 48px;
-  margin: 4px;
-  margin-right: 12px;
+  width: 50px;
+  height: 50px;
+  // margin: 4px;
+  // margin-right: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,7 +38,7 @@
 }
 
 .pr_information_modal {
-  background-image: url("img/background_paper.webp");
+  background-image: url("img/background_paper.jpg");
   background-size: cover;
   border-radius: 8px;
   box-shadow: rgb(0, 0, 0) 1px 1px 5px;
@@ -166,7 +166,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_aragon"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 66.6666666667%;
@@ -174,7 +174,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_byzantium"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 44.4444444444%;
@@ -182,7 +182,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_england"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 0%;
@@ -190,7 +190,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_france"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 11.1111111111%;
@@ -198,7 +198,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_holyRomanEmpire"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 22.2222222222%;
@@ -208,7 +208,7 @@
       .pr_map_card[data-card-id="medieval_hungary"]:not(
           [data-map-type="ageOfReformation"]
         ) {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 33.3333333333%;
@@ -216,7 +216,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_hungary"][data-map-type="ageOfReformation"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 22.2222222222%;
@@ -226,7 +226,7 @@
       .pr_map_card[data-card-id="medieval_ottoman"]:not(
           [data-map-type="ageOfReformation"]
         ) {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 88.8888888889%;
@@ -234,7 +234,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_ottoman"][data-map-type="ageOfReformation"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 33.3333333333%;
@@ -242,7 +242,7 @@
       }
 
       .pr_map_card[data-card-id="medieval_portugal"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 55.5555555556%;
@@ -250,7 +250,7 @@
       }
 
       .pr_map_card[data-card-id="catholic_papalStates"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 77.7777777778%;
@@ -258,7 +258,7 @@
       }
 
       .pr_map_card[data-card-id="islamic_mamluk"] {
-        background-image: url("img/map_cards.webp");
+        background-image: url("img/map_cards.jpg");
         background-size: 1000% 500%;
         background-repeat: no-repeat;
         background-position-x: 100%;

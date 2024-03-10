@@ -172,12 +172,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }
 
   setupDontPreloadImages() {
-    this.framework().dontPreloadImage("background_balcony.webp");
-    this.framework().dontPreloadImage("background_cathedral.webp");
-    this.framework().dontPreloadImage("background_goldsmith.webp");
-    this.framework().dontPreloadImage("background_lucrezia.webp");
-    this.framework().dontPreloadImage("background_poison.webp");
-    this.framework().dontPreloadImage("background_war.webp");
+    this.framework().dontPreloadImage("background_balcony.jpg");
+    this.framework().dontPreloadImage("background_cathedral.jpg");
+    this.framework().dontPreloadImage("background_goldsmith.jpg");
+    this.framework().dontPreloadImage("background_lucrezia.jpg");
+    this.framework().dontPreloadImage("background_poison.jpg");
+    this.framework().dontPreloadImage("background_war.jpg");
+    this.framework().dontPreloadImage("player_boards3.png");
   }
 
   public updateLayout() {
@@ -239,7 +240,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   // onEnteringState: this method is called each time we are entering into a new game state.
   //                  You can use this method to perform some user interface changes at this moment.
   public onEnteringState(stateName: string, args: any) {
-    console.log("Entering state: " + stateName, args);
+    debug("Entering state: " + stateName, args);
     // UI changes for active player
     if (
       this.framework().isCurrentPlayerActive() &&

@@ -39,13 +39,7 @@
 @import "../node_modules/bga-cards/bga-cards";
 
 html {
-  // background: url("") rgb(192, 192, 192);
-  background-image: url("img/background_goldsmith.webp");
-  // background-image: url("img/background_war.webp");
-  // background-image: url("img/background_cathedral.webp");
-  // background-image: url("img/background_balcony.webp");
-  // background-image: url("img/background_lucrezia.webp");
-  // background-image: url("img/background_poison.webp");
+  background-image: url("img/background_goldsmith.jpg");
   background-attachment: fixed; // no scroll
   background-position: center; // where to fix picture from
   background-size: cover; // will cover screen but parts of image might be outside screen
@@ -56,27 +50,27 @@ html[data-background-pref="none"] {
 }
 
 html[data-background-pref="balcony"] {
-  background-image: url("img/background_balcony.webp");
+  background-image: url("img/background_balcony.jpg");
 }
 
 html[data-background-pref="cathedral"] {
-  background-image: url("img/background_cathedral.webp");
+  background-image: url("img/background_cathedral.jpg");
 }
 
 html[data-background-pref="lucrezia"] {
-  background-image: url("img/background_lucrezia.webp");
+  background-image: url("img/background_lucrezia.jpg");
 }
 
 html[data-background-pref="goldsmith"] {
-  background-image: url("img/background_goldsmith.webp");
+  background-image: url("img/background_goldsmith.jpg");
 }
 
 html[data-background-pref="poison"] {
-  background-image: url("img/background_poison.webp");
+  background-image: url("img/background_poison.jpg");
 }
 
 html[data-background-pref="war"] {
-  background-image: url("img/background_war.webp");
+  background-image: url("img/background_war.jpg");
 }
 
 :root {
@@ -109,12 +103,16 @@ html[data-background-pref="war"] {
 }
 
 #page-title {
-  min-height: 36px;
+  min-height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* make space between buttons on touch devices */
 @media (hover: none) {
-  #page-title .action-button.bgabutton, #page-title .bgabutton {
+  #page-title .action-button.bgabutton,
+  #page-title .bgabutton {
     margin-bottom: 4px;
     margin-top: 4px;
   }
@@ -129,4 +127,8 @@ html[data-background-pref="war"] {
 /* Hide the "You may note something for next time..." popup that would appear. */
 #turnBasedNotesIncent {
   display: none;
+}
+
+#globalaction_zoom_wrap {
+  display: none !important;
 }

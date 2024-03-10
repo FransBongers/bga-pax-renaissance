@@ -23,7 +23,7 @@
 // }
 
 #pr_game_map {
-  background-image: url("img/board.webp");
+  background-image: url("img/board.jpg");
   background-size: calc(var(--paxRenLeftColumnScale) * 1500px)
     calc(var(--paxRenLeftColumnScale) * 1500px);
   background-repeat: no-repeat;
@@ -82,7 +82,7 @@
     justify-content: space-evenly;
 
     .pr_religion_icon {
-      background-image: url("img/religions.webp");
+      background-image: url("img/religions.png");
       background-size: 300% 100%;
       height: calc(var(--paxRenMapScale) * 60px);
       width: calc(var(--paxRenMapScale) * 48px);
@@ -186,7 +186,7 @@
 
 .pr_empire_throne_coat_of_arms {
   position: absolute;
-  background-image: url("img/tokens.webp");
+  background-image: url("img/tokens.png");
   background-size: 600% 300%;
   top: calc(var(--paxRenMapScale) * -2px);
   left: calc(var(--paxRenMapScale) * 4px);
@@ -361,7 +361,7 @@ $map-cards: (
 //     // box-shadow: 2px 2px 5px -1px #000;
 //     // border-radius: 5px;
 
-//     background-image: url("img/map_cards.webp");
+//     background-image: url("img/map_cards.jpg");
 //     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
 //     background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
 //   }
@@ -374,7 +374,7 @@ $map-cards: (
   height: calc(var(--paxRenCardScale) * 230px);
   border: calc(var(--paxRenMapScale) * 1px) black solid;
   position: absolute;
-  background-image: url("img/map_cards.webp");
+  background-image: url("img/map_cards.jpg");
   background-size: 1000% 500%;
   background-repeat: no-repeat;
   border-radius: calc(var(--paxRenCardScale) * 5px);
@@ -1430,7 +1430,7 @@ $map-cards: (
 
 #venice2_overlay {
   position: absolute;
-  background-image: url("img/agents_square.webp");
+  background-image: url("img/agents_square.png");
   background-size: 500% 100%;
   background-position-x: 100%;
   display: flex;

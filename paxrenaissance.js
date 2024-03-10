@@ -1995,12 +1995,13 @@ var PaxRenaissance = (function () {
         this.playerOrder = customPlayerOrder;
     };
     PaxRenaissance.prototype.setupDontPreloadImages = function () {
-        this.framework().dontPreloadImage("background_balcony.webp");
-        this.framework().dontPreloadImage("background_cathedral.webp");
-        this.framework().dontPreloadImage("background_goldsmith.webp");
-        this.framework().dontPreloadImage("background_lucrezia.webp");
-        this.framework().dontPreloadImage("background_poison.webp");
-        this.framework().dontPreloadImage("background_war.webp");
+        this.framework().dontPreloadImage("background_balcony.jpg");
+        this.framework().dontPreloadImage("background_cathedral.jpg");
+        this.framework().dontPreloadImage("background_goldsmith.jpg");
+        this.framework().dontPreloadImage("background_lucrezia.jpg");
+        this.framework().dontPreloadImage("background_poison.jpg");
+        this.framework().dontPreloadImage("background_war.jpg");
+        this.framework().dontPreloadImage("player_boards3.png");
     };
     PaxRenaissance.prototype.updateLayout = function () {
         if (!this.settings) {
@@ -2036,7 +2037,7 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.onEnteringState = function (stateName, args) {
         var _this = this;
-        console.log("Entering state: " + stateName, args);
+        debug("Entering state: " + stateName, args);
         if (this.framework().isCurrentPlayerActive() &&
             this.activeStates[stateName]) {
             this.activeStates[stateName].onEnteringState(args.args);
@@ -4679,7 +4680,7 @@ var NotificationManager = (function () {
     }
     NotificationManager.prototype.setupNotifications = function () {
         var _this = this;
-        console.log("notifications subscriptions setup");
+        debug("notifications subscriptions setup");
         dojo.connect(this.game.framework().notifqueue, "addToLog", function () {
             _this.game.addLogClass();
         });
@@ -7245,7 +7246,6 @@ var Settings = (function () {
     };
     Settings.prototype.onChangeShowActionButtonsSetting = function (value) {
         if (this.game.gamedatas.gamestate.name === "playerAction") {
-            console.log("trigger");
             this.game.activeStates.playerAction.updateInterfaceInitialStep();
         }
     };

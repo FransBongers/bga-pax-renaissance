@@ -32,7 +32,7 @@ class NotificationManager {
   // ..######..########....##.....#######..##.......
 
   setupNotifications() {
-    console.log("notifications subscriptions setup");
+    debug("notifications subscriptions setup");
 
     dojo.connect(this.game.framework().notifqueue, "addToLog", () => {
       this.game.addLogClass();
@@ -101,6 +101,13 @@ class NotificationManager {
           );
         })
       );
+
+      // if (notif[2] !== undefined) {
+      //   this.game
+      //     .framework()
+      //     .notifqueue.setIgnoreNotificationCheck(notif[0], notif[2]);
+      // }
+      // make all notif as synchronous
       // make all notif as synchronous
       this.game.framework().notifqueue.setSynchronous(notif[0], notif[1]);
     });
@@ -834,8 +841,6 @@ class NotificationManager {
     await this.game.gameMap
       .getEmpireSquareStock({ empireId: king.empire })
       .addCard(createEmpireCardContainer(king));
-
-    
   }
 
   // TODO: check if we can replace this with discardCard

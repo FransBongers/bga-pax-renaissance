@@ -37,7 +37,7 @@
 /* ------- PAWNS ------- */
 
 .pr_pawn {
-  background-image: url("img/pawns.webp");
+  background-image: url("img/pawns.png");
   background-size: 600% 300%;
   // width: 143px;
   // height: 234px;
@@ -88,14 +88,14 @@
 }
 
 .pr_bishop {
-  background-image: url("img/bishops.webp");
+  background-image: url("img/bishops.png");
   background-size: 300% 300%;
   width: calc(var(--paxRenTokenScale) * 36px);
   height: calc(var(--paxRenTokenScale) * 62px);
 }
 
 .pr_knight {
-  background-image: url("img/knights.webp");
+  background-image: url("img/knights.png");
   background-size: 300% 300%;
   max-width: calc(var(--paxRenTokenScale) * 44px);
   min-width: calc(var(--paxRenTokenScale) * 44px);
@@ -103,7 +103,7 @@
 }
 
 .pr_pirate {
-  background-image: url("img/pirates.webp");
+  background-image: url("img/pirates.png");
   background-size: 300% 300%;
   min-width: calc(var(--paxRenTokenScale) * 53px);
   min-height: calc(var(--paxRenTokenScale) * 54px);
@@ -112,7 +112,7 @@
 }
 
 .pr_rook {
-  background-image: url("img/rooks.webp");
+  background-image: url("img/rooks.png");
   background-size: 300% 300%;
   min-width: calc(var(--paxRenTokenScale) * 37px);
   max-width: calc(var(--paxRenTokenScale) * 37px);

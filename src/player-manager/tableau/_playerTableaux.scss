@@ -156,38 +156,37 @@
 
 .pr_player_board {
   position: relative;
-  background-image: url("img/player_boards.webp");
-  background-size: 200% 300%;
+  background-size: 200% 100%;
   height: calc(var(--paxRenCardScale) * 400px);
   min-width: calc(var(--paxRenCardScale) * 295px);
 }
 
 .pr_player_board[data-color="blue"] {
+  background-image: url("img/player_boards1.png");
   background-position-x: 0%;
-  background-position-y: 0%;
 }
 
 .pr_player_board[data-color="green"] {
+  background-image: url("img/player_boards1.png");
   background-position-x: 100%;
-  background-position-y: 0%;
 }
 
 .pr_player_board[data-color="purple"] {
+  background-image: url("img/player_boards2.png");
   background-position-x: 0%;
-  background-position-y: 50%;
 }
 
 .pr_player_board[data-color="yellow"] {
+  background-image: url("img/player_boards2.png");
   background-position-x: 100%;
-  background-position-y: 50%;
 }
 
 .pr_player_board[data-color="black"] {
+  background-image: url("img/player_boards3.png");
   background-position-x: 0%;
-  background-position-y: 100%;
 }
 
 .pr_player_board[data-color="white"] {
+  background-image: url("img/player_boards3.png");
   background-position-x: 100%;
-  background-position-y: 100%;
 }

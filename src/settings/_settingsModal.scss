@@ -1,38 +1,40 @@
 #pr_show_settings {
-  height: 40px;
-  width: 50px;
+  height: 50px;
+  width: 60px;
   display: flex;
   justify-content: center;
   align-items: center;
 
   &:hover {
-      color: grey;
+    color: grey;
   }
   cursor: pointer;
 
   svg {
-      width: auto;
-      height: 40px;
+    width: auto;
+    height: 40px;
   }
 }
 
 #pr_show_settings {
   .fa-primary {
-      transform-origin: 216px 255px;
-      transition: transform 1s;
+    transform-origin: 216px 255px;
+    transition: transform 1s;
   }
 
-  &:hover .fa-primary {
-      transform: rotate(180deg);
+  @media (hover: hover) {
+    &:hover .fa-primary {
+      transform: rotate(180.1deg);
+    }
   }
 }
 
 #popin_settings_modal_underlay {
-  background-color: #000!important;
+  background-color: #000 !important;
 }
 
 .pr_settings_modal {
-  background-image: url("img/background_paper.webp");
+  background-image: url("img/background_paper.jpg");
   background-size: cover;
   border-radius: 8px;
   box-shadow: rgb(0, 0, 0) 1px 1px 5px;
@@ -138,20 +140,17 @@
       // }
     }
 
-
     .player_preference_row {
       display: flex;
       flex-direction: row;
       margin-bottom: 4px;
       margin-top: 4px;
 
-
       .player_preference_row_label {
         flex-grow: 1;
         text-align: center;
         align-self: center;
         font-weight: 400;
-
       }
 
       .player_preference_row_value {
@@ -164,7 +163,6 @@
         }
       }
     }
-
   }
 
   .reserve {

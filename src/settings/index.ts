@@ -344,7 +344,6 @@ class Settings {
 
   public onChangeShowActionButtonsSetting(value: string) {
     if (this.game.gamedatas.gamestate.name === "playerAction") {
-      console.log("trigger");
       this.game.activeStates.playerAction.updateInterfaceInitialStep();
     }
   }

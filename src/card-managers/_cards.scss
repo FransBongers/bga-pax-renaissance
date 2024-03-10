@@ -305,14 +305,7 @@ $east-cards1: (
 
 @for $i from 1 through 40 {
   .pr_card[data-card-id="#{map.get($east-cards1,$i)}"] {
-    // background-image: url("img/east_cards1_1x.webp");
-    background-image: url("img/east_cards1.webp");
-    // background-image: -webkit-image-set(
-    //   url("img/east_cards1_1x.webp") 1x,
-    //   url("img/east_cards1.webp") 2x);
-    // background-image: image-set(
-    //   url("img/east_cards1_1x.webp") 1x,
-    //   url("img/east_cards1.webp") 2x);
+    background-image: url("img/east_cards1.jpg");
     background-size: 1000% 400%;
     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
     background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
@@ -363,7 +356,7 @@ $east-cards2: (
 
 @for $i from 1 through 39 {
   .pr_card[data-card-id="#{map.get($east-cards2,$i)}"] {
-    background-image: url("img/east_cards2.webp");
+    background-image: url("img/east_cards2.jpg");
     background-size: 1000% 400%;
     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
     background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
@@ -417,7 +410,7 @@ $west-cards1: (
 
 @for $i from 1 through 40 {
   .pr_card[data-card-id="#{map.get($west-cards1,$i)}"] {
-    background-image: url("img/west_cards1.webp");
+    background-image: url("img/west_cards1.jpg");
     background-size: 1000% 400%;
     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
     background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
@@ -465,34 +458,46 @@ $west-cards2: (
   38: "PREN148X",
   39: "PREN149X",
   40: "PREN150X",
-  41: "PREN151X",
-  42: "PREN152X",
-  43: "PREN153X",
-  44: "PREN154X",
-  45: "PREN155X",
-  46: "PREN156X",
-  47: "PREN157X",
-  48: "PREN158X",
-  49: "PREN159X",
-  50: "PREN160X",
-  51: "PREN161X",
-  52: "PREN162X",
-  53: "WEST_BACK",
-  54: "COMET3",
-  55: "COMET4",
-  56: "PREN212P",
-  57: "PREN213P",
-  58: "PREN214P",
-  59: "PREN215P",
-  60: "PREN216P",
 );
 
-@for $i from 1 through 60 {
+@for $i from 1 through 40 {
   .pr_card[data-card-id="#{map.get($west-cards2,$i)}"] {
-    background-image: url("img/west_cards2.webp");
-    background-size: 1000% 600%;
+    background-image: url("img/west_cards2.jpg");
+    background-size: 1000% 400%;
     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
-    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 5);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
+  }
+}
+
+$west-cards3: (
+  1: "PREN151X",
+  2: "PREN152X",
+  3: "PREN153X",
+  4: "PREN154X",
+  5: "PREN155X",
+  6: "PREN156X",
+  7: "PREN157X",
+  8: "PREN158X",
+  9: "PREN159X",
+  10: "PREN160X",
+  11: "PREN161X",
+  12: "PREN162X",
+  13: "WEST_BACK",
+  14: "COMET3",
+  15: "COMET4",
+  16: "PREN212P",
+  17: "PREN213P",
+  18: "PREN214P",
+  19: "PREN215P",
+  20: "PREN216P",
+);
+
+@for $i from 1 through 20 {
+  .pr_card[data-card-id="#{map.get($west-cards3,$i)}"] {
+    background-image: url("img/west_cards3.jpg");
+    background-size: 1000% 200%;
+    background-position-x: math.div((($i - 1) % 10 * 100%), 9);
+    background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 1);
   }
 }
 
@@ -533,7 +538,7 @@ $square-cards: (
 
 @for $i from 1 through 30 {
   .pr_square_card[data-card-id="#{map.get($square-cards,$i)}"] {
-    background-image: url("img/square_cards.webp");
+    background-image: url("img/square_cards.jpg");
     background-size: 1000% 400%;
     background-position-x: math.div((($i - 1) % 10 * 100%), 9);
     background-position-y: math.div(math.floor(calc(($i - 1) / 10)) * 100%, 3);
@@ -541,42 +546,42 @@ $square-cards: (
 }
 
 .pr_square_card[data-card-id=EmpireSquare_Hungary_king][data-map-type="ageOfReformation"] {
-  background-image: url("img/square_cards.webp");
+  background-image: url("img/square_cards.jpg");
   background-size: 1000% 400%;
   background-position-x: math.div(((31 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((31 - 1) / 10)) * 100%, 3);
 }
 
 .pr_square_card[data-card-id=EmpireSquare_Hungary_republic][data-map-type="ageOfReformation"] {
-  background-image: url("img/square_cards.webp");
+  background-image: url("img/square_cards.jpg");
   background-size: 1000% 400%;
   background-position-x: math.div(((32 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((32 - 1) / 10)) * 100%, 3);
 }
 
 .pr_square_card[data-card-id=EmpireSquare_Ottoman_king][data-map-type="ageOfReformation"] {
-  background-image: url("img/square_cards.webp");
+  background-image: url("img/square_cards.jpg");
   background-size: 1000% 400%;
   background-position-x: math.div(((33 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((33 - 1) / 10)) * 100%, 3);
 }
 
 .pr_square_card[data-card-id=EmpireSquare_Ottoman_republic][data-map-type="ageOfReformation"] {
-  background-image: url("img/square_cards.webp");
+  background-image: url("img/square_cards.jpg");
   background-size: 1000% 400%;
   background-position-x: math.div(((34 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((34 - 1) / 10)) * 100%, 3);
 }
 
 .pr_square_card[data-card-id=EmpireSquare_PapalStates_king][data-map-type="ageOfReformation"][data-religion="reformist"] {
-  background-image: url("img/square_cards.webp");
+  background-image: url("img/square_cards.jpg");
   background-size: 1000% 400%;
   background-position-x: math.div(((35 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((35 - 1) / 10)) * 100%, 3);
 }
 
 .pr_square_card[data-card-id=EmpireSquare_PapalStates_king][data-map-type="ageOfReformation"][data-religion="islamic"] {
-  background-image: url("img/square_cards.webp");
+  background-image: url("img/square_cards.jpg");
   background-size: 1000% 400%;
   background-position-x: math.div(((36 - 1) % 10 * 100%), 9);
   background-position-y: math.div(math.floor(calc((36 - 1) / 10)) * 100%, 3);

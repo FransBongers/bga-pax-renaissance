@@ -54,31 +54,31 @@
     }
 
     .pr_deck_counter_comet[data-card-id=COMET1] {
-      background-image: url("img/east_cards2.webp");
+      background-image: url("img/east_cards2.jpg");
       background-size: 1000% 401%;
       background-position-x: math.div(((34 - 1) % 10 * 100%), 9);
       background-position-y: math.div(math.floor(calc((34 - 1) / 10)) * 100%, 3);
     }
 
     .pr_deck_counter_comet[data-card-id=COMET2] {
-      background-image: url("img/east_cards2.webp");
+      background-image: url("img/east_cards2.jpg");
       background-size: 1000% 401%;
       background-position-x: math.div(((35 - 1) % 10 * 100%), 9);
       background-position-y: math.div(math.floor(calc((35 - 1) / 10)) * 100%, 3);
     }
 
     .pr_deck_counter_comet[data-card-id=COMET3] {
-      background-image: url("img/west_cards2.webp");
-      background-size: 1000% 601%;
-      background-position-x: math.div(((54 - 1) % 10 * 100%), 9);
-      background-position-y: math.div(math.floor(calc((54 - 1) / 10)) * 100%, 5);
+      background-image: url("img/west_cards3.jpg");
+      background-size: 1000% 201%;
+      background-position-x: math.div(((14 - 1) % 10 * 100%), 9);
+      background-position-y: math.div(math.floor(calc((14 - 1) / 10)) * 100%, 1);
     }
 
     .pr_deck_counter_comet[data-card-id=COMET4] {
-      background-image: url("img/west_cards2.webp");
-      background-size: 1000% 601%;
-      background-position-x: math.div(((55 - 1) % 10 * 100%), 9);
-      background-position-y: math.div(math.floor(calc((55 - 1) / 10)) * 100%, 5);
+      background-image: url("img/west_cards3.jpg");
+      background-size: 1000% 201%;
+      background-position-x: math.div(((15 - 1) % 10 * 100%), 9);
+      background-position-y: math.div(math.floor(calc((15 - 1) / 10)) * 100%, 1);
     }
   }
 }
