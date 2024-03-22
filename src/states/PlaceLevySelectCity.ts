@@ -47,10 +47,10 @@ class PlaceLevySelectCityState implements State {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a City in ${empireName} to place a Levy"
+        "${you} must select a City in ${empireName} to place a Levy"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         empireName: _(this.args.empire.name),
       },
     });

@@ -47,11 +47,11 @@ class TableauOpCommerceState implements State {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a card in the market to take 1 ${tkn_florin} from"
+        "${you} must select a card in the market to take 1 ${tkn_florin} from"
       ),
       args: {
         tkn_florin: tknFlorin(),
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

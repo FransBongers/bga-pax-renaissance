@@ -39,9 +39,9 @@ class ClientSellCardState implements State {
     this.setRoyalCouplesSelectable();
 
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a card to sell"),
+      text: _("${you} must select a card to sell"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

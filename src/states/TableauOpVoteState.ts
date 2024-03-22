@@ -46,9 +46,9 @@ class TableauOpVoteState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select an Empire to vote in"),
+      text: _("${you} must select an Empire to vote in"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

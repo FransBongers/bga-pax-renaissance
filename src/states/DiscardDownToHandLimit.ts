@@ -46,9 +46,9 @@ class DiscardDownToHandLimitState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a card to discard"),
+      text: _("${you} must select a card to discard"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.setCardsSelectable();

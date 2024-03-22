@@ -46,9 +46,9 @@ class BattlePlaceAttackersState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a surviving attacker to place"),
+      text: _("${you} must select a surviving attacker to place"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.setTokensSelectable();
@@ -65,10 +65,10 @@ class BattlePlaceAttackersState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a ${borderOrCity} to place ${tkn_mapToken} onto"
+        "${you} must select a ${borderOrCity} to place ${tkn_mapToken} onto"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         borderOrCity:
           option.agent.type === PAWN || option.agent.type === PIRATE
             ? _("Border")
@@ -142,10 +142,10 @@ class BattlePlaceAttackersState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a ${borderOrCity} to place ${tkn_mapToken} onto"
+        "${you} must select a ${borderOrCity} to place ${tkn_mapToken} onto"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         borderOrCity: option.token.type === PAWN ? _("Border") : _("City"),
         tkn_mapToken: tknMapToken(option.token.id),
       },

@@ -49,10 +49,10 @@ class TableauOpTaxPayOrRepressState implements State {
     this.game.setTokenSelected({ id: this.args.token.id });
     this.game.clientUpdatePageTitle({
       text: _(
-        "Your ${tkn_mapToken} is taxed. ${tkn_playerName} must pay 1 ${tkn_florin} to China or Repress your ${tkn_mapToken}"
+        "Your ${tkn_mapToken} is taxed. ${you} must pay 1 ${tkn_florin} to China or Repress your ${tkn_mapToken}"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         tkn_mapToken: tknMapToken(this.args.token.id),
         tkn_florin: tknFlorin(),
       },

@@ -46,9 +46,9 @@ class AbilityOpponentsPurpleOpState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may select a card to perform a purple Op"),
+      text: _("${you} may select a card to perform a purple Op"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

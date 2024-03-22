@@ -64,20 +64,13 @@ class BattleReconfigureConstantinopleState implements State {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} may select a Token to move within Constantinople"
+        "${you} may select a Token to move within Constantinople"
       ),
       args: {
-        tkn_playerName: "${you}",
-        // empireName: _(this.args.empire.name)
+        you: "${you}",
       },
     });
 
-    // Object.keys(this.args.possibleLevies).forEach((cityId) => {
-    //   this.game.setLocationSelectable({
-    //     id: cityId,
-    //     callback: () => this.updateInterfaceConfirmPlaceLevy({cityId}),
-    //   });
-    // });
     this.setTokensSelectable();
     this.checkConfirmAndResetButton();
     this.game.addPassButton({ optionalAction: this.args.optionalAction });
@@ -96,11 +89,10 @@ class BattleReconfigureConstantinopleState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a spot to move to or Token to switch with"
+        "${you} must select a spot to move to or Token to switch with"
       ),
       args: {
-        tkn_playerName: "${you}",
-        // empireName: _(this.args.empire.name)
+        you: "${you}",
       },
     });
     this.setDestinationsSelectable({ cityId });

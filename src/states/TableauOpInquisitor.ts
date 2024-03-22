@@ -51,10 +51,10 @@ class TableauOpInquisitorState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a ${tkn_mapToken} to move"),
+      text: _("${you} must select a ${tkn_mapToken} to move"),
       args: {
         tkn_mapToken: tknMapToken(Object.keys(this.args.tokens)[0]),
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 
@@ -69,11 +69,11 @@ class TableauOpInquisitorState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a card to move ${tkn_mapToken} to"
+        "${you} must select a card to move ${tkn_mapToken} to"
       ),
       args: {
         tkn_mapToken: tknMapToken(Object.keys(this.args.tokens)[0]),
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.setCardsSelectable(option);

@@ -46,10 +46,10 @@ class TableauOpRepressState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a Token to Repress"),
+      text: _("${you} must select a Token to Repress"),
       args: {
         tkn_florin: tknFlorin(),
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

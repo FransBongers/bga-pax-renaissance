@@ -44,9 +44,9 @@ class ConfirmPartialTurnState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must confirm the switch of player. You will not be able to restart your turn"),
+      text: _("${you} must confirm the switch of player. You will not be able to restart your turn"),
       args: {
-        tkn_playerName: '${you}'
+        you: '${you}'
       },
     });
     this.game.addConfirmButton({

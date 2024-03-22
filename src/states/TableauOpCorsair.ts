@@ -46,10 +46,10 @@ class TableauOpCorsairState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a Pirate to move"),
+      text: _("${you} must select a Pirate to move"),
       args: {
         tkn_florin: tknFlorin(),
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 
@@ -67,11 +67,11 @@ class TableauOpCorsairState implements State {
     this.game.setTokenSelected({ id: token.id });
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a Sea Border to move ${tkn_mapToken} into"
+        "${you} must select a Sea Border to move ${tkn_mapToken} into"
       ),
       args: {
         tkn_mapToken: tknMapToken(option.token.id),
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.setDestinationBordersSelectable({ option });

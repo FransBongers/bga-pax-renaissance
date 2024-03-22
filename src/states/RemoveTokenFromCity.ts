@@ -46,9 +46,9 @@ class RemoveTokenFromCityState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a Token to remove"),
+      text: _("${you} must select a Token to remove"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.setTokensSelectable();

@@ -41,9 +41,9 @@ class FreeActionState implements State {
     this.game.clearPossible();
     this.setAbilityActionsSelectable();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may perform an action from an ability"),
+      text: _("${you} may perform an action from an ability"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

@@ -56,10 +56,10 @@ class RegimeChangeGoldenLibertyState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "Golden Liberty: ${tkn_playerName} may change ${empireName} to a Medieval state"
+        "Golden Liberty: ${you} may change ${empireName} to a Medieval state"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         empireName: this.args.empire.name,
       },
     });

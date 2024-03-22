@@ -46,9 +46,9 @@ class TableauOpBeheadState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a card to behead"),
+      text: _("${you} must select a card to behead"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

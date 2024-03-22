@@ -5887,6 +5887,10 @@ html[data-background-pref=war] {
   align-items: center;
 }
 
+#pagemaintitle_wrap {
+  flex-grow: 1;
+}
+
 /* make space between buttons on touch devices */
 @media (hover: none) {
   #page-title .action-button.bgabutton,

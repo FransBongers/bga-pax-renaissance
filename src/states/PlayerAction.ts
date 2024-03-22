@@ -12,12 +12,12 @@ class PlayerActionState implements State {
   }
 
   onLeavingState() {
-    debug("Leaving PlayerActionsState");
+    debug('Leaving PlayerActionsState');
   }
 
   setDescription(activePlayerId: number) {
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may perform actions"),
+      text: _('${tkn_playerName} may perform actions'),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -62,9 +62,9 @@ class PlayerActionState implements State {
     this.game.clearPossible();
     this.setMarketCardsSelectable();
     this.game.clientUpdatePageTitle({
-      text: _("${you} must select a card to purchase"),
+      text: _('${you} must select a card to purchase'),
       args: {
-        you: "${you}",
+        you: '${you}',
       },
     });
     this.game.addCancelButton();
@@ -81,18 +81,18 @@ class PlayerActionState implements State {
 
     this.game.setCardSelected({ id: card.id });
     this.game.clientUpdatePageTitle({
-      text: _("Purchase ${cardName} for ${amount} ${tkn_florin} ?"),
+      text: _('Purchase ${cardName} for ${amount} ${tkn_florin} ?'),
       args: {
         amount: column,
         cardName: _(card.name),
-        tkn_florin: _("Florin(s)"),
+        tkn_florin: _('Florin(s)'),
       },
     });
     const callback = () =>
       this.game.takeAction({
-        action: "actPlayerAction",
+        action: 'actPlayerAction',
         args: {
-          action: "purchaseCard",
+          action: 'purchaseCard',
           cardId: card.id,
         },
       });
@@ -116,9 +116,9 @@ class PlayerActionState implements State {
     this.game.clearPossible();
     this.setHandCardsSelectable();
     this.game.clientUpdatePageTitle({
-      text: _("${you} must select a card to play"),
+      text: _('${you} must select a card to play'),
       args: {
-        you: "${you}",
+        you: '${you}',
       },
     });
     this.game.addCancelButton();
@@ -129,7 +129,7 @@ class PlayerActionState implements State {
     this.game.setCardSelected({ id: card.id });
 
     this.game.clientUpdatePageTitle({
-      text: _("Play ${cardName} to tableau?"),
+      text: _('Play ${cardName} to tableau?'),
       args: {
         cardName: _(card.name),
       },
@@ -137,9 +137,9 @@ class PlayerActionState implements State {
 
     const callback = () =>
       this.game.takeAction({
-        action: "actPlayerAction",
+        action: 'actPlayerAction',
         args: {
-          action: "playCard",
+          action: 'playCard',
           cardId: card.id,
         },
       });
@@ -163,9 +163,9 @@ class PlayerActionState implements State {
     this.game.clearPossible();
     this.setVictoryCardsSelectable();
     this.game.clientUpdatePageTitle({
-      text: _("${you} must select a Victory to declare"),
+      text: _('${you} must select a Victory to declare'),
       args: {
-        you: "${you}",
+        you: '${you}',
       },
     });
     this.game.addCancelButton();
@@ -186,8 +186,8 @@ class PlayerActionState implements State {
     // Purchase card action
     if (showActionButtons && this.args.cardsPlayerCanPurchase.length > 0) {
       this.game.addPrimaryActionButton({
-        id: "purchase_card_btn",
-        text: _("Purchase"),
+        id: 'purchase_card_btn',
+        text: _('Purchase'),
         callback: () => this.updateInterfaceSelectCardToPurchase(),
       });
     }
@@ -196,8 +196,8 @@ class PlayerActionState implements State {
     const handCards = this.game.hand.getCards();
     if (showActionButtons && handCards.length > 0) {
       this.game.addPrimaryActionButton({
-        id: "play_card_btn",
-        text: _("Play"),
+        id: 'play_card_btn',
+        text: _('Play'),
         callback: () => this.updateInterfaceSelectHandCard(),
       });
     }
@@ -209,8 +209,8 @@ class PlayerActionState implements State {
       0
     ) {
       this.game.addPrimaryActionButton({
-        id: "sell_card_btn",
-        text: _("Sell"),
+        id: 'sell_card_btn',
+        text: _('Sell'),
         callback: () =>
           this.game
             .framework()
@@ -231,7 +231,7 @@ class PlayerActionState implements State {
         }
         this.game.addPrimaryActionButton({
           id: `${region}_ops_btn`,
-          text: region === EAST ? _("Tableau Ops East") : _("Tableau Ops West"),
+          text: region === EAST ? _('Tableau Ops East') : _('Tableau Ops West'),
           callback: () =>
             this.game
               .framework()
@@ -252,8 +252,8 @@ class PlayerActionState implements State {
     // Trade fair
     if (showActionButtons && this.args.tradeFair.west) {
       this.game.addPrimaryActionButton({
-        id: "trade_fair_west_btn",
-        text: _("Trade Fair West"),
+        id: 'trade_fair_west_btn',
+        text: _('Trade Fair West'),
         callback: () =>
           this.game
             .framework()
@@ -262,7 +262,7 @@ class PlayerActionState implements State {
               {
                 args: {
                   ...this.args.tradeFair.west,
-                  action: "actPlayerAction",
+                  action: 'actPlayerAction',
                 },
               }
             ),
@@ -270,8 +270,8 @@ class PlayerActionState implements State {
     }
     if (showActionButtons && this.args.tradeFair.east) {
       this.game.addPrimaryActionButton({
-        id: "trade_fair_east_btn",
-        text: _("Trade Fair East"),
+        id: 'trade_fair_east_btn',
+        text: _('Trade Fair East'),
         callback: () =>
           this.game
             .framework()
@@ -280,7 +280,7 @@ class PlayerActionState implements State {
               {
                 args: {
                   ...this.args.tradeFair.east,
-                  action: "actPlayerAction",
+                  action: 'actPlayerAction',
                 },
               }
             ),
@@ -290,17 +290,20 @@ class PlayerActionState implements State {
     // Claim Victory
     if (showActionButtons && this.args.declarableVictories.length > 0) {
       this.game.addPrimaryActionButton({
-        id: "declare_victory_btn",
-        text: _("Declare Victory"),
+        id: 'declare_victory_btn',
+        text: _('Declare Victory'),
         callback: () => this.updateInterfaceSelectVictory(),
       });
     }
 
     // Extra abilities
-    if (showActionButtons && Object.entries(this.args.abilityActions).length > 0) {
+    if (
+      showActionButtons &&
+      Object.entries(this.args.abilityActions).length > 0
+    ) {
       this.game.addPrimaryActionButton({
-        id: "abiliy_action_btn",
-        text: _("Use action from ability"),
+        id: 'abiliy_action_btn',
+        text: _('Use action from ability'),
         callback: () =>
           this.game
             .framework()
@@ -322,20 +325,27 @@ class PlayerActionState implements State {
   private updatePageTitle() {
     const remainingActions = this.args.remainingActions;
 
-    let titleText = _("${tkn_playerName} may perform an action");
+    let titleTextWithRemaining = _(
+      '${you} may perform an action (${number} remaining)'
+    );
+    let titleTestNoRemaining = _('${you} may perform an action');
 
-    if (remainingActions === 1) {
-      titleText += _(" (1 remaining)");
-    } else if (remainingActions === 2) {
-      titleText += _(" (2 remaining)");
+    if (remainingActions > 0) {
+      this.game.clientUpdatePageTitle({
+        text: titleTextWithRemaining,
+        args: {
+          you: '${you}',
+          number: remainingActions,
+        },
+      });
+    } else {
+      this.game.clientUpdatePageTitle({
+        text: titleTestNoRemaining,
+        args: {
+          you: '${you}',
+        },
+      });
     }
-
-    this.game.clientUpdatePageTitle({
-      text: titleText,
-      args: {
-        tkn_playerName: "${you}",
-      },
-    });
   }
 
   private setAbilityActionsSelectable() {
@@ -374,7 +384,7 @@ class PlayerActionState implements State {
   private setMarketCardsSelectable() {
     this.args.cardsPlayerCanPurchase.forEach((card) => {
       const { id, location } = card;
-      const [market, region, column] = location.split("_");
+      const [market, region, column] = location.split('_');
 
       this.game.setCardSelectable({
         id: card.id,
@@ -399,7 +409,7 @@ class PlayerActionState implements State {
               {
                 args: {
                   ...this.args.tradeFair[region],
-                  action: "actPlayerAction",
+                  action: 'actPlayerAction',
                 },
               }
             ),
@@ -412,15 +422,15 @@ class PlayerActionState implements State {
       Object.entries(this.args.availableOps[region]).forEach(
         ([cardId, operations]) => {
           const card: TableauCard | EmpireCard = cardId.startsWith(
-            "EmpireSquare"
+            'EmpireSquare'
           )
             ? this.game.gamedatas.empireSquares.find(
                 (square) => square.id === cardId
               )
-            : this.game.gamedatas.staticData.tableauCards[cardId.split("_")[0]];
+            : this.game.gamedatas.staticData.tableauCards[cardId.split('_')[0]];
           operations.forEach((operation) => {
             const operationId = `${card.id}_${operation.id}${
-              card.type === EMPIRE_CARD ? `_${card.side}` : ""
+              card.type === EMPIRE_CARD ? `_${card.side}` : ''
             }`;
 
             this.game.setLocationSelectable({

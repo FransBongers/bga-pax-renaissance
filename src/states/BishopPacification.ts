@@ -46,9 +46,9 @@ class BishopPacificationState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} may choose a Token to Kill"),
+      text: _("${you} may choose a Token to Kill"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.game.addSecondaryActionButton({

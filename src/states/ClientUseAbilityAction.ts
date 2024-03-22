@@ -47,9 +47,9 @@ class ClientUseAbilityActionState implements State {
     this.game.clearPossible();
 
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select an action"),
+      text: _("${you} must select an action"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

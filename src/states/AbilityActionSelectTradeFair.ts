@@ -46,9 +46,9 @@ class AbilityActionSelectTradeFairState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a trade fair to perform"),
+      text: _("${you} must select a trade fair to perform"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

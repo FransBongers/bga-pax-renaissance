@@ -56,9 +56,9 @@ class PlaceAgentState implements State {
     this.game.clearPossible();
 
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select an Agent to place"),
+      text: _("${you} must select an Agent to place"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.addAgentButtons({ agents });
@@ -79,7 +79,7 @@ class PlaceAgentState implements State {
 
     this.game.addPassButton({
       optionalAction: this.args.optionalAction,
-      text: _("Do not place"),
+      text: Object.values(this.args.locations).length > 0 ? _("Do not place") : _("Skip"),
     });
     this.game.addUndoButtons(this.args);
   }
@@ -100,7 +100,6 @@ class PlaceAgentState implements State {
     this.game.clientUpdatePageTitle({
       text: _("Place ${tkn_mapToken} on ${location}?"),
       args: {
-        tkn_playerName: "${you}",
         tkn_mapToken: this.createMapTokenId(),
         location: _(
           card.type === EMPIRE_CARD ? card[card.side].name : card.name
@@ -143,10 +142,10 @@ class PlaceAgentState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select an empire to repress ${tkn_mapToken} to"
+        "${you} must select an empire to repress ${tkn_mapToken} to"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         tkn_mapToken: tknMapToken(location.tokenToRepress.token.id),
       },
     });
@@ -249,14 +248,22 @@ class PlaceAgentState implements State {
   }
 
   private updatePageTitle() {
+    const noOptions = Object.values(this.args.locations).length === 0;
+
+    let text = this.args.optionalAction
+    ? _("${you} may select a location to place ${tkn_mapToken}")
+    : _(
+        "${you} must select a location to place ${tkn_mapToken}"
+      );
+
+      if (noOptions) {
+        text = _("${you} cannot place ${tkn_mapToken} and must skip")
+      }
+
     this.game.clientUpdatePageTitle({
-      text: this.args.optionalAction
-        ? _("${tkn_playerName} may select a location to place ${tkn_mapToken}")
-        : _(
-            "${tkn_playerName} must select a location to place ${tkn_mapToken}"
-          ),
+      text,
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         tkn_mapToken: this.createMapTokenId(),
       },
     });
@@ -281,7 +288,6 @@ class PlaceAgentState implements State {
                 "Place ${tkn_mapToken} on ${location} and Repress ${tkn_mapToken_repressed} ?"
               ),
         args: {
-          tkn_playerName: "${you}",
           tkn_mapToken: this.createMapTokenId(),
           location: _(name),
           cost,
@@ -295,7 +301,6 @@ class PlaceAgentState implements State {
           "Place ${tkn_mapToken} on ${location} and Kill ${tkn_mapToken_killed} ?"
         ),
         args: {
-          tkn_playerName: "${you}",
           tkn_mapToken: this.createMapTokenId(),
           location: _(name),
           tkn_mapToken_killed: tknMapToken(tokenToKill.id),
@@ -305,7 +310,6 @@ class PlaceAgentState implements State {
       this.game.clientUpdatePageTitle({
         text: _("Place ${tkn_mapToken} on ${location}?"),
         args: {
-          tkn_playerName: "${you}",
           tkn_mapToken: this.createMapTokenId(),
           location: _(name),
         },

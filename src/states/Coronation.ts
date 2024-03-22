@@ -46,9 +46,9 @@ class CoronationState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a King to marry"),
+      text: _("${you} must select a King to marry"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.setCardsSelectable();

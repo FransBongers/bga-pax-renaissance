@@ -49,9 +49,9 @@ class SelectTokenState implements State {
     this.game.clearPossible();
 
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a ${tkn_mapToken} to place"),
+      text: _("${you} must select a ${tkn_mapToken} to place"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         tkn_mapToken: tknMapToken(this.args.tokens[0].id),
       },
     });

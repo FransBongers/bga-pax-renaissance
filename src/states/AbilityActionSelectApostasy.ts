@@ -52,9 +52,9 @@ class AbilityActionSelectApostasyState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must choose an apostasy to perform"),
+      text: _("${you} must choose an apostasy to perform"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

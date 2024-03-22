@@ -46,9 +46,9 @@ class TableauOpTaxState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select a Concession to Tax"),
+      text: _("${you} must select a Concession to Tax"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 
@@ -67,9 +67,9 @@ class TableauOpTaxState implements State {
     this.game.setTokenSelected({ id: token.id });
 
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must select the Empire to Tax"),
+      text: _("${you} must select the Empire to Tax"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
 

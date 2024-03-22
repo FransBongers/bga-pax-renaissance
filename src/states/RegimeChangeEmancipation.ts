@@ -47,10 +47,10 @@ class RegimeChangeEmancipationState implements State {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} may select a Repressed Token to move onto the Map"
+        "${you} may select a Repressed Token to move onto the Map"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.game.addPassButton({
@@ -73,10 +73,10 @@ class RegimeChangeEmancipationState implements State {
 
     this.game.clientUpdatePageTitle({
       text: _(
-        "${tkn_playerName} must select a ${borderOrCity} to move ${tkn_mapToken} onto"
+        "${you} must select a ${borderOrCity} to move ${tkn_mapToken} onto"
       ),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
         borderOrCity: token.type === PAWN ? _("Border") : _("City"),
         tkn_mapToken: tknMapToken(token.id),
       },

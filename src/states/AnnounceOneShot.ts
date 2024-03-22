@@ -50,7 +50,6 @@ class AnnounceOneShotState implements State {
         "Perform ${tkn_oneShot} One-shot?"
       ),
       args: {
-        tkn_playerName: "${you}",
         tkn_oneShot: this.args.oneShot,
       },
     });

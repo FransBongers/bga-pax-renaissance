@@ -46,9 +46,9 @@ class FlipVictoryCardState implements State {
   private updateInterfaceInitialStep() {
     this.game.clearPossible();
     this.game.clientUpdatePageTitle({
-      text: _("${tkn_playerName} must flip an inactive Victory Card"),
+      text: _("${you} must flip an inactive Victory Card"),
       args: {
-        tkn_playerName: "${you}",
+        you: "${you}",
       },
     });
     this.setVictoryCardsSelectable();
