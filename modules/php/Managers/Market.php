@@ -20,7 +20,7 @@ class Market
   // .##....##.##..........##....##.....##.##.......
   // ..######..########....##.....#######..##.......
 
-  private function drawInitialMarketCards()
+  private static function drawInitialMarketCards()
   {
     // Assign initial cards to market
     for ($i = 0; $i < 6; $i++) {
@@ -29,7 +29,7 @@ class Market
     }
   }
 
-  public function setupNewGameMarketFlorins()
+  public static function setupNewGameMarketFlorins()
   {
     $marketFlorins = [];
     for ($i = 0; $i < 6; $i++) {

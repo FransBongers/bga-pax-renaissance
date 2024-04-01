@@ -37,7 +37,7 @@ class FlipVictoryCard extends \PaxRenaissance\Models\AtomicAction
   {
     self::checkAction('actFlipVictoryCard');
     $cardId = $args['cardId'];
-    $data = self::argsFlipVictoryCard();
+    $data = $this->argsFlipVictoryCard();
 
     $card = Utils::array_find($data['victoryCards'], function ($victoryCard) use ($cardId) {
       return $victoryCard->getId() == $cardId;

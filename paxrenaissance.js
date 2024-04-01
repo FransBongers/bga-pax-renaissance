@@ -5219,6 +5219,9 @@ var NotificationManager = (function () {
                 switch (_b.label) {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, amount = _a.amount;
+                        if (amount === 0) {
+                            return [2];
+                        }
                         this.getPlayer({ playerId: playerId }).incFlorins(-amount);
                         return [4, this.game.market.moveFlorinAnimation({
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),

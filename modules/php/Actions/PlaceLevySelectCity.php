@@ -35,7 +35,7 @@ class PlaceLevySelectCity extends \PaxRenaissance\Actions\PlaceLevy
     self::checkAction('actPlaceLevySelectCity');
     $cityId = $args['cityId'];
 
-    $possible = self::getPossibleLevies();
+    $possible = $this->getPossibleLevies();
 
     if (!isset($possible['possibleLevies'][$cityId])) {
       throw new \feException("Not allowed to place Levy in selected City");

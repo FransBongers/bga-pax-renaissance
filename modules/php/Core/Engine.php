@@ -19,7 +19,7 @@ class Engine
 {
   public static $tree = null;
 
-  public function boot()
+  public static function boot()
   {
     $t = Globals::getEngine();
     self::$tree = self::buildTree($t);
@@ -30,7 +30,7 @@ class Engine
    * Save current tree into Globals table
    */
 
-  public function save()
+  public static function save()
   {
     $t = self::$tree->toArray();
     Globals::setEngine($t);
@@ -39,7 +39,7 @@ class Engine
   /**
    * Ensure the root is a SEQ node to be able to insert easily in the current flow
    */
-  protected function ensureSeqRootNode()
+  protected static function ensureSeqRootNode()
   {
     if (!self::$tree instanceof \PaxRenaissance\Core\Engine\SeqNode) {
       self::$tree = new \PaxRenaissance\Core\Engine\SeqNode([], [self::$tree]);
@@ -51,7 +51,7 @@ class Engine
    * Setup the engine, given an array representing a tree
    * @param array $t
    */
-  public function setup($t, $callback)
+  public static function setup($t, $callback)
   {
     self::$tree = self::buildTree($t);
     self::save();
@@ -83,7 +83,7 @@ class Engine
   /**
    * Recursively compute the next unresolved node we are going to address
    */
-  public function getNextUnresolved()
+  public static function getNextUnresolved()
   {
     return self::$tree->getNextUnresolved();
   }
@@ -92,7 +92,7 @@ class Engine
    * Proceed to next unresolved part of tree
    * // TODO: check $isUndo flag 
    */
-  public function proceed($confirmedPartial = false, $isUndo = false)
+  public static function proceed($confirmedPartial = false, $isUndo = false)
   {
     $node = self::$tree->getNextUnresolved();
     // If there are no nodes to resolve we are done. Either transition to
@@ -138,7 +138,7 @@ class Engine
     self::proceedToState($node);
   }
 
-  public function proceedToState($node)
+  public static function proceedToState($node)
   {
     $state = $node->getState();
     Game::get()->gamestate->jumpToState($state);
@@ -148,7 +148,7 @@ class Engine
    * Resolve the current unresolved node
    * @param array $args : store informations about the resolution (choices made by players)
    */
-  public function resolve($args = [])
+  public static function resolve($args = [])
   {
     // Get current node
     $node = self::$tree->getNextUnresolved();
@@ -160,7 +160,7 @@ class Engine
   /**
    * Resolve action : resolve the action of a leaf action node
    */
-  public function resolveAction($args = [], $checkpoint = false, &$node = null)
+  public static function resolveAction($args = [], $checkpoint = false, &$node = null)
   {
     if (is_null($node)) {
       $node = self::$tree->getNextUnresolved();
@@ -185,7 +185,7 @@ class Engine
   /**
    * Checkpoint for undo func functionality
    */
-  public function checkpoint()
+  public static function checkpoint()
   {
     Globals::setEngineChoices(0);
     Log::checkpoint();
@@ -194,7 +194,7 @@ class Engine
   /**
    * Insert a new node at root level of the tree at the end of seq node
    */
-  public function insertAtRoot($t, $last = true)
+  public static function insertAtRoot($t, $last = true)
   {
     self::ensureSeqRootNode();
     $node = self::buildTree($t);
@@ -235,7 +235,7 @@ class Engine
   /**
    * Confirm the full resolution of current flow
    */
-  public function confirm()
+  public static function confirm()
   {
     $node = self::$tree->getNextUnresolved();
     // Are we done ?
@@ -255,7 +255,7 @@ class Engine
     }
   }
 
-  public function confirmPartialTurn()
+  public static function confirmPartialTurn()
   {
     $node = self::$tree->getNextUnresolved();
 
@@ -279,7 +279,7 @@ class Engine
   /**
    * Restart the whole flow
    */
-  public function restart()
+  public static function restart()
   {
     Log::undoTurn();
 
@@ -292,7 +292,7 @@ class Engine
   /**
    * Restart at a given step
    */
-  public function undoToStep($stepId)
+  public static function undoToStep($stepId)
   {
     Log::undoToStep($stepId);
 
@@ -305,7 +305,7 @@ class Engine
   /**
    * Clear all nodes related to the current active zombie player
    */
-  public function clearZombieNodes($playerId)
+  public static function clearZombieNodes($playerId)
   {
     self::$tree->clearZombieNodes($playerId);
   }
@@ -313,7 +313,7 @@ class Engine
   /**
    * Get all resolved actions of given types
    */
-  public function getResolvedActions($types)
+  public static function getResolvedActions($types)
   {
     return self::$tree->getResolvedActions($types);
   }
@@ -321,7 +321,7 @@ class Engine
   /**
    * Get all unresolved actions of given types
    */
-  public function getUnresolvedActions($types)
+  public static function getUnresolvedActions($types)
   {
     return self::$tree->getUnresolvedActions($types);
   }

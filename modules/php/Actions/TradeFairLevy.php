@@ -27,7 +27,7 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
 
   public function stTradeFairLevy()
   {
-    $args = self::getPossibleLevies();
+    $args = $this->getPossibleLevies();
     if (count($args['possibleLevies']) === 0) {
       $this->resolveAction([]);
     } else if (count($args['possibleLevies']) === 1) {
@@ -69,7 +69,7 @@ class TradeFairLevy extends \PaxRenaissance\Models\AtomicAction
     self::checkAction('actTradeFairLevy');
     $cityId = $args['cityId'];
 
-    $possible = self::getPossibleLevies();
+    $possible = $this->getPossibleLevies();
 
     if (!isset($possible['possibleLevies'][$cityId])) {
       throw new \feException("Not allowed to place Levy in selected City");

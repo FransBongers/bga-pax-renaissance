@@ -142,7 +142,7 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     return self::get(self::getCurrentId());
   }
 
-  public function getNextId($player)
+  public static function getNextId($player)
   {
     $playerId = is_int($player) ? $player : $player->getId();
 
@@ -163,7 +163,7 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
   /*
    * Return the number of players
    */
-  public function count()
+  public static function count()
   {
     return self::DB()->count();
   }
@@ -193,7 +193,7 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
   /*
    * Get current turn order according to first player variable
    */
-  public function getTurnOrder($firstPlayer = null)
+  public static function getTurnOrder($firstPlayer = null)
   {
     $firstPlayer = $firstPlayer ?? Globals::getFirstPlayer();
     $order = [];

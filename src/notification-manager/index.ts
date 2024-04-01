@@ -565,6 +565,9 @@ class NotificationManager {
 
   async notif_payFlorinsToChina(notif: Notif<NotifPayFlorinsToChinaArgs>) {
     const { playerId, amount } = notif.args;
+    if (amount === 0) {
+      return;
+    }
     this.getPlayer({ playerId }).incFlorins(-amount);
     await this.game.market.moveFlorinAnimation({
       fromId: `pr_florins_counter_${playerId}_icon`,

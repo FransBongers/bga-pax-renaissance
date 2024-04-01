@@ -42,17 +42,17 @@ class TradeFair extends \PaxRenaissance\Models\AtomicAction
     $player = self::getPlayer();
 
     Cards::move($tradeFairs[$region]['card']->getId(), DISCARD);
-    $florinsFromChina = self::florinsFromChina($region);
+    $florinsFromChina = $this->florinsFromChina($region);
     Notifications::tradeFairConvene($player, $region, $florinsFromChina);
 
     $profits = Market::getMarketFlorins($region, 0);
-    $profits = self::emporiumSubsidy($player, $region, $profits);
+    $profits = $this->emporiumSubsidy($player, $region, $profits);
 
     
     if ($profits === 0) {
       Notifications::tradeFairNoVoyage();
     } else {
-      self::addSiblings($tradeRoute, $region, $city->getId());
+      $this->addSiblings($tradeRoute, $region, $city->getId());
     }
 
 

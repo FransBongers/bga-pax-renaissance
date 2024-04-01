@@ -142,7 +142,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
     self::setupPlaceStartingConcessions($players, $options);
   }
 
-  public function setupCreateTokens()
+  public static function setupCreateTokens()
   {
     $tokens = [];
     $setup = [
@@ -189,7 +189,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
     }
   }
 
-  private function setupPlaceTokens($players, $options)
+  private static function setupPlaceTokens($players, $options)
   {
     $mapOption = Globals::getStartingMap();
     $mapVariant1550 = $mapOption === OPTION_STARTING_MAP_1550_VARIANT;
@@ -231,7 +231,7 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
     }
   }
 
-  private function setupPlaceStartingConcessions($players, $options)
+  private static function setupPlaceStartingConcessions($players, $options)
   {
     $players = Players::getAll();
     foreach ($players as $playerId => $player) {
