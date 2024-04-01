@@ -3,8 +3,8 @@ class PlayerTableau {
   private playerId: number;
 
   public tableau: {
-    [EAST]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
-    [WEST]?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
+    [EAST]?: LineStockWithSort<EmpireCard | TableauCard | EmpireCardContainer>;
+    [WEST]?: LineStockWithSort<EmpireCard | TableauCard | EmpireCardContainer>;
     oldMaids?: LineStock<EmpireCard | TableauCard | EmpireCardContainer>;
   } = {};
 
@@ -91,12 +91,12 @@ class PlayerTableau {
         })
       );
 
-    this.tableau[EAST] = new LineStock(
+    this.tableau[EAST] = new LineStockWithSort(
       this.game.tableauCardManager,
       document.getElementById(`tableau_east_${player.id}`),
       { center: false, sort: sortFunction("state") }
     );
-    this.tableau[WEST] = new LineStock(
+    this.tableau[WEST] = new LineStockWithSort(
       this.game.tableauCardManager,
       document.getElementById(`tableau_west_${player.id}`),
       { center: false, sort: sortFunction("state") }

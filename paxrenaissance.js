@@ -4680,54 +4680,54 @@ var NotificationManager = (function () {
     }
     NotificationManager.prototype.setupNotifications = function () {
         var _this = this;
-        debug("notifications subscriptions setup");
-        dojo.connect(this.game.framework().notifqueue, "addToLog", function () {
+        debug('notifications subscriptions setup');
+        dojo.connect(this.game.framework().notifqueue, 'addToLog', function () {
             _this.game.addLogClass();
         });
         var notifs = [
-            ["log", undefined],
-            ["activateAbility", undefined],
-            ["changeEmpireToMedievalState", undefined],
-            ["changeEmpireToTheocracy", undefined],
-            ["changeEmpireSquare", undefined],
-            ["clearTurn", undefined],
-            ["coronation", undefined],
-            ["deactivateAbility", undefined],
-            ["declareVictory", undefined],
-            ["discardCard", undefined],
-            ["discardQueen", undefined],
-            ["flipEmpireCard", undefined],
-            ["flipVictoryCard", undefined],
-            ["moveEmpireSquare", undefined],
-            ["moveToken", undefined],
-            ["moveTokensWithinConstantinople", undefined],
-            ["oldMaid", undefined],
-            ["payFlorinsToChina", undefined],
-            ["placeToken", undefined],
-            ["playCard", undefined],
-            ["purchaseCard", undefined],
-            ["refreshHand", undefined],
-            ["refreshMarket", undefined],
-            ["refreshUI", undefined],
-            ["repressToken", undefined],
-            ["returnToSupply", undefined],
-            ["returnToThrone", undefined],
-            ["sellCard", undefined],
-            ["sellRoyalCouple", undefined],
-            ["tableauOpCommerce", undefined],
-            ["tableauOpTaxPay", undefined],
-            ["tradeFairConvene", undefined],
-            ["tradeFairEmporiumSubsidy", undefined],
-            ["tradeFairProfitDispersalPirates", undefined],
-            ["tradeFairProfitDispersalPlayer", undefined],
+            ['log', undefined],
+            ['activateAbility', undefined],
+            ['changeEmpireToMedievalState', undefined],
+            ['changeEmpireToTheocracy', undefined],
+            ['changeEmpireSquare', undefined],
+            ['clearTurn', undefined],
+            ['coronation', undefined],
+            ['deactivateAbility', undefined],
+            ['declareVictory', undefined],
+            ['discardCard', undefined],
+            ['discardQueen', undefined],
+            ['flipEmpireCard', undefined],
+            ['flipVictoryCard', undefined],
+            ['moveEmpireSquare', undefined],
+            ['moveToken', undefined],
+            ['moveTokensWithinConstantinople', undefined],
+            ['oldMaid', undefined],
+            ['payFlorinsToChina', undefined],
+            ['placeToken', undefined],
+            ['playCard', undefined],
+            ['purchaseCard', undefined],
+            ['refreshHand', undefined],
+            ['refreshMarket', undefined],
+            ['refreshUI', undefined],
+            ['repressToken', undefined],
+            ['returnToSupply', undefined],
+            ['returnToThrone', undefined],
+            ['sellCard', undefined],
+            ['sellRoyalCouple', undefined],
+            ['tableauOpCommerce', undefined],
+            ['tableauOpTaxPay', undefined],
+            ['tradeFairConvene', undefined],
+            ['tradeFairEmporiumSubsidy', undefined],
+            ['tradeFairProfitDispersalPirates', undefined],
+            ['tradeFairProfitDispersalPlayer', undefined],
         ];
         notifs.forEach(function (notif) {
             _this.subscriptions.push(dojo.subscribe(notif[0], _this, function (notifDetails) {
                 debug("notif_".concat(notif[0]), notifDetails);
                 var msg = _this.game.format_string_recursive(notifDetails.log, notifDetails.args);
-                if (msg != "") {
-                    $("gameaction_status").innerHTML = msg;
-                    $("pagemaintitletext").innerHTML = msg;
+                if (msg != '') {
+                    $('gameaction_status').innerHTML = msg;
+                    $('pagemaintitletext').innerHTML = msg;
                 }
                 var promise = _this["notif_".concat(notif[0])](notifDetails);
                 promise === null || promise === void 0 ? void 0 : promise.then(function () {
@@ -4740,7 +4740,7 @@ var NotificationManager = (function () {
     NotificationManager.prototype.notif_log = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                debug("notif_log", notif.args);
+                debug('notif_log', notif.args);
                 return [2, Promise.resolve()];
             });
         });
@@ -4813,7 +4813,7 @@ var NotificationManager = (function () {
                         player.activateAbility({ ability: ability });
                         break;
                     default:
-                        debug("Unhandled ability: ", ability);
+                        debug('Unhandled ability: ', ability);
                 }
                 return [2];
             });
@@ -4877,7 +4877,7 @@ var NotificationManager = (function () {
                         player.deactivateAbility({ ability: ability });
                         break;
                     default:
-                        debug("Unhandled ability: ", ability);
+                        debug('Unhandled ability: ', ability);
                 }
                 return [2];
             });
@@ -4919,7 +4919,7 @@ var NotificationManager = (function () {
                 this.game.gamedatas.gameMap.empires[papalStatesIndex].religion = religion;
                 node = document.getElementById("".concat(oldEmpireSquare.id, "-front"));
                 if (node) {
-                    node.setAttribute("data-religion", religion);
+                    node.setAttribute('data-religion', religion);
                 }
                 this.game.tooltipManager.removeTooltip(oldEmpireSquare.id);
                 this.game.tooltipManager.addEmpireCardTooltip({
@@ -4992,7 +4992,7 @@ var NotificationManager = (function () {
                         _b.label = 4;
                     case 4:
                         player = this.getPlayer({ playerId: playerId });
-                        if (fromLocationId.startsWith("hand_")) {
+                        if (fromLocationId.startsWith('hand_')) {
                             player.incHandCards(card.region, -1);
                             this.game.openHandsModal.removeCard({
                                 playerId: playerId,
@@ -5060,13 +5060,17 @@ var NotificationManager = (function () {
                         this.game.gameMap.updateCoatOfArms({ card: card });
                         this.removePrestige({ prestige: card[oldSide].prestige, player: player });
                         player.counters[oldSide].incValue(-1);
-                        if (!(formerSuzerain !== null)) return [3, 2];
                         container = createEmpireCardContainer(card);
+                        if (!(formerSuzerain !== null)) return [3, 2];
                         return [4, player.tableau.addCard(container)];
                     case 1:
                         _b.sent();
-                        _b.label = 2;
+                        return [3, 3];
                     case 2:
+                        this.game.tableauCardManager.updateCardInformations(container);
+                        player.tableau.tableau[container.location.split('_')[1]].sortStock();
+                        _b.label = 3;
+                    case 3:
                         this.game.tableauCardManager.updateCardInformations(card);
                         this.addPrestige({ prestige: card[card.side].prestige, player: player });
                         player.counters[card.side].incValue(1);
@@ -5143,14 +5147,14 @@ var NotificationManager = (function () {
                         this.adjustSupremeReligionCounters({
                             token: token,
                             location: from,
-                            addOrRemove: "remove",
+                            addOrRemove: 'remove',
                         });
                         if (isPawn && from.type === BORDER) {
                             this.game.playerManager
-                                .getPlayerForBank({ bank: token.id.split("_")[1] })
+                                .getPlayerForBank({ bank: token.id.split('_')[1] })
                                 .counters.concessions.incValue(-1);
                         }
-                        node = document.getElementById(token["type"] === BISHOP
+                        node = document.getElementById(token['type'] === BISHOP
                             ? "".concat(token.location, "_tokens")
                             : "pr_".concat(token.location));
                         return [4, this.game.animationManager.attachWithAnimation(new BgaSlideAnimation({ element: tokenNode }), node)];
@@ -5159,11 +5163,11 @@ var NotificationManager = (function () {
                         this.adjustSupremeReligionCounters({
                             token: token,
                             location: to,
-                            addOrRemove: "add",
+                            addOrRemove: 'add',
                         });
                         if (isPawn && to.type === BORDER) {
                             this.game.playerManager
-                                .getPlayerForBank({ bank: token.id.split("_")[1] })
+                                .getPlayerForBank({ bank: token.id.split('_')[1] })
                                 .counters.concessions.incValue(1);
                         }
                         return [2];
@@ -5225,7 +5229,7 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: playerId }).incFlorins(-amount);
                         return [4, this.game.market.moveFlorinAnimation({
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
-                                toId: "pr_china",
+                                toId: 'pr_china',
                                 index: 0,
                             })];
                     case 1:
@@ -5243,10 +5247,10 @@ var NotificationManager = (function () {
                 switch (_c.label) {
                     case 0:
                         _b = notif.args, token = _b.token, fromLocationId = _b.fromLocationId, to = _b.to;
-                        split = token.id.split("_");
+                        split = token.id.split('_');
                         isPawn = split[0] === PAWN;
                         isBishop = split[0] === BISHOP;
-                        fromSupply = fromLocationId.startsWith("supply");
+                        fromSupply = fromLocationId.startsWith('supply');
                         if (fromSupply && isPawn) {
                             this.game.supply.incValue({
                                 bank: split[1],
@@ -5264,7 +5268,7 @@ var NotificationManager = (function () {
                         if (isBishop) {
                             node = document.getElementById("".concat(token.location, "_tokens"));
                         }
-                        else if (token.location.startsWith("EmpireSquare_")) {
+                        else if (token.location.startsWith('EmpireSquare_')) {
                             repressTokensToThrones = this.game.settings.get({
                                 id: REPRESS_TOKENS_TO_THRONES,
                             }) === ENABLED;
@@ -5279,13 +5283,13 @@ var NotificationManager = (function () {
                             return [2];
                         }
                         if (!fromSupply) return [3, 2];
-                        node.insertAdjacentHTML("beforeend", tplToken(token));
+                        node.insertAdjacentHTML('beforeend', tplToken(token));
                         element = document.getElementById(token.id);
                         fromRect = (_a = document
                             .getElementById("".concat(token.type, "_").concat(token.separator, "_supply"))) === null || _a === void 0 ? void 0 : _a.getBoundingClientRect();
                         return [4, this.game.animationManager.play(new BgaSlideAnimation({
                                 element: element,
-                                transitionTimingFunction: "linear",
+                                transitionTimingFunction: 'linear',
                                 fromRect: fromRect,
                             }))];
                     case 1:
@@ -5302,7 +5306,7 @@ var NotificationManager = (function () {
                         this.adjustSupremeReligionCounters({
                             token: token,
                             location: to,
-                            addOrRemove: "add",
+                            addOrRemove: 'add',
                         });
                         if (isPawn) {
                             this.game.playerManager
@@ -5393,8 +5397,8 @@ var NotificationManager = (function () {
                         move = cardMoves_1[_i];
                         index += 1;
                         from = move.from, to = move.to, card = move.card;
-                        _b = from.split("_"), _1 = _b[0], fromRegion = _b[1], fromColumn = _b[2];
-                        _c = to.split("_"), _2 = _c[0], toRegion = _c[1], toCol = _c[2];
+                        _b = from.split('_'), _1 = _b[0], fromRegion = _b[1], fromColumn = _b[2];
+                        _c = to.split('_'), _2 = _c[0], toRegion = _c[1], toCol = _c[2];
                         card.location = to;
                         florinsOnCard = this.game.market.getFlorins({
                             region: fromRegion,
@@ -5485,7 +5489,7 @@ var NotificationManager = (function () {
                         _a = notif.args, playerId = _a.playerId, token = _a.token, cost = _a.cost, from = _a.from;
                         if (!(cost < 0)) return [3, 2];
                         return [4, this.game.market.moveFlorinAnimation({
-                                fromId: "pr_china",
+                                fromId: 'pr_china',
                                 index: 0,
                                 toId: "pr_florins_counter_".concat(playerId, "_icon"),
                             })];
@@ -5496,7 +5500,7 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: playerId }).incFlorins(-cost);
                         if (!(cost > 0)) return [3, 4];
                         return [4, this.game.market.moveFlorinAnimation({
-                                toId: "pr_china",
+                                toId: 'pr_china',
                                 index: 0,
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
                             })];
@@ -5509,7 +5513,7 @@ var NotificationManager = (function () {
                         this.adjustSupremeReligionCounters({
                             token: token,
                             location: from,
-                            addOrRemove: "remove",
+                            addOrRemove: 'remove',
                         });
                         if (token.type === PAWN) {
                             this.game.playerManager
@@ -5580,9 +5584,9 @@ var NotificationManager = (function () {
                         this.adjustSupremeReligionCounters({
                             token: token,
                             location: from,
-                            addOrRemove: "remove",
+                            addOrRemove: 'remove',
                         });
-                        if (token.type === PAWN && !from.id.startsWith("EmpireSquare")) {
+                        if (token.type === PAWN && !from.id.startsWith('EmpireSquare')) {
                             this.game.playerManager
                                 .getPlayerForBank({ bank: token.separator })
                                 .counters.concessions.incValue(-1);
@@ -5595,7 +5599,7 @@ var NotificationManager = (function () {
                         node.remove();
                         _b.label = 2;
                     case 2:
-                        split = token.id.split("_");
+                        split = token.id.split('_');
                         if (split[0] === PAWN) {
                             this.game.supply.incValue({
                                 bank: split[1],
@@ -5632,7 +5636,7 @@ var NotificationManager = (function () {
                 switch (_c.label) {
                     case 0:
                         _a = notif.args, playerId = _a.playerId, location = _a.location;
-                        _b = location.split("_"), _ = _b[0], region = _b[1], column = _b[2];
+                        _b = location.split('_'), _ = _b[0], region = _b[1], column = _b[2];
                         this.game.market.incFlorinValue({
                             region: region,
                             column: Number(column),
@@ -5661,7 +5665,7 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: playerId }).incFlorins(-1);
                         return [4, this.game.market.moveFlorinAnimation({
                                 fromId: "pr_florins_counter_".concat(playerId, "_icon"),
-                                toId: "pr_china",
+                                toId: 'pr_china',
                                 index: 0,
                             })];
                     case 1:
@@ -5679,7 +5683,7 @@ var NotificationManager = (function () {
                     case 0:
                         _a = notif.args, florinsFromChina = _a.florinsFromChina, region = _a.region;
                         return [4, this.game.market.moveFlorinAnimation({
-                                fromId: "pr_china",
+                                fromId: 'pr_china',
                                 toId: "pr_market_".concat(region, "_0_florins"),
                                 index: 1,
                             })];
@@ -5781,7 +5785,7 @@ var NotificationManager = (function () {
     NotificationManager.prototype.adjustSupremeReligionCounters = function (_a) {
         var _this = this;
         var token = _a.token, location = _a.location, addOrRemove = _a.addOrRemove;
-        var add = addOrRemove === "add";
+        var add = addOrRemove === 'add';
         if (token.type === PAWN || !location) {
             return;
         }
@@ -5913,7 +5917,7 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.getRegionAndColumnMarketLocation = function (_a) {
         var location = _a.location;
-        var _b = location.split("_"), _ = _b[0], region = _b[1], colummn = _b[2];
+        var _b = location.split('_'), _ = _b[0], region = _b[1], colummn = _b[2];
         return {
             region: region,
             column: Number(colummn),
@@ -6612,8 +6616,8 @@ var PlayerTableau = (function () {
                 color: player.color,
             })),
         }));
-        this.tableau[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state") });
-        this.tableau[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state") });
+        this.tableau[EAST] = new LineStockWithSort(this.game.tableauCardManager, document.getElementById("tableau_east_".concat(player.id)), { center: false, sort: sortFunction("state") });
+        this.tableau[WEST] = new LineStockWithSort(this.game.tableauCardManager, document.getElementById("tableau_west_".concat(player.id)), { center: false, sort: sortFunction("state") });
         this.tableau.oldMaids = new LineStock(this.game.tableauCardManager, document.getElementById("old_maids_".concat(player.id)));
         this.updateCards({ player: player });
     };
@@ -6714,6 +6718,28 @@ var PlayerTableau = (function () {
     };
     return PlayerTableau;
 }());
+var LineStockWithSort = (function (_super) {
+    __extends(LineStockWithSort, _super);
+    function LineStockWithSort(manager, element, settings) {
+        var _this = _super.call(this, manager, element, settings) || this;
+        _this.manager = manager;
+        _this.element = element;
+        return _this;
+    }
+    LineStockWithSort.prototype.sortStock = function () {
+        if (this.sort && this.cards.length) {
+            this.cards.sort(this.sort);
+            var previouslyMovedCardDiv = this.getCardElement(this.cards[this.cards.length - 1]);
+            this.element.appendChild(previouslyMovedCardDiv);
+            for (var i = this.cards.length - 2; i >= 0; i--) {
+                var movedCardDiv = this.getCardElement(this.cards[i]);
+                this.element.insertBefore(movedCardDiv, previouslyMovedCardDiv);
+                previouslyMovedCardDiv = movedCardDiv;
+            }
+        }
+    };
+    return LineStockWithSort;
+}(LineStock));
 var tplPlayerTableauContent = function (_a) {
     var player = _a.player, title = _a.title, overlap = _a.overlap, overlapEmpireSquares = _a.overlapEmpireSquares, showCounters = _a.showCounters;
     var playerId = player.id;

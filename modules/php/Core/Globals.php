@@ -158,7 +158,6 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
   {
     // Game options
     self::setOpenHands(($options[\PaxRenaissance\OPTION_OPEN_HANDS] ?? null) == \PaxRenaissance\OPTION_OPEN_HANDS_ENABLED);
-    self::setFirstPlayerVariant(count($players) === 2 && ($options[\PaxRenaissance\OPTION_FIRST_PLAYER_VARIANT] ?? null) == \PaxRenaissance\OPTION_FIRST_PLAYER_VARIANT_ENABLED);
     self::setStartingMap($options[\PaxRenaissance\OPTION_STARTING_MAP]);
   }
 }

@@ -102,15 +102,7 @@ class PlayersExtra extends \PaxRenaissance\Helpers\DB_Manager
   {
     $players = Players::getAll();
 
-    $fuggerPlayer = self::getPlayerForBank($players, FUGGER);
-    if ($fuggerPlayer !== null) {
-      return $fuggerPlayer->getId();
-    }
-    $firstPlayerVariant = Globals::getFirstPlayerVariant();
-    if (!$firstPlayerVariant) {
-      return Game::get()->getNextPlayerTable()[0];
-    }
-    $orderPriority = [BERENBERG, MARCHIONNI, MEDICI, MENDES];
+    $orderPriority = [FUGGER, BERENBERG, MARCHIONNI, MEDICI, MENDES, COEUR];
 
     foreach ($orderPriority as $bank) {
       $player = self::getPlayerForBank($players, $bank);

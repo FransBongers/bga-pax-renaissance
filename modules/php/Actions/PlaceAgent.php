@@ -116,7 +116,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     Engine::insertAsChild(Flows::placeToken($player->getId(), $supply, $locationId, $locationType, isset($args['empireId']) ? $args['empireId'] : $info['empireId'], $cost), $this->ctx);
 
 
-    $this->insertNextAgentAction($options, $agent);
+    $this->insertNextAgentAction($options, $agent, $locationId);
 
     $this->resolveAction($args);
   }
@@ -163,7 +163,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
   }
 
-  private function insertNextAgentAction($options, $agent)
+  private function insertNextAgentAction($options, $agent, $locationId)
   {
     $agents = $options['agents'];
     $info = $this->ctx->getInfo();
@@ -184,6 +184,10 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
         'empireId' => $this->ctx->getInfo()['empireId'],
         'optional' => $optional,
         'source' => $source,
+        'placedAgent' => [
+          'agent' => $agent,
+          'locationId' => $locationId,
+        ],
       ]));
     }
   }
@@ -193,13 +197,22 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     $info = $this->ctx->getInfo();
     $empireId = $info['empireId'];
     $agents = $info['agents'];
-    // $repressCost = isset($info['repressCost']) ? $info['repressCost'] : 1;
+
     $player = self::getPlayer();
     // Assumption: card only place agents of the same type
     $type = $agents[0]['type'];
 
     $playerHasFlorins = $player->getFlorins() > 0;
-    $locations = $this->getLocations($playerHasFlorins, $empireId, $type);
+
+    $excludedLocationId = null;
+    if (
+      isset($info['placedAgent'])
+      // && $info['placedAgent']['agent']['separator'] === $agents[0]['separator'] &&
+      // $info['placedAgent']['agent']['type'] === $agents[0]['type']
+    ) {
+      $excludedLocationId = $info['placedAgent']['locationId'];
+    }
+    $locations = $this->getLocations($playerHasFlorins, $empireId, $type, $excludedLocationId);
     return [
       'agents' => $agents,
       'locations' => $locations,
@@ -207,20 +220,20 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
   }
 
 
-  private function getLocations($playerHasFlorins, $empireId, $type)
+  private function getLocations($playerHasFlorins, $empireId, $type, $excludedLocationId)
   {
     $empires = $this->getEmpires($empireId);
     switch ($type) {
       case PIRATE:
       case PAWN:
-        return $this->getBorders($playerHasFlorins, $empireId, $type);
+        return $this->getBorders($playerHasFlorins, $empireId, $type, $excludedLocationId);
         break;
       case KNIGHT:
       case ROOK:
-        return $this->getCities($playerHasFlorins, $empires, $type);
+        return $this->getCities($playerHasFlorins, $empires, $type, $excludedLocationId);
         break;
       case BISHOP:
-        return $this->getCards($empireId, $type);
+        return $this->getCards($empireId, $type, $excludedLocationId);
         break;
     }
   }
@@ -234,7 +247,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     }
   }
 
-  private function getBorders($playerHasFlorins, $empireId, $type)
+  private function getBorders($playerHasFlorins, $empireId, $type, $excludedLocationId)
   {
     $empires = $this->getEmpires($empireId);
     $borders = array_merge(...array_map(function ($empire) {
@@ -245,6 +258,9 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
     foreach ($borders as $border) {
       $borderId = $border->getId();
+      if ($excludedLocationId !== null && $borderId === $excludedLocationId) {
+        continue;
+      }
       if (array_key_exists($borderId, $locations)) {
         continue;
       }
@@ -309,7 +325,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     return $locations;
   }
 
-  private function getCards($empireId, $type)
+  private function getCards($empireId, $type, $excludedLocationId)
   {
 
     $cards = array_merge(Cards::getAllCardsInTableaux(), Cards::getAllCardsInThrones()->toArray());
@@ -325,6 +341,11 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
 
     $locations = [];
     foreach ($cards as $card) {
+      // Skip for cards for now as there can lead to a situation where the game is stuck and only option is undo
+      // (ie, Oratory of Divine Love discards itself with apostasy One-shot).
+      // if ($excludedLocationId !== null && $card->getId() === $excludedLocationId) {
+      //   continue;
+      // }
       if (in_array($card->getEmpireId(), $validEmpireIds)) {
         $locations[$card->getId()] = $card;
       }
@@ -332,7 +353,7 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     return $locations;
   }
 
-  private function getCities($playerHasFlorins, $empires, $type)
+  private function getCities($playerHasFlorins, $empires, $type, $excludedLocationId)
   {
     $cities = array_merge(...array_map(function ($empire) {
       return $empire->getCities();
@@ -341,6 +362,9 @@ class PlaceAgent extends \PaxRenaissance\Models\AtomicAction
     $locations = [];
     foreach ($cities as $city) {
       $cityId = $city->getId();
+      if ($excludedLocationId !== null && $cityId === $excludedLocationId) {
+        continue;
+      }
 
       $token = $city->getToken();
       if ($token === null) {

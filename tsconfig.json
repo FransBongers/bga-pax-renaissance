@@ -66,6 +66,7 @@
     "src/player-manager/index.ts",
     "src/player-manager/player.ts",
     "src/player-manager/tableau/index.ts",
+    "src/player-manager/tableau/LineStockWithSort.ts",
     "src/player-manager/tableau/templates.ts",
     "src/player-manager/templates.ts",
     "src/player-manager/types.d.ts",

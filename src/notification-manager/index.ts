@@ -32,50 +32,50 @@ class NotificationManager {
   // ..######..########....##.....#######..##.......
 
   setupNotifications() {
-    debug("notifications subscriptions setup");
+    debug('notifications subscriptions setup');
 
-    dojo.connect(this.game.framework().notifqueue, "addToLog", () => {
+    dojo.connect(this.game.framework().notifqueue, 'addToLog', () => {
       this.game.addLogClass();
     });
 
     const notifs: [id: string, wait: number][] = [
       // checked
-      ["log", undefined],
-      ["activateAbility", undefined],
-      ["changeEmpireToMedievalState", undefined],
-      ["changeEmpireToTheocracy", undefined],
-      ["changeEmpireSquare", undefined],
-      ["clearTurn", undefined],
-      ["coronation", undefined],
-      ["deactivateAbility", undefined],
-      ["declareVictory", undefined],
-      ["discardCard", undefined],
-      ["discardQueen", undefined],
-      ["flipEmpireCard", undefined],
-      ["flipVictoryCard", undefined],
-      ["moveEmpireSquare", undefined],
-      ["moveToken", undefined],
-      ["moveTokensWithinConstantinople", undefined],
-      ["oldMaid", undefined],
-      ["payFlorinsToChina", undefined],
-      ["placeToken", undefined],
-      ["playCard", undefined],
-      ["purchaseCard", undefined],
-      ["refreshHand", undefined],
-      ["refreshMarket", undefined],
-      ["refreshUI", undefined],
-      ["repressToken", undefined],
-      ["returnToSupply", undefined],
-      ["returnToThrone", undefined],
-      ["sellCard", undefined],
-      ["sellRoyalCouple", undefined],
-      ["tableauOpCommerce", undefined],
-      ["tableauOpTaxPay", undefined],
-      ["tradeFairConvene", undefined],
-      ["tradeFairEmporiumSubsidy", undefined],
+      ['log', undefined],
+      ['activateAbility', undefined],
+      ['changeEmpireToMedievalState', undefined],
+      ['changeEmpireToTheocracy', undefined],
+      ['changeEmpireSquare', undefined],
+      ['clearTurn', undefined],
+      ['coronation', undefined],
+      ['deactivateAbility', undefined],
+      ['declareVictory', undefined],
+      ['discardCard', undefined],
+      ['discardQueen', undefined],
+      ['flipEmpireCard', undefined],
+      ['flipVictoryCard', undefined],
+      ['moveEmpireSquare', undefined],
+      ['moveToken', undefined],
+      ['moveTokensWithinConstantinople', undefined],
+      ['oldMaid', undefined],
+      ['payFlorinsToChina', undefined],
+      ['placeToken', undefined],
+      ['playCard', undefined],
+      ['purchaseCard', undefined],
+      ['refreshHand', undefined],
+      ['refreshMarket', undefined],
+      ['refreshUI', undefined],
+      ['repressToken', undefined],
+      ['returnToSupply', undefined],
+      ['returnToThrone', undefined],
+      ['sellCard', undefined],
+      ['sellRoyalCouple', undefined],
+      ['tableauOpCommerce', undefined],
+      ['tableauOpTaxPay', undefined],
+      ['tradeFairConvene', undefined],
+      ['tradeFairEmporiumSubsidy', undefined],
       // ["tradeFairPlaceLevy", undefined],
-      ["tradeFairProfitDispersalPirates", undefined],
-      ["tradeFairProfitDispersalPlayer", undefined],
+      ['tradeFairProfitDispersalPirates', undefined],
+      ['tradeFairProfitDispersalPlayer', undefined],
     ];
 
     // example: https://github.com/thoun/knarr/blob/main/src/knarr.ts
@@ -88,9 +88,9 @@ class NotificationManager {
             notifDetails.log,
             notifDetails.args as Record<string, unknown>
           );
-          if (msg != "") {
-            $("gameaction_status").innerHTML = msg;
-            $("pagemaintitletext").innerHTML = msg;
+          if (msg != '') {
+            $('gameaction_status').innerHTML = msg;
+            $('pagemaintitletext').innerHTML = msg;
           }
 
           const promise = this[`notif_${notif[0]}`](notifDetails);
@@ -123,7 +123,7 @@ class NotificationManager {
 
   async notif_log(notif: Notif<unknown>) {
     // this is for debugging php side
-    debug("notif_log", notif.args);
+    debug('notif_log', notif.args);
     return Promise.resolve();
   }
 
@@ -198,7 +198,7 @@ class NotificationManager {
         player.activateAbility({ ability });
         break;
       default:
-        debug("Unhandled ability: ", ability);
+        debug('Unhandled ability: ', ability);
     }
   }
 
@@ -270,7 +270,7 @@ class NotificationManager {
         player.deactivateAbility({ ability });
         break;
       default:
-        debug("Unhandled ability: ", ability);
+        debug('Unhandled ability: ', ability);
     }
   }
 
@@ -312,7 +312,7 @@ class NotificationManager {
 
     const node = document.getElementById(`${oldEmpireSquare.id}-front`);
     if (node) {
-      node.setAttribute("data-religion", religion);
+      node.setAttribute('data-religion', religion);
     }
     this.game.tooltipManager.removeTooltip(oldEmpireSquare.id);
     this.game.tooltipManager.addEmpireCardTooltip({
@@ -370,7 +370,7 @@ class NotificationManager {
         .addCard(card);
     }
     const player = this.getPlayer({ playerId });
-    if (fromLocationId.startsWith("hand_")) {
+    if (fromLocationId.startsWith('hand_')) {
       player.incHandCards((card as TableauCard).region, -1);
       this.game.openHandsModal.removeCard({
         playerId,
@@ -433,13 +433,17 @@ class NotificationManager {
     this.removePrestige({ prestige: card[oldSide].prestige, player });
     player.counters[oldSide].incValue(-1);
 
+    // if (formerSuzerain !== null) {
+    // this.game.tableauCardManager.removeVassal({
+    //   suzerain: formerSuzerain,
+    //   beforeMove: true,
+    // });
+    const container = createEmpireCardContainer(card);
     if (formerSuzerain !== null) {
-      // this.game.tableauCardManager.removeVassal({
-      //   suzerain: formerSuzerain,
-      //   beforeMove: true,
-      // });
-      const container = createEmpireCardContainer(card);
       await player.tableau.addCard(container);
+    } else {
+      this.game.tableauCardManager.updateCardInformations(container);
+      player.tableau.tableau[container.location.split('_')[1]].sortStock()
     }
     this.game.tableauCardManager.updateCardInformations(card);
 
@@ -505,16 +509,16 @@ class NotificationManager {
     this.adjustSupremeReligionCounters({
       token,
       location: from,
-      addOrRemove: "remove",
+      addOrRemove: 'remove',
     });
     if (isPawn && from.type === BORDER) {
       this.game.playerManager
-        .getPlayerForBank({ bank: token.id.split("_")[1] })
+        .getPlayerForBank({ bank: token.id.split('_')[1] })
         .counters.concessions.incValue(-1);
     }
 
     const node = document.getElementById(
-      token["type"] === BISHOP
+      token['type'] === BISHOP
         ? `${token.location}_tokens`
         : `pr_${token.location}`
     );
@@ -527,11 +531,11 @@ class NotificationManager {
     this.adjustSupremeReligionCounters({
       token,
       location: to,
-      addOrRemove: "add",
+      addOrRemove: 'add',
     });
     if (isPawn && to.type === BORDER) {
       this.game.playerManager
-        .getPlayerForBank({ bank: token.id.split("_")[1] })
+        .getPlayerForBank({ bank: token.id.split('_')[1] })
         .counters.concessions.incValue(1);
     }
   }
@@ -571,7 +575,7 @@ class NotificationManager {
     this.getPlayer({ playerId }).incFlorins(-amount);
     await this.game.market.moveFlorinAnimation({
       fromId: `pr_florins_counter_${playerId}_icon`,
-      toId: "pr_china",
+      toId: 'pr_china',
       index: 0,
     });
   }
@@ -579,10 +583,10 @@ class NotificationManager {
   async notif_placeToken(notif: Notif<NotifPlaceTokenArgs>) {
     const { token, fromLocationId, to } = notif.args;
 
-    const split = token.id.split("_");
+    const split = token.id.split('_');
     const isPawn = split[0] === PAWN;
     const isBishop = split[0] === BISHOP;
-    const fromSupply = fromLocationId.startsWith("supply");
+    const fromSupply = fromLocationId.startsWith('supply');
     if (fromSupply && isPawn) {
       this.game.supply.incValue({
         bank: split[1],
@@ -601,7 +605,7 @@ class NotificationManager {
     if (isBishop) {
       // Always place bishop on card
       node = document.getElementById(`${token.location}_tokens`);
-    } else if (token.location.startsWith("EmpireSquare_")) {
+    } else if (token.location.startsWith('EmpireSquare_')) {
       // console.log()
       // Other repressed tokens. Place based on setting
       const repressTokensToThrones =
@@ -625,7 +629,7 @@ class NotificationManager {
     }
 
     if (fromSupply) {
-      node.insertAdjacentHTML("beforeend", tplToken(token));
+      node.insertAdjacentHTML('beforeend', tplToken(token));
       const element = document.getElementById(token.id);
       const fromRect = document
         .getElementById(`${token.type}_${token.separator}_supply`)
@@ -633,7 +637,7 @@ class NotificationManager {
       await this.game.animationManager.play(
         new BgaSlideAnimation({
           element,
-          transitionTimingFunction: "linear",
+          transitionTimingFunction: 'linear',
           fromRect,
         })
       );
@@ -650,7 +654,7 @@ class NotificationManager {
     this.adjustSupremeReligionCounters({
       token,
       location: to,
-      addOrRemove: "add",
+      addOrRemove: 'add',
     });
     if (isPawn) {
       this.game.playerManager
@@ -711,22 +715,22 @@ class NotificationManager {
     for (let move of cardMoves) {
       index += 1;
       const { from, to, card } = move;
-      const [_, fromRegion, fromColumn] = from.split("_");
-      const [_2, toRegion, toCol] = to.split("_");
+      const [_, fromRegion, fromColumn] = from.split('_');
+      const [_2, toRegion, toCol] = to.split('_');
       card.location = to;
       const florinsOnCard = this.game.market.getFlorins({
-        region: fromRegion as "east" | "west",
+        region: fromRegion as 'east' | 'west',
         column: Number(fromColumn),
       });
       this.game.market.setFlorinValue({
-        region: fromRegion as "east" | "west",
+        region: fromRegion as 'east' | 'west',
         column: Number(fromColumn),
         value: 0,
       });
       const promises: Promise<unknown>[] = [
         this.game.market
           .getStock({
-            region: toRegion as "east" | "west",
+            region: toRegion as 'east' | 'west',
             column: Number(toCol),
           })
           .addCard(card),
@@ -743,12 +747,12 @@ class NotificationManager {
       }
       await Promise.all(promises);
       this.game.market.setFlorinValue({
-        region: toRegion as "east" | "west",
+        region: toRegion as 'east' | 'west',
         column: Number(toCol),
         value:
           florinsOnCard +
           this.game.market.getFlorins({
-            region: toRegion as "east" | "west",
+            region: toRegion as 'east' | 'west',
             column: Number(toCol),
           }),
       });
@@ -784,7 +788,7 @@ class NotificationManager {
 
     if (cost < 0) {
       await this.game.market.moveFlorinAnimation({
-        fromId: "pr_china",
+        fromId: 'pr_china',
         index: 0,
         toId: `pr_florins_counter_${playerId}_icon`,
       });
@@ -792,7 +796,7 @@ class NotificationManager {
     this.getPlayer({ playerId }).incFlorins(-cost);
     if (cost > 0) {
       await this.game.market.moveFlorinAnimation({
-        toId: "pr_china",
+        toId: 'pr_china',
         index: 0,
         fromId: `pr_florins_counter_${playerId}_icon`,
       });
@@ -803,7 +807,7 @@ class NotificationManager {
     this.adjustSupremeReligionCounters({
       token,
       location: from,
-      addOrRemove: "remove",
+      addOrRemove: 'remove',
     });
     if (token.type === PAWN) {
       this.game.playerManager
@@ -866,9 +870,9 @@ class NotificationManager {
     this.adjustSupremeReligionCounters({
       token,
       location: from,
-      addOrRemove: "remove",
+      addOrRemove: 'remove',
     });
-    if (token.type === PAWN && !from.id.startsWith("EmpireSquare")) {
+    if (token.type === PAWN && !from.id.startsWith('EmpireSquare')) {
       this.game.playerManager
         .getPlayerForBank({ bank: token.separator })
         .counters.concessions.incValue(-1);
@@ -882,7 +886,7 @@ class NotificationManager {
       );
       node.remove();
     }
-    const split = token.id.split("_");
+    const split = token.id.split('_');
     if (split[0] === PAWN) {
       this.game.supply.incValue({
         bank: split[1],
@@ -907,9 +911,9 @@ class NotificationManager {
 
   async notif_tableauOpCommerce(notif: Notif<NotifTableauOpCommerceArgs>) {
     const { playerId, location } = notif.args;
-    const [_, region, column] = location.split("_");
+    const [_, region, column] = location.split('_');
     this.game.market.incFlorinValue({
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: Number(column),
       value: -1,
     });
@@ -926,7 +930,7 @@ class NotificationManager {
     this.getPlayer({ playerId }).incFlorins(-1);
     await this.game.market.moveFlorinAnimation({
       fromId: `pr_florins_counter_${playerId}_icon`,
-      toId: "pr_china",
+      toId: 'pr_china',
       index: 0,
     });
   }
@@ -934,12 +938,12 @@ class NotificationManager {
   async notif_tradeFairConvene(notif: Notif<NotifTradeFairConveneArgs>) {
     const { florinsFromChina, region } = notif.args;
     await this.game.market.moveFlorinAnimation({
-      fromId: "pr_china",
+      fromId: 'pr_china',
       toId: `pr_market_${region}_0_florins`,
       index: 1,
     });
     this.game.market.incFlorinValue({
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: 0,
       value: florinsFromChina,
     });
@@ -954,7 +958,7 @@ class NotificationManager {
   ) {
     const { amount, playerId, region } = notif.args;
     this.game.market.incFlorinValue({
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: 0,
       value: -amount,
     });
@@ -972,7 +976,7 @@ class NotificationManager {
   ) {
     const { region } = notif.args;
     this.game.market.incFlorinValue({
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: 0,
       value: -1,
     });
@@ -989,7 +993,7 @@ class NotificationManager {
   ) {
     const { region, playerId, amount } = notif.args;
     this.game.market.incFlorinValue({
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: 0,
       value: -amount,
     });
@@ -1027,9 +1031,9 @@ class NotificationManager {
   }: {
     token: Token;
     location: City | Border | TableauCard | EmpireCard | null;
-    addOrRemove: "add" | "remove";
+    addOrRemove: 'add' | 'remove';
   }) {
-    const add = addOrRemove === "add";
+    const add = addOrRemove === 'add';
 
     if (token.type === PAWN || !location) {
       return;
@@ -1081,7 +1085,7 @@ class NotificationManager {
     playerId,
   }: {
     empireSquare: EmpireCard;
-    side: "republic" | "king";
+    side: 'republic' | 'king';
     playerId: number;
   }) {
     const owner = this.getPlayer({ playerId });
@@ -1099,7 +1103,7 @@ class NotificationManager {
     playerId,
   }: {
     empireSquare: EmpireCard;
-    side: "republic" | "king";
+    side: 'republic' | 'king';
     playerId: number;
   }) {
     const owner = this.getPlayer({ playerId });
@@ -1240,12 +1244,12 @@ class NotificationManager {
   }
 
   getRegionAndColumnMarketLocation({ location }: { location: string }): {
-    region: "east" | "west";
+    region: 'east' | 'west';
     column: number;
   } {
-    const [_, region, colummn] = location.split("_");
+    const [_, region, colummn] = location.split('_');
     return {
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: Number(colummn),
     };
   }

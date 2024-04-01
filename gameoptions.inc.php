@@ -57,25 +57,25 @@ $game_options = [
       ],
     ]
   ],
-  OPTION_FIRST_PLAYER_VARIANT => [
-    'name' => totranslate('First Player Variant (unofficial)'),
-    'values' => [
-      OPTION_FIRST_PLAYER_VARIANT_DISABLED => [
-        'name' => totranslate('Disabled'),
-      ],
-      OPTION_FIRST_PLAYER_VARIANT_ENABLED => [
-        'name' => totranslate('Enabled'),
-        'description' => totranslate('The player farthest along the West Trade Route will be the first player'),
-        'tmdisplay' => totranslate('First Player Variant'),
-      ],
-    ],
-    'displaycondition' => [
-      [
-          'type' => 'maxplayers',
-          'value' => [2]
-      ],
-  ]
-  ]
+  // OPTION_FIRST_PLAYER_VARIANT => [
+  //   'name' => totranslate('First Player Variant (unofficial)'),
+  //   'values' => [
+  //     OPTION_FIRST_PLAYER_VARIANT_DISABLED => [
+  //       'name' => totranslate('Disabled'),
+  //     ],
+  //     OPTION_FIRST_PLAYER_VARIANT_ENABLED => [
+  //       'name' => totranslate('Enabled'),
+  //       'description' => totranslate('The player farthest along the West Trade Route will be the first player'),
+  //       'tmdisplay' => totranslate('First Player Variant'),
+  //     ],
+  //   ],
+  //   'displaycondition' => [
+  //     [
+  //         'type' => 'maxplayers',
+  //         'value' => [2]
+  //     ],
+  //   ]
+  // ]
 ];
 
 $game_preferences = [];

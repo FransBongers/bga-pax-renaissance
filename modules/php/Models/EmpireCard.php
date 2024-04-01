@@ -301,10 +301,11 @@ class EmpireCard extends Card
     // Republic was a vassal king. We need to move it to tableau?
     if ($this->side === REPUBLIC && $this->isVassal()) {
       $formerSuzerain = $this->getSuzerain();
-      $insertInTableauWithRegion = Empires::get($this->empire)->getRegion();
-
-      $this->insertInTableau($player, $insertInTableauWithRegion);
     }
+    // TODO: add check here for Papal States / Age of Reformation with Islamic King card
+    $insertInTableauWithRegion = Empires::get($this->empire)->getRegion();
+
+    $this->insertInTableau($player, $insertInTableauWithRegion);
 
     Notifications::flipEmpireCard($player, $this, $formerSuzerain);
   }
