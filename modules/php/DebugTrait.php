@@ -34,7 +34,7 @@ trait DebugTrait
     // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
     // $this->debugPlaceCardInMarket('PREN030_SantaHermandad', WEST, 2);
     // Cards::get('EmpireSquare_Ottoman')->setSide(REPUBLIC);
-    $this->debugPlaceCardInTableau('PREN032_DukeOfMilan', WEST, 2371052);
+    $this->debugPlaceCardInTableau('PREN102X_SahnISemanMadrese', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN137X_FaithVsReason', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN110X_TransylvanianPlot', EAST, 2371052);
     // $this->debugPlaceCardInTableau('PREN129X_OratoryOfDivineLove', WEST, 2371052);

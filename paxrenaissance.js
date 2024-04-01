@@ -4805,6 +4805,9 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(lawChange);
                         break;
                     case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+                        if (ownerId == null) {
+                            break;
+                        }
                         this.game.gameMap.supremeReligion.reformist.bishops.incValue(data.bishops);
                         this.game.gameMap.supremeReligion.reformist.tokens.incValue(data.tokens);
                         player.activateAbility({ ability: ability });
@@ -4866,6 +4869,9 @@ var NotificationManager = (function () {
                         this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(lawChange);
                         break;
                     case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+                        if (ownerId == null) {
+                            break;
+                        }
                         this.game.gameMap.supremeReligion.reformist.bishops.incValue(-data.bishops);
                         this.game.gameMap.supremeReligion.reformist.tokens.incValue(-data.tokens);
                         player.deactivateAbility({ ability: ability });

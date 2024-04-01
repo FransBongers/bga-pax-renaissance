@@ -186,6 +186,9 @@ class NotificationManager {
         );
         break;
       case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+        if (ownerId == null) {
+          break;
+        }
         this.game.gameMap.supremeReligion.reformist.bishops.incValue(
           data.bishops
         );
@@ -255,6 +258,9 @@ class NotificationManager {
         );
         break;
       case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
+        if (ownerId == null) {
+          break;
+        }
         this.game.gameMap.supremeReligion.reformist.bishops.incValue(
           -data.bishops
         );

@@ -211,13 +211,14 @@ class Tokens extends \PaxRenaissance\Helpers\Pieces
       TIMBUKTU => Locations::supply(DISK, BLACK),
       NOVGOROD => Locations::supply(DISK, BLACK),
       SPICE_ISLANDS => Locations::supply(DISK, WHITE),
-      
     ];
-    if ($mapVariantAgeOfReformationPromo) {
+    if ($mapVariantAgeOfReformationPromo || $mapVariant1550) {
       $setup[TREBIZOND] = Locations::supply(DISK, WHITE);
     } else {
-      $setup[CONSTANTINOPLE_3] = Locations::supply(KNIGHT, ISLAMIC);
       $setup[RED_SEA] = Locations::supply(DISK, WHITE);
+    }
+    if (!$mapVariantAgeOfReformationPromo) {
+      $setup[CONSTANTINOPLE_3] = Locations::supply(KNIGHT, ISLAMIC);
     }
 
     foreach ($setup as $location => $pool) {

@@ -71,7 +71,7 @@ class TableauCard extends Card
 
   public function behead()
   {
-      $this->discard(DISCARD, $this->getOwner());
+    $this->discard(DISCARD, $this->getOwner());
   }
 
   public function discard($messageType = DISCARD, $player = null)
@@ -83,10 +83,10 @@ class TableauCard extends Card
     }
     $adjustPrestige = $this->isInTableau();
     $fromLocationId = $this->location;
+    $this->deactivateAbility();
     Cards::insertOnTop($this->getId(), DISCARD);
     $this->location = DISCARD;
     Notifications::discardCard($fromLocationId, $adjustPrestige,$player, $this, DISCARD, $messageType);
-    $this->deactivateAbility();
   }
 
   public function purchase($player, $ctx = null)

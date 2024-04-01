@@ -55,12 +55,14 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
 
   public function deactivateAbility()
   {
-    Notifications::deactivateAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, $this->getAbilityData() );
+    $owner = $this->getOwner();
+    Notifications::deactivateAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, $this->getAbilityData(), $owner === null ? null : $owner->getId());
   }
 
   public function activateAbility()
   {
-    Notifications::activateAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, $this->getAbilityData() );
+    $owner = $this->getOwner();
+    Notifications::activateAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, $this->getAbilityData(), $owner === null ? null : $owner->getId());
   }
 
   private function getAbilityData() {
