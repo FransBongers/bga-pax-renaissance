@@ -81,7 +81,7 @@
       margin-bottom: 8px;
 
       .pr_card_tooltip_row_icon {
-        min-width: 40px;
+        min-width: 50px;
         margin-right: 8px;
         display: flex;
         justify-content: center;
@@ -95,11 +95,11 @@
         }
 
         .pr_one_shot {
-          --paxRenIconScale: 0.7;
+          --paxRenIconScale: 0.5;
         }
 
         .pr_tableau_op {
-          --paxRenIconScale: 0.4;
+          --paxRenIconScale: 0.5;
         }
       }
 

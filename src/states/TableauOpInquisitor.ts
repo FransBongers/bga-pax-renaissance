@@ -76,6 +76,7 @@ class TableauOpInquisitorState implements State {
         you: "${you}",
       },
     });
+    this.game.addCancelButton();
     this.setCardsSelectable(option);
   }
 

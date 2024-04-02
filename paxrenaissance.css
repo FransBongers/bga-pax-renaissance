@@ -4319,7 +4319,6 @@
   background-color: rgba(30, 20, 17, 0.5);
   border-bottom: 1px solid black;
   border-left: 1px solid black;
-  border-radius: 1px solid black;
   padding: 4px;
   cursor: pointer;
   display: flex;
@@ -4336,10 +4335,10 @@
   border-bottom: none;
   cursor: auto;
 }
-.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs:first-child {
-  border-left: none;
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tab:first-child {
+  border-left: none !important;
 }
-.pr_information_modal #pr_information_modal_content .pr_information_modal_tabs:last-child {
+.pr_information_modal #pr_information_modal_content .pr_information_modal_tab:last-child {
   border-right: none;
 }
 .pr_information_modal #pr_information_modal_content #pr_mapCards {
@@ -4467,9 +4466,8 @@
 }
 .pr_information_modal #pr_information_modal_content #pr_operations .pr_header:nth-child(1),
 .pr_information_modal #pr_information_modal_content #pr_oneShots .pr_header:nth-child(1) {
-  border-top: none;
-  background-color: transparent;
-  border-right: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 1px dotted black;
 }
 .pr_information_modal #pr_information_modal_content #pr_operations .pr_header:nth-child(4n+2),
 .pr_information_modal #pr_information_modal_content #pr_operations .pr_header:nth-child(4n+3),
@@ -4487,10 +4485,6 @@
 .pr_information_modal #pr_information_modal_content #pr_operations .pr_cell span,
 .pr_information_modal #pr_information_modal_content #pr_oneShots .pr_cell span {
   font-size: medium;
-}
-.pr_information_modal #pr_information_modal_content #pr_operations .pr_cell:nth-child(5),
-.pr_information_modal #pr_information_modal_content #pr_oneShots .pr_cell:nth-child(5) {
-  border-top: 2px solid black;
 }
 .pr_information_modal #pr_information_modal_content #pr_operations .pr_cell:nth-child(4n),
 .pr_information_modal #pr_information_modal_content #pr_oneShots .pr_cell:nth-child(4n) {
@@ -5171,7 +5165,7 @@
   margin-bottom: 8px;
 }
 .pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon {
-  min-width: 40px;
+  min-width: 50px;
   margin-right: 8px;
   display: flex;
   justify-content: center;
@@ -5183,10 +5177,10 @@
   --paxRenIconScale: 0.3;
 }
 .pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon .pr_one_shot {
-  --paxRenIconScale: 0.7;
+  --paxRenIconScale: 0.5;
 }
 .pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_card_tooltip_row_icon .pr_tableau_op {
-  --paxRenIconScale: 0.4;
+  --paxRenIconScale: 0.5;
 }
 .pr_card_tooltip .pr_card_tooltip_inner_container .pr_card_tooltip_row .pr_tooltip_row_text {
   display: flex;

@@ -98,7 +98,6 @@
         background-color: rgb(30, 20, 17, 0.5);
         border-bottom: 1px solid black;
         border-left: 1px solid black;
-        border-radius: 1px solid black;
         padding: 4px;
         cursor: pointer;
         display: flex;
@@ -120,6 +119,8 @@
         cursor: auto;
       }
 
+      
+
       // .pr_information_modal_tab:before {
       //   content: " ";
       //   display: block;
@@ -135,11 +136,11 @@
       // }
     }
 
-    .pr_information_modal_tabs:first-child {
-      border-left: none;
+    .pr_information_modal_tab:first-child {
+      border-left: none !important;
     }
 
-    .pr_information_modal_tabs:last-child {
+    .pr_information_modal_tab:last-child {
       border-right: none;
     }
 
@@ -291,9 +292,8 @@
       }
 
       .pr_header:nth-child(1) {
-        border-top: none;
-        background-color: transparent;
-        border-right: 2px solid black;
+        border-left: 2px solid black;
+        border-right: 1px dotted black;
       }
 
       .pr_header:nth-child(4n + 2),
@@ -310,10 +310,6 @@
         span {
           font-size: medium;
         }
-      }
-
-      .pr_cell:nth-child(5) {
-        border-top: 2px solid black;
       }
 
       .pr_cell:nth-child(4n) {

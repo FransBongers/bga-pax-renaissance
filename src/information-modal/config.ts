@@ -107,7 +107,7 @@ const getOperationsConfig = (): {
   headers: string[];
   rows: OperationsOneShotsInfoRow[];
 } => ({
-  headers: ["", _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
+  headers: [_("TYPE"), _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
   rows: [
     {
       icons: [INQUISITOR_OP_CATHOLIC],
@@ -183,7 +183,7 @@ const getOneShotsConfig = (): {
   headers: string[];
   rows: OperationsOneShotsInfoRow[];
 } => ({
-  headers: ["", _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
+  headers: [_("TYPE"), _("TARGET"), _("REQUIREMENT"), _("EFFECT")],
   rows: [
     {
       icons: [
@@ -231,6 +231,14 @@ const getOneShotsConfig = (): {
         "All players with both types of indicated Religious Prestige in Tableau"
       ),
       effect: _("Discard all Tableau cards with indicated Religious Prestige."),
+    },
+    {
+      icons: [CORONATION_ONE_SHOT],
+      target: _(
+        "Empire Square"
+      ),
+      requirement: _("Must be Empire contained in Queen's list of suitors. King must be unmarried and either in his Throne or in your Tableau."),
+      effect: _("Form royal couple. Regime Change."),
     },
   ],
 });
