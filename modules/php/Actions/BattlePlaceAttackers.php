@@ -99,7 +99,7 @@ class BattlePlaceAttackers extends \PaxRenaissance\Models\AtomicAction
     }
 
     $info = $this->ctx->getInfo();
-    $agents = $info['agents'];
+    $agents = $info['agents'] === null ? [] : $info['agents'];
     $repressedTokens = $info['repressedTokens'];
 
     if (count($agents) + count($repressedTokens) > 0) {

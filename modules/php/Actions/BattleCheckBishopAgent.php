@@ -76,7 +76,9 @@ class BattleCheckBishopAgent extends \PaxRenaissance\Models\AtomicAction
 
     $card = Cards::get($data['cardId']);
 
-    $affectedAgents = Utils::filter($card->getAgents(), function ($agent) use ($source) {
+    $agents = $card->getAgents();
+    $agents = $agents === null ? [] : $agents;
+    $affectedAgents = Utils::filter($agents, function ($agent) use ($source) {
       if ($agent['type'] === BISHOP) {
         return true;
       }

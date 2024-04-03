@@ -9703,9 +9703,10 @@ var PlayerActionState = (function () {
     PlayerActionState.prototype.onLeavingState = function () {
         debug('Leaving PlayerActionsState');
     };
-    PlayerActionState.prototype.setDescription = function (activePlayerId) {
+    PlayerActionState.prototype.setDescription = function (activePlayerId, args) {
+        this.args = args;
         this.game.clientUpdatePageTitle({
-            text: _('${tkn_playerName} may perform actions'),
+            text: this.args.optionalAction ? _('${tkn_playerName} may perform actions') : _('${tkn_playerName} must perform an action'),
             args: {
                 tkn_playerName: this.game.playerManager
                     .getPlayer({ playerId: activePlayerId })
@@ -9935,11 +9936,12 @@ var PlayerActionState = (function () {
     PlayerActionState.prototype.addTest = function () { };
     PlayerActionState.prototype.updatePageTitle = function () {
         var remainingActions = this.args.remainingActions;
-        var titleTextWithRemaining = _('${you} may perform an action (${number} remaining)');
+        var titleTextWithRemainingMay = _('${you} may perform an action (${number} remaining)');
+        var titleTextWithRemainingMust = _('${you} must perform an action (${number} remaining)');
         var titleTestNoRemaining = _('${you} may perform an action');
         if (remainingActions > 0) {
             this.game.clientUpdatePageTitle({
-                text: titleTextWithRemaining,
+                text: this.args.optionalAction ? titleTextWithRemainingMay : titleTextWithRemainingMust,
                 args: {
                     you: '${you}',
                     number: remainingActions,

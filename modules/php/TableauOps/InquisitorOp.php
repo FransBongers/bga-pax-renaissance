@@ -89,10 +89,12 @@ class InquisitorOp extends \PaxRenaissance\Models\TableauOp
         $destinations[$cardId] = $card;
       }
 
-      $options[$token->getId()] = [
-        'token' => $token,
-        'destinations' => array_values($destinations),
-      ];
+      if (count($destinations) > 0) {
+        $options[$token->getId()] = [
+          'token' => $token,
+          'destinations' => array_values($destinations),
+        ];
+      }
     }
     return $options;
   }

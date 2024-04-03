@@ -15,9 +15,10 @@ class PlayerActionState implements State {
     debug('Leaving PlayerActionsState');
   }
 
-  setDescription(activePlayerId: number) {
+  setDescription(activePlayerId: number, args: OnEnteringPlayerActionArgs) {
+    this.args = args;
     this.game.clientUpdatePageTitle({
-      text: _('${tkn_playerName} may perform actions'),
+      text: this.args.optionalAction ? _('${tkn_playerName} may perform actions') : _('${tkn_playerName} must perform an action'),
       args: {
         tkn_playerName: this.game.playerManager
           .getPlayer({ playerId: activePlayerId })
@@ -325,14 +326,17 @@ class PlayerActionState implements State {
   private updatePageTitle() {
     const remainingActions = this.args.remainingActions;
 
-    let titleTextWithRemaining = _(
+    const titleTextWithRemainingMay = _(
       '${you} may perform an action (${number} remaining)'
     );
-    let titleTestNoRemaining = _('${you} may perform an action');
+    const titleTextWithRemainingMust = _(
+      '${you} must perform an action (${number} remaining)'
+    );
+    const titleTestNoRemaining = _('${you} may perform an action');
 
     if (remainingActions > 0) {
       this.game.clientUpdatePageTitle({
-        text: titleTextWithRemaining,
+        text: this.args.optionalAction ? titleTextWithRemainingMay : titleTextWithRemainingMust,
         args: {
           you: '${you}',
           number: remainingActions,

@@ -30,11 +30,11 @@ trait DebugTrait
 {
   function test()
   {
-    // Cards::move('PREN076_SophiaPalaiologina','queens_portugal');
+    // Cards::move('PREN159X_ConsentOfTheGoverned',DISCARD);
     // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
     // $this->debugPlaceCardInMarket('PREN030_SantaHermandad', WEST, 2);
     // Cards::get('EmpireSquare_Ottoman')->setSide(REPUBLIC);
-    $this->debugPlaceCardInTableau('PREN102X_SahnISemanMadrese', WEST, 2371052);
+    // $this->debugPlaceCardInTableau('PREN102X_SahnISemanMadrese', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN137X_FaithVsReason', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN110X_TransylvanianPlot', EAST, 2371052);
     // $this->debugPlaceCardInTableau('PREN129X_OratoryOfDivineLove', WEST, 2371052);
@@ -53,7 +53,7 @@ trait DebugTrait
     // foreach(Empires::getAll() as $empire) {
     //   $empire->getEmpireCard()->setSide(REPUBLIC);
     // }
-    // Tokens::get('pawn_fugger_8')->returnToSupply();
+    Tokens::move('bishop_catholic_3','EmpireSquare_Portugal');
     // Tokens::get('pawn_marchionni_4')->returnToSupply();
     // Tokens::move('pirate_reformist_3',BORDER_MAMLUK_OTTOMAN);
     // $index = 0;

@@ -287,6 +287,8 @@ class BattleResult extends \PaxRenaissance\Models\AtomicAction
   {
     $agents = Cards::get($cardId)->getAgents();
 
+    $agents = $agents === null ? [] : $agents;
+
     return Utils::filter($agents, function ($agent) use ($typeFilter, $separatorFilter) {
       if ($typeFilter !== null && !in_array($agent['type'], $typeFilter)) {
         return false;
