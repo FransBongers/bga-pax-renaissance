@@ -254,10 +254,10 @@ class EmpireCard extends Card
     $this->location = $this->startLocation;
 
     Notifications::returnToThrone($owner, $this, $fromSide, $suzerain);
-    $this->deactivateAbility();
+    $this->deactivateAbility($owner);
     $queens = $this->getQueens();
     foreach($queens as $queen) {
-      $queen->deactivateAbility();
+      $queen->deactivateAbility($owner);
     }
   }
 

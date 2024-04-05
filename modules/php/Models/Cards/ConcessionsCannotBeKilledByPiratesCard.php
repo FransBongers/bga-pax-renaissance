@@ -16,7 +16,7 @@ use PaxRenaissance\Managers\Tokens;
 class ConcessionsCannotBeKilledByPiratesCard extends \PaxRenaissance\Models\TableauCard
 {
 
-  public function deactivateAbility()
+  public function deactivateAbility($owner = null)
   {
     foreach(SEA_BORDERS as $borderId) {
       $border = Borders::get($borderId);

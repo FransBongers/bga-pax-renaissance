@@ -178,7 +178,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
 
   public function discard($messageType = DISCARD, $player = null)
   {
-    $this->deactivateAbility();
+    $this->deactivateAbility($player);
   }
 
   public function placeToken($token, $ctx)
@@ -212,7 +212,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     // Need check if card is silenced in case player has abilities that make
     // them immune to silencing
     if ($owner === null || ($owner !== null && $this->isSilenced($owner))) {
-      $this->deactivateAbility();
+      $this->deactivateAbility($owner);
     }
   }
 
@@ -220,7 +220,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
    * Called when card is silenced, discarded, sold
    * other moments when ability is deactivated
    */
-  public function deactivateAbility()
+  public function deactivateAbility($owner = null)
   {
   }
 

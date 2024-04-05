@@ -46,9 +46,8 @@ class PREN137X_FaithVsReason extends \PaxRenaissance\Models\TableauCard
     Notifications::activateAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2, null, $owner === null ? null : $owner->getId() );
   }
 
-  public function deactivateAbility()
+  public function deactivateAbility($owner = null)
   {
-    $owner = $this->getOwner();
     Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_CONCESSION_IN_GLOBALIZATION_VICTORY_2, null, $owner === null ? null : $owner->getId() );
   }
 }

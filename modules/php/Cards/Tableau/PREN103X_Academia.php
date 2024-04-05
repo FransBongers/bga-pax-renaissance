@@ -44,9 +44,8 @@ class PREN103X_Academia extends \PaxRenaissance\Models\TableauCard
     Notifications::activateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId() );
   }
 
-  public function deactivateAbility()
+  public function deactivateAbility($owner = null)
   {
-    $owner = $this->getOwner();
     Notifications::deactivateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId() );
   }
 }

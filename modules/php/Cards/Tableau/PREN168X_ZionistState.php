@@ -53,9 +53,8 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
     ];
   }
 
-  public function deactivateAbility()
+  public function deactivateAbility($owner = null)
   {
-    $owner = $this->getOwner();
     Notifications::deactivateAbility(SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS, $this->getAbilityData(), $owner === null ? null : $owner->getId());
   }
 
