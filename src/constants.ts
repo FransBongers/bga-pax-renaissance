@@ -16,6 +16,7 @@ const ENABLED = 'enabled';
 /**
  * Setting ids
  */
+const SINGLE_COLUMN_MAP_SIZE = 'singleColumnMapSize';
 const REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
 const CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 const CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';

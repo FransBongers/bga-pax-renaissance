@@ -118,6 +118,25 @@ const getSettingsConfig = (): Record<string, PlayerPreferenceTab> => ({
         },
         type: "slider",
       },
+      [SINGLE_COLUMN_MAP_SIZE]: {
+        id: SINGLE_COLUMN_MAP_SIZE,
+        onChangeInSetup: true,
+        label: _("Map size"),
+        defaultValue: 100,
+        visibleCondition: {
+          id: "twoColumnsLayout",
+          values: [DISABLED],
+        },
+        sliderConfig: {
+          step: 5,
+          padding: 0,
+          range: {
+            min: 30,
+            max: 100,
+          },
+        },
+        type: "slider",
+      },
       [CARD_SIZE_IN_LOG]: {
         id: CARD_SIZE_IN_LOG,
         onChangeInSetup: true,

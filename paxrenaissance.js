@@ -5,6 +5,7 @@ var CLIENT_SELL_CARD_STATE = "clientSellCardState";
 var CLIENT_START_TRADE_FAIR_STATE = "clientStartTradeFairState";
 var CLIENT_USE_ABILITY_ACTION_STATE = "clientUseAbilityActionState";
 var ENABLED = 'enabled';
+var SINGLE_COLUMN_MAP_SIZE = 'singleColumnMapSize';
 var REPRESS_TOKENS_TO_THRONES = 'repressTokensToThrones';
 var CARDS_IN_TABLEAU_OVERLAP = 'cardsInTableauOverlap';
 var CARD_SIZE_IN_TABLEAU = 'cardSizeInTableau';
@@ -2019,6 +2020,7 @@ var PaxRenaissance = (function () {
             var LEFT_SIZE = (proportions[0] * WIDTH) / 100;
             var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
             ROOT.style.setProperty("--paxRenLeftColumnScale", "".concat(leftColumnScale));
+            ROOT.style.setProperty("--paxRenMapSizeMultiplier", '1');
             var RIGHT_SIZE = (proportions[1] * WIDTH) / 100;
             var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
             ROOT.style.setProperty("--paxRenRightColumnScale", "".concat(rightColumnScale));
@@ -2028,6 +2030,7 @@ var PaxRenaissance = (function () {
             var LEFT_SIZE = WIDTH;
             var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
             ROOT.style.setProperty("--paxRenLeftColumnScale", "".concat(leftColumnScale));
+            ROOT.style.setProperty("--paxRenMapSizeMultiplier", "".concat(Number(this.settings.get({ id: SINGLE_COLUMN_MAP_SIZE })) / 100));
             var RIGHT_SIZE = WIDTH;
             var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
             ROOT.style.setProperty("--paxRenRightColumnScale", "".concat(rightColumnScale));
@@ -6843,6 +6846,25 @@ var getSettingsConfig = function () {
                         type: "slider",
                     }
                 },
+                _a[SINGLE_COLUMN_MAP_SIZE] = {
+                    id: SINGLE_COLUMN_MAP_SIZE,
+                    onChangeInSetup: true,
+                    label: _("Map size"),
+                    defaultValue: 100,
+                    visibleCondition: {
+                        id: "twoColumnsLayout",
+                        values: [DISABLED],
+                    },
+                    sliderConfig: {
+                        step: 5,
+                        padding: 0,
+                        range: {
+                            min: 30,
+                            max: 100,
+                        },
+                    },
+                    type: "slider",
+                },
                 _a[CARD_SIZE_IN_LOG] = {
                     id: CARD_SIZE_IN_LOG,
                     onChangeInSetup: true,
@@ -7188,6 +7210,9 @@ var Settings = (function () {
     Settings.prototype.onChangeColumnSizesSetting = function (value) {
         this.game.updateLayout();
     };
+    Settings.prototype.onChangeSingleColumnMapSizeSetting = function (value) {
+        this.game.updateLayout();
+    };
     Settings.prototype.onChangeCardSizeInLogSetting = function (value) {
         var ROOT = document.documentElement;
         ROOT.style.setProperty("--paxRenLogCardScale", "".concat(Number(value) / 100));
@@ -7320,14 +7345,17 @@ var Settings = (function () {
     };
     Settings.prototype.checkColumnSizesVisisble = function () {
         var sliderNode = document.getElementById("setting_row_columnSizes");
-        if (!sliderNode) {
+        var mapSizeSliderNode = document.getElementById("setting_row_singleColumnMapSize");
+        if (!(sliderNode && mapSizeSliderNode)) {
             return;
         }
         if (this.settings["twoColumnsLayout"] === ENABLED) {
             sliderNode.style.display = "";
+            mapSizeSliderNode.style.display = "none";
         }
         else {
             sliderNode.style.display = "none";
+            mapSizeSliderNode.style.display = "";
         }
     };
     Settings.prototype.checkEmpireSquaresOverlapVisible = function () {

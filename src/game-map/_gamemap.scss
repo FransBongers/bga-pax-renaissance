@@ -24,21 +24,21 @@
 
 #pr_game_map {
   background-image: url("img/board.jpg");
-  background-size: calc(var(--paxRenLeftColumnScale) * 1500px)
-    calc(var(--paxRenLeftColumnScale) * 1500px);
+  background-size: calc(var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier) * 1500px)
+    calc(var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier) * 1500px);
   background-repeat: no-repeat;
   // grid-column: 1 / span 1;
   // grid-row: span 1;
   position: relative;
-  height: calc(var(--paxRenLeftColumnScale) * 1500px);
-  width: calc(var(--paxRenLeftColumnScale) * 1500px);
+  height: calc(var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier) * 1500px);
+  width: calc(var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier) * 1500px);
   // box-shadow: rgb(0 0 0) 2px 2px 8px;
   box-shadow: 1px 1px 5px #000;
   transform-origin: top left;
-  --paxRenCardScale: var(--paxRenLeftColumnScale);
-  --paxRenMapScale: var(--paxRenLeftColumnScale);
-  --paxRenTokenScale: var(--paxRenLeftColumnScale);
-  --paxRenIconScale: var(--paxRenLeftColumnScale);
+  --paxRenCardScale: var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier);
+  --paxRenMapScale: var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier);
+  --paxRenTokenScale: var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier);
+  --paxRenIconScale: var(--paxRenLeftColumnScale) * var(--paxRenMapSizeMultiplier);
 }
 
 #pr_china {

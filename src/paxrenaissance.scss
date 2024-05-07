@@ -136,3 +136,8 @@ html[data-background-pref="war"] {
 #globalaction_zoom_wrap {
   display: none !important;
 }
+
+/* Hide player is now online, player is now offline messages */
+.notif_playerstatus {
+  display: none !important;
+}

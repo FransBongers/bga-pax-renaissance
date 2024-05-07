@@ -225,6 +225,10 @@ class Settings {
     this.game.updateLayout();
   }
 
+  public onChangeSingleColumnMapSizeSetting(value: string) {
+    this.game.updateLayout();
+  }
+
   public onChangeCardSizeInLogSetting(value: number) {
     const ROOT = document.documentElement;
     ROOT.style.setProperty("--paxRenLogCardScale", `${Number(value) / 100}`);
@@ -393,13 +397,19 @@ class Settings {
 
   private checkColumnSizesVisisble() {
     const sliderNode = document.getElementById("setting_row_columnSizes");
-    if (!sliderNode) {
+    const mapSizeSliderNode = document.getElementById("setting_row_singleColumnMapSize");
+
+    if (!(sliderNode && mapSizeSliderNode)) {
       return;
     }
+
     if (this.settings["twoColumnsLayout"] === ENABLED) {
       sliderNode.style.display = "";
+      mapSizeSliderNode.style.display = "none";
     } else {
+
       sliderNode.style.display = "none";
+      mapSizeSliderNode.style.display = "";
     }
   }
 

@@ -204,7 +204,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       const LEFT_SIZE = (proportions[0] * WIDTH) / 100;
       const leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
       ROOT.style.setProperty("--paxRenLeftColumnScale", `${leftColumnScale}`);
-
+      ROOT.style.setProperty("--paxRenMapSizeMultiplier", '1');
       const RIGHT_SIZE = (proportions[1] * WIDTH) / 100;
       const rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
       ROOT.style.setProperty("--paxRenRightColumnScale", `${rightColumnScale}`);
@@ -216,6 +216,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       const LEFT_SIZE = WIDTH;
       const leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
       ROOT.style.setProperty("--paxRenLeftColumnScale", `${leftColumnScale}`);
+      ROOT.style.setProperty("--paxRenMapSizeMultiplier", `${Number(this.settings.get({ id: SINGLE_COLUMN_MAP_SIZE })) / 100}`);
       const RIGHT_SIZE = WIDTH;
       const rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
       ROOT.style.setProperty("--paxRenRightColumnScale", `${rightColumnScale}`);
