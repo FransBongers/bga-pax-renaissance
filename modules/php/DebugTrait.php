@@ -30,6 +30,11 @@ trait DebugTrait
 {
   function test()
   {
+    $this->debugPlaceToken(KNIGHT, REFORMIST, BRUGES);
+    $this->debugPlaceToken(KNIGHT, REFORMIST, LYON);
+    $this->debugPlaceToken(KNIGHT, REFORMIST, BORDEAUX);
+    $this->debugPlaceToken(KNIGHT, REFORMIST, GRANADA);
+    $this->debugPlaceToken(KNIGHT, REFORMIST, ALGIERS);
     // Cards::move('PREN159X_ConsentOfTheGoverned',DISCARD);
     // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
     // $this->debugPlaceCardInMarket('PREN030_SantaHermandad', WEST, 2);
@@ -53,7 +58,7 @@ trait DebugTrait
     // foreach(Empires::getAll() as $empire) {
     //   $empire->getEmpireCard()->setSide(REPUBLIC);
     // }
-    Tokens::move('bishop_catholic_3','EmpireSquare_Portugal');
+    // Tokens::move('bishop_catholic_3','EmpireSquare_Portugal');
     // Tokens::get('pawn_marchionni_4')->returnToSupply();
     // Tokens::move('pirate_reformist_3',BORDER_MAMLUK_OTTOMAN);
     // $index = 0;
@@ -76,7 +81,7 @@ trait DebugTrait
 
     // Cards::get('EmpireSquare_Hungary')->setSide(REPUBLIC);
     // Cards::get('EmpireSquare_Ottoman')->setSide(REPUBLIC);
-    // $this->debugPlaceToken(PAWN, MEDICI, BORDER_ENGLAND_FRANCE);
+    // $this->debugPlaceToken(PAWN, MEDICI, BORDER_BYZANTIUM_HUNGARY);
     // $this->debugPlaceToken(PIRATE, CATHOLIC, BORDER_ENGLAND_PORTUGAL);
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN158X_OrderOfPreachers', WEST, 2371052);

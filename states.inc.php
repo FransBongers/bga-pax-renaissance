@@ -515,6 +515,14 @@ $machinestates = [
         'possibleactions' => ['actTableauOpTax', 'actPassOptionalAction', 'actRestart'],
     ],
 
+    ST_TABLEAU_OP_TAX_AUTO_CHECK => [
+        'name' => 'tableauOpTaxAutoCheck',
+        'description' => '',
+        'type' => 'game',
+        'action' => 'stAtomicAction',
+        'transitions' => [],
+    ],
+
     ST_TABLEAU_OP_TAX_FLORINS_CHECK => [
         'name' => 'tableauOpTaxFlorinsCheck',
         'description' => '',

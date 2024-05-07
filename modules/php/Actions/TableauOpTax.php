@@ -121,30 +121,25 @@ class TableauOpTax extends \PaxRenaissance\Models\AtomicAction
 
     Notifications::tableauOpTax($player, $token, $empire);
 
-    $this->ctx->getParent()->pushChild(new LeafNode([
-      'action' => TABLEAU_OP_TAX_FLORINS_CHECK,
-      // 'playerId' => $player->getId(),
-      // 'ownerId' => $ownerId,
-      'playerId' => $ownerId,
-      'empireId' => $empireId,
-      'tokenId' => $tokenId,
-    ]));
-
     // $this->ctx->getParent()->pushChild(new LeafNode([
-    //   'action' => TABLEAU_OP_TAX_PAY_OR_REPRESS,
+    //   'action' => TABLEAU_OP_TAX_FLORINS_CHECK,
+    //   // 'playerId' => $player->getId(),
+    //   // 'ownerId' => $ownerId,
     //   'playerId' => $ownerId,
     //   'empireId' => $empireId,
     //   'tokenId' => $tokenId,
     // ]));
 
-    $this->ctx->getParent()->pushChild(Engine::buildTree(Flows::placeLevy($empireId, $ownerId)));
 
-    // $this->ctx->getParent()->pushChild(new LeafNode([
-    //   'action' => TRADE_FAIR_LEVY,
-    //   'playerId' => $ownerId,
-    //   'empireId' => $empireId,
-    // ]));
+    // $this->ctx->getParent()->pushChild(Engine::buildTree(Flows::placeLevy($empireId, $ownerId)));
 
+    $this->ctx->getParent()->pushChild(new LeafNode([
+      'action' => TABLEAU_OP_TAX_AUTO_CHECK,
+      'playerId' => $player->getId(),
+      'taxedPlayerId' => $ownerId,
+      'empireId' => $empireId,
+      'tokenId' => $tokenId,
+    ]));
 
     $this->resolveAction($args);
   }

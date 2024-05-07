@@ -93,7 +93,7 @@ class City implements \JsonSerializable
     return $this->type;
   }
 
-  public function placeToken($token, $repressCost = 1)
+  public function placeToken($token, $repressCost = 1, $player = null)
   {
     $currentToken = $this->getToken();
     if ($currentToken !== null) {
@@ -101,7 +101,8 @@ class City implements \JsonSerializable
     }
     $fromLocationId = $token->getLocation();
     $token = $token->move($this->getId(), false);
-    Notifications::placeToken(Players::get(),$token, $fromLocationId, $this);
+    $player = $player === null ? Players::get() : $player;
+    Notifications::placeToken($player, $token, $fromLocationId, $this);
   }
 
   /**

@@ -63,6 +63,7 @@ class AtomicActions
     TABLEAU_OPS_SELECT_EAST_AND_WEST => 'TableauOpsSelect',
     TABLEAU_OP_SIEGE => 'TableauOpSiege',
     TABLEAU_OP_TAX => 'TableauOpTax',
+    TABLEAU_OP_TAX_AUTO_CHECK => 'TableauOpTaxAutoCheck',
     TABLEAU_OP_TAX_FLORINS_CHECK => 'TableauOpTaxFlorinsCheck',
     TABLEAU_OP_TAX_PAY_OR_REPRESS => 'TableauOpTaxPayOrRepress',
     TABLEAU_OP_VOTE => 'TableauOpVote',
