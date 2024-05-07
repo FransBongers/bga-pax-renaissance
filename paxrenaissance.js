@@ -5059,7 +5059,7 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_flipEmpireCard = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, playerId, card, formerSuzerain, oldSide, player, container;
+            var _a, playerId, card, formerSuzerain, oldSide, player, container, empireSquareIndex;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -5081,6 +5081,10 @@ var NotificationManager = (function () {
                         _b.label = 3;
                     case 3:
                         this.game.tableauCardManager.updateCardInformations(card);
+                        empireSquareIndex = this.game.gamedatas.empireSquares.findIndex(function (square) { return square.id === card.id; });
+                        if (empireSquareIndex >= 0) {
+                            this.game.gamedatas.empireSquares[empireSquareIndex] = card;
+                        }
                         this.addPrestige({ prestige: card[card.side].prestige, player: player });
                         player.counters[card.side].incValue(1);
                         return [2];

@@ -30,11 +30,11 @@ trait DebugTrait
 {
   function test()
   {
-    $this->debugPlaceToken(KNIGHT, REFORMIST, BRUGES);
-    $this->debugPlaceToken(KNIGHT, REFORMIST, LYON);
-    $this->debugPlaceToken(KNIGHT, REFORMIST, BORDEAUX);
-    $this->debugPlaceToken(KNIGHT, REFORMIST, GRANADA);
-    $this->debugPlaceToken(KNIGHT, REFORMIST, ALGIERS);
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, BRUGES);
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, LYON);
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, BORDEAUX);
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, GRANADA);
+    // $this->debugPlaceToken(KNIGHT, REFORMIST, ALGIERS);
     // Cards::move('PREN159X_ConsentOfTheGoverned',DISCARD);
     // Empires::get(PAPAL_STATES)->changeToTheocracy(ISLAMIC);
     // $this->debugPlaceCardInMarket('PREN030_SantaHermandad', WEST, 2);
@@ -44,7 +44,7 @@ trait DebugTrait
     // $this->debugPlaceCardInTableau('PREN110X_TransylvanianPlot', EAST, 2371052);
     // $this->debugPlaceCardInTableau('PREN129X_OratoryOfDivineLove', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
-    // $this->debugPlaceCardInTableau('EmpireSquare_France', WEST, 2371053);
+    $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN043_Gutenberg', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN141X_WelserKleinVenedig', WEST, 2371052);
     // Cards::move('EmpireSquare_PapalStates',Locations::vassals(HOLY_ROMAN_EMIRE));

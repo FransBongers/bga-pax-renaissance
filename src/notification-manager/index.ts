@@ -433,19 +433,21 @@ class NotificationManager {
     this.removePrestige({ prestige: card[oldSide].prestige, player });
     player.counters[oldSide].incValue(-1);
 
-    // if (formerSuzerain !== null) {
-    // this.game.tableauCardManager.removeVassal({
-    //   suzerain: formerSuzerain,
-    //   beforeMove: true,
-    // });
     const container = createEmpireCardContainer(card);
     if (formerSuzerain !== null) {
       await player.tableau.addCard(container);
     } else {
       this.game.tableauCardManager.updateCardInformations(container);
-      player.tableau.tableau[container.location.split('_')[1]].sortStock()
+      player.tableau.tableau[container.location.split('_')[1]].sortStock();
     }
     this.game.tableauCardManager.updateCardInformations(card);
+
+    const empireSquareIndex = this.game.gamedatas.empireSquares.findIndex(
+      (square: EmpireCard) => square.id === card.id
+    );
+    if (empireSquareIndex >= 0) {
+      this.game.gamedatas.empireSquares[empireSquareIndex] = card;
+    }
 
     this.addPrestige({ prestige: card[card.side].prestige, player });
     player.counters[card.side].incValue(1);
