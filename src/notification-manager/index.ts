@@ -161,6 +161,7 @@ class NotificationManager {
         this.getPlayer({ playerId: ownerId }).counters.concessions.incValue(
           concessionChange
         );
+        player.activateAbility({ ability });
         break;
       case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
         const valueChange =
@@ -184,6 +185,7 @@ class NotificationManager {
         this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(
           lawChange
         );
+        player.activateAbility({ ability });
         break;
       case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
         if (ownerId == null) {
@@ -232,6 +234,7 @@ class NotificationManager {
         this.getPlayer({ playerId: ownerId }).counters.concessions.incValue(
           concessionChange
         );
+        player.deactivateAbility({ ability });
         break;
       case SA_PATRON_COUNTS_AS_GREEN_BISHOP_YOUR_HOLY_VICTORY:
         const valueChange =
@@ -256,6 +259,7 @@ class NotificationManager {
         this.getPlayer({ playerId: ownerId }).counters.prestige.law.incValue(
           lawChange
         );
+        player.deactivateAbility({ ability });
         break;
       case SA_GREEN_PIRATES_COUNT_AS_RED_BISHOPS_AND_UNITS:
         if (ownerId == null) {
