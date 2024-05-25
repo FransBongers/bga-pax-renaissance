@@ -44,7 +44,7 @@ trait DebugTrait
     // $this->debugPlaceCardInTableau('PREN110X_TransylvanianPlot', EAST, 2371052);
     // $this->debugPlaceCardInTableau('PREN129X_OratoryOfDivineLove', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
-    
+
     // $this->debugPlaceCardInTableau('PREN132X_ArtisticGeometry', WEST, 2371052);
     $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052);
     Cards::move('EmpireSquare_PapalStates', Locations::vassals(HOLY_ROMAN_EMIRE));
@@ -104,7 +104,7 @@ trait DebugTrait
     // $this->debugPlaceCardInTableau('PREN034_MerchantsOfTheStaple', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN040_SindicatRemenca', WEST, 2371052);
     // $this->debugPlaceCardInTableau('PREN037_TheHidden', WEST, 2371052);
-    
+
     // $this->debugPlaceCardInTableau('EmpireSquare_Portugal', WEST, 2371053); // DISCOVERY
     // Cards::get('EmpireSquare_Portugal')->setSide(REPUBLIC);
   }
@@ -144,6 +144,60 @@ trait DebugTrait
     Notifications::placeToken(Players::get(), $token, $fromLocationId);
   }
 
+  function debugReturnTokenToSupply($locationId)
+  {
+    $token = Tokens::getTopOf($locationId);
+    $token->returnToSupply();
+  }
+
+  function debugActivateVictoryCondition($cardId)
+  {
+    $card = Cards::get($cardId);
+    $card->setActive();
+  }
+
+
+  function debugDiscardCard($cardId)
+  {
+    $card = Cards::get($cardId);
+    $card->discard();
+  }
+
+  function debugDiscardTopOfDeck($region, $numberOfCards)
+  {
+    Cards::pickForLocation(intval($numberOfCards), Locations::deck($region), DISCARD);
+  }
+
+  function debugAddCardsToTopOfDeck($region, $numberOfCards)
+  {
+    $region = trim($region);
+    Cards::pickForLocation(intval($numberOfCards), 'pool_' . $region, Locations::deck($region));
+  }
+
+  function debugAddCardToHand($cardId, $playerId = null)
+  {
+    $playerId = $playerId === null ? Players::get()->getId() : $playerId;
+    Cards::move($cardId, Locations::hand($playerId));
+  }
+
+  function debugMakeVassal($vassalCardId, $suzerainEmpireId)
+  {
+    Cards::move(trim($vassalCardId), Locations::vassals(trim($suzerainEmpireId)));
+  }
+
+  function debugFlipEmpireSquare($cardId)
+  {
+    $card = Cards::get($cardId);
+    $card->flip();
+  }
+
+  function debugSetEmpireReligion($empireId, $religion)
+  {
+    $religions = Globals::getEmpireReligions();
+    $religions[trim($empireId)] = trim($religion);
+    Globals::setEmpireReligions($religions);
+  }
+
   function engineDisplay()
   {
     Notifications::log('engine', Globals::getEngine());
@@ -154,6 +208,12 @@ trait DebugTrait
     $playerId = $this->debugGetPlayerId($playerId);
 
     Players::incFlorins($playerId, intval($amount));
+  }
+
+  function debugIncFlorinsOnMarketCard($region, $column, $value)
+  {
+    $value = intval($value);
+    Market::incMarketFlorins($region, $column, $value);
   }
 
 
