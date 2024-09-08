@@ -13,7 +13,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   // public cardManager: CardManager<TableauCard>;
   public discard: VoidStock<EmpireCard | TableauCard | EmpireCardContainer>;
   public gameMap: GameMap;
-  public gameOptions: PaxRenaissanceGamedatas["gameOptions"];
+  public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
   public hand: Hand;
   // public gameOptions: PaxRenaissanceGamedatas['gameOptions'];
   public infoPanel: InfoPanel;
@@ -45,7 +45,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   public activeStates: ActiveStates;
 
   constructor() {
-    console.log("paxrenaissance constructor");
+    console.log('paxrenaissance constructor');
   }
 
   // ..######..########.########.##.....##.########.
@@ -60,8 +60,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // Create a new div for buttons to avoid BGA auto clearing it
     dojo.place(
       "<div id='customActions' style='display:inline-block'></div>",
-      $("generalactions"),
-      "after"
+      $('generalactions'),
+      'after'
     );
     this.setAlwaysFixTopActions();
     this.setupDontPreloadImages();
@@ -70,7 +70,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // console.log('playAreaWidth',playAreaWidth);
     this.gamedatas = gamedatas;
     this.gameOptions = gamedatas.gameOptions;
-    debug("gamedatas", gamedatas);
+    debug('gamedatas', gamedatas);
     this.setupPlayerOrder({ customPlayerOrder: gamedatas.customPlayerOrder });
 
     this._connections = [];
@@ -133,7 +133,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.tableauCardManager = new TableauCardManager(this);
     this.discard = new VoidStock(
       this.tableauCardManager,
-      document.getElementById("pr_discard")
+      document.getElementById('pr_discard')
     );
 
     this.tooltipManager = new TooltipManager(this);
@@ -155,7 +155,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.notificationManager.setupNotifications();
 
     this.tooltipManager.setupTooltips();
-    debug("Ending game setup");
+    debug('Ending game setup');
   }
 
   // Sets player order with current player at index 0 if player is in the game
@@ -172,13 +172,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }
 
   setupDontPreloadImages() {
-    this.framework().dontPreloadImage("background_balcony.jpg");
-    this.framework().dontPreloadImage("background_cathedral.jpg");
-    this.framework().dontPreloadImage("background_goldsmith.jpg");
-    this.framework().dontPreloadImage("background_lucrezia.jpg");
-    this.framework().dontPreloadImage("background_poison.jpg");
-    this.framework().dontPreloadImage("background_war.jpg");
-    this.framework().dontPreloadImage("player_boards3.png");
+    this.framework().dontPreloadImage('background_balcony.jpg');
+    this.framework().dontPreloadImage('background_cathedral.jpg');
+    this.framework().dontPreloadImage('background_goldsmith.jpg');
+    this.framework().dontPreloadImage('background_lucrezia.jpg');
+    this.framework().dontPreloadImage('background_poison.jpg');
+    this.framework().dontPreloadImage('background_war.jpg');
+    this.framework().dontPreloadImage('player_boards3.png');
   }
 
   public updateLayout() {
@@ -186,40 +186,43 @@ class PaxRenaissance implements PaxRenaissanceGame {
       return;
     }
 
-    $("pr_play_area_container").setAttribute(
-      "data-two-columns",
-      this.settings.get({ id: "twoColumnsLayout" })
+    $('pr_play_area_container').setAttribute(
+      'data-two-columns',
+      this.settings.get({ id: 'twoColumnsLayout' })
     );
 
     const ROOT = document.documentElement;
     let WIDTH =
-      $("pr_play_area_container").getBoundingClientRect()["width"] - 8;
+      $('pr_play_area_container').getBoundingClientRect()['width'] - 8;
     const LEFT_COLUMN = 1500;
     const RIGHT_COLUMN = 1500;
 
-    if (this.settings.get({ id: "twoColumnsLayout" }) === ENABLED) {
+    if (this.settings.get({ id: 'twoColumnsLayout' }) === ENABLED) {
       WIDTH = WIDTH - 8; // grid gap
-      const size = Number(this.settings.get({ id: "columnSizes" }));
+      const size = Number(this.settings.get({ id: 'columnSizes' }));
       const proportions = [size, 100 - size];
       const LEFT_SIZE = (proportions[0] * WIDTH) / 100;
       const leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-      ROOT.style.setProperty("--paxRenLeftColumnScale", `${leftColumnScale}`);
-      ROOT.style.setProperty("--paxRenMapSizeMultiplier", '1');
+      ROOT.style.setProperty('--paxRenLeftColumnScale', `${leftColumnScale}`);
+      ROOT.style.setProperty('--paxRenMapSizeMultiplier', '1');
       const RIGHT_SIZE = (proportions[1] * WIDTH) / 100;
       const rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-      ROOT.style.setProperty("--paxRenRightColumnScale", `${rightColumnScale}`);
+      ROOT.style.setProperty('--paxRenRightColumnScale', `${rightColumnScale}`);
 
       $(
-        "pr_play_area_container"
+        'pr_play_area_container'
       ).style.gridTemplateColumns = `${LEFT_SIZE}px ${RIGHT_SIZE}px`;
     } else {
       const LEFT_SIZE = WIDTH;
       const leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-      ROOT.style.setProperty("--paxRenLeftColumnScale", `${leftColumnScale}`);
-      ROOT.style.setProperty("--paxRenMapSizeMultiplier", `${Number(this.settings.get({ id: SINGLE_COLUMN_MAP_SIZE })) / 100}`);
+      ROOT.style.setProperty('--paxRenLeftColumnScale', `${leftColumnScale}`);
+      ROOT.style.setProperty(
+        '--paxRenMapSizeMultiplier',
+        `${Number(this.settings.get({ id: SINGLE_COLUMN_MAP_SIZE })) / 100}`
+      );
       const RIGHT_SIZE = WIDTH;
       const rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-      ROOT.style.setProperty("--paxRenRightColumnScale", `${rightColumnScale}`);
+      ROOT.style.setProperty('--paxRenRightColumnScale', `${rightColumnScale}`);
     }
   }
 
@@ -241,7 +244,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   // onEnteringState: this method is called each time we are entering into a new game state.
   //                  You can use this method to perform some user interface changes at this moment.
   public onEnteringState(stateName: string, args: any) {
-    debug("Entering state: " + stateName, args);
+    debug('Entering state: ' + stateName, args);
     // UI changes for active player
     if (
       this.framework().isCurrentPlayerActive() &&
@@ -258,7 +261,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // Undo last steps
     if (args.args && args.args.previousSteps) {
       args.args.previousSteps.forEach((stepId: number) => {
-        let logEntry = $("logs").querySelector(
+        let logEntry = $('logs').querySelector(
           `.log.notif_newUndoableStep[data-step="${stepId}"]`
         );
         if (logEntry) {
@@ -282,7 +285,6 @@ class PaxRenaissance implements PaxRenaissanceGame {
     this.clearPossible();
   }
 
-
   // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
   //                        action status bar (ie: the HTML links in the status bar).
   //
@@ -290,8 +292,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     return;
     if (this.framework().isCurrentPlayerActive()) {
       this.addPrimaryActionButton({
-        id: "draw_button",
-        text: _("Test"),
+        id: 'draw_button',
+        text: _('Test'),
         callback: () => {
           this.clearInterface();
         },
@@ -320,13 +322,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
     text,
     callback,
     extraClasses,
-    color = "none",
+    color = 'none',
   }: {
     id: string;
     text: string;
     callback: Function | string;
     extraClasses?: string;
-    color?: "blue" | "gray" | "red" | "none";
+    color?: 'blue' | 'gray' | 'red' | 'none';
   }) {
     if ($(id)) {
       return;
@@ -335,7 +337,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
       id,
       text,
       callback,
-      "customActions",
+      'customActions',
       false,
       color
     );
@@ -346,22 +348,22 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
   addCancelButton() {
     this.addDangerActionButton({
-      id: "cancel_btn",
-      text: _("Cancel"),
+      id: 'cancel_btn',
+      text: _('Cancel'),
       callback: () => this.onCancel(),
     });
   }
 
   addConfirmButton({ callback }: { callback: Function | string }) {
     this.addPrimaryActionButton({
-      id: "confirm_btn",
-      text: _("Confirm"),
+      id: 'confirm_btn',
+      text: _('Confirm'),
       callback,
     });
   }
 
   private createAgentMapTokenId(agent: Agent) {
-    let id = "";
+    let id = '';
     if (agent.type === PAWN) {
       const bank = this.playerManager
         .getPlayer({ playerId: this.getPlayerId() })
@@ -382,14 +384,14 @@ class PaxRenaissance implements PaxRenaissanceGame {
     callback: Function | string;
     agent: Agent;
   }) {
-    const text = this.format_string_recursive(_("${tkn_mapToken} Agent"), {
+    const text = this.format_string_recursive(_('${tkn_mapToken} Agent'), {
       tkn_mapToken: this.createAgentMapTokenId(agent),
     });
     this.addSecondaryActionButton({
       id,
       callback,
       text,
-      extraClasses: "pr_agent_button",
+      extraClasses: 'pr_agent_button',
     });
     // const html = tplToken({
     //   type: agent.type,
@@ -413,17 +415,17 @@ class PaxRenaissance implements PaxRenaissanceGame {
   }) {
     if (optionalAction) {
       this.addSecondaryActionButton({
-        id: "pass_btn",
-        text: text ? _(text) : _("Pass"),
-        callback: () => this.takeAction({ action: "actPassOptionalAction" }),
+        id: 'pass_btn',
+        text: text ? _(text) : _('Pass'),
+        callback: () => this.takeAction({ action: 'actPassOptionalAction' }),
       });
     }
   }
 
   addSkipButton({ callback }: { callback: Function | string }) {
     this.addSecondaryActionButton({
-      id: "skip_btn",
-      text: _("Skip"),
+      id: 'skip_btn',
+      text: _('Skip'),
       callback,
     });
   }
@@ -454,9 +456,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
       id,
       text,
       callback,
-      "customActions",
+      'customActions',
       false,
-      "blue"
+      'blue'
     );
     if (extraClasses) {
       dojo.addClass(id, extraClasses);
@@ -481,9 +483,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
       id,
       text,
       callback,
-      "customActions",
+      'customActions',
       false,
-      "gray"
+      'gray'
     );
     if (extraClasses) {
       dojo.addClass(id, extraClasses);
@@ -508,9 +510,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
       id,
       text,
       callback,
-      "customActions",
+      'customActions',
       false,
-      "red"
+      'red'
     );
     if (extraClasses) {
       dojo.addClass(id, extraClasses);
@@ -522,9 +524,9 @@ class PaxRenaissance implements PaxRenaissanceGame {
       return;
     }
     this.addDangerActionButton({
-      id: "restart_btn",
-      text: _("Restart turn"),
-      callback: () => this.takeAction({ action: "actRestart" }),
+      id: 'restart_btn',
+      text: _('Restart turn'),
+      callback: () => this.takeAction({ action: 'actRestart' }),
     });
   }
 
@@ -533,24 +535,24 @@ class PaxRenaissance implements PaxRenaissanceGame {
     if (lastStep > 0) {
       // this.addDangerActionButton('btnUndoLastStep', _('Undo last step'), () => this.undoToStep(lastStep), 'restartAction');
       this.addDangerActionButton({
-        id: "undo_last_step_btn",
-        text: _("Undo last step"),
+        id: 'undo_last_step_btn',
+        text: _('Undo last step'),
         callback: () =>
           this.takeAction({
-            action: "actUndoToStep",
+            action: 'actUndoToStep',
             args: {
               stepId: lastStep,
             },
-            checkAction: "actRestart",
+            checkAction: 'actRestart',
           }),
       });
     }
 
     if (previousEngineChoices > 0) {
       this.addDangerActionButton({
-        id: "restart_btn",
-        text: _("Restart turn"),
-        callback: () => this.takeAction({ action: "actRestart" }),
+        id: 'restart_btn',
+        text: _('Restart turn'),
+        callback: () => this.takeAction({ action: 'actRestart' }),
       });
     }
   }
@@ -565,12 +567,12 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
   clearPossible() {
     this.framework().removeActionButtons();
-    dojo.empty("customActions");
+    dojo.empty('customActions');
 
     dojo.forEach(this._connections, dojo.disconnect);
     this._connections = [];
     this._selectableNodes.forEach((node) => {
-      if ($(node)) dojo.removeClass(node, "selectable selected");
+      if ($(node)) dojo.removeClass(node, 'selectable selected');
     });
     this._selectableNodes = [];
 
@@ -630,7 +632,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, (event: PointerEvent) =>
+      dojo.connect(node, 'onclick', this, (event: PointerEvent) =>
         callback(event)
       )
     );
@@ -659,7 +661,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, (event: PointerEvent) =>
+      dojo.connect(node, 'onclick', this, (event: PointerEvent) =>
         callback(event)
       )
     );
@@ -689,7 +691,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
     }
     node.classList.add(PR_SELECTABLE);
     this._connections.push(
-      dojo.connect(node, "onclick", this, (event: PointerEvent) =>
+      dojo.connect(node, 'onclick', this, (event: PointerEvent) =>
         callback(event)
       )
     );
@@ -709,11 +711,11 @@ class PaxRenaissance implements PaxRenaissanceGame {
     // this.framework().checkAction("actRestart");
     // this.takeAction('actUndoToStep', args: { stepId });
     this.takeAction({
-      action: "actUndoToStep",
+      action: 'actUndoToStep',
       args: {
         stepId,
       },
-      checkAction: "actRestart",
+      checkAction: 'actRestart',
     });
   }
 
@@ -754,12 +756,12 @@ class PaxRenaissance implements PaxRenaissanceGame {
     };
 
     if (temporary) {
-      this.connect($(node), "click", safeCallback);
-      dojo.removeClass(node, "unselectable"); // replace with pr_selectable / pr_selected
-      dojo.addClass(node, "selectable");
+      this.connect($(node), 'click', safeCallback);
+      dojo.removeClass(node, 'unselectable'); // replace with pr_selectable / pr_selected
+      dojo.addClass(node, 'selectable');
       this._selectableNodes.push(node);
     } else {
-      dojo.connect($(node), "click", safeCallback);
+      dojo.connect($(node), 'click', safeCallback);
     }
   }
 
@@ -827,7 +829,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
         // replace all keys that start with 'logToken'
         Object.entries(args).forEach(([key, value]) => {
-          if (key.startsWith("tkn_")) {
+          if (key.startsWith('tkn_')) {
             args[key] = getTokenDiv({
               key,
               value: value as string,
@@ -837,7 +839,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
         });
       }
     } catch (e) {
-      console.error(log, args, "Exception thrown", e.stack);
+      console.error(log, args, 'Exception thrown', e.stack);
     }
     return (this as any).inherited(arguments);
   }
@@ -879,12 +881,12 @@ class PaxRenaissance implements PaxRenaissanceGame {
     notifIds.forEach((uid) => {
       if (this._notif_uid_to_log_id.hasOwnProperty(uid)) {
         let logId = this._notif_uid_to_log_id[uid];
-        if ($("log_" + logId)) dojo.addClass("log_" + logId, "cancel");
+        if ($('log_' + logId)) dojo.addClass('log_' + logId, 'cancel');
       }
       if (this._notif_uid_to_mobile_log_id.hasOwnProperty(uid)) {
         let mobileLogId = this._notif_uid_to_mobile_log_id[uid];
-        if ($("dockedlog_" + mobileLogId))
-          dojo.addClass("dockedlog_" + mobileLogId, "cancel");
+        if ($('dockedlog_' + mobileLogId))
+          dojo.addClass('dockedlog_' + mobileLogId, 'cancel');
       }
     });
   }
@@ -907,25 +909,25 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
     let notif = this._last_notif;
     let type = notif.msg.type;
-    if (type == "history_history") {
+    if (type == 'history_history') {
       type = notif.msg.args.originalType;
     }
 
-    if ($("log_" + notif.logId)) {
-      dojo.addClass("log_" + notif.logId, "notif_" + type);
+    if ($('log_' + notif.logId)) {
+      dojo.addClass('log_' + notif.logId, 'notif_' + type);
 
       var methodName =
-        "onAdding" + type.charAt(0).toUpperCase() + type.slice(1) + "ToLog";
+        'onAdding' + type.charAt(0).toUpperCase() + type.slice(1) + 'ToLog';
       this[methodName]?.(notif);
     }
-    if ($("dockedlog_" + notif.mobileLogId)) {
-      dojo.addClass("dockedlog_" + notif.mobileLogId, "notif_" + type);
+    if ($('dockedlog_' + notif.mobileLogId)) {
+      dojo.addClass('dockedlog_' + notif.mobileLogId, 'notif_' + type);
     }
 
     while (this.tooltipsToMap.length) {
       const tooltipToMap = this.tooltipsToMap.pop();
       if (!tooltipToMap || !tooltipToMap[1]) {
-        console.error("error tooltipToMap", tooltipToMap);
+        console.error('error tooltipToMap', tooltipToMap);
       } else {
         this.addLogTooltip({
           tooltipId: tooltipToMap[0],
@@ -937,7 +939,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
 
   // cardId will be PRENXXXX for tableau cards and full id for empire card / victory card
   addLogTooltip({ tooltipId, cardId }: { tooltipId: number; cardId: string }) {
-    if (cardId.startsWith("EmpireSquare")) {
+    if (cardId.startsWith('EmpireSquare')) {
       const empireCard = this.gamedatas.empireSquares.find(
         (square) => square.id === cardId
       );
@@ -947,7 +949,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
           card: empireCard,
         });
       }
-    } else if (cardId.startsWith("Victory")) {
+    } else if (cardId.startsWith('Victory')) {
       const card = this.gamedatas.victoryCards.find(
         (card) => cardId === card.id
       );
@@ -995,12 +997,12 @@ class PaxRenaissance implements PaxRenaissanceGame {
   updatePlayerOrdering() {
     this.framework().inherited(arguments);
 
-    const container = document.getElementById("player_boards");
-    const infoPanel = document.getElementById("pr_info_panel");
+    const container = document.getElementById('player_boards');
+    const infoPanel = document.getElementById('pr_info_panel');
     if (!container) {
       return;
     }
-    container.insertAdjacentElement("afterbegin", infoPanel);
+    container.insertAdjacentElement('afterbegin', infoPanel);
   }
 
   setAlwaysFixTopActions(alwaysFixed = true, maximum = 30) {
@@ -1013,8 +1015,8 @@ class PaxRenaissance implements PaxRenaissanceGame {
     (this as any).inherited(arguments);
 
     if (this.alwaysFixTopActions) {
-      const afterTitleElem = document.getElementById("after-page-title");
-      const titleElem = document.getElementById("page-title");
+      const afterTitleElem = document.getElementById('after-page-title');
+      const titleElem = document.getElementById('page-title');
       let zoom = (getComputedStyle(titleElem) as any).zoom;
       if (!zoom) {
         zoom = 1;
@@ -1027,13 +1029,13 @@ class PaxRenaissance implements PaxRenaissanceGame {
           (window.innerHeight * this.alwaysFixTopActionsMaximum) / 100
       ) {
         const afterTitleRect = afterTitleElem.getBoundingClientRect();
-        titleElem.classList.add("fixed-page-title");
-        titleElem.style.width = (afterTitleRect.width - 10) / zoom + "px";
-        afterTitleElem.style.height = titleRect.height + "px";
+        titleElem.classList.add('fixed-page-title');
+        titleElem.style.width = (afterTitleRect.width - 10) / zoom + 'px';
+        afterTitleElem.style.height = titleRect.height + 'px';
       } else {
-        titleElem.classList.remove("fixed-page-title");
-        titleElem.style.width = "auto";
-        afterTitleElem.style.height = "0px";
+        titleElem.classList.remove('fixed-page-title');
+        titleElem.style.width = 'auto';
+        afterTitleElem.style.height = '0px';
       }
     }
   }
@@ -1047,7 +1049,7 @@ class PaxRenaissance implements PaxRenaissanceGame {
   //.##.....##..######..##.....##.##.....##
 
   actionError(actionName: string) {
-    this.framework().showMessage(`cannot take ${actionName} action`, "error");
+    this.framework().showMessage(`cannot take ${actionName} action`, 'error');
   }
 
   /*

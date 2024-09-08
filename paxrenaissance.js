@@ -1902,16 +1902,16 @@ var PaxRenaissance = (function () {
         this._last_tooltip_id = 0;
         this._selectableNodes = [];
         this.tooltipsToMap = [];
-        console.log("paxrenaissance constructor");
+        console.log('paxrenaissance constructor');
     }
     PaxRenaissance.prototype.setup = function (gamedatas) {
         var _a;
-        dojo.place("<div id='customActions' style='display:inline-block'></div>", $("generalactions"), "after");
+        dojo.place("<div id='customActions' style='display:inline-block'></div>", $('generalactions'), 'after');
         this.setAlwaysFixTopActions();
         this.setupDontPreloadImages();
         this.gamedatas = gamedatas;
         this.gameOptions = gamedatas.gameOptions;
-        debug("gamedatas", gamedatas);
+        debug('gamedatas', gamedatas);
         this.setupPlayerOrder({ customPlayerOrder: gamedatas.customPlayerOrder });
         this._connections = [];
         this.activeStates = (_a = {},
@@ -1964,7 +1964,7 @@ var PaxRenaissance = (function () {
                 : 2100 - this.settings.get({ id: PREF_ANIMATION_SPEED }),
         });
         this.tableauCardManager = new TableauCardManager(this);
-        this.discard = new VoidStock(this.tableauCardManager, document.getElementById("pr_discard"));
+        this.discard = new VoidStock(this.tableauCardManager, document.getElementById('pr_discard'));
         this.tooltipManager = new TooltipManager(this);
         this.gameMap = new GameMap(this);
         if (this.playerOrder.includes(this.getPlayerId())) {
@@ -1981,7 +1981,7 @@ var PaxRenaissance = (function () {
         this.notificationManager = new NotificationManager(this);
         this.notificationManager.setupNotifications();
         this.tooltipManager.setupTooltips();
-        debug("Ending game setup");
+        debug('Ending game setup');
     };
     PaxRenaissance.prototype.setupPlayerOrder = function (_a) {
         var customPlayerOrder = _a.customPlayerOrder;
@@ -1996,51 +1996,51 @@ var PaxRenaissance = (function () {
         this.playerOrder = customPlayerOrder;
     };
     PaxRenaissance.prototype.setupDontPreloadImages = function () {
-        this.framework().dontPreloadImage("background_balcony.jpg");
-        this.framework().dontPreloadImage("background_cathedral.jpg");
-        this.framework().dontPreloadImage("background_goldsmith.jpg");
-        this.framework().dontPreloadImage("background_lucrezia.jpg");
-        this.framework().dontPreloadImage("background_poison.jpg");
-        this.framework().dontPreloadImage("background_war.jpg");
-        this.framework().dontPreloadImage("player_boards3.png");
+        this.framework().dontPreloadImage('background_balcony.jpg');
+        this.framework().dontPreloadImage('background_cathedral.jpg');
+        this.framework().dontPreloadImage('background_goldsmith.jpg');
+        this.framework().dontPreloadImage('background_lucrezia.jpg');
+        this.framework().dontPreloadImage('background_poison.jpg');
+        this.framework().dontPreloadImage('background_war.jpg');
+        this.framework().dontPreloadImage('player_boards3.png');
     };
     PaxRenaissance.prototype.updateLayout = function () {
         if (!this.settings) {
             return;
         }
-        $("pr_play_area_container").setAttribute("data-two-columns", this.settings.get({ id: "twoColumnsLayout" }));
+        $('pr_play_area_container').setAttribute('data-two-columns', this.settings.get({ id: 'twoColumnsLayout' }));
         var ROOT = document.documentElement;
-        var WIDTH = $("pr_play_area_container").getBoundingClientRect()["width"] - 8;
+        var WIDTH = $('pr_play_area_container').getBoundingClientRect()['width'] - 8;
         var LEFT_COLUMN = 1500;
         var RIGHT_COLUMN = 1500;
-        if (this.settings.get({ id: "twoColumnsLayout" }) === ENABLED) {
+        if (this.settings.get({ id: 'twoColumnsLayout' }) === ENABLED) {
             WIDTH = WIDTH - 8;
-            var size = Number(this.settings.get({ id: "columnSizes" }));
+            var size = Number(this.settings.get({ id: 'columnSizes' }));
             var proportions = [size, 100 - size];
             var LEFT_SIZE = (proportions[0] * WIDTH) / 100;
             var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-            ROOT.style.setProperty("--paxRenLeftColumnScale", "".concat(leftColumnScale));
-            ROOT.style.setProperty("--paxRenMapSizeMultiplier", '1');
+            ROOT.style.setProperty('--paxRenLeftColumnScale', "".concat(leftColumnScale));
+            ROOT.style.setProperty('--paxRenMapSizeMultiplier', '1');
             var RIGHT_SIZE = (proportions[1] * WIDTH) / 100;
             var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-            ROOT.style.setProperty("--paxRenRightColumnScale", "".concat(rightColumnScale));
-            $("pr_play_area_container").style.gridTemplateColumns = "".concat(LEFT_SIZE, "px ").concat(RIGHT_SIZE, "px");
+            ROOT.style.setProperty('--paxRenRightColumnScale', "".concat(rightColumnScale));
+            $('pr_play_area_container').style.gridTemplateColumns = "".concat(LEFT_SIZE, "px ").concat(RIGHT_SIZE, "px");
         }
         else {
             var LEFT_SIZE = WIDTH;
             var leftColumnScale = LEFT_SIZE / LEFT_COLUMN;
-            ROOT.style.setProperty("--paxRenLeftColumnScale", "".concat(leftColumnScale));
-            ROOT.style.setProperty("--paxRenMapSizeMultiplier", "".concat(Number(this.settings.get({ id: SINGLE_COLUMN_MAP_SIZE })) / 100));
+            ROOT.style.setProperty('--paxRenLeftColumnScale', "".concat(leftColumnScale));
+            ROOT.style.setProperty('--paxRenMapSizeMultiplier', "".concat(Number(this.settings.get({ id: SINGLE_COLUMN_MAP_SIZE })) / 100));
             var RIGHT_SIZE = WIDTH;
             var rightColumnScale = RIGHT_SIZE / RIGHT_COLUMN;
-            ROOT.style.setProperty("--paxRenRightColumnScale", "".concat(rightColumnScale));
+            ROOT.style.setProperty('--paxRenRightColumnScale', "".concat(rightColumnScale));
         }
     };
     PaxRenaissance.prototype.setupNotifications = function () {
     };
     PaxRenaissance.prototype.onEnteringState = function (stateName, args) {
         var _this = this;
-        debug("Entering state: " + stateName, args);
+        debug('Entering state: ' + stateName, args);
         if (this.framework().isCurrentPlayerActive() &&
             this.activeStates[stateName]) {
             this.activeStates[stateName].onEnteringState(args.args);
@@ -2050,7 +2050,7 @@ var PaxRenaissance = (function () {
         }
         if (args.args && args.args.previousSteps) {
             args.args.previousSteps.forEach(function (stepId) {
-                var logEntry = $("logs").querySelector(".log.notif_newUndoableStep[data-step=\"".concat(stepId, "\"]"));
+                var logEntry = $('logs').querySelector(".log.notif_newUndoableStep[data-step=\"".concat(stepId, "\"]"));
                 if (logEntry) {
                     _this.onClick(logEntry, function () { return _this.undoToStep({ stepId: stepId }); });
                 }
@@ -2069,8 +2069,8 @@ var PaxRenaissance = (function () {
         return;
         if (this.framework().isCurrentPlayerActive()) {
             this.addPrimaryActionButton({
-                id: "draw_button",
-                text: _("Test"),
+                id: 'draw_button',
+                text: _('Test'),
                 callback: function () {
                     _this.clearInterface();
                 },
@@ -2078,11 +2078,11 @@ var PaxRenaissance = (function () {
         }
     };
     PaxRenaissance.prototype.addActionButtonClient = function (_a) {
-        var id = _a.id, text = _a.text, callback = _a.callback, extraClasses = _a.extraClasses, _b = _a.color, color = _b === void 0 ? "none" : _b;
+        var id = _a.id, text = _a.text, callback = _a.callback, extraClasses = _a.extraClasses, _b = _a.color, color = _b === void 0 ? 'none' : _b;
         if ($(id)) {
             return;
         }
-        this.framework().addActionButton(id, text, callback, "customActions", false, color);
+        this.framework().addActionButton(id, text, callback, 'customActions', false, color);
         if (extraClasses) {
             dojo.addClass(id, extraClasses);
         }
@@ -2090,21 +2090,21 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.addCancelButton = function () {
         var _this = this;
         this.addDangerActionButton({
-            id: "cancel_btn",
-            text: _("Cancel"),
+            id: 'cancel_btn',
+            text: _('Cancel'),
             callback: function () { return _this.onCancel(); },
         });
     };
     PaxRenaissance.prototype.addConfirmButton = function (_a) {
         var callback = _a.callback;
         this.addPrimaryActionButton({
-            id: "confirm_btn",
-            text: _("Confirm"),
+            id: 'confirm_btn',
+            text: _('Confirm'),
             callback: callback,
         });
     };
     PaxRenaissance.prototype.createAgentMapTokenId = function (agent) {
-        var id = "";
+        var id = '';
         if (agent.type === PAWN) {
             var bank = this.playerManager
                 .getPlayer({ playerId: this.getPlayerId() })
@@ -2118,14 +2118,14 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.addAgentButton = function (_a) {
         var id = _a.id, callback = _a.callback, agent = _a.agent;
-        var text = this.format_string_recursive(_("${tkn_mapToken} Agent"), {
+        var text = this.format_string_recursive(_('${tkn_mapToken} Agent'), {
             tkn_mapToken: this.createAgentMapTokenId(agent),
         });
         this.addSecondaryActionButton({
             id: id,
             callback: callback,
             text: text,
-            extraClasses: "pr_agent_button",
+            extraClasses: 'pr_agent_button',
         });
     };
     PaxRenaissance.prototype.addPassButton = function (_a) {
@@ -2133,17 +2133,17 @@ var PaxRenaissance = (function () {
         var optionalAction = _a.optionalAction, text = _a.text;
         if (optionalAction) {
             this.addSecondaryActionButton({
-                id: "pass_btn",
-                text: text ? _(text) : _("Pass"),
-                callback: function () { return _this.takeAction({ action: "actPassOptionalAction" }); },
+                id: 'pass_btn',
+                text: text ? _(text) : _('Pass'),
+                callback: function () { return _this.takeAction({ action: 'actPassOptionalAction' }); },
             });
         }
     };
     PaxRenaissance.prototype.addSkipButton = function (_a) {
         var callback = _a.callback;
         this.addSecondaryActionButton({
-            id: "skip_btn",
-            text: _("Skip"),
+            id: 'skip_btn',
+            text: _('Skip'),
             callback: callback,
         });
     };
@@ -2152,7 +2152,7 @@ var PaxRenaissance = (function () {
         if ($(id)) {
             return;
         }
-        this.framework().addActionButton(id, text, callback, "customActions", false, "blue");
+        this.framework().addActionButton(id, text, callback, 'customActions', false, 'blue');
         if (extraClasses) {
             dojo.addClass(id, extraClasses);
         }
@@ -2162,7 +2162,7 @@ var PaxRenaissance = (function () {
         if ($(id)) {
             return;
         }
-        this.framework().addActionButton(id, text, callback, "customActions", false, "gray");
+        this.framework().addActionButton(id, text, callback, 'customActions', false, 'gray');
         if (extraClasses) {
             dojo.addClass(id, extraClasses);
         }
@@ -2172,7 +2172,7 @@ var PaxRenaissance = (function () {
         if ($(id)) {
             return;
         }
-        this.framework().addActionButton(id, text, callback, "customActions", false, "red");
+        this.framework().addActionButton(id, text, callback, 'customActions', false, 'red');
         if (extraClasses) {
             dojo.addClass(id, extraClasses);
         }
@@ -2184,9 +2184,9 @@ var PaxRenaissance = (function () {
             return;
         }
         this.addDangerActionButton({
-            id: "restart_btn",
-            text: _("Restart turn"),
-            callback: function () { return _this.takeAction({ action: "actRestart" }); },
+            id: 'restart_btn',
+            text: _('Restart turn'),
+            callback: function () { return _this.takeAction({ action: 'actRestart' }); },
         });
     };
     PaxRenaissance.prototype.addUndoButtons = function (_a) {
@@ -2195,24 +2195,24 @@ var PaxRenaissance = (function () {
         var lastStep = Math.max.apply(Math, __spreadArray([0], previousSteps, false));
         if (lastStep > 0) {
             this.addDangerActionButton({
-                id: "undo_last_step_btn",
-                text: _("Undo last step"),
+                id: 'undo_last_step_btn',
+                text: _('Undo last step'),
                 callback: function () {
                     return _this.takeAction({
-                        action: "actUndoToStep",
+                        action: 'actUndoToStep',
                         args: {
                             stepId: lastStep,
                         },
-                        checkAction: "actRestart",
+                        checkAction: 'actRestart',
                     });
                 },
             });
         }
         if (previousEngineChoices > 0) {
             this.addDangerActionButton({
-                id: "restart_btn",
-                text: _("Restart turn"),
-                callback: function () { return _this.takeAction({ action: "actRestart" }); },
+                id: 'restart_btn',
+                text: _('Restart turn'),
+                callback: function () { return _this.takeAction({ action: 'actRestart' }); },
             });
         }
     };
@@ -2225,12 +2225,12 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.clearPossible = function () {
         this.framework().removeActionButtons();
-        dojo.empty("customActions");
+        dojo.empty('customActions');
         dojo.forEach(this._connections, dojo.disconnect);
         this._connections = [];
         this._selectableNodes.forEach(function (node) {
             if ($(node))
-                dojo.removeClass(node, "selectable selected");
+                dojo.removeClass(node, 'selectable selected');
         });
         this._selectableNodes = [];
         dojo.query(".".concat(PR_SELECTABLE)).removeClass(PR_SELECTABLE);
@@ -2264,7 +2264,7 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function (event) {
+        this._connections.push(dojo.connect(node, 'onclick', this, function (event) {
             return callback(event);
         }));
     };
@@ -2284,7 +2284,7 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function (event) {
+        this._connections.push(dojo.connect(node, 'onclick', this, function (event) {
             return callback(event);
         }));
     };
@@ -2305,7 +2305,7 @@ var PaxRenaissance = (function () {
             return;
         }
         node.classList.add(PR_SELECTABLE);
-        this._connections.push(dojo.connect(node, "onclick", this, function (event) {
+        this._connections.push(dojo.connect(node, 'onclick', this, function (event) {
             return callback(event);
         }));
     };
@@ -2321,11 +2321,11 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.undoToStep = function (_a) {
         var stepId = _a.stepId;
         this.takeAction({
-            action: "actUndoToStep",
+            action: 'actUndoToStep',
             args: {
                 stepId: stepId,
             },
-            checkAction: "actRestart",
+            checkAction: 'actRestart',
         });
     };
     PaxRenaissance.prototype.connect = function (node, action, callback) {
@@ -2345,13 +2345,13 @@ var PaxRenaissance = (function () {
             callback(evt);
         };
         if (temporary) {
-            this.connect($(node), "click", safeCallback);
-            dojo.removeClass(node, "unselectable");
-            dojo.addClass(node, "selectable");
+            this.connect($(node), 'click', safeCallback);
+            dojo.removeClass(node, 'unselectable');
+            dojo.addClass(node, 'selectable');
             this._selectableNodes.push(node);
         }
         else {
-            dojo.connect($(node), "click", safeCallback);
+            dojo.connect($(node), 'click', safeCallback);
         }
     };
     PaxRenaissance.prototype.onScreenWidthChange = function () {
@@ -2381,7 +2381,7 @@ var PaxRenaissance = (function () {
                 args.processed = true;
                 Object.entries(args).forEach(function (_a) {
                     var key = _a[0], value = _a[1];
-                    if (key.startsWith("tkn_")) {
+                    if (key.startsWith('tkn_')) {
                         args[key] = getTokenDiv({
                             key: key,
                             value: value,
@@ -2392,7 +2392,7 @@ var PaxRenaissance = (function () {
             }
         }
         catch (e) {
-            console.error(log, args, "Exception thrown", e.stack);
+            console.error(log, args, 'Exception thrown', e.stack);
         }
         return this.inherited(arguments);
     };
@@ -2420,13 +2420,13 @@ var PaxRenaissance = (function () {
         notifIds.forEach(function (uid) {
             if (_this._notif_uid_to_log_id.hasOwnProperty(uid)) {
                 var logId = _this._notif_uid_to_log_id[uid];
-                if ($("log_" + logId))
-                    dojo.addClass("log_" + logId, "cancel");
+                if ($('log_' + logId))
+                    dojo.addClass('log_' + logId, 'cancel');
             }
             if (_this._notif_uid_to_mobile_log_id.hasOwnProperty(uid)) {
                 var mobileLogId = _this._notif_uid_to_mobile_log_id[uid];
-                if ($("dockedlog_" + mobileLogId))
-                    dojo.addClass("dockedlog_" + mobileLogId, "cancel");
+                if ($('dockedlog_' + mobileLogId))
+                    dojo.addClass('dockedlog_' + mobileLogId, 'cancel');
             }
         });
     };
@@ -2437,21 +2437,21 @@ var PaxRenaissance = (function () {
         }
         var notif = this._last_notif;
         var type = notif.msg.type;
-        if (type == "history_history") {
+        if (type == 'history_history') {
             type = notif.msg.args.originalType;
         }
-        if ($("log_" + notif.logId)) {
-            dojo.addClass("log_" + notif.logId, "notif_" + type);
-            var methodName = "onAdding" + type.charAt(0).toUpperCase() + type.slice(1) + "ToLog";
+        if ($('log_' + notif.logId)) {
+            dojo.addClass('log_' + notif.logId, 'notif_' + type);
+            var methodName = 'onAdding' + type.charAt(0).toUpperCase() + type.slice(1) + 'ToLog';
             (_a = this[methodName]) === null || _a === void 0 ? void 0 : _a.call(this, notif);
         }
-        if ($("dockedlog_" + notif.mobileLogId)) {
-            dojo.addClass("dockedlog_" + notif.mobileLogId, "notif_" + type);
+        if ($('dockedlog_' + notif.mobileLogId)) {
+            dojo.addClass('dockedlog_' + notif.mobileLogId, 'notif_' + type);
         }
         while (this.tooltipsToMap.length) {
             var tooltipToMap = this.tooltipsToMap.pop();
             if (!tooltipToMap || !tooltipToMap[1]) {
-                console.error("error tooltipToMap", tooltipToMap);
+                console.error('error tooltipToMap', tooltipToMap);
             }
             else {
                 this.addLogTooltip({
@@ -2463,7 +2463,7 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.addLogTooltip = function (_a) {
         var tooltipId = _a.tooltipId, cardId = _a.cardId;
-        if (cardId.startsWith("EmpireSquare")) {
+        if (cardId.startsWith('EmpireSquare')) {
             var empireCard = this.gamedatas.empireSquares.find(function (square) { return square.id === cardId; });
             if (empireCard) {
                 this.tooltipManager.addEmpireCardTooltip({
@@ -2472,7 +2472,7 @@ var PaxRenaissance = (function () {
                 });
             }
         }
-        else if (cardId.startsWith("Victory")) {
+        else if (cardId.startsWith('Victory')) {
             var card = this.gamedatas.victoryCards.find(function (card) { return cardId === card.id; });
             if (card) {
                 this.tooltipManager.addVictoryCardTooltip({
@@ -2506,12 +2506,12 @@ var PaxRenaissance = (function () {
     };
     PaxRenaissance.prototype.updatePlayerOrdering = function () {
         this.framework().inherited(arguments);
-        var container = document.getElementById("player_boards");
-        var infoPanel = document.getElementById("pr_info_panel");
+        var container = document.getElementById('player_boards');
+        var infoPanel = document.getElementById('pr_info_panel');
         if (!container) {
             return;
         }
-        container.insertAdjacentElement("afterbegin", infoPanel);
+        container.insertAdjacentElement('afterbegin', infoPanel);
     };
     PaxRenaissance.prototype.setAlwaysFixTopActions = function (alwaysFixed, maximum) {
         if (alwaysFixed === void 0) { alwaysFixed = true; }
@@ -2523,8 +2523,8 @@ var PaxRenaissance = (function () {
     PaxRenaissance.prototype.adaptStatusBar = function () {
         this.inherited(arguments);
         if (this.alwaysFixTopActions) {
-            var afterTitleElem = document.getElementById("after-page-title");
-            var titleElem = document.getElementById("page-title");
+            var afterTitleElem = document.getElementById('after-page-title');
+            var titleElem = document.getElementById('page-title');
             var zoom = getComputedStyle(titleElem).zoom;
             if (!zoom) {
                 zoom = 1;
@@ -2534,19 +2534,19 @@ var PaxRenaissance = (function () {
                 titleElem.offsetHeight <
                     (window.innerHeight * this.alwaysFixTopActionsMaximum) / 100) {
                 var afterTitleRect = afterTitleElem.getBoundingClientRect();
-                titleElem.classList.add("fixed-page-title");
-                titleElem.style.width = (afterTitleRect.width - 10) / zoom + "px";
-                afterTitleElem.style.height = titleRect.height + "px";
+                titleElem.classList.add('fixed-page-title');
+                titleElem.style.width = (afterTitleRect.width - 10) / zoom + 'px';
+                afterTitleElem.style.height = titleRect.height + 'px';
             }
             else {
-                titleElem.classList.remove("fixed-page-title");
-                titleElem.style.width = "auto";
-                afterTitleElem.style.height = "0px";
+                titleElem.classList.remove('fixed-page-title');
+                titleElem.style.width = 'auto';
+                afterTitleElem.style.height = '0px';
             }
         }
     };
     PaxRenaissance.prototype.actionError = function (actionName) {
-        this.framework().showMessage("cannot take ".concat(actionName, " action"), "error");
+        this.framework().showMessage("cannot take ".concat(actionName, " action"), 'error');
     };
     PaxRenaissance.prototype.takeAction = function (_a) {
         var action = _a.action, _b = _a.args, args = _b === void 0 ? {} : _b, checkAction = _a.checkAction;
