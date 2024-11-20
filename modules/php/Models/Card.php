@@ -220,7 +220,7 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
    * Called when card is silenced, discarded, sold
    * other moments when ability is deactivated
    */
-  public function deactivateAbility($owner = null)
+  public function deactivateAbility($owner = null, $fromLocationId = null)
   {
   }
 

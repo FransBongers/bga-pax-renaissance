@@ -28,8 +28,10 @@ use PaxRenaissance\Models\Token;
 
 trait DebugTrait
 {
-  function test()
+  function debug_test()
   {
+    self::loadDebugUpdateCustomTurnOrder([]);
+
     // $this->debugPlaceToken(KNIGHT, REFORMIST, BRUGES);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, LYON);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, BORDEAUX);
@@ -46,8 +48,8 @@ trait DebugTrait
     // $this->debugPlaceCardInTableau('PREN134X_MiningEngineer', WEST, 2371052);
 
     // $this->debugPlaceCardInTableau('PREN132X_ArtisticGeometry', WEST, 2371052);
-    $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052);
-    Cards::move('EmpireSquare_PapalStates', Locations::vassals(HOLY_ROMAN_EMIRE));
+    // $this->debugPlaceCardInTableau('EmpireSquare_HolyRomanEmpire', WEST, 2371052);
+    // Cards::move('EmpireSquare_PapalStates', Locations::vassals(HOLY_ROMAN_EMIRE));
     // $this->debugPlaceToken(PAWN, COEUR, BORDER_HOLY_ROMAN_EMPIRE_HUNGARY);
 
     // $this->debugPlaceCardInTableau('EmpireSquare_PapalStates', WEST, 2371052);
@@ -109,7 +111,7 @@ trait DebugTrait
     // Cards::get('EmpireSquare_Portugal')->setSide(REPUBLIC);
   }
 
-  function debugPlaceCardInMarket($cardId, $region = WEST, $column = 1)
+  function debug_placeCardInMarket($cardId, $region = WEST, $column = 1)
   {
     $card = Cards::getTopOf(Locations::market($region, $column));
     Cards::move($card->getId(), DISCARD);
@@ -124,7 +126,7 @@ trait DebugTrait
     $king->setQueen(Cards::get($newQueen));
   }
 
-  function debugPlaceCardInTableau($cardId, $region = WEST, $playerId = null)
+  function debug_placeCardInTableau($cardId, $region = WEST, $playerId = null)
   {
     $playerId = $playerId === null ? Players::get()->getId() : $playerId;
     Cards::move($cardId, Locations::tableau($playerId, $region));
@@ -222,45 +224,128 @@ trait DebugTrait
     return $playerId = $playerId === null ? Players::get()->getId() : intval($playerId);
   }
 
-  public function LoadDebug()
+  // public function LoadDebug()
+  // {
+  //   // These are the id's from the BGAtable I need to debug.
+  //   // you can get them by running this query : SELECT JSON_ARRAYAGG(`player_id`) FROM `player`
+  //   $ids = [
+  //     89403527,
+  //     85521161,
+  //   ];
+  //   // You can also get the ids automatically with $ids = array_map(fn($dbPlayer) => intval($dbPlayer['player_id']), array_values($this->getCollectionFromDb('select player_id from player order by player_no')));
+
+  //   // Id of the first player in BGA Studio
+  //   $sid = 2371052;
+
+  //   foreach ($ids as $id) {
+  //     // basic tables
+  //     self::DbQuery("UPDATE player SET player_id=$sid WHERE player_id = $id");
+  //     self::DbQuery("UPDATE global SET global_value=$sid WHERE global_value = $id");
+  //     self::DbQuery("UPDATE stats SET stats_player_id=$sid WHERE stats_player_id = $id");
+  //     self::DbQuery("UPDATE player_extra SET player_id=$sid WHERE player_id = $id");
+
+  //     // 'other' game specific tables. example:
+  //     // tables specific to your schema that use player_ids
+
+
+
+  //     // Cards
+  //     self::DbQuery("UPDATE `cards` SET `card_location` = 'tableau_west_$sid' WHERE `cards`.`card_location` = 'tableau_west_$id';");
+  //     self::DbQuery("UPDATE `cards` SET `card_location` = 'tableau_east_$sid' WHERE `cards`.`card_location` = 'tableau_east_$id';");
+
+
+  //     /**
+  //      * TODO:
+  //      * - engine
+  //      * - turn order
+  //      * - first playuer
+  //      */
+
+
+  //     ++$sid;
+  //   }
+  // }
+
+  public function loadBugReportSQL(int $reportId, array $studioPlayers): void
   {
-    // These are the id's from the BGAtable I need to debug.
-    // you can get them by running this query : SELECT JSON_ARRAYAGG(`player_id`) FROM `player`
-    $ids = [
-      89403527,
-      85521161,
-    ];
-    // You can also get the ids automatically with $ids = array_map(fn($dbPlayer) => intval($dbPlayer['player_id']), array_values($this->getCollectionFromDb('select player_id from player order by player_no')));
-
-    // Id of the first player in BGA Studio
-    $sid = 2371052;
-
-    foreach ($ids as $id) {
-      // basic tables
-      self::DbQuery("UPDATE player SET player_id=$sid WHERE player_id = $id");
-      self::DbQuery("UPDATE global SET global_value=$sid WHERE global_value = $id");
-      self::DbQuery("UPDATE stats SET stats_player_id=$sid WHERE stats_player_id = $id");
-      self::DbQuery("UPDATE player_extra SET player_id=$sid WHERE player_id = $id");
-
-      // 'other' game specific tables. example:
-      // tables specific to your schema that use player_ids
-
-
-
-      // Cards
-      self::DbQuery("UPDATE `cards` SET `card_location` = 'tableau_west_$sid' WHERE `cards`.`card_location` = 'tableau_west_$id';");
-      self::DbQuery("UPDATE `cards` SET `card_location` = 'tableau_east_$sid' WHERE `cards`.`card_location` = 'tableau_east_$id';");
-
-
-      /**
-       * TODO:
-       * - engine
-       * - turn order
-       * - first playuer
-       */
-
-
-      ++$sid;
+    $prodPlayers = $this->getObjectListFromDb("SELECT `player_id` FROM `player`", true);
+    $prodCount = count($prodPlayers);
+    $studioCount = count($studioPlayers);
+    if ($prodCount != $studioCount) {
+      throw new BgaVisibleSystemException("Incorrect player count (bug report has $prodCount players, studio table has $studioCount players)");
     }
+
+    // SQL specific to your game
+    $sql[] = 'ALTER TABLE `gamelog` ADD `cancel` TINYINT(1) NOT NULL DEFAULT 0;';
+    // // For example, reset the current state if it's already game over
+    // $sql = [
+    //     "UPDATE `global` SET `global_value` = 10 WHERE `global_id` = 1 AND `global_value` = 99"
+    // ];
+
+
+    $map = [];
+    foreach ($prodPlayers as $index => $prodId) {
+      $studioId = $studioPlayers[$index];
+      $map[(int) $prodId] = (int) $studioId;
+      // SQL common to all games
+      $sql[] = "UPDATE `player` SET `player_id` = $studioId WHERE `player_id` = $prodId";
+      $sql[] = "UPDATE `global` SET `global_value` = $studioId WHERE `global_value` = $prodId";
+      $sql[] = "UPDATE `stats` SET `stats_player_id` = $studioId WHERE `stats_player_id` = $prodId";
+      $sql[] = "UPDATE `player_extra` SET `player_id` = $studioId WHERE `player_id` = $prodId";
+
+      $sql[] = "UPDATE `cards` SET `card_location` = 'tableau_west_$studioId' WHERE `cards`.`card_location` = 'tableau_west_$prodId'";
+      $sql[] = "UPDATE `cards` SET `card_location` = 'tableau_east_$studioId' WHERE `cards`.`card_location` = 'tableau_east_$prodId'";
+
+      // // SQL specific to your game
+
+      // $sql[] = "UPDATE `card` SET `card_location_arg` = $studioId WHERE `card_location_arg` = $prodId";
+      // $sql[] = "UPDATE `my_table` SET `my_column` = REPLACE(`my_column`, $prodId, $studioId)";
+    }
+    foreach ($sql as $q) {
+      $this->DbQuery($q);
+    }
+
+    // Engine
+    $engine = Globals::getEngine();
+    self::loadDebugUpdateEngine($engine, $map);
+    self::loadDebugUpdateCustomTurnOrder($map);
+    Globals::setEngine($engine);
+    Game::get()->reloadPlayersBasicInfos(); // Is this necessary?
+
+    // Game specific
+    $firstPlayerId = Globals::getFirstPlayer();
+    Globals::setFirstPlayer($map[$firstPlayerId]);
+  }
+
+  static function loadDebugUpdateEngine(&$node, $map)
+  {
+    if (isset($node['playerId'])) {
+      $node['playerId'] = $map[(int) $node['playerId']];
+    }
+
+    if (isset($node['children'])) {
+      foreach ($node['children'] as &$child) {
+        self::loadDebugUpdateEngine($child, $map);
+      }
+    }
+  }
+
+  static function loadDebugUpdateCustomTurnOrder($map)
+  {
+    $customTurnOrders = Globals::getCustomTurnOrders();
+    foreach ($customTurnOrders as $type => $data) {
+      foreach ($data['order'] as $index => $playerId) {
+        Notifications::log('loadDebugUpdateCustomTurnOrder', [
+          'index' => $index,
+          'playerId' => $playerId,
+        ]);
+
+        // if (isset($map[$playerId])) {
+        $customTurnOrders[$type]['order'][$index] = $map[$playerId];
+        // }
+
+      }
+    }
+    Globals::setCustomTurnOrders($customTurnOrders);
   }
 }

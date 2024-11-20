@@ -3,6 +3,7 @@
 namespace PaxRenaissance\Cards\Tableau;
 
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Utils;
 
 class PREN132X_ArtisticGeometry extends \PaxRenaissance\Models\TableauCard
 {
@@ -39,8 +40,12 @@ class PREN132X_ArtisticGeometry extends \PaxRenaissance\Models\TableauCard
     Notifications::activateAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId() );
   }
 
-  public function deactivateAbility($owner = null)
+  public function deactivateAbility($owner = null, $fromLocationId = null)
   {
+    if ($fromLocationId !== null && Utils::startsWith($fromLocationId, 'hand')) {
+      return;
+    }
+
     Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId() );
   }
 }

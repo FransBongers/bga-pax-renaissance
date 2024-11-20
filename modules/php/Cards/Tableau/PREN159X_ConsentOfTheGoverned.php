@@ -40,7 +40,7 @@ class PREN159X_ConsentOfTheGoverned extends \PaxRenaissance\Models\TableauCard
     Notifications::activateAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3, null, $owner === null ? null : $owner->getId() );
   }
 
-  public function deactivateAbility($owner = null)
+  public function deactivateAbility($owner = null, $fromLocationId = null)
   {
     Notifications::deactivateAbility(SA_PATRON_COUNTS_AS_LAW_IN_RENAISSANCE_VICTORY_3, null, $owner === null ? null : $owner->getId() );
   }

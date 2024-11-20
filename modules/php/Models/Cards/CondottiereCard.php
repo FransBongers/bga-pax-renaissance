@@ -18,7 +18,7 @@ class CondottiereCard extends \PaxRenaissance\Models\TableauCard
     Empires::get(PAPAL_STATES)->activateCondottiere();
   }
 
-  public function deactivateAbility($owner = null)
+  public function deactivateAbility($owner = null, $fromLocationId = null)
   {
     Empires::get(PAPAL_STATES)->deactivateCondottiere();
   }

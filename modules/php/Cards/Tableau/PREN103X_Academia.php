@@ -3,6 +3,7 @@
 namespace PaxRenaissance\Cards\Tableau;
 
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Utils;
 
 class PREN103X_Academia extends \PaxRenaissance\Models\TableauCard
 {
@@ -41,11 +42,15 @@ class PREN103X_Academia extends \PaxRenaissance\Models\TableauCard
   public function activateAbility()
   {
     $owner = $this->getOwner();
-    Notifications::activateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId() );
+    Notifications::activateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId());
   }
 
-  public function deactivateAbility($owner = null)
+  public function deactivateAbility($owner = null, $fromLocationId = null)
   {
-    Notifications::deactivateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId() );
+    if ($fromLocationId !== null && Utils::startsWith($fromLocationId, 'hand')) {
+      return;
+    }
+
+    Notifications::deactivateAbility(SA_CARD_COUNTS_AS_REPUBLIC_FOR_RENAISSANCE_VICTORY_1, null, $owner === null ? null : $owner->getId());
   }
 }

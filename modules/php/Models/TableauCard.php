@@ -83,11 +83,11 @@ class TableauCard extends Card
     }
     $adjustPrestige = $this->isInTableau();
     $fromLocationId = $this->location;
-    
+
     Cards::insertOnTop($this->getId(), DISCARD);
     $this->location = DISCARD;
-    Notifications::discardCard($fromLocationId, $adjustPrestige,$player, $this, DISCARD, $messageType);
-    $this->deactivateAbility($player);
+    Notifications::discardCard($fromLocationId, $adjustPrestige, $player, $this, DISCARD, $messageType);
+    $this->deactivateAbility($player, $fromLocationId);
   }
 
   public function purchase($player, $ctx = null)
@@ -144,7 +144,7 @@ class TableauCard extends Card
     return $this->agents;
   }
 
-    /**
+  /**
    * Returns array of empires that are valid for this cards actions
    * ie, the empire of the card or all western / eastern empires if empire is east or west
    */
