@@ -49,7 +49,7 @@ class PREN161X_Enclosure extends \PaxRenaissance\Models\TableauCard
 
   public function sell()
   {
-    if ($this->isInTableau()) {
+    if ($this->isInTableau() && !$this->isSilenced($this->getOwner())) {
       $owner = $this->getOwner();
       Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
         'action' => REGIME_CHANGE_EMANCIPATION,

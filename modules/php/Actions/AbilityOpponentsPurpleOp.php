@@ -45,6 +45,10 @@ class AbilityOpponentsPurpleOp extends \PaxRenaissance\Models\AtomicAction
 
   public function stAbilityOpponentsPurpleOp()
   {
+    $available = $this->getOptions()['options'];
+    if (count($available) === 0) {
+      $this->resolveAction(['automatic' => true]);
+    }
   }
 
   // ....###....########...######....######.
