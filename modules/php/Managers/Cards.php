@@ -121,6 +121,10 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
   {
     $numberOfAdditionalCards = count($players) * 4;
 
+    if (Globals::getExtendedGame()) {
+      $numberOfAdditionalCards += 4;
+    }
+
     foreach (REGIONS as $direction) {
       $pool = 'pool_' . $direction;
       $deck = 'deck_' . $direction;
@@ -145,12 +149,16 @@ class Cards extends \PaxRenaissance\Helpers\Pieces
     include dirname(__FILE__) . '/../Cards/list.inc.php';
 
     $addAgeOfReformationPromoCards = Globals::getStartingMap() === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+    $noExpansionCards = Globals::getLimitedCardSet();
 
     // $baseProjects = [];
     foreach ($cardIds as $cId) {
       $card = self::getCardInstance($cId);
 
       if ($card->isAgeOfReformpationPromo() && !$addAgeOfReformationPromoCards) {
+        continue;
+      }
+      if ($card->isExpansionCard() && $noExpansionCards) {
         continue;
       }
       if ($cId === 'VictoryAgeOfByzantine' && !$addAgeOfReformationPromoCards) {

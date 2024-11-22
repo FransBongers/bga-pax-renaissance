@@ -1,0 +1,72 @@
+{
+  "100": {
+    "name": "Open hands",
+    "values": {
+      "1": {
+        "name": "Enabled"
+      },
+      "0": {
+        "name": "Disabled",
+        "tmdisplay": "Hidden hands"
+      }
+    }
+  },
+  "102": {
+    "name": "Starting map",
+    "values": [
+      {
+        "name": "Default"
+      },
+      {
+        "name": "1550 Map Variant",
+        "tmdisplay": "1550 Map"
+      },
+      {
+        "name": "Age of Reformation Promo Variant",
+        "tmdisplay": "Age of Reformation Promo"
+      }
+    ]
+  },
+  "105": {
+    "name": "Extended game (unofficial variant)",
+    "values": {
+      "0": {
+        "name": "Disabled"
+        
+      },
+      "1": {
+        "name": "Enabled",
+        "description": "4 additional cards are added on top of each draw deck",
+        "tmdisplay": "Extended game"
+      }
+    }
+  },
+  "106": {
+    "name": "Limited card set (unofficial variant)",
+    "values": {
+      "0": {
+        "name": "Disabled"
+        
+      },
+      "1": {
+        "name": "Enabled",
+        "description": "All cards marked with an X in their id, ie PREN097X, will not be included in the decks",
+        "tmdisplay": "Limited card set"
+      }
+    }
+  },
+  "107": {
+    "name": "Strawman campaign (unofficial variant)",
+    "values": {
+      "0": {
+        "name": "Disabled"
+        
+      },
+      "1": {
+        "name": "Enabled",
+        "description": "Strawman campaign against an Empire in your own Tableau is allowed (not in same Suzerainty)",
+        "tmdisplay": "Strawman campaign"
+      }
+    }
+  }
+}

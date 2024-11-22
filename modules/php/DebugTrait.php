@@ -30,7 +30,9 @@ trait DebugTrait
 {
   function debug_test()
   {
-    self::loadDebugUpdateCustomTurnOrder([]);
+    Notifications::log('options extended',Globals::getExtendedGame());
+    Notifications::log('options limited',Globals::getLimitedCardSet());
+    Notifications::log('options strawman',Globals::getStrawmanCampaign());
 
     // $this->debugPlaceToken(KNIGHT, REFORMIST, BRUGES);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, LYON);

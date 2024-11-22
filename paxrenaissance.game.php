@@ -110,7 +110,7 @@ class PaxRenaissance extends Table
         Cards::setupNewGame($players, $options);
         Tokens::setupNewGame($players, $options);
         Market::setupNewGame($players, $options);
-        
+
 
         $this->setGameStateInitialValue('logging', false);
         $this->activeNextPlayer();
@@ -175,6 +175,12 @@ class PaxRenaissance extends Table
         $playerCount = Players::count();
 
         $cardsInDecksStartGame = 28 + 8 * $playerCount - 12;
+
+
+        if (Globals::getExtendedGame()) {
+            $cardsInDecksStartGame += 8;
+        }
+
         $deckCount = Cards::countInLocation(Locations::deck(EAST)) + Cards::countInLocation(Locations::deck(WEST));
 
         $progression = round((1 - ($deckCount / $cardsInDecksStartGame)) * 100);

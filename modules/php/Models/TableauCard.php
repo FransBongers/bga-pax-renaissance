@@ -134,6 +134,10 @@ class TableauCard extends Card
     return $this->ageOfReformationPromo;
   }
 
+  public function isExpansionCard()
+  {
+    return $this->expansionCard;
+  }
 
   public function isCometCard()
   {

@@ -124,6 +124,11 @@ class Card extends \PaxRenaissance\Helpers\DB_Model
     return false;
   }
 
+  public function isExpansionCard()
+  {
+    return false;
+  }
+
   /**
    * Note, does not check if card is silenced
    */
