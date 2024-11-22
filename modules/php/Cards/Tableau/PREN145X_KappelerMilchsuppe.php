@@ -15,6 +15,7 @@ class PREN145X_KappelerMilchsuppe extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("In 1529, the Protestant Cantons of Switzerland marched against the Catholic Cantons. Last minute mediations by the Swiss Tagsatzung averted fighting."),
       clienttranslate('Instead, the armies peacefully shared Milchsuppe (milk soup), cooked in a pot placed exactly on the Cantonal border.'),

@@ -15,6 +15,7 @@ class PREN099X_PapalLegateToPersia extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->empire = EAST;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Mediated by the tireless Franciscan Fra Bologna, the Papacy and the Republic of Venice forged a military alliance with Uzun Hasan, leader of the vast Persian empire. Hasan's great offensive against the Ottomans was at first successsful, but stalled when western support did not arrive as expected."),
       clienttranslate("Uzun died in 1478, forcing Venice to sign an expensive peace treaty with the Ottomans.")

@@ -15,6 +15,7 @@ class PREN156X_Humanism extends \PaxRenaissance\Models\Cards\ImmuneToSilencingCa
       ],
     ];
     $this->empire = FRANCE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('The embodiment of the humanist philosophy was Desiderius Erasmus, a humanist, Catholic priest, teacher, and theologian of the Dutch Renaissance. While critical of abuses of the Catholic Church, he continued to recognise Papal authority.'),
       clienttranslate("His middle way called for traditional faith, piety and grace, rejecting Luther's emphasis on faith alone. He also held to the Catholic doctrine of free will, rejecting predestination."),

@@ -15,6 +15,7 @@ class PREN122X_TheLastSigh extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = PORTUGAL;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The frontier between Islamic Granada and Christian Andalusia was in constant anarchy from raids, since both kingdoms were embroiled in internal succession wars."),
       clienttranslate("When Ferdinand and Isabella gained control of Spain, they invaded and annexed Granada, still engulfed in a struggle between the Nasrid Emir and his Boabdil. The spot where Boabdil last saw his Emirate is called \"the Moor's Last Sigh\""),

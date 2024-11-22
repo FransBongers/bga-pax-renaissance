@@ -15,6 +15,7 @@ class PREN118X_GrandMufti extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = EAST;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Although Sultan Süleyman is honored as the Lawgiver, he was the opposite. As ordained by Grand Mufti Ebussuud - supreme judge and highest official - the sharia ceased being religious Law applied to all, even the Sultan. Instead it became Kanun - decrees issues by the Sultan - and the judges became his bureaucrats."),
       clienttranslate('This gave Süleyman the freedom to ethnically cleanse the Yazidis.')

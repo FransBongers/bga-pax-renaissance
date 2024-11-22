@@ -15,6 +15,7 @@ class PREN116X_CelebiTaxRevolts extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = OTTOMAN;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The Kalender Çelebi were a series of revolts against the Ottomans. They are named for the adherents of the mystic rebel Çelebi, although later revolts followed different leaders."),
       clienttranslate('The rebellions, carried out by sekban or sipahis troops in 1527, were not meant to overthrow the government but to protest non-Muslim admission into the army and Janissary dominance of tax revenues.')

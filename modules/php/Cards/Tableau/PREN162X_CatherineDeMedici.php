@@ -8,6 +8,7 @@ class PREN162X_CatherineDeMedici extends \PaxRenaissance\Models\QueenCard
   {
     parent::__construct($row);
     $this->id = 'PREN162X_CatherineDeMedici';
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("This scion of the famed banking family became Queen consort of France and the most powerful woman in sixteenth-century Europe."),
       clienttranslate('Her reign saw almost constant religious and civil war in France.'),

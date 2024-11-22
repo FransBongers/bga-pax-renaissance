@@ -15,6 +15,7 @@ class PREN121X_NomadsOfTlemcen extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = ARAGON;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The kingdom of Tlemcen (1236-1554), loosely ruled by Zayyanid sultans, harbored European trading centers (funduks) through which trans-saharan gold entered Europe."),
       clienttranslate("Genoese bills of exchange circulated there."),

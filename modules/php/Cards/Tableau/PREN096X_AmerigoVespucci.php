@@ -15,6 +15,7 @@ class PREN096X_AmerigoVespucci extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->empire = ARAGON;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("In 1492, the Florentine banker Amerigo Vespucci took over the Medici bank in Cádiz in Castile. He acted as provisioner for the Columbus voyages and as navigator in several voyages to South America between 1499 and 1502."),
       clienttranslate('As chief navigator of Spain, he discovered a method to crudely reckon longitude. This demonstrated that Brazil and the West Indies were not the eastern outskirts of Asia, so the new world "America" was named after him.')

@@ -11,6 +11,7 @@ class PREN136X_Hermeticism extends \PaxRenaissance\Models\Cards\ImmuneToSilencin
     parent::__construct($row);
     $this->id = 'PREN136X_Hermeticism';
     $this->empire = WEST;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('Giovanni Pico della Mirandola, a young genius who believed in syncretism (fundamentally opposed doctrines can be reconciled) and hermeticism (a single true theology exists in all religions).'),
       clienttranslate("His lifelong work tried to reconcile Aristotle's this-world orientation with the other-worldliness of Plato."),

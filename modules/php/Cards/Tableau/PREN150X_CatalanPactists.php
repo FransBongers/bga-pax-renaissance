@@ -15,6 +15,7 @@ class PREN150X_CatalanPactists extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = ARAGON;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('Pactism supports a "pact and convention made between his Majesty and the Province". In the "War against John II", Catalan pactists under Joan Dusai won the first skirmish, and had the option to model themselves as an independent republic like Venice, or press for council with the king.'),
       clienttranslate('After a decade of war (1462-1472) the Constitutionalist stronghold in Barcelona surrendered.'),

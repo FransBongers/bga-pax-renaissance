@@ -19,6 +19,7 @@ class PREN143X_WolfOfRimini extends \PaxRenaissance\Models\Cards\CondottiereCard
       ],
     ];
     $this->empire = PAPAL_STATES;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Sigismondo Pandolfo Malatesta, lord of Rimini, Fano, and Cesena from 1432. A brilliant condottiero, he served the Papacy, Florence, Siena, Naples and Sforza of Milan."),
       clienttranslate('He was excommunicated by Pius II, who launched a crusade against him. He was sheltered by Venice and commanded the Venetian forces in the 1465 campaign against the Ottoman Empire.'),

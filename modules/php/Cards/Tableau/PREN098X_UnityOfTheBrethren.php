@@ -15,6 +15,7 @@ class PREN098X_UnityOfTheBrethren extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('In 1457 the disciples of Jan Hus called the "Unitas Fratrum" split from the Roman Church, which they viewed as hopelessly corrupt. Later they split from the Ultraquists and Luther as well, evolving into the modern Moravian Church.'),
       clienttranslate("The strictest standards of morals and modesty were exacted from the faithful. Luxuries, oaths, and military services were forbidden. Sins were publicly confessed and punished.")

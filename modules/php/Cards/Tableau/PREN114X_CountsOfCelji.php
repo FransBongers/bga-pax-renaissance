@@ -15,6 +15,7 @@ class PREN114X_CountsOfCelji extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('The Celji were the most important noble family of Slovenia (between Austria and Croatia). They were wiped out in a feud with the rival Hunyadi clan over the role of Captain General of Hungary.'),
       clienttranslate('In 1515 a peasant revolt (Windischer Bauernbund) engulfed Slovenia. The 80,000 rebels demanded tax representatives and the reintroduction of the "stara pravada" (i.e. original feudal obligations and trade rights). The rebellion was stopped by Imperial mercenaries.')

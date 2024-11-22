@@ -15,6 +15,7 @@ class PREN153X_TheMaryRose extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = ENGLAND;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('Henry VIII inherited five royal warships from the shipbuilding program of his father Henry VII. He expanded this to 40 ships, including his favorite, the Mary Rose, a huge carrack launched in 1511. She was the first to use gunports, allowing her to fire a broadside.'),
       clienttranslate('She sunk suddenly in a battle against a large French invasion in 1545.'),

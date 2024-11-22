@@ -15,6 +15,7 @@ class PREN105X_FrancoOttomanNavy extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->empire = ARAGON;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("When Francis I found himself surrounded by the Habsburg domains of Charles V, he allied with the Ottomans and performed joint operations with Hayreddin Barbarossa in the sieges of Corfu (1537) and of Nice (1548)."),
       clienttranslate("The Christian world was scandalized.")

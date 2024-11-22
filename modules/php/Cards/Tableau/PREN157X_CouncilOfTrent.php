@@ -15,6 +15,7 @@ class PREN157X_CouncilOfTrent extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = WEST;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('The 19th ecumenical council of the Catholic Church, held between 1545 and 1563, was the embodiment of the Counter-Reformation.'),
     ];

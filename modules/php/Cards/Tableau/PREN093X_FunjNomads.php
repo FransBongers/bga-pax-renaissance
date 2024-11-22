@@ -15,6 +15,7 @@ class PREN093X_FunjNomads extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->empire = MAMLUK;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('In 1504 Funj peoples migrated into Nubia and established the Sennar sultanate. Backed by armies of heavy cavalry, the sultan seized control of the gold caravans and the profitable Red Sea trade.'),
       clienttranslate("His monopoly and claims of divinity was eroded by a wealthy class of educated and literate Islamic merchants, who fought the lack of orthodoxy in the kingdom.")

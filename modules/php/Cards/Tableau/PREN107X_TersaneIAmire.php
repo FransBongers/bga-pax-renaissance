@@ -15,6 +15,7 @@ class PREN107X_TersaneIAmire extends \PaxRenaissance\Models\Cards\ConcessionsCan
       ]
     ];
     $this->empire = OTTOMAN;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("After the fall of Constantinople, Mehmed established a new shipyard called the Tersâne-i Âmire (Imperial Arsenal) across the Golden Horn."),
       clienttranslate("From here, Ottoman Admiral Kemal Reis personally directed the reparation and conversion of his galleys. He led the fleet evacuating Granada (1487), to crush the Venetian navy (1499, the first time cannon were used on ships), and into the Atlantic to occupy the Canaries (1501).")

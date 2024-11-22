@@ -15,6 +15,7 @@ class PREN140X_VenetianNavy extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = PAPAL_STATES;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Giovanni Ser di Mocenigo, Jr., Doge of Venice from 1478 to 1485. He fought the Ottomans at sea and Ferrara on land."),
       clienttranslate("His brother, Pietro Mocenigo, was also a doge of Venice but also was one of the greatest Venetian admirals, who saw action in Smyrna, Cyprus, and Scutari."),

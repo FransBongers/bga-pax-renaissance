@@ -10,6 +10,7 @@ class PREN138X_Reichskrone extends \PaxRenaissance\Models\QueenCard
   {
     parent::__construct($row);
     $this->id = 'PREN138X_Reichskrone';
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('The "King of the Romans" was chosen by the electors of the German electoral college. He became Holy Roman Emperor only when crowned by the Pope.'),
       clienttranslate('Bribery was rampant. Charles the Bold offered a bribe of 10,000 florins and court positions to attain the "Crown of the Romans". In the 1519 contest, Charles V eventually outbid his rival Francis to become emperor.'),

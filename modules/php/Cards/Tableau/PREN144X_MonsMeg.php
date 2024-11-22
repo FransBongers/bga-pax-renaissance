@@ -15,6 +15,7 @@ class PREN144X_MonsMeg extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = ENGLAND;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Mons Meg was the largest bombard outside the Ottoman Empire. In 1453 the Duke of Burgundy sent it as a gift to his nephew James II, King of Scots. He believed that Scottish intervention in the War of the Roses would help Burgundy."),
       clienttranslate('James used the 510mm gun to siege Scottish towns still occupied by the English. James was killed in the siege when his own cannon exploded.'),

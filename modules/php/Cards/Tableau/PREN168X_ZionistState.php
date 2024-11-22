@@ -19,6 +19,7 @@ class PREN168X_ZionistState extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = MAMLUK;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('Gracia Mendes Nasi inherited the Mendes bank, and used its riches and trade networks to establish a Zionist state in Galilee.'),
       clienttranslate('Conversos and other refugees of the Jewish diaspora flocked to this sanctuary, despite the intrigues of the counter-reformation.'),

@@ -15,6 +15,7 @@ class PREN111X_GlinskisRebellion extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = HUNGARY;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('Descended from Hungarian Orthodox nobility, Michael Glinski became wealthy in the lucrative wax trade, angering the szlachta (nobles). After defeating the Crimean Khanate in 1506, he was accused of conspiracy and lost his wealth.'),
       clienttranslate("Proclaiming himself the defender of the discriminated Orthodox faithful, Glinski led a rebellion against the Lithuanian crown.")

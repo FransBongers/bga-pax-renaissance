@@ -15,6 +15,7 @@ class PREN127X_RedSeaFleet extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = MAMLUK;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('In 1504, the Venetians sent Francesco Teldi, posing as a jewel buyer, as envoy to Cairo. He concluded a Venice-Mamluk alliance against the Portuguese, who had blockaded the Red Sea trade route.'),
       clienttranslate('In 1514 the Ottoman admiral Selman Reis also joined the Mamluks to break the blockade, and in 1525 did so by annexing Yemen and establishing a naval base there.'),

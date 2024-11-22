@@ -22,6 +22,7 @@ class TableauCard extends Card
   protected $region;
   protected $specialAbilities = [];
   protected $ageOfReformationPromo = false;
+  protected $expansionCard = false;
 
   public function __construct($row)
   {

@@ -15,6 +15,7 @@ class PREN139X_FrenchPirates extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = FRANCE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The pirate Nicolò Griego bankrupted the Republic of Venice when he plundered the Venetian galleys headed to the 1485 Flanders trade fair."),
       clienttranslate("Among his crew was Cristoforo Colombo, who would make history 7 years later."),

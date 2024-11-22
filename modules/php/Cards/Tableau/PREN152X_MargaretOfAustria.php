@@ -8,6 +8,7 @@ class PREN152X_MargaretOfAustria extends \PaxRenaissance\Models\QueenCard
   {
     parent::__construct($row);
     $this->id = 'PREN152X_MargaretOfAustria';
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("This Habsburg princess, betrothed successively to the princes of France, Spain, and Savoy, ruled the Netherlands for 24 years as one of Europe's strongest leaders."),
       clienttranslate('Acting as intermediary between her father Maximilian and her subjects, she negotiated a trade agreements favorable to the Flemish cloth interests and the "Ladies\' Peace of Cambrai".'),

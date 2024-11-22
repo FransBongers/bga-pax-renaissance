@@ -15,6 +15,7 @@ class PREN154X_EuropeanUnion extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('The medieval concept of a world empire headed by the Emperor and the Pope was replaced by a new paradigm proposed in 1462 by George of Poděbrady, King of Bohemia. The vision was a multilateral agreement of equal Christian states, like an early EU.'),
       clienttranslate('The pope responded by excommunicating George and calling for a crusade against his Hussite Christians.'),

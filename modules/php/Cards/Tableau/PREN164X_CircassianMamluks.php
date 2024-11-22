@@ -17,6 +17,7 @@ class PREN164X_CircassianMamluks extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = MAMLUK;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('Under the turbulent mamluk (warrior class) system, the army was the holder of political and economic power and a new Circassian aristocracy formed as mamluk recruitment diversified.'),
     ];

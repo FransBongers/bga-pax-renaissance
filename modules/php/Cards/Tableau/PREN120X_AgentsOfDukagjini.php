@@ -19,6 +19,7 @@ class PREN120X_AgentsOfDukagjini extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = OTTOMAN;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Lekë Dukagjini, a violent member of Dukagjini family, is remembered as the angel prince, as contrasted to the dragon prince Skanderbeg."),
       clienttranslate("Dukagjini wrote the Albanian laws known as the Kanunu i Lekë Dukagjinit, some aspects of which (blood feuds) have been reinstated in 1990's Albania"),

@@ -15,6 +15,7 @@ class PREN160X_JacquesLefevreDEtaples extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = FRANCE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Although this humanist theologian and Aristotelian scholar remained a Roman Catholic, his attempts at reform anticipated the Protestant movement."),
       clienttranslate("His efforts were branded as heresy and only the protection of the French king saved him from the pyre."),

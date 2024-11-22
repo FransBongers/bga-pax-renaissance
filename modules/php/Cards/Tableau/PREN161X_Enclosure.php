@@ -19,6 +19,7 @@ class PREN161X_Enclosure extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = ENGLAND;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("By buying the ground rights of common lands to attain exclusive rights of use, a farmer was free to adopt better farming practices and expand profit-making opportunities."),
       clienttranslate("The increase of crop yields and labor productivity in fenced private lands created a surplus of labor."),

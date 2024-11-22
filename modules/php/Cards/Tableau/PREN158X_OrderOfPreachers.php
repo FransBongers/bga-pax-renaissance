@@ -15,6 +15,7 @@ class PREN158X_OrderOfPreachers extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = WEST;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('As Master of the Order of Preachers (Dominicans), Thomas Cajetan composed several works directed against Martin Luther and thus shaped the policy of the papal delegates in Germany.'),
     ];

@@ -12,6 +12,7 @@ class PREN103X_Academia extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN103X_Academia';
     $this->empire = HUNGARY;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The Sodalitas Litterarum Vistulana of 1488 was an international society founded in Cracow by Conrad Celtes. It was active in mathematics, astronomy and the natural sciences. Notable members were Albert Brudzewski, Filip Callimachus, and Laurentius Corvinus."),
       clienttranslate("It was modelled after the Roman Academy, whose members were imprisoned by the anti-humanist Pope Paul II.")

@@ -19,6 +19,7 @@ class PREN148X_TolfaAlum extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = PAPAL_STATES;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Tolfa achieved sudden importance when the Pope's godson discovered alum deposits in 1461. This chemical, essential for the dyeing industry, was formerly available only through a heavily taxed Venetian concession in the Ottoman Empire."),
       clienttranslate('The banker Agostino Chigi, a sponsor of Pope Julius II, was awarded this concession in 1501, becoming the richest man in Rome.'),

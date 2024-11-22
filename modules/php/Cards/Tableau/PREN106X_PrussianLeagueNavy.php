@@ -15,6 +15,7 @@ class PREN106X_PrussianLeagueNavy extends \PaxRenaissance\Models\TableauCard
       ]
     ];
     $this->empire = HOLY_ROMAN_EMIRE;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The City of Danzig, recalling the Danzig massacre by the Teutonic Order and suffering high taxation, hired Polish privateers in 1461. Vincent Stolle, Matthew Kolmener, and Jacob Vochs used szniks (light merchant ships carrying 50 arquebusers and crossbowmen) that were highly successful in the 13-Years War."),
       clienttranslate("They pirated not only Teutonic galleys, but also Hansa ships from Lübeck, who had been bribed with favorable Teutonic trading rights.")

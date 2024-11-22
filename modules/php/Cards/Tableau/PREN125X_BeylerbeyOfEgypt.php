@@ -19,6 +19,7 @@ class PREN125X_BeylerbeyOfEgypt extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = MAMLUK;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('The Ottoman Governor Hain Ahmed Pasha was beheaded for declaring Egyptian independence with himself as Sultan in 1524. His replacement, Pargalı Ibrahim Paşa, was a polygot genius who had skyrocketed from slave to Grand Vizier.'),
       clienttranslate('Because of his reform of the military and civil codes, the Kanunname, and his diplomatic successes in the West, Süleyman had him beheaded as well.'),

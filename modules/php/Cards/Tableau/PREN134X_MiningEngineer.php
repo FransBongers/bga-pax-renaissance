@@ -9,6 +9,7 @@ class PREN134X_MiningEngineer extends \PaxRenaissance\Models\TableauCard
     parent::__construct($row);
     $this->id = 'PREN134X_MiningEngineer';
     $this->empire = WEST;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("Georgius Agricola, scholar, chemist, and mining engineer."),
       clienttranslate("His lavishly illustrated masterpiece, De re metallica, recorded Saxon mining technology, the best in the world."),

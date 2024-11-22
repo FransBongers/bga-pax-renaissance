@@ -18,6 +18,7 @@ class PREN147X_WilliamCaxton extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = ENGLAND;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The merchant William Caxton introduced the printing press into England (Westminster, 1476). The first book printed and retailed was an edition of Chaucer's Canterbury Tales."),
       clienttranslate('Caxton is credited with standardizing the regional dialects of English through printing.'),

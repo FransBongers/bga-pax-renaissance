@@ -15,6 +15,7 @@ class PREN124X_TheLastByzantine extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = BYZANTIUM;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('George Amiroutzes, the Protovestarios and Treasurer of Trebizond, secretly negotiated its surrender to his cousin Mahmud Pasha, the Grand Vizier under Mehmed.'),
       clienttranslate('Thus in 1461 the last Byzantine empire ended with the enslavement of its citizens and the execution of its ruler, while Amiroutzes attained a good Ottoman position.'),

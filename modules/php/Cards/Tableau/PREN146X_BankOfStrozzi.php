@@ -18,6 +18,7 @@ class PREN146X_BankOfStrozzi extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = PAPAL_STATES;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The Strozzi banking dynasty bribed the Florentine Signoria to exile their biggest rival, Cosimo de' Medici. This backfired and the Strozzi were exiled in 1434."),
       clienttranslate('Fillipo Strozzi reconciled with Cosimo and returned to Florence in 1462, but his son, Fillipo II (above) sponsored the assassination of a Medice duke and an unsuccessful anti-Medici uprising in 1537.'),

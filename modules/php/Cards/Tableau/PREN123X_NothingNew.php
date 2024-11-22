@@ -15,6 +15,7 @@ class PREN123X_NothingNew extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = HUNGARY;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('In 1505 the "Nihil Novi" (latin for "nothing new") act was passed, meaning the Polish king was not allowed to issue new laws without permission from the Sejm, represented by the upper and lower nobles.'),
       clienttranslate('The "Nihil Novi Dla Szlachty" established a Commonwealth featuring both the Golden Liberty (for the nobles) and the second serfdom (relapse of serfs into slavery).'),

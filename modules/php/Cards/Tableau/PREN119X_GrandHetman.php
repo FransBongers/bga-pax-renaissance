@@ -15,6 +15,7 @@ class PREN119X_GrandHetman extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = HUNGARY;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate("The Grand Hetman was the military commander of the dynastic union between Poland and Lithuania."),
       clienttranslate('The first was Konstanty Ostrogski, a devout Orthodox who led many campaigns against Muscovy, from 1497 to 1517.'),

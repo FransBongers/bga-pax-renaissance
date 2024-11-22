@@ -15,6 +15,7 @@ class PREN165X_TransylvanianSaxons extends \PaxRenaissance\Models\TableauCard
       ],
     ];
     $this->empire = HUNGARY;
+    $this->expansionCard = true;
     $this->flavorText = [
       clienttranslate('Ethnic Germans of the patrician class had settled Transylvania in waves since the 12th century. After the 1437 peasant revolt, they formed a defensive union with the Hungarian nobility and the free military Székelys.'),
       clienttranslate('They adhered to Eastern Orthodoxy in a primarily Catholic Hungary.'),
