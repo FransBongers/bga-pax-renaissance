@@ -79,7 +79,6 @@ class RegimeChangeMoveEmpireSquare extends \PaxRenaissance\Models\AtomicAction
       $this->returnVassals($empireCard);
       $this->discardBishops($empireCard);
       $this->discardQueens($empireCard);
-
     }
 
     /**

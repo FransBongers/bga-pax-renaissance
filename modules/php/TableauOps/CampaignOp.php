@@ -4,7 +4,9 @@ namespace PaxRenaissance\TableauOps;
 
 use PaxRenaissance\Core\Engine;
 use PaxRenaissance\Core\Engine\LeafNode;
+use PaxRenaissance\Core\Globals;
 use PaxRenaissance\Core\Notifications;
+use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Empires;
@@ -45,11 +47,32 @@ class CampaignOp extends \PaxRenaissance\Models\TableauOp
     ]);
   }
 
+  private function strawmanCampaignAllowed($strawmanCampaignGameOption, $empire, $empireCard, $adjacentEmpire)
+  {
+    if (!$strawmanCampaignGameOption) {
+      return false;
+    }
+    $adjacentEmpireCard = $adjacentEmpire->getEmpireCard();
+    $empireCardLocation = $empireCard->getLocation();
+    $adjacentEmpireCardLocation = $adjacentEmpireCard->getLocation();
+
+    // One empire is Suzerain and other empire is Vassal
+    if ($adjacentEmpireCardLocation === Locations::vassals($empire->getId()) || $empireCardLocation === Locations::vassals($adjacentEmpire->getId())) {
+      return false;
+    }
+
+    // Both empires are vassals to the same Suzerain
+    if (Utils::startsWith($adjacentEmpireCardLocation, 'vassals_') && $empireCardLocation === $adjacentEmpireCardLocation) {
+      return false;
+    }
+
+    return true;
+  }
+
   public function getOptions($player, $card)
   {
     $empireId = $card->getEmpireId();
     $options = [];
-
 
     $empire = Empires::get($empireId);
     $cities = $empire->getCities();
@@ -68,10 +91,12 @@ class CampaignOp extends \PaxRenaissance\Models\TableauOp
       $extraCost = count(Empires::get(MAMLUK)->getRepressedTokens([KNIGHT, PAWN, ROOK]));
     }
 
+    $strawmanCampaignGameOption = Globals::getStrawmanCampaign();
+
     $adjacentEmpires = $empire->getAdjacentEmpires();
     foreach ($adjacentEmpires as $adjacentEmpire) {
       $empireCard = Cards::get($adjacentEmpire->getEmpireSquareId());
-      if ($empireCard->isInPlayerTableau($player->getId())) {
+      if ($empireCard->isInPlayerTableau($player->getId()) && !$this->strawmanCampaignAllowed($strawmanCampaignGameOption, $empire, $card, $adjacentEmpire)) {
         continue;
       }
 

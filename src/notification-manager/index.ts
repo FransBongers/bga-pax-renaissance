@@ -482,6 +482,14 @@ class NotificationManager {
 
       await newOwner.tableau.addCard(container);
     } else if (destination.type === VASSAL) {
+      if (
+        origin.type === EMPIRE_SQUARE_ORIGIN_TABLEAU &&
+        origin.ownerId === destination.ownerId
+      ) {
+        this.game.tableauCardManager.removeCard(
+          createEmpireCardContainer(card)
+        );
+      }
       await this.game.tableauCardManager.addVassal({
         vassal: card,
         suzerain: destination.suzerain,

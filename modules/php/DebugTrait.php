@@ -30,10 +30,10 @@ trait DebugTrait
 {
   function debug_test()
   {
-    Notifications::log('options extended',Globals::getExtendedGame());
-    Notifications::log('options limited',Globals::getLimitedCardSet());
-    Notifications::log('options strawman',Globals::getStrawmanCampaign());
-
+    Cards::get('EmpireSquare_Mamluk')->setLocation(Locations::tableau(2371052, EAST));
+    // Notifications::log('options extended',Cards::get('EmpireSquare_Byzantium'));
+    // Notifications::log('options extended',Cards::get('EmpireSquare_Ottoman'));
+    
     // $this->debugPlaceToken(KNIGHT, REFORMIST, BRUGES);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, LYON);
     // $this->debugPlaceToken(KNIGHT, REFORMIST, BORDEAUX);

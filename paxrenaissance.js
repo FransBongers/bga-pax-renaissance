@@ -5130,6 +5130,10 @@ var NotificationManager = (function () {
                         return [3, 4];
                     case 2:
                         if (!(destination.type === VASSAL)) return [3, 4];
+                        if (origin.type === EMPIRE_SQUARE_ORIGIN_TABLEAU &&
+                            origin.ownerId === destination.ownerId) {
+                            this.game.tableauCardManager.removeCard(createEmpireCardContainer(card));
+                        }
                         return [4, this.game.tableauCardManager.addVassal({
                                 vassal: card,
                                 suzerain: destination.suzerain,
