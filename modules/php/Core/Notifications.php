@@ -5,6 +5,7 @@ namespace PaxRenaissance\Core;
 use PaxRenaissance\Helpers\Locations;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\Borders;
+use PaxRenaissance\Managers\Cards;
 use PaxRenaissance\Managers\Cities;
 use PaxRenaissance\Managers\Empires;
 use PaxRenaissance\Managers\Players;
@@ -580,10 +581,16 @@ class Notifications
 
   public static function refreshMarket($player, $cardMoves, $cardDraws)
   {
+    $astrologyVariant = Globals::getAstrologyVariant();
+
     self::notifyAll("refreshMarket",  clienttranslate('${tkn_playerName} refreshes the market'), [
       'player' => $player,
       'cardMoves' => $cardMoves,
       'cardDraws' => $cardDraws,
+      'topCards' => [
+        EAST => $astrologyVariant ? Cards::getTopOf(Locations::deck(EAST)) : null,
+        WEST => $astrologyVariant ? Cards::getTopOf(Locations::deck(WEST)) : null,
+      ]
     ]);
   }
 
@@ -594,7 +601,7 @@ class Notifications
     self::message(clienttranslate('${tkn_cardName} becomes the next ${region} trade fair card ${tkn_card}'), [
       'tkn_card' => self::tknCardArg($card),
       'tkn_cardName' => self::tknCardNameArg($card->getId(), $card->getName()),
-      'region' => $cardMove['to'] === Locations::market(EAST,0) ? clienttranslate('East') : clienttranslate('West'),
+      'region' => $cardMove['to'] === Locations::market(EAST, 0) ? clienttranslate('East') : clienttranslate('West'),
       'i18n' => ['region'],
     ]);
   }
@@ -929,7 +936,8 @@ class Notifications
     self::message(clienttranslate('No profits left. The voyage does not start'), []);
   }
 
-  public static function useAbilityAction($player,$card,$abilityId) {
+  public static function useAbilityAction($player, $card, $abilityId)
+  {
     $abilityTitle = Utils::array_find($card->getSpecialAbilities(), function ($ability) use ($abilityId) {
       return $ability['id'] === $abilityId;
     })['title'];

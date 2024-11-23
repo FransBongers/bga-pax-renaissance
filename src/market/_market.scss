@@ -32,6 +32,7 @@
     flex-direction: row;
     align-items: center;
     gap: calc(var(--paxRenMapScale) * 6px);
+    z-index: 1;
     // justify-content: space-between;
 
     .pr_deck_counter_comet {

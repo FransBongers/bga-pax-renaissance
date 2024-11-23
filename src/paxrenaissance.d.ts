@@ -284,6 +284,7 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
   };
   gameOptions: {
     ageOfReformationPromo: boolean;
+    astrologyVariant: boolean;
     openHands: boolean;
   };
   market: {
@@ -303,6 +304,10 @@ interface PaxRenaissanceGamedatas extends Gamedatas {
     florins: {
       [location: string]: number;
     };
+    topCard: {
+      east: TableauCard | null;
+      west: TableauCard | null;
+    }
   };
   players: Record<number, PaxRenaissancePlayerData>;
   staticData: {

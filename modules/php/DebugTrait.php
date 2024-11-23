@@ -30,7 +30,10 @@ trait DebugTrait
 {
   function debug_test()
   {
-    Cards::get('EmpireSquare_Mamluk')->setLocation(Locations::tableau(2371052, EAST));
+    // Notifications::log('orderdDeck', Cards::getInLocationOrdered('deck_' . EAST)->toArray());
+    Notifications::log('top east', Cards::getTopOf('deck_' . EAST));
+    Notifications::log('top west', Cards::getTopOf('deck_' . WEST));
+    // Cards::get('EmpireSquare_Mamluk')->setLocation(Locations::tableau(2371052, EAST));
     // Notifications::log('options extended',Cards::get('EmpireSquare_Byzantium'));
     // Notifications::log('options extended',Cards::get('EmpireSquare_Ottoman'));
     

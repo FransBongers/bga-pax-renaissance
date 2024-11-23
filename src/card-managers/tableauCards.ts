@@ -299,7 +299,11 @@ class TableauCardManager extends CardManager<
     }
 
     const { location, type } = card;
-    if (location && location.startsWith("deck")) {
+    // Use hidden to set card not visible before updating data
+    if (location === 'hidden') {
+      return false;
+    }
+    if (location && location.startsWith("deck") && !this.game.gameOptions.astrologyVariant) {
       return false;
     }
     if (location === "market_west_0" || location === "market_east_0") {

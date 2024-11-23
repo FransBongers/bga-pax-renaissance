@@ -3480,6 +3480,7 @@ span[style*="color:#bddcc6"] {
   flex-direction: row;
   align-items: center;
   gap: calc(var(--paxRenMapScale) * 6px);
+  z-index: 1;
 }
 #pr_market_east_deck_container .pr_deck_counter .pr_deck_counter_comet,
 #pr_market_west_deck_container .pr_deck_counter .pr_deck_counter_comet {

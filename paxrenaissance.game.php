@@ -134,6 +134,7 @@ class PaxRenaissance extends Table
             'gameMap' => MapBoard::getUiData(),
             'gameOptions' => [
                 'ageOfReformationPromo' => Globals::getStartingMap() === OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT,
+                'astrologyVariant' => Globals::getAstrologyVariant(),
                 'openHands' => Globals::getOpenHands(),
             ],
             'market' => Market::getUiData(),

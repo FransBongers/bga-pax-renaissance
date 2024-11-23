@@ -33,6 +33,7 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
     "firstPlayerVariant" => 'bool',
     "openHands" => 'bool',
     "startingMap" => 'int',
+    "astrologyVariant" => 'bool',
     "extendedGame" => 'bool',
     'limitedCardSet' => 'bool',
     'strawmanCampaign' => 'bool',
@@ -162,6 +163,7 @@ class Globals extends \PaxRenaissance\Helpers\DB_Manager
     // Game options
     self::setOpenHands(($options[\PaxRenaissance\OPTION_OPEN_HANDS] ?? null) == \PaxRenaissance\OPTION_OPEN_HANDS_ENABLED);
     self::setStartingMap($options[\PaxRenaissance\OPTION_STARTING_MAP]);
+    self::setAstrologyVariant(($options[\PaxRenaissance\OPTION_ASTROLOGY_VARIANT] ?? null) == \PaxRenaissance\OPTION_ASTROLOGY_VARIANT_ENABLED);
     self::setExtendedGame(($options[\PaxRenaissance\OPTION_EXTENDED_GAME] ?? null) == \PaxRenaissance\OPTION_EXTENDED_GAME_ENABLED);
     self::setLimitedCardSet(($options[\PaxRenaissance\OPTION_LIMITED_CARD_SET] ?? null) == \PaxRenaissance\OPTION_LIMITED_CARD_SET_ENABLED);
     self::setStrawmanCampaign(($options[\PaxRenaissance\OPTION_STRAWMAN_CAMPAIGN] ?? null) == \PaxRenaissance\OPTION_STRAWMAN_CAMPAIGN_ENABLED);

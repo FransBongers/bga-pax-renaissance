@@ -56,6 +56,7 @@ class Market {
       this.counters[region].forEach((counter: Counter, index) =>
         this.setFlorinValue({ region, column: index, value: 0 })
       );
+      this.decks[region].removeAll();
     });
   }
 
@@ -82,11 +83,11 @@ class Market {
     this.decks = {
       [EAST]: new LineStock(
         this.game.tableauCardManager,
-        document.getElementById("pr_market_east_deck")
+        document.getElementById('pr_market_east_deck')
       ),
       [WEST]: new LineStock(
         this.game.tableauCardManager,
-        document.getElementById("pr_market_west_deck")
+        document.getElementById('pr_market_west_deck')
       ),
     };
 
@@ -148,7 +149,7 @@ class Market {
   async setupMarket({ gamedatas }: { gamedatas: PaxRenaissanceGamedatas }) {
     gamedatas.market.cards.forEach((card) => {
       const { id, location } = card;
-      const [market, region, column] = location.split("_");
+      const [market, region, column] = location.split('_');
       const stock = this.getStock({ region, column: Number(column) });
       stock.addCard(card);
     });
@@ -164,22 +165,30 @@ class Market {
         value: gamedatas.market.florins[`market_${WEST}_${i}_florins`] || 0,
       });
     }
+    if (gamedatas.gameOptions.astrologyVariant) {
+      REGIONS.forEach((region) => {
+        const topCard = gamedatas.market.topCard[region];
+        if (topCard !== null) {
+          this.decks[region].addCard(topCard);
+        }
+      });
+    }
   }
 
   async drawCard(card: TableauCard): Promise<void> {
-    await this.decks[card.region].addCard({ ...card, location: "deck" });
+    await this.decks[card.region].addCard({ ...card, location: 'deck' });
     this.deckCounters[card.region].incValue(-1);
-    if (card.id.startsWith("COMET")) {
-      this.setCometOpacity(card.id.split("_")[0].toLowerCase());
+    if (card.id.startsWith('COMET')) {
+      this.setCometOpacity(card.id.split('_')[0].toLowerCase());
     }
-    const [_, region, column] = card.location.split("_");
+    const [_, region, column] = card.location.split('_');
     await this.getStock({ region, column: Number(column) }).addCard(card);
   }
 
   public getDeck({
     region,
   }: {
-    region: "east" | "west";
+    region: 'east' | 'west';
   }): LineStock<EmpireCard | TableauCard | EmpireCardContainer> {
     return this.decks[region];
   }
@@ -218,7 +227,7 @@ class Market {
     column,
     value,
   }: {
-    region: "east" | "west";
+    region: 'east' | 'west';
     column: number;
     value: number;
   }) {
@@ -237,7 +246,7 @@ class Market {
     column,
     value,
   }: {
-    region: "east" | "west";
+    region: 'east' | 'west';
     column: number;
     value: number;
   }) {
@@ -254,7 +263,7 @@ class Market {
     region,
     column,
   }: {
-    region: "east" | "west";
+    region: 'east' | 'west';
     column: number;
   }) {
     return this.counters[region][column].getValue();
@@ -311,12 +320,12 @@ class Market {
     // const node = document.getElementById(`pr_player_panel_2371053`);
 
     node.insertAdjacentHTML(
-      "beforeend",
+      'beforeend',
       tplIcon({
         id: `temp_florin_${index}`,
-        icon: "florin",
-        classes: "pr_temp_florin",
-        style: "position: absolute;",
+        icon: 'florin',
+        classes: 'pr_temp_florin',
+        style: 'position: absolute;',
         children: htmlFlorinChildren,
       })
     );
@@ -338,7 +347,7 @@ class Market {
     await this.game.animationManager.play(
       new BgaSlideAnimation<BgaAnimationWithOriginSettings>({
         element,
-        transitionTimingFunction: "linear",
+        transitionTimingFunction: 'linear',
         fromRect,
       })
     );
@@ -354,10 +363,8 @@ class Market {
     index: number;
     playerId: number;
   }): Promise<void> {
-    const [_, region, column] = florinLocation.split("_");
-    this.game.playerManager
-      .getPlayer({ playerId })
-      .incFlorins(-1);
+    const [_, region, column] = florinLocation.split('_');
+    this.game.playerManager.getPlayer({ playerId }).incFlorins(-1);
 
     if (this.game.animationManager.animationsActive()) {
       await this.moveFlorinAnimation({
@@ -368,7 +375,7 @@ class Market {
     }
 
     this.incFlorinValue({
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: Number(column),
       value: 1,
     });
@@ -383,10 +390,10 @@ class Market {
     index: number;
     playerId: number;
   }): Promise<boolean> {
-    const [_, region, column] = florinLocation.split("_");
+    const [_, region, column] = florinLocation.split('_');
 
     this.incFlorinValue({
-      region: region as "east" | "west",
+      region: region as 'east' | 'west',
       column: Number(column),
       value: -1,
     });
@@ -399,9 +406,7 @@ class Market {
       });
     }
 
-    this.game.playerManager
-      .getPlayer({ playerId })
-      .incFlorins(1);
+    this.game.playerManager.getPlayer({ playerId }).incFlorins(1);
     return true;
   }
 

@@ -722,7 +722,7 @@ class NotificationManager {
 
   async notif_refreshMarket(notif: Notif<NotifRefreshMarketArgs>) {
     this.game.clearPossible();
-    const { cardMoves, cardDraws } = notif.args;
+    const { cardMoves, cardDraws, topCards } = notif.args;
 
     let index = 0;
     // Shift cards
@@ -778,6 +778,23 @@ class NotificationManager {
     // Draw cards
     for (let card of cardDraws) {
       await this.game.market.drawCard(card);
+    }
+
+    // Reveal new top cards in case of Astrology Variant
+    if (this.game.gameOptions.astrologyVariant) {
+      REGIONS.forEach((region) => {
+        const card = topCards[region];
+        const deck = this.game.market.getDeck({ region });
+
+        if (
+          card === null ||
+          deck.getCards().some((cardInDeck) => cardInDeck.id === card.id)
+        ) {
+          return;
+        }
+
+        deck.addCard(card);
+      });
     }
   }
 

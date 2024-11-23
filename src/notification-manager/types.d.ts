@@ -210,6 +210,10 @@ interface NotifRefreshMarketArgs extends NotifWithPlayerArgs {
     card: TableauCard;
   }[];
   cardDraws: TableauCard[];
+  topCards: {
+    east: TableauCard | null;
+    west: TableauCard | null;
+  }
 }
 
 interface NotifRefreshUIArgs {

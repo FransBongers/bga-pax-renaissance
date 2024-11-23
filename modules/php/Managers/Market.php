@@ -55,10 +55,14 @@ class Market
     $data = [
       'cards' => Cards::getSelectQuery()->where('card_location', 'LIKE', 'market%')->get()->ui(),
       'florins' => self::getFlorins(),
-      'deckCounts' => []
+      'deckCounts' => [],
+      'topCard' => [
+        EAST => null,
+        WEST => null,
+      ]
     ];
     foreach (REGIONS as $direction) {
-      $deck = Cards::getInLocation('deck_' . $direction)->toArray();
+      $deck = Cards::getInLocationOrdered('deck_' . $direction)->toArray();
       $cardCount = count($deck);
       // $cometCount = count(Utils::filter($deck, function ($card) {
       //   return Utils::startsWith($card->getId(), 'COMET');
@@ -67,6 +71,9 @@ class Market
         'cardCount' => $cardCount,
         // 'cometCount' => $cometCount,
       ];
+      if ($cardCount > 0 && Globals::getAstrologyVariant()) {
+        $data['topCard'][$direction] = $deck[$cardCount  - 1];
+      }
       if ($direction === EAST) {
         $data['deckCounts'][$direction]['comet1'] = Utils::array_some($deck, function ($card) {
           return $card->getId() === 'COMET1_Copernicus';

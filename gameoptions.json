@@ -27,6 +27,20 @@
       }
     ]
   },
+  "103": {
+    "name": "Astrology variant",
+    "values": {
+      "0": {
+        "name": "Disabled"
+        
+      },
+      "1": {
+        "name": "Enabled",
+        "description": "The top card of each deck is visible",
+        "tmdisplay": "Astrology variant"
+      }
+    }
+  },
   "105": {
     "name": "Extended game (unofficial variant)",
     "values": {

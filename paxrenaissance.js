@@ -2797,7 +2797,10 @@ var TableauCardManager = (function (_super) {
             return true;
         }
         var location = card.location, type = card.type;
-        if (location && location.startsWith("deck")) {
+        if (location === 'hidden') {
+            return false;
+        }
+        if (location && location.startsWith("deck") && !this.game.gameOptions.astrologyVariant) {
             return false;
         }
         if (location === "market_west_0" || location === "market_east_0") {
@@ -4352,6 +4355,7 @@ var Market = (function () {
             _this.counters[region].forEach(function (counter, index) {
                 return _this.setFlorinValue({ region: region, column: index, value: 0 });
             });
+            _this.decks[region].removeAll();
         });
     };
     Market.prototype.updateMarket = function (_a) {
@@ -4378,8 +4382,8 @@ var Market = (function () {
         var _this = this;
         var gamedatas = _a.gamedatas;
         this.decks = (_b = {},
-            _b[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_east_deck")),
-            _b[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById("pr_market_west_deck")),
+            _b[EAST] = new LineStock(this.game.tableauCardManager, document.getElementById('pr_market_east_deck')),
+            _b[WEST] = new LineStock(this.game.tableauCardManager, document.getElementById('pr_market_west_deck')),
             _b);
         REGIONS.forEach(function (region) {
             _this.deckCounters[region].create("pr_market_".concat(region, "_deck_counter"));
@@ -4433,7 +4437,7 @@ var Market = (function () {
             return __generator(this, function (_b) {
                 gamedatas.market.cards.forEach(function (card) {
                     var id = card.id, location = card.location;
-                    var _a = location.split("_"), market = _a[0], region = _a[1], column = _a[2];
+                    var _a = location.split('_'), market = _a[0], region = _a[1], column = _a[2];
                     var stock = _this.getStock({ region: region, column: Number(column) });
                     stock.addCard(card);
                 });
@@ -4449,6 +4453,14 @@ var Market = (function () {
                         value: gamedatas.market.florins["market_".concat(WEST, "_").concat(i, "_florins")] || 0,
                     });
                 }
+                if (gamedatas.gameOptions.astrologyVariant) {
+                    REGIONS.forEach(function (region) {
+                        var topCard = gamedatas.market.topCard[region];
+                        if (topCard !== null) {
+                            _this.decks[region].addCard(topCard);
+                        }
+                    });
+                }
                 return [2];
             });
         });
@@ -4458,14 +4470,14 @@ var Market = (function () {
             var _a, _, region, column;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4, this.decks[card.region].addCard(__assign(__assign({}, card), { location: "deck" }))];
+                    case 0: return [4, this.decks[card.region].addCard(__assign(__assign({}, card), { location: 'deck' }))];
                     case 1:
                         _b.sent();
                         this.deckCounters[card.region].incValue(-1);
-                        if (card.id.startsWith("COMET")) {
-                            this.setCometOpacity(card.id.split("_")[0].toLowerCase());
+                        if (card.id.startsWith('COMET')) {
+                            this.setCometOpacity(card.id.split('_')[0].toLowerCase());
                         }
-                        _a = card.location.split("_"), _ = _a[0], region = _a[1], column = _a[2];
+                        _a = card.location.split('_'), _ = _a[0], region = _a[1], column = _a[2];
                         return [4, this.getStock({ region: region, column: Number(column) }).addCard(card)];
                     case 2:
                         _b.sent();
@@ -4538,11 +4550,11 @@ var Market = (function () {
                         from = document.getElementById(fromId);
                         to = document.getElementById(toId);
                         node = document.getElementById("pr_game_map");
-                        node.insertAdjacentHTML("beforeend", tplIcon({
+                        node.insertAdjacentHTML('beforeend', tplIcon({
                             id: "temp_florin_".concat(index),
-                            icon: "florin",
-                            classes: "pr_temp_florin",
-                            style: "position: absolute;",
+                            icon: 'florin',
+                            classes: 'pr_temp_florin',
+                            style: 'position: absolute;',
                             children: htmlFlorinChildren,
                         }));
                         element = document.getElementById("temp_florin_".concat(index));
@@ -4555,7 +4567,7 @@ var Market = (function () {
                         element.style.left = "".concat(pxNumber(element.style.left) + left, "px");
                         return [4, this.game.animationManager.play(new BgaSlideAnimation({
                                 element: element,
-                                transitionTimingFunction: "linear",
+                                transitionTimingFunction: 'linear',
                                 fromRect: fromRect,
                             }))];
                     case 1:
@@ -4573,10 +4585,8 @@ var Market = (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        _b = florinLocation.split("_"), _ = _b[0], region = _b[1], column = _b[2];
-                        this.game.playerManager
-                            .getPlayer({ playerId: playerId })
-                            .incFlorins(-1);
+                        _b = florinLocation.split('_'), _ = _b[0], region = _b[1], column = _b[2];
+                        this.game.playerManager.getPlayer({ playerId: playerId }).incFlorins(-1);
                         if (!this.game.animationManager.animationsActive()) return [3, 2];
                         return [4, this.moveFlorinAnimation({
                                 index: index,
@@ -4604,7 +4614,7 @@ var Market = (function () {
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        _b = florinLocation.split("_"), _ = _b[0], region = _b[1], column = _b[2];
+                        _b = florinLocation.split('_'), _ = _b[0], region = _b[1], column = _b[2];
                         this.incFlorinValue({
                             region: region,
                             column: Number(column),
@@ -4620,9 +4630,7 @@ var Market = (function () {
                         _c.sent();
                         _c.label = 2;
                     case 2:
-                        this.game.playerManager
-                            .getPlayer({ playerId: playerId })
-                            .incFlorins(1);
+                        this.game.playerManager.getPlayer({ playerId: playerId }).incFlorins(1);
                         return [2, true];
                 }
             });
@@ -5404,12 +5412,13 @@ var NotificationManager = (function () {
     };
     NotificationManager.prototype.notif_refreshMarket = function (notif) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, cardMoves, cardDraws, index, _i, cardMoves_1, move, from, to, card, _b, _1, fromRegion, fromColumn, _c, _2, toRegion, toCol, florinsOnCard, promises, _d, cardDraws_1, card;
+            var _a, cardMoves, cardDraws, topCards, index, _i, cardMoves_1, move, from, to, card, _b, _1, fromRegion, fromColumn, _c, _2, toRegion, toCol, florinsOnCard, promises, _d, cardDraws_1, card;
+            var _this = this;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
                         this.game.clearPossible();
-                        _a = notif.args, cardMoves = _a.cardMoves, cardDraws = _a.cardDraws;
+                        _a = notif.args, cardMoves = _a.cardMoves, cardDraws = _a.cardDraws, topCards = _a.topCards;
                         index = 0;
                         _i = 0, cardMoves_1 = cardMoves;
                         _e.label = 1;
@@ -5478,7 +5487,19 @@ var NotificationManager = (function () {
                     case 7:
                         _d++;
                         return [3, 5];
-                    case 8: return [2];
+                    case 8:
+                        if (this.game.gameOptions.astrologyVariant) {
+                            REGIONS.forEach(function (region) {
+                                var card = topCards[region];
+                                var deck = _this.game.market.getDeck({ region: region });
+                                if (card === null ||
+                                    deck.getCards().some(function (cardInDeck) { return cardInDeck.id === card.id; })) {
+                                    return;
+                                }
+                                deck.addCard(card);
+                            });
+                        }
+                        return [2];
                 }
             });
         });

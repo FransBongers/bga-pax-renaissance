@@ -26,11 +26,11 @@ class Preferences extends \PaxRenaissance\Helpers\DB_Manager
   public static function setupNewGame($players, $prefs)
   {
     // Load user preferences
-    include dirname(__FILE__) . '/../../../gameoptions.inc.php';
+    // include dirname(__FILE__) . '/../../../gameoptions.inc.php';
+    $game_preferences = self::getLocalPrefsData();
 
-    $preferences = $game_preferences + self::getLocalPrefsData();
     $values = [];
-    foreach ($preferences as $id => $data) {
+    foreach ($game_preferences as $id => $data) {
       $defaultValue = $data['default'] ?? array_keys($data['values'])[0];
 
       foreach ($players as $playerId => $infos) {
