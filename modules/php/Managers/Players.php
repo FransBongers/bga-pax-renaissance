@@ -8,6 +8,8 @@ use PaxRenaissance\Core\Notifications;
 use PaxRenaissance\Helpers\Utils;
 use PaxRenaissance\Managers\PlayersExtra;
 
+use const PaxRenaissance\OPTION_STARTING_MAP_DEFAULT;
+use const PaxRenaissance\OPTION_STARTING_MAP_1550_VARIANT;
 use const PaxRenaissance\OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
 /*
  * Players manager : allows to easily access players ...
@@ -23,20 +25,39 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
     return new \PaxRenaissance\Models\Player($row);
   }
 
+  private static function getAvailableColorsForMapOption()
+  {
+    $colors = [];
+    $startingMapOption = Globals::getStartingMap();
+
+    switch ($startingMapOption) {
+      case OPTION_STARTING_MAP_DEFAULT;
+        $colors = [BANK_COLOR_MAP[FUGGER], BANK_COLOR_MAP[MARCHIONNI], BANK_COLOR_MAP[COEUR], BANK_COLOR_MAP[MEDICI]];
+        break;
+      case OPTION_STARTING_MAP_1550_VARIANT:
+        $colors = [BANK_COLOR_MAP[FUGGER], BANK_COLOR_MAP[MARCHIONNI], BANK_COLOR_MAP[MEDICI]];
+        break;
+      case OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT;
+        $colors = [BANK_COLOR_MAP[FUGGER], BANK_COLOR_MAP[MARCHIONNI], BANK_COLOR_MAP[MEDICI], BANK_COLOR_MAP[BERENBERG], BANK_COLOR_MAP[MENDES]];
+        break;
+    }
+
+    shuffle($colors);
+
+    // For 1550 map variant add Coeur after shuffle so it's only used in 4p game.
+    if ($startingMapOption === OPTION_STARTING_MAP_1550_VARIANT) {
+      $colors[] = BANK_COLOR_MAP[COEUR];
+    }
+
+    return $colors;
+  }
+
   public static function setupNewGame($players, $options)
   {
     // Globals::setPlayers($players);
     // Create players
-    $gameInfos = Game::get()->getGameinfos();
-    $colors = Utils::filter($gameInfos['player_colors'], function ($color) {
-      if (Globals::getStartingMap() !== OPTION_STARTING_MAP_AGE_OF_REFORMATION_PROMO_VARIANT) {
-        return in_array($color, ["1084c7", "bddcc6", "732473", "ffce00"]);
-      }
-      return true;
-    });
-    // $colors = ['191716','bfc0c3'];
-    // // $colors = $gameInfos['player_colors'];
-    shuffle($colors);
+    $colors = self::getAvailableColorsForMapOption();
+
     $query = self::DB()->multipleInsert([
       'player_id',
       'player_color',
@@ -44,7 +65,6 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
       'player_name',
       'player_avatar',
       'player_score',
-      // 'rupees'
     ]);
 
     $values = [];

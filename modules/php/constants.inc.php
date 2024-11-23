@@ -19,6 +19,15 @@ const COLOR_BANK_MAP = [
   "bfc0c3" => MENDES
 ];
 
+const BANK_COLOR_MAP = [
+  FUGGER => "1084c7", // blue
+  MARCHIONNI => "bddcc6", // green
+  COEUR => "732473", // purple
+  MEDICI => "ffce00", // yellow
+  BERENBERG => "191716", // black
+  MENDES => "bfc0c3"
+];
+
 const BANKS = [
   FUGGER,
   MEDICI,
