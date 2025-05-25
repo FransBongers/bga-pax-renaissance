@@ -45,7 +45,7 @@ class Player extends \PaxRenaissance\Helpers\DB_Model
     return Preferences::get($this->id, $prefId);
   }
 
-  public function jsonSerialize($currentPlayerId = null)
+  public function jsonSerialize($currentPlayerId = null): array
   {
     $data = parent::jsonSerialize();
     $isCurrentPlayer = intval($currentPlayerId) == $this->getId();
