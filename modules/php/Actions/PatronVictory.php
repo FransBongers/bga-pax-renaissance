@@ -46,22 +46,7 @@ class PatronVictory extends \PaxRenaissance\Models\AtomicAction
 
   public function stPatronVictory()
   {
-    $players = Players::getAll()->toArray();
-
-    $scores = [];
-
-    foreach ($players as $player) {
-      $patronPrestige = $player->getPrestige(true)[PATRON];
-      $florins = $player->getFlorins();
-      $auxScore = $patronPrestige * 100 + $florins;
-      $playerId = $player->getId();
-      Players::setPlayerScoreAux($playerId, $auxScore);
-      $scores[] = [
-        'bank' => $player->getBank(),
-        'playerId' => $playerId,
-        'score' => $auxScore,
-      ];
-    }
+    $scores = Players::calculatePlayerScoreAux();
 
     Notifications::patronVictory();
     Stats::setVictoryType(STAT_VICTORY_TYPE_PATRON);
@@ -95,7 +80,7 @@ class PatronVictory extends \PaxRenaissance\Models\AtomicAction
           Stats::setVictoryBanker(STAT_BANKER_MENDES);
           break;
       }
-      $winnerId = $scores[0];
+      $winnerId = $scores[0]['playerId'];
       $placeInTurnOrder = 1 + Utils::array_find_index($order, function ($playerId) use ($winnerId) {
         return $playerId === $winnerId;
       });
@@ -104,11 +89,6 @@ class PatronVictory extends \PaxRenaissance\Models\AtomicAction
       Stats::setVictoryBanker(STAT_BANKER_NO_BANK);
       Stats::setTurnOrderWinner(0);
     }
-
-
-
-    $winnerId = $player->getId();
-
 
     Game::get()->gamestate->jumpToState(ST_END_GAME);
   }

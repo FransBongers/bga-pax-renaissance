@@ -244,4 +244,26 @@ class Players extends \PaxRenaissance\Helpers\DB_Manager
   {
     Game::get()->gamestate->changeActivePlayer($playerId);
   }
+
+  public static function calculatePlayerScoreAux()
+  {
+    $players = self::getAll()->toArray();
+
+    $scores = [];
+
+    foreach ($players as $player) {
+      $patronPrestige = $player->getPrestige(true)[PATRON];
+      $florins = $player->getFlorins();
+      $auxScore = $patronPrestige * 100 + $florins;
+      $playerId = $player->getId();
+      Players::setPlayerScoreAux($playerId, $auxScore);
+      $scores[] = [
+        'bank' => $player->getBank(),
+        'playerId' => $playerId,
+        'score' => $auxScore,
+      ];
+    }
+
+    return $scores;
+  }
 }

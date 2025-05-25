@@ -59,6 +59,8 @@ class DeclareVictory extends \PaxRenaissance\Models\AtomicAction
     Players::setPlayerScore($player->getId(), 1);
     Log::clearUndoableStepNotifications(true);
 
+    Players::calculatePlayerScoreAux();
+
     switch ($victoryCard->getId()) {
       case 'VictoryAgeOfByzantine':
         Stats::setVictoryType(STAT_VICTORY_TYPE_AGE_OF_BYZANTINE);
