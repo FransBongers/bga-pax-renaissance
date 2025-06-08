@@ -34,7 +34,7 @@ class PREN130X_Cryptography extends \PaxRenaissance\Models\TableauCard
 
   public function sell()
   {
-    if ($this->isInTableau()) {
+    if ($this->isInTableau() && !$this->isSilenced($this->getOwner())) {
       $owner = $this->getOwner();
       Engine::getNextUnresolved()->insertAsBrother(new LeafNode([
         'action' => ABILITY_OPPONENTS_PUPRLE_OP,
